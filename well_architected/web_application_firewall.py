@@ -30,18 +30,18 @@ class WebApplicationFirewall(Stack):
 
     def create_managed_rule(self, name=None, priority=None, excluded_rules=None):
         return CfnWebACL.RuleProperty(
-                name=name,
-                priority=priority,
-                override_action=self.default_override_action(),
-                visibility_config=self.create_visibility_configuration(name),
-                statement=CfnWebACL.StatementProperty(
-                    managed_rule_group_statement=CfnWebACL.ManagedRuleGroupStatementProperty(
-                        name=name,
-                        vendor_name='AWS',
-                        excluded_rules=excluded_rules if excluded_rules else []
-                    )
-                ),
-            )
+            name=name,
+            priority=priority,
+            override_action=self.default_override_action(),
+            visibility_config=self.create_visibility_configuration(name),
+            statement=CfnWebACL.StatementProperty(
+                managed_rule_group_statement=CfnWebACL.ManagedRuleGroupStatementProperty(
+                    name=name,
+                    vendor_name='AWS',
+                    excluded_rules=excluded_rules if excluded_rules else []
+                )
+            ),
+        )
 
     def common_ruleset(self):
         return self.create_managed_rule(
