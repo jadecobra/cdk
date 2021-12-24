@@ -84,7 +84,7 @@ class TestAPIGateway(TestTemplates):
         "aws:cdk:path": "LambdaAPIGateway/LambdaAPIGateway/Account"
       }
     },
-    "LambdaAPIGatewayDeploymentE937914C3a07fba6406c71ade2293ebcf36f2c46": {
+    "LambdaAPIGatewayDeploymentE937914C0356969e891f453d30de932d4de61531": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -116,7 +116,7 @@ class TestAPIGateway(TestTemplates):
           "Format": "$context.identity.sourceIp $context.identity.caller $context.identity.user [$context.requestTime] \"$context.httpMethod $context.resourcePath $context.protocol\" $context.status $context.responseLength $context.requestId"
         },
         "DeploymentId": {
-          "Ref": "LambdaAPIGatewayDeploymentE937914C3a07fba6406c71ade2293ebcf36f2c46"
+          "Ref": "LambdaAPIGatewayDeploymentE937914C0356969e891f453d30de932d4de61531"
         },
         "MethodSettings": [
           {
@@ -159,10 +159,7 @@ class TestAPIGateway(TestTemplates):
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Fn::GetAtt": [
-            "hello26396490",
-            "Arn"
-          ]
+          "Fn::ImportValue": "LambdaFunction:ExportsOutputFnGetAttLambdaFunctionBF21E41FArn8BD9CD14"
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -203,10 +200,7 @@ class TestAPIGateway(TestTemplates):
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Fn::GetAtt": [
-            "hello26396490",
-            "Arn"
-          ]
+          "Fn::ImportValue": "LambdaFunction:ExportsOutputFnGetAttLambdaFunctionBF21E41FArn8BD9CD14"
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -274,10 +268,7 @@ class TestAPIGateway(TestTemplates):
                 },
                 ":lambda:path/2015-03-31/functions/",
                 {
-                  "Fn::GetAtt": [
-                    "hello26396490",
-                    "Arn"
-                  ]
+                  "Fn::ImportValue": "LambdaFunction:ExportsOutputFnGetAttLambdaFunctionBF21E41FArn8BD9CD14"
                 },
                 "/invocations"
               ]
@@ -297,105 +288,10 @@ class TestAPIGateway(TestTemplates):
         "aws:cdk:path": "LambdaAPIGateway/LambdaAPIGateway/Default/hello/GET/Resource"
       }
     },
-    "helloServiceRole353607D3": {
-      "Type": "AWS::IAM::Role",
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com"
-              }
-            }
-          ],
-          "Version": "2012-10-17"
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition"
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-              ]
-            ]
-          }
-        ]
-      },
-      "Metadata": {
-        "aws:cdk:path": "LambdaAPIGateway/hello/ServiceRole/Resource"
-      }
-    },
-    "hello26396490": {
-      "Type": "AWS::Lambda::Function",
-      "Properties": {
-        "Code": {
-          "S3Bucket": {
-            "Ref": "AssetParameters6f583a693f7945791d3a4b8a29d8b95cea3f49f5bb75a5d9dfa3e659813fcc34S3BucketE10C6C17"
-          },
-          "S3Key": {
-            "Fn::Join": [
-              "",
-              [
-                {
-                  "Fn::Select": [
-                    0,
-                    {
-                      "Fn::Split": [
-                        "||",
-                        {
-                          "Ref": "AssetParameters6f583a693f7945791d3a4b8a29d8b95cea3f49f5bb75a5d9dfa3e659813fcc34S3VersionKeyCAE90EDD"
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "Fn::Select": [
-                    1,
-                    {
-                      "Fn::Split": [
-                        "||",
-                        {
-                          "Ref": "AssetParameters6f583a693f7945791d3a4b8a29d8b95cea3f49f5bb75a5d9dfa3e659813fcc34S3VersionKeyCAE90EDD"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            ]
-          }
-        },
-        "Role": {
-          "Fn::GetAtt": [
-            "helloServiceRole353607D3",
-            "Arn"
-          ]
-        },
-        "Handler": "hello.lambda_handler",
-        "Runtime": "python3.8",
-        "Timeout": 60
-      },
-      "DependsOn": [
-        "helloServiceRole353607D3"
-      ],
-      "Metadata": {
-        "aws:cdk:path": "LambdaAPIGateway/hello/Resource",
-        "aws:asset:path": "asset.6f583a693f7945791d3a4b8a29d8b95cea3f49f5bb75a5d9dfa3e659813fcc34",
-        "aws:asset:is-bundled": false,
-        "aws:asset:property": "Code"
-      }
-    },
     "CDKMetadata": {
       "Type": "AWS::CDK::Metadata",
       "Properties": {
-        "Analytics": "v2:deflate64:H4sIAAAAAAAA/1VQQU7DMBB8S++O2yiHXkmL4AJqVV5gnCWYxHbkXauKLP8db0IEnHZmNdqZ2VrWzVEedg/qjpXuhn3SPoBMb6T0IM4f7hJpiiRaRKCy7I3rxdk7pBA1seCqgrJAEJjcAH0MGhgXVWfIeJcFH0+j71GmF98/Bx8nVmy4CCbTK4K7mmUqN6idzM+5DbZa++hIPMI0+tmCW8z/MA63+K5gS3JS+Ev+RXwF+vQdr1aUhVG22Ptx1ZWZxajse6dk4qIQrEEshcRTdJqbsW7DWWBTKX4TyuVbhctT1AMQZ8hZXOdi4/aNrA+y3n2hMVUolYwFeVvnNzIiZY2OAQAA"
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/1VPQW7CMBB8C3ezEHHoFUqlXloVwQuMs6RbYq9lr4UiK3/HJo1aTjuzHs/MNtBsXmC92OpbXJr2usqGA0I+iTZXtb+4ryQ+idqzixKSkbo7YuQUDFZcHloSYjeqapF77iLkD+7eAydfFTMuAk+dFrzpAXLxkJ2nX7sZ7ozh5ES9oe95sOgeef9Y6dU9cicwN3nV8Y88VfxE+ea2riY0KtK2xHM/6cocVa/tudVQ+AGDpRjrPaM6DOWHW22gWUOz+IlEy1DakUU4TvMOxk3XjD8BAAA="
       },
       "Metadata": {
         "aws:cdk:path": "LambdaAPIGateway/CDKMetadata/Default"
@@ -445,20 +341,6 @@ class TestAPIGateway(TestTemplates):
       "Export": {
         "Name": "LambdaAPIGateway:ExportsOutputRefLambdaAPIGatewayDeploymentStageprod74ACA052509E0E94"
       }
-    }
-  },
-  "Parameters": {
-    "AssetParameters6f583a693f7945791d3a4b8a29d8b95cea3f49f5bb75a5d9dfa3e659813fcc34S3BucketE10C6C17": {
-      "Type": "String",
-      "Description": "S3 bucket for asset \"6f583a693f7945791d3a4b8a29d8b95cea3f49f5bb75a5d9dfa3e659813fcc34\""
-    },
-    "AssetParameters6f583a693f7945791d3a4b8a29d8b95cea3f49f5bb75a5d9dfa3e659813fcc34S3VersionKeyCAE90EDD": {
-      "Type": "String",
-      "Description": "S3 key for asset version \"6f583a693f7945791d3a4b8a29d8b95cea3f49f5bb75a5d9dfa3e659813fcc34\""
-    },
-    "AssetParameters6f583a693f7945791d3a4b8a29d8b95cea3f49f5bb75a5d9dfa3e659813fcc34ArtifactHash70AD0F2F": {
-      "Type": "String",
-      "Description": "Artifact hash for asset \"6f583a693f7945791d3a4b8a29d8b95cea3f49f5bb75a5d9dfa3e659813fcc34\""
     }
   },
   "Conditions": {

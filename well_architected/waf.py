@@ -6,7 +6,7 @@ from aws_cdk import (
 )
 
 
-class Waf(Stack):
+class WebApplicationFirewall(Stack):
 
     def __init__(self, scope: core.Construct, id: str, target_arn, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
