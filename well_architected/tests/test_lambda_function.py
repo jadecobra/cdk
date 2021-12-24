@@ -89,7 +89,7 @@ class TestLambdaFunction(TestTemplates):
             "Arn"
           ]
         },
-        "Handler": "None.handler",
+        "Handler": "hello.handler",
         "Runtime": "python3.8",
         "Timeout": 60
       },

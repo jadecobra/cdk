@@ -20,7 +20,7 @@ class WellArchitected(App):
     def create_lambda_function(self):
         return LambdaFunction(
             self, 'LambdaFunction',
-            # function_name='hello',
+            function_name='hello',
         ).lambda_function
 
     def create_lambda_api_gateway(self, lambda_function):
