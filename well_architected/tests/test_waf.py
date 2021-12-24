@@ -19,10 +19,10 @@ class TestWebApplicationFirewall(TestTemplates):
           "MetricName": "webACL",
           "SampledRequestsEnabled": true
         },
-        "Name": "HelloWorldACL",
+        "Name": "WebApplicationFirewall",
         "Rules": [
           {
-            "Name": "AWS-AWSManagedRulesCommonRuleSet",
+            "Name": "AWSManagedRulesCommonRuleSet",
             "OverrideAction": {
               "None": {}
             },
@@ -40,12 +40,12 @@ class TestWebApplicationFirewall(TestTemplates):
             },
             "VisibilityConfig": {
               "CloudWatchMetricsEnabled": true,
-              "MetricName": "awsCommonRules",
+              "MetricName": "AWSManagedRulesCommonRuleSet",
               "SampledRequestsEnabled": true
             }
           },
           {
-            "Name": "awsAnonymousIP",
+            "Name": "AWSManagedRulesAnonymousIpList",
             "OverrideAction": {
               "None": {}
             },
@@ -59,12 +59,12 @@ class TestWebApplicationFirewall(TestTemplates):
             },
             "VisibilityConfig": {
               "CloudWatchMetricsEnabled": true,
-              "MetricName": "awsAnonymous",
+              "MetricName": "AWSManagedRulesAnonymousIpList",
               "SampledRequestsEnabled": true
             }
           },
           {
-            "Name": "aws_Ipreputation",
+            "Name": "AWSManagedRulesAmazonIpReputationList",
             "OverrideAction": {
               "None": {}
             },
@@ -78,7 +78,7 @@ class TestWebApplicationFirewall(TestTemplates):
             },
             "VisibilityConfig": {
               "CloudWatchMetricsEnabled": true,
-              "MetricName": "aws_reputation",
+              "MetricName": "AWSManagedRulesAmazonIpReputationList",
               "SampledRequestsEnabled": true
             }
           },
@@ -107,7 +107,7 @@ class TestWebApplicationFirewall(TestTemplates):
         "aws:cdk:path": "WebApplicationFirewall/WebACL"
       }
     },
-    "WAFAssnAPI": {
+    "WAFAPIGatewayAssociation": {
       "Type": "AWS::WAFv2::WebACLAssociation",
       "Properties": {
         "ResourceArn": {
@@ -137,7 +137,7 @@ class TestWebApplicationFirewall(TestTemplates):
         }
       },
       "Metadata": {
-        "aws:cdk:path": "WebApplicationFirewall/WAFAssnAPI"
+        "aws:cdk:path": "WebApplicationFirewall/WAFAPIGatewayAssociation"
       }
     },
     "CDKMetadata": {
