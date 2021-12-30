@@ -27,38 +27,6 @@ class CloudWatchDashboard(core.Stack):
     ) -> None:
         super().__init__(scope, id, **kwargs)
 
-        # -----------------------------------------------------------------------------------------------------------
-        # The Simple Webservice Logic - This is what we will be monitoring
-        #
-        # API GW HTTP API, Lambda Fn and DynamoDB
-        # https://github.com/cdk-patterns/serverless/tree/master/the-simple-webservice
-        # -----------------------------------------------------------------------------------------------------------
-
-        # grant the lambda role read/write permissions to our table'
-        dynamodb_table.grant_read_write_data(lambda_function)
-
-        # defines an API Gateway Http API resource backed by our "dynamoLambda" function.
-        # api_gateway = api_gw.HttpApi(
-        #     self, 'HttpAPI',
-        #     default_integration=integrations.HttpLambdaIntegration(
-        #         'LambdaIntegration',
-        #         handler=lambda_function
-        #     )
-        # );
-        api_gateway = http_api
-
-        # core.CfnOutput(self, 'HTTP API Url', value=api_gateway.url);
-
-        # -----------------------------------------------------------------------------------------------------------
-        # Monitoring Logic Starts Here
-        #
-        # This is everything we need to understand the state of our system:
-        # - custom metrics
-        # - cloudwatch alarms
-        # - custom cloudwatch dashboard
-        # -----------------------------------------------------------------------------------------------------------
-
-        # SNS Topic so we can hook things into our alerts e.g. email
         error_topic = sns.Topic(self, 'theBigFanTopic')
 
         ###
@@ -69,12 +37,12 @@ class CloudWatchDashboard(core.Stack):
                                                                  label="% API Gateway 4xx Errors",
                                                                  using_metrics={
                                                                      "m1": self.metric_for_api_gw(
-                                                                         api_gateway.http_api_id,
+                                                                         http_api.http_api_id,
                                                                          '4XXError',
                                                                          '4XX Errors',
                                                                          'sum'),
                                                                      "m2": self.metric_for_api_gw(
-                                                                         api_gateway.http_api_id,
+                                                                         http_api.http_api_id,
                                                                          'Count',
                                                                          '# Requests',
                                                                          'sum'),
@@ -144,7 +112,7 @@ class CloudWatchDashboard(core.Stack):
         # 5xx are internal server errors so we want 0 of these
         cloud_watch.Alarm(self,
                           id="API Gateway 5XX Errors > 0",
-                          metric=self.metric_for_api_gw(api_id=api_gateway.http_api_id,
+                          metric=self.metric_for_api_gw(api_id=http_api.http_api_id,
                                                         metric_name="5XXError",
                                                         label="5XX Errors",
                                                         stat="p99"),
@@ -157,7 +125,7 @@ class CloudWatchDashboard(core.Stack):
 
         cloud_watch.Alarm(self,
                           id="API p99 latency alarm >= 1s",
-                          metric=self.metric_for_api_gw(api_id=api_gateway.http_api_id,
+                          metric=self.metric_for_api_gw(api_id=http_api.http_api_id,
                                                         metric_name="Latency",
                                                         label="API GW Latency",
                                                         stat="p99"),
@@ -227,22 +195,22 @@ class CloudWatchDashboard(core.Stack):
         dashboard = cloud_watch.Dashboard(self, id="CloudWatchDashBoard")
         dashboard.add_widgets(cloud_watch.GraphWidget(title="Requests",
                                                       width=8,
-                                                      left=[self.metric_for_api_gw(api_id=api_gateway.http_api_id,
+                                                      left=[self.metric_for_api_gw(api_id=http_api.http_api_id,
                                                                                    metric_name="Count",
                                                                                    label="# Requests",
                                                                                    stat="sum")]),
                               cloud_watch.GraphWidget(title="API GW Latency",
                                                       width=8,
                                                       stacked=True,
-                                                      left=[self.metric_for_api_gw(api_id=api_gateway.http_api_id,
+                                                      left=[self.metric_for_api_gw(api_id=http_api.http_api_id,
                                                                                    metric_name="Latency",
                                                                                    label="API Latency p50",
                                                                                    stat="p50"),
-                                                            self.metric_for_api_gw(api_id=api_gateway.http_api_id,
+                                                            self.metric_for_api_gw(api_id=http_api.http_api_id,
                                                                                    metric_name="Latency",
                                                                                    label="API Latency p90",
                                                                                    stat="p90"),
-                                                            self.metric_for_api_gw(api_id=api_gateway.http_api_id,
+                                                            self.metric_for_api_gw(api_id=http_api.http_api_id,
                                                                                    metric_name="Latency",
                                                                                    label="API Latency p99",
                                                                                    stat="p99")
@@ -250,11 +218,11 @@ class CloudWatchDashboard(core.Stack):
                               cloud_watch.GraphWidget(title="API GW Errors",
                                                       width=8,
                                                       stacked=True,
-                                                      left=[self.metric_for_api_gw(api_id=api_gateway.http_api_id,
+                                                      left=[self.metric_for_api_gw(api_id=http_api.http_api_id,
                                                                                    metric_name="4XXError",
                                                                                    label="4XX Errors",
                                                                                    stat="sum"),
-                                                            self.metric_for_api_gw(api_id=api_gateway.http_api_id,
+                                                            self.metric_for_api_gw(api_id=http_api.http_api_id,
                                                                                    metric_name="5XXError",
                                                                                    label="5XX Errors",
                                                                                    stat="sum")

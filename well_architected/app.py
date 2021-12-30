@@ -19,6 +19,7 @@ class WellArchitected(App):
                 'HITS_TABLE_NAME': self.dynamodb_table.table_name
             }
         )
+        self.dynamodb_table.grant_read_write_data(self.lambda_function)
         self.create_web_application_firewall(
             self.create_lambda_api_gateway(self.lambda_function)
         )
