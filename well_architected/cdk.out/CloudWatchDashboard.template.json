@@ -1,105 +1,5 @@
 {
   "Resources": {
-    "HttpAPI8D545486": {
-      "Type": "AWS::ApiGatewayV2::Api",
-      "Properties": {
-        "Name": "HttpAPI",
-        "ProtocolType": "HTTP"
-      },
-      "Metadata": {
-        "aws:cdk:path": "CloudWatchDashboard/HttpAPI/Resource"
-      }
-    },
-    "HttpAPIDefaultRouteLambdaIntegrationPermission08126EC0": {
-      "Type": "AWS::Lambda::Permission",
-      "Properties": {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": {
-          "Fn::ImportValue": "LambdaFunction:ExportsOutputFnGetAttLambdaFunctionBF21E41FArn8BD9CD14"
-        },
-        "Principal": "apigateway.amazonaws.com",
-        "SourceArn": {
-          "Fn::Join": [
-            "",
-            [
-              "arn:",
-              {
-                "Ref": "AWS::Partition"
-              },
-              ":execute-api:",
-              {
-                "Ref": "AWS::Region"
-              },
-              ":",
-              {
-                "Ref": "AWS::AccountId"
-              },
-              ":",
-              {
-                "Ref": "HttpAPI8D545486"
-              },
-              "/*/*"
-            ]
-          ]
-        }
-      },
-      "Metadata": {
-        "aws:cdk:path": "CloudWatchDashboard/HttpAPI/DefaultRoute/LambdaIntegration-Permission"
-      }
-    },
-    "HttpAPIDefaultRouteLambdaIntegration72370CBA": {
-      "Type": "AWS::ApiGatewayV2::Integration",
-      "Properties": {
-        "ApiId": {
-          "Ref": "HttpAPI8D545486"
-        },
-        "IntegrationType": "AWS_PROXY",
-        "IntegrationUri": {
-          "Fn::ImportValue": "LambdaFunction:ExportsOutputFnGetAttLambdaFunctionBF21E41FArn8BD9CD14"
-        },
-        "PayloadFormatVersion": "2.0"
-      },
-      "Metadata": {
-        "aws:cdk:path": "CloudWatchDashboard/HttpAPI/DefaultRoute/LambdaIntegration/Resource"
-      }
-    },
-    "HttpAPIDefaultRouteF9949FE6": {
-      "Type": "AWS::ApiGatewayV2::Route",
-      "Properties": {
-        "ApiId": {
-          "Ref": "HttpAPI8D545486"
-        },
-        "RouteKey": "$default",
-        "AuthorizationType": "NONE",
-        "Target": {
-          "Fn::Join": [
-            "",
-            [
-              "integrations/",
-              {
-                "Ref": "HttpAPIDefaultRouteLambdaIntegration72370CBA"
-              }
-            ]
-          ]
-        }
-      },
-      "Metadata": {
-        "aws:cdk:path": "CloudWatchDashboard/HttpAPI/DefaultRoute/Resource"
-      }
-    },
-    "HttpAPIDefaultStage1BC7D78F": {
-      "Type": "AWS::ApiGatewayV2::Stage",
-      "Properties": {
-        "ApiId": {
-          "Ref": "HttpAPI8D545486"
-        },
-        "StageName": "$default",
-        "AutoDeploy": true
-      },
-      "Metadata": {
-        "aws:cdk:path": "CloudWatchDashboard/HttpAPI/DefaultStage/Resource"
-      }
-    },
     "theBigFanTopicF96567DE": {
       "Type": "AWS::SNS::Topic",
       "Metadata": {
@@ -132,7 +32,7 @@
                   {
                     "Name": "ApiId",
                     "Value": {
-                      "Ref": "HttpAPI8D545486"
+                      "Fn::ImportValue": "LambdaHTTPAPIGateway:ExportsOutputRefHttpAPI8D545486FD78B06F"
                     }
                   }
                 ],
@@ -154,7 +54,7 @@
                   {
                     "Name": "ApiId",
                     "Value": {
-                      "Ref": "HttpAPI8D545486"
+                      "Fn::ImportValue": "LambdaHTTPAPIGateway:ExportsOutputRefHttpAPI8D545486FD78B06F"
                     }
                   }
                 ],
@@ -196,7 +96,7 @@
                   {
                     "Name": "ApiId",
                     "Value": {
-                      "Ref": "HttpAPI8D545486"
+                      "Fn::ImportValue": "LambdaHTTPAPIGateway:ExportsOutputRefHttpAPI8D545486FD78B06F"
                     }
                   }
                 ],
@@ -239,7 +139,7 @@
                   {
                     "Name": "ApiId",
                     "Value": {
-                      "Ref": "HttpAPI8D545486"
+                      "Fn::ImportValue": "LambdaHTTPAPIGateway:ExportsOutputRefHttpAPI8D545486FD78B06F"
                     }
                   }
                 ],
@@ -499,7 +399,7 @@
               },
               "\",\"metrics\":[[\"AWS/ApiGateway\",\"Count\",\"ApiId\",\"",
               {
-                "Ref": "HttpAPI8D545486"
+                "Fn::ImportValue": "LambdaHTTPAPIGateway:ExportsOutputRefHttpAPI8D545486FD78B06F"
               },
               "\",{\"label\":\"# Requests\",\"period\":900,\"stat\":\"Sum\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":8,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"API GW Latency\",\"region\":\"",
               {
@@ -507,15 +407,15 @@
               },
               "\",\"stacked\":true,\"metrics\":[[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
               {
-                "Ref": "HttpAPI8D545486"
+                "Fn::ImportValue": "LambdaHTTPAPIGateway:ExportsOutputRefHttpAPI8D545486FD78B06F"
               },
               "\",{\"label\":\"API Latency p50\",\"period\":900,\"stat\":\"p50\"}],[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
               {
-                "Ref": "HttpAPI8D545486"
+                "Fn::ImportValue": "LambdaHTTPAPIGateway:ExportsOutputRefHttpAPI8D545486FD78B06F"
               },
               "\",{\"label\":\"API Latency p90\",\"period\":900,\"stat\":\"p90\"}],[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
               {
-                "Ref": "HttpAPI8D545486"
+                "Fn::ImportValue": "LambdaHTTPAPIGateway:ExportsOutputRefHttpAPI8D545486FD78B06F"
               },
               "\",{\"label\":\"API Latency p99\",\"period\":900,\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":16,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"API GW Errors\",\"region\":\"",
               {
@@ -523,11 +423,11 @@
               },
               "\",\"stacked\":true,\"metrics\":[[\"AWS/ApiGateway\",\"4XXError\",\"ApiId\",\"",
               {
-                "Ref": "HttpAPI8D545486"
+                "Fn::ImportValue": "LambdaHTTPAPIGateway:ExportsOutputRefHttpAPI8D545486FD78B06F"
               },
               "\",{\"label\":\"4XX Errors\",\"period\":900,\"stat\":\"Sum\"}],[\"AWS/ApiGateway\",\"5XXError\",\"ApiId\",\"",
               {
-                "Ref": "HttpAPI8D545486"
+                "Fn::ImportValue": "LambdaHTTPAPIGateway:ExportsOutputRefHttpAPI8D545486FD78B06F"
               },
               "\",{\"label\":\"5XX Errors\",\"period\":900,\"stat\":\"Sum\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Error %\",\"region\":\"",
               {
@@ -629,36 +529,12 @@
     "CDKMetadata": {
       "Type": "AWS::CDK::Metadata",
       "Properties": {
-        "Analytics": "v2:deflate64:H4sIAAAAAAAA/12OTU4DMQyFz9J96nbogi1VWdAV1cAF3CTMmM4kUeIwqqLcnXGQQGLl7z0//3TQHR5hv3nCJW21ue2K9tFCeWPUN3X6cK+ZQ2Z18i5xzJrF623yOWorvDYMMXlXlawoGGhAtgvevx6gvDCHYyAJShHZ+8y20dmxHSLKsAT+yb/c+svQbjWoasL5ahBW42LjTCnJRHIJyrsPpCXZoCo9+WwWZD1COU4Y5/ZIg2dM49VjNGL9ilqrutx59G53gG4P3eYzEW1jdkyzhf6nfgPzVOWrNQEAAA=="
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/z2LQQ7CIBBFz9I9nZZ04VZTD2CqF8ABA7ZlDANpDOHuik1c/ff/y5cghwP0zVFt3KKeu4wUDORrVDiLkTzHkDCK8eEnw5QCmspfoV105Iuox8yeId/o5bDaHxSBCyW9qYgW8mlRYa1uh7NieycVdJ3+pZQiLu9oyXcDyB5k82Tn2pB8dKuBac8PyV8NU7MAAAA="
       },
       "Metadata": {
         "aws:cdk:path": "CloudWatchDashboard/CDKMetadata/Default"
       },
       "Condition": "CDKMetadataAvailable"
-    }
-  },
-  "Outputs": {
-    "HTTPAPIUrl": {
-      "Value": {
-        "Fn::Join": [
-          "",
-          [
-            "https://",
-            {
-              "Ref": "HttpAPI8D545486"
-            },
-            ".execute-api.",
-            {
-              "Ref": "AWS::Region"
-            },
-            ".",
-            {
-              "Ref": "AWS::URLSuffix"
-            },
-            "/"
-          ]
-        ]
-      }
     }
   },
   "Conditions": {

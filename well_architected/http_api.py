@@ -9,11 +9,11 @@ class LambdaHTTPAPIGateway(Stack):
     def __init__(self, scope: Construct, id: str, lambda_function: Function, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        self.api_gateway = HttpApi(
+        self.http_api = HttpApi(
             self, 'HttpAPI',
             default_integration=HttpLambdaIntegration(
                 'HTTPLambdaIntegration',
                 handler=lambda_function
             )
         )
-        CfnOutput(self, 'HTTP API Url', value=self.api_gateway.url)
+        CfnOutput(self, 'HTTP API Url', value=self.http_api.url)

@@ -25,7 +25,7 @@ class WellArchitected(App):
         self.create_cloudwatch_dashboard(
             dynamodb_table=self.dynamodb_table,
             lambda_function=self.lambda_function,
-            http_api=self.create_http_api_gateway(self.lambda_function),
+            http_api=self.create_http_api_gateway(self.lambda_function).http_api,
         )
 
     def create_dynamodb_table(self):
