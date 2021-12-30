@@ -4,17 +4,18 @@ from aws_cdk.aws_wafv2 import CfnWebACL, CfnWebACLAssociation
 
 class WebApplicationFirewall(Stack):
 
-    def __init__(self, scope: Construct, id: str, target_arn, **kwargs) -> None:
+    def __init__(self, scope: Construct, id: str, target_arn=None, web_application_firewall_scope='REGIONAL', **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
         self.associate_web_application_firewall(
             target_arn=target_arn,
             web_application_firewall=self.create_waf_acl(
-                [
+                scope=web_application_firewall_scope,
+                waf_rules=[
                     self.common_ruleset(),
                     self.anonymous_ip_rule(),
                     self.restricted_ip_list_rule(),
                     self.add_geoblock_rule(),
-                ]
+                ],
             ),
         )
 
@@ -78,11 +79,11 @@ class WebApplicationFirewall(Stack):
     def allow_action(self):
         return CfnWebACL.DefaultActionProperty(allow={})
 
-    def create_waf_acl(self, waf_rules):
+    def create_waf_acl(self, waf_rules=None, scope=None):
         return CfnWebACL(
             self, 'WebACL',
             default_action=self.allow_action(),
-            scope="REGIONAL",
+            scope=scope,
             visibility_config=self.create_visibility_configuration('webACL'),
             name='WebApplicationFirewall',
             rules=waf_rules

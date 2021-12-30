@@ -42,6 +42,49 @@ class TestLambdaFunction(TestTemplates):
         "aws:cdk:path": "LambdaFunction/LambdaFunction/ServiceRole/Resource"
       }
     },
+    "LambdaFunctionServiceRoleDefaultPolicy32EEEE35": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "dynamodb:BatchGetItem",
+                "dynamodb:GetRecords",
+                "dynamodb:GetShardIterator",
+                "dynamodb:Query",
+                "dynamodb:GetItem",
+                "dynamodb:Scan",
+                "dynamodb:ConditionCheckItem",
+                "dynamodb:BatchWriteItem",
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem",
+                "dynamodb:DeleteItem"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::ImportValue": "DynamoDBTable:ExportsOutputFnGetAttHitsFF5AF8CDArn18792E32"
+                },
+                {
+                  "Ref": "AWS::NoValue"
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "LambdaFunctionServiceRoleDefaultPolicy32EEEE35",
+        "Roles": [
+          {
+            "Ref": "LambdaFunctionServiceRoleC555A460"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "LambdaFunction/LambdaFunction/ServiceRole/DefaultPolicy/Resource"
+      }
+    },
     "LambdaFunctionBF21E41F": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
@@ -89,11 +132,19 @@ class TestLambdaFunction(TestTemplates):
             "Arn"
           ]
         },
+        "Environment": {
+          "Variables": {
+            "HITS_TABLE_NAME": {
+              "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
+            }
+          }
+        },
         "Handler": "hello.handler",
         "Runtime": "python3.8",
         "Timeout": 60
       },
       "DependsOn": [
+        "LambdaFunctionServiceRoleDefaultPolicy32EEEE35",
         "LambdaFunctionServiceRoleC555A460"
       ],
       "Metadata": {
@@ -106,7 +157,7 @@ class TestLambdaFunction(TestTemplates):
     "CDKMetadata": {
       "Type": "AWS::CDK::Metadata",
       "Properties": {
-        "Analytics": "v2:deflate64:H4sIAAAAAAAA/zWNwQ6CMBBEv4V7WSAcvCokngl+wVpWrECbdLcxpum/SzGe5s1kdqeBpj1BXZzxzaWelipq5wniTVAv6sJMsuNs7Kx6Z1l80KL6hx3Q40ZCPpuR2AWvKfPemowYZ5PKL+OK231CiNdgdY5z589JGdwgjm49TrMmxW2JeZbhWN89dEEvJB0ypaSGjzydrVpoamiKFxtT+mDFbATjT7/XaQiA1AAAAA=="
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/zWOQQ+CMAyFfwv3USUcvCokngn+gjoqTmBL1i7GLPvvshlP73vNa/saaNoTHKszvrnW03KI2nmCeBPUi7owk+w4Gzur3lkWH7So/mEH9LiRkM9mJHbBa8q8pyYjxtmk8sm44nafEOI1WJ3HOfPnpAxuEEe3ltWig1uN/pQXhZLitsbcg6HU2T10QS8kHTKlpIaPPJ09tNAcoalebEztgxWzEYw//QJ3v8er5QAAAA=="
       },
       "Metadata": {
         "aws:cdk:path": "LambdaFunction/CDKMetadata/Default"
@@ -332,6 +383,14 @@ class TestLambdaFunction(TestTemplates):
       },
       "Export": {
         "Name": "LambdaFunction:ExportsOutputFnGetAttLambdaFunctionBF21E41FArn8BD9CD14"
+      }
+    },
+    "ExportsOutputRefLambdaFunctionBF21E41F66817B40": {
+      "Value": {
+        "Ref": "LambdaFunctionBF21E41F"
+      },
+      "Export": {
+        "Name": "LambdaFunction:ExportsOutputRefLambdaFunctionBF21E41F66817B40"
       }
     }
   }
