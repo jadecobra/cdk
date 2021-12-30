@@ -38,15 +38,16 @@ class CloudWatchDashboard(core.Stack):
         dynamodb_table.grant_read_write_data(lambda_function)
 
         # defines an API Gateway Http API resource backed by our "dynamoLambda" function.
-        api_gateway = api_gw.HttpApi(
-            self, 'HttpAPI',
-            default_integration=integrations.HttpLambdaIntegration(
-                'LambdaIntegration',
-                handler=lambda_function
-            )
-        );
+        # api_gateway = api_gw.HttpApi(
+        #     self, 'HttpAPI',
+        #     default_integration=integrations.HttpLambdaIntegration(
+        #         'LambdaIntegration',
+        #         handler=lambda_function
+        #     )
+        # );
+        api_gateway = http_api
 
-        core.CfnOutput(self, 'HTTP API Url', value=api_gateway.url);
+        # core.CfnOutput(self, 'HTTP API Url', value=api_gateway.url);
 
         # -----------------------------------------------------------------------------------------------------------
         # Monitoring Logic Starts Here
