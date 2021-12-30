@@ -1,13 +1,14 @@
 import os
 
 from aws_cdk.core import App
-from rest_api import LambdaAPIGateway
+from rest_api import LambdaRestAPIGateway
 from web_application_firewall import WebApplicationFirewall
 from lambda_function import LambdaFunction
 
 from cloudwatch_dashboard import CloudWatchDashboard
 from dynamodb_table import DynamoDBTable
 from http_api import LambdaHTTPAPIGateway
+
 class WellArchitected(App):
 
     def __init__(self, *args, **kwargs):
@@ -46,8 +47,8 @@ class WellArchitected(App):
         ).lambda_function
 
     def create_lambda_api_gateway(self, lambda_function):
-        return LambdaAPIGateway(
-            self, 'LambdaAPIGateway',
+        return LambdaRestAPIGateway(
+            self, 'LambdaRestAPIGateway',
             lambda_function=lambda_function
         ).resource_arn
 

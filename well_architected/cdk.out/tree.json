@@ -444,17 +444,17 @@
           "version": "1.137.0"
         }
       },
-      "LambdaAPIGateway": {
-        "id": "LambdaAPIGateway",
-        "path": "LambdaAPIGateway",
+      "LambdaRestAPIGateway": {
+        "id": "LambdaRestAPIGateway",
+        "path": "LambdaRestAPIGateway",
         "children": {
           "helloAPILogs": {
             "id": "helloAPILogs",
-            "path": "LambdaAPIGateway/helloAPILogs",
+            "path": "LambdaRestAPIGateway/helloAPILogs",
             "children": {
               "Resource": {
                 "id": "Resource",
-                "path": "LambdaAPIGateway/helloAPILogs/Resource",
+                "path": "LambdaRestAPIGateway/helloAPILogs/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::Logs::LogGroup",
                   "aws:cdk:cloudformation:props": {
@@ -474,11 +474,11 @@
           },
           "LambdaAPIGateway": {
             "id": "LambdaAPIGateway",
-            "path": "LambdaAPIGateway/LambdaAPIGateway",
+            "path": "LambdaRestAPIGateway/LambdaAPIGateway",
             "children": {
               "Resource": {
                 "id": "Resource",
-                "path": "LambdaAPIGateway/LambdaAPIGateway/Resource",
+                "path": "LambdaRestAPIGateway/LambdaAPIGateway/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::ApiGateway::RestApi",
                   "aws:cdk:cloudformation:props": {
@@ -497,11 +497,11 @@
               },
               "CloudWatchRole": {
                 "id": "CloudWatchRole",
-                "path": "LambdaAPIGateway/LambdaAPIGateway/CloudWatchRole",
+                "path": "LambdaRestAPIGateway/LambdaAPIGateway/CloudWatchRole",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "LambdaAPIGateway/LambdaAPIGateway/CloudWatchRole/Resource",
+                    "path": "LambdaRestAPIGateway/LambdaAPIGateway/CloudWatchRole/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                       "aws:cdk:cloudformation:props": {
@@ -546,7 +546,7 @@
               },
               "Account": {
                 "id": "Account",
-                "path": "LambdaAPIGateway/LambdaAPIGateway/Account",
+                "path": "LambdaRestAPIGateway/LambdaAPIGateway/Account",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::ApiGateway::Account",
                   "aws:cdk:cloudformation:props": {
@@ -565,11 +565,11 @@
               },
               "Deployment": {
                 "id": "Deployment",
-                "path": "LambdaAPIGateway/LambdaAPIGateway/Deployment",
+                "path": "LambdaRestAPIGateway/LambdaAPIGateway/Deployment",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "LambdaAPIGateway/LambdaAPIGateway/Deployment/Resource",
+                    "path": "LambdaRestAPIGateway/LambdaAPIGateway/Deployment/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::ApiGateway::Deployment",
                       "aws:cdk:cloudformation:props": {
@@ -592,11 +592,11 @@
               },
               "DeploymentStage.prod": {
                 "id": "DeploymentStage.prod",
-                "path": "LambdaAPIGateway/LambdaAPIGateway/DeploymentStage.prod",
+                "path": "LambdaRestAPIGateway/LambdaAPIGateway/DeploymentStage.prod",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "LambdaAPIGateway/LambdaAPIGateway/DeploymentStage.prod/Resource",
+                    "path": "LambdaRestAPIGateway/LambdaAPIGateway/DeploymentStage.prod/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::ApiGateway::Stage",
                       "aws:cdk:cloudformation:props": {
@@ -613,7 +613,7 @@
                           "format": "$context.identity.sourceIp $context.identity.caller $context.identity.user [$context.requestTime] \"$context.httpMethod $context.resourcePath $context.protocol\" $context.status $context.responseLength $context.requestId"
                         },
                         "deploymentId": {
-                          "Ref": "LambdaAPIGatewayDeploymentE937914C0356969e891f453d30de932d4de61531"
+                          "Ref": "LambdaAPIGatewayDeploymentE937914C83f3bd4a2732ab3533cd15cbb417396d"
                         },
                         "methodSettings": [
                           {
@@ -640,7 +640,7 @@
               },
               "Endpoint": {
                 "id": "Endpoint",
-                "path": "LambdaAPIGateway/LambdaAPIGateway/Endpoint",
+                "path": "LambdaRestAPIGateway/LambdaAPIGateway/Endpoint",
                 "constructInfo": {
                   "fqn": "@aws-cdk/core.CfnOutput",
                   "version": "1.137.0"
@@ -648,15 +648,15 @@
               },
               "Default": {
                 "id": "Default",
-                "path": "LambdaAPIGateway/LambdaAPIGateway/Default",
+                "path": "LambdaRestAPIGateway/LambdaAPIGateway/Default",
                 "children": {
                   "hello": {
                     "id": "hello",
-                    "path": "LambdaAPIGateway/LambdaAPIGateway/Default/hello",
+                    "path": "LambdaRestAPIGateway/LambdaAPIGateway/Default/hello",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "LambdaAPIGateway/LambdaAPIGateway/Default/hello/Resource",
+                        "path": "LambdaRestAPIGateway/LambdaAPIGateway/Default/hello/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::ApiGateway::Resource",
                           "aws:cdk:cloudformation:props": {
@@ -679,11 +679,11 @@
                       },
                       "GET": {
                         "id": "GET",
-                        "path": "LambdaAPIGateway/LambdaAPIGateway/Default/hello/GET",
+                        "path": "LambdaRestAPIGateway/LambdaAPIGateway/Default/hello/GET",
                         "children": {
-                          "ApiPermission.LambdaAPIGateway52B24D07.GET..hello": {
-                            "id": "ApiPermission.LambdaAPIGateway52B24D07.GET..hello",
-                            "path": "LambdaAPIGateway/LambdaAPIGateway/Default/hello/GET/ApiPermission.LambdaAPIGateway52B24D07.GET..hello",
+                          "ApiPermission.LambdaRestAPIGatewayLambdaAPIGateway33BA6F57.GET..hello": {
+                            "id": "ApiPermission.LambdaRestAPIGatewayLambdaAPIGateway33BA6F57.GET..hello",
+                            "path": "LambdaRestAPIGateway/LambdaAPIGateway/Default/hello/GET/ApiPermission.LambdaRestAPIGatewayLambdaAPIGateway33BA6F57.GET..hello",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                               "aws:cdk:cloudformation:props": {
@@ -727,9 +727,9 @@
                               "version": "1.137.0"
                             }
                           },
-                          "ApiPermission.Test.LambdaAPIGateway52B24D07.GET..hello": {
-                            "id": "ApiPermission.Test.LambdaAPIGateway52B24D07.GET..hello",
-                            "path": "LambdaAPIGateway/LambdaAPIGateway/Default/hello/GET/ApiPermission.Test.LambdaAPIGateway52B24D07.GET..hello",
+                          "ApiPermission.Test.LambdaRestAPIGatewayLambdaAPIGateway33BA6F57.GET..hello": {
+                            "id": "ApiPermission.Test.LambdaRestAPIGatewayLambdaAPIGateway33BA6F57.GET..hello",
+                            "path": "LambdaRestAPIGateway/LambdaAPIGateway/Default/hello/GET/ApiPermission.Test.LambdaRestAPIGatewayLambdaAPIGateway33BA6F57.GET..hello",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                               "aws:cdk:cloudformation:props": {
@@ -771,7 +771,7 @@
                           },
                           "Resource": {
                             "id": "Resource",
-                            "path": "LambdaAPIGateway/LambdaAPIGateway/Default/hello/GET/Resource",
+                            "path": "LambdaRestAPIGateway/LambdaAPIGateway/Default/hello/GET/Resource",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
                               "aws:cdk:cloudformation:props": {
@@ -856,11 +856,11 @@
           },
           "CDKMetadata": {
             "id": "CDKMetadata",
-            "path": "LambdaAPIGateway/CDKMetadata",
+            "path": "LambdaRestAPIGateway/CDKMetadata",
             "children": {
               "Default": {
                 "id": "Default",
-                "path": "LambdaAPIGateway/CDKMetadata/Default",
+                "path": "LambdaRestAPIGateway/CDKMetadata/Default",
                 "constructInfo": {
                   "fqn": "@aws-cdk/core.CfnResource",
                   "version": "1.137.0"
@@ -868,7 +868,7 @@
               },
               "Condition": {
                 "id": "Condition",
-                "path": "LambdaAPIGateway/CDKMetadata/Condition",
+                "path": "LambdaRestAPIGateway/CDKMetadata/Condition",
                 "constructInfo": {
                   "fqn": "@aws-cdk/core.CfnCondition",
                   "version": "1.137.0"
@@ -882,11 +882,11 @@
           },
           "Exports": {
             "id": "Exports",
-            "path": "LambdaAPIGateway/Exports",
+            "path": "LambdaRestAPIGateway/Exports",
             "children": {
               "Output{\"Ref\":\"LambdaAPIGateway527FD988\"}": {
                 "id": "Output{\"Ref\":\"LambdaAPIGateway527FD988\"}",
-                "path": "LambdaAPIGateway/Exports/Output{\"Ref\":\"LambdaAPIGateway527FD988\"}",
+                "path": "LambdaRestAPIGateway/Exports/Output{\"Ref\":\"LambdaAPIGateway527FD988\"}",
                 "constructInfo": {
                   "fqn": "@aws-cdk/core.CfnOutput",
                   "version": "1.137.0"
@@ -894,7 +894,7 @@
               },
               "Output{\"Ref\":\"LambdaAPIGatewayDeploymentStageprod74ACA052\"}": {
                 "id": "Output{\"Ref\":\"LambdaAPIGatewayDeploymentStageprod74ACA052\"}",
-                "path": "LambdaAPIGateway/Exports/Output{\"Ref\":\"LambdaAPIGatewayDeploymentStageprod74ACA052\"}",
+                "path": "LambdaRestAPIGateway/Exports/Output{\"Ref\":\"LambdaAPIGatewayDeploymentStageprod74ACA052\"}",
                 "constructInfo": {
                   "fqn": "@aws-cdk/core.CfnOutput",
                   "version": "1.137.0"
@@ -1037,11 +1037,11 @@
                       },
                       "::/restapis/",
                       {
-                        "Fn::ImportValue": "LambdaAPIGateway:ExportsOutputRefLambdaAPIGateway527FD98828FC969E"
+                        "Fn::ImportValue": "LambdaRestAPIGateway:ExportsOutputRefLambdaAPIGateway527FD98828FC969E"
                       },
                       "/stages/",
                       {
-                        "Fn::ImportValue": "LambdaAPIGateway:ExportsOutputRefLambdaAPIGatewayDeploymentStageprod74ACA052509E0E94"
+                        "Fn::ImportValue": "LambdaRestAPIGateway:ExportsOutputRefLambdaAPIGatewayDeploymentStageprod74ACA052509E0E94"
                       }
                     ]
                   ]

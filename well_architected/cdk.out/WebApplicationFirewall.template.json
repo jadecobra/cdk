@@ -113,11 +113,11 @@
               },
               "::/restapis/",
               {
-                "Fn::ImportValue": "LambdaAPIGateway:ExportsOutputRefLambdaAPIGateway527FD98828FC969E"
+                "Fn::ImportValue": "LambdaRestAPIGateway:ExportsOutputRefLambdaAPIGateway527FD98828FC969E"
               },
               "/stages/",
               {
-                "Fn::ImportValue": "LambdaAPIGateway:ExportsOutputRefLambdaAPIGatewayDeploymentStageprod74ACA052509E0E94"
+                "Fn::ImportValue": "LambdaRestAPIGateway:ExportsOutputRefLambdaAPIGatewayDeploymentStageprod74ACA052509E0E94"
               }
             ]
           ]

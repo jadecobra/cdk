@@ -6,7 +6,7 @@ from lambda_function import LambdaFunction
 import aws_cdk.aws_apigateway as api_gateway
 
 
-class LambdaAPIGateway(Stack):
+class LambdaRestAPIGateway(Stack):
 
     def __init__(self, scope: Construct, id: str, lambda_function: Function, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
