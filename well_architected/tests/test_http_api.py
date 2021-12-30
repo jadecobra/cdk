@@ -111,12 +111,44 @@ class TestHTTPAPI(TestTemplates):
     "CDKMetadata": {
       "Type": "AWS::CDK::Metadata",
       "Properties": {
-        "Analytics": "v2:deflate64:H4sIAAAAAAAA/11OQQ6CMBB8C/e6UDl41XDRG8EXrKXiirSk3UpIw9+leDDxNDO7M5mRIMsDFNkRJ79TbZ9HZZ2GeGVUvais8eyCYlHdTaO9DU7pxNdHS0zWLCIFI47UIesJ5/ce4pl5PI2UjAmSbGxgvbGLYd05TOFk+JM/37qg27o2sogXDrcWYT3U2g3kfWpfRD3zw5q8BFmAzJ6eaOeCYRo0NF/8ANTH2mXjAAAA"
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/11OSw6CMBA9C/syUFm41bDRlQRPUEvFirRNO5WQhrvL4MLE1fvMm3nDgVd7KLODmEIuu6FI0noF6YpCDqy+m0tEF5HV1gT0USJ5rQo2eqmIr4NOo7ZmYXQiCad7gWoS83sH6YTojk5TkIBkayOqjZ0Nqt4LWqbAn/zl1l/6rWsjC3uJ8dYJWI1G+VGHQO0La2Z8WFNUwEvg2TNonftoUI8K2i9+AANcqQDtAAAA"
       },
       "Metadata": {
         "aws:cdk:path": "LambdaHTTPAPIGateway/CDKMetadata/Default"
       },
       "Condition": "CDKMetadataAvailable"
+    }
+  },
+  "Outputs": {
+    "HTTPAPIUrl": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Ref": "HttpAPI8D545486"
+            },
+            ".execute-api.",
+            {
+              "Ref": "AWS::Region"
+            },
+            ".",
+            {
+              "Ref": "AWS::URLSuffix"
+            },
+            "/"
+          ]
+        ]
+      }
+    },
+    "ExportsOutputRefHttpAPI8D545486FD78B06F": {
+      "Value": {
+        "Ref": "HttpAPI8D545486"
+      },
+      "Export": {
+        "Name": "LambdaHTTPAPIGateway:ExportsOutputRefHttpAPI8D545486FD78B06F"
+      }
     }
   },
   "Conditions": {
