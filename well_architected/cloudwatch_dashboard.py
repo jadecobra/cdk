@@ -232,8 +232,7 @@ class CloudWatchDashboard(Stack):
             treat_missing_data=cloud_watch.TreatMissingData.NOT_BREACHING,
         ).add_alarm_action(actions.SnsAction(self.error_topic))
 
-    def create_cloudwatch_alarms(self):
-        # Api Gateway
+    def create_api_gateway_alarms(self):
         # 4xx are user errors so a large volume indicates a problem
         self.add_cloudwatch_alarm(
             id="API Gateway 4XX Errors > 1%",
@@ -261,6 +260,7 @@ class CloudWatchDashboard(Stack):
             threshold=1000,
         )
 
+    def create_lambda_function_alarms(self):
         # Lambda
         # 2% of Dynamo Lambda invocations erroring
         self.add_cloudwatch_alarm(
@@ -283,9 +283,15 @@ class CloudWatchDashboard(Stack):
             threshold=2,
         )
 
+    def create_dynamodb_alarms(self):
         # DynamoDB
         # DynamoDB Interactions are throttled - indicated poorly provisioned
         self.add_cloudwatch_alarm(
             id="DynamoDB Table Reads/Writes Throttled",
             metric=self.dynamodb_throttles,
         )
+
+    def create_cloudwatch_alarms(self):
+        self.create_api_gateway_alarms()
+        self.create_lambda_function_alarms()
+        self.create_dynamodb_alarms()
