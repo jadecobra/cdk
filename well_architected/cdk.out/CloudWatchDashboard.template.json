@@ -110,7 +110,6 @@
             "ReturnData": true
           }
         ],
-        "Period": 300,
         "Threshold": 0,
         "TreatMissingData": "notBreaching"
       },
@@ -153,7 +152,6 @@
             "ReturnData": true
           }
         ],
-        "Period": 300,
         "Threshold": 1000,
         "TreatMissingData": "notBreaching"
       },

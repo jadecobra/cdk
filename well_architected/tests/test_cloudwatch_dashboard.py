@@ -117,7 +117,6 @@ class TestCloudWatchDashboard(TestTemplates):
             "ReturnData": true
           }
         ],
-        "Period": 300,
         "Threshold": 0,
         "TreatMissingData": "notBreaching"
       },
@@ -160,7 +159,6 @@ class TestCloudWatchDashboard(TestTemplates):
             "ReturnData": true
           }
         ],
-        "Period": 300,
         "Threshold": 1000,
         "TreatMissingData": "notBreaching"
       },
