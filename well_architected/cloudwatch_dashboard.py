@@ -1,20 +1,11 @@
-import os
-from this import d
-# os.system('pip install aws_cdk.aws_apigatewayv2_integrations')
-
-from aws_cdk import (
-    aws_lambda as _lambda,
-    aws_apigatewayv2 as api_gw,
-    aws_apigatewayv2_integrations as integrations,
-    aws_dynamodb as dynamo_db,
-    aws_sns as sns,
-    aws_cloudwatch as cloud_watch,
-    aws_cloudwatch_actions as actions,
-    core
-)
+from aws_cdk.core import Stack, Construct, Duration
 from aws_cdk.aws_lambda import Function
 from aws_cdk.aws_dynamodb import Table
-from aws_cdk.core import Stack, Construct, Duration
+from aws_cdk.aws_cloudwatch_actions import SnsAction
+from aws_cdk.aws_sns import Topic
+from aws_cdk.aws_cloudwatch import (
+    Alarm, Dashboard, MathExpression, Metric, GraphWidget, TreatMissingData, Unit
+)
 
 
 class CloudWatchDashboard(Stack):
@@ -23,19 +14,20 @@ class CloudWatchDashboard(Stack):
         self, scope: Construct, id: str,
         lambda_function: Function,
         dynamodb_table: Table,
-        http_api=None,
+        api=None,
         **kwargs
     ) -> None:
         super().__init__(scope, id, **kwargs)
-        self.error_topic = sns.Topic(self, 'theBigFanTopic')
+        self.error_topic = Topic(self, 'theBigFanTopic')
         self.dynamodb_table = dynamodb_table
-        self.http_api = http_api
+        self.api = api
         self.lambda_function = lambda_function
-        ###
-        # Custom Metrics
-        ###
+        self.create_metrics()
+        self.create_cloudwatch_alarms()
+        self.create_cloudwatch_dashboard()
 
-        self.api_gw_4xx_error_percentage = cloud_watch.MathExpression(
+    def create_metrics(self):
+        self.api_gw_4xx_error_percentage = self.create_cloudwatch_math_expression(
             expression="m1/m2*100",
             label="% API Gateway 4xx Errors",
             using_metrics={
@@ -48,26 +40,24 @@ class CloudWatchDashboard(Stack):
                     label='# Requests',
                 ),
             },
-            period=self.five_minutes(),
         )
 
         # Gather the % of lambda invocations that error in past 5 mins
-        self.lambda_error_percentage = cloud_watch.MathExpression(
-            expression="e / i * 100",
+        self.lambda_error_percentage = self.create_cloudwatch_math_expression(
+            expression="e / invocations * 100",
             label="% of invocations that errored, last 5 mins",
             using_metrics={
-                "i": self.add_lambda_function_metric('Invocations'),
+                "invocations": self.add_lambda_function_metric('Invocations'),
                 "e": self.add_lambda_function_metric("Errors"),
             },
-            period=self.five_minutes(),
         )
 
         # note: throttled requests are not counted in total num of invocations
         self.lambda_throttled_percentage = self.create_cloudwatch_math_expression(
             label="% of throttled requests, last 30 mins",
-            expression="t / (i + t) * 100",
+            expression="t / (invocations + t) * 100",
             using_metrics={
-                "i": self.add_lambda_function_metric("Invocations"),
+                "invocations": self.add_lambda_function_metric("Invocations"),
                 "t": self.add_lambda_function_metric("Throttles"),
             },
         )
@@ -83,10 +73,11 @@ class CloudWatchDashboard(Stack):
         )
 
         # Rather than have 2 alerts, let's create one aggregate metric
-
-
-        self.create_cloudwatch_alarms()
-        self.create_cloudwatch_dashboard()
+        self.dynamodb_throttles = self.cloudwatch_math_sum(
+            label="DynamoDB Throttles",
+            m1=self.add_dynamodb_metric('ReadThrottleEvents'),
+            m2=self.add_dynamodb_metric('WriteThrottleEvents'),
+        )
 
     def cloudwatch_math_sum(self, label=None, m1=None, m2=None):
         return self.create_cloudwatch_math_expression(
@@ -96,7 +87,7 @@ class CloudWatchDashboard(Stack):
         )
 
     def create_cloudwatch_math_expression(self, expression=None, label=None, using_metrics=None):
-        return cloud_watch.MathExpression(
+        return MathExpression(
             expression=expression,
             label=label,
             using_metrics=using_metrics,
@@ -104,12 +95,12 @@ class CloudWatchDashboard(Stack):
         )
 
     def add_cloudwatch_widget(self, title=None, stacked=True, left=None):
-        return cloud_watch.GraphWidget(
+        return GraphWidget(
             title=title, width=8, stacked=stacked, left=left
         )
 
     def create_cloudwatch_dashboard(self):
-        dashboard = cloud_watch.Dashboard(self, id="CloudWatchDashBoard")
+        dashboard = Dashboard(self, "CloudWatchDashBoard")
         dashboard.add_widgets(
             self.add_cloudwatch_widget(
                 title="Requests",
@@ -210,27 +201,38 @@ class CloudWatchDashboard(Stack):
     def add_lambda_function_metric(self, metric_name):
         return self.lambda_function.metric(metric_name=metric_name, statistic="sum")
 
+    @staticmethod
+    def get_api_id(api):
+        try:
+            return api.api_id
+        except AttributeError:
+            return api.rest_api_id
+
     def add_api_gateway_metric(self, metric_name: str = None, label: str = None, period=Duration.seconds(900), statistic: str = 'sum'):
-        return cloud_watch.Metric(
+        return Metric(
             metric_name=metric_name,
             namespace="AWS/ApiGateway",
-            dimensions={"ApiId": self.http_api.api_id},
-            unit=cloud_watch.Unit.COUNT,
+            dimensions={
+                "ApiId": self.get_api_id(self.api),
+            },
+            unit=Unit.COUNT,
             label=label,
             statistic=statistic,
             period=period,
         )
 
     def add_cloudwatch_alarm(self, id=None, metric=None, threshold=1):
-        return cloud_watch.Alarm(
+        return Alarm(
             self,
             id=id,
             metric=metric,
             threshold=threshold,
             evaluation_periods=6,
             datapoints_to_alarm=1,
-            treat_missing_data=cloud_watch.TreatMissingData.NOT_BREACHING,
-        ).add_alarm_action(actions.SnsAction(self.error_topic))
+            treat_missing_data=TreatMissingData.NOT_BREACHING,
+        ).add_alarm_action(
+            SnsAction(self.error_topic)
+        )
 
     def create_api_gateway_alarms(self):
         # 4xx are user errors so a large volume indicates a problem
@@ -285,16 +287,19 @@ class CloudWatchDashboard(Stack):
 
     def create_dynamodb_alarms(self):
         # DynamoDB
-        # DynamoDB Interactions are throttled - indicating poorly provisioned
-        # Rather than have 2 alerts, let's create one aggregate metric
+        # DynamoDB Interactions are throttled - indicated poorly provisioned
         self.add_cloudwatch_alarm(
             id="DynamoDB Table Reads/Writes Throttled",
-            metric=self.cloudwatch_math_sum(
-                label="DynamoDB Throttles",
-                m1=self.add_dynamodb_metric('ReadThrottleEvents'),
-                m2=self.add_dynamodb_metric('WriteThrottleEvents'),
-            ),
+            metric=self.dynamodb_throttles,
         )
+
+        # There should be 0 DynamoDB errors
+        # Alarms on math expressions cannot contain more than 10 individual metrics
+        # self.add_cloudwatch_alarm(
+        #     id="DynamoDB Errors > 0",
+        #     metric=self.dynamodb_total_errors,
+        #     threshold=0,
+        # )
 
     def create_cloudwatch_alarms(self):
         self.create_api_gateway_alarms()

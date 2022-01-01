@@ -5,6 +5,9 @@ from aws_cdk.aws_wafv2 import CfnWebACL, CfnWebACLAssociation
 class WebApplicationFirewall(Stack):
 
     def __init__(self, scope: Construct, id: str, target_arn=None, web_application_firewall_scope='REGIONAL', **kwargs) -> None:
+        '''This only works with APIGateway REST APIs and CloudFront
+        HTTP APIs are not supported yet
+        '''
         super().__init__(scope, id, **kwargs)
         self.associate_web_application_firewall(
             target_arn=target_arn,

@@ -172,12 +172,12 @@
         "DatapointsToAlarm": 1,
         "Metrics": [
           {
-            "Expression": "e / i * 100",
+            "Expression": "e / invocations * 100",
             "Id": "expr_1",
             "Label": "% of invocations that errored, last 5 mins"
           },
           {
-            "Id": "i",
+            "Id": "invocations",
             "MetricStat": {
               "Metric": {
                 "Dimensions": [
@@ -267,12 +267,12 @@
         "DatapointsToAlarm": 1,
         "Metrics": [
           {
-            "Expression": "t / (i + t) * 100",
+            "Expression": "t / (invocations + t) * 100",
             "Id": "expr_1",
             "Label": "% of throttled requests, last 30 mins"
           },
           {
-            "Id": "i",
+            "Id": "invocations",
             "MetricStat": {
               "Metric": {
                 "Dimensions": [
@@ -431,11 +431,11 @@
               {
                 "Ref": "AWS::Region"
               },
-              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"e / i * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"e / invocations * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
               {
                 "Fn::ImportValue": "LambdaFunction:ExportsOutputRefLambdaFunctionBF21E41F66817B40"
               },
-              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"i\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
+              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
               {
                 "Fn::ImportValue": "LambdaFunction:ExportsOutputRefLambdaFunctionBF21E41F66817B40"
               },
@@ -459,11 +459,11 @@
               {
                 "Ref": "AWS::Region"
               },
-              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of throttled requests, last 30 mins\",\"expression\":\"t / (i + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of throttled requests, last 30 mins\",\"expression\":\"t / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
               {
                 "Fn::ImportValue": "LambdaFunction:ExportsOutputRefLambdaFunctionBF21E41F66817B40"
               },
-              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"i\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
+              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
               {
                 "Fn::ImportValue": "LambdaFunction:ExportsOutputRefLambdaFunctionBF21E41F66817B40"
               },

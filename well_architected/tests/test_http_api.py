@@ -5,7 +5,7 @@ class TestHTTPAPI(TestTemplates):
 
     def test_http_api_gateway(self):
         self.assert_template_equal(
-            'LambdaHTTPAPIGateway',
+            'LambdaHttpApiGateway',
             {
   "Resources": {
     "HttpAPI8D545486": {
@@ -15,7 +15,7 @@ class TestHTTPAPI(TestTemplates):
         "ProtocolType": "HTTP"
       },
       "Metadata": {
-        "aws:cdk:path": "LambdaHTTPAPIGateway/HttpAPI/Resource"
+        "aws:cdk:path": "LambdaHttpApiGateway/HttpAPI/Resource"
       }
     },
     "HttpAPIDefaultRouteHTTPLambdaIntegrationPermission5A5BB64C": {
@@ -52,7 +52,7 @@ class TestHTTPAPI(TestTemplates):
         }
       },
       "Metadata": {
-        "aws:cdk:path": "LambdaHTTPAPIGateway/HttpAPI/DefaultRoute/HTTPLambdaIntegration-Permission"
+        "aws:cdk:path": "LambdaHttpApiGateway/HttpAPI/DefaultRoute/HTTPLambdaIntegration-Permission"
       }
     },
     "HttpAPIDefaultRouteHTTPLambdaIntegration7A40D12F": {
@@ -68,7 +68,7 @@ class TestHTTPAPI(TestTemplates):
         "PayloadFormatVersion": "2.0"
       },
       "Metadata": {
-        "aws:cdk:path": "LambdaHTTPAPIGateway/HttpAPI/DefaultRoute/HTTPLambdaIntegration/Resource"
+        "aws:cdk:path": "LambdaHttpApiGateway/HttpAPI/DefaultRoute/HTTPLambdaIntegration/Resource"
       }
     },
     "HttpAPIDefaultRouteF9949FE6": {
@@ -92,7 +92,7 @@ class TestHTTPAPI(TestTemplates):
         }
       },
       "Metadata": {
-        "aws:cdk:path": "LambdaHTTPAPIGateway/HttpAPI/DefaultRoute/Resource"
+        "aws:cdk:path": "LambdaHttpApiGateway/HttpAPI/DefaultRoute/Resource"
       }
     },
     "HttpAPIDefaultStage1BC7D78F": {
@@ -105,7 +105,7 @@ class TestHTTPAPI(TestTemplates):
         "AutoDeploy": true
       },
       "Metadata": {
-        "aws:cdk:path": "LambdaHTTPAPIGateway/HttpAPI/DefaultStage/Resource"
+        "aws:cdk:path": "LambdaHttpApiGateway/HttpAPI/DefaultStage/Resource"
       }
     },
     "CDKMetadata": {
@@ -114,7 +114,7 @@ class TestHTTPAPI(TestTemplates):
         "Analytics": "v2:deflate64:H4sIAAAAAAAA/11OSw6CMBA9C/syUFm41bDRlQRPUEvFirRNO5WQhrvL4MLE1fvMm3nDgVd7KLODmEIuu6FI0noF6YpCDqy+m0tEF5HV1gT0USJ5rQo2eqmIr4NOo7ZmYXQiCad7gWoS83sH6YTojk5TkIBkayOqjZ0Nqt4LWqbAn/zl1l/6rWsjC3uJ8dYJWI1G+VGHQO0La2Z8WFNUwEvg2TNonftoUI8K2i9+AANcqQDtAAAA"
       },
       "Metadata": {
-        "aws:cdk:path": "LambdaHTTPAPIGateway/CDKMetadata/Default"
+        "aws:cdk:path": "LambdaHttpApiGateway/CDKMetadata/Default"
       },
       "Condition": "CDKMetadataAvailable"
     }
@@ -147,7 +147,7 @@ class TestHTTPAPI(TestTemplates):
         "Ref": "HttpAPI8D545486"
       },
       "Export": {
-        "Name": "LambdaHTTPAPIGateway:ExportsOutputRefHttpAPI8D545486FD78B06F"
+        "Name": "LambdaHttpApiGateway:ExportsOutputRefHttpAPI8D545486FD78B06F"
       }
     }
   },

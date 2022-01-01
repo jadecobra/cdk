@@ -4,7 +4,7 @@ from aws_cdk.aws_apigatewayv2 import HttpApi
 from aws_cdk.aws_apigatewayv2_integrations import HttpLambdaIntegration
 
 
-class LambdaHTTPAPIGateway(Stack):
+class LambdaHttpApiGateway(Stack):
 
     def __init__(self, scope: Construct, id: str, lambda_function: Function, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
