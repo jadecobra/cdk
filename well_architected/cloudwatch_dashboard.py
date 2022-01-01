@@ -1,4 +1,5 @@
 import os
+from this import d
 # os.system('pip install aws_cdk.aws_apigatewayv2_integrations')
 
 from aws_cdk import (
@@ -62,44 +63,45 @@ class CloudWatchDashboard(Stack):
         )
 
         # note: throttled requests are not counted in total num of invocations
-        self.lambda_throttled_percentage = cloud_watch.MathExpression(
-            expression="t / (i + t) * 100",
+        self.lambda_throttled_percentage = self.create_cloudwatch_math_expression(
             label="% of throttled requests, last 30 mins",
+            expression="t / (i + t) * 100",
             using_metrics={
                 "i": self.add_lambda_function_metric("Invocations"),
                 "t": self.add_lambda_function_metric("Throttles"),
             },
-            period=self.five_minutes(),
         )
 
         # I think usererrors are at an account level rather than a table level so merging
         # these two metrics until I can get a definitive answer. I think usererrors
         # will always show as 0 when scoped to a table so this is still effectively
         # a system errors count
-        self.dynamodb_total_errors = cloud_watch.MathExpression(
-            expression="m1 + m2",
+        self.dynamodb_total_errors = self.cloudwatch_math_sum(
             label="DynamoDB Errors",
-            using_metrics={
-                "m1": self.dynamodb_table.metric_user_errors(),
-                "m2": self.dynamodb_table.metric_system_errors_for_operations(),
-            },
-            period=self.five_minutes(),
+            m1=self.dynamodb_table.metric_user_errors(),
+            m2=self.dynamodb_table.metric_system_errors_for_operations(),
         )
 
         # Rather than have 2 alerts, let's create one aggregate metric
-        self.dynamodb_throttles = cloud_watch.MathExpression(
-            expression="m1 + m2",
-            label="DynamoDB Throttles",
-            using_metrics={
-                "m1": self.add_dynamodb_metric('ReadThrottleEvents'),
-                "m2": self.add_dynamodb_metric('WriteThrottleEvents'),
-            },
-            period=self.five_minutes(),
-        )
+
 
         self.create_cloudwatch_alarms()
         self.create_cloudwatch_dashboard()
 
+    def cloudwatch_math_sum(self, label=None, m1=None, m2=None):
+        return self.create_cloudwatch_math_expression(
+            label=label,
+            expression="m1 + m2",
+            using_metrics={"m1": m1, "m2": m2},
+        )
+
+    def create_cloudwatch_math_expression(self, expression=None, label=None, using_metrics=None):
+        return cloud_watch.MathExpression(
+            expression=expression,
+            label=label,
+            using_metrics=using_metrics,
+            period=self.five_minutes(),
+        )
 
     def add_cloudwatch_widget(self, title=None, stacked=True, left=None):
         return cloud_watch.GraphWidget(
@@ -283,10 +285,15 @@ class CloudWatchDashboard(Stack):
 
     def create_dynamodb_alarms(self):
         # DynamoDB
-        # DynamoDB Interactions are throttled - indicated poorly provisioned
+        # DynamoDB Interactions are throttled - indicating poorly provisioned
+        # Rather than have 2 alerts, let's create one aggregate metric
         self.add_cloudwatch_alarm(
             id="DynamoDB Table Reads/Writes Throttled",
-            metric=self.dynamodb_throttles,
+            metric=self.cloudwatch_math_sum(
+                label="DynamoDB Throttles",
+                m1=self.add_dynamodb_metric('ReadThrottleEvents'),
+                m2=self.add_dynamodb_metric('WriteThrottleEvents'),
+            ),
         )
 
     def create_cloudwatch_alarms(self):
