@@ -128,18 +128,12 @@ class CloudWatchDashboard(Stack):
                 left=[
                     self.add_api_gateway_metric(
                         metric_name="Latency",
-                        label="API Latency p50",
-                        statistic="p50",
-                    ),
-                    self.add_api_gateway_metric(
-                        metric_name="Latency",
-                        label="API Latency p90",
-                        statistic="p90",
-                    ),
-                    self.add_api_gateway_metric(
-                        metric_name="Latency",
-                        label="API Latency p99",
-                        statistic="p99",
+                        label=label,
+                        statistic=statistic,
+                    ) for label, statistic in (
+                        ("API Latency p50", "p50"),
+                        ("API Latency p90", "p90"),
+                        ("API Latency p99", "p99"),
                     )
                 ]
             ),
@@ -147,12 +141,11 @@ class CloudWatchDashboard(Stack):
                 title="API GW Errors",
                 left=[
                     self.add_api_gateway_metric(
-                        metric_name="4XXError",
-                        label="4XX Errors",
-                    ),
-                    self.add_api_gateway_metric(
-                        metric_name="5XXError",
-                        label="5XX Errors",
+                        metric_name=metric_name,
+                        label=label,
+                    ) for metric_name, label in (
+                        ("4XXError", "4XX Errors"),
+                        ("5XXError", "5XX Errors"),
                     )
                 ]
             ),
@@ -185,23 +178,22 @@ class CloudWatchDashboard(Stack):
                 title="DynamoDB Consumed Read/Write Units",
                 stacked=False,
                 left=[
-                    self.dynamodb_table.metric(metric_name="ConsumedReadCapacityUnits"),
-                    self.dynamodb_table.metric(metric_name="ConsumedWriteCapacityUnits"),
+                    self.dynamodb_table.metric(metric_name=metric_name) for metric_name in (
+                        'ConsumedReadCapacityUnits', 'ConsumedWriteCapacityUnits',
+                    )
                 ]
             ),
             self.add_cloudwatch_widget(
                 title="DynamoDB Throttles",
                 left=[
                     self.dynamodb_table.metric(
-                        metric_name="ReadThrottleEvents",
+                        metric_name=metric_name,
                         statistic="sum",
-                    ),
-                    self.dynamodb_table.metric(
-                        metric_name="WriteThrottleEvents",
-                        statistic="sum",
+                    ) for metric_name in (
+                        'ReadThrottleEvents', 'WriteThrottleEvents',
                     )
                 ],
-            )
+            ),
         )
 
     def dynamodb_successful_request_latency(self, operation):
