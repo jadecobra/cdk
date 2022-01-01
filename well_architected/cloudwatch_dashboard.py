@@ -91,12 +91,8 @@ class CloudWatchDashboard(Stack):
             expression="m1 + m2",
             label="DynamoDB Throttles",
             using_metrics={
-                "m1": self.dynamodb_table.metric(
-                    metric_name="ReadThrottleEvents", statistic="sum"
-                ),
-                "m2": self.dynamodb_table.metric(
-                    metric_name="WriteThrottleEvents", statistic="sum"
-                ),
+                "m1": self.add_dynamodb_metric('ReadThrottleEvents'),
+                "m2": self.add_dynamodb_metric('WriteThrottleEvents'),
             },
             period=self.five_minutes(),
         )
@@ -178,23 +174,25 @@ class CloudWatchDashboard(Stack):
                 title="DynamoDB Consumed Read/Write Units",
                 stacked=False,
                 left=[
-                    self.dynamodb_table.metric(metric_name=metric_name) for metric_name in (
+                    self.add_dynamodb_metric(metric_name, statistic='avg') for metric_name in (
                         'ConsumedReadCapacityUnits', 'ConsumedWriteCapacityUnits',
                     )
                 ]
             ),
+
             self.add_cloudwatch_widget(
                 title="DynamoDB Throttles",
                 left=[
-                    self.dynamodb_table.metric(
-                        metric_name=metric_name,
-                        statistic="sum",
-                    ) for metric_name in (
+                    self.add_dynamodb_metric(metric_name)
+                    for metric_name in (
                         'ReadThrottleEvents', 'WriteThrottleEvents',
                     )
                 ],
             ),
         )
+
+    def add_dynamodb_metric(self, metric_name, statistic='sum'):
+        return self.dynamodb_table.metric(metric_name=metric_name, statistic=statistic)
 
     def dynamodb_successful_request_latency(self, operation):
         return self.dynamodb_table.metric_successful_request_latency(
