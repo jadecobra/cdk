@@ -100,16 +100,22 @@ class CloudWatchDashboard(Stack):
             },
             period=self.five_minutes(),
         )
-        ###
-        # Alarms
-        ###
-        self.create_cloudwatch_alarms()
 
+        self.create_cloudwatch_alarms()
+        self.create_cloudwatch_dashboard()
+
+
+    def add_cloudwatch_widget(self, title=None, stacked=True, left=None):
+        return cloud_watch.GraphWidget(
+            title=title, width=8, stacked=stacked, left=left
+        )
+
+    def create_cloudwatch_dashboard(self):
         dashboard = cloud_watch.Dashboard(self, id="CloudWatchDashBoard")
         dashboard.add_widgets(
-            cloud_watch.GraphWidget(
+            self.add_cloudwatch_widget(
                 title="Requests",
-                width=8,
+                stacked=False,
                 left=[
                     self.add_api_gateway_metric(
                         metric_name="Count",
@@ -117,10 +123,8 @@ class CloudWatchDashboard(Stack):
                     )
                 ]
             ),
-            cloud_watch.GraphWidget(
+            self.add_cloudwatch_widget(
                 title="API GW Latency",
-                width=8,
-                stacked=True,
                 left=[
                     self.add_api_gateway_metric(
                         metric_name="Latency",
@@ -139,10 +143,8 @@ class CloudWatchDashboard(Stack):
                     )
                 ]
             ),
-            cloud_watch.GraphWidget(
+            self.add_cloudwatch_widget(
                 title="API GW Errors",
-                width=8,
-                stacked=True,
                 left=[
                     self.add_api_gateway_metric(
                         metric_name="4XXError",
@@ -154,50 +156,41 @@ class CloudWatchDashboard(Stack):
                     )
                 ]
             ),
-            cloud_watch.GraphWidget(
+            self.add_cloudwatch_widget(
                 title="Dynamo Lambda Error %",
-                width=8,
-                # stacked=True,
+                stacked=False,
                 left=[self.lambda_error_percentage],
             ),
-            cloud_watch.GraphWidget(
+            self.add_cloudwatch_widget(
                 title="Dynamo Lambda Duration",
-                width=8,
-                stacked=True,
                 left=[
-                    lambda_function.metric_duration(statistic="p50"),
-                    lambda_function.metric_duration(statistic="p90"),
-                    lambda_function.metric_duration(statistic="p99"),
+                    self.lambda_function.metric_duration(statistic=statistic)
+                    for statistic in ('p50', 'p90', 'p99')
                 ],
             ),
-            cloud_watch.GraphWidget(
+            self.add_cloudwatch_widget(
                 title="Dynamo Lambda Throttle %",
-                width=8,
                 left=[self.lambda_throttled_percentage],
+                stacked=False,
             ),
-            cloud_watch.GraphWidget(
+            self.add_cloudwatch_widget(
                 title="DynamoDB Latency",
-                width=8,
-                stacked=True,
                 left=[
                     self.dynamodb_successful_request_latency(action) for action in (
                         'GetItem', 'UpdateItem', 'PutItem', 'DeleteItem', 'Query',
                     )
                 ],
             ),
-            cloud_watch.GraphWidget(
+            self.add_cloudwatch_widget(
                 title="DynamoDB Consumed Read/Write Units",
-                width=8,
                 stacked=False,
                 left=[
                     self.dynamodb_table.metric(metric_name="ConsumedReadCapacityUnits"),
                     self.dynamodb_table.metric(metric_name="ConsumedWriteCapacityUnits"),
                 ]
             ),
-            cloud_watch.GraphWidget(
+            self.add_cloudwatch_widget(
                 title="DynamoDB Throttles",
-                width=8,
-                stacked=True,
                 left=[
                     self.dynamodb_table.metric(
                         metric_name="ReadThrottleEvents",
@@ -208,12 +201,7 @@ class CloudWatchDashboard(Stack):
                         statistic="sum",
                     )
                 ],
-            ),
-        )
-
-    def add_cloudwatch_widget(self):
-        return cloud_watch.GraphWidget(
-
+            )
         )
 
     def dynamodb_successful_request_latency(self, operation):

@@ -402,7 +402,7 @@ class TestCloudWatchDashboard(TestTemplates):
               {
                 "Ref": "AWS::Region"
               },
-              "\",\"metrics\":[[\"AWS/ApiGateway\",\"Count\",\"ApiId\",\"",
+              "\",\"stacked\":false,\"metrics\":[[\"AWS/ApiGateway\",\"Count\",\"ApiId\",\"",
               {
                 "Fn::ImportValue": "LambdaHTTPAPIGateway:ExportsOutputRefHttpAPI8D545486FD78B06F"
               },
@@ -438,7 +438,7 @@ class TestCloudWatchDashboard(TestTemplates):
               {
                 "Ref": "AWS::Region"
               },
-              "\",\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"e / i * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"e / i * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
               {
                 "Fn::ImportValue": "LambdaFunction:ExportsOutputRefLambdaFunctionBF21E41F66817B40"
               },
@@ -466,7 +466,7 @@ class TestCloudWatchDashboard(TestTemplates):
               {
                 "Ref": "AWS::Region"
               },
-              "\",\"metrics\":[[{\"label\":\"% of throttled requests, last 30 mins\",\"expression\":\"t / (i + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of throttled requests, last 30 mins\",\"expression\":\"t / (i + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
               {
                 "Fn::ImportValue": "LambdaFunction:ExportsOutputRefLambdaFunctionBF21E41F66817B40"
               },
