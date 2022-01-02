@@ -146,10 +146,170 @@
         "aws:asset:property": "Code"
       }
     },
+    "DynamoLambda2ErrorDE3BEB2F": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": 6,
+        "AlarmActions": [
+          {
+            "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
+          }
+        ],
+        "DatapointsToAlarm": 1,
+        "Metrics": [
+          {
+            "Expression": "e / invocations * 100",
+            "Id": "expr_1",
+            "Label": "% of invocations that errored, last 5 mins"
+          },
+          {
+            "Id": "invocations",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "FunctionName",
+                    "Value": {
+                      "Ref": "LambdaFunctionBF21E41F"
+                    }
+                  }
+                ],
+                "MetricName": "Invocations",
+                "Namespace": "AWS/Lambda"
+              },
+              "Period": 300,
+              "Stat": "Sum"
+            },
+            "ReturnData": false
+          },
+          {
+            "Id": "e",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "FunctionName",
+                    "Value": {
+                      "Ref": "LambdaFunctionBF21E41F"
+                    }
+                  }
+                ],
+                "MetricName": "Errors",
+                "Namespace": "AWS/Lambda"
+              },
+              "Period": 300,
+              "Stat": "Sum"
+            },
+            "ReturnData": false
+          }
+        ],
+        "Threshold": 2,
+        "TreatMissingData": "notBreaching"
+      },
+      "Metadata": {
+        "aws:cdk:path": "LambdaFunction/Dynamo Lambda 2% Error/Resource"
+      }
+    },
+    "DynamoLambdap99LongDuration1s739ED568": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": 6,
+        "AlarmActions": [
+          {
+            "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
+          }
+        ],
+        "DatapointsToAlarm": 1,
+        "Dimensions": [
+          {
+            "Name": "FunctionName",
+            "Value": {
+              "Ref": "LambdaFunctionBF21E41F"
+            }
+          }
+        ],
+        "ExtendedStatistic": "p99",
+        "MetricName": "Duration",
+        "Namespace": "AWS/Lambda",
+        "Period": 300,
+        "Threshold": 1000,
+        "TreatMissingData": "notBreaching"
+      },
+      "Metadata": {
+        "aws:cdk:path": "LambdaFunction/Dynamo Lambda p99 Long Duration (>1s)/Resource"
+      }
+    },
+    "DynamoLambda2Throttled090CFA4C": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": 6,
+        "AlarmActions": [
+          {
+            "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
+          }
+        ],
+        "DatapointsToAlarm": 1,
+        "Metrics": [
+          {
+            "Expression": "t / (invocations + t) * 100",
+            "Id": "expr_1",
+            "Label": "% of throttled requests, last 30 mins"
+          },
+          {
+            "Id": "invocations",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "FunctionName",
+                    "Value": {
+                      "Ref": "LambdaFunctionBF21E41F"
+                    }
+                  }
+                ],
+                "MetricName": "Invocations",
+                "Namespace": "AWS/Lambda"
+              },
+              "Period": 300,
+              "Stat": "Sum"
+            },
+            "ReturnData": false
+          },
+          {
+            "Id": "t",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "FunctionName",
+                    "Value": {
+                      "Ref": "LambdaFunctionBF21E41F"
+                    }
+                  }
+                ],
+                "MetricName": "Throttles",
+                "Namespace": "AWS/Lambda"
+              },
+              "Period": 300,
+              "Stat": "Sum"
+            },
+            "ReturnData": false
+          }
+        ],
+        "Threshold": 2,
+        "TreatMissingData": "notBreaching"
+      },
+      "Metadata": {
+        "aws:cdk:path": "LambdaFunction/Dynamo Lambda 2% Throttled/Resource"
+      }
+    },
     "CDKMetadata": {
       "Type": "AWS::CDK::Metadata",
       "Properties": {
-        "Analytics": "v2:deflate64:H4sIAAAAAAAA/zWOQQ+CMAyFfwv3USUcvCokngn+gjoqTmBL1i7GLPvvshlP73vNa/saaNoTHKszvrnW03KI2nmCeBPUi7owk+w4Gzur3lkWH7So/mEH9LiRkM9mJHbBa8q8pyYjxtmk8sm44nafEOI1WJ3HOfPnpAxuEEe3ltWig1uN/pQXhZLitsbcg6HU2T10QS8kHTKlpIaPPJ09tNAcoalebEztgxWzEYw//QJ3v8er5QAAAA=="
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/zWOS27DMAxEz5K9zMTwItsmAbo23BOwNJuo1gcQKQSBoLvHUtEV3xAz5IwwTmc4HT7wKQOt27FQTAzlS5E2cxFh3fFuw93cYhBNmdTcfsKMCT0rpyYWlpgTcePdtVq1MVTTThaH/ntFKJ85UFs3zz9XY9FDWaLr0T7n6Cy9+otO1cg0YOsh0OvsGq6ZNtYrChtyMa9PVHpAuThMvkU71FrN/NJHDMcJxhOMh1+xdkg5qPUMy998A921L5EBAQAA"
       },
       "Metadata": {
         "aws:cdk:path": "LambdaFunction/CDKMetadata/Default"

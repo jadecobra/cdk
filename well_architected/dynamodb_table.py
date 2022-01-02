@@ -21,7 +21,7 @@ class DynamoDBTable(Stack):
         self.create_throttles_alarm()
         self.dynamodb_cloudwatch_widgets = self.create_cloudwatch_widgets()
 
-    def add_dynamodb_metric(self, metric_name, statistic='sum'):
+    def get_dynamodb_metric(self, metric_name, statistic='sum'):
         return self.dynamodb_table.metric(metric_name=metric_name, statistic=statistic)
 
     def create_latency_widget(self):
@@ -29,7 +29,7 @@ class DynamoDBTable(Stack):
             title="DynamoDB Latency",
             left=[
                 self.dynamodb_table.metric_successful_request_latency(
-                    dimensions={
+                    dimensions_map={
                         'TableName': self.dynamodb_table.table_name,
                         'Operation': action,
                     }
@@ -44,23 +44,21 @@ class DynamoDBTable(Stack):
             title="DynamoDB Consumed Read/Write Units",
             stacked=False,
             left=[
-                self.add_dynamodb_metric(metric_name, statistic='avg') for metric_name in (
+                self.get_dynamodb_metric(metric_name, statistic='avg') for metric_name in (
                     'ConsumedReadCapacityUnits', 'ConsumedWriteCapacityUnits',
                 )
             ]
         )
 
     def create_throttles_metric(self, action='Read'):
-        return self.add_dynamodb_metric(f'{action}ThrottleEvents')
+        return self.get_dynamodb_metric(f'{action}ThrottleEvents')
 
     def create_throttles_widget(self):
         return cloudwatch.create_cloudwatch_widget(
             title="DynamoDB Throttles",
             left=[
-                self.create_throttles_metric(action)
-                for action in (
-                    'Read', 'Write',
-                )
+                self.create_throttles_metric(),
+                self.create_throttles_metric('Write')
             ],
         )
 

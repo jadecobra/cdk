@@ -542,6 +542,211 @@
               "version": "1.137.0"
             }
           },
+          "Dynamo Lambda 2% Error": {
+            "id": "Dynamo Lambda 2% Error",
+            "path": "LambdaFunction/Dynamo Lambda 2% Error",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "LambdaFunction/Dynamo Lambda 2% Error/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                  "aws:cdk:cloudformation:props": {
+                    "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                    "evaluationPeriods": 6,
+                    "alarmActions": [
+                      {
+                        "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
+                      }
+                    ],
+                    "datapointsToAlarm": 1,
+                    "metrics": [
+                      {
+                        "expression": "e / invocations * 100",
+                        "id": "expr_1",
+                        "label": "% of invocations that errored, last 5 mins"
+                      },
+                      {
+                        "metricStat": {
+                          "metric": {
+                            "metricName": "Invocations",
+                            "namespace": "AWS/Lambda",
+                            "dimensions": [
+                              {
+                                "name": "FunctionName",
+                                "value": {
+                                  "Ref": "LambdaFunctionBF21E41F"
+                                }
+                              }
+                            ]
+                          },
+                          "period": 300,
+                          "stat": "Sum"
+                        },
+                        "id": "invocations",
+                        "returnData": false
+                      },
+                      {
+                        "metricStat": {
+                          "metric": {
+                            "metricName": "Errors",
+                            "namespace": "AWS/Lambda",
+                            "dimensions": [
+                              {
+                                "name": "FunctionName",
+                                "value": {
+                                  "Ref": "LambdaFunctionBF21E41F"
+                                }
+                              }
+                            ]
+                          },
+                          "period": 300,
+                          "stat": "Sum"
+                        },
+                        "id": "e",
+                        "returnData": false
+                      }
+                    ],
+                    "threshold": 2,
+                    "treatMissingData": "notBreaching"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
+                  "version": "1.137.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
+              "version": "1.137.0"
+            }
+          },
+          "Dynamo Lambda p99 Long Duration (>1s)": {
+            "id": "Dynamo Lambda p99 Long Duration (>1s)",
+            "path": "LambdaFunction/Dynamo Lambda p99 Long Duration (>1s)",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "LambdaFunction/Dynamo Lambda p99 Long Duration (>1s)/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                  "aws:cdk:cloudformation:props": {
+                    "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                    "evaluationPeriods": 6,
+                    "alarmActions": [
+                      {
+                        "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
+                      }
+                    ],
+                    "datapointsToAlarm": 1,
+                    "dimensions": [
+                      {
+                        "name": "FunctionName",
+                        "value": {
+                          "Ref": "LambdaFunctionBF21E41F"
+                        }
+                      }
+                    ],
+                    "extendedStatistic": "p99",
+                    "metricName": "Duration",
+                    "namespace": "AWS/Lambda",
+                    "period": 300,
+                    "threshold": 1000,
+                    "treatMissingData": "notBreaching"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
+                  "version": "1.137.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
+              "version": "1.137.0"
+            }
+          },
+          "Dynamo Lambda 2% Throttled": {
+            "id": "Dynamo Lambda 2% Throttled",
+            "path": "LambdaFunction/Dynamo Lambda 2% Throttled",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "LambdaFunction/Dynamo Lambda 2% Throttled/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                  "aws:cdk:cloudformation:props": {
+                    "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                    "evaluationPeriods": 6,
+                    "alarmActions": [
+                      {
+                        "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
+                      }
+                    ],
+                    "datapointsToAlarm": 1,
+                    "metrics": [
+                      {
+                        "expression": "t / (invocations + t) * 100",
+                        "id": "expr_1",
+                        "label": "% of throttled requests, last 30 mins"
+                      },
+                      {
+                        "metricStat": {
+                          "metric": {
+                            "metricName": "Invocations",
+                            "namespace": "AWS/Lambda",
+                            "dimensions": [
+                              {
+                                "name": "FunctionName",
+                                "value": {
+                                  "Ref": "LambdaFunctionBF21E41F"
+                                }
+                              }
+                            ]
+                          },
+                          "period": 300,
+                          "stat": "Sum"
+                        },
+                        "id": "invocations",
+                        "returnData": false
+                      },
+                      {
+                        "metricStat": {
+                          "metric": {
+                            "metricName": "Throttles",
+                            "namespace": "AWS/Lambda",
+                            "dimensions": [
+                              {
+                                "name": "FunctionName",
+                                "value": {
+                                  "Ref": "LambdaFunctionBF21E41F"
+                                }
+                              }
+                            ]
+                          },
+                          "period": 300,
+                          "stat": "Sum"
+                        },
+                        "id": "t",
+                        "returnData": false
+                      }
+                    ],
+                    "threshold": 2,
+                    "treatMissingData": "notBreaching"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
+                  "version": "1.137.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
+              "version": "1.137.0"
+            }
+          },
           "CDKMetadata": {
             "id": "CDKMetadata",
             "path": "LambdaFunction/CDKMetadata",
@@ -1676,211 +1881,6 @@
               "version": "1.137.0"
             }
           },
-          "Dynamo Lambda 2% Error": {
-            "id": "Dynamo Lambda 2% Error",
-            "path": "HttpApiCloudWatchDashboard/Dynamo Lambda 2% Error",
-            "children": {
-              "Resource": {
-                "id": "Resource",
-                "path": "HttpApiCloudWatchDashboard/Dynamo Lambda 2% Error/Resource",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
-                  "aws:cdk:cloudformation:props": {
-                    "comparisonOperator": "GreaterThanOrEqualToThreshold",
-                    "evaluationPeriods": 6,
-                    "alarmActions": [
-                      {
-                        "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
-                      }
-                    ],
-                    "datapointsToAlarm": 1,
-                    "metrics": [
-                      {
-                        "expression": "e / invocations * 100",
-                        "id": "expr_1",
-                        "label": "% of invocations that errored, last 5 mins"
-                      },
-                      {
-                        "metricStat": {
-                          "metric": {
-                            "metricName": "Invocations",
-                            "namespace": "AWS/Lambda",
-                            "dimensions": [
-                              {
-                                "name": "FunctionName",
-                                "value": {
-                                  "Fn::ImportValue": "LambdaFunction:ExportsOutputRefLambdaFunctionBF21E41F66817B40"
-                                }
-                              }
-                            ]
-                          },
-                          "period": 300,
-                          "stat": "Sum"
-                        },
-                        "id": "invocations",
-                        "returnData": false
-                      },
-                      {
-                        "metricStat": {
-                          "metric": {
-                            "metricName": "Errors",
-                            "namespace": "AWS/Lambda",
-                            "dimensions": [
-                              {
-                                "name": "FunctionName",
-                                "value": {
-                                  "Fn::ImportValue": "LambdaFunction:ExportsOutputRefLambdaFunctionBF21E41F66817B40"
-                                }
-                              }
-                            ]
-                          },
-                          "period": 300,
-                          "stat": "Sum"
-                        },
-                        "id": "e",
-                        "returnData": false
-                      }
-                    ],
-                    "threshold": 2,
-                    "treatMissingData": "notBreaching"
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
-                  "version": "1.137.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
-              "version": "1.137.0"
-            }
-          },
-          "Dynamo Lambda p99 Long Duration (>1s)": {
-            "id": "Dynamo Lambda p99 Long Duration (>1s)",
-            "path": "HttpApiCloudWatchDashboard/Dynamo Lambda p99 Long Duration (>1s)",
-            "children": {
-              "Resource": {
-                "id": "Resource",
-                "path": "HttpApiCloudWatchDashboard/Dynamo Lambda p99 Long Duration (>1s)/Resource",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
-                  "aws:cdk:cloudformation:props": {
-                    "comparisonOperator": "GreaterThanOrEqualToThreshold",
-                    "evaluationPeriods": 6,
-                    "alarmActions": [
-                      {
-                        "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
-                      }
-                    ],
-                    "datapointsToAlarm": 1,
-                    "dimensions": [
-                      {
-                        "name": "FunctionName",
-                        "value": {
-                          "Fn::ImportValue": "LambdaFunction:ExportsOutputRefLambdaFunctionBF21E41F66817B40"
-                        }
-                      }
-                    ],
-                    "extendedStatistic": "p99",
-                    "metricName": "Duration",
-                    "namespace": "AWS/Lambda",
-                    "period": 300,
-                    "threshold": 1000,
-                    "treatMissingData": "notBreaching"
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
-                  "version": "1.137.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
-              "version": "1.137.0"
-            }
-          },
-          "Dynamo Lambda 2% Throttled": {
-            "id": "Dynamo Lambda 2% Throttled",
-            "path": "HttpApiCloudWatchDashboard/Dynamo Lambda 2% Throttled",
-            "children": {
-              "Resource": {
-                "id": "Resource",
-                "path": "HttpApiCloudWatchDashboard/Dynamo Lambda 2% Throttled/Resource",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
-                  "aws:cdk:cloudformation:props": {
-                    "comparisonOperator": "GreaterThanOrEqualToThreshold",
-                    "evaluationPeriods": 6,
-                    "alarmActions": [
-                      {
-                        "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
-                      }
-                    ],
-                    "datapointsToAlarm": 1,
-                    "metrics": [
-                      {
-                        "expression": "t / (invocations + t) * 100",
-                        "id": "expr_1",
-                        "label": "% of throttled requests, last 30 mins"
-                      },
-                      {
-                        "metricStat": {
-                          "metric": {
-                            "metricName": "Invocations",
-                            "namespace": "AWS/Lambda",
-                            "dimensions": [
-                              {
-                                "name": "FunctionName",
-                                "value": {
-                                  "Fn::ImportValue": "LambdaFunction:ExportsOutputRefLambdaFunctionBF21E41F66817B40"
-                                }
-                              }
-                            ]
-                          },
-                          "period": 300,
-                          "stat": "Sum"
-                        },
-                        "id": "invocations",
-                        "returnData": false
-                      },
-                      {
-                        "metricStat": {
-                          "metric": {
-                            "metricName": "Throttles",
-                            "namespace": "AWS/Lambda",
-                            "dimensions": [
-                              {
-                                "name": "FunctionName",
-                                "value": {
-                                  "Fn::ImportValue": "LambdaFunction:ExportsOutputRefLambdaFunctionBF21E41F66817B40"
-                                }
-                              }
-                            ]
-                          },
-                          "period": 300,
-                          "stat": "Sum"
-                        },
-                        "id": "t",
-                        "returnData": false
-                      }
-                    ],
-                    "threshold": 2,
-                    "treatMissingData": "notBreaching"
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
-                  "version": "1.137.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
-              "version": "1.137.0"
-            }
-          },
           "CloudWatchDashBoard": {
             "id": "CloudWatchDashBoard",
             "path": "HttpApiCloudWatchDashboard/CloudWatchDashBoard",
@@ -2256,211 +2256,6 @@
                       }
                     ],
                     "threshold": 1000,
-                    "treatMissingData": "notBreaching"
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
-                  "version": "1.137.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
-              "version": "1.137.0"
-            }
-          },
-          "Dynamo Lambda 2% Error": {
-            "id": "Dynamo Lambda 2% Error",
-            "path": "RestApiCloudWatchDashboard/Dynamo Lambda 2% Error",
-            "children": {
-              "Resource": {
-                "id": "Resource",
-                "path": "RestApiCloudWatchDashboard/Dynamo Lambda 2% Error/Resource",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
-                  "aws:cdk:cloudformation:props": {
-                    "comparisonOperator": "GreaterThanOrEqualToThreshold",
-                    "evaluationPeriods": 6,
-                    "alarmActions": [
-                      {
-                        "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
-                      }
-                    ],
-                    "datapointsToAlarm": 1,
-                    "metrics": [
-                      {
-                        "expression": "e / invocations * 100",
-                        "id": "expr_1",
-                        "label": "% of invocations that errored, last 5 mins"
-                      },
-                      {
-                        "metricStat": {
-                          "metric": {
-                            "metricName": "Invocations",
-                            "namespace": "AWS/Lambda",
-                            "dimensions": [
-                              {
-                                "name": "FunctionName",
-                                "value": {
-                                  "Fn::ImportValue": "LambdaFunction:ExportsOutputRefLambdaFunctionBF21E41F66817B40"
-                                }
-                              }
-                            ]
-                          },
-                          "period": 300,
-                          "stat": "Sum"
-                        },
-                        "id": "invocations",
-                        "returnData": false
-                      },
-                      {
-                        "metricStat": {
-                          "metric": {
-                            "metricName": "Errors",
-                            "namespace": "AWS/Lambda",
-                            "dimensions": [
-                              {
-                                "name": "FunctionName",
-                                "value": {
-                                  "Fn::ImportValue": "LambdaFunction:ExportsOutputRefLambdaFunctionBF21E41F66817B40"
-                                }
-                              }
-                            ]
-                          },
-                          "period": 300,
-                          "stat": "Sum"
-                        },
-                        "id": "e",
-                        "returnData": false
-                      }
-                    ],
-                    "threshold": 2,
-                    "treatMissingData": "notBreaching"
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
-                  "version": "1.137.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
-              "version": "1.137.0"
-            }
-          },
-          "Dynamo Lambda p99 Long Duration (>1s)": {
-            "id": "Dynamo Lambda p99 Long Duration (>1s)",
-            "path": "RestApiCloudWatchDashboard/Dynamo Lambda p99 Long Duration (>1s)",
-            "children": {
-              "Resource": {
-                "id": "Resource",
-                "path": "RestApiCloudWatchDashboard/Dynamo Lambda p99 Long Duration (>1s)/Resource",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
-                  "aws:cdk:cloudformation:props": {
-                    "comparisonOperator": "GreaterThanOrEqualToThreshold",
-                    "evaluationPeriods": 6,
-                    "alarmActions": [
-                      {
-                        "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
-                      }
-                    ],
-                    "datapointsToAlarm": 1,
-                    "dimensions": [
-                      {
-                        "name": "FunctionName",
-                        "value": {
-                          "Fn::ImportValue": "LambdaFunction:ExportsOutputRefLambdaFunctionBF21E41F66817B40"
-                        }
-                      }
-                    ],
-                    "extendedStatistic": "p99",
-                    "metricName": "Duration",
-                    "namespace": "AWS/Lambda",
-                    "period": 300,
-                    "threshold": 1000,
-                    "treatMissingData": "notBreaching"
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
-                  "version": "1.137.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
-              "version": "1.137.0"
-            }
-          },
-          "Dynamo Lambda 2% Throttled": {
-            "id": "Dynamo Lambda 2% Throttled",
-            "path": "RestApiCloudWatchDashboard/Dynamo Lambda 2% Throttled",
-            "children": {
-              "Resource": {
-                "id": "Resource",
-                "path": "RestApiCloudWatchDashboard/Dynamo Lambda 2% Throttled/Resource",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
-                  "aws:cdk:cloudformation:props": {
-                    "comparisonOperator": "GreaterThanOrEqualToThreshold",
-                    "evaluationPeriods": 6,
-                    "alarmActions": [
-                      {
-                        "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
-                      }
-                    ],
-                    "datapointsToAlarm": 1,
-                    "metrics": [
-                      {
-                        "expression": "t / (invocations + t) * 100",
-                        "id": "expr_1",
-                        "label": "% of throttled requests, last 30 mins"
-                      },
-                      {
-                        "metricStat": {
-                          "metric": {
-                            "metricName": "Invocations",
-                            "namespace": "AWS/Lambda",
-                            "dimensions": [
-                              {
-                                "name": "FunctionName",
-                                "value": {
-                                  "Fn::ImportValue": "LambdaFunction:ExportsOutputRefLambdaFunctionBF21E41F66817B40"
-                                }
-                              }
-                            ]
-                          },
-                          "period": 300,
-                          "stat": "Sum"
-                        },
-                        "id": "invocations",
-                        "returnData": false
-                      },
-                      {
-                        "metricStat": {
-                          "metric": {
-                            "metricName": "Throttles",
-                            "namespace": "AWS/Lambda",
-                            "dimensions": [
-                              {
-                                "name": "FunctionName",
-                                "value": {
-                                  "Fn::ImportValue": "LambdaFunction:ExportsOutputRefLambdaFunctionBF21E41F66817B40"
-                                }
-                              }
-                            ]
-                          },
-                          "period": 300,
-                          "stat": "Sum"
-                        },
-                        "id": "t",
-                        "returnData": false
-                      }
-                    ],
-                    "threshold": 2,
                     "treatMissingData": "notBreaching"
                   }
                 },
