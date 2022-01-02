@@ -34,9 +34,7 @@ class WellArchitected(App):
             self, 'HttpApiCloudWatchDashboard',
             lambda_function=self.lambda_function,
             dynamodb_table=self.dynamodb_table.dynamodb_table,
-            dynamodb_latency_widget=self.dynamodb_table.dynamodb_latency_widget,
-            dynamodb_read_write_capacity_widget=self.dynamodb_table.dynamodb_read_write_capacity_widget,
-            dynamodb_throttles_widget=self.dynamodb_table.dynamodb_throttles_widget,
+            dynamodb_cloudwatch_widgets=self.dynamodb_table.dynamodb_cloudwatch_widgets,
             api_id=self.http_api.api_id,
             error_topic=self.error_topic,
         )
@@ -45,9 +43,7 @@ class WellArchitected(App):
             self, 'RestApiCloudWatchDashboard',
             lambda_function=self.lambda_function,
             dynamodb_table=self.dynamodb_table.dynamodb_table,
-            dynamodb_latency_widget=self.dynamodb_table.dynamodb_latency_widget,
-            dynamodb_read_write_capacity_widget=self.dynamodb_table.dynamodb_read_write_capacity_widget,
-            dynamodb_throttles_widget=self.dynamodb_table.dynamodb_throttles_widget,
+            dynamodb_cloudwatch_widgets=self.dynamodb_table.dynamodb_cloudwatch_widgets,
             api_id=self.rest_api.rest_api.rest_api_id,
             error_topic=self.error_topic,
         )

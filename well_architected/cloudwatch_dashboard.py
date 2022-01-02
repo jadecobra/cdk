@@ -16,9 +16,7 @@ class CloudWatchDashboard(Stack):
         self, scope: Construct, id: str,
         lambda_function: Function = None,
         dynamodb_table: Table = None,
-        dynamodb_latency_widget=None,
-        dynamodb_read_write_capacity_widget=None,
-        dynamodb_throttles_widget=None,
+        dynamodb_cloudwatch_widgets: list = None,
         api_id: str = None,
         error_topic: Topic = None,
         **kwargs
@@ -26,9 +24,7 @@ class CloudWatchDashboard(Stack):
         super().__init__(scope, id, **kwargs)
         self.error_topic = error_topic
         self.dynamodb_table = dynamodb_table
-        self.dynamodb_latency_widget = dynamodb_latency_widget
-        self.dynamodb_read_write_capacity_widget = dynamodb_read_write_capacity_widget
-        self.dynamodb_throttles_widget = dynamodb_throttles_widget
+        self.dynamodb_cloudwatch_widgets = dynamodb_cloudwatch_widgets
         self.api_id = api_id
         self.lambda_function = lambda_function
         self.create_metrics()
@@ -134,10 +130,9 @@ class CloudWatchDashboard(Stack):
                 left=[self.lambda_throttled_percentage_metric],
                 stacked=False,
             ),
-            self.dynamodb_latency_widget,
-            self.dynamodb_read_write_capacity_widget,
-            self.dynamodb_throttles_widget,
+            *self.dynamodb_cloudwatch_widgets,
         )
+
 
     def five_minutes(self):
         return Duration.minutes(5)
