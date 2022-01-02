@@ -1,3 +1,5 @@
+import cloudwatch
+
 from aws_cdk.core import Stack, Construct, Duration
 from aws_cdk.aws_lambda import Function
 from aws_cdk.aws_dynamodb import Table
@@ -14,20 +16,20 @@ class CloudWatchDashboard(Stack):
         self, scope: Construct, id: str,
         lambda_function: Function,
         dynamodb_table: Table,
-        api=None,
+        api_id=None,
         **kwargs
     ) -> None:
         super().__init__(scope, id, **kwargs)
         self.error_topic = Topic(self, 'theBigFanTopic')
         self.dynamodb_table = dynamodb_table
-        self.api = api
+        self.api_id = api_id
         self.lambda_function = lambda_function
         self.create_metrics()
         self.create_cloudwatch_alarms()
         self.create_cloudwatch_dashboard()
 
     def create_metrics(self):
-        self.api_gw_4xx_error_percentage = self.create_cloudwatch_math_expression(
+        self.api_gw_4xx_error_percentage = cloudwatch.create_cloudwatch_math_expression(
             expression="m1/m2*100",
             label="% API Gateway 4xx Errors",
             using_metrics={
@@ -43,7 +45,7 @@ class CloudWatchDashboard(Stack):
         )
 
         # Gather the % of lambda invocations that error in past 5 mins
-        self.lambda_error_percentage = self.create_cloudwatch_math_expression(
+        self.lambda_error_percentage_metric = cloudwatch.create_cloudwatch_math_expression(
             expression="e / invocations * 100",
             label="% of invocations that errored, last 5 mins",
             using_metrics={
@@ -53,7 +55,7 @@ class CloudWatchDashboard(Stack):
         )
 
         # note: throttled requests are not counted in total num of invocations
-        self.lambda_throttled_percentage = self.create_cloudwatch_math_expression(
+        self.lambda_throttled_percentage_metric = cloudwatch.create_cloudwatch_math_expression(
             label="% of throttled requests, last 30 mins",
             expression="t / (invocations + t) * 100",
             using_metrics={
@@ -66,32 +68,17 @@ class CloudWatchDashboard(Stack):
         # these two metrics until I can get a definitive answer. I think usererrors
         # will always show as 0 when scoped to a table so this is still effectively
         # a system errors count
-        self.dynamodb_total_errors = self.cloudwatch_math_sum(
+        self.dynamodb_total_errors_metric = cloudwatch.cloudwatch_math_sum(
             label="DynamoDB Errors",
             m1=self.dynamodb_table.metric_user_errors(),
             m2=self.dynamodb_table.metric_system_errors_for_operations(),
         )
 
         # Rather than have 2 alerts, let's create one aggregate metric
-        self.dynamodb_throttles = self.cloudwatch_math_sum(
+        self.dynamodb_throttles_metric = cloudwatch.cloudwatch_math_sum(
             label="DynamoDB Throttles",
             m1=self.add_dynamodb_metric('ReadThrottleEvents'),
             m2=self.add_dynamodb_metric('WriteThrottleEvents'),
-        )
-
-    def cloudwatch_math_sum(self, label=None, m1=None, m2=None):
-        return self.create_cloudwatch_math_expression(
-            label=label,
-            expression="m1 + m2",
-            using_metrics={"m1": m1, "m2": m2},
-        )
-
-    def create_cloudwatch_math_expression(self, expression=None, label=None, using_metrics=None):
-        return MathExpression(
-            expression=expression,
-            label=label,
-            using_metrics=using_metrics,
-            period=self.five_minutes(),
         )
 
     def add_cloudwatch_widget(self, title=None, stacked=True, left=None):
@@ -100,8 +87,8 @@ class CloudWatchDashboard(Stack):
         )
 
     def create_cloudwatch_dashboard(self):
-        dashboard = Dashboard(self, "CloudWatchDashBoard")
-        dashboard.add_widgets(
+        self.dashboard = Dashboard(self, "CloudWatchDashBoard")
+        self.dashboard.add_widgets(
             self.add_cloudwatch_widget(
                 title="Requests",
                 stacked=False,
@@ -141,7 +128,7 @@ class CloudWatchDashboard(Stack):
             self.add_cloudwatch_widget(
                 title="Dynamo Lambda Error %",
                 stacked=False,
-                left=[self.lambda_error_percentage],
+                left=[self.lambda_error_percentage_metric],
             ),
             self.add_cloudwatch_widget(
                 title="Dynamo Lambda Duration",
@@ -152,7 +139,7 @@ class CloudWatchDashboard(Stack):
             ),
             self.add_cloudwatch_widget(
                 title="Dynamo Lambda Throttle %",
-                left=[self.lambda_throttled_percentage],
+                left=[self.lambda_throttled_percentage_metric],
                 stacked=False,
             ),
             self.add_cloudwatch_widget(
@@ -201,19 +188,12 @@ class CloudWatchDashboard(Stack):
     def add_lambda_function_metric(self, metric_name):
         return self.lambda_function.metric(metric_name=metric_name, statistic="sum")
 
-    @staticmethod
-    def get_api_id(api):
-        try:
-            return api.api_id
-        except AttributeError:
-            return api.rest_api_id
-
     def add_api_gateway_metric(self, metric_name: str = None, label: str = None, period=Duration.seconds(900), statistic: str = 'sum'):
         return Metric(
             metric_name=metric_name,
             namespace="AWS/ApiGateway",
             dimensions={
-                "ApiId": self.get_api_id(self.api),
+                "ApiId": self.api_id,
             },
             unit=Unit.COUNT,
             label=label,
@@ -267,7 +247,7 @@ class CloudWatchDashboard(Stack):
         # 2% of Dynamo Lambda invocations erroring
         self.add_cloudwatch_alarm(
             id="Dynamo Lambda 2% Error",
-            metric=self.lambda_error_percentage,
+            metric=self.lambda_error_percentage_metric,
             threshold=2,
         )
 
@@ -281,7 +261,7 @@ class CloudWatchDashboard(Stack):
         # 2% of our lambda invocations are throttled
         self.add_cloudwatch_alarm(
             id="Dynamo Lambda 2% Throttled",
-            metric=self.lambda_throttled_percentage,
+            metric=self.lambda_throttled_percentage_metric,
             threshold=2,
         )
 
@@ -290,7 +270,7 @@ class CloudWatchDashboard(Stack):
         # DynamoDB Interactions are throttled - indicated poorly provisioned
         self.add_cloudwatch_alarm(
             id="DynamoDB Table Reads/Writes Throttled",
-            metric=self.dynamodb_throttles,
+            metric=self.dynamodb_throttles_metric,
         )
 
         # There should be 0 DynamoDB errors

@@ -32,17 +32,21 @@ class WellArchitected(App):
             self, 'HttpApiCloudWatchDashboard',
             lambda_function=self.lambda_function,
             dynamodb_table=self.dynamodb_table,
-            api=self.http_api,
+            api_id=self.http_api.api_id,
         )
 
         CloudWatchDashboard(
             self, 'RestApiCloudWatchDashboard',
             lambda_function=self.lambda_function,
             dynamodb_table=self.dynamodb_table,
-            api=self.rest_api.rest_api,
+            api_id=self.rest_api.rest_api.rest_api_id,
         )
 
-
+        # TODO
+        # put alarms with individual components
+        # put metrics with individual components
+        # add alarms to dashboard from individual components
+        # add big fan topic pattern
 
     def create_dynamodb_table(self):
         return DynamoDBTable(
