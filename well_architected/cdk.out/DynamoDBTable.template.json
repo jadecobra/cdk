@@ -23,10 +23,75 @@
         "aws:cdk:path": "DynamoDBTable/Hits/Resource"
       }
     },
+    "DynamoDBTableReadsWritesThrottled13F6F2AE": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": 6,
+        "AlarmActions": [
+          {
+            "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
+          }
+        ],
+        "DatapointsToAlarm": 1,
+        "Metrics": [
+          {
+            "Expression": "m1 + m2",
+            "Id": "expr_1",
+            "Label": "DynamoDB Throttles"
+          },
+          {
+            "Id": "m1",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "TableName",
+                    "Value": {
+                      "Ref": "HitsFF5AF8CD"
+                    }
+                  }
+                ],
+                "MetricName": "ReadThrottleEvents",
+                "Namespace": "AWS/DynamoDB"
+              },
+              "Period": 300,
+              "Stat": "Sum"
+            },
+            "ReturnData": false
+          },
+          {
+            "Id": "m2",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "TableName",
+                    "Value": {
+                      "Ref": "HitsFF5AF8CD"
+                    }
+                  }
+                ],
+                "MetricName": "WriteThrottleEvents",
+                "Namespace": "AWS/DynamoDB"
+              },
+              "Period": 300,
+              "Stat": "Sum"
+            },
+            "ReturnData": false
+          }
+        ],
+        "Threshold": 1,
+        "TreatMissingData": "notBreaching"
+      },
+      "Metadata": {
+        "aws:cdk:path": "DynamoDBTable/DynamoDB Table Reads--Writes Throttled/Resource"
+      }
+    },
     "CDKMetadata": {
       "Type": "AWS::CDK::Metadata",
       "Properties": {
-        "Analytics": "v2:deflate64:H4sIAAAAAAAA/0WMQQrCMBBFz9L9dNrQhVuhF5DqBdIkxbF2BpIJUkLurtaFq/95//ENmuGEfXO2r9Q6v3bFSQxYrmrdClNIkqMLMAonjdkpjAv/6cKfwZOScIXvg9/ZbuJnLDc7Pw/jKLXCZde7cDeg6dE0j0TUxsxKW8Dpl2+ngndljAAAAA=="
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/0WMQQ6CMBBFz8K+DjQs3Gq4gEEvUKYlVGAmaachpOndFVy4+i///XwNur1CU93MFi9o5zojBwf5KQZn1bvIKaBTHVOUkFBUN9K/HekrrBfPVNTxkO1OZmU7QH6ZYTknJxSFCye7GcEJ8n0xYT3cCaUU9dhlYqpb0A3o6h29v4RE4lcH/S8/wOTh7aoAAAA="
       },
       "Metadata": {
         "aws:cdk:path": "DynamoDBTable/CDKMetadata/Default"

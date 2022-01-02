@@ -15,16 +15,16 @@ class WellArchitected(App):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.error_topic = SnsTopic(self, 'SnsTopic').topic
-        self.dynamodb_table = self.create_dynamodb_table()
+        self.dynamodb_table = self.create_dynamodb_table(self.error_topic)
         self.lambda_function = self.create_lambda_function(
             environment_variables={
-                'HITS_TABLE_NAME': self.dynamodb_table.table_name
+                'HITS_TABLE_NAME': self.dynamodb_table.dynamodb_table.table_name
             }
         )
         self.http_api = self.create_http_api_gateway(self.lambda_function).http_api
         self.rest_api = self.create_rest_api_gateway(self.lambda_function)
 
-        self.dynamodb_table.grant_read_write_data(self.lambda_function)
+        self.dynamodb_table.dynamodb_table.grant_read_write_data(self.lambda_function)
         self.create_web_application_firewall(
             id='WebApplicationFirewall',
             target_arn=self.rest_api.resource_arn,
@@ -33,7 +33,10 @@ class WellArchitected(App):
         CloudWatchDashboard(
             self, 'HttpApiCloudWatchDashboard',
             lambda_function=self.lambda_function,
-            dynamodb_table=self.dynamodb_table,
+            dynamodb_table=self.dynamodb_table.dynamodb_table,
+            dynamodb_latency_widget=self.dynamodb_table.dynamodb_latency_widget,
+            dynamodb_read_write_capacity_widget=self.dynamodb_table.dynamodb_read_write_capacity_widget,
+            dynamodb_throttles_widget=self.dynamodb_table.dynamodb_throttles_widget,
             api_id=self.http_api.api_id,
             error_topic=self.error_topic,
         )
@@ -41,7 +44,10 @@ class WellArchitected(App):
         CloudWatchDashboard(
             self, 'RestApiCloudWatchDashboard',
             lambda_function=self.lambda_function,
-            dynamodb_table=self.dynamodb_table,
+            dynamodb_table=self.dynamodb_table.dynamodb_table,
+            dynamodb_latency_widget=self.dynamodb_table.dynamodb_latency_widget,
+            dynamodb_read_write_capacity_widget=self.dynamodb_table.dynamodb_read_write_capacity_widget,
+            dynamodb_throttles_widget=self.dynamodb_table.dynamodb_throttles_widget,
             api_id=self.rest_api.rest_api.rest_api_id,
             error_topic=self.error_topic,
         )
@@ -52,10 +58,11 @@ class WellArchitected(App):
         # add alarms to dashboard from individual components
         # add big fan topic pattern
 
-    def create_dynamodb_table(self):
+    def create_dynamodb_table(self, error_topic):
         return DynamoDBTable(
             self, 'DynamoDBTable',
-        ).dynamodb_table
+            error_topic=error_topic
+        )
 
     def create_http_api_gateway(self, lambda_function):
         return LambdaHttpApiGateway(
