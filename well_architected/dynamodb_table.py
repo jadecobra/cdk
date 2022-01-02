@@ -17,26 +17,9 @@ class DynamoDBTable(Stack):
                 type=AttributeType.STRING
             ),
         )
+        # self.create_total_errors_alarm() # too many metrics for alarm
         self.create_throttles_alarm()
         self.dynamodb_cloudwatch_widgets = self.create_cloudwatch_widgets()
-
-        # I think usererrors are at an account level rather than a table level so merging
-        # these two metrics until I can get a definitive answer. I think usererrors
-        # will always show as 0 when scoped to a table so this is still effectively
-        # a system errors count
-        self.dynamodb_total_errors_metric = cloudwatch.cloudwatch_math_sum(
-            label="DynamoDB Errors",
-            m1=self.dynamodb_table.metric_user_errors(),
-            m2=self.dynamodb_table.metric_system_errors_for_operations(),
-        )
-
-        # There should be 0 DynamoDB errors
-        # Alarms on math expressions cannot contain more than 10 individual metrics
-        # self.add_cloudwatch_alarm(
-        #     id="DynamoDB Errors > 0",
-        #     metric=self.dynamodb_total_errors_metric,
-        #     threshold=0,
-        # )
 
     def add_dynamodb_metric(self, metric_name, statistic='sum'):
         return self.dynamodb_table.metric(metric_name=metric_name, statistic=statistic)
@@ -90,6 +73,25 @@ class DynamoDBTable(Stack):
                 m2=self.create_throttles_metric('Write'),
             ),
             error_topic=self.error_topic,
+        )
+
+    def create_total_errors_alarm(self):
+        # I think usererrors are at an account level rather than a table level so merging
+        # these two metrics until I can get a definitive answer. I think usererrors
+        # will always show as 0 when scoped to a table so this is still effectively
+        # a system errors count
+
+        # There should be 0 DynamoDB errors
+        # Alarms on math expressions cannot contain more than 10 individual metrics
+        # It appears the sume of user errors and system errors is more than 10 metrics
+        cloudwatch.create_cloudwatch_alarm(
+            self, id="DynamoDB Errors > 0",
+            metric=cloudwatch.cloudwatch_math_sum(
+                label="DynamoDB Errors",
+                m1=self.dynamodb_table.metric_user_errors(),
+                m2=self.dynamodb_table.metric_system_errors_for_operations(),
+            ),
+            threshold=0,
         )
 
     def create_cloudwatch_widgets(self):
