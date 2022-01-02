@@ -12,6 +12,82 @@
           "version": "1.137.0"
         }
       },
+      "SnsTopic": {
+        "id": "SnsTopic",
+        "path": "SnsTopic",
+        "children": {
+          "SnsTopic": {
+            "id": "SnsTopic",
+            "path": "SnsTopic/SnsTopic",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "SnsTopic/SnsTopic/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::SNS::Topic",
+                  "aws:cdk:cloudformation:props": {}
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-sns.CfnTopic",
+                  "version": "1.137.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/aws-sns.Topic",
+              "version": "1.137.0"
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "SnsTopic/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "SnsTopic/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "@aws-cdk/core.CfnResource",
+                  "version": "1.137.0"
+                }
+              },
+              "Condition": {
+                "id": "Condition",
+                "path": "SnsTopic/CDKMetadata/Condition",
+                "constructInfo": {
+                  "fqn": "@aws-cdk/core.CfnCondition",
+                  "version": "1.137.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/core.Construct",
+              "version": "1.137.0"
+            }
+          },
+          "Exports": {
+            "id": "Exports",
+            "path": "SnsTopic/Exports",
+            "children": {
+              "Output{\"Ref\":\"SnsTopic2C1570A4\"}": {
+                "id": "Output{\"Ref\":\"SnsTopic2C1570A4\"}",
+                "path": "SnsTopic/Exports/Output{\"Ref\":\"SnsTopic2C1570A4\"}",
+                "constructInfo": {
+                  "fqn": "@aws-cdk/core.CfnOutput",
+                  "version": "1.137.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/core.Construct",
+              "version": "1.137.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "@aws-cdk/core.Stack",
+          "version": "1.137.0"
+        }
+      },
       "DynamoDBTable": {
         "id": "DynamoDBTable",
         "path": "DynamoDBTable",
@@ -1322,28 +1398,6 @@
         "id": "HttpApiCloudWatchDashboard",
         "path": "HttpApiCloudWatchDashboard",
         "children": {
-          "theBigFanTopic": {
-            "id": "theBigFanTopic",
-            "path": "HttpApiCloudWatchDashboard/theBigFanTopic",
-            "children": {
-              "Resource": {
-                "id": "Resource",
-                "path": "HttpApiCloudWatchDashboard/theBigFanTopic/Resource",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::SNS::Topic",
-                  "aws:cdk:cloudformation:props": {}
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-sns.CfnTopic",
-                  "version": "1.137.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/aws-sns.Topic",
-              "version": "1.137.0"
-            }
-          },
           "API Gateway 4XX Errors > 1%": {
             "id": "API Gateway 4XX Errors > 1%",
             "path": "HttpApiCloudWatchDashboard/API Gateway 4XX Errors > 1%",
@@ -1358,7 +1412,7 @@
                     "evaluationPeriods": 6,
                     "alarmActions": [
                       {
-                        "Ref": "theBigFanTopicF96567DE"
+                        "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
                       }
                     ],
                     "datapointsToAlarm": 1,
@@ -1442,7 +1496,7 @@
                     "evaluationPeriods": 6,
                     "alarmActions": [
                       {
-                        "Ref": "theBigFanTopicF96567DE"
+                        "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
                       }
                     ],
                     "datapointsToAlarm": 1,
@@ -1499,7 +1553,7 @@
                     "evaluationPeriods": 6,
                     "alarmActions": [
                       {
-                        "Ref": "theBigFanTopicF96567DE"
+                        "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
                       }
                     ],
                     "datapointsToAlarm": 1,
@@ -1556,7 +1610,7 @@
                     "evaluationPeriods": 6,
                     "alarmActions": [
                       {
-                        "Ref": "theBigFanTopicF96567DE"
+                        "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
                       }
                     ],
                     "datapointsToAlarm": 1,
@@ -1636,7 +1690,7 @@
                     "evaluationPeriods": 6,
                     "alarmActions": [
                       {
-                        "Ref": "theBigFanTopicF96567DE"
+                        "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
                       }
                     ],
                     "datapointsToAlarm": 1,
@@ -1681,7 +1735,7 @@
                     "evaluationPeriods": 6,
                     "alarmActions": [
                       {
-                        "Ref": "theBigFanTopicF96567DE"
+                        "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
                       }
                     ],
                     "datapointsToAlarm": 1,
@@ -1733,86 +1787,6 @@
                       }
                     ],
                     "threshold": 2,
-                    "treatMissingData": "notBreaching"
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
-                  "version": "1.137.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
-              "version": "1.137.0"
-            }
-          },
-          "DynamoDB Table Reads--Writes Throttled": {
-            "id": "DynamoDB Table Reads--Writes Throttled",
-            "path": "HttpApiCloudWatchDashboard/DynamoDB Table Reads--Writes Throttled",
-            "children": {
-              "Resource": {
-                "id": "Resource",
-                "path": "HttpApiCloudWatchDashboard/DynamoDB Table Reads--Writes Throttled/Resource",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
-                  "aws:cdk:cloudformation:props": {
-                    "comparisonOperator": "GreaterThanOrEqualToThreshold",
-                    "evaluationPeriods": 6,
-                    "alarmActions": [
-                      {
-                        "Ref": "theBigFanTopicF96567DE"
-                      }
-                    ],
-                    "datapointsToAlarm": 1,
-                    "metrics": [
-                      {
-                        "expression": "m1 + m2",
-                        "id": "expr_1",
-                        "label": "DynamoDB Throttles"
-                      },
-                      {
-                        "metricStat": {
-                          "metric": {
-                            "metricName": "ReadThrottleEvents",
-                            "namespace": "AWS/DynamoDB",
-                            "dimensions": [
-                              {
-                                "name": "TableName",
-                                "value": {
-                                  "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
-                                }
-                              }
-                            ]
-                          },
-                          "period": 300,
-                          "stat": "Sum"
-                        },
-                        "id": "m1",
-                        "returnData": false
-                      },
-                      {
-                        "metricStat": {
-                          "metric": {
-                            "metricName": "WriteThrottleEvents",
-                            "namespace": "AWS/DynamoDB",
-                            "dimensions": [
-                              {
-                                "name": "TableName",
-                                "value": {
-                                  "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
-                                }
-                              }
-                            ]
-                          },
-                          "period": 300,
-                          "stat": "Sum"
-                        },
-                        "id": "m2",
-                        "returnData": false
-                      }
-                    ],
-                    "threshold": 1,
                     "treatMissingData": "notBreaching"
                   }
                 },
@@ -1982,6 +1956,86 @@
               "version": "1.137.0"
             }
           },
+          "DynamoDB Table Reads--Writes Throttled": {
+            "id": "DynamoDB Table Reads--Writes Throttled",
+            "path": "HttpApiCloudWatchDashboard/DynamoDB Table Reads--Writes Throttled",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "HttpApiCloudWatchDashboard/DynamoDB Table Reads--Writes Throttled/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                  "aws:cdk:cloudformation:props": {
+                    "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                    "evaluationPeriods": 6,
+                    "alarmActions": [
+                      {
+                        "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
+                      }
+                    ],
+                    "datapointsToAlarm": 1,
+                    "metrics": [
+                      {
+                        "expression": "m1 + m2",
+                        "id": "expr_1",
+                        "label": "DynamoDB Throttles"
+                      },
+                      {
+                        "metricStat": {
+                          "metric": {
+                            "metricName": "ReadThrottleEvents",
+                            "namespace": "AWS/DynamoDB",
+                            "dimensions": [
+                              {
+                                "name": "TableName",
+                                "value": {
+                                  "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
+                                }
+                              }
+                            ]
+                          },
+                          "period": 300,
+                          "stat": "Sum"
+                        },
+                        "id": "m1",
+                        "returnData": false
+                      },
+                      {
+                        "metricStat": {
+                          "metric": {
+                            "metricName": "WriteThrottleEvents",
+                            "namespace": "AWS/DynamoDB",
+                            "dimensions": [
+                              {
+                                "name": "TableName",
+                                "value": {
+                                  "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
+                                }
+                              }
+                            ]
+                          },
+                          "period": 300,
+                          "stat": "Sum"
+                        },
+                        "id": "m2",
+                        "returnData": false
+                      }
+                    ],
+                    "threshold": 1,
+                    "treatMissingData": "notBreaching"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
+                  "version": "1.137.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
+              "version": "1.137.0"
+            }
+          },
           "CDKMetadata": {
             "id": "CDKMetadata",
             "path": "HttpApiCloudWatchDashboard/CDKMetadata",
@@ -2018,28 +2072,6 @@
         "id": "RestApiCloudWatchDashboard",
         "path": "RestApiCloudWatchDashboard",
         "children": {
-          "theBigFanTopic": {
-            "id": "theBigFanTopic",
-            "path": "RestApiCloudWatchDashboard/theBigFanTopic",
-            "children": {
-              "Resource": {
-                "id": "Resource",
-                "path": "RestApiCloudWatchDashboard/theBigFanTopic/Resource",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::SNS::Topic",
-                  "aws:cdk:cloudformation:props": {}
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-sns.CfnTopic",
-                  "version": "1.137.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/aws-sns.Topic",
-              "version": "1.137.0"
-            }
-          },
           "API Gateway 4XX Errors > 1%": {
             "id": "API Gateway 4XX Errors > 1%",
             "path": "RestApiCloudWatchDashboard/API Gateway 4XX Errors > 1%",
@@ -2054,7 +2086,7 @@
                     "evaluationPeriods": 6,
                     "alarmActions": [
                       {
-                        "Ref": "theBigFanTopicF96567DE"
+                        "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
                       }
                     ],
                     "datapointsToAlarm": 1,
@@ -2138,7 +2170,7 @@
                     "evaluationPeriods": 6,
                     "alarmActions": [
                       {
-                        "Ref": "theBigFanTopicF96567DE"
+                        "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
                       }
                     ],
                     "datapointsToAlarm": 1,
@@ -2195,7 +2227,7 @@
                     "evaluationPeriods": 6,
                     "alarmActions": [
                       {
-                        "Ref": "theBigFanTopicF96567DE"
+                        "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
                       }
                     ],
                     "datapointsToAlarm": 1,
@@ -2252,7 +2284,7 @@
                     "evaluationPeriods": 6,
                     "alarmActions": [
                       {
-                        "Ref": "theBigFanTopicF96567DE"
+                        "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
                       }
                     ],
                     "datapointsToAlarm": 1,
@@ -2332,7 +2364,7 @@
                     "evaluationPeriods": 6,
                     "alarmActions": [
                       {
-                        "Ref": "theBigFanTopicF96567DE"
+                        "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
                       }
                     ],
                     "datapointsToAlarm": 1,
@@ -2377,7 +2409,7 @@
                     "evaluationPeriods": 6,
                     "alarmActions": [
                       {
-                        "Ref": "theBigFanTopicF96567DE"
+                        "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
                       }
                     ],
                     "datapointsToAlarm": 1,
@@ -2429,86 +2461,6 @@
                       }
                     ],
                     "threshold": 2,
-                    "treatMissingData": "notBreaching"
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
-                  "version": "1.137.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
-              "version": "1.137.0"
-            }
-          },
-          "DynamoDB Table Reads--Writes Throttled": {
-            "id": "DynamoDB Table Reads--Writes Throttled",
-            "path": "RestApiCloudWatchDashboard/DynamoDB Table Reads--Writes Throttled",
-            "children": {
-              "Resource": {
-                "id": "Resource",
-                "path": "RestApiCloudWatchDashboard/DynamoDB Table Reads--Writes Throttled/Resource",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
-                  "aws:cdk:cloudformation:props": {
-                    "comparisonOperator": "GreaterThanOrEqualToThreshold",
-                    "evaluationPeriods": 6,
-                    "alarmActions": [
-                      {
-                        "Ref": "theBigFanTopicF96567DE"
-                      }
-                    ],
-                    "datapointsToAlarm": 1,
-                    "metrics": [
-                      {
-                        "expression": "m1 + m2",
-                        "id": "expr_1",
-                        "label": "DynamoDB Throttles"
-                      },
-                      {
-                        "metricStat": {
-                          "metric": {
-                            "metricName": "ReadThrottleEvents",
-                            "namespace": "AWS/DynamoDB",
-                            "dimensions": [
-                              {
-                                "name": "TableName",
-                                "value": {
-                                  "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
-                                }
-                              }
-                            ]
-                          },
-                          "period": 300,
-                          "stat": "Sum"
-                        },
-                        "id": "m1",
-                        "returnData": false
-                      },
-                      {
-                        "metricStat": {
-                          "metric": {
-                            "metricName": "WriteThrottleEvents",
-                            "namespace": "AWS/DynamoDB",
-                            "dimensions": [
-                              {
-                                "name": "TableName",
-                                "value": {
-                                  "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
-                                }
-                              }
-                            ]
-                          },
-                          "period": 300,
-                          "stat": "Sum"
-                        },
-                        "id": "m2",
-                        "returnData": false
-                      }
-                    ],
-                    "threshold": 1,
                     "treatMissingData": "notBreaching"
                   }
                 },
@@ -2675,6 +2627,86 @@
             },
             "constructInfo": {
               "fqn": "@aws-cdk/aws-cloudwatch.Dashboard",
+              "version": "1.137.0"
+            }
+          },
+          "DynamoDB Table Reads--Writes Throttled": {
+            "id": "DynamoDB Table Reads--Writes Throttled",
+            "path": "RestApiCloudWatchDashboard/DynamoDB Table Reads--Writes Throttled",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "RestApiCloudWatchDashboard/DynamoDB Table Reads--Writes Throttled/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                  "aws:cdk:cloudformation:props": {
+                    "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                    "evaluationPeriods": 6,
+                    "alarmActions": [
+                      {
+                        "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
+                      }
+                    ],
+                    "datapointsToAlarm": 1,
+                    "metrics": [
+                      {
+                        "expression": "m1 + m2",
+                        "id": "expr_1",
+                        "label": "DynamoDB Throttles"
+                      },
+                      {
+                        "metricStat": {
+                          "metric": {
+                            "metricName": "ReadThrottleEvents",
+                            "namespace": "AWS/DynamoDB",
+                            "dimensions": [
+                              {
+                                "name": "TableName",
+                                "value": {
+                                  "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
+                                }
+                              }
+                            ]
+                          },
+                          "period": 300,
+                          "stat": "Sum"
+                        },
+                        "id": "m1",
+                        "returnData": false
+                      },
+                      {
+                        "metricStat": {
+                          "metric": {
+                            "metricName": "WriteThrottleEvents",
+                            "namespace": "AWS/DynamoDB",
+                            "dimensions": [
+                              {
+                                "name": "TableName",
+                                "value": {
+                                  "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
+                                }
+                              }
+                            ]
+                          },
+                          "period": 300,
+                          "stat": "Sum"
+                        },
+                        "id": "m2",
+                        "returnData": false
+                      }
+                    ],
+                    "threshold": 1,
+                    "treatMissingData": "notBreaching"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
+                  "version": "1.137.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
               "version": "1.137.0"
             }
           },

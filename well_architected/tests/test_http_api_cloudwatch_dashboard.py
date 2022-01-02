@@ -7,12 +7,6 @@ class TestHTTPAPICloudWatchDashboard(TestTemplates):
             'HttpApiCloudWatchDashboard',
              {
   "Resources": {
-    "theBigFanTopicF96567DE": {
-      "Type": "AWS::SNS::Topic",
-      "Metadata": {
-        "aws:cdk:path": "HttpApiCloudWatchDashboard/theBigFanTopic/Resource"
-      }
-    },
     "APIGateway4XXErrors1647FE3DB": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {
@@ -20,7 +14,7 @@ class TestHTTPAPICloudWatchDashboard(TestTemplates):
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "theBigFanTopicF96567DE"
+            "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -89,7 +83,7 @@ class TestHTTPAPICloudWatchDashboard(TestTemplates):
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "theBigFanTopicF96567DE"
+            "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -131,7 +125,7 @@ class TestHTTPAPICloudWatchDashboard(TestTemplates):
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "theBigFanTopicF96567DE"
+            "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -173,7 +167,7 @@ class TestHTTPAPICloudWatchDashboard(TestTemplates):
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "theBigFanTopicF96567DE"
+            "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -238,7 +232,7 @@ class TestHTTPAPICloudWatchDashboard(TestTemplates):
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "theBigFanTopicF96567DE"
+            "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -268,7 +262,7 @@ class TestHTTPAPICloudWatchDashboard(TestTemplates):
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "theBigFanTopicF96567DE"
+            "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -324,71 +318,6 @@ class TestHTTPAPICloudWatchDashboard(TestTemplates):
       },
       "Metadata": {
         "aws:cdk:path": "HttpApiCloudWatchDashboard/Dynamo Lambda 2% Throttled/Resource"
-      }
-    },
-    "DynamoDBTableReadsWritesThrottled13F6F2AE": {
-      "Type": "AWS::CloudWatch::Alarm",
-      "Properties": {
-        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
-        "EvaluationPeriods": 6,
-        "AlarmActions": [
-          {
-            "Ref": "theBigFanTopicF96567DE"
-          }
-        ],
-        "DatapointsToAlarm": 1,
-        "Metrics": [
-          {
-            "Expression": "m1 + m2",
-            "Id": "expr_1",
-            "Label": "DynamoDB Throttles"
-          },
-          {
-            "Id": "m1",
-            "MetricStat": {
-              "Metric": {
-                "Dimensions": [
-                  {
-                    "Name": "TableName",
-                    "Value": {
-                      "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
-                    }
-                  }
-                ],
-                "MetricName": "ReadThrottleEvents",
-                "Namespace": "AWS/DynamoDB"
-              },
-              "Period": 300,
-              "Stat": "Sum"
-            },
-            "ReturnData": false
-          },
-          {
-            "Id": "m2",
-            "MetricStat": {
-              "Metric": {
-                "Dimensions": [
-                  {
-                    "Name": "TableName",
-                    "Value": {
-                      "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
-                    }
-                  }
-                ],
-                "MetricName": "WriteThrottleEvents",
-                "Namespace": "AWS/DynamoDB"
-              },
-              "Period": 300,
-              "Stat": "Sum"
-            },
-            "ReturnData": false
-          }
-        ],
-        "Threshold": 1,
-        "TreatMissingData": "notBreaching"
-      },
-      "Metadata": {
-        "aws:cdk:path": "HttpApiCloudWatchDashboard/DynamoDB Table Reads--Writes Throttled/Resource"
       }
     },
     "CloudWatchDashBoard043C60B6": {
@@ -531,10 +460,75 @@ class TestHTTPAPICloudWatchDashboard(TestTemplates):
         "aws:cdk:path": "HttpApiCloudWatchDashboard/CloudWatchDashBoard/Resource"
       }
     },
+    "DynamoDBTableReadsWritesThrottled13F6F2AE": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": 6,
+        "AlarmActions": [
+          {
+            "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
+          }
+        ],
+        "DatapointsToAlarm": 1,
+        "Metrics": [
+          {
+            "Expression": "m1 + m2",
+            "Id": "expr_1",
+            "Label": "DynamoDB Throttles"
+          },
+          {
+            "Id": "m1",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "TableName",
+                    "Value": {
+                      "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
+                    }
+                  }
+                ],
+                "MetricName": "ReadThrottleEvents",
+                "Namespace": "AWS/DynamoDB"
+              },
+              "Period": 300,
+              "Stat": "Sum"
+            },
+            "ReturnData": false
+          },
+          {
+            "Id": "m2",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "TableName",
+                    "Value": {
+                      "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
+                    }
+                  }
+                ],
+                "MetricName": "WriteThrottleEvents",
+                "Namespace": "AWS/DynamoDB"
+              },
+              "Period": 300,
+              "Stat": "Sum"
+            },
+            "ReturnData": false
+          }
+        ],
+        "Threshold": 1,
+        "TreatMissingData": "notBreaching"
+      },
+      "Metadata": {
+        "aws:cdk:path": "HttpApiCloudWatchDashboard/DynamoDB Table Reads--Writes Throttled/Resource"
+      }
+    },
     "CDKMetadata": {
       "Type": "AWS::CDK::Metadata",
       "Properties": {
-        "Analytics": "v2:deflate64:H4sIAAAAAAAA/z2LQQ7CIBBFz9I9nZZ04VZTD2CqF8ABA7ZlDANpDOHuik1c/ff/y5cghwP0zVFt3KKeu4wUDORrVDiLkTzHkDCK8eEnw5QCmspfoV105Iuox8yeId/o5bDaHxSBCyW9qYgW8mlRYa1uh7NieycVdJ3+pZQiLu9oyXcDyB5k82Tn2pB8dKuBac8PyV8NU7MAAAA="
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/z2LTQ6CMBCFz8K+DDQs3GrwAAZPMLY1rUAnmU5DDOndtZK4et/706CHE/TNGbfUGjt3uyF2sN8FzaxGikk4G1HjM04uUWbjKn8LGyRQLOp3XCjbDcV42C8L8lo3B1wx+Qch2xr9TSnq9hZPsRtA96CbVwqh5RwlrA6mQz9XolXynAAAAA=="
       },
       "Metadata": {
         "aws:cdk:path": "HttpApiCloudWatchDashboard/CDKMetadata/Default"
@@ -736,4 +730,5 @@ class TestHTTPAPICloudWatchDashboard(TestTemplates):
       ]
     }
   }
-}        )
+}
+      )

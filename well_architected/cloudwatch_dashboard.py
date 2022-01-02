@@ -14,13 +14,15 @@ class CloudWatchDashboard(Stack):
 
     def __init__(
         self, scope: Construct, id: str,
-        lambda_function: Function,
-        dynamodb_table: Table,
-        api_id=None,
+        lambda_function: Function = None,
+        dynamodb_table: Table = None,
+        api_id: str = None,
+        error_topic: Topic = None,
         **kwargs
     ) -> None:
         super().__init__(scope, id, **kwargs)
-        self.error_topic = Topic(self, 'theBigFanTopic')
+        self.error_topic = error_topic
+        # self.error_topic = Topic(self, 'theBigFanTopic')
         self.dynamodb_table = dynamodb_table
         self.api_id = api_id
         self.lambda_function = lambda_function
@@ -28,8 +30,8 @@ class CloudWatchDashboard(Stack):
         self.create_cloudwatch_alarms()
         self.create_cloudwatch_dashboard()
 
-    def create_metrics(self):
-        self.api_gw_4xx_error_percentage = cloudwatch.create_cloudwatch_math_expression(
+    def create_api_gateway_metrics(self):
+        self.api_gateway_4xx_error_percentage = cloudwatch.create_cloudwatch_math_expression(
             expression="m1/m2*100",
             label="% API Gateway 4xx Errors",
             using_metrics={
@@ -44,6 +46,7 @@ class CloudWatchDashboard(Stack):
             },
         )
 
+    def create_lambda_function_metrics(self):
         # Gather the % of lambda invocations that error in past 5 mins
         self.lambda_error_percentage_metric = cloudwatch.create_cloudwatch_math_expression(
             expression="e / invocations * 100",
@@ -64,24 +67,15 @@ class CloudWatchDashboard(Stack):
             },
         )
 
-        # I think usererrors are at an account level rather than a table level so merging
-        # these two metrics until I can get a definitive answer. I think usererrors
-        # will always show as 0 when scoped to a table so this is still effectively
-        # a system errors count
-        self.dynamodb_total_errors_metric = cloudwatch.cloudwatch_math_sum(
-            label="DynamoDB Errors",
-            m1=self.dynamodb_table.metric_user_errors(),
-            m2=self.dynamodb_table.metric_system_errors_for_operations(),
-        )
 
-        # Rather than have 2 alerts, let's create one aggregate metric
-        self.dynamodb_throttles_metric = cloudwatch.cloudwatch_math_sum(
-            label="DynamoDB Throttles",
-            m1=self.add_dynamodb_metric('ReadThrottleEvents'),
-            m2=self.add_dynamodb_metric('WriteThrottleEvents'),
-        )
 
-    def add_cloudwatch_widget(self, title=None, stacked=True, left=None):
+    def create_metrics(self):
+        self.create_api_gateway_metrics()
+        self.create_lambda_function_metrics()
+        self.create_dynamodb_metrics()
+
+    @staticmethod
+    def create_cloudwatch_widget(title=None, stacked=True, left=None):
         return GraphWidget(
             title=title, width=8, stacked=stacked, left=left
         )
@@ -89,7 +83,7 @@ class CloudWatchDashboard(Stack):
     def create_cloudwatch_dashboard(self):
         self.dashboard = Dashboard(self, "CloudWatchDashBoard")
         self.dashboard.add_widgets(
-            self.add_cloudwatch_widget(
+            self.create_cloudwatch_widget(
                 title="Requests",
                 stacked=False,
                 left=[
@@ -99,7 +93,7 @@ class CloudWatchDashboard(Stack):
                     )
                 ]
             ),
-            self.add_cloudwatch_widget(
+            self.create_cloudwatch_widget(
                 title="API GW Latency",
                 left=[
                     self.add_api_gateway_metric(
@@ -113,7 +107,7 @@ class CloudWatchDashboard(Stack):
                     )
                 ]
             ),
-            self.add_cloudwatch_widget(
+            self.create_cloudwatch_widget(
                 title="API GW Errors",
                 left=[
                     self.add_api_gateway_metric(
@@ -125,61 +119,26 @@ class CloudWatchDashboard(Stack):
                     )
                 ]
             ),
-            self.add_cloudwatch_widget(
+            self.create_cloudwatch_widget(
                 title="Dynamo Lambda Error %",
                 stacked=False,
                 left=[self.lambda_error_percentage_metric],
             ),
-            self.add_cloudwatch_widget(
+            self.create_cloudwatch_widget(
                 title="Dynamo Lambda Duration",
                 left=[
                     self.lambda_function.metric_duration(statistic=statistic)
                     for statistic in ('p50', 'p90', 'p99')
                 ],
             ),
-            self.add_cloudwatch_widget(
+            self.create_cloudwatch_widget(
                 title="Dynamo Lambda Throttle %",
                 left=[self.lambda_throttled_percentage_metric],
                 stacked=False,
             ),
-            self.add_cloudwatch_widget(
-                title="DynamoDB Latency",
-                left=[
-                    self.dynamodb_successful_request_latency(action) for action in (
-                        'GetItem', 'UpdateItem', 'PutItem', 'DeleteItem', 'Query',
-                    )
-                ],
-            ),
-            self.add_cloudwatch_widget(
-                title="DynamoDB Consumed Read/Write Units",
-                stacked=False,
-                left=[
-                    self.add_dynamodb_metric(metric_name, statistic='avg') for metric_name in (
-                        'ConsumedReadCapacityUnits', 'ConsumedWriteCapacityUnits',
-                    )
-                ]
-            ),
-
-            self.add_cloudwatch_widget(
-                title="DynamoDB Throttles",
-                left=[
-                    self.add_dynamodb_metric(metric_name)
-                    for metric_name in (
-                        'ReadThrottleEvents', 'WriteThrottleEvents',
-                    )
-                ],
-            ),
-        )
-
-    def add_dynamodb_metric(self, metric_name, statistic='sum'):
-        return self.dynamodb_table.metric(metric_name=metric_name, statistic=statistic)
-
-    def dynamodb_successful_request_latency(self, operation):
-        return self.dynamodb_table.metric_successful_request_latency(
-            dimensions={
-                'TableName': self.dynamodb_table.table_name,
-                'Operation': operation,
-            }
+            self.create_dynamodb_latency_widget(),
+            self.create_dynamodb_read_write_capacity_widget(),
+            self.create_dynamodb_throttles_widget(),
         )
 
     def five_minutes(self):
@@ -218,7 +177,7 @@ class CloudWatchDashboard(Stack):
         # 4xx are user errors so a large volume indicates a problem
         self.add_cloudwatch_alarm(
             id="API Gateway 4XX Errors > 1%",
-            metric=self.api_gw_4xx_error_percentage
+            metric=self.api_gateway_4xx_error_percentage
         )
 
         # 5xx are internal server errors so we want 0 of these
@@ -265,14 +224,21 @@ class CloudWatchDashboard(Stack):
             threshold=2,
         )
 
-    def create_dynamodb_alarms(self):
-        # DynamoDB
-        # DynamoDB Interactions are throttled - indicated poorly provisioned
-        self.add_cloudwatch_alarm(
-            id="DynamoDB Table Reads/Writes Throttled",
-            metric=self.dynamodb_throttles_metric,
+    def add_dynamodb_metric(self, metric_name, statistic='sum'):
+        return self.dynamodb_table.metric(metric_name=metric_name, statistic=statistic)
+
+    def create_dynamodb_metrics(self):
+        # I think usererrors are at an account level rather than a table level so merging
+        # these two metrics until I can get a definitive answer. I think usererrors
+        # will always show as 0 when scoped to a table so this is still effectively
+        # a system errors count
+        self.dynamodb_total_errors_metric = cloudwatch.cloudwatch_math_sum(
+            label="DynamoDB Errors",
+            m1=self.dynamodb_table.metric_user_errors(),
+            m2=self.dynamodb_table.metric_system_errors_for_operations(),
         )
 
+    def create_dynamodb_alarms(self):
         # There should be 0 DynamoDB errors
         # Alarms on math expressions cannot contain more than 10 individual metrics
         # self.add_cloudwatch_alarm(
@@ -280,6 +246,54 @@ class CloudWatchDashboard(Stack):
         #     metric=self.dynamodb_total_errors,
         #     threshold=0,
         # )
+        return
+
+    def create_dynamodb_latency_widget(self):
+        return self.create_cloudwatch_widget(
+            title="DynamoDB Latency",
+            left=[
+                self.dynamodb_table.metric_successful_request_latency(
+                    dimensions={
+                        'TableName': self.dynamodb_table.table_name,
+                        'Operation': action,
+                    }
+                ) for action in (
+                    'GetItem', 'UpdateItem', 'PutItem', 'DeleteItem', 'Query',
+                )
+            ],
+        )
+
+    def create_dynamodb_read_write_capacity_widget(self):
+        return self.create_cloudwatch_widget(
+            title="DynamoDB Consumed Read/Write Units",
+            stacked=False,
+            left=[
+                self.add_dynamodb_metric(metric_name, statistic='avg') for metric_name in (
+                    'ConsumedReadCapacityUnits', 'ConsumedWriteCapacityUnits',
+                )
+            ]
+        )
+
+    def create_dynamodb_throttles_widget(self):
+        # DynamoDB Interactions are throttled - indicaticating poor provisioning
+        # Rather than have 2 alerts, let's create one aggregate metric
+        self.add_cloudwatch_alarm(
+            id="DynamoDB Table Reads/Writes Throttled",
+            metric=cloudwatch.cloudwatch_math_sum(
+                label="DynamoDB Throttles",
+                m1=self.add_dynamodb_metric('ReadThrottleEvents'),
+                m2=self.add_dynamodb_metric('WriteThrottleEvents'),
+            ),
+        )
+        return self.create_cloudwatch_widget(
+            title="DynamoDB Throttles",
+            left=[
+                self.add_dynamodb_metric(metric_name)
+                for metric_name in (
+                    'ReadThrottleEvents', 'WriteThrottleEvents',
+                )
+            ],
+        )
 
     def create_cloudwatch_alarms(self):
         self.create_api_gateway_alarms()

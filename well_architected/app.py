@@ -8,11 +8,13 @@ from lambda_function import LambdaFunction
 from cloudwatch_dashboard import CloudWatchDashboard
 from dynamodb_table import DynamoDBTable
 from http_api import LambdaHttpApiGateway
+from sns_topic import SnsTopic
 
 class WellArchitected(App):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.error_topic = SnsTopic(self, 'SnsTopic').topic
         self.dynamodb_table = self.create_dynamodb_table()
         self.lambda_function = self.create_lambda_function(
             environment_variables={
@@ -33,6 +35,7 @@ class WellArchitected(App):
             lambda_function=self.lambda_function,
             dynamodb_table=self.dynamodb_table,
             api_id=self.http_api.api_id,
+            error_topic=self.error_topic,
         )
 
         CloudWatchDashboard(
@@ -40,6 +43,7 @@ class WellArchitected(App):
             lambda_function=self.lambda_function,
             dynamodb_table=self.dynamodb_table,
             api_id=self.rest_api.rest_api.rest_api_id,
+            error_topic=self.error_topic,
         )
 
         # TODO
