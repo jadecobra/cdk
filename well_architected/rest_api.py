@@ -2,13 +2,13 @@ from aws_cdk.core import Stack, Construct, Duration
 from aws_cdk.aws_logs import LogGroup
 from aws_cdk.aws_lambda import Function
 from lambda_function import LambdaFunction
-
+from api_gateway_cloudwatch import ApiGatewayCloudWatch
 import aws_cdk.aws_apigateway as api_gateway
 
 
 class LambdaRestAPIGateway(Stack):
 
-    def __init__(self, scope: Construct, id: str, lambda_function: Function, **kwargs) -> None:
+    def __init__(self, scope: Construct, id: str, lambda_function: Function, error_topic=None, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         self.rest_api = self.create_rest_api()
@@ -18,6 +18,12 @@ class LambdaRestAPIGateway(Stack):
 
         )
         self.resource_arn = f"arn:aws:apigateway:{self.region}::/restapis/{self.rest_api.rest_api_id}/stages/{self.rest_api.deployment_stage.stage_name}"
+        self.api_gateway_cloudwatch = ApiGatewayCloudWatch(
+            self, 'ApiGatewayCloudWatch',
+            api_id=self.rest_api.rest_api_id,
+            error_topic=error_topic,
+        )
+        self.api_gateway_cloudwatch_widgets = self.api_gateway_cloudwatch.api_gateway_cloudwatch_widgets
 
     def method_origin(self):
         return 'method.response.header.Access-Control-Allow-Origin'

@@ -1,5 +1,7 @@
 from aws_cdk.core import Duration
-from aws_cdk.aws_cloudwatch import MathExpression, GraphWidget, Alarm, TreatMissingData
+from aws_cdk.aws_cloudwatch import (
+    MathExpression, Metric, GraphWidget, Alarm, TreatMissingData, Unit
+)
 from aws_cdk.aws_cloudwatch_actions import SnsAction
 
 def five_minutes():

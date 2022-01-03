@@ -3,7 +3,7 @@ from tests.utilities import TestTemplates, true, false
 
 class TestRestAPIGateway(TestTemplates):
 
-    def test_api_gateway(self):
+    def test_rest_api_gateway(self):
         self.assert_template_equal(
             'LambdaRestAPIGateway',
             {
@@ -288,10 +288,163 @@ class TestRestAPIGateway(TestTemplates):
         "aws:cdk:path": "LambdaRestAPIGateway/LambdaAPIGateway/Default/hello/GET/Resource"
       }
     },
+    "ApiGatewayCloudWatchAPIGateway4XXErrors11FFC618F": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": 6,
+        "AlarmActions": [
+          {
+            "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
+          }
+        ],
+        "DatapointsToAlarm": 1,
+        "Metrics": [
+          {
+            "Expression": "m1/m2*100",
+            "Id": "expr_1",
+            "Label": "% API Gateway 4xx Errors"
+          },
+          {
+            "Id": "m1",
+            "Label": "4XX Errors",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "ApiId",
+                    "Value": {
+                      "Ref": "LambdaAPIGateway527FD988"
+                    }
+                  }
+                ],
+                "MetricName": "4XXError",
+                "Namespace": "AWS/ApiGateway"
+              },
+              "Period": 300,
+              "Stat": "Sum",
+              "Unit": "Count"
+            },
+            "ReturnData": false
+          },
+          {
+            "Id": "m2",
+            "Label": "# Requests",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "ApiId",
+                    "Value": {
+                      "Ref": "LambdaAPIGateway527FD988"
+                    }
+                  }
+                ],
+                "MetricName": "Count",
+                "Namespace": "AWS/ApiGateway"
+              },
+              "Period": 300,
+              "Stat": "Sum",
+              "Unit": "Count"
+            },
+            "ReturnData": false
+          }
+        ],
+        "Threshold": 1,
+        "TreatMissingData": "notBreaching"
+      },
+      "Metadata": {
+        "aws:cdk:path": "LambdaRestAPIGateway/ApiGatewayCloudWatch/API Gateway 4XX Errors > 1%/Resource"
+      }
+    },
+    "ApiGatewayCloudWatchAPIGateway5XXErrors0001B6606": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": 6,
+        "AlarmActions": [
+          {
+            "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
+          }
+        ],
+        "DatapointsToAlarm": 1,
+        "Metrics": [
+          {
+            "Id": "m1",
+            "Label": "5XX Errors",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "ApiId",
+                    "Value": {
+                      "Ref": "LambdaAPIGateway527FD988"
+                    }
+                  }
+                ],
+                "MetricName": "5XXError",
+                "Namespace": "AWS/ApiGateway"
+              },
+              "Period": 900,
+              "Stat": "p99",
+              "Unit": "Count"
+            },
+            "ReturnData": true
+          }
+        ],
+        "Threshold": 0,
+        "TreatMissingData": "notBreaching"
+      },
+      "Metadata": {
+        "aws:cdk:path": "LambdaRestAPIGateway/ApiGatewayCloudWatch/API Gateway 5XX Errors > 0/Resource"
+      }
+    },
+    "ApiGatewayCloudWatchAPIp99latencyalarm1s6545CFD1": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": 6,
+        "AlarmActions": [
+          {
+            "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
+          }
+        ],
+        "DatapointsToAlarm": 1,
+        "Metrics": [
+          {
+            "Id": "m1",
+            "Label": "API GW Latency",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "ApiId",
+                    "Value": {
+                      "Ref": "LambdaAPIGateway527FD988"
+                    }
+                  }
+                ],
+                "MetricName": "Latency",
+                "Namespace": "AWS/ApiGateway"
+              },
+              "Period": 900,
+              "Stat": "p99",
+              "Unit": "Count"
+            },
+            "ReturnData": true
+          }
+        ],
+        "Threshold": 1000,
+        "TreatMissingData": "notBreaching"
+      },
+      "Metadata": {
+        "aws:cdk:path": "LambdaRestAPIGateway/ApiGatewayCloudWatch/API p99 latency alarm >= 1s/Resource"
+      }
+    },
     "CDKMetadata": {
       "Type": "AWS::CDK::Metadata",
       "Properties": {
-        "Analytics": "v2:deflate64:H4sIAAAAAAAA/1VPQW7CMBB8C3ezEHHoFUqlXloVwQuMs6RbYq9lr4UiK3/HJo1aTjuzHs/MNtBsXmC92OpbXJr2usqGA0I+iTZXtb+4ryQ+idqzixKSkbo7YuQUDFZcHloSYjeqapF77iLkD+7eAydfFTMuAk+dFrzpAXLxkJ2nX7sZ7ozh5ES9oe95sOgeef9Y6dU9cicwN3nV8Y88VfxE+ea2riY0KtK2xHM/6cocVa/tudVQ+AGDpRjrPaM6DOWHW22gWUOz+IlEy1DakUU4TvMOxk3XjD8BAAA="
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/1WPwW7DIBBEvyV3QmLlkGvdVOolVaPkC7ZAHRpgESyyLMS/F+xabU/7dhnNDB3vDke+3zzBGLdCPnZZYFA83wjEg50+3Xsin4id0EUKSVC7XVXEFIRqXB+kJo2usGaRDQ6R5zMOrwGTb4qVq8DrAUiNMPFcPaj3+sduxV4ITI7Yi/IGJ6vcnPdnq72GOXeBtckzxN/lX8U3RXeU7bRQYRpsjUez6OoszID9kMDrflHB6hjrf5gwmOQIJO489waCnQs2KKWwy1Td3O7Auz3vNl9R622ozbVV/LrMbz9tuLBbAQAA"
       },
       "Metadata": {
         "aws:cdk:path": "LambdaRestAPIGateway/CDKMetadata/Default"

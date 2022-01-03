@@ -9,6 +9,7 @@ from cloudwatch_dashboard import CloudWatchDashboard
 from dynamodb_table import DynamoDBTable
 from http_api import LambdaHttpApiGateway
 from sns_topic import SnsTopic
+from api_gateway_cloudwatch import ApiGatewayCloudWatch
 
 class WellArchitected(App):
 
@@ -22,8 +23,16 @@ class WellArchitected(App):
                 'HITS_TABLE_NAME': self.dynamodb_table.dynamodb_table.table_name
             }
         )
-        self.http_api = self.create_http_api_gateway(self.lambda_function.lambda_function).http_api
-        self.rest_api = self.create_rest_api_gateway(self.lambda_function.lambda_function)
+        self.http_api = LambdaHttpApiGateway(
+            self, 'LambdaHttpApiGateway',
+            lambda_function=self.lambda_function.lambda_function,
+            error_topic=self.error_topic,
+        )
+        self.rest_api = LambdaRestAPIGateway(
+            self, 'LambdaRestAPIGateway',
+            lambda_function=self.lambda_function.lambda_function,
+            error_topic=self.error_topic,
+        )
 
         self.dynamodb_table.dynamodb_table.grant_read_write_data(self.lambda_function.lambda_function)
         self.create_web_application_firewall(
@@ -34,24 +43,22 @@ class WellArchitected(App):
         CloudWatchDashboard(
             self, 'HttpApiCloudWatchDashboard',
             lambda_function=self.lambda_function.lambda_function,
-            # lambda_error_percentage_metric=self.lambda_function.lambda_error_percentage_metric,
-            # lambda_error_percentage_widget=self.lambda_function.lambda_error_percentage_widget,
             lambda_function_cloudwatch_widgets=self.lambda_function.lambda_function_cloudwatch_widgets,
             dynamodb_table=self.dynamodb_table.dynamodb_table,
             dynamodb_cloudwatch_widgets=self.dynamodb_table.dynamodb_cloudwatch_widgets,
-            api_id=self.http_api.api_id,
+            api_id=self.http_api.http_api.api_id,
+            api_gateway_cloudwatch_widgets = self.http_api.api_gateway_cloudwatch_widgets,
             error_topic=self.error_topic,
         )
 
         CloudWatchDashboard(
             self, 'RestApiCloudWatchDashboard',
             lambda_function=self.lambda_function.lambda_function,
-            # lambda_error_percentage_metric=self.lambda_function.lambda_error_percentage_metric,
-            # lambda_error_percentage_widget=self.lambda_function.lambda_error_percentage_widget,
             lambda_function_cloudwatch_widgets=self.lambda_function.lambda_function_cloudwatch_widgets,
             dynamodb_table=self.dynamodb_table.dynamodb_table,
             dynamodb_cloudwatch_widgets=self.dynamodb_table.dynamodb_cloudwatch_widgets,
             api_id=self.rest_api.rest_api.rest_api_id,
+            api_gateway_cloudwatch_widgets=self.rest_api.api_gateway_cloudwatch_widgets,
             error_topic=self.error_topic,
         )
 
@@ -67,24 +74,12 @@ class WellArchitected(App):
             error_topic=error_topic
         )
 
-    def create_http_api_gateway(self, lambda_function):
-        return LambdaHttpApiGateway(
-            self, 'LambdaHttpApiGateway',
-            lambda_function=lambda_function,
-        )
-
     def create_lambda_function(self, environment_variables=None, error_topic=None):
         return LambdaFunction(
             self, 'LambdaFunction',
             function_name='hello',
             environment_variables=environment_variables,
             error_topic=error_topic
-        )
-
-    def create_rest_api_gateway(self, lambda_function):
-        return LambdaRestAPIGateway(
-            self, 'LambdaRestAPIGateway',
-            lambda_function=lambda_function
         )
 
     def create_cloudwatch_dashboard(self, id=None, lambda_function=None, dynamodb_table=None, api=None):
@@ -96,9 +91,6 @@ class WellArchitected(App):
         )
 
     def create_web_application_firewall(self, id=None, target_arn=None):
-        return WebApplicationFirewall(
-            self, id,
-            target_arn=target_arn
-        )
+        return WebApplicationFirewall(self, id, target_arn=target_arn)
 
 WellArchitected().synth()
