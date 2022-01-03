@@ -9,7 +9,6 @@ from cloudwatch_dashboard import CloudWatchDashboard
 from dynamodb_table import DynamoDBTable
 from http_api import LambdaHttpApiGateway
 from sns_topic import SnsTopic
-from api_gateway_cloudwatch import ApiGatewayCloudWatch
 
 class WellArchitected(App):
 
@@ -23,50 +22,43 @@ class WellArchitected(App):
                 'HITS_TABLE_NAME': self.dynamodb_table.dynamodb_table.table_name
             }
         )
+        self.create_rest_api()
+        self.create_http_api()
+
+        self.dynamodb_table.dynamodb_table.grant_read_write_data(self.lambda_function.lambda_function)
+        # TODO
+        # abstract to functions
+
+    def create_http_api(self):
         self.http_api = LambdaHttpApiGateway(
             self, 'LambdaHttpApiGateway',
             lambda_function=self.lambda_function.lambda_function,
             error_topic=self.error_topic,
         )
+        CloudWatchDashboard(
+            self, 'HttpApiCloudWatchDashboard',
+            self.http_api.api_gateway_cloudwatch_widgets,
+            self.lambda_function.lambda_function_cloudwatch_widgets,
+            self.dynamodb_table.dynamodb_cloudwatch_widgets,
+        )
+
+    def create_rest_api(self):
         self.rest_api = LambdaRestAPIGateway(
             self, 'LambdaRestAPIGateway',
             lambda_function=self.lambda_function.lambda_function,
             error_topic=self.error_topic,
         )
 
-        self.dynamodb_table.dynamodb_table.grant_read_write_data(self.lambda_function.lambda_function)
+        CloudWatchDashboard(
+            self, 'RestApiCloudWatchDashboard',
+            self.rest_api.api_gateway_cloudwatch_widgets,
+            self.lambda_function.lambda_function_cloudwatch_widgets,
+            self.dynamodb_table.dynamodb_cloudwatch_widgets,
+        )
         self.create_web_application_firewall(
             id='WebApplicationFirewall',
             target_arn=self.rest_api.resource_arn,
         )
-
-        CloudWatchDashboard(
-            self, 'HttpApiCloudWatchDashboard',
-            lambda_function=self.lambda_function.lambda_function,
-            lambda_function_cloudwatch_widgets=self.lambda_function.lambda_function_cloudwatch_widgets,
-            dynamodb_table=self.dynamodb_table.dynamodb_table,
-            dynamodb_cloudwatch_widgets=self.dynamodb_table.dynamodb_cloudwatch_widgets,
-            api_id=self.http_api.http_api.api_id,
-            api_gateway_cloudwatch_widgets = self.http_api.api_gateway_cloudwatch_widgets,
-            error_topic=self.error_topic,
-        )
-
-        CloudWatchDashboard(
-            self, 'RestApiCloudWatchDashboard',
-            lambda_function=self.lambda_function.lambda_function,
-            lambda_function_cloudwatch_widgets=self.lambda_function.lambda_function_cloudwatch_widgets,
-            dynamodb_table=self.dynamodb_table.dynamodb_table,
-            dynamodb_cloudwatch_widgets=self.dynamodb_table.dynamodb_cloudwatch_widgets,
-            api_id=self.rest_api.rest_api.rest_api_id,
-            api_gateway_cloudwatch_widgets=self.rest_api.api_gateway_cloudwatch_widgets,
-            error_topic=self.error_topic,
-        )
-
-        # TODO
-        # put alarms with individual components
-        # put metrics with individual components
-        # add alarms to dashboard from individual components
-        # add big fan topic pattern
 
     def create_dynamodb_table(self, error_topic):
         return DynamoDBTable(

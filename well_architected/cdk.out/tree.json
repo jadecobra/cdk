@@ -805,441 +805,6 @@
           "version": "1.137.0"
         }
       },
-      "LambdaHttpApiGateway": {
-        "id": "LambdaHttpApiGateway",
-        "path": "LambdaHttpApiGateway",
-        "children": {
-          "HttpAPI": {
-            "id": "HttpAPI",
-            "path": "LambdaHttpApiGateway/HttpAPI",
-            "children": {
-              "Resource": {
-                "id": "Resource",
-                "path": "LambdaHttpApiGateway/HttpAPI/Resource",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::ApiGatewayV2::Api",
-                  "aws:cdk:cloudformation:props": {
-                    "name": "HttpAPI",
-                    "protocolType": "HTTP"
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-apigatewayv2.CfnApi",
-                  "version": "1.137.0"
-                }
-              },
-              "DefaultRoute": {
-                "id": "DefaultRoute",
-                "path": "LambdaHttpApiGateway/HttpAPI/DefaultRoute",
-                "children": {
-                  "HTTPLambdaIntegration-Permission": {
-                    "id": "HTTPLambdaIntegration-Permission",
-                    "path": "LambdaHttpApiGateway/HttpAPI/DefaultRoute/HTTPLambdaIntegration-Permission",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
-                      "aws:cdk:cloudformation:props": {
-                        "action": "lambda:InvokeFunction",
-                        "functionName": {
-                          "Fn::ImportValue": "LambdaFunction:ExportsOutputFnGetAttLambdaFunctionBF21E41FArn8BD9CD14"
-                        },
-                        "principal": "apigateway.amazonaws.com",
-                        "sourceArn": {
-                          "Fn::Join": [
-                            "",
-                            [
-                              "arn:",
-                              {
-                                "Ref": "AWS::Partition"
-                              },
-                              ":execute-api:",
-                              {
-                                "Ref": "AWS::Region"
-                              },
-                              ":",
-                              {
-                                "Ref": "AWS::AccountId"
-                              },
-                              ":",
-                              {
-                                "Ref": "HttpAPI8D545486"
-                              },
-                              "/*/*"
-                            ]
-                          ]
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "@aws-cdk/aws-lambda.CfnPermission",
-                      "version": "1.137.0"
-                    }
-                  },
-                  "HTTPLambdaIntegration": {
-                    "id": "HTTPLambdaIntegration",
-                    "path": "LambdaHttpApiGateway/HttpAPI/DefaultRoute/HTTPLambdaIntegration",
-                    "children": {
-                      "Resource": {
-                        "id": "Resource",
-                        "path": "LambdaHttpApiGateway/HttpAPI/DefaultRoute/HTTPLambdaIntegration/Resource",
-                        "attributes": {
-                          "aws:cdk:cloudformation:type": "AWS::ApiGatewayV2::Integration",
-                          "aws:cdk:cloudformation:props": {
-                            "apiId": {
-                              "Ref": "HttpAPI8D545486"
-                            },
-                            "integrationType": "AWS_PROXY",
-                            "integrationUri": {
-                              "Fn::ImportValue": "LambdaFunction:ExportsOutputFnGetAttLambdaFunctionBF21E41FArn8BD9CD14"
-                            },
-                            "payloadFormatVersion": "2.0"
-                          }
-                        },
-                        "constructInfo": {
-                          "fqn": "@aws-cdk/aws-apigatewayv2.CfnIntegration",
-                          "version": "1.137.0"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "@aws-cdk/aws-apigatewayv2.HttpIntegration",
-                      "version": "1.137.0"
-                    }
-                  },
-                  "Resource": {
-                    "id": "Resource",
-                    "path": "LambdaHttpApiGateway/HttpAPI/DefaultRoute/Resource",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::ApiGatewayV2::Route",
-                      "aws:cdk:cloudformation:props": {
-                        "apiId": {
-                          "Ref": "HttpAPI8D545486"
-                        },
-                        "routeKey": "$default",
-                        "authorizationType": "NONE",
-                        "target": {
-                          "Fn::Join": [
-                            "",
-                            [
-                              "integrations/",
-                              {
-                                "Ref": "HttpAPIDefaultRouteHTTPLambdaIntegration7A40D12F"
-                              }
-                            ]
-                          ]
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "@aws-cdk/aws-apigatewayv2.CfnRoute",
-                      "version": "1.137.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-apigatewayv2.HttpRoute",
-                  "version": "1.137.0"
-                }
-              },
-              "DefaultStage": {
-                "id": "DefaultStage",
-                "path": "LambdaHttpApiGateway/HttpAPI/DefaultStage",
-                "children": {
-                  "Resource": {
-                    "id": "Resource",
-                    "path": "LambdaHttpApiGateway/HttpAPI/DefaultStage/Resource",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::ApiGatewayV2::Stage",
-                      "aws:cdk:cloudformation:props": {
-                        "apiId": {
-                          "Ref": "HttpAPI8D545486"
-                        },
-                        "stageName": "$default",
-                        "autoDeploy": true
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "@aws-cdk/aws-apigatewayv2.CfnStage",
-                      "version": "1.137.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-apigatewayv2.HttpStage",
-                  "version": "1.137.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/aws-apigatewayv2.HttpApi",
-              "version": "1.137.0"
-            }
-          },
-          "ApiGatewayCloudWatch": {
-            "id": "ApiGatewayCloudWatch",
-            "path": "LambdaHttpApiGateway/ApiGatewayCloudWatch",
-            "children": {
-              "API Gateway 4XX Errors > 1%": {
-                "id": "API Gateway 4XX Errors > 1%",
-                "path": "LambdaHttpApiGateway/ApiGatewayCloudWatch/API Gateway 4XX Errors > 1%",
-                "children": {
-                  "Resource": {
-                    "id": "Resource",
-                    "path": "LambdaHttpApiGateway/ApiGatewayCloudWatch/API Gateway 4XX Errors > 1%/Resource",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
-                      "aws:cdk:cloudformation:props": {
-                        "comparisonOperator": "GreaterThanOrEqualToThreshold",
-                        "evaluationPeriods": 6,
-                        "alarmActions": [
-                          {
-                            "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
-                          }
-                        ],
-                        "datapointsToAlarm": 1,
-                        "metrics": [
-                          {
-                            "expression": "m1/m2*100",
-                            "id": "expr_1",
-                            "label": "% API Gateway 4xx Errors"
-                          },
-                          {
-                            "metricStat": {
-                              "metric": {
-                                "metricName": "4XXError",
-                                "namespace": "AWS/ApiGateway",
-                                "dimensions": [
-                                  {
-                                    "name": "ApiId",
-                                    "value": {
-                                      "Ref": "HttpAPI8D545486"
-                                    }
-                                  }
-                                ]
-                              },
-                              "period": 300,
-                              "stat": "Sum",
-                              "unit": "Count"
-                            },
-                            "id": "m1",
-                            "label": "4XX Errors",
-                            "returnData": false
-                          },
-                          {
-                            "metricStat": {
-                              "metric": {
-                                "metricName": "Count",
-                                "namespace": "AWS/ApiGateway",
-                                "dimensions": [
-                                  {
-                                    "name": "ApiId",
-                                    "value": {
-                                      "Ref": "HttpAPI8D545486"
-                                    }
-                                  }
-                                ]
-                              },
-                              "period": 300,
-                              "stat": "Sum",
-                              "unit": "Count"
-                            },
-                            "id": "m2",
-                            "label": "# Requests",
-                            "returnData": false
-                          }
-                        ],
-                        "threshold": 1,
-                        "treatMissingData": "notBreaching"
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
-                      "version": "1.137.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
-                  "version": "1.137.0"
-                }
-              },
-              "API Gateway 5XX Errors > 0": {
-                "id": "API Gateway 5XX Errors > 0",
-                "path": "LambdaHttpApiGateway/ApiGatewayCloudWatch/API Gateway 5XX Errors > 0",
-                "children": {
-                  "Resource": {
-                    "id": "Resource",
-                    "path": "LambdaHttpApiGateway/ApiGatewayCloudWatch/API Gateway 5XX Errors > 0/Resource",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
-                      "aws:cdk:cloudformation:props": {
-                        "comparisonOperator": "GreaterThanOrEqualToThreshold",
-                        "evaluationPeriods": 6,
-                        "alarmActions": [
-                          {
-                            "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
-                          }
-                        ],
-                        "datapointsToAlarm": 1,
-                        "metrics": [
-                          {
-                            "metricStat": {
-                              "metric": {
-                                "metricName": "5XXError",
-                                "namespace": "AWS/ApiGateway",
-                                "dimensions": [
-                                  {
-                                    "name": "ApiId",
-                                    "value": {
-                                      "Ref": "HttpAPI8D545486"
-                                    }
-                                  }
-                                ]
-                              },
-                              "period": 900,
-                              "stat": "p99",
-                              "unit": "Count"
-                            },
-                            "id": "m1",
-                            "label": "5XX Errors",
-                            "returnData": true
-                          }
-                        ],
-                        "threshold": 0,
-                        "treatMissingData": "notBreaching"
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
-                      "version": "1.137.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
-                  "version": "1.137.0"
-                }
-              },
-              "API p99 latency alarm >= 1s": {
-                "id": "API p99 latency alarm >= 1s",
-                "path": "LambdaHttpApiGateway/ApiGatewayCloudWatch/API p99 latency alarm >= 1s",
-                "children": {
-                  "Resource": {
-                    "id": "Resource",
-                    "path": "LambdaHttpApiGateway/ApiGatewayCloudWatch/API p99 latency alarm >= 1s/Resource",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
-                      "aws:cdk:cloudformation:props": {
-                        "comparisonOperator": "GreaterThanOrEqualToThreshold",
-                        "evaluationPeriods": 6,
-                        "alarmActions": [
-                          {
-                            "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
-                          }
-                        ],
-                        "datapointsToAlarm": 1,
-                        "metrics": [
-                          {
-                            "metricStat": {
-                              "metric": {
-                                "metricName": "Latency",
-                                "namespace": "AWS/ApiGateway",
-                                "dimensions": [
-                                  {
-                                    "name": "ApiId",
-                                    "value": {
-                                      "Ref": "HttpAPI8D545486"
-                                    }
-                                  }
-                                ]
-                              },
-                              "period": 900,
-                              "stat": "p99",
-                              "unit": "Count"
-                            },
-                            "id": "m1",
-                            "label": "API GW Latency",
-                            "returnData": true
-                          }
-                        ],
-                        "threshold": 1000,
-                        "treatMissingData": "notBreaching"
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
-                      "version": "1.137.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
-                  "version": "1.137.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/core.Construct",
-              "version": "1.137.0"
-            }
-          },
-          "HTTP API Url": {
-            "id": "HTTP API Url",
-            "path": "LambdaHttpApiGateway/HTTP API Url",
-            "constructInfo": {
-              "fqn": "@aws-cdk/core.CfnOutput",
-              "version": "1.137.0"
-            }
-          },
-          "CDKMetadata": {
-            "id": "CDKMetadata",
-            "path": "LambdaHttpApiGateway/CDKMetadata",
-            "children": {
-              "Default": {
-                "id": "Default",
-                "path": "LambdaHttpApiGateway/CDKMetadata/Default",
-                "constructInfo": {
-                  "fqn": "@aws-cdk/core.CfnResource",
-                  "version": "1.137.0"
-                }
-              },
-              "Condition": {
-                "id": "Condition",
-                "path": "LambdaHttpApiGateway/CDKMetadata/Condition",
-                "constructInfo": {
-                  "fqn": "@aws-cdk/core.CfnCondition",
-                  "version": "1.137.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/core.Construct",
-              "version": "1.137.0"
-            }
-          },
-          "Exports": {
-            "id": "Exports",
-            "path": "LambdaHttpApiGateway/Exports",
-            "children": {
-              "Output{\"Ref\":\"HttpAPI8D545486\"}": {
-                "id": "Output{\"Ref\":\"HttpAPI8D545486\"}",
-                "path": "LambdaHttpApiGateway/Exports/Output{\"Ref\":\"HttpAPI8D545486\"}",
-                "constructInfo": {
-                  "fqn": "@aws-cdk/core.CfnOutput",
-                  "version": "1.137.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/core.Construct",
-              "version": "1.137.0"
-            }
-          }
-        },
-        "constructInfo": {
-          "fqn": "@aws-cdk/core.Stack",
-          "version": "1.137.0"
-        }
-      },
       "LambdaRestAPIGateway": {
         "id": "LambdaRestAPIGateway",
         "path": "LambdaRestAPIGateway",
@@ -1916,6 +1481,197 @@
           "version": "1.137.0"
         }
       },
+      "RestApiCloudWatchDashboard": {
+        "id": "RestApiCloudWatchDashboard",
+        "path": "RestApiCloudWatchDashboard",
+        "children": {
+          "CloudWatchDashBoard": {
+            "id": "CloudWatchDashBoard",
+            "path": "RestApiCloudWatchDashboard/CloudWatchDashBoard",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "RestApiCloudWatchDashboard/CloudWatchDashBoard/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CloudWatch::Dashboard",
+                  "aws:cdk:cloudformation:props": {
+                    "dashboardBody": {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Requests\",\"region\":\"",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          "\",\"stacked\":false,\"metrics\":[[\"AWS/ApiGateway\",\"Count\",\"ApiId\",\"",
+                          {
+                            "Fn::ImportValue": "LambdaRestAPIGateway:ExportsOutputRefLambdaAPIGateway527FD98828FC969E"
+                          },
+                          "\",{\"label\":\"# Requests\",\"period\":900,\"stat\":\"Sum\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":8,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"API GW Latency\",\"region\":\"",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          "\",\"stacked\":true,\"metrics\":[[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
+                          {
+                            "Fn::ImportValue": "LambdaRestAPIGateway:ExportsOutputRefLambdaAPIGateway527FD98828FC969E"
+                          },
+                          "\",{\"label\":\"API Latency p50\",\"period\":900,\"stat\":\"p50\"}],[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
+                          {
+                            "Fn::ImportValue": "LambdaRestAPIGateway:ExportsOutputRefLambdaAPIGateway527FD98828FC969E"
+                          },
+                          "\",{\"label\":\"API Latency p90\",\"period\":900,\"stat\":\"p90\"}],[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
+                          {
+                            "Fn::ImportValue": "LambdaRestAPIGateway:ExportsOutputRefLambdaAPIGateway527FD98828FC969E"
+                          },
+                          "\",{\"label\":\"API Latency p99\",\"period\":900,\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":16,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"API GW Errors\",\"region\":\"",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          "\",\"stacked\":true,\"metrics\":[[\"AWS/ApiGateway\",\"4XXError\",\"ApiId\",\"",
+                          {
+                            "Fn::ImportValue": "LambdaRestAPIGateway:ExportsOutputRefLambdaAPIGateway527FD98828FC969E"
+                          },
+                          "\",{\"label\":\"4XX Errors\",\"period\":900,\"stat\":\"Sum\"}],[\"AWS/ApiGateway\",\"5XXError\",\"ApiId\",\"",
+                          {
+                            "Fn::ImportValue": "LambdaRestAPIGateway:ExportsOutputRefLambdaAPIGateway527FD98828FC969E"
+                          },
+                          "\",{\"label\":\"5XX Errors\",\"period\":900,\"stat\":\"Sum\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Error %\",\"region\":\"",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"e / invocations * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+                          {
+                            "Fn::ImportValue": "LambdaFunction:ExportsOutputRefLambdaFunctionBF21E41F66817B40"
+                          },
+                          "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
+                          {
+                            "Fn::ImportValue": "LambdaFunction:ExportsOutputRefLambdaFunctionBF21E41F66817B40"
+                          },
+                          "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"e\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":8,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Duration\",\"region\":\"",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+                          {
+                            "Fn::ImportValue": "LambdaFunction:ExportsOutputRefLambdaFunctionBF21E41F66817B40"
+                          },
+                          "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+                          {
+                            "Fn::ImportValue": "LambdaFunction:ExportsOutputRefLambdaFunctionBF21E41F66817B40"
+                          },
+                          "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+                          {
+                            "Fn::ImportValue": "LambdaFunction:ExportsOutputRefLambdaFunctionBF21E41F66817B40"
+                          },
+                          "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":16,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Throttle %\",\"region\":\"",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of throttled requests, last 30 mins\",\"expression\":\"t / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+                          {
+                            "Fn::ImportValue": "LambdaFunction:ExportsOutputRefLambdaFunctionBF21E41F66817B40"
+                          },
+                          "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
+                          {
+                            "Fn::ImportValue": "LambdaFunction:ExportsOutputRefLambdaFunctionBF21E41F66817B40"
+                          },
+                          "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"t\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"DynamoDB Latency\",\"region\":\"",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          "\",\"stacked\":true,\"metrics\":[[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"GetItem\",\"TableName\",\"",
+                          {
+                            "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
+                          },
+                          "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"UpdateItem\",\"TableName\",\"",
+                          {
+                            "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
+                          },
+                          "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"PutItem\",\"TableName\",\"",
+                          {
+                            "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
+                          },
+                          "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"DeleteItem\",\"TableName\",\"",
+                          {
+                            "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
+                          },
+                          "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"Query\",\"TableName\",\"",
+                          {
+                            "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
+                          },
+                          "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":8,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"DynamoDB Consumed Read/Write Units\",\"region\":\"",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          "\",\"stacked\":false,\"metrics\":[[\"AWS/DynamoDB\",\"ConsumedReadCapacityUnits\",\"TableName\",\"",
+                          {
+                            "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
+                          },
+                          "\"],[\"AWS/DynamoDB\",\"ConsumedWriteCapacityUnits\",\"TableName\",\"",
+                          {
+                            "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
+                          },
+                          "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":16,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"DynamoDB Throttles\",\"region\":\"",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          "\",\"stacked\":true,\"metrics\":[[\"AWS/DynamoDB\",\"ReadThrottleEvents\",\"TableName\",\"",
+                          {
+                            "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
+                          },
+                          "\",{\"stat\":\"Sum\"}],[\"AWS/DynamoDB\",\"WriteThrottleEvents\",\"TableName\",\"",
+                          {
+                            "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
+                          },
+                          "\",{\"stat\":\"Sum\"}]],\"yAxis\":{}}}]}"
+                        ]
+                      ]
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-cloudwatch.CfnDashboard",
+                  "version": "1.137.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/aws-cloudwatch.Dashboard",
+              "version": "1.137.0"
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "RestApiCloudWatchDashboard/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "RestApiCloudWatchDashboard/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "@aws-cdk/core.CfnResource",
+                  "version": "1.137.0"
+                }
+              },
+              "Condition": {
+                "id": "Condition",
+                "path": "RestApiCloudWatchDashboard/CDKMetadata/Condition",
+                "constructInfo": {
+                  "fqn": "@aws-cdk/core.CfnCondition",
+                  "version": "1.137.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/core.Construct",
+              "version": "1.137.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "@aws-cdk/core.Stack",
+          "version": "1.137.0"
+        }
+      },
       "WebApplicationFirewall": {
         "id": "WebApplicationFirewall",
         "path": "WebApplicationFirewall",
@@ -2080,6 +1836,441 @@
                 "path": "WebApplicationFirewall/CDKMetadata/Condition",
                 "constructInfo": {
                   "fqn": "@aws-cdk/core.CfnCondition",
+                  "version": "1.137.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/core.Construct",
+              "version": "1.137.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "@aws-cdk/core.Stack",
+          "version": "1.137.0"
+        }
+      },
+      "LambdaHttpApiGateway": {
+        "id": "LambdaHttpApiGateway",
+        "path": "LambdaHttpApiGateway",
+        "children": {
+          "HttpAPI": {
+            "id": "HttpAPI",
+            "path": "LambdaHttpApiGateway/HttpAPI",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "LambdaHttpApiGateway/HttpAPI/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::ApiGatewayV2::Api",
+                  "aws:cdk:cloudformation:props": {
+                    "name": "HttpAPI",
+                    "protocolType": "HTTP"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-apigatewayv2.CfnApi",
+                  "version": "1.137.0"
+                }
+              },
+              "DefaultRoute": {
+                "id": "DefaultRoute",
+                "path": "LambdaHttpApiGateway/HttpAPI/DefaultRoute",
+                "children": {
+                  "HTTPLambdaIntegration-Permission": {
+                    "id": "HTTPLambdaIntegration-Permission",
+                    "path": "LambdaHttpApiGateway/HttpAPI/DefaultRoute/HTTPLambdaIntegration-Permission",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                      "aws:cdk:cloudformation:props": {
+                        "action": "lambda:InvokeFunction",
+                        "functionName": {
+                          "Fn::ImportValue": "LambdaFunction:ExportsOutputFnGetAttLambdaFunctionBF21E41FArn8BD9CD14"
+                        },
+                        "principal": "apigateway.amazonaws.com",
+                        "sourceArn": {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":execute-api:",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              ":",
+                              {
+                                "Ref": "AWS::AccountId"
+                              },
+                              ":",
+                              {
+                                "Ref": "HttpAPI8D545486"
+                              },
+                              "/*/*"
+                            ]
+                          ]
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-lambda.CfnPermission",
+                      "version": "1.137.0"
+                    }
+                  },
+                  "HTTPLambdaIntegration": {
+                    "id": "HTTPLambdaIntegration",
+                    "path": "LambdaHttpApiGateway/HttpAPI/DefaultRoute/HTTPLambdaIntegration",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "LambdaHttpApiGateway/HttpAPI/DefaultRoute/HTTPLambdaIntegration/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::ApiGatewayV2::Integration",
+                          "aws:cdk:cloudformation:props": {
+                            "apiId": {
+                              "Ref": "HttpAPI8D545486"
+                            },
+                            "integrationType": "AWS_PROXY",
+                            "integrationUri": {
+                              "Fn::ImportValue": "LambdaFunction:ExportsOutputFnGetAttLambdaFunctionBF21E41FArn8BD9CD14"
+                            },
+                            "payloadFormatVersion": "2.0"
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-apigatewayv2.CfnIntegration",
+                          "version": "1.137.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-apigatewayv2.HttpIntegration",
+                      "version": "1.137.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "LambdaHttpApiGateway/HttpAPI/DefaultRoute/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::ApiGatewayV2::Route",
+                      "aws:cdk:cloudformation:props": {
+                        "apiId": {
+                          "Ref": "HttpAPI8D545486"
+                        },
+                        "routeKey": "$default",
+                        "authorizationType": "NONE",
+                        "target": {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "integrations/",
+                              {
+                                "Ref": "HttpAPIDefaultRouteHTTPLambdaIntegration7A40D12F"
+                              }
+                            ]
+                          ]
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-apigatewayv2.CfnRoute",
+                      "version": "1.137.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-apigatewayv2.HttpRoute",
+                  "version": "1.137.0"
+                }
+              },
+              "DefaultStage": {
+                "id": "DefaultStage",
+                "path": "LambdaHttpApiGateway/HttpAPI/DefaultStage",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "LambdaHttpApiGateway/HttpAPI/DefaultStage/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::ApiGatewayV2::Stage",
+                      "aws:cdk:cloudformation:props": {
+                        "apiId": {
+                          "Ref": "HttpAPI8D545486"
+                        },
+                        "stageName": "$default",
+                        "autoDeploy": true
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-apigatewayv2.CfnStage",
+                      "version": "1.137.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-apigatewayv2.HttpStage",
+                  "version": "1.137.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/aws-apigatewayv2.HttpApi",
+              "version": "1.137.0"
+            }
+          },
+          "ApiGatewayCloudWatch": {
+            "id": "ApiGatewayCloudWatch",
+            "path": "LambdaHttpApiGateway/ApiGatewayCloudWatch",
+            "children": {
+              "API Gateway 4XX Errors > 1%": {
+                "id": "API Gateway 4XX Errors > 1%",
+                "path": "LambdaHttpApiGateway/ApiGatewayCloudWatch/API Gateway 4XX Errors > 1%",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "LambdaHttpApiGateway/ApiGatewayCloudWatch/API Gateway 4XX Errors > 1%/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                      "aws:cdk:cloudformation:props": {
+                        "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                        "evaluationPeriods": 6,
+                        "alarmActions": [
+                          {
+                            "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
+                          }
+                        ],
+                        "datapointsToAlarm": 1,
+                        "metrics": [
+                          {
+                            "expression": "m1/m2*100",
+                            "id": "expr_1",
+                            "label": "% API Gateway 4xx Errors"
+                          },
+                          {
+                            "metricStat": {
+                              "metric": {
+                                "metricName": "4XXError",
+                                "namespace": "AWS/ApiGateway",
+                                "dimensions": [
+                                  {
+                                    "name": "ApiId",
+                                    "value": {
+                                      "Ref": "HttpAPI8D545486"
+                                    }
+                                  }
+                                ]
+                              },
+                              "period": 300,
+                              "stat": "Sum",
+                              "unit": "Count"
+                            },
+                            "id": "m1",
+                            "label": "4XX Errors",
+                            "returnData": false
+                          },
+                          {
+                            "metricStat": {
+                              "metric": {
+                                "metricName": "Count",
+                                "namespace": "AWS/ApiGateway",
+                                "dimensions": [
+                                  {
+                                    "name": "ApiId",
+                                    "value": {
+                                      "Ref": "HttpAPI8D545486"
+                                    }
+                                  }
+                                ]
+                              },
+                              "period": 300,
+                              "stat": "Sum",
+                              "unit": "Count"
+                            },
+                            "id": "m2",
+                            "label": "# Requests",
+                            "returnData": false
+                          }
+                        ],
+                        "threshold": 1,
+                        "treatMissingData": "notBreaching"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
+                      "version": "1.137.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
+                  "version": "1.137.0"
+                }
+              },
+              "API Gateway 5XX Errors > 0": {
+                "id": "API Gateway 5XX Errors > 0",
+                "path": "LambdaHttpApiGateway/ApiGatewayCloudWatch/API Gateway 5XX Errors > 0",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "LambdaHttpApiGateway/ApiGatewayCloudWatch/API Gateway 5XX Errors > 0/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                      "aws:cdk:cloudformation:props": {
+                        "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                        "evaluationPeriods": 6,
+                        "alarmActions": [
+                          {
+                            "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
+                          }
+                        ],
+                        "datapointsToAlarm": 1,
+                        "metrics": [
+                          {
+                            "metricStat": {
+                              "metric": {
+                                "metricName": "5XXError",
+                                "namespace": "AWS/ApiGateway",
+                                "dimensions": [
+                                  {
+                                    "name": "ApiId",
+                                    "value": {
+                                      "Ref": "HttpAPI8D545486"
+                                    }
+                                  }
+                                ]
+                              },
+                              "period": 900,
+                              "stat": "p99",
+                              "unit": "Count"
+                            },
+                            "id": "m1",
+                            "label": "5XX Errors",
+                            "returnData": true
+                          }
+                        ],
+                        "threshold": 0,
+                        "treatMissingData": "notBreaching"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
+                      "version": "1.137.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
+                  "version": "1.137.0"
+                }
+              },
+              "API p99 latency alarm >= 1s": {
+                "id": "API p99 latency alarm >= 1s",
+                "path": "LambdaHttpApiGateway/ApiGatewayCloudWatch/API p99 latency alarm >= 1s",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "LambdaHttpApiGateway/ApiGatewayCloudWatch/API p99 latency alarm >= 1s/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                      "aws:cdk:cloudformation:props": {
+                        "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                        "evaluationPeriods": 6,
+                        "alarmActions": [
+                          {
+                            "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
+                          }
+                        ],
+                        "datapointsToAlarm": 1,
+                        "metrics": [
+                          {
+                            "metricStat": {
+                              "metric": {
+                                "metricName": "Latency",
+                                "namespace": "AWS/ApiGateway",
+                                "dimensions": [
+                                  {
+                                    "name": "ApiId",
+                                    "value": {
+                                      "Ref": "HttpAPI8D545486"
+                                    }
+                                  }
+                                ]
+                              },
+                              "period": 900,
+                              "stat": "p99",
+                              "unit": "Count"
+                            },
+                            "id": "m1",
+                            "label": "API GW Latency",
+                            "returnData": true
+                          }
+                        ],
+                        "threshold": 1000,
+                        "treatMissingData": "notBreaching"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
+                      "version": "1.137.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
+                  "version": "1.137.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/core.Construct",
+              "version": "1.137.0"
+            }
+          },
+          "HTTP API Url": {
+            "id": "HTTP API Url",
+            "path": "LambdaHttpApiGateway/HTTP API Url",
+            "constructInfo": {
+              "fqn": "@aws-cdk/core.CfnOutput",
+              "version": "1.137.0"
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "LambdaHttpApiGateway/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "LambdaHttpApiGateway/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "@aws-cdk/core.CfnResource",
+                  "version": "1.137.0"
+                }
+              },
+              "Condition": {
+                "id": "Condition",
+                "path": "LambdaHttpApiGateway/CDKMetadata/Condition",
+                "constructInfo": {
+                  "fqn": "@aws-cdk/core.CfnCondition",
+                  "version": "1.137.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/core.Construct",
+              "version": "1.137.0"
+            }
+          },
+          "Exports": {
+            "id": "Exports",
+            "path": "LambdaHttpApiGateway/Exports",
+            "children": {
+              "Output{\"Ref\":\"HttpAPI8D545486\"}": {
+                "id": "Output{\"Ref\":\"HttpAPI8D545486\"}",
+                "path": "LambdaHttpApiGateway/Exports/Output{\"Ref\":\"HttpAPI8D545486\"}",
+                "constructInfo": {
+                  "fqn": "@aws-cdk/core.CfnOutput",
                   "version": "1.137.0"
                 }
               }
@@ -2269,197 +2460,6 @@
               "Condition": {
                 "id": "Condition",
                 "path": "HttpApiCloudWatchDashboard/CDKMetadata/Condition",
-                "constructInfo": {
-                  "fqn": "@aws-cdk/core.CfnCondition",
-                  "version": "1.137.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/core.Construct",
-              "version": "1.137.0"
-            }
-          }
-        },
-        "constructInfo": {
-          "fqn": "@aws-cdk/core.Stack",
-          "version": "1.137.0"
-        }
-      },
-      "RestApiCloudWatchDashboard": {
-        "id": "RestApiCloudWatchDashboard",
-        "path": "RestApiCloudWatchDashboard",
-        "children": {
-          "CloudWatchDashBoard": {
-            "id": "CloudWatchDashBoard",
-            "path": "RestApiCloudWatchDashboard/CloudWatchDashBoard",
-            "children": {
-              "Resource": {
-                "id": "Resource",
-                "path": "RestApiCloudWatchDashboard/CloudWatchDashBoard/Resource",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::CloudWatch::Dashboard",
-                  "aws:cdk:cloudformation:props": {
-                    "dashboardBody": {
-                      "Fn::Join": [
-                        "",
-                        [
-                          "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Requests\",\"region\":\"",
-                          {
-                            "Ref": "AWS::Region"
-                          },
-                          "\",\"stacked\":false,\"metrics\":[[\"AWS/ApiGateway\",\"Count\",\"ApiId\",\"",
-                          {
-                            "Fn::ImportValue": "LambdaRestAPIGateway:ExportsOutputRefLambdaAPIGateway527FD98828FC969E"
-                          },
-                          "\",{\"label\":\"# Requests\",\"period\":900,\"stat\":\"Sum\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":8,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"API GW Latency\",\"region\":\"",
-                          {
-                            "Ref": "AWS::Region"
-                          },
-                          "\",\"stacked\":true,\"metrics\":[[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
-                          {
-                            "Fn::ImportValue": "LambdaRestAPIGateway:ExportsOutputRefLambdaAPIGateway527FD98828FC969E"
-                          },
-                          "\",{\"label\":\"API Latency p50\",\"period\":900,\"stat\":\"p50\"}],[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
-                          {
-                            "Fn::ImportValue": "LambdaRestAPIGateway:ExportsOutputRefLambdaAPIGateway527FD98828FC969E"
-                          },
-                          "\",{\"label\":\"API Latency p90\",\"period\":900,\"stat\":\"p90\"}],[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
-                          {
-                            "Fn::ImportValue": "LambdaRestAPIGateway:ExportsOutputRefLambdaAPIGateway527FD98828FC969E"
-                          },
-                          "\",{\"label\":\"API Latency p99\",\"period\":900,\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":16,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"API GW Errors\",\"region\":\"",
-                          {
-                            "Ref": "AWS::Region"
-                          },
-                          "\",\"stacked\":true,\"metrics\":[[\"AWS/ApiGateway\",\"4XXError\",\"ApiId\",\"",
-                          {
-                            "Fn::ImportValue": "LambdaRestAPIGateway:ExportsOutputRefLambdaAPIGateway527FD98828FC969E"
-                          },
-                          "\",{\"label\":\"4XX Errors\",\"period\":900,\"stat\":\"Sum\"}],[\"AWS/ApiGateway\",\"5XXError\",\"ApiId\",\"",
-                          {
-                            "Fn::ImportValue": "LambdaRestAPIGateway:ExportsOutputRefLambdaAPIGateway527FD98828FC969E"
-                          },
-                          "\",{\"label\":\"5XX Errors\",\"period\":900,\"stat\":\"Sum\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Error %\",\"region\":\"",
-                          {
-                            "Ref": "AWS::Region"
-                          },
-                          "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"e / invocations * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
-                          {
-                            "Fn::ImportValue": "LambdaFunction:ExportsOutputRefLambdaFunctionBF21E41F66817B40"
-                          },
-                          "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
-                          {
-                            "Fn::ImportValue": "LambdaFunction:ExportsOutputRefLambdaFunctionBF21E41F66817B40"
-                          },
-                          "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"e\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":8,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Duration\",\"region\":\"",
-                          {
-                            "Ref": "AWS::Region"
-                          },
-                          "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
-                          {
-                            "Fn::ImportValue": "LambdaFunction:ExportsOutputRefLambdaFunctionBF21E41F66817B40"
-                          },
-                          "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
-                          {
-                            "Fn::ImportValue": "LambdaFunction:ExportsOutputRefLambdaFunctionBF21E41F66817B40"
-                          },
-                          "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
-                          {
-                            "Fn::ImportValue": "LambdaFunction:ExportsOutputRefLambdaFunctionBF21E41F66817B40"
-                          },
-                          "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":16,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Throttle %\",\"region\":\"",
-                          {
-                            "Ref": "AWS::Region"
-                          },
-                          "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of throttled requests, last 30 mins\",\"expression\":\"t / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
-                          {
-                            "Fn::ImportValue": "LambdaFunction:ExportsOutputRefLambdaFunctionBF21E41F66817B40"
-                          },
-                          "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
-                          {
-                            "Fn::ImportValue": "LambdaFunction:ExportsOutputRefLambdaFunctionBF21E41F66817B40"
-                          },
-                          "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"t\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"DynamoDB Latency\",\"region\":\"",
-                          {
-                            "Ref": "AWS::Region"
-                          },
-                          "\",\"stacked\":true,\"metrics\":[[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"GetItem\",\"TableName\",\"",
-                          {
-                            "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
-                          },
-                          "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"UpdateItem\",\"TableName\",\"",
-                          {
-                            "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
-                          },
-                          "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"PutItem\",\"TableName\",\"",
-                          {
-                            "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
-                          },
-                          "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"DeleteItem\",\"TableName\",\"",
-                          {
-                            "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
-                          },
-                          "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"Query\",\"TableName\",\"",
-                          {
-                            "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
-                          },
-                          "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":8,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"DynamoDB Consumed Read/Write Units\",\"region\":\"",
-                          {
-                            "Ref": "AWS::Region"
-                          },
-                          "\",\"stacked\":false,\"metrics\":[[\"AWS/DynamoDB\",\"ConsumedReadCapacityUnits\",\"TableName\",\"",
-                          {
-                            "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
-                          },
-                          "\"],[\"AWS/DynamoDB\",\"ConsumedWriteCapacityUnits\",\"TableName\",\"",
-                          {
-                            "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
-                          },
-                          "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":16,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"DynamoDB Throttles\",\"region\":\"",
-                          {
-                            "Ref": "AWS::Region"
-                          },
-                          "\",\"stacked\":true,\"metrics\":[[\"AWS/DynamoDB\",\"ReadThrottleEvents\",\"TableName\",\"",
-                          {
-                            "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
-                          },
-                          "\",{\"stat\":\"Sum\"}],[\"AWS/DynamoDB\",\"WriteThrottleEvents\",\"TableName\",\"",
-                          {
-                            "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
-                          },
-                          "\",{\"stat\":\"Sum\"}]],\"yAxis\":{}}}]}"
-                        ]
-                      ]
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-cloudwatch.CfnDashboard",
-                  "version": "1.137.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/aws-cloudwatch.Dashboard",
-              "version": "1.137.0"
-            }
-          },
-          "CDKMetadata": {
-            "id": "CDKMetadata",
-            "path": "RestApiCloudWatchDashboard/CDKMetadata",
-            "children": {
-              "Default": {
-                "id": "Default",
-                "path": "RestApiCloudWatchDashboard/CDKMetadata/Default",
-                "constructInfo": {
-                  "fqn": "@aws-cdk/core.CfnResource",
-                  "version": "1.137.0"
-                }
-              },
-              "Condition": {
-                "id": "Condition",
-                "path": "RestApiCloudWatchDashboard/CDKMetadata/Condition",
                 "constructInfo": {
                   "fqn": "@aws-cdk/core.CfnCondition",
                   "version": "1.137.0"

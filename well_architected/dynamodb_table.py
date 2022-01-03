@@ -93,10 +93,8 @@ class DynamoDBTable(Stack):
         )
 
     def create_cloudwatch_widgets(self):
-        return [
-            widget for widget in (
-                self.create_latency_widget(),
-                self.create_read_write_capacity_widget(),
-                self.create_throttles_widget(),
-            )
-        ]
+        return  (
+            self.create_latency_widget(),
+            self.create_read_write_capacity_widget(),
+            self.create_throttles_widget(),
+        )

@@ -4,6 +4,8 @@ from aws_cdk.core import Stack, Construct, Duration
 from aws_cdk.aws_lambda import Function, Code, Runtime
 from aws_cdk.aws_sns import ITopic
 
+# TODO
+# separate alarms from widgets
 
 class LambdaFunction(Stack):
 
@@ -20,6 +22,7 @@ class LambdaFunction(Stack):
             timeout=Duration.seconds(60),
             environment=environment_variables,
         )
+
 
         self.lambda_function_cloudwatch_widgets = self.create_lambda_function_cloudwatch_widgets()
 
