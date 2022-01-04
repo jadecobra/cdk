@@ -1,4 +1,4 @@
-from aws_cdk.core import Stack, Construct, CfnOutput
+from aws_cdk.core import Construct, CfnOutput, Stack
 from aws_cdk.aws_lambda import Function
 from aws_cdk.aws_apigatewayv2 import HttpApi
 from aws_cdk.aws_apigatewayv2_integrations import HttpLambdaIntegration
@@ -17,9 +17,10 @@ class LambdaHttpApiGateway(Stack):
             )
         )
 
-        self.api_gateway_cloudwatch_widgets = ApiGatewayCloudWatch(
+        ApiGatewayCloudWatch(
             self, 'ApiGatewayCloudWatch',
-            api_id=self.http_api.api_id,
+            api_id=self.http_api.http_api_id,
             error_topic=error_topic,
-        ).api_gateway_cloudwatch_widgets
+        )
+
         CfnOutput(self, 'HTTP API Url', value=self.http_api.url)

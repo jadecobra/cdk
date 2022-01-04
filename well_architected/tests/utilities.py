@@ -23,11 +23,11 @@ def time_it(function, *args, description='run process', **kwargs):
     result = f'Time taken to {description}::  {time() - start_time:.4f} seconds'
     log_performance(log(result))
 
+system('clear')
+time_it(system, 'cdk ls', description='list all stacks')
 class TestTemplates(TestCase):
     maxDiff = None
 
     def assert_template_equal(self, template_name, expected_template):
-        system('clear')
-        time_it(system, 'cdk ls', description='list all stacks')
         with open(f'cdk.out/{template_name}.template.json') as template:
             self.assertEqual(load(template), expected_template)

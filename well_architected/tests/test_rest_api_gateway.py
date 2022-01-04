@@ -441,10 +441,62 @@ class TestRestAPIGateway(TestTemplates):
         "aws:cdk:path": "LambdaRestAPIGateway/ApiGatewayCloudWatch/API p99 latency alarm >= 1s/Resource"
       }
     },
+    "ApiGatewayCloudWatchCloudWatchDashBoard278188F3": {
+      "Type": "AWS::CloudWatch::Dashboard",
+      "Properties": {
+        "DashboardBody": {
+          "Fn::Join": [
+            "",
+            [
+              "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Requests\",\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"stacked\":false,\"metrics\":[[\"AWS/ApiGateway\",\"Count\",\"ApiId\",\"",
+              {
+                "Ref": "LambdaAPIGateway527FD988"
+              },
+              "\",{\"label\":\"# Requests\",\"period\":900,\"stat\":\"Sum\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"API GW Latency\",\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"stacked\":true,\"metrics\":[[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
+              {
+                "Ref": "LambdaAPIGateway527FD988"
+              },
+              "\",{\"label\":\"API Latency p50\",\"period\":900,\"stat\":\"p50\"}],[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
+              {
+                "Ref": "LambdaAPIGateway527FD988"
+              },
+              "\",{\"label\":\"API Latency p90\",\"period\":900,\"stat\":\"p90\"}],[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
+              {
+                "Ref": "LambdaAPIGateway527FD988"
+              },
+              "\",{\"label\":\"API Latency p99\",\"period\":900,\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"API GW Errors\",\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"stacked\":true,\"metrics\":[[\"AWS/ApiGateway\",\"4XXError\",\"ApiId\",\"",
+              {
+                "Ref": "LambdaAPIGateway527FD988"
+              },
+              "\",{\"label\":\"4XX Errors\",\"period\":900,\"stat\":\"Sum\"}],[\"AWS/ApiGateway\",\"5XXError\",\"ApiId\",\"",
+              {
+                "Ref": "LambdaAPIGateway527FD988"
+              },
+              "\",{\"label\":\"5XX Errors\",\"period\":900,\"stat\":\"Sum\"}]],\"yAxis\":{}}}]}"
+            ]
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "LambdaRestAPIGateway/ApiGatewayCloudWatch/CloudWatchDashBoard/Resource"
+      }
+    },
     "CDKMetadata": {
       "Type": "AWS::CDK::Metadata",
       "Properties": {
-        "Analytics": "v2:deflate64:H4sIAAAAAAAA/1WPwW7DIBBEvyV3QmLlkGvdVOolVaPkC7ZAHRpgESyyLMS/F+xabU/7dhnNDB3vDke+3zzBGLdCPnZZYFA83wjEg50+3Xsin4id0EUKSVC7XVXEFIRqXB+kJo2usGaRDQ6R5zMOrwGTb4qVq8DrAUiNMPFcPaj3+sduxV4ITI7Yi/IGJ6vcnPdnq72GOXeBtckzxN/lX8U3RXeU7bRQYRpsjUez6OoszID9kMDrflHB6hjrf5gwmOQIJO489waCnQs2KKWwy1Td3O7Auz3vNl9R622ozbVV/LrMbz9tuLBbAQAA"
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/1VPy27DIBD8ltwJiZVDr3ETqZdWjZIv2GBq0wBrwSLLQvx7Add9nHZmdzQz2/Dm8MT3myNMfiu6xy4KdJLHG4F4sNOHfQ80BmIntJ5cEFR2V+kxOCELzodOkUKbWLGIGnvP4yv2Lw7DWBQrzoJR9UBygpnH7EHtqL7tVtgKgcESO8tR42ykrXl/WO7V19wFrE2ewf+SfxXfJA3YldWCElNgcjzqRZdnYhrMvQOe+UU6o7zP/zChMXQTkBh4bDU4UwtWcAY/3BFc9f0hKSV2mXOI3R14s+fN5tMrtXX5IWUkvy7zC7FsTrdyAQAA"
       },
       "Metadata": {
         "aws:cdk:path": "LambdaRestAPIGateway/CDKMetadata/Default"

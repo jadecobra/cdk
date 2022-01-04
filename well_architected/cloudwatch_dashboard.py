@@ -10,6 +10,7 @@ class CloudWatchDashboard(Stack):
         **kwargs
     ) -> None:
         super().__init__(scope, id, **kwargs)
-        self.dashboard = Dashboard(self, "CloudWatchDashBoard")
-        for widget in widgets:
-            self.dashboard.add_widgets(*widget)
+        Dashboard(
+            self, "CloudWatchDashBoard",
+            widgets=[[*widget] for widget in widgets]
+        )

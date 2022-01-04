@@ -37,7 +37,6 @@ class WellArchitected(App):
         )
         CloudWatchDashboard(
             self, 'HttpApiCloudWatchDashboard',
-            self.http_api.api_gateway_cloudwatch_widgets,
             self.lambda_function.lambda_function_cloudwatch_widgets,
             self.dynamodb_table.dynamodb_cloudwatch_widgets,
         )
@@ -51,7 +50,6 @@ class WellArchitected(App):
 
         CloudWatchDashboard(
             self, 'RestApiCloudWatchDashboard',
-            self.rest_api.api_gateway_cloudwatch_widgets,
             self.lambda_function.lambda_function_cloudwatch_widgets,
             self.dynamodb_table.dynamodb_cloudwatch_widgets,
         )

@@ -1,9 +1,7 @@
 import cloudwatch
 
 from aws_cdk.core import Duration, Stack, Construct
-from aws_cdk.aws_cloudwatch import (
-    Metric, Unit
-)
+from aws_cdk.aws_cloudwatch import Metric, Unit, Dashboard
 
 
 class ApiGatewayCloudWatch(Construct):
@@ -12,8 +10,10 @@ class ApiGatewayCloudWatch(Construct):
         super().__init__(scope, id, **kwargs)
         self.api_id = api_id
         self.error_topic = error_topic
-        self.create_api_gateway_alarms()
-        self.api_gateway_cloudwatch_widgets = self.create_api_gateway_cloudwatch_widgets()
+        self.create_api_gateway_4xx_alarm()
+        self.create_api_gateway_5xx_alarm()
+        self.create_api_gateway_latency_alarm()
+        self.create_api_gateway_cloudwatch_dashboard()
 
     def add_api_gateway_metric(self, metric_name: str = None, label: str = None,
             period=Duration.seconds(900), statistic: str = 'sum',
@@ -28,9 +28,9 @@ class ApiGatewayCloudWatch(Construct):
             period=period,
         )
 
-    def create_api_gateway_alarms(self):
+    def create_api_gateway_4xx_alarm(self):
         # 4xx are user errors so a large volume indicates a problem
-        cloudwatch.create_cloudwatch_alarm(
+        return cloudwatch.create_cloudwatch_alarm(
             self, id="API Gateway 4XX Errors > 1%",
             error_topic=self.error_topic,
             metric=cloudwatch.create_cloudwatch_math_expression(
@@ -49,8 +49,9 @@ class ApiGatewayCloudWatch(Construct):
             ),
         )
 
+    def create_api_gateway_5xx_alarm(self):
         # 5xx are internal server errors so we want 0 of these
-        cloudwatch.create_cloudwatch_alarm(
+        return cloudwatch.create_cloudwatch_alarm(
             self, id="API Gateway 5XX Errors > 0",
             metric=self.add_api_gateway_metric(
                 metric_name="5XXError",
@@ -61,7 +62,8 @@ class ApiGatewayCloudWatch(Construct):
             error_topic=self.error_topic,
         )
 
-        cloudwatch.create_cloudwatch_alarm(
+    def create_api_gateway_latency_alarm(self):
+        return cloudwatch.create_cloudwatch_alarm(
             self, id="API p99 latency alarm >= 1s",
             metric=self.add_api_gateway_metric(
                 metric_name="Latency",
@@ -102,7 +104,7 @@ class ApiGatewayCloudWatch(Construct):
             ]
         )
 
-    def create_api_gateway_requests_widget(self):
+    def create_api_gateway_number_of_requests_widget(self):
         return cloudwatch.create_cloudwatch_widget(
             title="Requests",
             stacked=False,
@@ -116,7 +118,12 @@ class ApiGatewayCloudWatch(Construct):
 
     def create_api_gateway_cloudwatch_widgets(self):
         return (
-            self.create_api_gateway_requests_widget(),
+            self.create_api_gateway_number_of_requests_widget(),
             self.create_api_gateway_latency_widget(),
             self.create_api_gateway_errors_widget(),
+        )
+
+    def create_api_gateway_cloudwatch_dashboard(self):
+        return cloudwatch.create_cloudwatch_dashboard(
+            self, widgets=self.create_api_gateway_cloudwatch_widgets()
         )

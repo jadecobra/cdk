@@ -1,6 +1,6 @@
 from aws_cdk.core import Duration
 from aws_cdk.aws_cloudwatch import (
-    MathExpression, Metric, GraphWidget, Alarm, TreatMissingData, Unit
+    MathExpression, GraphWidget, Alarm, TreatMissingData, Dashboard
 )
 from aws_cdk.aws_cloudwatch_actions import SnsAction
 
@@ -38,4 +38,12 @@ def create_cloudwatch_alarm(stack, id=None, metric=None, threshold=1, error_topi
         treat_missing_data=TreatMissingData.NOT_BREACHING,
     ).add_alarm_action(
         SnsAction(error_topic)
+    )
+
+def create_cloudwatch_dashboard(stack, widgets=None):
+    return Dashboard(
+        stack, "CloudWatchDashBoard",
+        widgets=[
+            [widget] for widget in widgets
+        ]
     )
