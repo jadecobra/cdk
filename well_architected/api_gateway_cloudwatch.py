@@ -1,7 +1,6 @@
-import cloudwatch
-
-from aws_cdk.core import Duration, Stack, Construct
-from aws_cdk.aws_cloudwatch import Metric, Unit, Dashboard
+from aws_cdk.core import Duration, Construct
+from aws_cdk.aws_cloudwatch import Metric, Unit
+from well_architected import WellArchitectedFramework
 
 
 class ApiGatewayCloudWatch(Construct):
@@ -30,10 +29,9 @@ class ApiGatewayCloudWatch(Construct):
 
     def create_api_gateway_4xx_alarm(self):
         # 4xx are user errors so a large volume indicates a problem
-        return cloudwatch.create_cloudwatch_alarm(
+        return WellArchitectedFramework.create_cloudwatch_alarm(
             self, id="API Gateway 4XX Errors > 1%",
-            error_topic=self.error_topic,
-            metric=cloudwatch.create_cloudwatch_math_expression(
+            metric=WellArchitectedFramework.create_cloudwatch_math_expression(
                 expression="m1/m2*100",
                 label="% API Gateway 4xx Errors",
                 using_metrics={
@@ -51,7 +49,7 @@ class ApiGatewayCloudWatch(Construct):
 
     def create_api_gateway_5xx_alarm(self):
         # 5xx are internal server errors so we want 0 of these
-        return cloudwatch.create_cloudwatch_alarm(
+        return WellArchitectedFramework.create_cloudwatch_alarm(
             self, id="API Gateway 5XX Errors > 0",
             metric=self.add_api_gateway_metric(
                 metric_name="5XXError",
@@ -59,11 +57,10 @@ class ApiGatewayCloudWatch(Construct):
                 statistic="p99",
             ),
             threshold=0,
-            error_topic=self.error_topic,
         )
 
     def create_api_gateway_latency_alarm(self):
-        return cloudwatch.create_cloudwatch_alarm(
+        return WellArchitectedFramework.create_cloudwatch_alarm(
             self, id="API p99 latency alarm >= 1s",
             metric=self.add_api_gateway_metric(
                 metric_name="Latency",
@@ -71,11 +68,10 @@ class ApiGatewayCloudWatch(Construct):
                 statistic="p99",
             ),
             threshold=1000,
-            error_topic=self.error_topic,
         )
 
     def create_api_gateway_errors_widget(self):
-        return cloudwatch.create_cloudwatch_widget(
+        return WellArchitectedFramework.create_cloudwatch_widget(
             title="API GW Errors",
             left=[
                 self.add_api_gateway_metric(
@@ -89,7 +85,7 @@ class ApiGatewayCloudWatch(Construct):
         )
 
     def create_api_gateway_latency_widget(self):
-        return cloudwatch.create_cloudwatch_widget(
+        return WellArchitectedFramework.create_cloudwatch_widget(
             title="API GW Latency",
             left=[
                 self.add_api_gateway_metric(
@@ -105,7 +101,7 @@ class ApiGatewayCloudWatch(Construct):
         )
 
     def create_api_gateway_number_of_requests_widget(self):
-        return cloudwatch.create_cloudwatch_widget(
+        return WellArchitectedFramework.create_cloudwatch_widget(
             title="Requests",
             stacked=False,
             left=[
@@ -124,6 +120,6 @@ class ApiGatewayCloudWatch(Construct):
         )
 
     def create_cloudwatch_dashboard(self):
-        return cloudwatch.create_cloudwatch_dashboard(
+        return WellArchitectedFramework.create_cloudwatch_dashboard(
             self, widgets=self.create_cloudwatch_widgets()
         )
