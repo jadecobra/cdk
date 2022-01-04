@@ -22,22 +22,15 @@ class WellArchitected(App):
                 'HITS_TABLE_NAME': self.dynamodb_table.dynamodb_table.table_name
             }
         )
+        self.dynamodb_table.dynamodb_table.grant_read_write_data(self.lambda_function.lambda_function)
         self.create_rest_api()
         self.create_http_api()
-
-        self.dynamodb_table.dynamodb_table.grant_read_write_data(self.lambda_function.lambda_function)
-        # TODO
-        # abstract to functions
 
     def create_http_api(self):
         self.http_api = LambdaHttpApiGateway(
             self, 'LambdaHttpApiGateway',
             lambda_function=self.lambda_function.lambda_function,
             error_topic=self.error_topic,
-        )
-        CloudWatchDashboard(
-            self, 'HttpApiCloudWatchDashboard',
-            self.dynamodb_table.dynamodb_cloudwatch_widgets,
         )
 
     def create_rest_api(self):
@@ -47,10 +40,6 @@ class WellArchitected(App):
             error_topic=self.error_topic,
         )
 
-        CloudWatchDashboard(
-            self, 'RestApiCloudWatchDashboard',
-            self.dynamodb_table.dynamodb_cloudwatch_widgets,
-        )
         self.create_web_application_firewall(
             id='WebApplicationFirewall',
             target_arn=self.rest_api.resource_arn,

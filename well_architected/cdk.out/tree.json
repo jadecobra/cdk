@@ -136,6 +136,43 @@
               "version": "1.137.0"
             }
           },
+          "DynamoDB User Errors > 0": {
+            "id": "DynamoDB User Errors > 0",
+            "path": "DynamoDBTable/DynamoDB User Errors > 0",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "DynamoDBTable/DynamoDB User Errors > 0/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                  "aws:cdk:cloudformation:props": {
+                    "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                    "evaluationPeriods": 6,
+                    "alarmActions": [
+                      {
+                        "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
+                      }
+                    ],
+                    "datapointsToAlarm": 1,
+                    "metricName": "UserErrors",
+                    "namespace": "AWS/DynamoDB",
+                    "period": 300,
+                    "statistic": "Sum",
+                    "threshold": 0,
+                    "treatMissingData": "notBreaching"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
+                  "version": "1.137.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
+              "version": "1.137.0"
+            }
+          },
           "DynamoDB Table Reads--Writes Throttled": {
             "id": "DynamoDB Table Reads--Writes Throttled",
             "path": "DynamoDBTable/DynamoDB Table Reads--Writes Throttled",
@@ -213,6 +250,85 @@
             },
             "constructInfo": {
               "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
+              "version": "1.137.0"
+            }
+          },
+          "CloudWatchDashBoard": {
+            "id": "CloudWatchDashBoard",
+            "path": "DynamoDBTable/CloudWatchDashBoard",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "DynamoDBTable/CloudWatchDashBoard/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CloudWatch::Dashboard",
+                  "aws:cdk:cloudformation:props": {
+                    "dashboardBody": {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"DynamoDB Latency\",\"region\":\"",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          "\",\"stacked\":true,\"metrics\":[[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"GetItem\",\"TableName\",\"",
+                          {
+                            "Ref": "HitsFF5AF8CD"
+                          },
+                          "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"UpdateItem\",\"TableName\",\"",
+                          {
+                            "Ref": "HitsFF5AF8CD"
+                          },
+                          "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"PutItem\",\"TableName\",\"",
+                          {
+                            "Ref": "HitsFF5AF8CD"
+                          },
+                          "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"DeleteItem\",\"TableName\",\"",
+                          {
+                            "Ref": "HitsFF5AF8CD"
+                          },
+                          "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"Query\",\"TableName\",\"",
+                          {
+                            "Ref": "HitsFF5AF8CD"
+                          },
+                          "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"DynamoDB Consumed Read/Write Units\",\"region\":\"",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          "\",\"stacked\":false,\"metrics\":[[\"AWS/DynamoDB\",\"ConsumedReadCapacityUnits\",\"TableName\",\"",
+                          {
+                            "Ref": "HitsFF5AF8CD"
+                          },
+                          "\"],[\"AWS/DynamoDB\",\"ConsumedWriteCapacityUnits\",\"TableName\",\"",
+                          {
+                            "Ref": "HitsFF5AF8CD"
+                          },
+                          "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"DynamoDB Throttles\",\"region\":\"",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          "\",\"stacked\":true,\"metrics\":[[\"AWS/DynamoDB\",\"ReadThrottleEvents\",\"TableName\",\"",
+                          {
+                            "Ref": "HitsFF5AF8CD"
+                          },
+                          "\",{\"stat\":\"Sum\"}],[\"AWS/DynamoDB\",\"WriteThrottleEvents\",\"TableName\",\"",
+                          {
+                            "Ref": "HitsFF5AF8CD"
+                          },
+                          "\",{\"stat\":\"Sum\"}]],\"yAxis\":{}}}]}"
+                        ]
+                      ]
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-cloudwatch.CfnDashboard",
+                  "version": "1.137.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/aws-cloudwatch.Dashboard",
               "version": "1.137.0"
             }
           },
@@ -1611,121 +1727,6 @@
           "version": "1.137.0"
         }
       },
-      "RestApiCloudWatchDashboard": {
-        "id": "RestApiCloudWatchDashboard",
-        "path": "RestApiCloudWatchDashboard",
-        "children": {
-          "CloudWatchDashBoard": {
-            "id": "CloudWatchDashBoard",
-            "path": "RestApiCloudWatchDashboard/CloudWatchDashBoard",
-            "children": {
-              "Resource": {
-                "id": "Resource",
-                "path": "RestApiCloudWatchDashboard/CloudWatchDashBoard/Resource",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::CloudWatch::Dashboard",
-                  "aws:cdk:cloudformation:props": {
-                    "dashboardBody": {
-                      "Fn::Join": [
-                        "",
-                        [
-                          "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"DynamoDB Latency\",\"region\":\"",
-                          {
-                            "Ref": "AWS::Region"
-                          },
-                          "\",\"stacked\":true,\"metrics\":[[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"GetItem\",\"TableName\",\"",
-                          {
-                            "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
-                          },
-                          "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"UpdateItem\",\"TableName\",\"",
-                          {
-                            "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
-                          },
-                          "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"PutItem\",\"TableName\",\"",
-                          {
-                            "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
-                          },
-                          "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"DeleteItem\",\"TableName\",\"",
-                          {
-                            "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
-                          },
-                          "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"Query\",\"TableName\",\"",
-                          {
-                            "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
-                          },
-                          "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":8,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"DynamoDB Consumed Read/Write Units\",\"region\":\"",
-                          {
-                            "Ref": "AWS::Region"
-                          },
-                          "\",\"stacked\":false,\"metrics\":[[\"AWS/DynamoDB\",\"ConsumedReadCapacityUnits\",\"TableName\",\"",
-                          {
-                            "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
-                          },
-                          "\"],[\"AWS/DynamoDB\",\"ConsumedWriteCapacityUnits\",\"TableName\",\"",
-                          {
-                            "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
-                          },
-                          "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":16,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"DynamoDB Throttles\",\"region\":\"",
-                          {
-                            "Ref": "AWS::Region"
-                          },
-                          "\",\"stacked\":true,\"metrics\":[[\"AWS/DynamoDB\",\"ReadThrottleEvents\",\"TableName\",\"",
-                          {
-                            "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
-                          },
-                          "\",{\"stat\":\"Sum\"}],[\"AWS/DynamoDB\",\"WriteThrottleEvents\",\"TableName\",\"",
-                          {
-                            "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
-                          },
-                          "\",{\"stat\":\"Sum\"}]],\"yAxis\":{}}}]}"
-                        ]
-                      ]
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-cloudwatch.CfnDashboard",
-                  "version": "1.137.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/aws-cloudwatch.Dashboard",
-              "version": "1.137.0"
-            }
-          },
-          "CDKMetadata": {
-            "id": "CDKMetadata",
-            "path": "RestApiCloudWatchDashboard/CDKMetadata",
-            "children": {
-              "Default": {
-                "id": "Default",
-                "path": "RestApiCloudWatchDashboard/CDKMetadata/Default",
-                "constructInfo": {
-                  "fqn": "@aws-cdk/core.CfnResource",
-                  "version": "1.137.0"
-                }
-              },
-              "Condition": {
-                "id": "Condition",
-                "path": "RestApiCloudWatchDashboard/CDKMetadata/Condition",
-                "constructInfo": {
-                  "fqn": "@aws-cdk/core.CfnCondition",
-                  "version": "1.137.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/core.Construct",
-              "version": "1.137.0"
-            }
-          }
-        },
-        "constructInfo": {
-          "fqn": "@aws-cdk/core.Stack",
-          "version": "1.137.0"
-        }
-      },
       "WebApplicationFirewall": {
         "id": "WebApplicationFirewall",
         "path": "WebApplicationFirewall",
@@ -2372,121 +2373,6 @@
               "Condition": {
                 "id": "Condition",
                 "path": "LambdaHttpApiGateway/CDKMetadata/Condition",
-                "constructInfo": {
-                  "fqn": "@aws-cdk/core.CfnCondition",
-                  "version": "1.137.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/core.Construct",
-              "version": "1.137.0"
-            }
-          }
-        },
-        "constructInfo": {
-          "fqn": "@aws-cdk/core.Stack",
-          "version": "1.137.0"
-        }
-      },
-      "HttpApiCloudWatchDashboard": {
-        "id": "HttpApiCloudWatchDashboard",
-        "path": "HttpApiCloudWatchDashboard",
-        "children": {
-          "CloudWatchDashBoard": {
-            "id": "CloudWatchDashBoard",
-            "path": "HttpApiCloudWatchDashboard/CloudWatchDashBoard",
-            "children": {
-              "Resource": {
-                "id": "Resource",
-                "path": "HttpApiCloudWatchDashboard/CloudWatchDashBoard/Resource",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::CloudWatch::Dashboard",
-                  "aws:cdk:cloudformation:props": {
-                    "dashboardBody": {
-                      "Fn::Join": [
-                        "",
-                        [
-                          "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"DynamoDB Latency\",\"region\":\"",
-                          {
-                            "Ref": "AWS::Region"
-                          },
-                          "\",\"stacked\":true,\"metrics\":[[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"GetItem\",\"TableName\",\"",
-                          {
-                            "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
-                          },
-                          "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"UpdateItem\",\"TableName\",\"",
-                          {
-                            "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
-                          },
-                          "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"PutItem\",\"TableName\",\"",
-                          {
-                            "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
-                          },
-                          "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"DeleteItem\",\"TableName\",\"",
-                          {
-                            "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
-                          },
-                          "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"Query\",\"TableName\",\"",
-                          {
-                            "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
-                          },
-                          "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":8,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"DynamoDB Consumed Read/Write Units\",\"region\":\"",
-                          {
-                            "Ref": "AWS::Region"
-                          },
-                          "\",\"stacked\":false,\"metrics\":[[\"AWS/DynamoDB\",\"ConsumedReadCapacityUnits\",\"TableName\",\"",
-                          {
-                            "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
-                          },
-                          "\"],[\"AWS/DynamoDB\",\"ConsumedWriteCapacityUnits\",\"TableName\",\"",
-                          {
-                            "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
-                          },
-                          "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":16,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"DynamoDB Throttles\",\"region\":\"",
-                          {
-                            "Ref": "AWS::Region"
-                          },
-                          "\",\"stacked\":true,\"metrics\":[[\"AWS/DynamoDB\",\"ReadThrottleEvents\",\"TableName\",\"",
-                          {
-                            "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
-                          },
-                          "\",{\"stat\":\"Sum\"}],[\"AWS/DynamoDB\",\"WriteThrottleEvents\",\"TableName\",\"",
-                          {
-                            "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
-                          },
-                          "\",{\"stat\":\"Sum\"}]],\"yAxis\":{}}}]}"
-                        ]
-                      ]
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-cloudwatch.CfnDashboard",
-                  "version": "1.137.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/aws-cloudwatch.Dashboard",
-              "version": "1.137.0"
-            }
-          },
-          "CDKMetadata": {
-            "id": "CDKMetadata",
-            "path": "HttpApiCloudWatchDashboard/CDKMetadata",
-            "children": {
-              "Default": {
-                "id": "Default",
-                "path": "HttpApiCloudWatchDashboard/CDKMetadata/Default",
-                "constructInfo": {
-                  "fqn": "@aws-cdk/core.CfnResource",
-                  "version": "1.137.0"
-                }
-              },
-              "Condition": {
-                "id": "Condition",
-                "path": "HttpApiCloudWatchDashboard/CDKMetadata/Condition",
                 "constructInfo": {
                   "fqn": "@aws-cdk/core.CfnCondition",
                   "version": "1.137.0"
