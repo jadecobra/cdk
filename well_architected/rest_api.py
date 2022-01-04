@@ -1,8 +1,8 @@
 from aws_cdk.core import Construct, Stack
 from aws_cdk.aws_logs import LogGroup
 from aws_cdk.aws_lambda import Function
-from api_gateway_cloudwatch import ApiGatewayCloudWatch
 from aws_cdk.aws_sns import ITopic
+from api_gateway_cloudwatch import ApiGatewayCloudWatch
 
 import aws_cdk.aws_apigateway as api_gateway
 

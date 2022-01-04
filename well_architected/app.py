@@ -37,7 +37,6 @@ class WellArchitected(App):
         )
         CloudWatchDashboard(
             self, 'HttpApiCloudWatchDashboard',
-            self.lambda_function.lambda_function_cloudwatch_widgets,
             self.dynamodb_table.dynamodb_cloudwatch_widgets,
         )
 
@@ -50,7 +49,6 @@ class WellArchitected(App):
 
         CloudWatchDashboard(
             self, 'RestApiCloudWatchDashboard',
-            self.lambda_function.lambda_function_cloudwatch_widgets,
             self.dynamodb_table.dynamodb_cloudwatch_widgets,
         )
         self.create_web_application_firewall(
@@ -70,14 +68,6 @@ class WellArchitected(App):
             function_name='hello',
             environment_variables=environment_variables,
             error_topic=error_topic
-        )
-
-    def create_cloudwatch_dashboard(self, id=None, lambda_function=None, dynamodb_table=None, api=None):
-        return CloudWatchDashboard(
-            self, 'CloudWatchDashboard',
-            lambda_function=lambda_function,
-            dynamodb_table=dynamodb_table,
-            api=api,
         )
 
     def create_web_application_firewall(self, id=None, target_arn=None):

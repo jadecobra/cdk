@@ -314,10 +314,66 @@ class TestLambdaFunction(TestTemplates):
         "aws:cdk:path": "LambdaFunction/Dynamo Lambda 2% Throttled/Resource"
       }
     },
+    "CloudWatchDashBoard043C60B6": {
+      "Type": "AWS::CloudWatch::Dashboard",
+      "Properties": {
+        "DashboardBody": {
+          "Fn::Join": [
+            "",
+            [
+              "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Error %\",\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"e / invocations * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+              {
+                "Ref": "LambdaFunctionBF21E41F"
+              },
+              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
+              {
+                "Ref": "LambdaFunctionBF21E41F"
+              },
+              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"e\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Duration\",\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+              {
+                "Ref": "LambdaFunctionBF21E41F"
+              },
+              "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+              {
+                "Ref": "LambdaFunctionBF21E41F"
+              },
+              "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+              {
+                "Ref": "LambdaFunctionBF21E41F"
+              },
+              "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Throttle %\",\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of throttled requests, last 30 mins\",\"expression\":\"t / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+              {
+                "Ref": "LambdaFunctionBF21E41F"
+              },
+              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
+              {
+                "Ref": "LambdaFunctionBF21E41F"
+              },
+              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"t\"}]],\"yAxis\":{}}}]}"
+            ]
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "LambdaFunction/CloudWatchDashBoard/Resource"
+      }
+    },
     "CDKMetadata": {
       "Type": "AWS::CDK::Metadata",
       "Properties": {
-        "Analytics": "v2:deflate64:H4sIAAAAAAAA/zWOS27DMAxEz5K9zMTwItsmAbo23BOwNJuo1gcQKQSBoLvHUtEV3xAz5IwwTmc4HT7wKQOt27FQTAzlS5E2cxFh3fFuw93cYhBNmdTcfsKMCT0rpyYWlpgTcePdtVq1MVTTThaH/ntFKJ85UFs3zz9XY9FDWaLr0T7n6Cy9+otO1cg0YOsh0OvsGq6ZNtYrChtyMa9PVHpAuThMvkU71FrN/NJHDMcJxhOMh1+xdkg5qPUMy998A921L5EBAQAA"
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/z2OS27DMAxEz5K9zMTwotsmKbo23BMwlBqr1gcQKQSBoLvXUtCu+IaYIWeEcXqD0+EdHzyQ3o6FYjJQvgRpU2dmIzvebbirawwsKZOo63eYMaE3YlITi+GYE5nGu0tbsTFU1U4Wh/6mEcpnDtTWzfPHVVn0UJboerTPOTpLz/6iU1U8Ddh6MPQ6u4ZLps3IBdkocjHrBwqtUM4Ok2/RF3wgr7eISbfVv6i1qvkpawzHCcYTjIcftnZIOYj1BpbX/AWD9F+sGAEAAA=="
       },
       "Metadata": {
         "aws:cdk:path": "LambdaFunction/CDKMetadata/Default"
@@ -543,14 +599,6 @@ class TestLambdaFunction(TestTemplates):
       },
       "Export": {
         "Name": "LambdaFunction:ExportsOutputFnGetAttLambdaFunctionBF21E41FArn8BD9CD14"
-      }
-    },
-    "ExportsOutputRefLambdaFunctionBF21E41F66817B40": {
-      "Value": {
-        "Ref": "LambdaFunctionBF21E41F"
-      },
-      "Export": {
-        "Name": "LambdaFunction:ExportsOutputRefLambdaFunctionBF21E41F66817B40"
       }
     }
   }

@@ -13,7 +13,7 @@ class ApiGatewayCloudWatch(Construct):
         self.create_api_gateway_4xx_alarm()
         self.create_api_gateway_5xx_alarm()
         self.create_api_gateway_latency_alarm()
-        self.create_api_gateway_cloudwatch_dashboard()
+        self.create_cloudwatch_dashboard()
 
     def add_api_gateway_metric(self, metric_name: str = None, label: str = None,
             period=Duration.seconds(900), statistic: str = 'sum',
@@ -116,14 +116,14 @@ class ApiGatewayCloudWatch(Construct):
             ]
         )
 
-    def create_api_gateway_cloudwatch_widgets(self):
+    def create_cloudwatch_widgets(self):
         return (
             self.create_api_gateway_number_of_requests_widget(),
             self.create_api_gateway_latency_widget(),
             self.create_api_gateway_errors_widget(),
         )
 
-    def create_api_gateway_cloudwatch_dashboard(self):
+    def create_cloudwatch_dashboard(self):
         return cloudwatch.create_cloudwatch_dashboard(
-            self, widgets=self.create_api_gateway_cloudwatch_widgets()
+            self, widgets=self.create_cloudwatch_widgets()
         )
