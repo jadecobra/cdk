@@ -2389,6 +2389,650 @@
           "fqn": "@aws-cdk/core.Stack",
           "version": "1.137.0"
         }
+      },
+      "XRayTracer": {
+        "id": "XRayTracer",
+        "path": "XRayTracer",
+        "children": {
+          "TheXRayTracerSnsFanOutTopic": {
+            "id": "TheXRayTracerSnsFanOutTopic",
+            "path": "XRayTracer/TheXRayTracerSnsFanOutTopic",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "XRayTracer/TheXRayTracerSnsFanOutTopic/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::SNS::Topic",
+                  "aws:cdk:cloudformation:props": {
+                    "displayName": "The XRay Tracer Fan Out Topic"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-sns.CfnTopic",
+                  "version": "1.137.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/aws-sns.Topic",
+              "version": "1.137.0"
+            }
+          },
+          "xrayTracerAPI": {
+            "id": "xrayTracerAPI",
+            "path": "XRayTracer/xrayTracerAPI",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "XRayTracer/xrayTracerAPI/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::ApiGateway::RestApi",
+                  "aws:cdk:cloudformation:props": {
+                    "name": "xrayTracerAPI"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-apigateway.CfnRestApi",
+                  "version": "1.137.0"
+                }
+              },
+              "CloudWatchRole": {
+                "id": "CloudWatchRole",
+                "path": "XRayTracer/xrayTracerAPI/CloudWatchRole",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "XRayTracer/xrayTracerAPI/CloudWatchRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "apigateway.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-iam.CfnRole",
+                      "version": "1.137.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-iam.Role",
+                  "version": "1.137.0"
+                }
+              },
+              "Account": {
+                "id": "Account",
+                "path": "XRayTracer/xrayTracerAPI/Account",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::ApiGateway::Account",
+                  "aws:cdk:cloudformation:props": {
+                    "cloudWatchRoleArn": {
+                      "Fn::GetAtt": [
+                        "xrayTracerAPICloudWatchRoleCCB113F4",
+                        "Arn"
+                      ]
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-apigateway.CfnAccount",
+                  "version": "1.137.0"
+                }
+              },
+              "Deployment": {
+                "id": "Deployment",
+                "path": "XRayTracer/xrayTracerAPI/Deployment",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "XRayTracer/xrayTracerAPI/Deployment/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::ApiGateway::Deployment",
+                      "aws:cdk:cloudformation:props": {
+                        "restApiId": {
+                          "Ref": "xrayTracerAPIA84CAE80"
+                        },
+                        "description": "Automatically created by the RestApi construct"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-apigateway.CfnDeployment",
+                      "version": "1.137.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-apigateway.Deployment",
+                  "version": "1.137.0"
+                }
+              },
+              "DeploymentStage.prod": {
+                "id": "DeploymentStage.prod",
+                "path": "XRayTracer/xrayTracerAPI/DeploymentStage.prod",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "XRayTracer/xrayTracerAPI/DeploymentStage.prod/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::ApiGateway::Stage",
+                      "aws:cdk:cloudformation:props": {
+                        "restApiId": {
+                          "Ref": "xrayTracerAPIA84CAE80"
+                        },
+                        "deploymentId": {
+                          "Ref": "xrayTracerAPIDeploymentB3CB89A0c2d74c56c7bf7778fc5e2fa94da22dac"
+                        },
+                        "methodSettings": [
+                          {
+                            "httpMethod": "*",
+                            "resourcePath": "/*",
+                            "dataTraceEnabled": true,
+                            "loggingLevel": "INFO",
+                            "metricsEnabled": true
+                          }
+                        ],
+                        "stageName": "prod",
+                        "tracingEnabled": true
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-apigateway.CfnStage",
+                      "version": "1.137.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-apigateway.Stage",
+                  "version": "1.137.0"
+                }
+              },
+              "Endpoint": {
+                "id": "Endpoint",
+                "path": "XRayTracer/xrayTracerAPI/Endpoint",
+                "constructInfo": {
+                  "fqn": "@aws-cdk/core.CfnOutput",
+                  "version": "1.137.0"
+                }
+              },
+              "Default": {
+                "id": "Default",
+                "path": "XRayTracer/xrayTracerAPI/Default",
+                "children": {
+                  "GET": {
+                    "id": "GET",
+                    "path": "XRayTracer/xrayTracerAPI/Default/GET",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "XRayTracer/xrayTracerAPI/Default/GET/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
+                          "aws:cdk:cloudformation:props": {
+                            "httpMethod": "GET",
+                            "resourceId": {
+                              "Fn::GetAtt": [
+                                "xrayTracerAPIA84CAE80",
+                                "RootResourceId"
+                              ]
+                            },
+                            "restApiId": {
+                              "Ref": "xrayTracerAPIA84CAE80"
+                            },
+                            "authorizationType": "NONE",
+                            "integration": {
+                              "type": "AWS",
+                              "uri": "arn:aws:apigateway:us-east-1:sns:path//",
+                              "integrationHttpMethod": "POST",
+                              "requestParameters": {
+                                "integration.request.header.Content-Type": "'application/x-www-form-urlencoded'"
+                              },
+                              "requestTemplates": {
+                                "application/json": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "Action=Publish&TargetArn=$util.urlEncode('",
+                                      {
+                                        "Ref": "TheXRayTracerSnsFanOutTopicDE7E70F8"
+                                      },
+                                      "')&Message=$util.urlEncode($context.path)&Version=2010-03-31"
+                                    ]
+                                  ]
+                                }
+                              },
+                              "passthroughBehavior": "NEVER",
+                              "integrationResponses": [
+                                {
+                                  "responseTemplates": {
+                                    "application/json": "{\"message\": \"message added to topic\"}"
+                                  },
+                                  "statusCode": "200"
+                                },
+                                {
+                                  "responseParameters": {
+                                    "method.response.header.Content-Type": "'application/json'",
+                                    "method.response.header.Access-Control-Allow-Origin": "'*'",
+                                    "method.response.header.Access-Control-Allow-Credentials": "'true'"
+                                  },
+                                  "responseTemplates": {
+                                    "application/json": "{\"state\":\"error\",\"message\":\"$util.escapeJavaScript($input.path('$.errorMessage'))\"}"
+                                  },
+                                  "selectionPattern": "^\\[Error\\].*",
+                                  "statusCode": "400"
+                                }
+                              ],
+                              "credentials": {
+                                "Fn::GetAtt": [
+                                  "ApiGatewaySNSRole1BAAAE75",
+                                  "Arn"
+                                ]
+                              }
+                            },
+                            "methodResponses": [
+                              {
+                                "statusCode": "200",
+                                "responseParameters": {
+                                  "method.response.header.Content-Type": true,
+                                  "method.response.header.Access-Control-Allow-Origin": true,
+                                  "method.response.header.Access-Control-Allow-Credentials": true
+                                },
+                                "responseModels": {
+                                  "application/json": {
+                                    "Ref": "xrayTracerAPIResponseModel2591E14E"
+                                  }
+                                }
+                              },
+                              {
+                                "statusCode": "400",
+                                "responseParameters": {
+                                  "method.response.header.Content-Type": true,
+                                  "method.response.header.Access-Control-Allow-Origin": true,
+                                  "method.response.header.Access-Control-Allow-Credentials": true
+                                },
+                                "responseModels": {
+                                  "application/json": {
+                                    "Ref": "xrayTracerAPIErrorResponseModel24719E91"
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-apigateway.CfnMethod",
+                          "version": "1.137.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-apigateway.Method",
+                      "version": "1.137.0"
+                    }
+                  },
+                  "{proxy+}": {
+                    "id": "{proxy+}",
+                    "path": "XRayTracer/xrayTracerAPI/Default/{proxy+}",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "XRayTracer/xrayTracerAPI/Default/{proxy+}/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::ApiGateway::Resource",
+                          "aws:cdk:cloudformation:props": {
+                            "parentId": {
+                              "Fn::GetAtt": [
+                                "xrayTracerAPIA84CAE80",
+                                "RootResourceId"
+                              ]
+                            },
+                            "pathPart": "{proxy+}",
+                            "restApiId": {
+                              "Ref": "xrayTracerAPIA84CAE80"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-apigateway.CfnResource",
+                          "version": "1.137.0"
+                        }
+                      },
+                      "GET": {
+                        "id": "GET",
+                        "path": "XRayTracer/xrayTracerAPI/Default/{proxy+}/GET",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "XRayTracer/xrayTracerAPI/Default/{proxy+}/GET/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
+                              "aws:cdk:cloudformation:props": {
+                                "httpMethod": "GET",
+                                "resourceId": {
+                                  "Ref": "xrayTracerAPIproxy719DA214"
+                                },
+                                "restApiId": {
+                                  "Ref": "xrayTracerAPIA84CAE80"
+                                },
+                                "authorizationType": "NONE",
+                                "integration": {
+                                  "type": "AWS",
+                                  "uri": "arn:aws:apigateway:us-east-1:sns:path//",
+                                  "integrationHttpMethod": "POST",
+                                  "requestParameters": {
+                                    "integration.request.header.Content-Type": "'application/x-www-form-urlencoded'"
+                                  },
+                                  "requestTemplates": {
+                                    "application/json": {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          "Action=Publish&TargetArn=$util.urlEncode('",
+                                          {
+                                            "Ref": "TheXRayTracerSnsFanOutTopicDE7E70F8"
+                                          },
+                                          "')&Message=$util.urlEncode($context.path)&Version=2010-03-31"
+                                        ]
+                                      ]
+                                    }
+                                  },
+                                  "passthroughBehavior": "NEVER",
+                                  "integrationResponses": [
+                                    {
+                                      "responseTemplates": {
+                                        "application/json": "{\"message\": \"message added to topic\"}"
+                                      },
+                                      "statusCode": "200"
+                                    },
+                                    {
+                                      "responseParameters": {
+                                        "method.response.header.Content-Type": "'application/json'",
+                                        "method.response.header.Access-Control-Allow-Origin": "'*'",
+                                        "method.response.header.Access-Control-Allow-Credentials": "'true'"
+                                      },
+                                      "responseTemplates": {
+                                        "application/json": "{\"state\":\"error\",\"message\":\"$util.escapeJavaScript($input.path('$.errorMessage'))\"}"
+                                      },
+                                      "selectionPattern": "^\\[Error\\].*",
+                                      "statusCode": "400"
+                                    }
+                                  ],
+                                  "credentials": {
+                                    "Fn::GetAtt": [
+                                      "ApiGatewaySNSRole1BAAAE75",
+                                      "Arn"
+                                    ]
+                                  }
+                                },
+                                "methodResponses": [
+                                  {
+                                    "statusCode": "200",
+                                    "responseParameters": {
+                                      "method.response.header.Content-Type": true,
+                                      "method.response.header.Access-Control-Allow-Origin": true,
+                                      "method.response.header.Access-Control-Allow-Credentials": true
+                                    },
+                                    "responseModels": {
+                                      "application/json": {
+                                        "Ref": "xrayTracerAPIResponseModel2591E14E"
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "statusCode": "400",
+                                    "responseParameters": {
+                                      "method.response.header.Content-Type": true,
+                                      "method.response.header.Access-Control-Allow-Origin": true,
+                                      "method.response.header.Access-Control-Allow-Credentials": true
+                                    },
+                                    "responseModels": {
+                                      "application/json": {
+                                        "Ref": "xrayTracerAPIErrorResponseModel24719E91"
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "@aws-cdk/aws-apigateway.CfnMethod",
+                              "version": "1.137.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-apigateway.Method",
+                          "version": "1.137.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-apigateway.Resource",
+                      "version": "1.137.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-apigateway.ResourceBase",
+                  "version": "1.137.0"
+                }
+              },
+              "ResponseModel": {
+                "id": "ResponseModel",
+                "path": "XRayTracer/xrayTracerAPI/ResponseModel",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "XRayTracer/xrayTracerAPI/ResponseModel/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::ApiGateway::Model",
+                      "aws:cdk:cloudformation:props": {
+                        "restApiId": {
+                          "Ref": "xrayTracerAPIA84CAE80"
+                        },
+                        "contentType": "application/json",
+                        "name": "ResponseModel",
+                        "schema": {
+                          "properties": {
+                            "message": {
+                              "type": "string"
+                            }
+                          },
+                          "$schema": "http://json-schema.org/draft-04/schema#",
+                          "title": "pollResponse",
+                          "type": "object"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-apigateway.CfnModel",
+                      "version": "1.137.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-apigateway.Model",
+                  "version": "1.137.0"
+                }
+              },
+              "ErrorResponseModel": {
+                "id": "ErrorResponseModel",
+                "path": "XRayTracer/xrayTracerAPI/ErrorResponseModel",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "XRayTracer/xrayTracerAPI/ErrorResponseModel/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::ApiGateway::Model",
+                      "aws:cdk:cloudformation:props": {
+                        "restApiId": {
+                          "Ref": "xrayTracerAPIA84CAE80"
+                        },
+                        "contentType": "application/json",
+                        "name": "ErrorResponseModel",
+                        "schema": {
+                          "properties": {
+                            "state": {
+                              "type": "string"
+                            },
+                            "message": {
+                              "type": "string"
+                            }
+                          },
+                          "$schema": "http://json-schema.org/draft-04/schema#",
+                          "title": "errorResponse",
+                          "type": "object"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-apigateway.CfnModel",
+                      "version": "1.137.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-apigateway.Model",
+                  "version": "1.137.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/aws-apigateway.RestApi",
+              "version": "1.137.0"
+            }
+          },
+          "ApiGatewaySNSRole": {
+            "id": "ApiGatewaySNSRole",
+            "path": "XRayTracer/ApiGatewaySNSRole",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "XRayTracer/ApiGatewaySNSRole/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                  "aws:cdk:cloudformation:props": {
+                    "assumeRolePolicyDocument": {
+                      "Statement": [
+                        {
+                          "Action": "sts:AssumeRole",
+                          "Effect": "Allow",
+                          "Principal": {
+                            "Service": "apigateway.amazonaws.com"
+                          }
+                        }
+                      ],
+                      "Version": "2012-10-17"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-iam.CfnRole",
+                  "version": "1.137.0"
+                }
+              },
+              "DefaultPolicy": {
+                "id": "DefaultPolicy",
+                "path": "XRayTracer/ApiGatewaySNSRole/DefaultPolicy",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "XRayTracer/ApiGatewaySNSRole/DefaultPolicy/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                      "aws:cdk:cloudformation:props": {
+                        "policyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sns:Publish",
+                              "Effect": "Allow",
+                              "Resource": {
+                                "Ref": "TheXRayTracerSnsFanOutTopicDE7E70F8"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "policyName": "ApiGatewaySNSRoleDefaultPolicyCA5D0260",
+                        "roles": [
+                          {
+                            "Ref": "ApiGatewaySNSRole1BAAAE75"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-iam.CfnPolicy",
+                      "version": "1.137.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-iam.Policy",
+                  "version": "1.137.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/aws-iam.Role",
+              "version": "1.137.0"
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "XRayTracer/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "XRayTracer/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "@aws-cdk/core.CfnResource",
+                  "version": "1.137.0"
+                }
+              },
+              "Condition": {
+                "id": "Condition",
+                "path": "XRayTracer/CDKMetadata/Condition",
+                "constructInfo": {
+                  "fqn": "@aws-cdk/core.CfnCondition",
+                  "version": "1.137.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/core.Construct",
+              "version": "1.137.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "@aws-cdk/core.Stack",
+          "version": "1.137.0"
+        }
       }
     },
     "constructInfo": {

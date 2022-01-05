@@ -9,6 +9,7 @@ from cloudwatch_dashboard import CloudWatchDashboard
 from dynamodb_table import DynamoDBTable
 from http_api import LambdaHttpApiGateway
 from sns_topic import SnsTopic
+from xray_tracer.xray_tracer import TheXrayTracerStack
 
 class WellArchitected(App):
 
@@ -25,6 +26,7 @@ class WellArchitected(App):
         self.dynamodb_table.dynamodb_table.grant_read_write_data(self.lambda_function.lambda_function)
         self.create_rest_api()
         self.create_http_api()
+        TheXrayTracerStack(self, 'XRayTracer')
 
     def create_http_api(self):
         self.http_api = LambdaHttpApiGateway(
