@@ -16,15 +16,16 @@ class TheDynamoFlowStack(core.Stack):
                                 partition_key=dynamo_db.Attribute(name="path", type=dynamo_db.AttributeType.STRING)
                                 )
 
-        dynamo_lambda = _lambda.Function(self, "DynamoLambdaHandler",
-                                         runtime=_lambda.Runtime.NODEJS_12_X,
-                                         handler="dynamo.handler",
-                                         code=_lambda.Code.from_asset("lambda_fns"),
-                                         tracing=_lambda.Tracing.ACTIVE,
-                                         environment={
-                                             "HITS_TABLE_NAME": table.table_name
-                                         }
-                                         )
+        dynamo_lambda = _lambda.Function(
+            self, "DynamoLambdaHandler",
+            runtime=_lambda.Runtime.NODEJS_12_X,
+            handler="dynamo.handler",
+            code=_lambda.Code.from_asset("lambda_fns"),
+            tracing=_lambda.Tracing.ACTIVE,
+            environment={
+                "HITS_TABLE_NAME": table.table_name
+            }
+        )
         # grant the lambda role read/write permissions to our table
         table.grant_read_write_data(dynamo_lambda)
 

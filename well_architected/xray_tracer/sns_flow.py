@@ -13,23 +13,25 @@ class TheSnsFlowStack(core.Stack):
         # SNS Topic creation
         topic = sns.Topic(self, 'TheXRayTracerSnsTopic', display_name='The XRay Tracer CDK Pattern Topic')
 
-        sns_lambda = _lambda.Function(self, "snsLambdaHandler",
-                                      runtime=_lambda.Runtime.NODEJS_12_X,
-                                      handler="sns_publish.handler",
-                                      code=_lambda.Code.from_asset("lambda_fns"),
-                                      tracing=_lambda.Tracing.ACTIVE,
-                                      environment={
-                                          "TOPIC_ARN": topic.topic_arn
-                                      }
-                                      )
+        sns_lambda = _lambda.Function(
+            self, "snsLambdaHandler",
+            runtime=_lambda.Runtime.NODEJS_12_X,
+            handler="sns_publish.handler",
+            code=_lambda.Code.from_asset("lambda_fns"),
+            tracing=_lambda.Tracing.ACTIVE,
+            environment={
+                "TOPIC_ARN": topic.topic_arn
+            }
+        )
         topic.grant_publish(sns_lambda)
         apigw_topic = sns.Topic.from_topic_arn(self, 'SNSTopic', sns_topic_arn)
         apigw_topic.add_subscription(subscriptions.LambdaSubscription(sns_lambda))
 
-        sns_subscriber_lambda = _lambda.Function(self, "snsSubscriptionLambdaHandler",
-                                                 runtime=_lambda.Runtime.NODEJS_12_X,
-                                                 handler="sns_subscribe.handler",
-                                                 code=_lambda.Code.from_asset("lambda_fns"),
-                                                 tracing=_lambda.Tracing.ACTIVE
-                                                 )
+        sns_subscriber_lambda = _lambda.Function(
+            self, "snsSubscriptionLambdaHandler",
+            runtime=_lambda.Runtime.NODEJS_12_X,
+            handler="sns_subscribe.handler",
+            code=_lambda.Code.from_asset("lambda_fns"),
+            tracing=_lambda.Tracing.ACTIVE
+        )
         topic.add_subscription(subscriptions.LambdaSubscription(sns_subscriber_lambda))

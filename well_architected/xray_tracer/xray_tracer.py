@@ -24,18 +24,22 @@ class TheXrayTracerStack(core.Stack):
         # Tracing is enabled for X-Ray
         ###
 
-        gateway = api_gw.RestApi(self, 'xrayTracerAPI',
-                                 deploy_options=api_gw.StageOptions(
-                                     metrics_enabled=True,
-                                     logging_level=api_gw.MethodLoggingLevel.INFO,
-                                     data_trace_enabled=True,
-                                     tracing_enabled=True,
-                                     stage_name='prod'
-                                 ))
+        gateway = api_gw.RestApi(
+            self, 'xrayTracerAPI',
+            deploy_options=api_gw.StageOptions(
+                metrics_enabled=True,
+                logging_level=api_gw.MethodLoggingLevel.INFO,
+                data_trace_enabled=True,
+                tracing_enabled=True,
+                stage_name='prod'
+            )
+        )
 
         # Give our gateway permissions to interact with SNS
-        api_gw_sns_role = iam.Role(self, 'ApiGatewaySNSRole',
-                                   assumed_by=iam.ServicePrincipal('apigateway.amazonaws.com'))
+        api_gw_sns_role = iam.Role(
+            self, 'ApiGatewaySNSRole',
+            assumed_by=iam.ServicePrincipal('apigateway.amazonaws.com')
+        )
         topic.grant_publish(api_gw_sns_role)
 
         # shortening the lines of later code
@@ -43,31 +47,39 @@ class TheXrayTracerStack(core.Stack):
         schema_type = api_gw.JsonSchemaType
 
         # Because this isn't a proxy integration, we need to define our response model
-        response_model = gateway.add_model('ResponseModel',
-                                           content_type='application/json',
-                                           model_name='ResponseModel',
-                                           schema=schema(schema=api_gw.JsonSchemaVersion.DRAFT4,
-                                                         title='pollResponse',
-                                                         type=schema_type.OBJECT,
-                                                         properties={
-                                                             'message': schema(type=schema_type.STRING)
-                                                         }))
+        response_model = gateway.add_model(
+            'ResponseModel',
+            content_type='application/json',
+            model_name='ResponseModel',
+            schema=schema(
+                schema=api_gw.JsonSchemaVersion.DRAFT4,
+                title='pollResponse',
+                type=schema_type.OBJECT,
+                properties={
+                    'message': schema(type=schema_type.STRING)
+                }
+            )
+        )
 
-        error_response_model = gateway.add_model('ErrorResponseModel',
-                                                 content_type='application/json',
-                                                 model_name='ErrorResponseModel',
-                                                 schema=schema(schema=api_gw.JsonSchemaVersion.DRAFT4,
-                                                               title='errorResponse',
-                                                               type=schema_type.OBJECT,
-                                                               properties={
-                                                                   'state': schema(type=schema_type.STRING),
-                                                                   'message': schema(type=schema_type.STRING)
-                                                               }))
+        error_response_model = gateway.add_model(
+            'ErrorResponseModel',
+            content_type='application/json',
+            model_name='ErrorResponseModel',
+            schema=schema(
+                schema=api_gw.JsonSchemaVersion.DRAFT4,
+                title='errorResponse',
+                type=schema_type.OBJECT,
+                properties={
+                    'state': schema(type=schema_type.STRING),
+                    'message': schema(type=schema_type.STRING)
+                }
+            )
+        )
 
         request_template = "Action=Publish&" + \
-                           "TargetArn=$util.urlEncode('" + topic.topic_arn + "')&" + \
-                           "Message=$util.urlEncode($context.path)&" + \
-                           "Version=2010-03-31"
+            "TargetArn=$util.urlEncode('" + topic.topic_arn + "')&" + \
+            "Message=$util.urlEncode($context.path)&" + \
+            "Version=2010-03-31"
 
         # This is the VTL to transform the error response
         error_template = {
@@ -109,42 +121,48 @@ class TheXrayTracerStack(core.Stack):
         )
 
         method_responses = [
-            api_gw.MethodResponse(status_code='200',
-                                  response_parameters={
-                                      'method.response.header.Content-Type': True,
-                                      'method.response.header.Access-Control-Allow-Origin': True,
-                                      'method.response.header.Access-Control-Allow-Credentials': True
-                                  },
-                                  response_models={
-                                      'application/json': response_model
-                                  }),
-            api_gw.MethodResponse(status_code='400',
-                                  response_parameters={
-                                      'method.response.header.Content-Type': True,
-                                      'method.response.header.Access-Control-Allow-Origin': True,
-                                      'method.response.header.Access-Control-Allow-Credentials': True
-                                  },
-                                  response_models={
-                                      'application/json': error_response_model
-                                  }),
+            api_gw.MethodResponse(
+                status_code='200',
+                response_parameters={
+                    'method.response.header.Content-Type': True,
+                    'method.response.header.Access-Control-Allow-Origin': True,
+                    'method.response.header.Access-Control-Allow-Credentials': True
+                },
+                response_models={
+                    'application/json': response_model
+                }
+            ),
+            api_gw.MethodResponse(
+                status_code='400',
+                response_parameters={
+                    'method.response.header.Content-Type': True,
+                    'method.response.header.Access-Control-Allow-Origin': True,
+                    'method.response.header.Access-Control-Allow-Credentials': True
+                },
+                response_models={
+                    'application/json': error_response_model
+
+            }),
         ]
 
         # Add a / endpoint onto the gateway
-        gateway.root \
-            .add_method('GET', api_gw.Integration(type=api_gw.IntegrationType.AWS,
-                                                  integration_http_method='POST',
-                                                  uri='arn:aws:apigateway:us-east-1:sns:path//',
-                                                  options=integration_options
-                                                  ),
-                        method_responses=method_responses
-                        )
+        gateway.root.add_method(
+            'GET', api_gw.Integration(
+                type=api_gw.IntegrationType.AWS,
+                integration_http_method='POST',
+                uri='arn:aws:apigateway:us-east-1:sns:path//',
+                options=integration_options
+            ),
+            method_responses=method_responses
+        )
 
         # Add a {proxy+} endpoint onto the gateway
-        gateway.root.add_resource('{proxy+}') \
-            .add_method('GET', api_gw.Integration(type=api_gw.IntegrationType.AWS,
-                                                  integration_http_method='POST',
-                                                  uri='arn:aws:apigateway:us-east-1:sns:path//',
-                                                  options=integration_options
-                                                  ),
-                        method_responses=method_responses
-                        )
+        gateway.root.add_resource('{proxy+}').add_method(
+            'GET', api_gw.Integration(
+                type=api_gw.IntegrationType.AWS,
+                integration_http_method='POST',
+                uri='arn:aws:apigateway:us-east-1:sns:path//',
+                options=integration_options
+            ),
+            method_responses=method_responses
+        )
