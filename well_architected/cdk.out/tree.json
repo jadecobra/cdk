@@ -2545,7 +2545,7 @@
                           "Ref": "xrayTracerAPIA84CAE80"
                         },
                         "deploymentId": {
-                          "Ref": "xrayTracerAPIDeploymentB3CB89A0c2d74c56c7bf7778fc5e2fa94da22dac"
+                          "Ref": "xrayTracerAPIDeploymentB3CB89A02d6f6c9102c331c1e11ae41d64af7ae6"
                         },
                         "methodSettings": [
                           {
@@ -2606,7 +2606,18 @@
                             "authorizationType": "NONE",
                             "integration": {
                               "type": "AWS",
-                              "uri": "arn:aws:apigateway:us-east-1:sns:path//",
+                              "uri": {
+                                "Fn::Join": [
+                                  "",
+                                  [
+                                    "arn:aws:apigateway:",
+                                    {
+                                      "Ref": "AWS::Region"
+                                    },
+                                    ":sns:path//"
+                                  ]
+                                ]
+                              },
                               "integrationHttpMethod": "POST",
                               "requestParameters": {
                                 "integration.request.header.Content-Type": "'application/x-www-form-urlencoded'"
@@ -2741,7 +2752,18 @@
                                 "authorizationType": "NONE",
                                 "integration": {
                                   "type": "AWS",
-                                  "uri": "arn:aws:apigateway:us-east-1:sns:path//",
+                                  "uri": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:aws:apigateway:",
+                                        {
+                                          "Ref": "AWS::Region"
+                                        },
+                                        ":sns:path//"
+                                      ]
+                                    ]
+                                  },
                                   "integrationHttpMethod": "POST",
                                   "requestParameters": {
                                     "integration.request.header.Content-Type": "'application/x-www-form-urlencoded'"

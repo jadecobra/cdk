@@ -6,7 +6,6 @@ from aws_cdk import (
 )
 import json
 
-
 class TheXrayTracerStack(core.Stack):
     def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
@@ -24,7 +23,7 @@ class TheXrayTracerStack(core.Stack):
         # Tracing is enabled for X-Ray
         ###
 
-        gateway = api_gw.RestApi(
+        self.gateway = api_gw.RestApi(
             self, 'xrayTracerAPI',
             deploy_options=api_gw.StageOptions(
                 metrics_enabled=True,
@@ -36,18 +35,18 @@ class TheXrayTracerStack(core.Stack):
         )
 
         # Give our gateway permissions to interact with SNS
-        api_gw_sns_role = iam.Role(
+        self.api_gw_sns_role = iam.Role(
             self, 'ApiGatewaySNSRole',
             assumed_by=iam.ServicePrincipal('apigateway.amazonaws.com')
         )
-        topic.grant_publish(api_gw_sns_role)
+        topic.grant_publish(self.api_gw_sns_role)
 
         # shortening the lines of later code
         schema = api_gw.JsonSchema
         schema_type = api_gw.JsonSchemaType
 
         # Because this isn't a proxy integration, we need to define our response model
-        response_model = gateway.add_model(
+        self.response_model = self.gateway.add_model(
             'ResponseModel',
             content_type='application/json',
             model_name='ResponseModel',
@@ -61,7 +60,7 @@ class TheXrayTracerStack(core.Stack):
             )
         )
 
-        error_response_model = gateway.add_model(
+        self.error_response_model = self.gateway.add_model(
             'ErrorResponseModel',
             content_type='application/json',
             model_name='ErrorResponseModel',
@@ -76,7 +75,7 @@ class TheXrayTracerStack(core.Stack):
             )
         )
 
-        request_template = "Action=Publish&" + \
+        self.request_template = "Action=Publish&" + \
             "TargetArn=$util.urlEncode('" + topic.topic_arn + "')&" + \
             "Message=$util.urlEncode($context.path)&" + \
             "Version=2010-03-31"
@@ -86,83 +85,83 @@ class TheXrayTracerStack(core.Stack):
             "state": 'error',
             "message": "$util.escapeJavaScript($input.path('$.errorMessage'))"
         }
-        error_template_string = json.dumps(error_template, separators=(',', ':'))
+        self.error_template_string = json.dumps(error_template, separators=(',', ':'))
 
+        self.create_root_endpoint()
+        self.create_proxy_endpoint()
+
+    def integration_options(self):
         # This is how our gateway chooses what response to send based on selection_pattern
-        integration_options = api_gw.IntegrationOptions(
-            credentials_role=api_gw_sns_role,
+        return api_gw.IntegrationOptions(
+            credentials_role=self.api_gw_sns_role,
             request_parameters={
                 'integration.request.header.Content-Type': "'application/x-www-form-urlencoded'"
             },
-            request_templates={
-                "application/json": request_template
-            },
+            request_templates=self.create_response_template(self.request_template),
             passthrough_behavior=api_gw.PassthroughBehavior.NEVER,
             integration_responses=[
                 api_gw.IntegrationResponse(
                     status_code='200',
-                    response_templates={
-                        "application/json": json.dumps(
-                            {"message": 'message added to topic'})
-                    }),
+                    response_templates=self.create_response_template(
+                        json.dumps({"message": 'message added to topic'})
+                    ),
+                ),
                 api_gw.IntegrationResponse(
                     selection_pattern="^\[Error\].*",
                     status_code='400',
-                    response_templates={
-                        "application/json": error_template_string
-                    },
-                    response_parameters={
-                        'method.response.header.Content-Type': "'application/json'",
-                        'method.response.header.Access-Control-Allow-Origin': "'*'",
-                        'method.response.header.Access-Control-Allow-Credentials': "'true'"
-                    }
+                    response_templates=self.create_response_template(self.error_template_string),
+                    response_parameters=self.integration_response_parameters()
                 )
             ]
         )
 
-        method_responses = [
-            api_gw.MethodResponse(
-                status_code='200',
-                response_parameters={
-                    'method.response.header.Content-Type': True,
-                    'method.response.header.Access-Control-Allow-Origin': True,
-                    'method.response.header.Access-Control-Allow-Credentials': True
-                },
-                response_models={
-                    'application/json': response_model
-                }
-            ),
-            api_gw.MethodResponse(
-                status_code='400',
-                response_parameters={
-                    'method.response.header.Content-Type': True,
-                    'method.response.header.Access-Control-Allow-Origin': True,
-                    'method.response.header.Access-Control-Allow-Credentials': True
-                },
-                response_models={
-                    'application/json': error_response_model
+    @staticmethod
+    def create_response_template(model):
+        return {'application/json': model}
 
-            }),
-        ]
+    @staticmethod
+    def create_response_parameters(content_type=True, origin=True, credentials=True):
+        return {
+            'method.response.header.Content-Type': content_type,
+            'method.response.header.Access-Control-Allow-Origin': origin,
+            'method.response.header.Access-Control-Allow-Credentials': credentials
+        }
 
-        # Add a / endpoint onto the gateway
-        gateway.root.add_method(
-            'GET', api_gw.Integration(
-                type=api_gw.IntegrationType.AWS,
-                integration_http_method='POST',
-                uri='arn:aws:apigateway:us-east-1:sns:path//',
-                options=integration_options
-            ),
-            method_responses=method_responses
+    def integration_response_parameters(self):
+        return self.create_response_parameters(
+            content_type="'application/json'",
+            origin="'*'",
+            credentials="'true'"
         )
 
-        # Add a {proxy+} endpoint onto the gateway
-        gateway.root.add_resource('{proxy+}').add_method(
+    def create_method_response(self, status_code='200', response_model=None):
+        return api_gw.MethodResponse(
+            status_code=status_code,
+            response_parameters=self.create_response_parameters(),
+            response_models=self.create_response_template(response_model)
+        )
+
+    def method_responses(self):
+        return [
+            self.create_method_response(response_model=self.response_model),
+            self.create_method_response(status_code='400', response_model=self.error_response_model),
+        ]
+
+    def create_endpoint(self, resource):
+        return resource.add_method(
             'GET', api_gw.Integration(
                 type=api_gw.IntegrationType.AWS,
                 integration_http_method='POST',
-                uri='arn:aws:apigateway:us-east-1:sns:path//',
-                options=integration_options
+                uri=f'arn:aws:apigateway:{self.region}:sns:path//',
+                options=self.integration_options()
             ),
-            method_responses=method_responses
+            method_responses=self.method_responses()
+        )
+
+    def create_root_endpoint(self):
+        return self.create_endpoint(self.gateway.root)
+
+    def create_proxy_endpoint(self):
+        return self.create_endpoint(
+            self.gateway.root.add_resource('{proxy+}')
         )

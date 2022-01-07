@@ -77,7 +77,7 @@ class TestXRayTracer(TestTemplates):
         "aws:cdk:path": "XRayTracer/xrayTracerAPI/Account"
       }
     },
-    "xrayTracerAPIDeploymentB3CB89A0c2d74c56c7bf7778fc5e2fa94da22dac": {
+    "xrayTracerAPIDeploymentB3CB89A02d6f6c9102c331c1e11ae41d64af7ae6": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -103,7 +103,7 @@ class TestXRayTracer(TestTemplates):
           "Ref": "xrayTracerAPIA84CAE80"
         },
         "DeploymentId": {
-          "Ref": "xrayTracerAPIDeploymentB3CB89A0c2d74c56c7bf7778fc5e2fa94da22dac"
+          "Ref": "xrayTracerAPIDeploymentB3CB89A02d6f6c9102c331c1e11ae41d64af7ae6"
         },
         "MethodSettings": [
           {
@@ -185,7 +185,18 @@ class TestXRayTracer(TestTemplates):
             }
           },
           "Type": "AWS",
-          "Uri": "arn:aws:apigateway:us-east-1:sns:path//"
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":sns:path//"
+              ]
+            ]
+          }
         },
         "MethodResponses": [
           {
@@ -296,7 +307,18 @@ class TestXRayTracer(TestTemplates):
             }
           },
           "Type": "AWS",
-          "Uri": "arn:aws:apigateway:us-east-1:sns:path//"
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":sns:path//"
+              ]
+            ]
+          }
         },
         "MethodResponses": [
           {
