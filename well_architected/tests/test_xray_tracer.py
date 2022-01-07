@@ -77,7 +77,7 @@ class TestXRayTracer(TestTemplates):
         "aws:cdk:path": "XRayTracer/xrayTracerAPI/Account"
       }
     },
-    "xrayTracerAPIDeploymentB3CB89A02d6f6c9102c331c1e11ae41d64af7ae6": {
+    "xrayTracerAPIDeploymentB3CB89A07260d8259c447b5a0a9d4db434a7500c": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -103,7 +103,7 @@ class TestXRayTracer(TestTemplates):
           "Ref": "xrayTracerAPIA84CAE80"
         },
         "DeploymentId": {
-          "Ref": "xrayTracerAPIDeploymentB3CB89A02d6f6c9102c331c1e11ae41d64af7ae6"
+          "Ref": "xrayTracerAPIDeploymentB3CB89A07260d8259c447b5a0a9d4db434a7500c"
         },
         "MethodSettings": [
           {
@@ -451,7 +451,7 @@ class TestXRayTracer(TestTemplates):
     "CDKMetadata": {
       "Type": "AWS::CDK::Metadata",
       "Properties": {
-        "Analytics": "v2:deflate64:H4sIAAAAAAAA/02OSw7CMAxEz8I+BCoWbPltEQi4QOQaMLRx1DhCVZS7k7SAWPnZY4+n0tViqeeTlXn5KdTPWQTuUMezGHiq7dUegrggasvWSxdAyuyEnkMHWDgLNQmxTapYRG+9jhd2BEUdICuObkbwZXod87GsHX18vrgG4GBF7dA13Ldoh0d/XQ50Gx6O8I2wMR7VHuXOdRE/9B/wx3uusRmWCiRFps1puBm3Sj1yQ9CXdqSUkjr22dHOFrqa62ry8ETTLgelFvVprG/1NzUaQwEAAA=="
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/02OSw7CMAxEz8I+BCo2LPltEQi4QOQaMLRx1DhCVZS7k7SAWPnZY4+n0tViqeeTlXn5KdTPWQTuUMezGHiq7dUegrggasvWSxdAyuyEnkMHWDgLNQmxTapYRG+9jhd2BEUdICuObkbwZXod87GsHX18vrgG4GBF7dA13Ldoh0d/XQ50Gx6O8I2wMR7VHuXOdRE/9B/wx3uusRmWCiRFps1puBm3Sj1yQ9CXdqSUkjr22dHOFrqa62ry8ETTLgelFvVprG8PMalvQwEAAA=="
       },
       "Metadata": {
         "aws:cdk:path": "XRayTracer/CDKMetadata/Default"

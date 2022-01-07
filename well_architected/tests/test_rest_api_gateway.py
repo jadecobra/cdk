@@ -84,7 +84,7 @@ class TestRestAPIGateway(TestTemplates):
         "aws:cdk:path": "LambdaRestAPIGateway/LambdaAPIGateway/Account"
       }
     },
-    "LambdaAPIGatewayDeploymentE937914C83f3bd4a2732ab3533cd15cbb417396d": {
+    "LambdaAPIGatewayDeploymentE937914C2779a458e8a08b599f0056860d37f9fd": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -116,7 +116,7 @@ class TestRestAPIGateway(TestTemplates):
           "Format": "$context.identity.sourceIp $context.identity.caller $context.identity.user [$context.requestTime] \"$context.httpMethod $context.resourcePath $context.protocol\" $context.status $context.responseLength $context.requestId"
         },
         "DeploymentId": {
-          "Ref": "LambdaAPIGatewayDeploymentE937914C83f3bd4a2732ab3533cd15cbb417396d"
+          "Ref": "LambdaAPIGatewayDeploymentE937914C2779a458e8a08b599f0056860d37f9fd"
         },
         "MethodSettings": [
           {
@@ -496,7 +496,7 @@ class TestRestAPIGateway(TestTemplates):
     "CDKMetadata": {
       "Type": "AWS::CDK::Metadata",
       "Properties": {
-        "Analytics": "v2:deflate64:H4sIAAAAAAAA/1VPy27DIBD8ltwJiZVDr3ETqZdWjZIv2GBq0wBrwSLLQvx7Add9nHZmdzQz2/Dm8MT3myNMfiu6xy4KdJLHG4F4sNOHfQ80BmIntJ5cEFR2V+kxOCELzodOkUKbWLGIGnvP4yv2Lw7DWBQrzoJR9UBygpnH7EHtqL7tVtgKgcESO8tR42ykrXl/WO7V19wFrE2ewf+SfxXfJA3YldWCElNgcjzqRZdnYhrMvQOe+UU6o7zP/zChMXQTkBh4bDU4UwtWcAY/3BFc9f0hKSV2mXOI3R14s+fN5tMrtXX5IWUkvy7zC7FsTrdyAQAA"
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/1VPy27DIBD8ltwJiZVLj3ETqZdWjZIv2GBq0wBrwSLLQvx7Add9nHZmdzQz2/Dm8MT3myNMfiu6xy4KdJLHG4F4sNOHfQ80BmIntJ5cEFR2V+kxOCELzodOkUKbWLGIGnvP4yv2Lw7DWBQrzoJR9UBygpnH7EHtqL7tVtgKgcESO8tR42ykrXl/WO7V19wFrE2ewf+SfxXfJA3YldWCElNgcjzqRZdnYhrMvQOe+UU6o7zP/zChMXQTkBh4bDU4UwtWcAY/3BFc9f0hKSV2mXOI3R14s+fN5tMrtXX5IWUkvy7zC9NTaydyAQAA"
       },
       "Metadata": {
         "aws:cdk:path": "LambdaRestAPIGateway/CDKMetadata/Default"

@@ -90,6 +90,9 @@ class TheXrayTracerStack(core.Stack):
         self.create_root_endpoint()
         self.create_proxy_endpoint()
 
+    def create_integration_response(self):
+        pass
+
     def integration_options(self):
         # This is how our gateway chooses what response to send based on selection_pattern
         return api_gw.IntegrationOptions(

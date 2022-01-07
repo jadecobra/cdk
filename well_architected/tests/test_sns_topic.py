@@ -17,7 +17,7 @@ class TestRestAPIGateway(TestTemplates):
     "CDKMetadata": {
       "Type": "AWS::CDK::Metadata",
       "Properties": {
-        "Analytics": "v2:deflate64:H4sIAAAAAAAA/yWLQQqDMBAA3+I9rgYPvRb8gNh+QNaUbqW7kt0gEvL3Nu1pBobx4IcL9M11ObTFdesySgyQb7bg5kZhtZjQ3PjgOaikiKH6N6xkJFxcHZUV8l12whp/UoqbTnsKdwP4HnzzUqI2JjZ6B5j//ADPlwyKfgAAAA=="
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/yWLQQqDMBAA3+I9rgYvPRb8gNh+QNaUbqW7kt0gEvL3Nu1pBobx4IcL9M11ObTFdesySgyQb7bg5kZhtZjQ3PjgOaikiKH6N6xkJFxcHZUV8l12whp/UoqbTnsKdwP4HnzzUqI2JjZ6B5j//ABBZO+nfgAAAA=="
       },
       "Metadata": {
         "aws:cdk:path": "SnsTopic/CDKMetadata/Default"

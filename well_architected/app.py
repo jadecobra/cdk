@@ -1,5 +1,3 @@
-import os
-
 from aws_cdk.core import App
 from rest_api import LambdaRestAPIGateway
 from web_application_firewall import WebApplicationFirewall
