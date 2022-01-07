@@ -77,7 +77,7 @@ class TestXRayTracer(TestTemplates):
         "aws:cdk:path": "XRayTracer/xrayTracerAPI/Account"
       }
     },
-    "xrayTracerAPIDeploymentB3CB89A07260d8259c447b5a0a9d4db434a7500c": {
+    "xrayTracerAPIDeploymentB3CB89A046a929035b39f548d29a9fe1fc0faafe": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -103,7 +103,7 @@ class TestXRayTracer(TestTemplates):
           "Ref": "xrayTracerAPIA84CAE80"
         },
         "DeploymentId": {
-          "Ref": "xrayTracerAPIDeploymentB3CB89A07260d8259c447b5a0a9d4db434a7500c"
+          "Ref": "xrayTracerAPIDeploymentB3CB89A046a929035b39f548d29a9fe1fc0faafe"
         },
         "MethodSettings": [
           {
@@ -386,10 +386,10 @@ class TestXRayTracer(TestTemplates):
         "Name": "ErrorResponseModel",
         "Schema": {
           "properties": {
-            "state": {
+            "message": {
               "type": "string"
             },
-            "message": {
+            "state": {
               "type": "string"
             }
           },

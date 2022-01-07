@@ -2545,7 +2545,7 @@
                           "Ref": "xrayTracerAPIA84CAE80"
                         },
                         "deploymentId": {
-                          "Ref": "xrayTracerAPIDeploymentB3CB89A07260d8259c447b5a0a9d4db434a7500c"
+                          "Ref": "xrayTracerAPIDeploymentB3CB89A046a929035b39f548d29a9fe1fc0faafe"
                         },
                         "methodSettings": [
                           {
@@ -2918,10 +2918,10 @@
                         "name": "ErrorResponseModel",
                         "schema": {
                           "properties": {
-                            "state": {
+                            "message": {
                               "type": "string"
                             },
-                            "message": {
+                            "state": {
                               "type": "string"
                             }
                           },
