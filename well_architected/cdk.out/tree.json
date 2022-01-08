@@ -3346,9 +3346,9 @@
                       "version": "1.138.1"
                     }
                   },
-                  "AllowInvoke:SqsFlowSNSTopic3A729E90": {
-                    "id": "AllowInvoke:SqsFlowSNSTopic3A729E90",
-                    "path": "SqsFlow/sqs/LambdaFunction/AllowInvoke:SqsFlowSNSTopic3A729E90",
+                  "AllowInvoke:XRayTracerTheXRayTracerSnsFanOutTopicE1CDC79D": {
+                    "id": "AllowInvoke:XRayTracerTheXRayTracerSnsFanOutTopicE1CDC79D",
+                    "path": "SqsFlow/sqs/LambdaFunction/AllowInvoke:XRayTracerTheXRayTracerSnsFanOutTopicE1CDC79D",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                       "aws:cdk:cloudformation:props": {
@@ -3370,13 +3370,13 @@
                       "version": "1.138.1"
                     }
                   },
-                  "SNSTopic": {
-                    "id": "SNSTopic",
-                    "path": "SqsFlow/sqs/LambdaFunction/SNSTopic",
+                  "TheXRayTracerSnsFanOutTopic": {
+                    "id": "TheXRayTracerSnsFanOutTopic",
+                    "path": "SqsFlow/sqs/LambdaFunction/TheXRayTracerSnsFanOutTopic",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "SqsFlow/sqs/LambdaFunction/SNSTopic/Resource",
+                        "path": "SqsFlow/sqs/LambdaFunction/TheXRayTracerSnsFanOutTopic/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::SNS::Subscription",
                           "aws:cdk:cloudformation:props": {
@@ -3388,19 +3388,6 @@
                               "Fn::GetAtt": [
                                 "sqsLambdaFunctionDBCFBC0F",
                                 "Arn"
-                              ]
-                            },
-                            "region": {
-                              "Fn::Select": [
-                                3,
-                                {
-                                  "Fn::Split": [
-                                    ":",
-                                    {
-                                      "Fn::ImportValue": "XRayTracer:ExportsOutputRefTheXRayTracerSnsFanOutTopicDE7E70F8D479F0D6"
-                                    }
-                                  ]
-                                }
                               ]
                             }
                           }
@@ -4304,14 +4291,6 @@
             },
             "constructInfo": {
               "fqn": "@aws-cdk/core.Construct",
-              "version": "1.138.1"
-            }
-          },
-          "SNSTopic": {
-            "id": "SNSTopic",
-            "path": "SqsFlow/SNSTopic",
-            "constructInfo": {
-              "fqn": "@aws-cdk/aws-sns.TopicBase",
               "version": "1.138.1"
             }
           },

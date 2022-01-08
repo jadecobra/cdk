@@ -9,11 +9,11 @@ class TheXrayTracerStack(Stack):
     def __init__(self, scope: Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        self.topic = Topic(self, 'TheXRayTracerSnsFanOutTopic', display_name='The XRay Tracer Fan Out Topic')
-        self.sns_topic_arn = self.topic.topic_arn
+        self.sns_topic = Topic(self, 'TheXRayTracerSnsFanOutTopic', display_name='The XRay Tracer Fan Out Topic')
+        self.sns_topic_arn = self.sns_topic.topic_arn
         self.gateway = self.create_rest_api()
         self.api_gateway_sns_role = self.create_iam_role()
-        self.topic.grant_publish(self.api_gateway_sns_role)
+        self.sns_topic.grant_publish(self.api_gateway_sns_role)
 
         # Because this isn't a proxy integration, we need to define our response model
         self.response_model = self.create_response_model(
@@ -82,7 +82,7 @@ class TheXrayTracerStack(Stack):
 
     def request_template(self):
         return (
-            f"Action=Publish&TargetArn=$util.urlEncode('{self.topic.topic_arn}')"
+            f"Action=Publish&TargetArn=$util.urlEncode('{self.sns_topic.topic_arn}')"
             "&Message=$util.urlEncode($context.path)&Version=2010-03-31"
         )
 
