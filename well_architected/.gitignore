@@ -1,4 +1,4 @@
-cdk.out/*.*
-.venv/*.*
+cdk.out
+.venv
 .pyc
 __pycache__
