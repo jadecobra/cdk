@@ -8,6 +8,7 @@ from dynamodb_table import DynamoDBTable
 from http_api import LambdaHttpApiGateway
 from sns_topic import SnsTopic
 from xray_tracer.xray_tracer import TheXrayTracerStack
+from xray_tracer.sqs_flow import SqsFlow
 
 class WellArchitected(App):
 
@@ -24,7 +25,19 @@ class WellArchitected(App):
         self.dynamodb_table.dynamodb_table.grant_read_write_data(self.lambda_function.lambda_function)
         self.create_rest_api()
         self.create_http_api()
+
         TheXrayTracerStack(self, 'XRayTracer')
+
+        # xray_tracer = TheXrayTracerStack(app, "the-xray-tracer")
+        # http_flow = TheHttpFlowStack(app, 'the-http-flow-stack', sns_topic_arn=xray_tracer.sns_topic_arn)
+        # dynamo_flow = TheDynamoFlowStack(app, 'the-dynamo-flow-stack', sns_topic_arn=xray_tracer.sns_topic_arn)
+        # sns_flow = TheSnsFlowStack(app, 'the-sns-flow-stack', sns_topic_arn=xray_tracer.sns_topic_arn)
+        # sqs_flow = TheSqsFlowStack(app, 'the-sqs-flow-stack', sns_topic_arn=xray_tracer.sns_topic_arn)
+
+        # http_flow.add_dependency(xray_tracer)
+        # dynamo_flow.add_dependency(xray_tracer)
+        # sns_flow.add_dependency(xray_tracer)
+        # sqs_flow.add_dependency(xray_tracer)
 
     def create_http_api(self):
         self.http_api = LambdaHttpApiGateway(

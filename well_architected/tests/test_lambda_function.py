@@ -373,7 +373,7 @@ class TestLambdaFunction(TestTemplates):
     "CDKMetadata": {
       "Type": "AWS::CDK::Metadata",
       "Properties": {
-        "Analytics": "v2:deflate64:H4sIAAAAAAAA/z2OS27DMAxEz5K9zMTwpssmKbo23BMwlBqr1gcQKQSBoLvXUtCu+IaYIWeEcXqD0+EdHzyQ3o6FYjJQvgRpU2dmIzvebbirawwsKZOo63eYMaE3YlITi+GYE5nGu0tbsTFU1U4Wh/6mEcpnDtTWzfPHVVn0UJboerTPOTpLz/6iU1U8Ddh6MPQ6u4ZLps3IBdkocjHrBwqtUM4Ok2/RF3wgr7eISbfVv6i1qvkpawzHCcYTjIcftnZIOYj1BpbX/AWgwd+8GAEAAA=="
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/z2PSW7DMAxFz9K9zNTwpssMRdeGewKGUmPVGgCRQhAIunssBe2K73/wcxhhnD5gfDvinQfS26FQTAbKtyBt6sRsZMebDTd1iYElZRJ1+QkzJvRGTGpiMRxzItN479JWbAxVtZHFob9qhPKVAzW79fxxVRY9lCW6Hu11js7So6/oVBVPA7Y7GPo5u4Zzps3IGdkocjHrOwqtUE4Ok2/RF3wir9eISTfrX9Ra1fyQNYbDBOP7/vsvWzukHMR6A8urPgG9QyMHGAEAAA=="
       },
       "Metadata": {
         "aws:cdk:path": "LambdaFunction/CDKMetadata/Default"

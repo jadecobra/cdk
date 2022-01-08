@@ -1,3 +1,5 @@
+import os
+# os.system('pip install -U -r requirements.txt')
 from aws_cdk import (
     aws_lambda as _lambda,
     aws_lambda_event_sources as lambda_event,
@@ -8,7 +10,7 @@ from aws_cdk import (
 )
 
 
-class TheSqsFlowStack(core.Stack):
+class SqsFlow(core.Stack):
     def __init__(self, scope: core.Construct, id: str, sns_topic_arn: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 

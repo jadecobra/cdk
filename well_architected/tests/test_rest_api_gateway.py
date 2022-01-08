@@ -496,7 +496,7 @@ class TestRestAPIGateway(TestTemplates):
     "CDKMetadata": {
       "Type": "AWS::CDK::Metadata",
       "Properties": {
-        "Analytics": "v2:deflate64:H4sIAAAAAAAA/1VPy27DIBD8ltwJiZVLj3ETqZdWjZIv2GBq0wBrwSLLQvx7Add9nHZmdzQz2/Dm8MT3myNMfiu6xy4KdJLHG4F4sNOHfQ80BmIntJ5cEFR2V+kxOCELzodOkUKbWLGIGnvP4yv2Lw7DWBQrzoJR9UBygpnH7EHtqL7tVtgKgcESO8tR42ykrXl/WO7V19wFrE2ewf+SfxXfJA3YldWCElNgcjzqRZdnYhrMvQOe+UU6o7zP/zChMXQTkBh4bDU4UwtWcAY/3BFc9f0hKSV2mXOI3R14s+fN5tMrtXX5IWUkvy7zC9NTaydyAQAA"
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/1VQy27DIBD8lt4JqZVLj3UTqZdWjdIv2GBq0wCLYJFlIf69a7vu47Qzy2hmlkY2hwfZ3D3CmHaqu+2LwqhleSdQN3H88G+ZQiZxRJ8oZkXz7qIT5qj0jPmhM2TQVzFbFIt9kuUF++eIOcyKDbMgmB5IjzDJwh7UBvNtt8FWKcyexEkHi5PTfsn7w7hXv+SuYGvyBOmX/Kv4qmnAbl6tqAoDjuPRrjqeVVhw1w4k87OOzqTE9whlMXcjkBpkaS1EtxRcwAnScEWIi+8PqbWK88Qhfn+QzT3/6mcyZhf5IOO0vKzzC4Ypi3VyAQAA"
       },
       "Metadata": {
         "aws:cdk:path": "LambdaRestAPIGateway/CDKMetadata/Default"

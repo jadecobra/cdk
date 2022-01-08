@@ -136,7 +136,7 @@
     "CDKMetadata": {
       "Type": "AWS::CDK::Metadata",
       "Properties": {
-        "Analytics": "v2:deflate64:H4sIAAAAAAAA/z2LMQ+CMBBGfwt7OagsjpKuDgYG53qUeBJ7Se+QmIb/Lmji9L3kvc+CbY5QFye/SInDVGXkFCD36nEyjqNomlGNG2MXhOeEYedNDKTEcTX7cfHj6wB5E9dwa93Z/KkVYST/TVdzeeudY9WArcEWDyEq0xyVngG6334AYpGeoZAAAAA="
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/z2NsQ7CMAxEv4U9dQldGKmyMqB2YA5uKkxFLMUuFYr676QgMd2T3p3Ogm2OYHcnv0iFw1Rn5BQg9+pxMo6jaJpRjRtjF4TnhGHjIgZS4riabbj48XWAXMQ13Fp3Nn9qRRjJf6urubz1zrFuwO7L50OIqjRHpWeA7pcfpZf7QZAAAAA="
       },
       "Metadata": {
         "aws:cdk:path": "WebApplicationFirewall/CDKMetadata/Default"
