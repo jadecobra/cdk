@@ -7,6 +7,7 @@ from aws_cdk.aws_sns_subscriptions import LambdaSubscription
 from aws_cdk.aws_lambda_event_sources import SqsEventSource
 from aws_cdk.aws_lambda import Code, Function, Runtime, Tracing
 from aws_cdk.aws_sns import Topic
+from lambda_function import LambdaFunctionConstruct
 class SqsFlow(Stack):
 
     def __init__(self, scope: Construct, id: str, sns_topic_arn: str, **kwargs) -> None:
@@ -31,14 +32,11 @@ class SqsFlow(Stack):
         self.add_permissions()
 
     def create_lambda_function(self, id=None, function_name=None, environment_variables=None):
-        return Function(
+        return LambdaFunctionConstruct(
             self, function_name,
-            runtime=Runtime.PYTHON_3_8,
-            handler=f"{function_name}.handler",
-            code=Code.from_asset("lambda_functions"),
-            tracing=Tracing.ACTIVE,
-            environment=environment_variables,
-        )
+            function_name=function_name,
+            environment_variables=environment_variables,
+        ).lambda_function
 
     def add_permissions(self):
         self.sqs_queue.grant_send_messages(self.sqs_publisher)

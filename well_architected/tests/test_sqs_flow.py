@@ -19,7 +19,17 @@ class TestSqsFlow(TestTemplates):
         "aws:cdk:path": "SqsFlow/RDSPublishQueue/Resource"
       }
     },
-    "sqsServiceRole07D53907": {
+    "sqsErrorTopicC8E3DE0B": {
+      "Type": "AWS::SNS::Topic",
+      "Properties": {
+        "DisplayName": "ErrorTopic",
+        "TopicName": "ErrorTopic"
+      },
+      "Metadata": {
+        "aws:cdk:path": "SqsFlow/sqs/ErrorTopic/Resource"
+      }
+    },
+    "sqsLambdaFunctionServiceRole62789435": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -50,22 +60,14 @@ class TestSqsFlow(TestTemplates):
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "SqsFlow/sqs/ServiceRole/Resource"
+        "aws:cdk:path": "SqsFlow/sqs/LambdaFunction/ServiceRole/Resource"
       }
     },
-    "sqsServiceRoleDefaultPolicy6C36BFC1": {
+    "sqsLambdaFunctionServiceRoleDefaultPolicyE4DD722B": {
       "Type": "AWS::IAM::Policy",
       "Properties": {
         "PolicyDocument": {
           "Statement": [
-            {
-              "Action": [
-                "xray:PutTraceSegments",
-                "xray:PutTelemetryRecords"
-              ],
-              "Effect": "Allow",
-              "Resource": "*"
-            },
             {
               "Action": [
                 "sqs:SendMessage",
@@ -83,18 +85,18 @@ class TestSqsFlow(TestTemplates):
           ],
           "Version": "2012-10-17"
         },
-        "PolicyName": "sqsServiceRoleDefaultPolicy6C36BFC1",
+        "PolicyName": "sqsLambdaFunctionServiceRoleDefaultPolicyE4DD722B",
         "Roles": [
           {
-            "Ref": "sqsServiceRole07D53907"
+            "Ref": "sqsLambdaFunctionServiceRole62789435"
           }
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "SqsFlow/sqs/ServiceRole/DefaultPolicy/Resource"
+        "aws:cdk:path": "SqsFlow/sqs/LambdaFunction/ServiceRole/DefaultPolicy/Resource"
       }
     },
-    "sqs1386CA46": {
+    "sqsLambdaFunctionDBCFBC0F": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
@@ -137,7 +139,7 @@ class TestSqsFlow(TestTemplates):
         },
         "Role": {
           "Fn::GetAtt": [
-            "sqsServiceRole07D53907",
+            "sqsLambdaFunctionServiceRole62789435",
             "Arn"
           ]
         },
@@ -150,28 +152,26 @@ class TestSqsFlow(TestTemplates):
         },
         "Handler": "sqs.handler",
         "Runtime": "python3.8",
-        "TracingConfig": {
-          "Mode": "Active"
-        }
+        "Timeout": 60
       },
       "DependsOn": [
-        "sqsServiceRoleDefaultPolicy6C36BFC1",
-        "sqsServiceRole07D53907"
+        "sqsLambdaFunctionServiceRoleDefaultPolicyE4DD722B",
+        "sqsLambdaFunctionServiceRole62789435"
       ],
       "Metadata": {
-        "aws:cdk:path": "SqsFlow/sqs/Resource",
+        "aws:cdk:path": "SqsFlow/sqs/LambdaFunction/Resource",
         "aws:asset:path": "asset.121bd1015c718f11470ee4f7750028d48d0f96e49fef7e4751df1759cfeb6f06",
         "aws:asset:is-bundled": false,
         "aws:asset:property": "Code"
       }
     },
-    "sqsAllowInvokeSqsFlowSNSTopic3A729E90E75E55D8": {
+    "sqsLambdaFunctionAllowInvokeSqsFlowSNSTopic3A729E901EB57D5D": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "sqs1386CA46",
+            "sqsLambdaFunctionDBCFBC0F",
             "Arn"
           ]
         },
@@ -181,10 +181,10 @@ class TestSqsFlow(TestTemplates):
         }
       },
       "Metadata": {
-        "aws:cdk:path": "SqsFlow/sqs/AllowInvoke:SqsFlowSNSTopic3A729E90"
+        "aws:cdk:path": "SqsFlow/sqs/LambdaFunction/AllowInvoke:SqsFlowSNSTopic3A729E90"
       }
     },
-    "sqsSNSTopic2F92781E": {
+    "sqsLambdaFunctionSNSTopic47C0A473": {
       "Type": "AWS::SNS::Subscription",
       "Properties": {
         "Protocol": "lambda",
@@ -193,7 +193,7 @@ class TestSqsFlow(TestTemplates):
         },
         "Endpoint": {
           "Fn::GetAtt": [
-            "sqs1386CA46",
+            "sqsLambdaFunctionDBCFBC0F",
             "Arn"
           ]
         },
@@ -212,10 +212,236 @@ class TestSqsFlow(TestTemplates):
         }
       },
       "Metadata": {
-        "aws:cdk:path": "SqsFlow/sqs/SNSTopic/Resource"
+        "aws:cdk:path": "SqsFlow/sqs/LambdaFunction/SNSTopic/Resource"
       }
     },
-    "sqssubscribeServiceRole6533E28E": {
+    "sqsDynamoLambda2Error5FAEF8D5": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": 6,
+        "AlarmActions": [
+          {
+            "Ref": "sqsErrorTopicC8E3DE0B"
+          }
+        ],
+        "DatapointsToAlarm": 1,
+        "Metrics": [
+          {
+            "Expression": "e / invocations * 100",
+            "Id": "expr_1",
+            "Label": "% of invocations that errored, last 5 mins"
+          },
+          {
+            "Id": "invocations",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "FunctionName",
+                    "Value": {
+                      "Ref": "sqsLambdaFunctionDBCFBC0F"
+                    }
+                  }
+                ],
+                "MetricName": "Invocations",
+                "Namespace": "AWS/Lambda"
+              },
+              "Period": 300,
+              "Stat": "Sum"
+            },
+            "ReturnData": false
+          },
+          {
+            "Id": "e",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "FunctionName",
+                    "Value": {
+                      "Ref": "sqsLambdaFunctionDBCFBC0F"
+                    }
+                  }
+                ],
+                "MetricName": "Errors",
+                "Namespace": "AWS/Lambda"
+              },
+              "Period": 300,
+              "Stat": "Sum"
+            },
+            "ReturnData": false
+          }
+        ],
+        "Threshold": 2,
+        "TreatMissingData": "notBreaching"
+      },
+      "Metadata": {
+        "aws:cdk:path": "SqsFlow/sqs/Dynamo Lambda 2% Error/Resource"
+      }
+    },
+    "sqsDynamoLambdap99LongDuration1s13094CF2": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": 6,
+        "AlarmActions": [
+          {
+            "Ref": "sqsErrorTopicC8E3DE0B"
+          }
+        ],
+        "DatapointsToAlarm": 1,
+        "Dimensions": [
+          {
+            "Name": "FunctionName",
+            "Value": {
+              "Ref": "sqsLambdaFunctionDBCFBC0F"
+            }
+          }
+        ],
+        "ExtendedStatistic": "p99",
+        "MetricName": "Duration",
+        "Namespace": "AWS/Lambda",
+        "Period": 300,
+        "Threshold": 1000,
+        "TreatMissingData": "notBreaching"
+      },
+      "Metadata": {
+        "aws:cdk:path": "SqsFlow/sqs/Dynamo Lambda p99 Long Duration (>1s)/Resource"
+      }
+    },
+    "sqsDynamoLambda2ThrottledD8CF2508": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": 6,
+        "AlarmActions": [
+          {
+            "Ref": "sqsErrorTopicC8E3DE0B"
+          }
+        ],
+        "DatapointsToAlarm": 1,
+        "Metrics": [
+          {
+            "Expression": "t / (invocations + t) * 100",
+            "Id": "expr_1",
+            "Label": "% of throttled requests, last 30 mins"
+          },
+          {
+            "Id": "invocations",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "FunctionName",
+                    "Value": {
+                      "Ref": "sqsLambdaFunctionDBCFBC0F"
+                    }
+                  }
+                ],
+                "MetricName": "Invocations",
+                "Namespace": "AWS/Lambda"
+              },
+              "Period": 300,
+              "Stat": "Sum"
+            },
+            "ReturnData": false
+          },
+          {
+            "Id": "t",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "FunctionName",
+                    "Value": {
+                      "Ref": "sqsLambdaFunctionDBCFBC0F"
+                    }
+                  }
+                ],
+                "MetricName": "Throttles",
+                "Namespace": "AWS/Lambda"
+              },
+              "Period": 300,
+              "Stat": "Sum"
+            },
+            "ReturnData": false
+          }
+        ],
+        "Threshold": 2,
+        "TreatMissingData": "notBreaching"
+      },
+      "Metadata": {
+        "aws:cdk:path": "SqsFlow/sqs/Dynamo Lambda 2% Throttled/Resource"
+      }
+    },
+    "sqsCloudWatchDashBoardAC79C904": {
+      "Type": "AWS::CloudWatch::Dashboard",
+      "Properties": {
+        "DashboardBody": {
+          "Fn::Join": [
+            "",
+            [
+              "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Error %\",\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"e / invocations * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+              {
+                "Ref": "sqsLambdaFunctionDBCFBC0F"
+              },
+              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
+              {
+                "Ref": "sqsLambdaFunctionDBCFBC0F"
+              },
+              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"e\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Duration\",\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+              {
+                "Ref": "sqsLambdaFunctionDBCFBC0F"
+              },
+              "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+              {
+                "Ref": "sqsLambdaFunctionDBCFBC0F"
+              },
+              "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+              {
+                "Ref": "sqsLambdaFunctionDBCFBC0F"
+              },
+              "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Throttle %\",\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of throttled requests, last 30 mins\",\"expression\":\"t / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+              {
+                "Ref": "sqsLambdaFunctionDBCFBC0F"
+              },
+              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
+              {
+                "Ref": "sqsLambdaFunctionDBCFBC0F"
+              },
+              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"t\"}]],\"yAxis\":{}}}]}"
+            ]
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "SqsFlow/sqs/CloudWatchDashBoard/Resource"
+      }
+    },
+    "sqssubscribeErrorTopicC4F29AB2": {
+      "Type": "AWS::SNS::Topic",
+      "Properties": {
+        "DisplayName": "ErrorTopic",
+        "TopicName": "ErrorTopic"
+      },
+      "Metadata": {
+        "aws:cdk:path": "SqsFlow/sqs_subscribe/ErrorTopic/Resource"
+      }
+    },
+    "sqssubscribeLambdaFunctionServiceRole7577D75B": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -246,22 +472,14 @@ class TestSqsFlow(TestTemplates):
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "SqsFlow/sqs_subscribe/ServiceRole/Resource"
+        "aws:cdk:path": "SqsFlow/sqs_subscribe/LambdaFunction/ServiceRole/Resource"
       }
     },
-    "sqssubscribeServiceRoleDefaultPolicyBF52038F": {
+    "sqssubscribeLambdaFunctionServiceRoleDefaultPolicy47D1F13D": {
       "Type": "AWS::IAM::Policy",
       "Properties": {
         "PolicyDocument": {
           "Statement": [
-            {
-              "Action": [
-                "xray:PutTraceSegments",
-                "xray:PutTelemetryRecords"
-              ],
-              "Effect": "Allow",
-              "Resource": "*"
-            },
             {
               "Action": [
                 "sqs:ReceiveMessage",
@@ -281,18 +499,18 @@ class TestSqsFlow(TestTemplates):
           ],
           "Version": "2012-10-17"
         },
-        "PolicyName": "sqssubscribeServiceRoleDefaultPolicyBF52038F",
+        "PolicyName": "sqssubscribeLambdaFunctionServiceRoleDefaultPolicy47D1F13D",
         "Roles": [
           {
-            "Ref": "sqssubscribeServiceRole6533E28E"
+            "Ref": "sqssubscribeLambdaFunctionServiceRole7577D75B"
           }
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "SqsFlow/sqs_subscribe/ServiceRole/DefaultPolicy/Resource"
+        "aws:cdk:path": "SqsFlow/sqs_subscribe/LambdaFunction/ServiceRole/DefaultPolicy/Resource"
       }
     },
-    "sqssubscribe6A7ED757": {
+    "sqssubscribeLambdaFunction2B3EFD1F": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
@@ -335,32 +553,30 @@ class TestSqsFlow(TestTemplates):
         },
         "Role": {
           "Fn::GetAtt": [
-            "sqssubscribeServiceRole6533E28E",
+            "sqssubscribeLambdaFunctionServiceRole7577D75B",
             "Arn"
           ]
         },
         "Handler": "sqs_subscribe.handler",
         "Runtime": "python3.8",
-        "TracingConfig": {
-          "Mode": "Active"
-        }
+        "Timeout": 60
       },
       "DependsOn": [
-        "sqssubscribeServiceRoleDefaultPolicyBF52038F",
-        "sqssubscribeServiceRole6533E28E"
+        "sqssubscribeLambdaFunctionServiceRoleDefaultPolicy47D1F13D",
+        "sqssubscribeLambdaFunctionServiceRole7577D75B"
       ],
       "Metadata": {
-        "aws:cdk:path": "SqsFlow/sqs_subscribe/Resource",
+        "aws:cdk:path": "SqsFlow/sqs_subscribe/LambdaFunction/Resource",
         "aws:asset:path": "asset.121bd1015c718f11470ee4f7750028d48d0f96e49fef7e4751df1759cfeb6f06",
         "aws:asset:is-bundled": false,
         "aws:asset:property": "Code"
       }
     },
-    "sqssubscribeSqsEventSourceSqsFlowRDSPublishQueueD1D2BBCF1DF330F8": {
+    "sqssubscribeLambdaFunctionSqsEventSourceSqsFlowRDSPublishQueueD1D2BBCF2F32E4E5": {
       "Type": "AWS::Lambda::EventSourceMapping",
       "Properties": {
         "FunctionName": {
-          "Ref": "sqssubscribe6A7ED757"
+          "Ref": "sqssubscribeLambdaFunction2B3EFD1F"
         },
         "EventSourceArn": {
           "Fn::GetAtt": [
@@ -370,13 +586,229 @@ class TestSqsFlow(TestTemplates):
         }
       },
       "Metadata": {
-        "aws:cdk:path": "SqsFlow/sqs_subscribe/SqsEventSource:SqsFlowRDSPublishQueueD1D2BBCF/Resource"
+        "aws:cdk:path": "SqsFlow/sqs_subscribe/LambdaFunction/SqsEventSource:SqsFlowRDSPublishQueueD1D2BBCF/Resource"
+      }
+    },
+    "sqssubscribeDynamoLambda2ErrorCE8B6912": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": 6,
+        "AlarmActions": [
+          {
+            "Ref": "sqssubscribeErrorTopicC4F29AB2"
+          }
+        ],
+        "DatapointsToAlarm": 1,
+        "Metrics": [
+          {
+            "Expression": "e / invocations * 100",
+            "Id": "expr_1",
+            "Label": "% of invocations that errored, last 5 mins"
+          },
+          {
+            "Id": "invocations",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "FunctionName",
+                    "Value": {
+                      "Ref": "sqssubscribeLambdaFunction2B3EFD1F"
+                    }
+                  }
+                ],
+                "MetricName": "Invocations",
+                "Namespace": "AWS/Lambda"
+              },
+              "Period": 300,
+              "Stat": "Sum"
+            },
+            "ReturnData": false
+          },
+          {
+            "Id": "e",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "FunctionName",
+                    "Value": {
+                      "Ref": "sqssubscribeLambdaFunction2B3EFD1F"
+                    }
+                  }
+                ],
+                "MetricName": "Errors",
+                "Namespace": "AWS/Lambda"
+              },
+              "Period": 300,
+              "Stat": "Sum"
+            },
+            "ReturnData": false
+          }
+        ],
+        "Threshold": 2,
+        "TreatMissingData": "notBreaching"
+      },
+      "Metadata": {
+        "aws:cdk:path": "SqsFlow/sqs_subscribe/Dynamo Lambda 2% Error/Resource"
+      }
+    },
+    "sqssubscribeDynamoLambdap99LongDuration1sE7D6C222": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": 6,
+        "AlarmActions": [
+          {
+            "Ref": "sqssubscribeErrorTopicC4F29AB2"
+          }
+        ],
+        "DatapointsToAlarm": 1,
+        "Dimensions": [
+          {
+            "Name": "FunctionName",
+            "Value": {
+              "Ref": "sqssubscribeLambdaFunction2B3EFD1F"
+            }
+          }
+        ],
+        "ExtendedStatistic": "p99",
+        "MetricName": "Duration",
+        "Namespace": "AWS/Lambda",
+        "Period": 300,
+        "Threshold": 1000,
+        "TreatMissingData": "notBreaching"
+      },
+      "Metadata": {
+        "aws:cdk:path": "SqsFlow/sqs_subscribe/Dynamo Lambda p99 Long Duration (>1s)/Resource"
+      }
+    },
+    "sqssubscribeDynamoLambda2Throttled7382DF58": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": 6,
+        "AlarmActions": [
+          {
+            "Ref": "sqssubscribeErrorTopicC4F29AB2"
+          }
+        ],
+        "DatapointsToAlarm": 1,
+        "Metrics": [
+          {
+            "Expression": "t / (invocations + t) * 100",
+            "Id": "expr_1",
+            "Label": "% of throttled requests, last 30 mins"
+          },
+          {
+            "Id": "invocations",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "FunctionName",
+                    "Value": {
+                      "Ref": "sqssubscribeLambdaFunction2B3EFD1F"
+                    }
+                  }
+                ],
+                "MetricName": "Invocations",
+                "Namespace": "AWS/Lambda"
+              },
+              "Period": 300,
+              "Stat": "Sum"
+            },
+            "ReturnData": false
+          },
+          {
+            "Id": "t",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "FunctionName",
+                    "Value": {
+                      "Ref": "sqssubscribeLambdaFunction2B3EFD1F"
+                    }
+                  }
+                ],
+                "MetricName": "Throttles",
+                "Namespace": "AWS/Lambda"
+              },
+              "Period": 300,
+              "Stat": "Sum"
+            },
+            "ReturnData": false
+          }
+        ],
+        "Threshold": 2,
+        "TreatMissingData": "notBreaching"
+      },
+      "Metadata": {
+        "aws:cdk:path": "SqsFlow/sqs_subscribe/Dynamo Lambda 2% Throttled/Resource"
+      }
+    },
+    "sqssubscribeCloudWatchDashBoard2D9A2251": {
+      "Type": "AWS::CloudWatch::Dashboard",
+      "Properties": {
+        "DashboardBody": {
+          "Fn::Join": [
+            "",
+            [
+              "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Error %\",\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"e / invocations * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+              {
+                "Ref": "sqssubscribeLambdaFunction2B3EFD1F"
+              },
+              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
+              {
+                "Ref": "sqssubscribeLambdaFunction2B3EFD1F"
+              },
+              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"e\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Duration\",\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+              {
+                "Ref": "sqssubscribeLambdaFunction2B3EFD1F"
+              },
+              "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+              {
+                "Ref": "sqssubscribeLambdaFunction2B3EFD1F"
+              },
+              "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+              {
+                "Ref": "sqssubscribeLambdaFunction2B3EFD1F"
+              },
+              "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Throttle %\",\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of throttled requests, last 30 mins\",\"expression\":\"t / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+              {
+                "Ref": "sqssubscribeLambdaFunction2B3EFD1F"
+              },
+              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
+              {
+                "Ref": "sqssubscribeLambdaFunction2B3EFD1F"
+              },
+              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"t\"}]],\"yAxis\":{}}}]}"
+            ]
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "SqsFlow/sqs_subscribe/CloudWatchDashBoard/Resource"
       }
     },
     "CDKMetadata": {
       "Type": "AWS::CDK::Metadata",
       "Properties": {
-        "Analytics": "v2:deflate64:H4sIAAAAAAAA/2VQQU7EMAx8C/c0S9ULR9gV3FYqLR/wut7FtElKnIBWUf5OE4QE4uQZezQeu9Vtd6fbm3v4lAaneZfQedJpDICzehChsMEL24s6OCvBRwzqcLY9eDAUyBcykLjokQreVBMHdjarYpnkXXR6jhTrtIKsFjCnCXR6ihaLtox+4568YZHCHj/IhrHaH2Fda5Cz/d/NisHoNLilLqq1dwvjtRpWlJV0DZSbRNfTNq73EWcKexBSYresYzwJel5/svzhL25lLNqcs+qv4dXZXafb2+2Db8Lc+GgDG9LDd/0Cedcaol4BAAA="
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/2VRQU7EMAx8C/c0S9ULR3YXuCGVlg+4bthm2yQlTlitovydJAUE4uSZscca2TWvmzte39zDhSoc511AYwUPvQOc2dFoctajY3si4ZJ4kvrEjm+6BQtKOGEz6QQZb1FknCyjdNLoyPLKQO/Ew4sXvnQLiIx0El/NKjGLG+j9QGjlmr1Z/cPLyAEoeRdQwwg8PHmN37O/cSuskkSZPX4I7foS7RnW9Sv6fzUyCYqHziwlZKmtWSRey8KCUuimgnwF4uUYifODx1m4nIvhYvx4AYcTD/sFrMrWDTwATYMBO2bph8QYWXt1k9G7hte36QdnkrKyXjupBO+2+gma56U5oAEAAA=="
       },
       "Metadata": {
         "aws:cdk:path": "SqsFlow/CDKMetadata/Default"
