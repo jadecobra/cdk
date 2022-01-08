@@ -1,5 +1,5 @@
 from aws_cdk.core import Construct, Duration
-from aws_cdk.aws_lambda import Function, Code, Runtime
+from aws_cdk.aws_lambda import Function, Code, Runtime, Tracing
 from aws_cdk.aws_sns import ITopic
 from well_architected import WellArchitectedFramework, WellArchitectedFrameworkConstruct
 
@@ -117,6 +117,7 @@ class LambdaFunctionConstruct(WellArchitectedFrameworkConstruct):
             handler=f'{function_name}.handler',
             code=Code.from_asset("lambda_functions"),
             timeout=Duration.seconds(60),
+            tracing=Tracing.ACTIVE,
             environment=environment_variables,
         )
         self.create_2_percent_error_alarm()

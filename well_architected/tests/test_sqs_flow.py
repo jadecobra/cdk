@@ -70,6 +70,14 @@ class TestSqsFlow(TestTemplates):
           "Statement": [
             {
               "Action": [
+                "xray:PutTraceSegments",
+                "xray:PutTelemetryRecords"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": [
                 "sqs:SendMessage",
                 "sqs:GetQueueAttributes",
                 "sqs:GetQueueUrl"
@@ -152,7 +160,10 @@ class TestSqsFlow(TestTemplates):
         },
         "Handler": "sqs.handler",
         "Runtime": "python3.8",
-        "Timeout": 60
+        "Timeout": 60,
+        "TracingConfig": {
+          "Mode": "Active"
+        }
       },
       "DependsOn": [
         "sqsLambdaFunctionServiceRoleDefaultPolicyE4DD722B",
@@ -482,6 +493,14 @@ class TestSqsFlow(TestTemplates):
           "Statement": [
             {
               "Action": [
+                "xray:PutTraceSegments",
+                "xray:PutTelemetryRecords"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": [
                 "sqs:ReceiveMessage",
                 "sqs:ChangeMessageVisibility",
                 "sqs:GetQueueUrl",
@@ -559,7 +578,10 @@ class TestSqsFlow(TestTemplates):
         },
         "Handler": "sqs_subscribe.handler",
         "Runtime": "python3.8",
-        "Timeout": 60
+        "Timeout": 60,
+        "TracingConfig": {
+          "Mode": "Active"
+        }
       },
       "DependsOn": [
         "sqssubscribeLambdaFunctionServiceRoleDefaultPolicy47D1F13D",

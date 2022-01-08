@@ -3192,6 +3192,14 @@
                                   "Statement": [
                                     {
                                       "Action": [
+                                        "xray:PutTraceSegments",
+                                        "xray:PutTelemetryRecords"
+                                      ],
+                                      "Effect": "Allow",
+                                      "Resource": "*"
+                                    },
+                                    {
+                                      "Action": [
                                         "sqs:SendMessage",
                                         "sqs:GetQueueAttributes",
                                         "sqs:GetQueueUrl"
@@ -3327,7 +3335,10 @@
                         },
                         "handler": "sqs.handler",
                         "runtime": "python3.8",
-                        "timeout": 60
+                        "timeout": 60,
+                        "tracingConfig": {
+                          "mode": "Active"
+                        }
                       }
                     },
                     "constructInfo": {
@@ -3827,6 +3838,14 @@
                                   "Statement": [
                                     {
                                       "Action": [
+                                        "xray:PutTraceSegments",
+                                        "xray:PutTelemetryRecords"
+                                      ],
+                                      "Effect": "Allow",
+                                      "Resource": "*"
+                                    },
+                                    {
+                                      "Action": [
                                         "sqs:ReceiveMessage",
                                         "sqs:ChangeMessageVisibility",
                                         "sqs:GetQueueUrl",
@@ -3957,7 +3976,10 @@
                         },
                         "handler": "sqs_subscribe.handler",
                         "runtime": "python3.8",
-                        "timeout": 60
+                        "timeout": 60,
+                        "tracingConfig": {
+                          "mode": "Active"
+                        }
                       }
                     },
                     "constructInfo": {
