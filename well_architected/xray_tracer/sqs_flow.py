@@ -1,43 +1,45 @@
-import os
-# os.system('pip install -U -r requirements.txt')
 from aws_cdk import (
-    aws_lambda as _lambda,
-    aws_lambda_event_sources as lambda_event,
-    aws_sns as sns,
-    aws_sns_subscriptions as subscriptions,
-    aws_sqs as sqs,
-    core
+    aws_sns as sns
 )
+from aws_cdk.core import Stack, Construct, Duration
+from aws_cdk.aws_sqs import Queue
+from aws_cdk.aws_sns_subscriptions import LambdaSubscription
+from aws_cdk.aws_lambda_event_sources import SqsEventSource
+from aws_cdk.aws_lambda import Code, Function, Runtime, Tracing
+from aws_cdk.aws_sns import Topic
+class SqsFlow(Stack):
 
-
-class SqsFlow(core.Stack):
-    def __init__(self, scope: core.Construct, id: str, sns_topic_arn: str, **kwargs) -> None:
+    def __init__(self, scope: Construct, id: str, sns_topic_arn: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        # Queue Setup
-        sqs_queue = sqs.Queue(self, 'RDSPublishQueue', visibility_timeout=core.Duration.seconds(300))
+        self.sqs_queue = Queue(self, 'RDSPublishQueue', visibility_timeout=Duration.seconds(300))
 
-        sqs_lambda = _lambda.Function(
-            self, "sqsLambdaHandler",
-            runtime=_lambda.Runtime.NODEJS_12_X,
-            handler="sqs.handler",
-            code=_lambda.Code.from_asset("lambda_fns"),
-            tracing=_lambda.Tracing.ACTIVE,
-            environment={
-                "SQS_URL": sqs_queue.queue_url
+        self.sqs_publisher = self.create_lambda_function(
+            function_name="sqs",
+            environment_variables={
+                "SQS_URL": self.sqs_queue.queue_url
             }
         )
-        sqs_queue.grant_send_messages(sqs_lambda)
 
-        topic = sns.Topic.from_topic_arn(self, 'SNSTopic', sns_topic_arn)
-        topic.add_subscription(subscriptions.LambdaSubscription(sqs_lambda))
-
-        sqs_subscribe_lambda = _lambda.Function(
-            self, "sqsSubscribeLambdaHandler",
-            runtime=_lambda.Runtime.NODEJS_12_X,
-            handler="sqs_subscribe.handler",
-            code=_lambda.Code.from_asset("lambda_fns"),
-            tracing=_lambda.Tracing.ACTIVE
+        self.sqs_subscriber = self.create_lambda_function(
+            function_name="sqs_subscribe",
         )
-        sqs_queue.grant_consume_messages(sqs_subscribe_lambda)
-        sqs_subscribe_lambda.add_event_source(lambda_event.SqsEventSource(sqs_queue))
+
+        self.sqs_subscriber.add_event_source(SqsEventSource(self.sqs_queue))
+        self.topic = Topic.from_topic_arn(self, 'SNSTopic', sns_topic_arn)
+        self.topic.add_subscription(LambdaSubscription(self.sqs_publisher))
+        self.add_permissions()
+
+    def create_lambda_function(self, id=None, function_name=None, environment_variables=None):
+        return Function(
+            self, function_name,
+            runtime=Runtime.PYTHON_3_8,
+            handler=f"{function_name}.handler",
+            code=Code.from_asset("lambda_functions"),
+            tracing=Tracing.ACTIVE,
+            environment=environment_variables,
+        )
+
+    def add_permissions(self):
+        self.sqs_queue.grant_send_messages(self.sqs_publisher)
+        self.sqs_queue.grant_consume_messages(self.sqs_subscriber)

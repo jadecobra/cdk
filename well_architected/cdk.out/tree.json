@@ -3049,6 +3049,673 @@
               "fqn": "@aws-cdk/core.Construct",
               "version": "1.138.1"
             }
+          },
+          "Exports": {
+            "id": "Exports",
+            "path": "XRayTracer/Exports",
+            "children": {
+              "Output{\"Ref\":\"TheXRayTracerSnsFanOutTopicDE7E70F8\"}": {
+                "id": "Output{\"Ref\":\"TheXRayTracerSnsFanOutTopicDE7E70F8\"}",
+                "path": "XRayTracer/Exports/Output{\"Ref\":\"TheXRayTracerSnsFanOutTopicDE7E70F8\"}",
+                "constructInfo": {
+                  "fqn": "@aws-cdk/core.CfnOutput",
+                  "version": "1.138.1"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/core.Construct",
+              "version": "1.138.1"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "@aws-cdk/core.Stack",
+          "version": "1.138.1"
+        }
+      },
+      "SqsFlow": {
+        "id": "SqsFlow",
+        "path": "SqsFlow",
+        "children": {
+          "RDSPublishQueue": {
+            "id": "RDSPublishQueue",
+            "path": "SqsFlow/RDSPublishQueue",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "SqsFlow/RDSPublishQueue/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::SQS::Queue",
+                  "aws:cdk:cloudformation:props": {
+                    "visibilityTimeout": 300
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-sqs.CfnQueue",
+                  "version": "1.138.1"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/aws-sqs.Queue",
+              "version": "1.138.1"
+            }
+          },
+          "sqs": {
+            "id": "sqs",
+            "path": "SqsFlow/sqs",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "SqsFlow/sqs/ServiceRole",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "SqsFlow/sqs/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-iam.CfnRole",
+                      "version": "1.138.1"
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "SqsFlow/sqs/ServiceRole/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "SqsFlow/sqs/ServiceRole/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": [
+                                    "xray:PutTraceSegments",
+                                    "xray:PutTelemetryRecords"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": "*"
+                                },
+                                {
+                                  "Action": [
+                                    "sqs:SendMessage",
+                                    "sqs:GetQueueAttributes",
+                                    "sqs:GetQueueUrl"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "RDSPublishQueue2BEA1A7F",
+                                      "Arn"
+                                    ]
+                                  }
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "sqsServiceRoleDefaultPolicy6C36BFC1",
+                            "roles": [
+                              {
+                                "Ref": "sqsServiceRole07D53907"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-iam.CfnPolicy",
+                          "version": "1.138.1"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-iam.Policy",
+                      "version": "1.138.1"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-iam.Role",
+                  "version": "1.138.1"
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "SqsFlow/sqs/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "SqsFlow/sqs/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/core.AssetStaging",
+                      "version": "1.138.1"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "SqsFlow/sqs/Code/AssetBucket",
+                    "children": {
+                      "Notifications": {
+                        "id": "Notifications",
+                        "path": "SqsFlow/sqs/Code/AssetBucket/Notifications",
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/core.Construct",
+                          "version": "1.138.1"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-s3.BucketBase",
+                      "version": "1.138.1"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-s3-assets.Asset",
+                  "version": "1.138.1"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "SqsFlow/sqs/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": {
+                        "Ref": "AssetParameters121bd1015c718f11470ee4f7750028d48d0f96e49fef7e4751df1759cfeb6f06S3Bucket6BDF5420"
+                      },
+                      "s3Key": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            {
+                              "Fn::Select": [
+                                0,
+                                {
+                                  "Fn::Split": [
+                                    "||",
+                                    {
+                                      "Ref": "AssetParameters121bd1015c718f11470ee4f7750028d48d0f96e49fef7e4751df1759cfeb6f06S3VersionKey6B2E3823"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Fn::Select": [
+                                1,
+                                {
+                                  "Fn::Split": [
+                                    "||",
+                                    {
+                                      "Ref": "AssetParameters121bd1015c718f11470ee4f7750028d48d0f96e49fef7e4751df1759cfeb6f06S3VersionKey6B2E3823"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        ]
+                      }
+                    },
+                    "role": {
+                      "Fn::GetAtt": [
+                        "sqsServiceRole07D53907",
+                        "Arn"
+                      ]
+                    },
+                    "environment": {
+                      "variables": {
+                        "SQS_URL": {
+                          "Ref": "RDSPublishQueue2BEA1A7F"
+                        }
+                      }
+                    },
+                    "handler": "sqs.handler",
+                    "runtime": "python3.8",
+                    "tracingConfig": {
+                      "mode": "Active"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-lambda.CfnFunction",
+                  "version": "1.138.1"
+                }
+              },
+              "AllowInvoke:SqsFlowSNSTopic3A729E90": {
+                "id": "AllowInvoke:SqsFlowSNSTopic3A729E90",
+                "path": "SqsFlow/sqs/AllowInvoke:SqsFlowSNSTopic3A729E90",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                  "aws:cdk:cloudformation:props": {
+                    "action": "lambda:InvokeFunction",
+                    "functionName": {
+                      "Fn::GetAtt": [
+                        "sqs1386CA46",
+                        "Arn"
+                      ]
+                    },
+                    "principal": "sns.amazonaws.com",
+                    "sourceArn": {
+                      "Fn::ImportValue": "XRayTracer:ExportsOutputRefTheXRayTracerSnsFanOutTopicDE7E70F8D479F0D6"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-lambda.CfnPermission",
+                  "version": "1.138.1"
+                }
+              },
+              "SNSTopic": {
+                "id": "SNSTopic",
+                "path": "SqsFlow/sqs/SNSTopic",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "SqsFlow/sqs/SNSTopic/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::SNS::Subscription",
+                      "aws:cdk:cloudformation:props": {
+                        "protocol": "lambda",
+                        "topicArn": {
+                          "Fn::ImportValue": "XRayTracer:ExportsOutputRefTheXRayTracerSnsFanOutTopicDE7E70F8D479F0D6"
+                        },
+                        "endpoint": {
+                          "Fn::GetAtt": [
+                            "sqs1386CA46",
+                            "Arn"
+                          ]
+                        },
+                        "region": {
+                          "Fn::Select": [
+                            3,
+                            {
+                              "Fn::Split": [
+                                ":",
+                                {
+                                  "Fn::ImportValue": "XRayTracer:ExportsOutputRefTheXRayTracerSnsFanOutTopicDE7E70F8D479F0D6"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-sns.CfnSubscription",
+                      "version": "1.138.1"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-sns.Subscription",
+                  "version": "1.138.1"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/aws-lambda.Function",
+              "version": "1.138.1"
+            }
+          },
+          "AssetParameters": {
+            "id": "AssetParameters",
+            "path": "SqsFlow/AssetParameters",
+            "children": {
+              "121bd1015c718f11470ee4f7750028d48d0f96e49fef7e4751df1759cfeb6f06": {
+                "id": "121bd1015c718f11470ee4f7750028d48d0f96e49fef7e4751df1759cfeb6f06",
+                "path": "SqsFlow/AssetParameters/121bd1015c718f11470ee4f7750028d48d0f96e49fef7e4751df1759cfeb6f06",
+                "children": {
+                  "S3Bucket": {
+                    "id": "S3Bucket",
+                    "path": "SqsFlow/AssetParameters/121bd1015c718f11470ee4f7750028d48d0f96e49fef7e4751df1759cfeb6f06/S3Bucket",
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/core.CfnParameter",
+                      "version": "1.138.1"
+                    }
+                  },
+                  "S3VersionKey": {
+                    "id": "S3VersionKey",
+                    "path": "SqsFlow/AssetParameters/121bd1015c718f11470ee4f7750028d48d0f96e49fef7e4751df1759cfeb6f06/S3VersionKey",
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/core.CfnParameter",
+                      "version": "1.138.1"
+                    }
+                  },
+                  "ArtifactHash": {
+                    "id": "ArtifactHash",
+                    "path": "SqsFlow/AssetParameters/121bd1015c718f11470ee4f7750028d48d0f96e49fef7e4751df1759cfeb6f06/ArtifactHash",
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/core.CfnParameter",
+                      "version": "1.138.1"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/core.Construct",
+                  "version": "1.138.1"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/core.Construct",
+              "version": "1.138.1"
+            }
+          },
+          "sqs_subscribe": {
+            "id": "sqs_subscribe",
+            "path": "SqsFlow/sqs_subscribe",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "SqsFlow/sqs_subscribe/ServiceRole",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "SqsFlow/sqs_subscribe/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-iam.CfnRole",
+                      "version": "1.138.1"
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "SqsFlow/sqs_subscribe/ServiceRole/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "SqsFlow/sqs_subscribe/ServiceRole/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": [
+                                    "xray:PutTraceSegments",
+                                    "xray:PutTelemetryRecords"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": "*"
+                                },
+                                {
+                                  "Action": [
+                                    "sqs:ReceiveMessage",
+                                    "sqs:ChangeMessageVisibility",
+                                    "sqs:GetQueueUrl",
+                                    "sqs:DeleteMessage",
+                                    "sqs:GetQueueAttributes"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "RDSPublishQueue2BEA1A7F",
+                                      "Arn"
+                                    ]
+                                  }
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "sqssubscribeServiceRoleDefaultPolicyBF52038F",
+                            "roles": [
+                              {
+                                "Ref": "sqssubscribeServiceRole6533E28E"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-iam.CfnPolicy",
+                          "version": "1.138.1"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-iam.Policy",
+                      "version": "1.138.1"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-iam.Role",
+                  "version": "1.138.1"
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "SqsFlow/sqs_subscribe/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "SqsFlow/sqs_subscribe/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/core.AssetStaging",
+                      "version": "1.138.1"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "SqsFlow/sqs_subscribe/Code/AssetBucket",
+                    "children": {
+                      "Notifications": {
+                        "id": "Notifications",
+                        "path": "SqsFlow/sqs_subscribe/Code/AssetBucket/Notifications",
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/core.Construct",
+                          "version": "1.138.1"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-s3.BucketBase",
+                      "version": "1.138.1"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-s3-assets.Asset",
+                  "version": "1.138.1"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "SqsFlow/sqs_subscribe/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": {
+                        "Ref": "AssetParameters121bd1015c718f11470ee4f7750028d48d0f96e49fef7e4751df1759cfeb6f06S3Bucket6BDF5420"
+                      },
+                      "s3Key": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            {
+                              "Fn::Select": [
+                                0,
+                                {
+                                  "Fn::Split": [
+                                    "||",
+                                    {
+                                      "Ref": "AssetParameters121bd1015c718f11470ee4f7750028d48d0f96e49fef7e4751df1759cfeb6f06S3VersionKey6B2E3823"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Fn::Select": [
+                                1,
+                                {
+                                  "Fn::Split": [
+                                    "||",
+                                    {
+                                      "Ref": "AssetParameters121bd1015c718f11470ee4f7750028d48d0f96e49fef7e4751df1759cfeb6f06S3VersionKey6B2E3823"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        ]
+                      }
+                    },
+                    "role": {
+                      "Fn::GetAtt": [
+                        "sqssubscribeServiceRole6533E28E",
+                        "Arn"
+                      ]
+                    },
+                    "handler": "sqs_subscribe.handler",
+                    "runtime": "python3.8",
+                    "tracingConfig": {
+                      "mode": "Active"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-lambda.CfnFunction",
+                  "version": "1.138.1"
+                }
+              },
+              "SqsEventSource:SqsFlowRDSPublishQueueD1D2BBCF": {
+                "id": "SqsEventSource:SqsFlowRDSPublishQueueD1D2BBCF",
+                "path": "SqsFlow/sqs_subscribe/SqsEventSource:SqsFlowRDSPublishQueueD1D2BBCF",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "SqsFlow/sqs_subscribe/SqsEventSource:SqsFlowRDSPublishQueueD1D2BBCF/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::Lambda::EventSourceMapping",
+                      "aws:cdk:cloudformation:props": {
+                        "functionName": {
+                          "Ref": "sqssubscribe6A7ED757"
+                        },
+                        "eventSourceArn": {
+                          "Fn::GetAtt": [
+                            "RDSPublishQueue2BEA1A7F",
+                            "Arn"
+                          ]
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-lambda.CfnEventSourceMapping",
+                      "version": "1.138.1"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-lambda.EventSourceMapping",
+                  "version": "1.138.1"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/aws-lambda.Function",
+              "version": "1.138.1"
+            }
+          },
+          "SNSTopic": {
+            "id": "SNSTopic",
+            "path": "SqsFlow/SNSTopic",
+            "constructInfo": {
+              "fqn": "@aws-cdk/aws-sns.TopicBase",
+              "version": "1.138.1"
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "SqsFlow/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "SqsFlow/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "@aws-cdk/core.CfnResource",
+                  "version": "1.138.1"
+                }
+              },
+              "Condition": {
+                "id": "Condition",
+                "path": "SqsFlow/CDKMetadata/Condition",
+                "constructInfo": {
+                  "fqn": "@aws-cdk/core.CfnCondition",
+                  "version": "1.138.1"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/core.Construct",
+              "version": "1.138.1"
+            }
           }
         },
         "constructInfo": {

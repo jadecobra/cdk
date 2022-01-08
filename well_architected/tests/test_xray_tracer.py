@@ -485,6 +485,14 @@ class TestXRayTracer(TestTemplates):
           ]
         ]
       }
+    },
+    "ExportsOutputRefTheXRayTracerSnsFanOutTopicDE7E70F8D479F0D6": {
+      "Value": {
+        "Ref": "TheXRayTracerSnsFanOutTopicDE7E70F8"
+      },
+      "Export": {
+        "Name": "XRayTracer:ExportsOutputRefTheXRayTracerSnsFanOutTopicDE7E70F8D479F0D6"
+      }
     }
   },
   "Conditions": {

@@ -26,13 +26,11 @@ class WellArchitected(App):
         self.create_rest_api()
         self.create_http_api()
 
-        TheXrayTracerStack(self, 'XRayTracer')
-
-        # xray_tracer = TheXrayTracerStack(app, "the-xray-tracer")
+        xray_tracer = TheXrayTracerStack(self, 'XRayTracer')
         # http_flow = TheHttpFlowStack(app, 'the-http-flow-stack', sns_topic_arn=xray_tracer.sns_topic_arn)
         # dynamo_flow = TheDynamoFlowStack(app, 'the-dynamo-flow-stack', sns_topic_arn=xray_tracer.sns_topic_arn)
         # sns_flow = TheSnsFlowStack(app, 'the-sns-flow-stack', sns_topic_arn=xray_tracer.sns_topic_arn)
-        # sqs_flow = TheSqsFlowStack(app, 'the-sqs-flow-stack', sns_topic_arn=xray_tracer.sns_topic_arn)
+        sqs_flow = SqsFlow(self, 'SqsFlow', sns_topic_arn=xray_tracer.sns_topic_arn)
 
         # http_flow.add_dependency(xray_tracer)
         # dynamo_flow.add_dependency(xray_tracer)
