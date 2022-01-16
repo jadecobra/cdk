@@ -205,3 +205,10 @@ class LambdaFunctionConstruct(WellArchitectedFrameworkConstruct):
             self.create_lambda_duration_widget(),
             self.create_lambda_throttled_percentage_widget(),
         )
+
+def create_python_lambda_function(stack, function_name=None, environment_variables=None):
+    return LambdaFunctionConstruct(
+        stack, function_name,
+        function_name=function_name,
+        environment_variables=environment_variables,
+    ).lambda_function
