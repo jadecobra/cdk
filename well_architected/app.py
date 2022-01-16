@@ -29,11 +29,12 @@ class WellArchitected(App):
         self.create_rest_api()
         self.create_http_api()
 
-        xray_tracer = TheXrayTracerStack(self, 'XRayTracer')
-        HttpFlow(self, 'HttpFlow', sns_topic=xray_tracer.sns_topic)
-        DynamoDBFlow(self, 'DynamoDBFlow', sns_topic=xray_tracer.sns_topic)
-        SnsFlow(self, 'SnsFlow', sns_topic=xray_tracer.sns_topic)
-        SqsFlow(self, 'SqsFlow', sns_topic=xray_tracer.sns_topic)
+        self.xray_sns_topic = SnsTopic(self, 'XRayTracerSnsFanOutTopic', display_name='The XRay Tracer Fan Out Topic').topic
+        TheXrayTracerStack(self, 'XRayTracer', sns_topic=self.xray_sns_topic)
+        HttpFlow(self, 'HttpFlow', sns_topic=self.xray_sns_topic)
+        DynamoDBFlow(self, 'DynamoDBFlow', sns_topic=self.xray_sns_topic)
+        SnsFlow(self, 'SnsFlow', sns_topic=self.xray_sns_topic)
+        SqsFlow(self, 'SqsFlow', sns_topic=self.xray_sns_topic)
 
     def create_http_api(self):
         self.http_api = LambdaHttpApiGateway(

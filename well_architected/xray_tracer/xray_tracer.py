@@ -1,16 +1,14 @@
 from json import dumps
-from aws_cdk.aws_sns import Topic
+from aws_cdk.aws_sns import Topic, ITopic
 from aws_cdk.core import Stack, Construct
 from aws_cdk.aws_iam import Role, ServicePrincipal
 from aws_cdk import aws_apigateway
 
 
 class TheXrayTracerStack(Stack):
-    def __init__(self, scope: Construct, id: str, **kwargs) -> None:
+    def __init__(self, scope: Construct, id: str, sns_topic: ITopic = None, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
-
-        self.sns_topic = Topic(self, 'TheXRayTracerSnsFanOutTopic', display_name='The XRay Tracer Fan Out Topic')
-        self.sns_topic_arn = self.sns_topic.topic_arn
+        self.sns_topic = sns_topic
         self.gateway = self.create_rest_api()
         self.api_gateway_sns_role = self.create_iam_role()
         self.sns_topic.grant_publish(self.api_gateway_sns_role)

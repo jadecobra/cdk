@@ -204,7 +204,7 @@ class TestDynamoDBFlow(TestTemplates):
         "aws:asset:property": "Code"
       }
     },
-    "hitcounterLambdaFunctionAllowInvokeXRayTracerTheXRayTracerSnsFanOutTopicE1CDC79DEA372A85": {
+    "hitcounterLambdaFunctionAllowInvokeXRayTracerSnsFanOutTopic4E706A091FB77B96": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:InvokeFunction",
@@ -216,19 +216,19 @@ class TestDynamoDBFlow(TestTemplates):
         },
         "Principal": "sns.amazonaws.com",
         "SourceArn": {
-          "Fn::ImportValue": "XRayTracer:ExportsOutputRefTheXRayTracerSnsFanOutTopicDE7E70F8D479F0D6"
+          "Fn::ImportValue": "XRayTracerSnsFanOutTopic:ExportsOutputRefXRayTracerSnsFanOutTopic129D23A131FFD088"
         }
       },
       "Metadata": {
-        "aws:cdk:path": "DynamoDBFlow/hit_counter/LambdaFunction/AllowInvoke:XRayTracerTheXRayTracerSnsFanOutTopicE1CDC79D"
+        "aws:cdk:path": "DynamoDBFlow/hit_counter/LambdaFunction/AllowInvoke:XRayTracerSnsFanOutTopic4E706A09"
       }
     },
-    "hitcounterLambdaFunctionTheXRayTracerSnsFanOutTopic49B262F3": {
+    "hitcounterLambdaFunctionXRayTracerSnsFanOutTopicAFE0C45F": {
       "Type": "AWS::SNS::Subscription",
       "Properties": {
         "Protocol": "lambda",
         "TopicArn": {
-          "Fn::ImportValue": "XRayTracer:ExportsOutputRefTheXRayTracerSnsFanOutTopicDE7E70F8D479F0D6"
+          "Fn::ImportValue": "XRayTracerSnsFanOutTopic:ExportsOutputRefXRayTracerSnsFanOutTopic129D23A131FFD088"
         },
         "Endpoint": {
           "Fn::GetAtt": [
@@ -238,7 +238,7 @@ class TestDynamoDBFlow(TestTemplates):
         }
       },
       "Metadata": {
-        "aws:cdk:path": "DynamoDBFlow/hit_counter/LambdaFunction/TheXRayTracerSnsFanOutTopic/Resource"
+        "aws:cdk:path": "DynamoDBFlow/hit_counter/LambdaFunction/XRayTracerSnsFanOutTopic/Resource"
       }
     },
     "hitcounterDynamoLambda2Error497B073E": {

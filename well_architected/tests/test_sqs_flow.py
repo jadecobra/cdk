@@ -176,7 +176,7 @@ class TestSqsFlow(TestTemplates):
         "aws:asset:property": "Code"
       }
     },
-    "sqsLambdaFunctionAllowInvokeXRayTracerTheXRayTracerSnsFanOutTopicE1CDC79D1B91EFEF": {
+    "sqsLambdaFunctionAllowInvokeXRayTracerSnsFanOutTopic4E706A091417C519": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:InvokeFunction",
@@ -188,19 +188,19 @@ class TestSqsFlow(TestTemplates):
         },
         "Principal": "sns.amazonaws.com",
         "SourceArn": {
-          "Fn::ImportValue": "XRayTracer:ExportsOutputRefTheXRayTracerSnsFanOutTopicDE7E70F8D479F0D6"
+          "Fn::ImportValue": "XRayTracerSnsFanOutTopic:ExportsOutputRefXRayTracerSnsFanOutTopic129D23A131FFD088"
         }
       },
       "Metadata": {
-        "aws:cdk:path": "SqsFlow/sqs/LambdaFunction/AllowInvoke:XRayTracerTheXRayTracerSnsFanOutTopicE1CDC79D"
+        "aws:cdk:path": "SqsFlow/sqs/LambdaFunction/AllowInvoke:XRayTracerSnsFanOutTopic4E706A09"
       }
     },
-    "sqsLambdaFunctionTheXRayTracerSnsFanOutTopicF3C8A23F": {
+    "sqsLambdaFunctionXRayTracerSnsFanOutTopic1D1F6839": {
       "Type": "AWS::SNS::Subscription",
       "Properties": {
         "Protocol": "lambda",
         "TopicArn": {
-          "Fn::ImportValue": "XRayTracer:ExportsOutputRefTheXRayTracerSnsFanOutTopicDE7E70F8D479F0D6"
+          "Fn::ImportValue": "XRayTracerSnsFanOutTopic:ExportsOutputRefXRayTracerSnsFanOutTopic129D23A131FFD088"
         },
         "Endpoint": {
           "Fn::GetAtt": [
@@ -210,7 +210,7 @@ class TestSqsFlow(TestTemplates):
         }
       },
       "Metadata": {
-        "aws:cdk:path": "SqsFlow/sqs/LambdaFunction/TheXRayTracerSnsFanOutTopic/Resource"
+        "aws:cdk:path": "SqsFlow/sqs/LambdaFunction/XRayTracerSnsFanOutTopic/Resource"
       }
     },
     "sqsDynamoLambda2Error5FAEF8D5": {

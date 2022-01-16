@@ -179,7 +179,7 @@ class TestSnsFlow(TestTemplates):
         },
         "Principal": "sns.amazonaws.com",
         "SourceArn": {
-          "Fn::ImportValue": "XRayTracer:ExportsOutputRefTheXRayTracerSnsFanOutTopicDE7E70F8D479F0D6"
+          "Fn::ImportValue": "XRayTracerSnsFanOutTopic:ExportsOutputRefXRayTracerSnsFanOutTopic129D23A131FFD088"
         }
       },
       "Metadata": {
@@ -191,7 +191,7 @@ class TestSnsFlow(TestTemplates):
       "Properties": {
         "Protocol": "lambda",
         "TopicArn": {
-          "Fn::ImportValue": "XRayTracer:ExportsOutputRefTheXRayTracerSnsFanOutTopicDE7E70F8D479F0D6"
+          "Fn::ImportValue": "XRayTracerSnsFanOutTopic:ExportsOutputRefXRayTracerSnsFanOutTopic129D23A131FFD088"
         },
         "Endpoint": {
           "Fn::GetAtt": [
@@ -206,7 +206,7 @@ class TestSnsFlow(TestTemplates):
               "Fn::Split": [
                 ":",
                 {
-                  "Fn::ImportValue": "XRayTracer:ExportsOutputRefTheXRayTracerSnsFanOutTopicDE7E70F8D479F0D6"
+                  "Fn::ImportValue": "XRayTracerSnsFanOutTopic:ExportsOutputRefXRayTracerSnsFanOutTopic129D23A131FFD088"
                 }
               ]
             }

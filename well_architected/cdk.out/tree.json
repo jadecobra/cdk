@@ -2390,17 +2390,17 @@
           "version": "1.139.0"
         }
       },
-      "XRayTracer": {
-        "id": "XRayTracer",
-        "path": "XRayTracer",
+      "XRayTracerSnsFanOutTopic": {
+        "id": "XRayTracerSnsFanOutTopic",
+        "path": "XRayTracerSnsFanOutTopic",
         "children": {
-          "TheXRayTracerSnsFanOutTopic": {
-            "id": "TheXRayTracerSnsFanOutTopic",
-            "path": "XRayTracer/TheXRayTracerSnsFanOutTopic",
+          "XRayTracerSnsFanOutTopic": {
+            "id": "XRayTracerSnsFanOutTopic",
+            "path": "XRayTracerSnsFanOutTopic/XRayTracerSnsFanOutTopic",
             "children": {
               "Resource": {
                 "id": "Resource",
-                "path": "XRayTracer/TheXRayTracerSnsFanOutTopic/Resource",
+                "path": "XRayTracerSnsFanOutTopic/XRayTracerSnsFanOutTopic/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::SNS::Topic",
                   "aws:cdk:cloudformation:props": {
@@ -2418,6 +2418,60 @@
               "version": "1.139.0"
             }
           },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "XRayTracerSnsFanOutTopic/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "XRayTracerSnsFanOutTopic/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "@aws-cdk/core.CfnResource",
+                  "version": "1.139.0"
+                }
+              },
+              "Condition": {
+                "id": "Condition",
+                "path": "XRayTracerSnsFanOutTopic/CDKMetadata/Condition",
+                "constructInfo": {
+                  "fqn": "@aws-cdk/core.CfnCondition",
+                  "version": "1.139.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/core.Construct",
+              "version": "1.139.0"
+            }
+          },
+          "Exports": {
+            "id": "Exports",
+            "path": "XRayTracerSnsFanOutTopic/Exports",
+            "children": {
+              "Output{\"Ref\":\"XRayTracerSnsFanOutTopic129D23A1\"}": {
+                "id": "Output{\"Ref\":\"XRayTracerSnsFanOutTopic129D23A1\"}",
+                "path": "XRayTracerSnsFanOutTopic/Exports/Output{\"Ref\":\"XRayTracerSnsFanOutTopic129D23A1\"}",
+                "constructInfo": {
+                  "fqn": "@aws-cdk/core.CfnOutput",
+                  "version": "1.139.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/core.Construct",
+              "version": "1.139.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "@aws-cdk/core.Stack",
+          "version": "1.139.0"
+        }
+      },
+      "XRayTracer": {
+        "id": "XRayTracer",
+        "path": "XRayTracer",
+        "children": {
           "xrayTracerAPI": {
             "id": "xrayTracerAPI",
             "path": "XRayTracer/xrayTracerAPI",
@@ -2545,7 +2599,7 @@
                           "Ref": "xrayTracerAPIA84CAE80"
                         },
                         "deploymentId": {
-                          "Ref": "xrayTracerAPIDeploymentB3CB89A046a929035b39f548d29a9fe1fc0faafe"
+                          "Ref": "xrayTracerAPIDeploymentB3CB89A0721985a531d4b66ddba940aa934d59f0"
                         },
                         "methodSettings": [
                           {
@@ -2629,7 +2683,7 @@
                                     [
                                       "Action=Publish&TargetArn=$util.urlEncode('",
                                       {
-                                        "Ref": "TheXRayTracerSnsFanOutTopicDE7E70F8"
+                                        "Fn::ImportValue": "XRayTracerSnsFanOutTopic:ExportsOutputRefXRayTracerSnsFanOutTopic129D23A131FFD088"
                                       },
                                       "')&Message=$util.urlEncode($context.path)&Version=2010-03-31"
                                     ]
@@ -2775,7 +2829,7 @@
                                         [
                                           "Action=Publish&TargetArn=$util.urlEncode('",
                                           {
-                                            "Ref": "TheXRayTracerSnsFanOutTopicDE7E70F8"
+                                            "Fn::ImportValue": "XRayTracerSnsFanOutTopic:ExportsOutputRefXRayTracerSnsFanOutTopic129D23A131FFD088"
                                           },
                                           "')&Message=$util.urlEncode($context.path)&Version=2010-03-31"
                                         ]
@@ -2993,7 +3047,7 @@
                               "Action": "sns:Publish",
                               "Effect": "Allow",
                               "Resource": {
-                                "Ref": "TheXRayTracerSnsFanOutTopicDE7E70F8"
+                                "Fn::ImportValue": "XRayTracerSnsFanOutTopic:ExportsOutputRefXRayTracerSnsFanOutTopic129D23A131FFD088"
                               }
                             }
                           ],
@@ -3041,24 +3095,6 @@
                 "path": "XRayTracer/CDKMetadata/Condition",
                 "constructInfo": {
                   "fqn": "@aws-cdk/core.CfnCondition",
-                  "version": "1.139.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/core.Construct",
-              "version": "1.139.0"
-            }
-          },
-          "Exports": {
-            "id": "Exports",
-            "path": "XRayTracer/Exports",
-            "children": {
-              "Output{\"Ref\":\"TheXRayTracerSnsFanOutTopicDE7E70F8\"}": {
-                "id": "Output{\"Ref\":\"TheXRayTracerSnsFanOutTopicDE7E70F8\"}",
-                "path": "XRayTracer/Exports/Output{\"Ref\":\"TheXRayTracerSnsFanOutTopicDE7E70F8\"}",
-                "constructInfo": {
-                  "fqn": "@aws-cdk/core.CfnOutput",
                   "version": "1.139.0"
                 }
               }
@@ -3301,9 +3337,9 @@
                       "version": "1.139.0"
                     }
                   },
-                  "AllowInvoke:XRayTracerTheXRayTracerSnsFanOutTopicE1CDC79D": {
-                    "id": "AllowInvoke:XRayTracerTheXRayTracerSnsFanOutTopicE1CDC79D",
-                    "path": "HttpFlow/http_api/LambdaFunction/AllowInvoke:XRayTracerTheXRayTracerSnsFanOutTopicE1CDC79D",
+                  "AllowInvoke:XRayTracerSnsFanOutTopic4E706A09": {
+                    "id": "AllowInvoke:XRayTracerSnsFanOutTopic4E706A09",
+                    "path": "HttpFlow/http_api/LambdaFunction/AllowInvoke:XRayTracerSnsFanOutTopic4E706A09",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                       "aws:cdk:cloudformation:props": {
@@ -3316,7 +3352,7 @@
                         },
                         "principal": "sns.amazonaws.com",
                         "sourceArn": {
-                          "Fn::ImportValue": "XRayTracer:ExportsOutputRefTheXRayTracerSnsFanOutTopicDE7E70F8D479F0D6"
+                          "Fn::ImportValue": "XRayTracerSnsFanOutTopic:ExportsOutputRefXRayTracerSnsFanOutTopic129D23A131FFD088"
                         }
                       }
                     },
@@ -3325,19 +3361,19 @@
                       "version": "1.139.0"
                     }
                   },
-                  "TheXRayTracerSnsFanOutTopic": {
-                    "id": "TheXRayTracerSnsFanOutTopic",
-                    "path": "HttpFlow/http_api/LambdaFunction/TheXRayTracerSnsFanOutTopic",
+                  "XRayTracerSnsFanOutTopic": {
+                    "id": "XRayTracerSnsFanOutTopic",
+                    "path": "HttpFlow/http_api/LambdaFunction/XRayTracerSnsFanOutTopic",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "HttpFlow/http_api/LambdaFunction/TheXRayTracerSnsFanOutTopic/Resource",
+                        "path": "HttpFlow/http_api/LambdaFunction/XRayTracerSnsFanOutTopic/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::SNS::Subscription",
                           "aws:cdk:cloudformation:props": {
                             "protocol": "lambda",
                             "topicArn": {
-                              "Fn::ImportValue": "XRayTracer:ExportsOutputRefTheXRayTracerSnsFanOutTopicDE7E70F8D479F0D6"
+                              "Fn::ImportValue": "XRayTracerSnsFanOutTopic:ExportsOutputRefXRayTracerSnsFanOutTopic129D23A131FFD088"
                             },
                             "endpoint": {
                               "Fn::GetAtt": [
@@ -4030,9 +4066,9 @@
                       "version": "1.139.0"
                     }
                   },
-                  "AllowInvoke:XRayTracerTheXRayTracerSnsFanOutTopicE1CDC79D": {
-                    "id": "AllowInvoke:XRayTracerTheXRayTracerSnsFanOutTopicE1CDC79D",
-                    "path": "DynamoDBFlow/hit_counter/LambdaFunction/AllowInvoke:XRayTracerTheXRayTracerSnsFanOutTopicE1CDC79D",
+                  "AllowInvoke:XRayTracerSnsFanOutTopic4E706A09": {
+                    "id": "AllowInvoke:XRayTracerSnsFanOutTopic4E706A09",
+                    "path": "DynamoDBFlow/hit_counter/LambdaFunction/AllowInvoke:XRayTracerSnsFanOutTopic4E706A09",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                       "aws:cdk:cloudformation:props": {
@@ -4045,7 +4081,7 @@
                         },
                         "principal": "sns.amazonaws.com",
                         "sourceArn": {
-                          "Fn::ImportValue": "XRayTracer:ExportsOutputRefTheXRayTracerSnsFanOutTopicDE7E70F8D479F0D6"
+                          "Fn::ImportValue": "XRayTracerSnsFanOutTopic:ExportsOutputRefXRayTracerSnsFanOutTopic129D23A131FFD088"
                         }
                       }
                     },
@@ -4054,19 +4090,19 @@
                       "version": "1.139.0"
                     }
                   },
-                  "TheXRayTracerSnsFanOutTopic": {
-                    "id": "TheXRayTracerSnsFanOutTopic",
-                    "path": "DynamoDBFlow/hit_counter/LambdaFunction/TheXRayTracerSnsFanOutTopic",
+                  "XRayTracerSnsFanOutTopic": {
+                    "id": "XRayTracerSnsFanOutTopic",
+                    "path": "DynamoDBFlow/hit_counter/LambdaFunction/XRayTracerSnsFanOutTopic",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "DynamoDBFlow/hit_counter/LambdaFunction/TheXRayTracerSnsFanOutTopic/Resource",
+                        "path": "DynamoDBFlow/hit_counter/LambdaFunction/XRayTracerSnsFanOutTopic/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::SNS::Subscription",
                           "aws:cdk:cloudformation:props": {
                             "protocol": "lambda",
                             "topicArn": {
-                              "Fn::ImportValue": "XRayTracer:ExportsOutputRefTheXRayTracerSnsFanOutTopicDE7E70F8D479F0D6"
+                              "Fn::ImportValue": "XRayTracerSnsFanOutTopic:ExportsOutputRefXRayTracerSnsFanOutTopic129D23A131FFD088"
                             },
                             "endpoint": {
                               "Fn::GetAtt": [
@@ -4731,7 +4767,7 @@
                         },
                         "principal": "sns.amazonaws.com",
                         "sourceArn": {
-                          "Fn::ImportValue": "XRayTracer:ExportsOutputRefTheXRayTracerSnsFanOutTopicDE7E70F8D479F0D6"
+                          "Fn::ImportValue": "XRayTracerSnsFanOutTopic:ExportsOutputRefXRayTracerSnsFanOutTopic129D23A131FFD088"
                         }
                       }
                     },
@@ -4752,7 +4788,7 @@
                           "aws:cdk:cloudformation:props": {
                             "protocol": "lambda",
                             "topicArn": {
-                              "Fn::ImportValue": "XRayTracer:ExportsOutputRefTheXRayTracerSnsFanOutTopicDE7E70F8D479F0D6"
+                              "Fn::ImportValue": "XRayTracerSnsFanOutTopic:ExportsOutputRefXRayTracerSnsFanOutTopic129D23A131FFD088"
                             },
                             "endpoint": {
                               "Fn::GetAtt": [
@@ -4767,7 +4803,7 @@
                                   "Fn::Split": [
                                     ":",
                                     {
-                                      "Fn::ImportValue": "XRayTracer:ExportsOutputRefTheXRayTracerSnsFanOutTopicDE7E70F8D479F0D6"
+                                      "Fn::ImportValue": "XRayTracerSnsFanOutTopic:ExportsOutputRefXRayTracerSnsFanOutTopic129D23A131FFD088"
                                     }
                                   ]
                                 }
@@ -5998,9 +6034,9 @@
                       "version": "1.139.0"
                     }
                   },
-                  "AllowInvoke:XRayTracerTheXRayTracerSnsFanOutTopicE1CDC79D": {
-                    "id": "AllowInvoke:XRayTracerTheXRayTracerSnsFanOutTopicE1CDC79D",
-                    "path": "SqsFlow/sqs/LambdaFunction/AllowInvoke:XRayTracerTheXRayTracerSnsFanOutTopicE1CDC79D",
+                  "AllowInvoke:XRayTracerSnsFanOutTopic4E706A09": {
+                    "id": "AllowInvoke:XRayTracerSnsFanOutTopic4E706A09",
+                    "path": "SqsFlow/sqs/LambdaFunction/AllowInvoke:XRayTracerSnsFanOutTopic4E706A09",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                       "aws:cdk:cloudformation:props": {
@@ -6013,7 +6049,7 @@
                         },
                         "principal": "sns.amazonaws.com",
                         "sourceArn": {
-                          "Fn::ImportValue": "XRayTracer:ExportsOutputRefTheXRayTracerSnsFanOutTopicDE7E70F8D479F0D6"
+                          "Fn::ImportValue": "XRayTracerSnsFanOutTopic:ExportsOutputRefXRayTracerSnsFanOutTopic129D23A131FFD088"
                         }
                       }
                     },
@@ -6022,19 +6058,19 @@
                       "version": "1.139.0"
                     }
                   },
-                  "TheXRayTracerSnsFanOutTopic": {
-                    "id": "TheXRayTracerSnsFanOutTopic",
-                    "path": "SqsFlow/sqs/LambdaFunction/TheXRayTracerSnsFanOutTopic",
+                  "XRayTracerSnsFanOutTopic": {
+                    "id": "XRayTracerSnsFanOutTopic",
+                    "path": "SqsFlow/sqs/LambdaFunction/XRayTracerSnsFanOutTopic",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "SqsFlow/sqs/LambdaFunction/TheXRayTracerSnsFanOutTopic/Resource",
+                        "path": "SqsFlow/sqs/LambdaFunction/XRayTracerSnsFanOutTopic/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::SNS::Subscription",
                           "aws:cdk:cloudformation:props": {
                             "protocol": "lambda",
                             "topicArn": {
-                              "Fn::ImportValue": "XRayTracer:ExportsOutputRefTheXRayTracerSnsFanOutTopicDE7E70F8D479F0D6"
+                              "Fn::ImportValue": "XRayTracerSnsFanOutTopic:ExportsOutputRefXRayTracerSnsFanOutTopic129D23A131FFD088"
                             },
                             "endpoint": {
                               "Fn::GetAtt": [

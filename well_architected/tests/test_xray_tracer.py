@@ -8,15 +8,6 @@ class TestXRayTracer(TestTemplates):
             'XRayTracer',
             {
   "Resources": {
-    "TheXRayTracerSnsFanOutTopicDE7E70F8": {
-      "Type": "AWS::SNS::Topic",
-      "Properties": {
-        "DisplayName": "The XRay Tracer Fan Out Topic"
-      },
-      "Metadata": {
-        "aws:cdk:path": "XRayTracer/TheXRayTracerSnsFanOutTopic/Resource"
-      }
-    },
     "xrayTracerAPIA84CAE80": {
       "Type": "AWS::ApiGateway::RestApi",
       "Properties": {
@@ -77,7 +68,7 @@ class TestXRayTracer(TestTemplates):
         "aws:cdk:path": "XRayTracer/xrayTracerAPI/Account"
       }
     },
-    "xrayTracerAPIDeploymentB3CB89A046a929035b39f548d29a9fe1fc0faafe": {
+    "xrayTracerAPIDeploymentB3CB89A0721985a531d4b66ddba940aa934d59f0": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -103,7 +94,7 @@ class TestXRayTracer(TestTemplates):
           "Ref": "xrayTracerAPIA84CAE80"
         },
         "DeploymentId": {
-          "Ref": "xrayTracerAPIDeploymentB3CB89A046a929035b39f548d29a9fe1fc0faafe"
+          "Ref": "xrayTracerAPIDeploymentB3CB89A0721985a531d4b66ddba940aa934d59f0"
         },
         "MethodSettings": [
           {
@@ -177,7 +168,7 @@ class TestXRayTracer(TestTemplates):
                 [
                   "Action=Publish&TargetArn=$util.urlEncode('",
                   {
-                    "Ref": "TheXRayTracerSnsFanOutTopicDE7E70F8"
+                    "Fn::ImportValue": "XRayTracerSnsFanOutTopic:ExportsOutputRefXRayTracerSnsFanOutTopic129D23A131FFD088"
                   },
                   "')&Message=$util.urlEncode($context.path)&Version=2010-03-31"
                 ]
@@ -299,7 +290,7 @@ class TestXRayTracer(TestTemplates):
                 [
                   "Action=Publish&TargetArn=$util.urlEncode('",
                   {
-                    "Ref": "TheXRayTracerSnsFanOutTopicDE7E70F8"
+                    "Fn::ImportValue": "XRayTracerSnsFanOutTopic:ExportsOutputRefXRayTracerSnsFanOutTopic129D23A131FFD088"
                   },
                   "')&Message=$util.urlEncode($context.path)&Version=2010-03-31"
                 ]
@@ -431,7 +422,7 @@ class TestXRayTracer(TestTemplates):
               "Action": "sns:Publish",
               "Effect": "Allow",
               "Resource": {
-                "Ref": "TheXRayTracerSnsFanOutTopicDE7E70F8"
+                "Fn::ImportValue": "XRayTracerSnsFanOutTopic:ExportsOutputRefXRayTracerSnsFanOutTopic129D23A131FFD088"
               }
             }
           ],
@@ -451,7 +442,7 @@ class TestXRayTracer(TestTemplates):
     "CDKMetadata": {
       "Type": "AWS::CDK::Metadata",
       "Properties": {
-        "Analytics": "v2:deflate64:H4sIAAAAAAAA/02OSw7CMAxEz8I+BCpW7PhtEQi4QOQaMLRx1DhCVZS7k7SAWPnZY4+n0tViqeeTlXn5KdTPWQTuUMezGHiq7dUegrggasvWSxdAyuyEnkMHWDgLNQmxTapYRG+9jhd2BEUdICuObkbwZXod87GsHX18vrgG4GBF7dA13Ldoh0d/XQ50Gx6O8I2wMR7VHuXOdRE/9B/wx3uusRmWCiRFps1puBm3Sj1yQ9CXdqSUkjr22dHOFrqa62ry8ETTLgelFvVprG8Hz/QvQwEAAA=="
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/02OSw7CMAxEz8I+BKqu2AFli0Bwgig1xdDGVeOoiqrcnaQf1JWf7fF4MpnlB7nfHFVvt7r87gZNHcjhyUp/RfEyN8etY1GQsdw5zWn2AEuu05A4LkpkJBNEshhUi5Vi6JWXQ9TxqcX5ZMGT1uQMiwu0NfkGzOi56uLvavSeYPl2VhbEFfhNZVrOtM7y5yuVUI+iBEGgamIaqidVqneqUfvUThRCEHcfHc0ul9leZpuPRdx2MSg2IB9T/QEEFiXVLgEAAA=="
       },
       "Metadata": {
         "aws:cdk:path": "XRayTracer/CDKMetadata/Default"
@@ -484,14 +475,6 @@ class TestXRayTracer(TestTemplates):
             "/"
           ]
         ]
-      }
-    },
-    "ExportsOutputRefTheXRayTracerSnsFanOutTopicDE7E70F8D479F0D6": {
-      "Value": {
-        "Ref": "TheXRayTracerSnsFanOutTopicDE7E70F8"
-      },
-      "Export": {
-        "Name": "XRayTracer:ExportsOutputRefTheXRayTracerSnsFanOutTopicDE7E70F8D479F0D6"
       }
     }
   },
