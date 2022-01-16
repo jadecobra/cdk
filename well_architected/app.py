@@ -10,7 +10,7 @@ from sns_topic import SnsTopic
 from xray_tracer.xray_tracer import TheXrayTracerStack
 from xray_tracer.sqs_flow import SqsFlow
 from xray_tracer.sns_flow import SnsFlow
-from xray_tracer.dynamodb_flow import TheDynamoFlowStack
+from xray_tracer.dynamodb_flow import DynamoDBFlow
 
 class WellArchitected(App):
 
@@ -30,7 +30,7 @@ class WellArchitected(App):
 
         xray_tracer = TheXrayTracerStack(self, 'XRayTracer')
         # http_flow = TheHttpFlowStack(app, 'the-http-flow-stack', sns_topic_arn=xray_tracer.sns_topic_arn)
-        dynamo_flow = TheDynamoFlowStack(self, 'DynamoDBFlow', sns_topic=xray_tracer.sns_topic)
+        dynamo_flow = DynamoDBFlow(self, 'DynamoDBFlow', sns_topic=xray_tracer.sns_topic)
         SnsFlow(self, 'SnsFlow', sns_topic=xray_tracer.sns_topic)
         SqsFlow(self, 'SqsFlow', sns_topic=xray_tracer.sns_topic)
 

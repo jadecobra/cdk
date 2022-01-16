@@ -1,6 +1,6 @@
 from aws_cdk.aws_sns import ITopic, Topic
 from aws_cdk.core import Stack, Construct
-from aws_cdk.aws_sns_subscribers import LambdaSubscription
+from aws_cdk.aws_sns_subscriptions import LambdaSubscription
 from lambda_function import create_python_lambda_function
 
 
