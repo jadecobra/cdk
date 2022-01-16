@@ -103,7 +103,6 @@ class TheXrayTracerStack(Stack):
     @staticmethod
     def create_response_template(model):
         return {'application/json': (model)}
-        return {'application/json': dumps(model) if not isinstance(model, str) else model}
 
     def integration_options(self):
         # This is how our gateway chooses what response to send based on selection_pattern
