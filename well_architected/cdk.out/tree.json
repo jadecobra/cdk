@@ -3741,14 +3741,6 @@
               "version": "1.138.1"
             }
           },
-          "SNSTopic": {
-            "id": "SNSTopic",
-            "path": "SnsFlow/SNSTopic",
-            "constructInfo": {
-              "fqn": "@aws-cdk/aws-sns.TopicBase",
-              "version": "1.138.1"
-            }
-          },
           "sns_subscribe": {
             "id": "sns_subscribe",
             "path": "SnsFlow/sns_subscribe",
@@ -4314,6 +4306,14 @@
             },
             "constructInfo": {
               "fqn": "@aws-cdk/core.Construct",
+              "version": "1.138.1"
+            }
+          },
+          "SNSTopic": {
+            "id": "SNSTopic",
+            "path": "SnsFlow/SNSTopic",
+            "constructInfo": {
+              "fqn": "@aws-cdk/aws-sns.TopicBase",
               "version": "1.138.1"
             }
           },
