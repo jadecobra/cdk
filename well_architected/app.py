@@ -11,6 +11,7 @@ from xray_tracer.xray_tracer import TheXrayTracerStack
 from xray_tracer.sqs_flow import SqsFlow
 from xray_tracer.sns_flow import SnsFlow
 from xray_tracer.dynamodb_flow import DynamoDBFlow
+from xray_tracer.http_api_flow import TheHttpFlowStack
 
 class WellArchitected(App):
 
@@ -29,15 +30,10 @@ class WellArchitected(App):
         self.create_http_api()
 
         xray_tracer = TheXrayTracerStack(self, 'XRayTracer')
-        # TheHttpFlowStack(app, 'HttpApiGatewayFlow', sns_topic=xray_tracer.sns_topic)
+        TheHttpFlowStack(self, 'HttpApiFlow', sns_topic=xray_tracer.sns_topic)
         DynamoDBFlow(self, 'DynamoDBFlow', sns_topic=xray_tracer.sns_topic)
         SnsFlow(self, 'SnsFlow', sns_topic=xray_tracer.sns_topic)
         SqsFlow(self, 'SqsFlow', sns_topic=xray_tracer.sns_topic)
-
-        # http_flow.add_dependency(xray_tracer)
-        # dynamo_flow.add_dependency(xray_tracer)
-        # sns_flow.add_dependency(xray_tracer)
-        # sqs_flow.add_dependency(xray_tracer)
 
     def create_http_api(self):
         self.http_api = LambdaHttpApiGateway(
