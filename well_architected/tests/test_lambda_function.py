@@ -90,7 +90,7 @@ class TestLambdaFunction(TestTemplates):
       "Properties": {
         "Code": {
           "S3Bucket": {
-            "Ref": "AssetParameters121bd1015c718f11470ee4f7750028d48d0f96e49fef7e4751df1759cfeb6f06S3Bucket6BDF5420"
+            "Ref": "AssetParameterscca552d02e0d03ed8728dbdb2206e866cd808515a4801b6ea94c8fef60748522S3Bucket405A15B0"
           },
           "S3Key": {
             "Fn::Join": [
@@ -103,7 +103,7 @@ class TestLambdaFunction(TestTemplates):
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters121bd1015c718f11470ee4f7750028d48d0f96e49fef7e4751df1759cfeb6f06S3VersionKey6B2E3823"
+                          "Ref": "AssetParameterscca552d02e0d03ed8728dbdb2206e866cd808515a4801b6ea94c8fef60748522S3VersionKeyA5EB029F"
                         }
                       ]
                     }
@@ -116,7 +116,7 @@ class TestLambdaFunction(TestTemplates):
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters121bd1015c718f11470ee4f7750028d48d0f96e49fef7e4751df1759cfeb6f06S3VersionKey6B2E3823"
+                          "Ref": "AssetParameterscca552d02e0d03ed8728dbdb2206e866cd808515a4801b6ea94c8fef60748522S3VersionKeyA5EB029F"
                         }
                       ]
                     }
@@ -149,7 +149,7 @@ class TestLambdaFunction(TestTemplates):
       ],
       "Metadata": {
         "aws:cdk:path": "LambdaFunction/LambdaFunction/Resource",
-        "aws:asset:path": "asset.121bd1015c718f11470ee4f7750028d48d0f96e49fef7e4751df1759cfeb6f06",
+        "aws:asset:path": "asset.cca552d02e0d03ed8728dbdb2206e866cd808515a4801b6ea94c8fef60748522",
         "aws:asset:is-bundled": false,
         "aws:asset:property": "Code"
       }
@@ -373,7 +373,7 @@ class TestLambdaFunction(TestTemplates):
     "CDKMetadata": {
       "Type": "AWS::CDK::Metadata",
       "Properties": {
-        "Analytics": "v2:deflate64:H4sIAAAAAAAA/z2PSW7DMAxFz9K9zNTwpssMRdeGewKGUmPVGgCRQhAIunssBe2K73/wcxhhnD5gfDvinQfS26FQTAbKtyBt6sRsZMebDTd1iYElZRJ1+QkzJvRGTGpiMRxzItN479JWbAxVtZHFob9qhPKVAzW79fxxVRY9lCW6Hu11js7So6/oVBVPA7Y7GPo5u4Zzps3IGdkocjHrOwqtUE4Ok2/RF3wir9eISTfrX9Ra1fyQNYbDBOP7/vsvWzukHMR6A8urPgG9QyMHGAEAAA=="
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/z2OS27DMAxEz5K9zMTwqrsmKbo23BMwlBqr1gcQKQSBoLvXUtCu+IaYIWeEcXqD0+EdHzyQ3o6FYjJQvgRpU2dmIzvebbirawwsKZOo63eYMaE3YlITi+GYE5nGu0tbsTFU1U4Wh/6mEcpnDtTWzfPHVVn0UJboerTPOTpLz/6iU1U8Ddh6MPQ6u4ZLps3IBdkocjHrBwqtUM4Ok2/RF3wgr7eISbfVv6i1qvkpawzHCcYTjIcftnZIOYj1BpbX/AVM9AVAGAEAAA=="
       },
       "Metadata": {
         "aws:cdk:path": "LambdaFunction/CDKMetadata/Default"
@@ -382,17 +382,17 @@ class TestLambdaFunction(TestTemplates):
     }
   },
   "Parameters": {
-    "AssetParameters121bd1015c718f11470ee4f7750028d48d0f96e49fef7e4751df1759cfeb6f06S3Bucket6BDF5420": {
+    "AssetParameterscca552d02e0d03ed8728dbdb2206e866cd808515a4801b6ea94c8fef60748522S3Bucket405A15B0": {
       "Type": "String",
-      "Description": "S3 bucket for asset \"121bd1015c718f11470ee4f7750028d48d0f96e49fef7e4751df1759cfeb6f06\""
+      "Description": "S3 bucket for asset \"cca552d02e0d03ed8728dbdb2206e866cd808515a4801b6ea94c8fef60748522\""
     },
-    "AssetParameters121bd1015c718f11470ee4f7750028d48d0f96e49fef7e4751df1759cfeb6f06S3VersionKey6B2E3823": {
+    "AssetParameterscca552d02e0d03ed8728dbdb2206e866cd808515a4801b6ea94c8fef60748522S3VersionKeyA5EB029F": {
       "Type": "String",
-      "Description": "S3 key for asset version \"121bd1015c718f11470ee4f7750028d48d0f96e49fef7e4751df1759cfeb6f06\""
+      "Description": "S3 key for asset version \"cca552d02e0d03ed8728dbdb2206e866cd808515a4801b6ea94c8fef60748522\""
     },
-    "AssetParameters121bd1015c718f11470ee4f7750028d48d0f96e49fef7e4751df1759cfeb6f06ArtifactHash8CDD66AF": {
+    "AssetParameterscca552d02e0d03ed8728dbdb2206e866cd808515a4801b6ea94c8fef60748522ArtifactHash8A9140CB": {
       "Type": "String",
-      "Description": "Artifact hash for asset \"121bd1015c718f11470ee4f7750028d48d0f96e49fef7e4751df1759cfeb6f06\""
+      "Description": "Artifact hash for asset \"cca552d02e0d03ed8728dbdb2206e866cd808515a4801b6ea94c8fef60748522\""
     }
   },
   "Conditions": {

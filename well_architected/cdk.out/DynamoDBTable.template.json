@@ -177,7 +177,7 @@
     "CDKMetadata": {
       "Type": "AWS::CDK::Metadata",
       "Properties": {
-        "Analytics": "v2:deflate64:H4sIAAAAAAAA/0VOSwqDMBA9S/cxNrjpssUeoGgvME4ipuoM5INIyN3rB9rV+/J4SqrqJtXlDosvUI9lQnZGpjYAjqIxnqNDI2omH1zEIOqe/m5PW6BtsExZ7AtJrwQz606mN3TTUTlIFjhx1AsEHGR6TODmPTvJE/zQMTi9Wz+RcxavNQxMZSXVdTv58dYWLlKws5HNiV/yufgdwQAAAA=="
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/0WMQQqDMBREz+I+fg2uumuxByi2F/gmEVM1H5IfRELu3qrQrmbmzTASZHOBurjiGkqlpyop8gbSk1FNojOBoldGtOQC+6hYtIP708F9C23Zkstif0h6c7iQ7iG9sJ+PyWGyUDNFvSKrEdJtRr/s3WnuGMae0Osd/ULOWTw2HslVDcgaZPEO1pY+OraLge7UD6/K/tPBAAAA"
       },
       "Metadata": {
         "aws:cdk:path": "DynamoDBTable/CDKMetadata/Default"

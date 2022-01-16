@@ -451,7 +451,7 @@ class TestXRayTracer(TestTemplates):
     "CDKMetadata": {
       "Type": "AWS::CDK::Metadata",
       "Properties": {
-        "Analytics": "v2:deflate64:H4sIAAAAAAAA/02QSw7CMAxEz8I+BCo2LPltEQi4QOQaMLRx1DhCVZS7k7SAWPnZ44xHqXS1WOpqsjIvP4X6OYvAHep4FgNPtb3aQxAXRG3ZeukCSJmd0HPoAAtnoSYhtkkVi+it1/HCjqCoA2TF0c0IvkyvY34sa0cfny+uAThYUTt0Dfct2uHQX5cD3YaDI3wjbIxHtUe5c13ED/0H/PGea2yGpQJJkWlzGm7GrVKP3BD0pR0ppaSOfXa0s4Wu5vmbHp5o2uWg1KI+jfUNWRozkkMBAAA="
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/02OSw7CMAxEz8I+BCpW7PhtEQi4QOQaMLRx1DhCVZS7k7SAWPnZY4+n0tViqeeTlXn5KdTPWQTuUMezGHiq7dUegrggasvWSxdAyuyEnkMHWDgLNQmxTapYRG+9jhd2BEUdICuObkbwZXod87GsHX18vrgG4GBF7dA13Ldoh0d/XQ50Gx6O8I2wMR7VHuXOdRE/9B/wx3uusRmWCiRFps1puBm3Sj1yQ9CXdqSUkjr22dHOFrqa62ry8ETTLgelFvVprG8Hz/QvQwEAAA=="
       },
       "Metadata": {
         "aws:cdk:path": "XRayTracer/CDKMetadata/Default"

@@ -17,7 +17,7 @@ class TestSNSTopic(TestTemplates):
     "CDKMetadata": {
       "Type": "AWS::CDK::Metadata",
       "Properties": {
-        "Analytics": "v2:deflate64:H4sIAAAAAAAA/yWNQQqDMBBFz9J9HBvcdFnwAsX2AjKmdBRnSmaCSMjdNe3qP3g8vgff3cBf7uOmDU5Lm1FigPy0ERfXC6vFhOb6Nw9BJUUMlU8xkZFwcTVUVsgv+RJW+YNS3GO3j3Dbgb+eD7MSNTGx0Rpg+O8BgIrhNn4AAAA="
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/yWLQQqDMBAA3+I9rgZPvRX8gNh+QNaUbqW7kt0gEvL3Nu1pBobx4IcL9M11ObTFdesySgyQb7bg5kZhtZjQ3PjgOaikiKH6N6xkJFxcHZUV8l12whp/UoqbTnsKdwP4HnzzUqI2JjZ6B5j//AA/3LwyfgAAAA=="
       },
       "Metadata": {
         "aws:cdk:path": "SnsTopic/CDKMetadata/Default"
