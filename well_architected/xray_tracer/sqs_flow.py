@@ -1,6 +1,3 @@
-from aws_cdk import (
-    aws_sns as sns
-)
 from aws_cdk.core import Stack, Construct, Duration
 from aws_cdk.aws_sqs import Queue
 from aws_cdk.aws_sns_subscriptions import LambdaSubscription
