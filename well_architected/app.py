@@ -4,7 +4,7 @@ from web_application_firewall import WebApplicationFirewall
 from lambda_function import LambdaFunctionStack
 
 from cloudwatch_dashboard import CloudWatchDashboard
-from dynamodb_table import DynamoDBTable
+from dynamodb_table import DynamoDBTableStack
 from http_api import LambdaHttpApiGateway
 from sns_topic import SnsTopic
 from xray_tracer.sns_rest_api import SnsRestApi
@@ -56,7 +56,7 @@ class WellArchitected(App):
         )
 
     def create_dynamodb_table(self, error_topic):
-        return DynamoDBTable(
+        return DynamoDBTableStack(
             self, 'DynamoDBTable',
             error_topic=error_topic
         )

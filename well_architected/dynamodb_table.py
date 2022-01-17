@@ -1,8 +1,8 @@
 from aws_cdk.core import Construct
 from aws_cdk.aws_dynamodb import Table, Attribute, AttributeType, BillingMode
-from well_architected import WellArchitectedFramework
+from well_architected import WellArchitectedFramework, WellArchitectedFrameworkConstruct
 
-class DynamoDBTable(WellArchitectedFramework):
+class DynamoDBTableConstruct(WellArchitectedFrameworkConstruct):
 
     def __init__(
         self, scope: Construct, id: str, error_topic=None, **kwargs
@@ -94,3 +94,15 @@ class DynamoDBTable(WellArchitectedFramework):
             self.create_read_write_capacity_widget(),
             self.create_throttles_widget(),
         )
+
+
+class DynamoDBTableStack(WellArchitectedFramework):
+
+    def __init__(
+        self, scope: Construct, id: str, error_topic=None, **kwargs
+    ) -> None:
+        super().__init__(scope, id, error_topic=error_topic, **kwargs)
+        self.dynamodb_table = DynamoDBTableConstruct(
+            self, "Hits",
+            error_topic=error_topic,
+        ).dynamodb_table

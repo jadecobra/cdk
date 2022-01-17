@@ -7,7 +7,7 @@ class TestDynamoDBTable(TestTemplates):
             'DynamoDBTable',
             {
   "Resources": {
-    "HitsFF5AF8CD": {
+    "Hits9BF577DE": {
       "Type": "AWS::DynamoDB::Table",
       "Properties": {
         "KeySchema": [
@@ -27,10 +27,10 @@ class TestDynamoDBTable(TestTemplates):
       "UpdateReplacePolicy": "Retain",
       "DeletionPolicy": "Retain",
       "Metadata": {
-        "aws:cdk:path": "DynamoDBTable/Hits/Resource"
+        "aws:cdk:path": "DynamoDBTable/Hits/Hits/Resource"
       }
     },
-    "DynamoDBUserErrors063AAE77E": {
+    "HitsDynamoDBUserErrors07CE7B5C5": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
@@ -49,10 +49,10 @@ class TestDynamoDBTable(TestTemplates):
         "TreatMissingData": "notBreaching"
       },
       "Metadata": {
-        "aws:cdk:path": "DynamoDBTable/DynamoDB User Errors > 0/Resource"
+        "aws:cdk:path": "DynamoDBTable/Hits/DynamoDB User Errors > 0/Resource"
       }
     },
-    "DynamoDBTableReadsWritesThrottled13F6F2AE": {
+    "HitsDynamoDBTableReadsWritesThrottledA2E6A6CD": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
@@ -77,7 +77,7 @@ class TestDynamoDBTable(TestTemplates):
                   {
                     "Name": "TableName",
                     "Value": {
-                      "Ref": "HitsFF5AF8CD"
+                      "Ref": "Hits9BF577DE"
                     }
                   }
                 ],
@@ -97,7 +97,7 @@ class TestDynamoDBTable(TestTemplates):
                   {
                     "Name": "TableName",
                     "Value": {
-                      "Ref": "HitsFF5AF8CD"
+                      "Ref": "Hits9BF577DE"
                     }
                   }
                 ],
@@ -114,10 +114,10 @@ class TestDynamoDBTable(TestTemplates):
         "TreatMissingData": "notBreaching"
       },
       "Metadata": {
-        "aws:cdk:path": "DynamoDBTable/DynamoDB Table Reads--Writes Throttled/Resource"
+        "aws:cdk:path": "DynamoDBTable/Hits/DynamoDB Table Reads--Writes Throttled/Resource"
       }
     },
-    "CloudWatchDashBoard043C60B6": {
+    "HitsCloudWatchDashBoardD0EE794E": {
       "Type": "AWS::CloudWatch::Dashboard",
       "Properties": {
         "DashboardBody": {
@@ -130,23 +130,23 @@ class TestDynamoDBTable(TestTemplates):
               },
               "\",\"stacked\":true,\"metrics\":[[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"GetItem\",\"TableName\",\"",
               {
-                "Ref": "HitsFF5AF8CD"
+                "Ref": "Hits9BF577DE"
               },
               "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"UpdateItem\",\"TableName\",\"",
               {
-                "Ref": "HitsFF5AF8CD"
+                "Ref": "Hits9BF577DE"
               },
               "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"PutItem\",\"TableName\",\"",
               {
-                "Ref": "HitsFF5AF8CD"
+                "Ref": "Hits9BF577DE"
               },
               "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"DeleteItem\",\"TableName\",\"",
               {
-                "Ref": "HitsFF5AF8CD"
+                "Ref": "Hits9BF577DE"
               },
               "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"Query\",\"TableName\",\"",
               {
-                "Ref": "HitsFF5AF8CD"
+                "Ref": "Hits9BF577DE"
               },
               "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"DynamoDB Consumed Read/Write Units\",\"region\":\"",
               {
@@ -154,11 +154,11 @@ class TestDynamoDBTable(TestTemplates):
               },
               "\",\"stacked\":false,\"metrics\":[[\"AWS/DynamoDB\",\"ConsumedReadCapacityUnits\",\"TableName\",\"",
               {
-                "Ref": "HitsFF5AF8CD"
+                "Ref": "Hits9BF577DE"
               },
               "\"],[\"AWS/DynamoDB\",\"ConsumedWriteCapacityUnits\",\"TableName\",\"",
               {
-                "Ref": "HitsFF5AF8CD"
+                "Ref": "Hits9BF577DE"
               },
               "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"DynamoDB Throttles\",\"region\":\"",
               {
@@ -166,11 +166,11 @@ class TestDynamoDBTable(TestTemplates):
               },
               "\",\"stacked\":true,\"metrics\":[[\"AWS/DynamoDB\",\"ReadThrottleEvents\",\"TableName\",\"",
               {
-                "Ref": "HitsFF5AF8CD"
+                "Ref": "Hits9BF577DE"
               },
               "\",{\"stat\":\"Sum\"}],[\"AWS/DynamoDB\",\"WriteThrottleEvents\",\"TableName\",\"",
               {
-                "Ref": "HitsFF5AF8CD"
+                "Ref": "Hits9BF577DE"
               },
               "\",{\"stat\":\"Sum\"}]],\"yAxis\":{}}}]}"
             ]
@@ -178,13 +178,13 @@ class TestDynamoDBTable(TestTemplates):
         }
       },
       "Metadata": {
-        "aws:cdk:path": "DynamoDBTable/CloudWatchDashBoard/Resource"
+        "aws:cdk:path": "DynamoDBTable/Hits/CloudWatchDashBoard/Resource"
       }
     },
     "CDKMetadata": {
       "Type": "AWS::CDK::Metadata",
       "Properties": {
-        "Analytics": "v2:deflate64:H4sIAAAAAAAA/0WMQQqDMBREz+I+fg2uumuxByi2F/gmEVM1H5IfRELu3qrQrmbmzTASZHOBurjiGkqlpyop8gbSk1FNojOBoldGtOQC+6hYtIP708F9C23Zkstif0h6c7iQ7iG9sJ+PyWGyUDNFvSKrEdJtRr/s3WnuGMae0Osd/ULOWTw2HslVDcgaZPEO1pY+OraLge7UD6/K/tPBAAAA"
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/02MTQqDMBCFz+I+jgZX3bXYAxTtBcYkxVTNQDJBJOTurQqlq/e9H54E2VygLq64hlLpqUqKvIHUM6pJtOQC+6hYdCZQ9MqI9uX++bvQli25LPaHpDeHC+kB0hOH+ZgckIWaKeoVWY2QbjP6Ze9OuGMYB0Kv9+hncs7isfFIrmpA1iCLd7C29NGxXQx0p34AQPlDxsEAAAA="
       },
       "Metadata": {
         "aws:cdk:path": "DynamoDBTable/CDKMetadata/Default"
@@ -387,23 +387,23 @@ class TestDynamoDBTable(TestTemplates):
     }
   },
   "Outputs": {
-    "ExportsOutputFnGetAttHitsFF5AF8CDArn18792E32": {
+    "ExportsOutputFnGetAttHits9BF577DEArnFF8B7C1B": {
       "Value": {
         "Fn::GetAtt": [
-          "HitsFF5AF8CD",
+          "Hits9BF577DE",
           "Arn"
         ]
       },
       "Export": {
-        "Name": "DynamoDBTable:ExportsOutputFnGetAttHitsFF5AF8CDArn18792E32"
+        "Name": "DynamoDBTable:ExportsOutputFnGetAttHits9BF577DEArnFF8B7C1B"
       }
     },
-    "ExportsOutputRefHitsFF5AF8CDC54C3C7B": {
+    "ExportsOutputRefHits9BF577DEBF202F48": {
       "Value": {
-        "Ref": "HitsFF5AF8CD"
+        "Ref": "Hits9BF577DE"
       },
       "Export": {
-        "Name": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
+        "Name": "DynamoDBTable:ExportsOutputRefHits9BF577DEBF202F48"
       }
     }
   }

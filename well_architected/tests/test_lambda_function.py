@@ -81,7 +81,7 @@ class TestLambdaFunction(TestTemplates):
               "Effect": "Allow",
               "Resource": [
                 {
-                  "Fn::ImportValue": "DynamoDBTable:ExportsOutputFnGetAttHitsFF5AF8CDArn18792E32"
+                  "Fn::ImportValue": "DynamoDBTable:ExportsOutputFnGetAttHits9BF577DEArnFF8B7C1B"
                 },
                 {
                   "Ref": "AWS::NoValue"
@@ -152,7 +152,7 @@ class TestLambdaFunction(TestTemplates):
         "Environment": {
           "Variables": {
             "HITS_TABLE_NAME": {
-              "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
+              "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHits9BF577DEBF202F48"
             }
           }
         },
