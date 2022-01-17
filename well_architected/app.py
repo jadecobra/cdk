@@ -1,7 +1,7 @@
 from aws_cdk.core import App
 from rest_api import LambdaRestAPIGateway
 from web_application_firewall import WebApplicationFirewall
-from lambda_function import LambdaFunction
+from lambda_function import LambdaFunctionStack
 
 from cloudwatch_dashboard import CloudWatchDashboard
 from dynamodb_table import DynamoDBTable
@@ -62,9 +62,9 @@ class WellArchitected(App):
         )
 
     def create_lambda_function(self, environment_variables=None, error_topic=None):
-        return LambdaFunction(
+        return LambdaFunctionStack(
             self, 'LambdaFunction',
-            function_name='hello',
+            function_name='hit_counter',
             environment_variables=environment_variables,
             error_topic=error_topic
         )

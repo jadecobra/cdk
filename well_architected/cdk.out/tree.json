@@ -394,223 +394,545 @@
         "id": "LambdaFunction",
         "path": "LambdaFunction",
         "children": {
-          "LambdaFunction": {
-            "id": "LambdaFunction",
-            "path": "LambdaFunction/LambdaFunction",
+          "hit_counter": {
+            "id": "hit_counter",
+            "path": "LambdaFunction/hit_counter",
             "children": {
-              "ServiceRole": {
-                "id": "ServiceRole",
-                "path": "LambdaFunction/LambdaFunction/ServiceRole",
+              "ErrorTopic": {
+                "id": "ErrorTopic",
+                "path": "LambdaFunction/hit_counter/ErrorTopic",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "LambdaFunction/LambdaFunction/ServiceRole/Resource",
+                    "path": "LambdaFunction/hit_counter/ErrorTopic/Resource",
                     "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:type": "AWS::SNS::Topic",
                       "aws:cdk:cloudformation:props": {
-                        "assumeRolePolicyDocument": {
-                          "Statement": [
-                            {
-                              "Action": "sts:AssumeRole",
-                              "Effect": "Allow",
-                              "Principal": {
-                                "Service": "lambda.amazonaws.com"
-                              }
-                            }
-                          ],
-                          "Version": "2012-10-17"
-                        },
-                        "managedPolicyArns": [
-                          {
-                            "Fn::Join": [
-                              "",
-                              [
-                                "arn:",
-                                {
-                                  "Ref": "AWS::Partition"
-                                },
-                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-                              ]
-                            ]
-                          }
-                        ]
+                        "displayName": "ErrorTopic",
+                        "topicName": "ErrorTopic"
                       }
                     },
                     "constructInfo": {
-                      "fqn": "@aws-cdk/aws-iam.CfnRole",
+                      "fqn": "@aws-cdk/aws-sns.CfnTopic",
                       "version": "1.139.0"
                     }
-                  },
-                  "DefaultPolicy": {
-                    "id": "DefaultPolicy",
-                    "path": "LambdaFunction/LambdaFunction/ServiceRole/DefaultPolicy",
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-sns.Topic",
+                  "version": "1.139.0"
+                }
+              },
+              "LambdaFunction": {
+                "id": "LambdaFunction",
+                "path": "LambdaFunction/hit_counter/LambdaFunction",
+                "children": {
+                  "ServiceRole": {
+                    "id": "ServiceRole",
+                    "path": "LambdaFunction/hit_counter/LambdaFunction/ServiceRole",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "LambdaFunction/LambdaFunction/ServiceRole/DefaultPolicy/Resource",
+                        "path": "LambdaFunction/hit_counter/LambdaFunction/ServiceRole/Resource",
                         "attributes": {
-                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                           "aws:cdk:cloudformation:props": {
-                            "policyDocument": {
+                            "assumeRolePolicyDocument": {
                               "Statement": [
                                 {
-                                  "Action": [
-                                    "dynamodb:BatchGetItem",
-                                    "dynamodb:GetRecords",
-                                    "dynamodb:GetShardIterator",
-                                    "dynamodb:Query",
-                                    "dynamodb:GetItem",
-                                    "dynamodb:Scan",
-                                    "dynamodb:ConditionCheckItem",
-                                    "dynamodb:BatchWriteItem",
-                                    "dynamodb:PutItem",
-                                    "dynamodb:UpdateItem",
-                                    "dynamodb:DeleteItem"
-                                  ],
+                                  "Action": "sts:AssumeRole",
                                   "Effect": "Allow",
-                                  "Resource": [
-                                    {
-                                      "Fn::ImportValue": "DynamoDBTable:ExportsOutputFnGetAttHitsFF5AF8CDArn18792E32"
-                                    },
-                                    {
-                                      "Ref": "AWS::NoValue"
-                                    }
-                                  ]
+                                  "Principal": {
+                                    "Service": "lambda.amazonaws.com"
+                                  }
                                 }
                               ],
                               "Version": "2012-10-17"
                             },
-                            "policyName": "LambdaFunctionServiceRoleDefaultPolicy32EEEE35",
-                            "roles": [
+                            "managedPolicyArns": [
                               {
-                                "Ref": "LambdaFunctionServiceRoleC555A460"
+                                "Fn::Join": [
+                                  "",
+                                  [
+                                    "arn:",
+                                    {
+                                      "Ref": "AWS::Partition"
+                                    },
+                                    ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                                  ]
+                                ]
                               }
                             ]
                           }
                         },
                         "constructInfo": {
-                          "fqn": "@aws-cdk/aws-iam.CfnPolicy",
+                          "fqn": "@aws-cdk/aws-iam.CfnRole",
+                          "version": "1.139.0"
+                        }
+                      },
+                      "DefaultPolicy": {
+                        "id": "DefaultPolicy",
+                        "path": "LambdaFunction/hit_counter/LambdaFunction/ServiceRole/DefaultPolicy",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "LambdaFunction/hit_counter/LambdaFunction/ServiceRole/DefaultPolicy/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                              "aws:cdk:cloudformation:props": {
+                                "policyDocument": {
+                                  "Statement": [
+                                    {
+                                      "Action": [
+                                        "xray:PutTraceSegments",
+                                        "xray:PutTelemetryRecords"
+                                      ],
+                                      "Effect": "Allow",
+                                      "Resource": "*"
+                                    },
+                                    {
+                                      "Action": [
+                                        "dynamodb:BatchGetItem",
+                                        "dynamodb:GetRecords",
+                                        "dynamodb:GetShardIterator",
+                                        "dynamodb:Query",
+                                        "dynamodb:GetItem",
+                                        "dynamodb:Scan",
+                                        "dynamodb:ConditionCheckItem",
+                                        "dynamodb:BatchWriteItem",
+                                        "dynamodb:PutItem",
+                                        "dynamodb:UpdateItem",
+                                        "dynamodb:DeleteItem"
+                                      ],
+                                      "Effect": "Allow",
+                                      "Resource": [
+                                        {
+                                          "Fn::ImportValue": "DynamoDBTable:ExportsOutputFnGetAttHitsFF5AF8CDArn18792E32"
+                                        },
+                                        {
+                                          "Ref": "AWS::NoValue"
+                                        }
+                                      ]
+                                    }
+                                  ],
+                                  "Version": "2012-10-17"
+                                },
+                                "policyName": "hitcounterLambdaFunctionServiceRoleDefaultPolicyBCDA98FD",
+                                "roles": [
+                                  {
+                                    "Ref": "hitcounterLambdaFunctionServiceRoleE2452AC5"
+                                  }
+                                ]
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "@aws-cdk/aws-iam.CfnPolicy",
+                              "version": "1.139.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-iam.Policy",
                           "version": "1.139.0"
                         }
                       }
                     },
                     "constructInfo": {
-                      "fqn": "@aws-cdk/aws-iam.Policy",
-                      "version": "1.139.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-iam.Role",
-                  "version": "1.139.0"
-                }
-              },
-              "Code": {
-                "id": "Code",
-                "path": "LambdaFunction/LambdaFunction/Code",
-                "children": {
-                  "Stage": {
-                    "id": "Stage",
-                    "path": "LambdaFunction/LambdaFunction/Code/Stage",
-                    "constructInfo": {
-                      "fqn": "@aws-cdk/core.AssetStaging",
+                      "fqn": "@aws-cdk/aws-iam.Role",
                       "version": "1.139.0"
                     }
                   },
-                  "AssetBucket": {
-                    "id": "AssetBucket",
-                    "path": "LambdaFunction/LambdaFunction/Code/AssetBucket",
+                  "Code": {
+                    "id": "Code",
+                    "path": "LambdaFunction/hit_counter/LambdaFunction/Code",
                     "children": {
-                      "Notifications": {
-                        "id": "Notifications",
-                        "path": "LambdaFunction/LambdaFunction/Code/AssetBucket/Notifications",
+                      "Stage": {
+                        "id": "Stage",
+                        "path": "LambdaFunction/hit_counter/LambdaFunction/Code/Stage",
                         "constructInfo": {
-                          "fqn": "@aws-cdk/core.Construct",
+                          "fqn": "@aws-cdk/core.AssetStaging",
+                          "version": "1.139.0"
+                        }
+                      },
+                      "AssetBucket": {
+                        "id": "AssetBucket",
+                        "path": "LambdaFunction/hit_counter/LambdaFunction/Code/AssetBucket",
+                        "children": {
+                          "Notifications": {
+                            "id": "Notifications",
+                            "path": "LambdaFunction/hit_counter/LambdaFunction/Code/AssetBucket/Notifications",
+                            "constructInfo": {
+                              "fqn": "@aws-cdk/core.Construct",
+                              "version": "1.139.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-s3.BucketBase",
                           "version": "1.139.0"
                         }
                       }
                     },
                     "constructInfo": {
-                      "fqn": "@aws-cdk/aws-s3.BucketBase",
+                      "fqn": "@aws-cdk/aws-s3-assets.Asset",
+                      "version": "1.139.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "LambdaFunction/hit_counter/LambdaFunction/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                      "aws:cdk:cloudformation:props": {
+                        "code": {
+                          "s3Bucket": {
+                            "Ref": "AssetParameters3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5S3BucketD2320349"
+                          },
+                          "s3Key": {
+                            "Fn::Join": [
+                              "",
+                              [
+                                {
+                                  "Fn::Select": [
+                                    0,
+                                    {
+                                      "Fn::Split": [
+                                        "||",
+                                        {
+                                          "Ref": "AssetParameters3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5S3VersionKey91D22072"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Fn::Select": [
+                                    1,
+                                    {
+                                      "Fn::Split": [
+                                        "||",
+                                        {
+                                          "Ref": "AssetParameters3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5S3VersionKey91D22072"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            ]
+                          }
+                        },
+                        "role": {
+                          "Fn::GetAtt": [
+                            "hitcounterLambdaFunctionServiceRoleE2452AC5",
+                            "Arn"
+                          ]
+                        },
+                        "environment": {
+                          "variables": {
+                            "HITS_TABLE_NAME": {
+                              "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
+                            }
+                          }
+                        },
+                        "handler": "hit_counter.handler",
+                        "runtime": "python3.8",
+                        "timeout": 60,
+                        "tracingConfig": {
+                          "mode": "Active"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-lambda.CfnFunction",
                       "version": "1.139.0"
                     }
                   }
                 },
                 "constructInfo": {
-                  "fqn": "@aws-cdk/aws-s3-assets.Asset",
+                  "fqn": "@aws-cdk/aws-lambda.Function",
                   "version": "1.139.0"
                 }
               },
-              "Resource": {
-                "id": "Resource",
-                "path": "LambdaFunction/LambdaFunction/Resource",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
-                  "aws:cdk:cloudformation:props": {
-                    "code": {
-                      "s3Bucket": {
-                        "Ref": "AssetParameters3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5S3BucketD2320349"
-                      },
-                      "s3Key": {
-                        "Fn::Join": [
-                          "",
-                          [
-                            {
-                              "Fn::Select": [
-                                0,
-                                {
-                                  "Fn::Split": [
-                                    "||",
-                                    {
-                                      "Ref": "AssetParameters3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5S3VersionKey91D22072"
+              "Dynamo Lambda 2% Error": {
+                "id": "Dynamo Lambda 2% Error",
+                "path": "LambdaFunction/hit_counter/Dynamo Lambda 2% Error",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "LambdaFunction/hit_counter/Dynamo Lambda 2% Error/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                      "aws:cdk:cloudformation:props": {
+                        "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                        "evaluationPeriods": 6,
+                        "alarmActions": [
+                          {
+                            "Ref": "hitcounterErrorTopicB8385607"
+                          }
+                        ],
+                        "datapointsToAlarm": 1,
+                        "metrics": [
+                          {
+                            "expression": "e / invocations * 100",
+                            "id": "expr_1",
+                            "label": "% of invocations that errored, last 5 mins"
+                          },
+                          {
+                            "metricStat": {
+                              "metric": {
+                                "metricName": "Invocations",
+                                "namespace": "AWS/Lambda",
+                                "dimensions": [
+                                  {
+                                    "name": "FunctionName",
+                                    "value": {
+                                      "Ref": "hitcounterLambdaFunctionB862C182"
                                     }
-                                  ]
-                                }
-                              ]
+                                  }
+                                ]
+                              },
+                              "period": 300,
+                              "stat": "Sum"
                             },
-                            {
-                              "Fn::Select": [
-                                1,
-                                {
-                                  "Fn::Split": [
-                                    "||",
-                                    {
-                                      "Ref": "AssetParameters3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5S3VersionKey91D22072"
+                            "id": "invocations",
+                            "returnData": false
+                          },
+                          {
+                            "metricStat": {
+                              "metric": {
+                                "metricName": "Errors",
+                                "namespace": "AWS/Lambda",
+                                "dimensions": [
+                                  {
+                                    "name": "FunctionName",
+                                    "value": {
+                                      "Ref": "hitcounterLambdaFunctionB862C182"
                                     }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        ]
+                                  }
+                                ]
+                              },
+                              "period": 300,
+                              "stat": "Sum"
+                            },
+                            "id": "e",
+                            "returnData": false
+                          }
+                        ],
+                        "threshold": 2,
+                        "treatMissingData": "notBreaching"
                       }
                     },
-                    "role": {
-                      "Fn::GetAtt": [
-                        "LambdaFunctionServiceRoleC555A460",
-                        "Arn"
-                      ]
-                    },
-                    "environment": {
-                      "variables": {
-                        "HITS_TABLE_NAME": {
-                          "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHitsFF5AF8CDC54C3C7B"
-                        }
-                      }
-                    },
-                    "handler": "hello.handler",
-                    "runtime": "python3.8",
-                    "timeout": 60
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
+                      "version": "1.139.0"
+                    }
                   }
                 },
                 "constructInfo": {
-                  "fqn": "@aws-cdk/aws-lambda.CfnFunction",
+                  "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
+                  "version": "1.139.0"
+                }
+              },
+              "Dynamo Lambda p99 Long Duration (>1s)": {
+                "id": "Dynamo Lambda p99 Long Duration (>1s)",
+                "path": "LambdaFunction/hit_counter/Dynamo Lambda p99 Long Duration (>1s)",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "LambdaFunction/hit_counter/Dynamo Lambda p99 Long Duration (>1s)/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                      "aws:cdk:cloudformation:props": {
+                        "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                        "evaluationPeriods": 6,
+                        "alarmActions": [
+                          {
+                            "Ref": "hitcounterErrorTopicB8385607"
+                          }
+                        ],
+                        "datapointsToAlarm": 1,
+                        "dimensions": [
+                          {
+                            "name": "FunctionName",
+                            "value": {
+                              "Ref": "hitcounterLambdaFunctionB862C182"
+                            }
+                          }
+                        ],
+                        "extendedStatistic": "p99",
+                        "metricName": "Duration",
+                        "namespace": "AWS/Lambda",
+                        "period": 300,
+                        "threshold": 1000,
+                        "treatMissingData": "notBreaching"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
+                      "version": "1.139.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
+                  "version": "1.139.0"
+                }
+              },
+              "Dynamo Lambda 2% Throttled": {
+                "id": "Dynamo Lambda 2% Throttled",
+                "path": "LambdaFunction/hit_counter/Dynamo Lambda 2% Throttled",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "LambdaFunction/hit_counter/Dynamo Lambda 2% Throttled/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                      "aws:cdk:cloudformation:props": {
+                        "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                        "evaluationPeriods": 6,
+                        "alarmActions": [
+                          {
+                            "Ref": "hitcounterErrorTopicB8385607"
+                          }
+                        ],
+                        "datapointsToAlarm": 1,
+                        "metrics": [
+                          {
+                            "expression": "t / (invocations + t) * 100",
+                            "id": "expr_1",
+                            "label": "% of throttled requests, last 30 mins"
+                          },
+                          {
+                            "metricStat": {
+                              "metric": {
+                                "metricName": "Invocations",
+                                "namespace": "AWS/Lambda",
+                                "dimensions": [
+                                  {
+                                    "name": "FunctionName",
+                                    "value": {
+                                      "Ref": "hitcounterLambdaFunctionB862C182"
+                                    }
+                                  }
+                                ]
+                              },
+                              "period": 300,
+                              "stat": "Sum"
+                            },
+                            "id": "invocations",
+                            "returnData": false
+                          },
+                          {
+                            "metricStat": {
+                              "metric": {
+                                "metricName": "Throttles",
+                                "namespace": "AWS/Lambda",
+                                "dimensions": [
+                                  {
+                                    "name": "FunctionName",
+                                    "value": {
+                                      "Ref": "hitcounterLambdaFunctionB862C182"
+                                    }
+                                  }
+                                ]
+                              },
+                              "period": 300,
+                              "stat": "Sum"
+                            },
+                            "id": "t",
+                            "returnData": false
+                          }
+                        ],
+                        "threshold": 2,
+                        "treatMissingData": "notBreaching"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
+                      "version": "1.139.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
+                  "version": "1.139.0"
+                }
+              },
+              "CloudWatchDashBoard": {
+                "id": "CloudWatchDashBoard",
+                "path": "LambdaFunction/hit_counter/CloudWatchDashBoard",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "LambdaFunction/hit_counter/CloudWatchDashBoard/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::CloudWatch::Dashboard",
+                      "aws:cdk:cloudformation:props": {
+                        "dashboardBody": {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Error %\",\"region\":\"",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"e / invocations * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+                              {
+                                "Ref": "hitcounterLambdaFunctionB862C182"
+                              },
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
+                              {
+                                "Ref": "hitcounterLambdaFunctionB862C182"
+                              },
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"e\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Duration\",\"region\":\"",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+                              {
+                                "Ref": "hitcounterLambdaFunctionB862C182"
+                              },
+                              "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+                              {
+                                "Ref": "hitcounterLambdaFunctionB862C182"
+                              },
+                              "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+                              {
+                                "Ref": "hitcounterLambdaFunctionB862C182"
+                              },
+                              "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Throttle %\",\"region\":\"",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of throttled requests, last 30 mins\",\"expression\":\"t / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+                              {
+                                "Ref": "hitcounterLambdaFunctionB862C182"
+                              },
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
+                              {
+                                "Ref": "hitcounterLambdaFunctionB862C182"
+                              },
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"t\"}]],\"yAxis\":{}}}]}"
+                            ]
+                          ]
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-cloudwatch.CfnDashboard",
+                      "version": "1.139.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-cloudwatch.Dashboard",
                   "version": "1.139.0"
                 }
               }
             },
             "constructInfo": {
-              "fqn": "@aws-cdk/aws-lambda.Function",
+              "fqn": "@aws-cdk/core.Construct",
               "version": "1.139.0"
             }
           },
@@ -658,282 +980,6 @@
               "version": "1.139.0"
             }
           },
-          "Dynamo Lambda 2% Error": {
-            "id": "Dynamo Lambda 2% Error",
-            "path": "LambdaFunction/Dynamo Lambda 2% Error",
-            "children": {
-              "Resource": {
-                "id": "Resource",
-                "path": "LambdaFunction/Dynamo Lambda 2% Error/Resource",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
-                  "aws:cdk:cloudformation:props": {
-                    "comparisonOperator": "GreaterThanOrEqualToThreshold",
-                    "evaluationPeriods": 6,
-                    "alarmActions": [
-                      {
-                        "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
-                      }
-                    ],
-                    "datapointsToAlarm": 1,
-                    "metrics": [
-                      {
-                        "expression": "e / invocations * 100",
-                        "id": "expr_1",
-                        "label": "% of invocations that errored, last 5 mins"
-                      },
-                      {
-                        "metricStat": {
-                          "metric": {
-                            "metricName": "Invocations",
-                            "namespace": "AWS/Lambda",
-                            "dimensions": [
-                              {
-                                "name": "FunctionName",
-                                "value": {
-                                  "Ref": "LambdaFunctionBF21E41F"
-                                }
-                              }
-                            ]
-                          },
-                          "period": 300,
-                          "stat": "Sum"
-                        },
-                        "id": "invocations",
-                        "returnData": false
-                      },
-                      {
-                        "metricStat": {
-                          "metric": {
-                            "metricName": "Errors",
-                            "namespace": "AWS/Lambda",
-                            "dimensions": [
-                              {
-                                "name": "FunctionName",
-                                "value": {
-                                  "Ref": "LambdaFunctionBF21E41F"
-                                }
-                              }
-                            ]
-                          },
-                          "period": 300,
-                          "stat": "Sum"
-                        },
-                        "id": "e",
-                        "returnData": false
-                      }
-                    ],
-                    "threshold": 2,
-                    "treatMissingData": "notBreaching"
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
-                  "version": "1.139.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
-              "version": "1.139.0"
-            }
-          },
-          "Dynamo Lambda p99 Long Duration (>1s)": {
-            "id": "Dynamo Lambda p99 Long Duration (>1s)",
-            "path": "LambdaFunction/Dynamo Lambda p99 Long Duration (>1s)",
-            "children": {
-              "Resource": {
-                "id": "Resource",
-                "path": "LambdaFunction/Dynamo Lambda p99 Long Duration (>1s)/Resource",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
-                  "aws:cdk:cloudformation:props": {
-                    "comparisonOperator": "GreaterThanOrEqualToThreshold",
-                    "evaluationPeriods": 6,
-                    "alarmActions": [
-                      {
-                        "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
-                      }
-                    ],
-                    "datapointsToAlarm": 1,
-                    "dimensions": [
-                      {
-                        "name": "FunctionName",
-                        "value": {
-                          "Ref": "LambdaFunctionBF21E41F"
-                        }
-                      }
-                    ],
-                    "extendedStatistic": "p99",
-                    "metricName": "Duration",
-                    "namespace": "AWS/Lambda",
-                    "period": 300,
-                    "threshold": 1000,
-                    "treatMissingData": "notBreaching"
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
-                  "version": "1.139.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
-              "version": "1.139.0"
-            }
-          },
-          "Dynamo Lambda 2% Throttled": {
-            "id": "Dynamo Lambda 2% Throttled",
-            "path": "LambdaFunction/Dynamo Lambda 2% Throttled",
-            "children": {
-              "Resource": {
-                "id": "Resource",
-                "path": "LambdaFunction/Dynamo Lambda 2% Throttled/Resource",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
-                  "aws:cdk:cloudformation:props": {
-                    "comparisonOperator": "GreaterThanOrEqualToThreshold",
-                    "evaluationPeriods": 6,
-                    "alarmActions": [
-                      {
-                        "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
-                      }
-                    ],
-                    "datapointsToAlarm": 1,
-                    "metrics": [
-                      {
-                        "expression": "t / (invocations + t) * 100",
-                        "id": "expr_1",
-                        "label": "% of throttled requests, last 30 mins"
-                      },
-                      {
-                        "metricStat": {
-                          "metric": {
-                            "metricName": "Invocations",
-                            "namespace": "AWS/Lambda",
-                            "dimensions": [
-                              {
-                                "name": "FunctionName",
-                                "value": {
-                                  "Ref": "LambdaFunctionBF21E41F"
-                                }
-                              }
-                            ]
-                          },
-                          "period": 300,
-                          "stat": "Sum"
-                        },
-                        "id": "invocations",
-                        "returnData": false
-                      },
-                      {
-                        "metricStat": {
-                          "metric": {
-                            "metricName": "Throttles",
-                            "namespace": "AWS/Lambda",
-                            "dimensions": [
-                              {
-                                "name": "FunctionName",
-                                "value": {
-                                  "Ref": "LambdaFunctionBF21E41F"
-                                }
-                              }
-                            ]
-                          },
-                          "period": 300,
-                          "stat": "Sum"
-                        },
-                        "id": "t",
-                        "returnData": false
-                      }
-                    ],
-                    "threshold": 2,
-                    "treatMissingData": "notBreaching"
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
-                  "version": "1.139.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
-              "version": "1.139.0"
-            }
-          },
-          "CloudWatchDashBoard": {
-            "id": "CloudWatchDashBoard",
-            "path": "LambdaFunction/CloudWatchDashBoard",
-            "children": {
-              "Resource": {
-                "id": "Resource",
-                "path": "LambdaFunction/CloudWatchDashBoard/Resource",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::CloudWatch::Dashboard",
-                  "aws:cdk:cloudformation:props": {
-                    "dashboardBody": {
-                      "Fn::Join": [
-                        "",
-                        [
-                          "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Error %\",\"region\":\"",
-                          {
-                            "Ref": "AWS::Region"
-                          },
-                          "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"e / invocations * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
-                          {
-                            "Ref": "LambdaFunctionBF21E41F"
-                          },
-                          "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
-                          {
-                            "Ref": "LambdaFunctionBF21E41F"
-                          },
-                          "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"e\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Duration\",\"region\":\"",
-                          {
-                            "Ref": "AWS::Region"
-                          },
-                          "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
-                          {
-                            "Ref": "LambdaFunctionBF21E41F"
-                          },
-                          "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
-                          {
-                            "Ref": "LambdaFunctionBF21E41F"
-                          },
-                          "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
-                          {
-                            "Ref": "LambdaFunctionBF21E41F"
-                          },
-                          "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Throttle %\",\"region\":\"",
-                          {
-                            "Ref": "AWS::Region"
-                          },
-                          "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of throttled requests, last 30 mins\",\"expression\":\"t / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
-                          {
-                            "Ref": "LambdaFunctionBF21E41F"
-                          },
-                          "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
-                          {
-                            "Ref": "LambdaFunctionBF21E41F"
-                          },
-                          "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"t\"}]],\"yAxis\":{}}}]}"
-                        ]
-                      ]
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-cloudwatch.CfnDashboard",
-                  "version": "1.139.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/aws-cloudwatch.Dashboard",
-              "version": "1.139.0"
-            }
-          },
           "CDKMetadata": {
             "id": "CDKMetadata",
             "path": "LambdaFunction/CDKMetadata",
@@ -964,9 +1010,9 @@
             "id": "Exports",
             "path": "LambdaFunction/Exports",
             "children": {
-              "Output{\"Fn::GetAtt\":[\"LambdaFunctionBF21E41F\",\"Arn\"]}": {
-                "id": "Output{\"Fn::GetAtt\":[\"LambdaFunctionBF21E41F\",\"Arn\"]}",
-                "path": "LambdaFunction/Exports/Output{\"Fn::GetAtt\":[\"LambdaFunctionBF21E41F\",\"Arn\"]}",
+              "Output{\"Fn::GetAtt\":[\"hitcounterLambdaFunctionB862C182\",\"Arn\"]}": {
+                "id": "Output{\"Fn::GetAtt\":[\"hitcounterLambdaFunctionB862C182\",\"Arn\"]}",
+                "path": "LambdaFunction/Exports/Output{\"Fn::GetAtt\":[\"hitcounterLambdaFunctionB862C182\",\"Arn\"]}",
                 "constructInfo": {
                   "fqn": "@aws-cdk/core.CfnOutput",
                   "version": "1.139.0"
@@ -1153,7 +1199,7 @@
                           "format": "$context.identity.sourceIp $context.identity.caller $context.identity.user [$context.requestTime] \"$context.httpMethod $context.resourcePath $context.protocol\" $context.status $context.responseLength $context.requestId"
                         },
                         "deploymentId": {
-                          "Ref": "LambdaAPIGatewayDeploymentE937914C2779a458e8a08b599f0056860d37f9fd"
+                          "Ref": "LambdaAPIGatewayDeploymentE937914C8e2a69677d7c755d4c16351139f0b7c4"
                         },
                         "methodSettings": [
                           {
@@ -1229,7 +1275,7 @@
                               "aws:cdk:cloudformation:props": {
                                 "action": "lambda:InvokeFunction",
                                 "functionName": {
-                                  "Fn::ImportValue": "LambdaFunction:ExportsOutputFnGetAttLambdaFunctionBF21E41FArn8BD9CD14"
+                                  "Fn::ImportValue": "LambdaFunction:ExportsOutputFnGetAtthitcounterLambdaFunctionB862C182Arn3B74EE41"
                                 },
                                 "principal": "apigateway.amazonaws.com",
                                 "sourceArn": {
@@ -1275,7 +1321,7 @@
                               "aws:cdk:cloudformation:props": {
                                 "action": "lambda:InvokeFunction",
                                 "functionName": {
-                                  "Fn::ImportValue": "LambdaFunction:ExportsOutputFnGetAttLambdaFunctionBF21E41FArn8BD9CD14"
+                                  "Fn::ImportValue": "LambdaFunction:ExportsOutputFnGetAtthitcounterLambdaFunctionB862C182Arn3B74EE41"
                                 },
                                 "principal": "apigateway.amazonaws.com",
                                 "sourceArn": {
@@ -1339,7 +1385,7 @@
                                         },
                                         ":lambda:path/2015-03-31/functions/",
                                         {
-                                          "Fn::ImportValue": "LambdaFunction:ExportsOutputFnGetAttLambdaFunctionBF21E41FArn8BD9CD14"
+                                          "Fn::ImportValue": "LambdaFunction:ExportsOutputFnGetAtthitcounterLambdaFunctionB862C182Arn3B74EE41"
                                         },
                                         "/invocations"
                                       ]
@@ -1941,7 +1987,7 @@
                       "aws:cdk:cloudformation:props": {
                         "action": "lambda:InvokeFunction",
                         "functionName": {
-                          "Fn::ImportValue": "LambdaFunction:ExportsOutputFnGetAttLambdaFunctionBF21E41FArn8BD9CD14"
+                          "Fn::ImportValue": "LambdaFunction:ExportsOutputFnGetAtthitcounterLambdaFunctionB862C182Arn3B74EE41"
                         },
                         "principal": "apigateway.amazonaws.com",
                         "sourceArn": {
@@ -1990,7 +2036,7 @@
                             },
                             "integrationType": "AWS_PROXY",
                             "integrationUri": {
-                              "Fn::ImportValue": "LambdaFunction:ExportsOutputFnGetAttLambdaFunctionBF21E41FArn8BD9CD14"
+                              "Fn::ImportValue": "LambdaFunction:ExportsOutputFnGetAtthitcounterLambdaFunctionB862C182Arn3B74EE41"
                             },
                             "payloadFormatVersion": "2.0"
                           }

@@ -84,7 +84,7 @@ class TestRestAPIGateway(TestTemplates):
         "aws:cdk:path": "LambdaRestAPIGateway/LambdaAPIGateway/Account"
       }
     },
-    "LambdaAPIGatewayDeploymentE937914C2779a458e8a08b599f0056860d37f9fd": {
+    "LambdaAPIGatewayDeploymentE937914C8e2a69677d7c755d4c16351139f0b7c4": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -116,7 +116,7 @@ class TestRestAPIGateway(TestTemplates):
           "Format": "$context.identity.sourceIp $context.identity.caller $context.identity.user [$context.requestTime] \"$context.httpMethod $context.resourcePath $context.protocol\" $context.status $context.responseLength $context.requestId"
         },
         "DeploymentId": {
-          "Ref": "LambdaAPIGatewayDeploymentE937914C2779a458e8a08b599f0056860d37f9fd"
+          "Ref": "LambdaAPIGatewayDeploymentE937914C8e2a69677d7c755d4c16351139f0b7c4"
         },
         "MethodSettings": [
           {
@@ -159,7 +159,7 @@ class TestRestAPIGateway(TestTemplates):
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Fn::ImportValue": "LambdaFunction:ExportsOutputFnGetAttLambdaFunctionBF21E41FArn8BD9CD14"
+          "Fn::ImportValue": "LambdaFunction:ExportsOutputFnGetAtthitcounterLambdaFunctionB862C182Arn3B74EE41"
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -200,7 +200,7 @@ class TestRestAPIGateway(TestTemplates):
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Fn::ImportValue": "LambdaFunction:ExportsOutputFnGetAttLambdaFunctionBF21E41FArn8BD9CD14"
+          "Fn::ImportValue": "LambdaFunction:ExportsOutputFnGetAtthitcounterLambdaFunctionB862C182Arn3B74EE41"
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -268,7 +268,7 @@ class TestRestAPIGateway(TestTemplates):
                 },
                 ":lambda:path/2015-03-31/functions/",
                 {
-                  "Fn::ImportValue": "LambdaFunction:ExportsOutputFnGetAttLambdaFunctionBF21E41FArn8BD9CD14"
+                  "Fn::ImportValue": "LambdaFunction:ExportsOutputFnGetAtthitcounterLambdaFunctionB862C182Arn3B74EE41"
                 },
                 "/invocations"
               ]

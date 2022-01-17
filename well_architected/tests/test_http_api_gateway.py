@@ -23,7 +23,7 @@ class TestHTTPAPI(TestTemplates):
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Fn::ImportValue": "LambdaFunction:ExportsOutputFnGetAttLambdaFunctionBF21E41FArn8BD9CD14"
+          "Fn::ImportValue": "LambdaFunction:ExportsOutputFnGetAtthitcounterLambdaFunctionB862C182Arn3B74EE41"
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -63,7 +63,7 @@ class TestHTTPAPI(TestTemplates):
         },
         "IntegrationType": "AWS_PROXY",
         "IntegrationUri": {
-          "Fn::ImportValue": "LambdaFunction:ExportsOutputFnGetAttLambdaFunctionBF21E41FArn8BD9CD14"
+          "Fn::ImportValue": "LambdaFunction:ExportsOutputFnGetAtthitcounterLambdaFunctionB862C182Arn3B74EE41"
         },
         "PayloadFormatVersion": "2.0"
       },

@@ -8,7 +8,17 @@ class TestLambdaFunction(TestTemplates):
             'LambdaFunction',
             {
   "Resources": {
-    "LambdaFunctionServiceRoleC555A460": {
+    "hitcounterErrorTopicB8385607": {
+      "Type": "AWS::SNS::Topic",
+      "Properties": {
+        "DisplayName": "ErrorTopic",
+        "TopicName": "ErrorTopic"
+      },
+      "Metadata": {
+        "aws:cdk:path": "LambdaFunction/hit_counter/ErrorTopic/Resource"
+      }
+    },
+    "hitcounterLambdaFunctionServiceRoleE2452AC5": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -39,14 +49,22 @@ class TestLambdaFunction(TestTemplates):
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "LambdaFunction/LambdaFunction/ServiceRole/Resource"
+        "aws:cdk:path": "LambdaFunction/hit_counter/LambdaFunction/ServiceRole/Resource"
       }
     },
-    "LambdaFunctionServiceRoleDefaultPolicy32EEEE35": {
+    "hitcounterLambdaFunctionServiceRoleDefaultPolicyBCDA98FD": {
       "Type": "AWS::IAM::Policy",
       "Properties": {
         "PolicyDocument": {
           "Statement": [
+            {
+              "Action": [
+                "xray:PutTraceSegments",
+                "xray:PutTelemetryRecords"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            },
             {
               "Action": [
                 "dynamodb:BatchGetItem",
@@ -74,18 +92,18 @@ class TestLambdaFunction(TestTemplates):
           ],
           "Version": "2012-10-17"
         },
-        "PolicyName": "LambdaFunctionServiceRoleDefaultPolicy32EEEE35",
+        "PolicyName": "hitcounterLambdaFunctionServiceRoleDefaultPolicyBCDA98FD",
         "Roles": [
           {
-            "Ref": "LambdaFunctionServiceRoleC555A460"
+            "Ref": "hitcounterLambdaFunctionServiceRoleE2452AC5"
           }
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "LambdaFunction/LambdaFunction/ServiceRole/DefaultPolicy/Resource"
+        "aws:cdk:path": "LambdaFunction/hit_counter/LambdaFunction/ServiceRole/DefaultPolicy/Resource"
       }
     },
-    "LambdaFunctionBF21E41F": {
+    "hitcounterLambdaFunctionB862C182": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
@@ -128,7 +146,7 @@ class TestLambdaFunction(TestTemplates):
         },
         "Role": {
           "Fn::GetAtt": [
-            "LambdaFunctionServiceRoleC555A460",
+            "hitcounterLambdaFunctionServiceRoleE2452AC5",
             "Arn"
           ]
         },
@@ -139,29 +157,32 @@ class TestLambdaFunction(TestTemplates):
             }
           }
         },
-        "Handler": "hello.handler",
+        "Handler": "hit_counter.handler",
         "Runtime": "python3.8",
-        "Timeout": 60
+        "Timeout": 60,
+        "TracingConfig": {
+          "Mode": "Active"
+        }
       },
       "DependsOn": [
-        "LambdaFunctionServiceRoleDefaultPolicy32EEEE35",
-        "LambdaFunctionServiceRoleC555A460"
+        "hitcounterLambdaFunctionServiceRoleDefaultPolicyBCDA98FD",
+        "hitcounterLambdaFunctionServiceRoleE2452AC5"
       ],
       "Metadata": {
-        "aws:cdk:path": "LambdaFunction/LambdaFunction/Resource",
+        "aws:cdk:path": "LambdaFunction/hit_counter/LambdaFunction/Resource",
         "aws:asset:path": "asset.3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5",
         "aws:asset:is-bundled": false,
         "aws:asset:property": "Code"
       }
     },
-    "DynamoLambda2ErrorDE3BEB2F": {
+    "hitcounterDynamoLambda2Error497B073E": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
+            "Ref": "hitcounterErrorTopicB8385607"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -179,7 +200,7 @@ class TestLambdaFunction(TestTemplates):
                   {
                     "Name": "FunctionName",
                     "Value": {
-                      "Ref": "LambdaFunctionBF21E41F"
+                      "Ref": "hitcounterLambdaFunctionB862C182"
                     }
                   }
                 ],
@@ -199,7 +220,7 @@ class TestLambdaFunction(TestTemplates):
                   {
                     "Name": "FunctionName",
                     "Value": {
-                      "Ref": "LambdaFunctionBF21E41F"
+                      "Ref": "hitcounterLambdaFunctionB862C182"
                     }
                   }
                 ],
@@ -216,17 +237,17 @@ class TestLambdaFunction(TestTemplates):
         "TreatMissingData": "notBreaching"
       },
       "Metadata": {
-        "aws:cdk:path": "LambdaFunction/Dynamo Lambda 2% Error/Resource"
+        "aws:cdk:path": "LambdaFunction/hit_counter/Dynamo Lambda 2% Error/Resource"
       }
     },
-    "DynamoLambdap99LongDuration1s739ED568": {
+    "hitcounterDynamoLambdap99LongDuration1s6366F631": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
+            "Ref": "hitcounterErrorTopicB8385607"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -234,7 +255,7 @@ class TestLambdaFunction(TestTemplates):
           {
             "Name": "FunctionName",
             "Value": {
-              "Ref": "LambdaFunctionBF21E41F"
+              "Ref": "hitcounterLambdaFunctionB862C182"
             }
           }
         ],
@@ -246,17 +267,17 @@ class TestLambdaFunction(TestTemplates):
         "TreatMissingData": "notBreaching"
       },
       "Metadata": {
-        "aws:cdk:path": "LambdaFunction/Dynamo Lambda p99 Long Duration (>1s)/Resource"
+        "aws:cdk:path": "LambdaFunction/hit_counter/Dynamo Lambda p99 Long Duration (>1s)/Resource"
       }
     },
-    "DynamoLambda2Throttled090CFA4C": {
+    "hitcounterDynamoLambda2Throttled25E14661": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
+            "Ref": "hitcounterErrorTopicB8385607"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -274,7 +295,7 @@ class TestLambdaFunction(TestTemplates):
                   {
                     "Name": "FunctionName",
                     "Value": {
-                      "Ref": "LambdaFunctionBF21E41F"
+                      "Ref": "hitcounterLambdaFunctionB862C182"
                     }
                   }
                 ],
@@ -294,7 +315,7 @@ class TestLambdaFunction(TestTemplates):
                   {
                     "Name": "FunctionName",
                     "Value": {
-                      "Ref": "LambdaFunctionBF21E41F"
+                      "Ref": "hitcounterLambdaFunctionB862C182"
                     }
                   }
                 ],
@@ -311,10 +332,10 @@ class TestLambdaFunction(TestTemplates):
         "TreatMissingData": "notBreaching"
       },
       "Metadata": {
-        "aws:cdk:path": "LambdaFunction/Dynamo Lambda 2% Throttled/Resource"
+        "aws:cdk:path": "LambdaFunction/hit_counter/Dynamo Lambda 2% Throttled/Resource"
       }
     },
-    "CloudWatchDashBoard043C60B6": {
+    "hitcounterCloudWatchDashBoard56CA7346": {
       "Type": "AWS::CloudWatch::Dashboard",
       "Properties": {
         "DashboardBody": {
@@ -327,11 +348,11 @@ class TestLambdaFunction(TestTemplates):
               },
               "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"e / invocations * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
               {
-                "Ref": "LambdaFunctionBF21E41F"
+                "Ref": "hitcounterLambdaFunctionB862C182"
               },
               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
               {
-                "Ref": "LambdaFunctionBF21E41F"
+                "Ref": "hitcounterLambdaFunctionB862C182"
               },
               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"e\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Duration\",\"region\":\"",
               {
@@ -339,15 +360,15 @@ class TestLambdaFunction(TestTemplates):
               },
               "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
               {
-                "Ref": "LambdaFunctionBF21E41F"
+                "Ref": "hitcounterLambdaFunctionB862C182"
               },
               "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
               {
-                "Ref": "LambdaFunctionBF21E41F"
+                "Ref": "hitcounterLambdaFunctionB862C182"
               },
               "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
               {
-                "Ref": "LambdaFunctionBF21E41F"
+                "Ref": "hitcounterLambdaFunctionB862C182"
               },
               "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Throttle %\",\"region\":\"",
               {
@@ -355,11 +376,11 @@ class TestLambdaFunction(TestTemplates):
               },
               "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of throttled requests, last 30 mins\",\"expression\":\"t / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
               {
-                "Ref": "LambdaFunctionBF21E41F"
+                "Ref": "hitcounterLambdaFunctionB862C182"
               },
               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
               {
-                "Ref": "LambdaFunctionBF21E41F"
+                "Ref": "hitcounterLambdaFunctionB862C182"
               },
               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"t\"}]],\"yAxis\":{}}}]}"
             ]
@@ -367,13 +388,13 @@ class TestLambdaFunction(TestTemplates):
         }
       },
       "Metadata": {
-        "aws:cdk:path": "LambdaFunction/CloudWatchDashBoard/Resource"
+        "aws:cdk:path": "LambdaFunction/hit_counter/CloudWatchDashBoard/Resource"
       }
     },
     "CDKMetadata": {
       "Type": "AWS::CDK::Metadata",
       "Properties": {
-        "Analytics": "v2:deflate64:H4sIAAAAAAAA/z2OS27DMAxEz5K9zMTwqrsmKbo23BMwlBqr1gcQKQSBoLvXUtCu+IaYIWeEcXqD0+EdHzyQ3o6FYjJQvgRpU2dmIzvebbirawwsKZOo63eYMaE3YlITi+GYE5nGu0tbsTFU1U4Wh/6mEcpnDtTWzfPHVVn0UJboerTPOTpLz/6iU1U8Ddh6MPQ6u4ZLps3IBdkocjHrBwqtUM4Ok2/RF3wgr7eISbfVv6i1qvkpawzHCcYTjIcftnZIOYj1BpbX/AVM9AVAGAEAAA=="
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/z2OS27DMAxEz5K9zMTwqrt8iq4NtxdgKDVWbUmFSCEIBN09loJ2xTf8DKeHfniDw+6Id+5IL/tMIRrIn4K0qEvwLDGRqBOzka15s/6mLt9+xIjOiIlVTIZDimQqbyfaig2+qGqZ2TPkr/BrqU4bFLWiu2qE/JE81d06+uOiLDrIU1ibX6tjWC092t9GRfHQYY3E0JJtGs6JFiNnZKNoDUnfUWiGfFoxunr6gnfk+Row6tr6F6UUNT5kDn4/QH+AfvfD1nYxebHOwPSqT75X/4ItAQAA"
       },
       "Metadata": {
         "aws:cdk:path": "LambdaFunction/CDKMetadata/Default"
@@ -590,15 +611,15 @@ class TestLambdaFunction(TestTemplates):
     }
   },
   "Outputs": {
-    "ExportsOutputFnGetAttLambdaFunctionBF21E41FArn8BD9CD14": {
+    "ExportsOutputFnGetAtthitcounterLambdaFunctionB862C182Arn3B74EE41": {
       "Value": {
         "Fn::GetAtt": [
-          "LambdaFunctionBF21E41F",
+          "hitcounterLambdaFunctionB862C182",
           "Arn"
         ]
       },
       "Export": {
-        "Name": "LambdaFunction:ExportsOutputFnGetAttLambdaFunctionBF21E41FArn8BD9CD14"
+        "Name": "LambdaFunction:ExportsOutputFnGetAtthitcounterLambdaFunctionB862C182Arn3B74EE41"
       }
     }
   }
