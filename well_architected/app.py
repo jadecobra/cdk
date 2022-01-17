@@ -7,7 +7,7 @@ from cloudwatch_dashboard import CloudWatchDashboard
 from dynamodb_table import DynamoDBTable
 from http_api import LambdaHttpApiGateway
 from sns_topic import SnsTopic
-from xray_tracer.xray_tracer import TheXrayTracerStack
+from xray_tracer.xray_tracer import SnsRestApi
 from xray_tracer.sqs_flow import SqsFlow
 from xray_tracer.sns_flow import SnsFlow
 from xray_tracer.dynamodb_flow import DynamoDBFlow
@@ -30,7 +30,7 @@ class WellArchitected(App):
         self.create_http_api()
 
         self.xray_sns_topic = SnsTopic(self, 'XRayTracerSnsFanOutTopic', display_name='The XRay Tracer Fan Out Topic').topic
-        TheXrayTracerStack(self, 'XRayTracer', sns_topic=self.xray_sns_topic)
+        SnsRestApi(self, 'XRayTracer', sns_topic=self.xray_sns_topic)
         HttpFlow(self, 'HttpFlow', sns_topic=self.xray_sns_topic)
         DynamoDBFlow(self, 'DynamoDBFlow', sns_topic=self.xray_sns_topic)
         SnsFlow(self, 'SnsFlow', sns_topic=self.xray_sns_topic)

@@ -5,7 +5,7 @@ from aws_cdk.aws_iam import Role, ServicePrincipal
 from aws_cdk import aws_apigateway
 
 
-class TheXrayTracerStack(Stack):
+class SnsRestApi(Stack):
     def __init__(self, scope: Construct, id: str, sns_topic: ITopic = None, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
         self.sns_topic = sns_topic

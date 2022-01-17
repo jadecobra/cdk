@@ -100,7 +100,7 @@ class TestSnsFlow(TestTemplates):
       "Properties": {
         "Code": {
           "S3Bucket": {
-            "Ref": "AssetParameterscca552d02e0d03ed8728dbdb2206e866cd808515a4801b6ea94c8fef60748522S3Bucket405A15B0"
+            "Ref": "AssetParametersdbb5ee403884500d31ec6cd56022356492900e9a5847a21193393796cc85f66aS3BucketC8A66B57"
           },
           "S3Key": {
             "Fn::Join": [
@@ -113,7 +113,7 @@ class TestSnsFlow(TestTemplates):
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameterscca552d02e0d03ed8728dbdb2206e866cd808515a4801b6ea94c8fef60748522S3VersionKeyA5EB029F"
+                          "Ref": "AssetParametersdbb5ee403884500d31ec6cd56022356492900e9a5847a21193393796cc85f66aS3VersionKeyDBAE7B4A"
                         }
                       ]
                     }
@@ -126,7 +126,7 @@ class TestSnsFlow(TestTemplates):
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameterscca552d02e0d03ed8728dbdb2206e866cd808515a4801b6ea94c8fef60748522S3VersionKeyA5EB029F"
+                          "Ref": "AssetParametersdbb5ee403884500d31ec6cd56022356492900e9a5847a21193393796cc85f66aS3VersionKeyDBAE7B4A"
                         }
                       ]
                     }
@@ -162,7 +162,7 @@ class TestSnsFlow(TestTemplates):
       ],
       "Metadata": {
         "aws:cdk:path": "SnsFlow/sns_publish/LambdaFunction/Resource",
-        "aws:asset:path": "asset.cca552d02e0d03ed8728dbdb2206e866cd808515a4801b6ea94c8fef60748522",
+        "aws:asset:path": "asset.dbb5ee403884500d31ec6cd56022356492900e9a5847a21193393796cc85f66a",
         "aws:asset:is-bundled": false,
         "aws:asset:property": "Code"
       }
@@ -509,7 +509,7 @@ class TestSnsFlow(TestTemplates):
       "Properties": {
         "Code": {
           "S3Bucket": {
-            "Ref": "AssetParameterscca552d02e0d03ed8728dbdb2206e866cd808515a4801b6ea94c8fef60748522S3Bucket405A15B0"
+            "Ref": "AssetParametersdbb5ee403884500d31ec6cd56022356492900e9a5847a21193393796cc85f66aS3BucketC8A66B57"
           },
           "S3Key": {
             "Fn::Join": [
@@ -522,7 +522,7 @@ class TestSnsFlow(TestTemplates):
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameterscca552d02e0d03ed8728dbdb2206e866cd808515a4801b6ea94c8fef60748522S3VersionKeyA5EB029F"
+                          "Ref": "AssetParametersdbb5ee403884500d31ec6cd56022356492900e9a5847a21193393796cc85f66aS3VersionKeyDBAE7B4A"
                         }
                       ]
                     }
@@ -535,7 +535,7 @@ class TestSnsFlow(TestTemplates):
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameterscca552d02e0d03ed8728dbdb2206e866cd808515a4801b6ea94c8fef60748522S3VersionKeyA5EB029F"
+                          "Ref": "AssetParametersdbb5ee403884500d31ec6cd56022356492900e9a5847a21193393796cc85f66aS3VersionKeyDBAE7B4A"
                         }
                       ]
                     }
@@ -564,7 +564,7 @@ class TestSnsFlow(TestTemplates):
       ],
       "Metadata": {
         "aws:cdk:path": "SnsFlow/sns_subscribe/LambdaFunction/Resource",
-        "aws:asset:path": "asset.cca552d02e0d03ed8728dbdb2206e866cd808515a4801b6ea94c8fef60748522",
+        "aws:asset:path": "asset.dbb5ee403884500d31ec6cd56022356492900e9a5847a21193393796cc85f66a",
         "aws:asset:is-bundled": false,
         "aws:asset:property": "Code"
       }
@@ -834,17 +834,17 @@ class TestSnsFlow(TestTemplates):
     }
   },
   "Parameters": {
-    "AssetParameterscca552d02e0d03ed8728dbdb2206e866cd808515a4801b6ea94c8fef60748522S3Bucket405A15B0": {
+    "AssetParametersdbb5ee403884500d31ec6cd56022356492900e9a5847a21193393796cc85f66aS3BucketC8A66B57": {
       "Type": "String",
-      "Description": "S3 bucket for asset \"cca552d02e0d03ed8728dbdb2206e866cd808515a4801b6ea94c8fef60748522\""
+      "Description": "S3 bucket for asset \"dbb5ee403884500d31ec6cd56022356492900e9a5847a21193393796cc85f66a\""
     },
-    "AssetParameterscca552d02e0d03ed8728dbdb2206e866cd808515a4801b6ea94c8fef60748522S3VersionKeyA5EB029F": {
+    "AssetParametersdbb5ee403884500d31ec6cd56022356492900e9a5847a21193393796cc85f66aS3VersionKeyDBAE7B4A": {
       "Type": "String",
-      "Description": "S3 key for asset version \"cca552d02e0d03ed8728dbdb2206e866cd808515a4801b6ea94c8fef60748522\""
+      "Description": "S3 key for asset version \"dbb5ee403884500d31ec6cd56022356492900e9a5847a21193393796cc85f66a\""
     },
-    "AssetParameterscca552d02e0d03ed8728dbdb2206e866cd808515a4801b6ea94c8fef60748522ArtifactHash8A9140CB": {
+    "AssetParametersdbb5ee403884500d31ec6cd56022356492900e9a5847a21193393796cc85f66aArtifactHash62B09B39": {
       "Type": "String",
-      "Description": "Artifact hash for asset \"cca552d02e0d03ed8728dbdb2206e866cd808515a4801b6ea94c8fef60748522\""
+      "Description": "Artifact hash for asset \"dbb5ee403884500d31ec6cd56022356492900e9a5847a21193393796cc85f66a\""
     }
   },
   "Conditions": {
