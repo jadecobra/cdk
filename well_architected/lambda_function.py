@@ -1,12 +1,12 @@
 from aws_cdk.core import Construct, Duration, Stack
-from aws_cdk.aws_lambda import Function, Code, Runtime, Tracing
+from aws_cdk.aws_lambda import Function, Code, Runtime, Tracing, LayerVersion
 from aws_cdk.aws_sns import ITopic
 from well_architected import WellArchitectedFrameworkConstruct
 
 class LambdaFunctionConstruct(WellArchitectedFrameworkConstruct):
 
     def __init__(self, scope: Construct, id: str,
-        function_name=None, environment_variables=None, error_topic:ITopic=None,
+        function_name=None, environment_variables=None, error_topic:ITopic=None, layers:list[str]=None,
         **kwargs) -> None:
         super().__init__(scope, id, error_topic=error_topic, **kwargs)
         self.lambda_function = Function(
@@ -16,6 +16,7 @@ class LambdaFunctionConstruct(WellArchitectedFrameworkConstruct):
             code=Code.from_asset(f"lambda_functions/{function_name}"),
             timeout=Duration.seconds(60),
             tracing=Tracing.ACTIVE,
+            layers=self.create_layers(layers),
             environment=environment_variables,
         )
         self.create_2_percent_error_alarm()
@@ -25,12 +26,28 @@ class LambdaFunctionConstruct(WellArchitectedFrameworkConstruct):
             self.create_cloudwatch_widgets()
         )
 
+    def create_layer(self, layer):
+        return LayerVersion(
+            self, f'{layer}LambdaLayer',
+            code=Code.from_asset(f"lambda_layers/{layer}"),
+            description=f"AWS XRay SDK Lambda Layer"
+        )
+
+    def create_layers(self, layers):
+        result = [self.create_layer('aws-xray-sdk')]
+        try:
+            for layer in layers:
+                result.append(self.create_layer(layer))
+        except TypeError:
+            'No additional layers specified'
+        return result
+
     def get_lambda_function_metric(self, metric_name):
         return self.lambda_function.metric(metric_name=metric_name, statistic="sum")
 
     def create_lambda_error_percentage_metric(self):
         return self.create_cloudwatch_math_expression(
-            expression="errors / invocations * 100",
+            expression="(errors / invocations) * 100",
             label="% of invocations that errored, last 5 mins",
             using_metrics={
                 "invocations": self.get_lambda_function_metric('Invocations'),
@@ -42,7 +59,7 @@ class LambdaFunctionConstruct(WellArchitectedFrameworkConstruct):
         # note: throttled requests are not counted in total num of invocations
         return self.create_cloudwatch_math_expression(
             label="throttled requests % in last 30 mins",
-            expression="throttles / (invocations + t) * 100",
+            expression="(throttles * 100) / (invocations + throttles)",
             using_metrics={
                 "invocations": self.get_lambda_function_metric("Invocations"),
                 "throttles": self.get_lambda_function_metric("Throttles"),

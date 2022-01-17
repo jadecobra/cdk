@@ -9,6 +9,56 @@
         "aws:cdk:path": "LambdaFunction/hit_counter/ErrorTopic/Resource"
       }
     },
+    "hitcounterawsxraysdkLambdaLayerC2C52DF3": {
+      "Type": "AWS::Lambda::LayerVersion",
+      "Properties": {
+        "Content": {
+          "S3Bucket": {
+            "Ref": "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3BucketC7A2EC7F"
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3VersionKeyF23940AD"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3VersionKeyF23940AD"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        },
+        "Description": "AWS XRay SDK Lambda Layer"
+      },
+      "Metadata": {
+        "aws:cdk:path": "LambdaFunction/hit_counter/aws-xray-sdkLambdaLayer/Resource",
+        "aws:asset:path": "asset.d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Content"
+      }
+    },
     "hitcounterLambdaFunctionServiceRoleE2452AC5": {
       "Type": "AWS::IAM::Role",
       "Properties": {
@@ -149,6 +199,11 @@
           }
         },
         "Handler": "hit_counter.handler",
+        "Layers": [
+          {
+            "Ref": "hitcounterawsxraysdkLambdaLayerC2C52DF3"
+          }
+        ],
         "Runtime": "python3.8",
         "Timeout": 60,
         "TracingConfig": {
@@ -179,7 +234,7 @@
         "DatapointsToAlarm": 1,
         "Metrics": [
           {
-            "Expression": "errors / invocations * 100",
+            "Expression": "(errors / invocations) * 100",
             "Id": "expr_1",
             "Label": "% of invocations that errored, last 5 mins"
           },
@@ -274,7 +329,7 @@
         "DatapointsToAlarm": 1,
         "Metrics": [
           {
-            "Expression": "throttles / (invocations + t) * 100",
+            "Expression": "(throttles * 100) / (invocations + throttles)",
             "Id": "expr_1",
             "Label": "throttled requests % in last 30 mins"
           },
@@ -337,7 +392,7 @@
               {
                 "Ref": "AWS::Region"
               },
-              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"errors / invocations * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
               {
                 "Ref": "hitcounterLambdaFunctionB862C182"
               },
@@ -365,7 +420,7 @@
               {
                 "Ref": "AWS::Region"
               },
-              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"throttles / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
               {
                 "Ref": "hitcounterLambdaFunctionB862C182"
               },
@@ -385,7 +440,7 @@
     "CDKMetadata": {
       "Type": "AWS::CDK::Metadata",
       "Properties": {
-        "Analytics": "v2:deflate64:H4sIAAAAAAAA/z2OS27DMAxEz5K9zMTwqrt8iq4NtxdgKDVWbUmFSCEIBN09loJ2xTf8DKeHfniDw+6Id+5IL/tMIRrIn4K0qEvwLDGRqBOzka15s/6mLt9+xIjOiIlVTIZDimQqbyfaig2+qGqZ2TPkr/BrqU4bFLWiu2qE/JE81d06+uOiLDrIU1ibX6tjWC092t9GRfHQYY3E0JJtGs6JFiNnZKNoDUnfUWiGfFoxunr6gnfk+Row6tr6F6UUNT5kDn4/QH+AfvfD1nYxebHOwPSqT75X/4ItAQAA"
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/1WOQU/DMAyFf8vuqbeqJ25sQ5w4VAVx99ywhqYJih1NVZT/TpMBEid/7z3bei203QMcdo9444bGeZ/IBw3pVZBmdfaOJUQSdWTWsplX467q/OF6DLho0aGIQbOPgXTh7WQ0YrzLqrxM7BjSm/8yVNIKWVlcLiNCesFVh3cdeNsv8T/9HB3JT/DLWXHXYOnCUCttGk6RZi0nZK0MLpAGb2uVOntvDa21cqWsyPo43lBognS0GJYS3uEJebp4DGOx/kTOWfWrTN7tO2gP0O4+2ZgmRCdm0TDc5zdx/Ex1SgEAAA=="
       },
       "Metadata": {
         "aws:cdk:path": "LambdaFunction/CDKMetadata/Default"
@@ -394,6 +449,18 @@
     }
   },
   "Parameters": {
+    "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3BucketC7A2EC7F": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81\""
+    },
+    "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3VersionKeyF23940AD": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81\""
+    },
+    "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81ArtifactHashA3AAFFE1": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81\""
+    },
     "AssetParameters42961f7a43eb8def8a88d0711b3c95740379627ec280319af30490b76a248e16S3Bucket2E949244": {
       "Type": "String",
       "Description": "S3 bucket for asset \"42961f7a43eb8def8a88d0711b3c95740379627ec280319af30490b76a248e16\""

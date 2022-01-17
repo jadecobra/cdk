@@ -28,6 +28,56 @@ class TestSqsFlow(TestTemplates):
         "aws:cdk:path": "SqsFlow/sqs/ErrorTopic/Resource"
       }
     },
+    "sqsawsxraysdkLambdaLayer3F894DB7": {
+      "Type": "AWS::Lambda::LayerVersion",
+      "Properties": {
+        "Content": {
+          "S3Bucket": {
+            "Ref": "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3BucketC7A2EC7F"
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3VersionKeyF23940AD"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3VersionKeyF23940AD"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        },
+        "Description": "AWS XRay SDK Lambda Layer"
+      },
+      "Metadata": {
+        "aws:cdk:path": "SqsFlow/sqs/aws-xray-sdkLambdaLayer/Resource",
+        "aws:asset:path": "asset.d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Content"
+      }
+    },
     "sqsLambdaFunctionServiceRole62789435": {
       "Type": "AWS::IAM::Role",
       "Properties": {
@@ -158,6 +208,11 @@ class TestSqsFlow(TestTemplates):
           }
         },
         "Handler": "sqs.handler",
+        "Layers": [
+          {
+            "Ref": "sqsawsxraysdkLambdaLayer3F894DB7"
+          }
+        ],
         "Runtime": "python3.8",
         "Timeout": 60,
         "TracingConfig": {
@@ -225,7 +280,7 @@ class TestSqsFlow(TestTemplates):
         "DatapointsToAlarm": 1,
         "Metrics": [
           {
-            "Expression": "errors / invocations * 100",
+            "Expression": "(errors / invocations) * 100",
             "Id": "expr_1",
             "Label": "% of invocations that errored, last 5 mins"
           },
@@ -320,7 +375,7 @@ class TestSqsFlow(TestTemplates):
         "DatapointsToAlarm": 1,
         "Metrics": [
           {
-            "Expression": "throttles / (invocations + t) * 100",
+            "Expression": "(throttles * 100) / (invocations + throttles)",
             "Id": "expr_1",
             "Label": "throttled requests % in last 30 mins"
           },
@@ -383,7 +438,7 @@ class TestSqsFlow(TestTemplates):
               {
                 "Ref": "AWS::Region"
               },
-              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"errors / invocations * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
               {
                 "Ref": "sqsLambdaFunctionDBCFBC0F"
               },
@@ -411,7 +466,7 @@ class TestSqsFlow(TestTemplates):
               {
                 "Ref": "AWS::Region"
               },
-              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"throttles / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
               {
                 "Ref": "sqsLambdaFunctionDBCFBC0F"
               },
@@ -435,6 +490,56 @@ class TestSqsFlow(TestTemplates):
       },
       "Metadata": {
         "aws:cdk:path": "SqsFlow/sqs_subscribe/ErrorTopic/Resource"
+      }
+    },
+    "sqssubscribeawsxraysdkLambdaLayerA04517E9": {
+      "Type": "AWS::Lambda::LayerVersion",
+      "Properties": {
+        "Content": {
+          "S3Bucket": {
+            "Ref": "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3BucketC7A2EC7F"
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3VersionKeyF23940AD"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3VersionKeyF23940AD"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        },
+        "Description": "AWS XRay SDK Lambda Layer"
+      },
+      "Metadata": {
+        "aws:cdk:path": "SqsFlow/sqs_subscribe/aws-xray-sdkLambdaLayer/Resource",
+        "aws:asset:path": "asset.d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Content"
       }
     },
     "sqssubscribeLambdaFunctionServiceRole7577D75B": {
@@ -562,6 +667,11 @@ class TestSqsFlow(TestTemplates):
           ]
         },
         "Handler": "sqs_subscribe.handler",
+        "Layers": [
+          {
+            "Ref": "sqssubscribeawsxraysdkLambdaLayerA04517E9"
+          }
+        ],
         "Runtime": "python3.8",
         "Timeout": 60,
         "TracingConfig": {
@@ -609,7 +719,7 @@ class TestSqsFlow(TestTemplates):
         "DatapointsToAlarm": 1,
         "Metrics": [
           {
-            "Expression": "errors / invocations * 100",
+            "Expression": "(errors / invocations) * 100",
             "Id": "expr_1",
             "Label": "% of invocations that errored, last 5 mins"
           },
@@ -704,7 +814,7 @@ class TestSqsFlow(TestTemplates):
         "DatapointsToAlarm": 1,
         "Metrics": [
           {
-            "Expression": "throttles / (invocations + t) * 100",
+            "Expression": "(throttles * 100) / (invocations + throttles)",
             "Id": "expr_1",
             "Label": "throttled requests % in last 30 mins"
           },
@@ -767,7 +877,7 @@ class TestSqsFlow(TestTemplates):
               {
                 "Ref": "AWS::Region"
               },
-              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"errors / invocations * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
               {
                 "Ref": "sqssubscribeLambdaFunction2B3EFD1F"
               },
@@ -795,7 +905,7 @@ class TestSqsFlow(TestTemplates):
               {
                 "Ref": "AWS::Region"
               },
-              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"throttles / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
               {
                 "Ref": "sqssubscribeLambdaFunction2B3EFD1F"
               },
@@ -815,7 +925,7 @@ class TestSqsFlow(TestTemplates):
     "CDKMetadata": {
       "Type": "AWS::CDK::Metadata",
       "Properties": {
-        "Analytics": "v2:deflate64:H4sIAAAAAAAA/2WQwU7DMBBEv6V3Z9soJ260BW5IIeEHNs7Sukns4LWpKsv/TuwAqsRpZ549q7FLKKsH2G0e8cqF7IdtkMYShNahHMTRaHbWSyf2zOQWeFL6JI4fukaLEzmyyTTExltJSS+RXjlldBRpZeBPhvDmyefTLKJgvcB3MyuZ4Cpa37G0ak7ZRO99FCNOXY8QXryWvzfudU12UszJPX+Rdm0u9Irz/FP4P41C4QShMWOulmdtRiVveWFWS9WqwPR2hvwFi4eDlwO5AzIJORrfX9HJM4T9iHZK0VU8IZ87g7ZP6M/EGEV9c2ejtxWUOyg3F1aqsF47NRE06/wGpg+TAZYBAAA="
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/2WPQU/DMAyFf8vuabaqJ25sg51AKi3i7qZmDW2TEidMVZT/TpMONMTJ7322E7+c58Ud323u4UKZaPutF9og97UF0bOjVmSNE5btidAu8CzVmR3fVQkGRrRooqmQtDMCo15WWmmlVoHFJz19EvcvDl3qJhEYqQW+6kmKCFdRu4aEkVPcjfTWBzbA2LTA/RPMaN7Q0HXqjz85JX7Wb3WJZpSURh6/UNk6XfsM03RN858uNxYZxNDEU/bF84MTPdoDEDIJI/eVHlKqVEs9SDGn75IKTAzatRewouN+P4AZY3MVD0Bdo8G0Ef2aEAIrZ9tptS14vuP55oOkzIxTVo7Iq7V+A4FfJ9CzAQAA"
       },
       "Metadata": {
         "aws:cdk:path": "SqsFlow/CDKMetadata/Default"
@@ -824,6 +934,18 @@ class TestSqsFlow(TestTemplates):
     }
   },
   "Parameters": {
+    "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3BucketC7A2EC7F": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81\""
+    },
+    "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3VersionKeyF23940AD": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81\""
+    },
+    "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81ArtifactHashA3AAFFE1": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81\""
+    },
     "AssetParameterscc629a1cbfb955ae6703ba4a9bf13234c83109279756439f1c139ce563d2667eS3BucketE9206EF0": {
       "Type": "String",
       "Description": "S3 bucket for asset \"cc629a1cbfb955ae6703ba4a9bf13234c83109279756439f1c139ce563d2667e\""

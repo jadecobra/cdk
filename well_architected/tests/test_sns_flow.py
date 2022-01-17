@@ -26,6 +26,56 @@ class TestSnsFlow(TestTemplates):
         "aws:cdk:path": "SnsFlow/sns_publish/ErrorTopic/Resource"
       }
     },
+    "snspublishawsxraysdkLambdaLayer2E8A5647": {
+      "Type": "AWS::Lambda::LayerVersion",
+      "Properties": {
+        "Content": {
+          "S3Bucket": {
+            "Ref": "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3BucketC7A2EC7F"
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3VersionKeyF23940AD"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3VersionKeyF23940AD"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        },
+        "Description": "AWS XRay SDK Lambda Layer"
+      },
+      "Metadata": {
+        "aws:cdk:path": "SnsFlow/sns_publish/aws-xray-sdkLambdaLayer/Resource",
+        "aws:asset:path": "asset.d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Content"
+      }
+    },
     "snspublishLambdaFunctionServiceRoleBE8DA9C2": {
       "Type": "AWS::IAM::Role",
       "Properties": {
@@ -149,6 +199,11 @@ class TestSnsFlow(TestTemplates):
           }
         },
         "Handler": "sns_publish.handler",
+        "Layers": [
+          {
+            "Ref": "snspublishawsxraysdkLambdaLayer2E8A5647"
+          }
+        ],
         "Runtime": "python3.8",
         "Timeout": 60,
         "TracingConfig": {
@@ -229,7 +284,7 @@ class TestSnsFlow(TestTemplates):
         "DatapointsToAlarm": 1,
         "Metrics": [
           {
-            "Expression": "errors / invocations * 100",
+            "Expression": "(errors / invocations) * 100",
             "Id": "expr_1",
             "Label": "% of invocations that errored, last 5 mins"
           },
@@ -324,7 +379,7 @@ class TestSnsFlow(TestTemplates):
         "DatapointsToAlarm": 1,
         "Metrics": [
           {
-            "Expression": "throttles / (invocations + t) * 100",
+            "Expression": "(throttles * 100) / (invocations + throttles)",
             "Id": "expr_1",
             "Label": "throttled requests % in last 30 mins"
           },
@@ -387,7 +442,7 @@ class TestSnsFlow(TestTemplates):
               {
                 "Ref": "AWS::Region"
               },
-              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"errors / invocations * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
               {
                 "Ref": "snspublishLambdaFunctionE7ECD8FF"
               },
@@ -415,7 +470,7 @@ class TestSnsFlow(TestTemplates):
               {
                 "Ref": "AWS::Region"
               },
-              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"throttles / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
               {
                 "Ref": "snspublishLambdaFunctionE7ECD8FF"
               },
@@ -439,6 +494,56 @@ class TestSnsFlow(TestTemplates):
       },
       "Metadata": {
         "aws:cdk:path": "SnsFlow/sns_subscribe/ErrorTopic/Resource"
+      }
+    },
+    "snssubscribeawsxraysdkLambdaLayerFB9F9B45": {
+      "Type": "AWS::Lambda::LayerVersion",
+      "Properties": {
+        "Content": {
+          "S3Bucket": {
+            "Ref": "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3BucketC7A2EC7F"
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3VersionKeyF23940AD"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3VersionKeyF23940AD"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        },
+        "Description": "AWS XRay SDK Lambda Layer"
+      },
+      "Metadata": {
+        "aws:cdk:path": "SnsFlow/sns_subscribe/aws-xray-sdkLambdaLayer/Resource",
+        "aws:asset:path": "asset.d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Content"
       }
     },
     "snssubscribeLambdaFunctionServiceRole6068C33F": {
@@ -550,6 +655,11 @@ class TestSnsFlow(TestTemplates):
           ]
         },
         "Handler": "sns_subscribe.handler",
+        "Layers": [
+          {
+            "Ref": "snssubscribeawsxraysdkLambdaLayerFB9F9B45"
+          }
+        ],
         "Runtime": "python3.8",
         "Timeout": 60,
         "TracingConfig": {
@@ -617,7 +727,7 @@ class TestSnsFlow(TestTemplates):
         "DatapointsToAlarm": 1,
         "Metrics": [
           {
-            "Expression": "errors / invocations * 100",
+            "Expression": "(errors / invocations) * 100",
             "Id": "expr_1",
             "Label": "% of invocations that errored, last 5 mins"
           },
@@ -712,7 +822,7 @@ class TestSnsFlow(TestTemplates):
         "DatapointsToAlarm": 1,
         "Metrics": [
           {
-            "Expression": "throttles / (invocations + t) * 100",
+            "Expression": "(throttles * 100) / (invocations + throttles)",
             "Id": "expr_1",
             "Label": "throttled requests % in last 30 mins"
           },
@@ -775,7 +885,7 @@ class TestSnsFlow(TestTemplates):
               {
                 "Ref": "AWS::Region"
               },
-              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"errors / invocations * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
               {
                 "Ref": "snssubscribeLambdaFunctionE84E36B6"
               },
@@ -803,7 +913,7 @@ class TestSnsFlow(TestTemplates):
               {
                 "Ref": "AWS::Region"
               },
-              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"throttles / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
               {
                 "Ref": "snssubscribeLambdaFunctionE84E36B6"
               },
@@ -823,7 +933,7 @@ class TestSnsFlow(TestTemplates):
     "CDKMetadata": {
       "Type": "AWS::CDK::Metadata",
       "Properties": {
-        "Analytics": "v2:deflate64:H4sIAAAAAAAA/1WPwW7DIAyGn6V34jbKabe1nXaO0r2A47DGa4AKg6oK8e4LRJu2k7//57eNW2i7FzjsXvEhDU23fSLnNaRLQLqps7MSfKSgjiI6rOaV7VWdP22PHo0O2hcxaHHRky68tkwc2NmsysgkViB9uDtTed3gEkchz/cSK+4/XSMnFJ3VgmacENJ7tPST/cu99oZF6jJGA2lwS/1Erb1bmJ41Vykr6RosdwjUc1YNp0g3Hco6RYuL0wMDzZCOC3pTWjd4Q5lHh34q1q/IOav+GWZn9x20B2h3X8Lc+GgDGw3DVr8Bmdj8XGIBAAA="
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/1VPMW7DMAx8S3aZieGpW5MUnToYTtGdltlYtSUFooTAEPT3WnJbNBPvjscjWUPdPMFh94x3ruQw7aO0jiBePMpJnK1h74L04shMfhWvylzF+dO06FCTJ5dJR2yDk5TxOjIor6xJIkdGNgzx3d6UzN0NXELP0qlbtmX1gRfLCZmSmFH3A0J8w4XcBzn+8T/w12Dkb9B/3JLTirlcwk2F+QGG8sfK4RTkRD7vEQo1xM7O5f5SWzsruZSUgpKQsw3DHb0cIR5ndDo3N/CCPPYW3ZClP5JSEu3iR2v2DdQHqHdfrFTlgvFKE3Rb/QZ4CXn5fwEAAA=="
       },
       "Metadata": {
         "aws:cdk:path": "SnsFlow/CDKMetadata/Default"
@@ -832,6 +942,18 @@ class TestSnsFlow(TestTemplates):
     }
   },
   "Parameters": {
+    "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3BucketC7A2EC7F": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81\""
+    },
+    "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3VersionKeyF23940AD": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81\""
+    },
+    "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81ArtifactHashA3AAFFE1": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81\""
+    },
     "AssetParametersef7aa034d437b1c1976e69f919345dcddf4b4c9c6a6947d000d52902c30271cfS3Bucket81A6DB81": {
       "Type": "String",
       "Description": "S3 bucket for asset \"ef7aa034d437b1c1976e69f919345dcddf4b4c9c6a6947d000d52902c30271cf\""

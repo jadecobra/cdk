@@ -43,6 +43,56 @@ class TestDynamoDBFlow(TestTemplates):
         "aws:cdk:path": "DynamoDBFlow/hit_counter/ErrorTopic/Resource"
       }
     },
+    "hitcounterawsxraysdkLambdaLayerC2C52DF3": {
+      "Type": "AWS::Lambda::LayerVersion",
+      "Properties": {
+        "Content": {
+          "S3Bucket": {
+            "Ref": "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3BucketC7A2EC7F"
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3VersionKeyF23940AD"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3VersionKeyF23940AD"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        },
+        "Description": "AWS XRay SDK Lambda Layer"
+      },
+      "Metadata": {
+        "aws:cdk:path": "DynamoDBFlow/hit_counter/aws-xray-sdkLambdaLayer/Resource",
+        "aws:asset:path": "asset.d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Content"
+      }
+    },
     "hitcounterLambdaFunctionServiceRoleE2452AC5": {
       "Type": "AWS::IAM::Role",
       "Properties": {
@@ -186,6 +236,11 @@ class TestDynamoDBFlow(TestTemplates):
           }
         },
         "Handler": "hit_counter.handler",
+        "Layers": [
+          {
+            "Ref": "hitcounterawsxraysdkLambdaLayerC2C52DF3"
+          }
+        ],
         "Runtime": "python3.8",
         "Timeout": 60,
         "TracingConfig": {
@@ -253,7 +308,7 @@ class TestDynamoDBFlow(TestTemplates):
         "DatapointsToAlarm": 1,
         "Metrics": [
           {
-            "Expression": "errors / invocations * 100",
+            "Expression": "(errors / invocations) * 100",
             "Id": "expr_1",
             "Label": "% of invocations that errored, last 5 mins"
           },
@@ -348,7 +403,7 @@ class TestDynamoDBFlow(TestTemplates):
         "DatapointsToAlarm": 1,
         "Metrics": [
           {
-            "Expression": "throttles / (invocations + t) * 100",
+            "Expression": "(throttles * 100) / (invocations + throttles)",
             "Id": "expr_1",
             "Label": "throttled requests % in last 30 mins"
           },
@@ -411,7 +466,7 @@ class TestDynamoDBFlow(TestTemplates):
               {
                 "Ref": "AWS::Region"
               },
-              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"errors / invocations * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
               {
                 "Ref": "hitcounterLambdaFunctionB862C182"
               },
@@ -439,7 +494,7 @@ class TestDynamoDBFlow(TestTemplates):
               {
                 "Ref": "AWS::Region"
               },
-              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"throttles / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
               {
                 "Ref": "hitcounterLambdaFunctionB862C182"
               },
@@ -459,7 +514,7 @@ class TestDynamoDBFlow(TestTemplates):
     "CDKMetadata": {
       "Type": "AWS::CDK::Metadata",
       "Properties": {
-        "Analytics": "v2:deflate64:H4sIAAAAAAAA/02PwW7DIAyGn6V34jbKabe1nXaO0r2AY2jDGqDCoCpCvPsC0bae/P8/n23cQtu9wWH3jk9uSN73iZxXkC4B6S4GxS56UuLsLAcfKYgjswrr603bmzhfbY8ejQrKF/PPX+3aInXQzmZRZie5WDROjpC+cJwrUkUWbHkN3UNTDau4xJHJ60cZUNJXn8WMZpQI6TNa+iVeda+80cyV1WggDW7bWGvvZk1L5apaf9A1WO5iqOetHk6R7iqckJWg2UX5xEATpOOM3pTWTXwgT6NDL0v0Z3LOol/C5Oy+g/YA7e6btW58tEEbBcNWfwCZsC+6ewEAAA=="
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/1VPS2/CMAz+LdxDoOK024Bppx0qmHZ3HUOzNgmKE6Eqyn9fk+7BTv5e/mQ3stk9ye3qGe68RjVsEjpPMp0D4CBOxC56JHF0loOPGMSemcLsXrW9iuPFtuDBUCBfyF/+YucVpYN2NovSndRkwTjVyfQO3VgjFWTBlmfR3TRWsYJz7Bi9vpWCoj7yLEYwnQKZ3mAi/0Gev1P/+Gu0+LP+iFvyRjPXIt6toTzEsv41c3mIOFA4AJPQYGQ6ueXYOls3apxqS0VZ4OiiukPAXqb9CN4UcwEvwH3nwKsi/ZKcs2in0Du72clmK5vVJ2u99tEGbUielvkFvLp3WJgBAAA="
       },
       "Metadata": {
         "aws:cdk:path": "DynamoDBFlow/CDKMetadata/Default"
@@ -468,6 +523,18 @@ class TestDynamoDBFlow(TestTemplates):
     }
   },
   "Parameters": {
+    "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3BucketC7A2EC7F": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81\""
+    },
+    "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3VersionKeyF23940AD": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81\""
+    },
+    "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81ArtifactHashA3AAFFE1": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81\""
+    },
     "AssetParameters42961f7a43eb8def8a88d0711b3c95740379627ec280319af30490b76a248e16S3Bucket2E949244": {
       "Type": "String",
       "Description": "S3 bucket for asset \"42961f7a43eb8def8a88d0711b3c95740379627ec280319af30490b76a248e16\""

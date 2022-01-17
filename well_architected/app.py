@@ -2,7 +2,7 @@ from aws_cdk.core import App
 from rest_api import LambdaRestAPIGateway
 from web_application_firewall import WebApplicationFirewall
 from lambda_function import LambdaFunctionStack
-
+from lambda_layer import LambdaLayer
 from dynamodb_table import DynamoDBTableStack
 from http_api import LambdaHttpApiGateway
 from sns_topic import SnsTopic
