@@ -683,7 +683,7 @@
                         "datapointsToAlarm": 1,
                         "metrics": [
                           {
-                            "expression": "e / invocations * 100",
+                            "expression": "errors / invocations * 100",
                             "id": "expr_1",
                             "label": "% of invocations that errored, last 5 mins"
                           },
@@ -724,7 +724,7 @@
                               "period": 300,
                               "stat": "Sum"
                             },
-                            "id": "e",
+                            "id": "errors",
                             "returnData": false
                           }
                         ],
@@ -808,7 +808,7 @@
                         "datapointsToAlarm": 1,
                         "metrics": [
                           {
-                            "expression": "t / (invocations + t) * 100",
+                            "expression": "throttles / (invocations + t) * 100",
                             "id": "expr_1",
                             "label": "throttled requests % in last 30 mins"
                           },
@@ -849,7 +849,7 @@
                               "period": 300,
                               "stat": "Sum"
                             },
-                            "id": "t",
+                            "id": "throttles",
                             "returnData": false
                           }
                         ],
@@ -886,7 +886,7 @@
                               {
                                 "Ref": "AWS::Region"
                               },
-                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"e / invocations * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"errors / invocations * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
                               {
                                 "Ref": "hitcounterLambdaFunctionB862C182"
                               },
@@ -894,7 +894,7 @@
                               {
                                 "Ref": "hitcounterLambdaFunctionB862C182"
                               },
-                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"e\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
                               {
                                 "Ref": "AWS::Region"
                               },
@@ -914,7 +914,7 @@
                               {
                                 "Ref": "AWS::Region"
                               },
-                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"t / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"throttles / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
                               {
                                 "Ref": "hitcounterLambdaFunctionB862C182"
                               },
@@ -922,7 +922,7 @@
                               {
                                 "Ref": "hitcounterLambdaFunctionB862C182"
                               },
-                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"t\"}]],\"yAxis\":{}}}]}"
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
                             ]
                           ]
                         }
@@ -3522,7 +3522,7 @@
                         "datapointsToAlarm": 1,
                         "metrics": [
                           {
-                            "expression": "e / invocations * 100",
+                            "expression": "errors / invocations * 100",
                             "id": "expr_1",
                             "label": "% of invocations that errored, last 5 mins"
                           },
@@ -3563,7 +3563,7 @@
                               "period": 300,
                               "stat": "Sum"
                             },
-                            "id": "e",
+                            "id": "errors",
                             "returnData": false
                           }
                         ],
@@ -3647,7 +3647,7 @@
                         "datapointsToAlarm": 1,
                         "metrics": [
                           {
-                            "expression": "t / (invocations + t) * 100",
+                            "expression": "throttles / (invocations + t) * 100",
                             "id": "expr_1",
                             "label": "throttled requests % in last 30 mins"
                           },
@@ -3688,7 +3688,7 @@
                               "period": 300,
                               "stat": "Sum"
                             },
-                            "id": "t",
+                            "id": "throttles",
                             "returnData": false
                           }
                         ],
@@ -3725,7 +3725,7 @@
                               {
                                 "Ref": "AWS::Region"
                               },
-                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"e / invocations * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"errors / invocations * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
                               {
                                 "Ref": "httpapiLambdaFunctionA00B9685"
                               },
@@ -3733,7 +3733,7 @@
                               {
                                 "Ref": "httpapiLambdaFunctionA00B9685"
                               },
-                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"e\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
                               {
                                 "Ref": "AWS::Region"
                               },
@@ -3753,7 +3753,7 @@
                               {
                                 "Ref": "AWS::Region"
                               },
-                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"t / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"throttles / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
                               {
                                 "Ref": "httpapiLambdaFunctionA00B9685"
                               },
@@ -3761,7 +3761,7 @@
                               {
                                 "Ref": "httpapiLambdaFunctionA00B9685"
                               },
-                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"t\"}]],\"yAxis\":{}}}]}"
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
                             ]
                           ]
                         }
@@ -4250,7 +4250,7 @@
                         "datapointsToAlarm": 1,
                         "metrics": [
                           {
-                            "expression": "e / invocations * 100",
+                            "expression": "errors / invocations * 100",
                             "id": "expr_1",
                             "label": "% of invocations that errored, last 5 mins"
                           },
@@ -4291,7 +4291,7 @@
                               "period": 300,
                               "stat": "Sum"
                             },
-                            "id": "e",
+                            "id": "errors",
                             "returnData": false
                           }
                         ],
@@ -4375,7 +4375,7 @@
                         "datapointsToAlarm": 1,
                         "metrics": [
                           {
-                            "expression": "t / (invocations + t) * 100",
+                            "expression": "throttles / (invocations + t) * 100",
                             "id": "expr_1",
                             "label": "throttled requests % in last 30 mins"
                           },
@@ -4416,7 +4416,7 @@
                               "period": 300,
                               "stat": "Sum"
                             },
-                            "id": "t",
+                            "id": "throttles",
                             "returnData": false
                           }
                         ],
@@ -4453,7 +4453,7 @@
                               {
                                 "Ref": "AWS::Region"
                               },
-                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"e / invocations * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"errors / invocations * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
                               {
                                 "Ref": "hitcounterLambdaFunctionB862C182"
                               },
@@ -4461,7 +4461,7 @@
                               {
                                 "Ref": "hitcounterLambdaFunctionB862C182"
                               },
-                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"e\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
                               {
                                 "Ref": "AWS::Region"
                               },
@@ -4481,7 +4481,7 @@
                               {
                                 "Ref": "AWS::Region"
                               },
-                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"t / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"throttles / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
                               {
                                 "Ref": "hitcounterLambdaFunctionB862C182"
                               },
@@ -4489,7 +4489,7 @@
                               {
                                 "Ref": "hitcounterLambdaFunctionB862C182"
                               },
-                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"t\"}]],\"yAxis\":{}}}]}"
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
                             ]
                           ]
                         }
@@ -4948,7 +4948,7 @@
                         "datapointsToAlarm": 1,
                         "metrics": [
                           {
-                            "expression": "e / invocations * 100",
+                            "expression": "errors / invocations * 100",
                             "id": "expr_1",
                             "label": "% of invocations that errored, last 5 mins"
                           },
@@ -4989,7 +4989,7 @@
                               "period": 300,
                               "stat": "Sum"
                             },
-                            "id": "e",
+                            "id": "errors",
                             "returnData": false
                           }
                         ],
@@ -5073,7 +5073,7 @@
                         "datapointsToAlarm": 1,
                         "metrics": [
                           {
-                            "expression": "t / (invocations + t) * 100",
+                            "expression": "throttles / (invocations + t) * 100",
                             "id": "expr_1",
                             "label": "throttled requests % in last 30 mins"
                           },
@@ -5114,7 +5114,7 @@
                               "period": 300,
                               "stat": "Sum"
                             },
-                            "id": "t",
+                            "id": "throttles",
                             "returnData": false
                           }
                         ],
@@ -5151,7 +5151,7 @@
                               {
                                 "Ref": "AWS::Region"
                               },
-                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"e / invocations * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"errors / invocations * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
                               {
                                 "Ref": "snspublishLambdaFunctionE7ECD8FF"
                               },
@@ -5159,7 +5159,7 @@
                               {
                                 "Ref": "snspublishLambdaFunctionE7ECD8FF"
                               },
-                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"e\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
                               {
                                 "Ref": "AWS::Region"
                               },
@@ -5179,7 +5179,7 @@
                               {
                                 "Ref": "AWS::Region"
                               },
-                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"t / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"throttles / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
                               {
                                 "Ref": "snspublishLambdaFunctionE7ECD8FF"
                               },
@@ -5187,7 +5187,7 @@
                               {
                                 "Ref": "snspublishLambdaFunctionE7ECD8FF"
                               },
-                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"t\"}]],\"yAxis\":{}}}]}"
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
                             ]
                           ]
                         }
@@ -5559,7 +5559,7 @@
                         "datapointsToAlarm": 1,
                         "metrics": [
                           {
-                            "expression": "e / invocations * 100",
+                            "expression": "errors / invocations * 100",
                             "id": "expr_1",
                             "label": "% of invocations that errored, last 5 mins"
                           },
@@ -5600,7 +5600,7 @@
                               "period": 300,
                               "stat": "Sum"
                             },
-                            "id": "e",
+                            "id": "errors",
                             "returnData": false
                           }
                         ],
@@ -5684,7 +5684,7 @@
                         "datapointsToAlarm": 1,
                         "metrics": [
                           {
-                            "expression": "t / (invocations + t) * 100",
+                            "expression": "throttles / (invocations + t) * 100",
                             "id": "expr_1",
                             "label": "throttled requests % in last 30 mins"
                           },
@@ -5725,7 +5725,7 @@
                               "period": 300,
                               "stat": "Sum"
                             },
-                            "id": "t",
+                            "id": "throttles",
                             "returnData": false
                           }
                         ],
@@ -5762,7 +5762,7 @@
                               {
                                 "Ref": "AWS::Region"
                               },
-                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"e / invocations * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"errors / invocations * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
                               {
                                 "Ref": "snssubscribeLambdaFunctionE84E36B6"
                               },
@@ -5770,7 +5770,7 @@
                               {
                                 "Ref": "snssubscribeLambdaFunctionE84E36B6"
                               },
-                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"e\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
                               {
                                 "Ref": "AWS::Region"
                               },
@@ -5790,7 +5790,7 @@
                               {
                                 "Ref": "AWS::Region"
                               },
-                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"t / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"throttles / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
                               {
                                 "Ref": "snssubscribeLambdaFunctionE84E36B6"
                               },
@@ -5798,7 +5798,7 @@
                               {
                                 "Ref": "snssubscribeLambdaFunctionE84E36B6"
                               },
-                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"t\"}]],\"yAxis\":{}}}]}"
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
                             ]
                           ]
                         }
@@ -6215,7 +6215,7 @@
                         "datapointsToAlarm": 1,
                         "metrics": [
                           {
-                            "expression": "e / invocations * 100",
+                            "expression": "errors / invocations * 100",
                             "id": "expr_1",
                             "label": "% of invocations that errored, last 5 mins"
                           },
@@ -6256,7 +6256,7 @@
                               "period": 300,
                               "stat": "Sum"
                             },
-                            "id": "e",
+                            "id": "errors",
                             "returnData": false
                           }
                         ],
@@ -6340,7 +6340,7 @@
                         "datapointsToAlarm": 1,
                         "metrics": [
                           {
-                            "expression": "t / (invocations + t) * 100",
+                            "expression": "throttles / (invocations + t) * 100",
                             "id": "expr_1",
                             "label": "throttled requests % in last 30 mins"
                           },
@@ -6381,7 +6381,7 @@
                               "period": 300,
                               "stat": "Sum"
                             },
-                            "id": "t",
+                            "id": "throttles",
                             "returnData": false
                           }
                         ],
@@ -6418,7 +6418,7 @@
                               {
                                 "Ref": "AWS::Region"
                               },
-                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"e / invocations * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"errors / invocations * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
                               {
                                 "Ref": "sqsLambdaFunctionDBCFBC0F"
                               },
@@ -6426,7 +6426,7 @@
                               {
                                 "Ref": "sqsLambdaFunctionDBCFBC0F"
                               },
-                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"e\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
                               {
                                 "Ref": "AWS::Region"
                               },
@@ -6446,7 +6446,7 @@
                               {
                                 "Ref": "AWS::Region"
                               },
-                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"t / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"throttles / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
                               {
                                 "Ref": "sqsLambdaFunctionDBCFBC0F"
                               },
@@ -6454,7 +6454,7 @@
                               {
                                 "Ref": "sqsLambdaFunctionDBCFBC0F"
                               },
-                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"t\"}]],\"yAxis\":{}}}]}"
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
                             ]
                           ]
                         }
@@ -6817,7 +6817,7 @@
                         "datapointsToAlarm": 1,
                         "metrics": [
                           {
-                            "expression": "e / invocations * 100",
+                            "expression": "errors / invocations * 100",
                             "id": "expr_1",
                             "label": "% of invocations that errored, last 5 mins"
                           },
@@ -6858,7 +6858,7 @@
                               "period": 300,
                               "stat": "Sum"
                             },
-                            "id": "e",
+                            "id": "errors",
                             "returnData": false
                           }
                         ],
@@ -6942,7 +6942,7 @@
                         "datapointsToAlarm": 1,
                         "metrics": [
                           {
-                            "expression": "t / (invocations + t) * 100",
+                            "expression": "throttles / (invocations + t) * 100",
                             "id": "expr_1",
                             "label": "throttled requests % in last 30 mins"
                           },
@@ -6983,7 +6983,7 @@
                               "period": 300,
                               "stat": "Sum"
                             },
-                            "id": "t",
+                            "id": "throttles",
                             "returnData": false
                           }
                         ],
@@ -7020,7 +7020,7 @@
                               {
                                 "Ref": "AWS::Region"
                               },
-                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"e / invocations * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"errors / invocations * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
                               {
                                 "Ref": "sqssubscribeLambdaFunction2B3EFD1F"
                               },
@@ -7028,7 +7028,7 @@
                               {
                                 "Ref": "sqssubscribeLambdaFunction2B3EFD1F"
                               },
-                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"e\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
                               {
                                 "Ref": "AWS::Region"
                               },
@@ -7048,7 +7048,7 @@
                               {
                                 "Ref": "AWS::Region"
                               },
-                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"t / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"throttles / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
                               {
                                 "Ref": "sqssubscribeLambdaFunction2B3EFD1F"
                               },
@@ -7056,7 +7056,7 @@
                               {
                                 "Ref": "sqssubscribeLambdaFunction2B3EFD1F"
                               },
-                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"t\"}]],\"yAxis\":{}}}]}"
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
                             ]
                           ]
                         }

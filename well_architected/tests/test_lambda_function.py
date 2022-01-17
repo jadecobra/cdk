@@ -187,7 +187,7 @@ class TestLambdaFunction(TestTemplates):
         "DatapointsToAlarm": 1,
         "Metrics": [
           {
-            "Expression": "e / invocations * 100",
+            "Expression": "errors / invocations * 100",
             "Id": "expr_1",
             "Label": "% of invocations that errored, last 5 mins"
           },
@@ -212,7 +212,7 @@ class TestLambdaFunction(TestTemplates):
             "ReturnData": false
           },
           {
-            "Id": "e",
+            "Id": "errors",
             "MetricStat": {
               "Metric": {
                 "Dimensions": [
@@ -282,7 +282,7 @@ class TestLambdaFunction(TestTemplates):
         "DatapointsToAlarm": 1,
         "Metrics": [
           {
-            "Expression": "t / (invocations + t) * 100",
+            "Expression": "throttles / (invocations + t) * 100",
             "Id": "expr_1",
             "Label": "throttled requests % in last 30 mins"
           },
@@ -307,7 +307,7 @@ class TestLambdaFunction(TestTemplates):
             "ReturnData": false
           },
           {
-            "Id": "t",
+            "Id": "throttles",
             "MetricStat": {
               "Metric": {
                 "Dimensions": [
@@ -345,7 +345,7 @@ class TestLambdaFunction(TestTemplates):
               {
                 "Ref": "AWS::Region"
               },
-              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"e / invocations * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"errors / invocations * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
               {
                 "Ref": "hitcounterLambdaFunctionB862C182"
               },
@@ -353,7 +353,7 @@ class TestLambdaFunction(TestTemplates):
               {
                 "Ref": "hitcounterLambdaFunctionB862C182"
               },
-              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"e\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
+              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
               {
                 "Ref": "AWS::Region"
               },
@@ -373,7 +373,7 @@ class TestLambdaFunction(TestTemplates):
               {
                 "Ref": "AWS::Region"
               },
-              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"t / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"throttles / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
               {
                 "Ref": "hitcounterLambdaFunctionB862C182"
               },
@@ -381,7 +381,7 @@ class TestLambdaFunction(TestTemplates):
               {
                 "Ref": "hitcounterLambdaFunctionB862C182"
               },
-              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"t\"}]],\"yAxis\":{}}}]}"
+              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
             ]
           ]
         }

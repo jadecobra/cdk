@@ -6863,3 +6863,10 @@
 2022-01-17 08:50:35.801613::Time taken to list all stacks::  1.7983 seconds
 2022-01-17 08:51:14.768409::Time taken to list all stacks::  2.0490 seconds
 2022-01-17 08:51:23.243806::Time taken to list all stacks::  2.2005 seconds
+2022-01-17 09:09:46.736346::Time taken to list all stacks::  2.5859 seconds
+2022-01-17 09:09:48.940216::Time taken to list all stacks::  2.1404 seconds
+2022-01-17 09:09:59.075002::Time taken to list all stacks::  2.0635 seconds
+2022-01-17 09:10:04.763006::Time taken to list all stacks::  2.1074 seconds
+2022-01-17 09:10:06.857931::Time taken to list all stacks::  2.0234 seconds
+2022-01-17 09:10:09.939585::Time taken to list all stacks::  2.0484 seconds
+2022-01-17 09:10:36.605409::Time taken to list all stacks::  2.5658 seconds

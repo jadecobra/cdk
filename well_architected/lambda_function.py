@@ -31,11 +31,11 @@ class LambdaFunctionConstruct(WellArchitectedFrameworkConstruct):
     def create_lambda_error_percentage_metric(self):
         # Gather the % of lambda invocations that error in past 5 mins
         return self.create_cloudwatch_math_expression(
-            expression="e / invocations * 100",
+            expression="errors / invocations * 100",
             label="% of invocations that errored, last 5 mins",
             using_metrics={
                 "invocations": self.get_lambda_function_metric('Invocations'),
-                "e": self.get_lambda_function_metric("Errors"),
+                "errors": self.get_lambda_function_metric("Errors"),
             },
         )
 
@@ -43,10 +43,10 @@ class LambdaFunctionConstruct(WellArchitectedFrameworkConstruct):
         # note: throttled requests are not counted in total num of invocations
         return self.create_cloudwatch_math_expression(
             label="throttled requests % in last 30 mins",
-            expression="t / (invocations + t) * 100",
+            expression="throttles / (invocations + t) * 100",
             using_metrics={
                 "invocations": self.get_lambda_function_metric("Invocations"),
-                "t": self.get_lambda_function_metric("Throttles"),
+                "throttles": self.get_lambda_function_metric("Throttles"),
             },
         )
 
