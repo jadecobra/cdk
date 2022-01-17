@@ -3,7 +3,6 @@ from rest_api import LambdaRestAPIGateway
 from web_application_firewall import WebApplicationFirewall
 from lambda_function import LambdaFunctionStack
 
-from cloudwatch_dashboard import CloudWatchDashboard
 from dynamodb_table import DynamoDBTableStack
 from http_api import LambdaHttpApiGateway
 from sns_topic import SnsTopic
