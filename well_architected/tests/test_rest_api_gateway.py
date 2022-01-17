@@ -288,6 +288,15 @@ class TestRestAPIGateway(TestTemplates):
         "aws:cdk:path": "LambdaRestAPIGateway/LambdaAPIGateway/Default/hello/GET/Resource"
       }
     },
+    "ApiGatewayCloudWatchErrorTopicB01304FE": {
+      "Type": "AWS::SNS::Topic",
+      "Properties": {
+        "DisplayName": "ErrorTopic"
+      },
+      "Metadata": {
+        "aws:cdk:path": "LambdaRestAPIGateway/ApiGatewayCloudWatch/ErrorTopic/Resource"
+      }
+    },
     "ApiGatewayCloudWatchAPIGateway4XXErrors11FFC618F": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {
@@ -496,7 +505,7 @@ class TestRestAPIGateway(TestTemplates):
     "CDKMetadata": {
       "Type": "AWS::CDK::Metadata",
       "Properties": {
-        "Analytics": "v2:deflate64:H4sIAAAAAAAA/1VPy27DIBD8ltwJiZVTb3ETqZdWjZIv2GBq0wBrwSLLQvx7Add9nHZmdzQz2/Dm8MT3myNMfiu6xy4KdJLHG4F4sNOHfQ80BmIntJ5cEFR2V+kxOCELzodOkUKbWLGIGnvP4yv2Lw7DWBQrzoJR9UBygpnH7EHtqL7tVtgKgcESO8tR42ykrXl/WO7V19wFrE2ewf+SfxXfJA3YldWCElNgcjzqRZdnYhrMvQOe+UU6o7zP/zChMXQTkBh4bDU4UwtWcAY/3BFc9f0hKSV2mXOI3R14s+fN5tMrtXX5IWUkvy7zCwAwd1ByAQAA"
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/1WPzW7DIBCEnyV3QmLl1FvdROqlVaO0L7ABapMAi/iRZSHevYDr/pz4ZhntzHa0OzzQ/eYRJr9l/L5LDJ2g6T0Au5Pjp3mLwcZAjmh8cJGFOrsIj9ExUbl8cBkkmkzqiqRw8DS94PDsMNrqWLkYrBwgiAlmmsqO0Fv5vW7FnjGMJpCTsApnLUzL+6NKr6HlLrA2eQL/K/5VfBVhRF5HC2UiQZd4VIuvvJko0FcOtOizcFp6X+4h3pRDPtBKVo0NMmEKI58gsJGmXoHTrXWDE/jxiuBa2I/IOZPzXJLN7kC7Pe02Ny/l1pUrpRb0srxf3ktXm4cBAAA="
       },
       "Metadata": {
         "aws:cdk:path": "LambdaRestAPIGateway/CDKMetadata/Default"
