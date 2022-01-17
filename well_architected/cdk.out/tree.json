@@ -2468,17 +2468,17 @@
           "version": "1.139.0"
         }
       },
-      "XRayTracer": {
-        "id": "XRayTracer",
-        "path": "XRayTracer",
+      "SnsRestApi": {
+        "id": "SnsRestApi",
+        "path": "SnsRestApi",
         "children": {
           "xrayTracerAPI": {
             "id": "xrayTracerAPI",
-            "path": "XRayTracer/xrayTracerAPI",
+            "path": "SnsRestApi/xrayTracerAPI",
             "children": {
               "Resource": {
                 "id": "Resource",
-                "path": "XRayTracer/xrayTracerAPI/Resource",
+                "path": "SnsRestApi/xrayTracerAPI/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::ApiGateway::RestApi",
                   "aws:cdk:cloudformation:props": {
@@ -2492,11 +2492,11 @@
               },
               "CloudWatchRole": {
                 "id": "CloudWatchRole",
-                "path": "XRayTracer/xrayTracerAPI/CloudWatchRole",
+                "path": "SnsRestApi/xrayTracerAPI/CloudWatchRole",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "XRayTracer/xrayTracerAPI/CloudWatchRole/Resource",
+                    "path": "SnsRestApi/xrayTracerAPI/CloudWatchRole/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                       "aws:cdk:cloudformation:props": {
@@ -2541,7 +2541,7 @@
               },
               "Account": {
                 "id": "Account",
-                "path": "XRayTracer/xrayTracerAPI/Account",
+                "path": "SnsRestApi/xrayTracerAPI/Account",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::ApiGateway::Account",
                   "aws:cdk:cloudformation:props": {
@@ -2560,11 +2560,11 @@
               },
               "Deployment": {
                 "id": "Deployment",
-                "path": "XRayTracer/xrayTracerAPI/Deployment",
+                "path": "SnsRestApi/xrayTracerAPI/Deployment",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "XRayTracer/xrayTracerAPI/Deployment/Resource",
+                    "path": "SnsRestApi/xrayTracerAPI/Deployment/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::ApiGateway::Deployment",
                       "aws:cdk:cloudformation:props": {
@@ -2587,11 +2587,11 @@
               },
               "DeploymentStage.prod": {
                 "id": "DeploymentStage.prod",
-                "path": "XRayTracer/xrayTracerAPI/DeploymentStage.prod",
+                "path": "SnsRestApi/xrayTracerAPI/DeploymentStage.prod",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "XRayTracer/xrayTracerAPI/DeploymentStage.prod/Resource",
+                    "path": "SnsRestApi/xrayTracerAPI/DeploymentStage.prod/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::ApiGateway::Stage",
                       "aws:cdk:cloudformation:props": {
@@ -2599,7 +2599,7 @@
                           "Ref": "xrayTracerAPIA84CAE80"
                         },
                         "deploymentId": {
-                          "Ref": "xrayTracerAPIDeploymentB3CB89A0721985a531d4b66ddba940aa934d59f0"
+                          "Ref": "xrayTracerAPIDeploymentB3CB89A0ba806054008ff62b1e0d375f6c1845f2"
                         },
                         "methodSettings": [
                           {
@@ -2627,7 +2627,7 @@
               },
               "Endpoint": {
                 "id": "Endpoint",
-                "path": "XRayTracer/xrayTracerAPI/Endpoint",
+                "path": "SnsRestApi/xrayTracerAPI/Endpoint",
                 "constructInfo": {
                   "fqn": "@aws-cdk/core.CfnOutput",
                   "version": "1.139.0"
@@ -2635,15 +2635,15 @@
               },
               "Default": {
                 "id": "Default",
-                "path": "XRayTracer/xrayTracerAPI/Default",
+                "path": "SnsRestApi/xrayTracerAPI/Default",
                 "children": {
                   "GET": {
                     "id": "GET",
-                    "path": "XRayTracer/xrayTracerAPI/Default/GET",
+                    "path": "SnsRestApi/xrayTracerAPI/Default/GET",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "XRayTracer/xrayTracerAPI/Default/GET/Resource",
+                        "path": "SnsRestApi/xrayTracerAPI/Default/GET/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
                           "aws:cdk:cloudformation:props": {
@@ -2761,11 +2761,11 @@
                   },
                   "{proxy+}": {
                     "id": "{proxy+}",
-                    "path": "XRayTracer/xrayTracerAPI/Default/{proxy+}",
+                    "path": "SnsRestApi/xrayTracerAPI/Default/{proxy+}",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "XRayTracer/xrayTracerAPI/Default/{proxy+}/Resource",
+                        "path": "SnsRestApi/xrayTracerAPI/Default/{proxy+}/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::ApiGateway::Resource",
                           "aws:cdk:cloudformation:props": {
@@ -2788,11 +2788,11 @@
                       },
                       "GET": {
                         "id": "GET",
-                        "path": "XRayTracer/xrayTracerAPI/Default/{proxy+}/GET",
+                        "path": "SnsRestApi/xrayTracerAPI/Default/{proxy+}/GET",
                         "children": {
                           "Resource": {
                             "id": "Resource",
-                            "path": "XRayTracer/xrayTracerAPI/Default/{proxy+}/GET/Resource",
+                            "path": "SnsRestApi/xrayTracerAPI/Default/{proxy+}/GET/Resource",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
                               "aws:cdk:cloudformation:props": {
@@ -2919,11 +2919,11 @@
               },
               "ResponseModel": {
                 "id": "ResponseModel",
-                "path": "XRayTracer/xrayTracerAPI/ResponseModel",
+                "path": "SnsRestApi/xrayTracerAPI/ResponseModel",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "XRayTracer/xrayTracerAPI/ResponseModel/Resource",
+                    "path": "SnsRestApi/xrayTracerAPI/ResponseModel/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::ApiGateway::Model",
                       "aws:cdk:cloudformation:props": {
@@ -2957,11 +2957,11 @@
               },
               "ErrorResponseModel": {
                 "id": "ErrorResponseModel",
-                "path": "XRayTracer/xrayTracerAPI/ErrorResponseModel",
+                "path": "SnsRestApi/xrayTracerAPI/ErrorResponseModel",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "XRayTracer/xrayTracerAPI/ErrorResponseModel/Resource",
+                    "path": "SnsRestApi/xrayTracerAPI/ErrorResponseModel/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::ApiGateway::Model",
                       "aws:cdk:cloudformation:props": {
@@ -3004,11 +3004,11 @@
           },
           "ApiGatewaySNSRole": {
             "id": "ApiGatewaySNSRole",
-            "path": "XRayTracer/ApiGatewaySNSRole",
+            "path": "SnsRestApi/ApiGatewaySNSRole",
             "children": {
               "Resource": {
                 "id": "Resource",
-                "path": "XRayTracer/ApiGatewaySNSRole/Resource",
+                "path": "SnsRestApi/ApiGatewaySNSRole/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                   "aws:cdk:cloudformation:props": {
@@ -3033,11 +3033,11 @@
               },
               "DefaultPolicy": {
                 "id": "DefaultPolicy",
-                "path": "XRayTracer/ApiGatewaySNSRole/DefaultPolicy",
+                "path": "SnsRestApi/ApiGatewaySNSRole/DefaultPolicy",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "XRayTracer/ApiGatewaySNSRole/DefaultPolicy/Resource",
+                    "path": "SnsRestApi/ApiGatewaySNSRole/DefaultPolicy/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
                       "aws:cdk:cloudformation:props": {
@@ -3080,11 +3080,11 @@
           },
           "CDKMetadata": {
             "id": "CDKMetadata",
-            "path": "XRayTracer/CDKMetadata",
+            "path": "SnsRestApi/CDKMetadata",
             "children": {
               "Default": {
                 "id": "Default",
-                "path": "XRayTracer/CDKMetadata/Default",
+                "path": "SnsRestApi/CDKMetadata/Default",
                 "constructInfo": {
                   "fqn": "@aws-cdk/core.CfnResource",
                   "version": "1.139.0"
@@ -3092,7 +3092,7 @@
               },
               "Condition": {
                 "id": "Condition",
-                "path": "XRayTracer/CDKMetadata/Condition",
+                "path": "SnsRestApi/CDKMetadata/Condition",
                 "constructInfo": {
                   "fqn": "@aws-cdk/core.CfnCondition",
                   "version": "1.139.0"
