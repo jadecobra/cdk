@@ -6,7 +6,7 @@ class TestSqsFlow(TestTemplates):
     def test_sqs_flow(self):
         self.assert_template_equal(
             'SqsFlow',
-            {
+           {
   "Resources": {
     "RDSPublishQueue2BEA1A7F": {
       "Type": "AWS::SQS::Queue",
@@ -108,7 +108,7 @@ class TestSqsFlow(TestTemplates):
       "Properties": {
         "Code": {
           "S3Bucket": {
-            "Ref": "AssetParameters3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5S3BucketD2320349"
+            "Ref": "AssetParameterscc629a1cbfb955ae6703ba4a9bf13234c83109279756439f1c139ce563d2667eS3BucketE9206EF0"
           },
           "S3Key": {
             "Fn::Join": [
@@ -121,7 +121,7 @@ class TestSqsFlow(TestTemplates):
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5S3VersionKey91D22072"
+                          "Ref": "AssetParameterscc629a1cbfb955ae6703ba4a9bf13234c83109279756439f1c139ce563d2667eS3VersionKey8174EE0C"
                         }
                       ]
                     }
@@ -134,7 +134,7 @@ class TestSqsFlow(TestTemplates):
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5S3VersionKey91D22072"
+                          "Ref": "AssetParameterscc629a1cbfb955ae6703ba4a9bf13234c83109279756439f1c139ce563d2667eS3VersionKey8174EE0C"
                         }
                       ]
                     }
@@ -170,7 +170,7 @@ class TestSqsFlow(TestTemplates):
       ],
       "Metadata": {
         "aws:cdk:path": "SqsFlow/sqs/LambdaFunction/Resource",
-        "aws:asset:path": "asset.3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5",
+        "aws:asset:path": "asset.cc629a1cbfb955ae6703ba4a9bf13234c83109279756439f1c139ce563d2667e",
         "aws:asset:is-bundled": false,
         "aws:asset:property": "Code"
       }
@@ -225,7 +225,7 @@ class TestSqsFlow(TestTemplates):
         "DatapointsToAlarm": 1,
         "Metrics": [
           {
-            "Expression": "e / invocations * 100",
+            "Expression": "errors / invocations * 100",
             "Id": "expr_1",
             "Label": "% of invocations that errored, last 5 mins"
           },
@@ -250,7 +250,7 @@ class TestSqsFlow(TestTemplates):
             "ReturnData": false
           },
           {
-            "Id": "e",
+            "Id": "errors",
             "MetricStat": {
               "Metric": {
                 "Dimensions": [
@@ -320,7 +320,7 @@ class TestSqsFlow(TestTemplates):
         "DatapointsToAlarm": 1,
         "Metrics": [
           {
-            "Expression": "t / (invocations + t) * 100",
+            "Expression": "throttles / (invocations + t) * 100",
             "Id": "expr_1",
             "Label": "throttled requests % in last 30 mins"
           },
@@ -345,7 +345,7 @@ class TestSqsFlow(TestTemplates):
             "ReturnData": false
           },
           {
-            "Id": "t",
+            "Id": "throttles",
             "MetricStat": {
               "Metric": {
                 "Dimensions": [
@@ -383,7 +383,7 @@ class TestSqsFlow(TestTemplates):
               {
                 "Ref": "AWS::Region"
               },
-              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"e / invocations * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"errors / invocations * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
               {
                 "Ref": "sqsLambdaFunctionDBCFBC0F"
               },
@@ -391,7 +391,7 @@ class TestSqsFlow(TestTemplates):
               {
                 "Ref": "sqsLambdaFunctionDBCFBC0F"
               },
-              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"e\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
+              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
               {
                 "Ref": "AWS::Region"
               },
@@ -411,7 +411,7 @@ class TestSqsFlow(TestTemplates):
               {
                 "Ref": "AWS::Region"
               },
-              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"t / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"throttles / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
               {
                 "Ref": "sqsLambdaFunctionDBCFBC0F"
               },
@@ -419,7 +419,7 @@ class TestSqsFlow(TestTemplates):
               {
                 "Ref": "sqsLambdaFunctionDBCFBC0F"
               },
-              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"t\"}]],\"yAxis\":{}}}]}"
+              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
             ]
           ]
         }
@@ -519,7 +519,7 @@ class TestSqsFlow(TestTemplates):
       "Properties": {
         "Code": {
           "S3Bucket": {
-            "Ref": "AssetParameters3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5S3BucketD2320349"
+            "Ref": "AssetParameters45a64ba94427aa8245e84b37bb9b08e693b04502538428e5ceab2adab6ff77c7S3BucketD999D6E8"
           },
           "S3Key": {
             "Fn::Join": [
@@ -532,7 +532,7 @@ class TestSqsFlow(TestTemplates):
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5S3VersionKey91D22072"
+                          "Ref": "AssetParameters45a64ba94427aa8245e84b37bb9b08e693b04502538428e5ceab2adab6ff77c7S3VersionKey8DF23815"
                         }
                       ]
                     }
@@ -545,7 +545,7 @@ class TestSqsFlow(TestTemplates):
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5S3VersionKey91D22072"
+                          "Ref": "AssetParameters45a64ba94427aa8245e84b37bb9b08e693b04502538428e5ceab2adab6ff77c7S3VersionKey8DF23815"
                         }
                       ]
                     }
@@ -574,7 +574,7 @@ class TestSqsFlow(TestTemplates):
       ],
       "Metadata": {
         "aws:cdk:path": "SqsFlow/sqs_subscribe/LambdaFunction/Resource",
-        "aws:asset:path": "asset.3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5",
+        "aws:asset:path": "asset.45a64ba94427aa8245e84b37bb9b08e693b04502538428e5ceab2adab6ff77c7",
         "aws:asset:is-bundled": false,
         "aws:asset:property": "Code"
       }
@@ -609,7 +609,7 @@ class TestSqsFlow(TestTemplates):
         "DatapointsToAlarm": 1,
         "Metrics": [
           {
-            "Expression": "e / invocations * 100",
+            "Expression": "errors / invocations * 100",
             "Id": "expr_1",
             "Label": "% of invocations that errored, last 5 mins"
           },
@@ -634,7 +634,7 @@ class TestSqsFlow(TestTemplates):
             "ReturnData": false
           },
           {
-            "Id": "e",
+            "Id": "errors",
             "MetricStat": {
               "Metric": {
                 "Dimensions": [
@@ -704,7 +704,7 @@ class TestSqsFlow(TestTemplates):
         "DatapointsToAlarm": 1,
         "Metrics": [
           {
-            "Expression": "t / (invocations + t) * 100",
+            "Expression": "throttles / (invocations + t) * 100",
             "Id": "expr_1",
             "Label": "throttled requests % in last 30 mins"
           },
@@ -729,7 +729,7 @@ class TestSqsFlow(TestTemplates):
             "ReturnData": false
           },
           {
-            "Id": "t",
+            "Id": "throttles",
             "MetricStat": {
               "Metric": {
                 "Dimensions": [
@@ -767,7 +767,7 @@ class TestSqsFlow(TestTemplates):
               {
                 "Ref": "AWS::Region"
               },
-              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"e / invocations * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"errors / invocations * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
               {
                 "Ref": "sqssubscribeLambdaFunction2B3EFD1F"
               },
@@ -775,7 +775,7 @@ class TestSqsFlow(TestTemplates):
               {
                 "Ref": "sqssubscribeLambdaFunction2B3EFD1F"
               },
-              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"e\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
+              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
               {
                 "Ref": "AWS::Region"
               },
@@ -795,7 +795,7 @@ class TestSqsFlow(TestTemplates):
               {
                 "Ref": "AWS::Region"
               },
-              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"t / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"throttles / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
               {
                 "Ref": "sqssubscribeLambdaFunction2B3EFD1F"
               },
@@ -803,7 +803,7 @@ class TestSqsFlow(TestTemplates):
               {
                 "Ref": "sqssubscribeLambdaFunction2B3EFD1F"
               },
-              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"t\"}]],\"yAxis\":{}}}]}"
+              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
             ]
           ]
         }
@@ -824,17 +824,29 @@ class TestSqsFlow(TestTemplates):
     }
   },
   "Parameters": {
-    "AssetParameters3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5S3BucketD2320349": {
+    "AssetParameterscc629a1cbfb955ae6703ba4a9bf13234c83109279756439f1c139ce563d2667eS3BucketE9206EF0": {
       "Type": "String",
-      "Description": "S3 bucket for asset \"3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5\""
+      "Description": "S3 bucket for asset \"cc629a1cbfb955ae6703ba4a9bf13234c83109279756439f1c139ce563d2667e\""
     },
-    "AssetParameters3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5S3VersionKey91D22072": {
+    "AssetParameterscc629a1cbfb955ae6703ba4a9bf13234c83109279756439f1c139ce563d2667eS3VersionKey8174EE0C": {
       "Type": "String",
-      "Description": "S3 key for asset version \"3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5\""
+      "Description": "S3 key for asset version \"cc629a1cbfb955ae6703ba4a9bf13234c83109279756439f1c139ce563d2667e\""
     },
-    "AssetParameters3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5ArtifactHash8698A4CE": {
+    "AssetParameterscc629a1cbfb955ae6703ba4a9bf13234c83109279756439f1c139ce563d2667eArtifactHash68AAC9E4": {
       "Type": "String",
-      "Description": "Artifact hash for asset \"3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5\""
+      "Description": "Artifact hash for asset \"cc629a1cbfb955ae6703ba4a9bf13234c83109279756439f1c139ce563d2667e\""
+    },
+    "AssetParameters45a64ba94427aa8245e84b37bb9b08e693b04502538428e5ceab2adab6ff77c7S3BucketD999D6E8": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"45a64ba94427aa8245e84b37bb9b08e693b04502538428e5ceab2adab6ff77c7\""
+    },
+    "AssetParameters45a64ba94427aa8245e84b37bb9b08e693b04502538428e5ceab2adab6ff77c7S3VersionKey8DF23815": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"45a64ba94427aa8245e84b37bb9b08e693b04502538428e5ceab2adab6ff77c7\""
+    },
+    "AssetParameters45a64ba94427aa8245e84b37bb9b08e693b04502538428e5ceab2adab6ff77c7ArtifactHashBA433240": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"45a64ba94427aa8245e84b37bb9b08e693b04502538428e5ceab2adab6ff77c7\""
     }
   },
   "Conditions": {

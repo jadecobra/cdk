@@ -13,7 +13,7 @@ class LambdaFunctionConstruct(WellArchitectedFrameworkConstruct):
             self, "LambdaFunction",
             runtime=Runtime.PYTHON_3_8,
             handler=f'{function_name}.handler',
-            code=Code.from_asset("lambda_functions"),
+            code=Code.from_asset(f"lambda_functions/{function_name}"),
             timeout=Duration.seconds(60),
             tracing=Tracing.ACTIVE,
             environment=environment_variables,
@@ -29,7 +29,6 @@ class LambdaFunctionConstruct(WellArchitectedFrameworkConstruct):
         return self.lambda_function.metric(metric_name=metric_name, statistic="sum")
 
     def create_lambda_error_percentage_metric(self):
-        # Gather the % of lambda invocations that error in past 5 mins
         return self.create_cloudwatch_math_expression(
             expression="errors / invocations * 100",
             label="% of invocations that errored, last 5 mins",

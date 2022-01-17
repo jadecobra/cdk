@@ -99,7 +99,7 @@ class TestSnsFlow(TestTemplates):
       "Properties": {
         "Code": {
           "S3Bucket": {
-            "Ref": "AssetParameters3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5S3BucketD2320349"
+            "Ref": "AssetParametersef7aa034d437b1c1976e69f919345dcddf4b4c9c6a6947d000d52902c30271cfS3Bucket81A6DB81"
           },
           "S3Key": {
             "Fn::Join": [
@@ -112,7 +112,7 @@ class TestSnsFlow(TestTemplates):
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5S3VersionKey91D22072"
+                          "Ref": "AssetParametersef7aa034d437b1c1976e69f919345dcddf4b4c9c6a6947d000d52902c30271cfS3VersionKey99E114A0"
                         }
                       ]
                     }
@@ -125,7 +125,7 @@ class TestSnsFlow(TestTemplates):
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5S3VersionKey91D22072"
+                          "Ref": "AssetParametersef7aa034d437b1c1976e69f919345dcddf4b4c9c6a6947d000d52902c30271cfS3VersionKey99E114A0"
                         }
                       ]
                     }
@@ -161,7 +161,7 @@ class TestSnsFlow(TestTemplates):
       ],
       "Metadata": {
         "aws:cdk:path": "SnsFlow/sns_publish/LambdaFunction/Resource",
-        "aws:asset:path": "asset.3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5",
+        "aws:asset:path": "asset.ef7aa034d437b1c1976e69f919345dcddf4b4c9c6a6947d000d52902c30271cf",
         "aws:asset:is-bundled": false,
         "aws:asset:property": "Code"
       }
@@ -229,7 +229,7 @@ class TestSnsFlow(TestTemplates):
         "DatapointsToAlarm": 1,
         "Metrics": [
           {
-            "Expression": "e / invocations * 100",
+            "Expression": "errors / invocations * 100",
             "Id": "expr_1",
             "Label": "% of invocations that errored, last 5 mins"
           },
@@ -254,7 +254,7 @@ class TestSnsFlow(TestTemplates):
             "ReturnData": false
           },
           {
-            "Id": "e",
+            "Id": "errors",
             "MetricStat": {
               "Metric": {
                 "Dimensions": [
@@ -324,7 +324,7 @@ class TestSnsFlow(TestTemplates):
         "DatapointsToAlarm": 1,
         "Metrics": [
           {
-            "Expression": "t / (invocations + t) * 100",
+            "Expression": "throttles / (invocations + t) * 100",
             "Id": "expr_1",
             "Label": "throttled requests % in last 30 mins"
           },
@@ -349,7 +349,7 @@ class TestSnsFlow(TestTemplates):
             "ReturnData": false
           },
           {
-            "Id": "t",
+            "Id": "throttles",
             "MetricStat": {
               "Metric": {
                 "Dimensions": [
@@ -387,7 +387,7 @@ class TestSnsFlow(TestTemplates):
               {
                 "Ref": "AWS::Region"
               },
-              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"e / invocations * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"errors / invocations * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
               {
                 "Ref": "snspublishLambdaFunctionE7ECD8FF"
               },
@@ -395,7 +395,7 @@ class TestSnsFlow(TestTemplates):
               {
                 "Ref": "snspublishLambdaFunctionE7ECD8FF"
               },
-              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"e\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
+              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
               {
                 "Ref": "AWS::Region"
               },
@@ -415,7 +415,7 @@ class TestSnsFlow(TestTemplates):
               {
                 "Ref": "AWS::Region"
               },
-              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"t / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"throttles / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
               {
                 "Ref": "snspublishLambdaFunctionE7ECD8FF"
               },
@@ -423,7 +423,7 @@ class TestSnsFlow(TestTemplates):
               {
                 "Ref": "snspublishLambdaFunctionE7ECD8FF"
               },
-              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"t\"}]],\"yAxis\":{}}}]}"
+              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
             ]
           ]
         }
@@ -507,7 +507,7 @@ class TestSnsFlow(TestTemplates):
       "Properties": {
         "Code": {
           "S3Bucket": {
-            "Ref": "AssetParameters3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5S3BucketD2320349"
+            "Ref": "AssetParameters974996a9096d42156ceb01e12ea154d428b9b643131593d6d5dbc4dc9d11918fS3Bucket69F99350"
           },
           "S3Key": {
             "Fn::Join": [
@@ -520,7 +520,7 @@ class TestSnsFlow(TestTemplates):
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5S3VersionKey91D22072"
+                          "Ref": "AssetParameters974996a9096d42156ceb01e12ea154d428b9b643131593d6d5dbc4dc9d11918fS3VersionKey160115D9"
                         }
                       ]
                     }
@@ -533,7 +533,7 @@ class TestSnsFlow(TestTemplates):
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5S3VersionKey91D22072"
+                          "Ref": "AssetParameters974996a9096d42156ceb01e12ea154d428b9b643131593d6d5dbc4dc9d11918fS3VersionKey160115D9"
                         }
                       ]
                     }
@@ -562,7 +562,7 @@ class TestSnsFlow(TestTemplates):
       ],
       "Metadata": {
         "aws:cdk:path": "SnsFlow/sns_subscribe/LambdaFunction/Resource",
-        "aws:asset:path": "asset.3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5",
+        "aws:asset:path": "asset.974996a9096d42156ceb01e12ea154d428b9b643131593d6d5dbc4dc9d11918f",
         "aws:asset:is-bundled": false,
         "aws:asset:property": "Code"
       }
@@ -617,7 +617,7 @@ class TestSnsFlow(TestTemplates):
         "DatapointsToAlarm": 1,
         "Metrics": [
           {
-            "Expression": "e / invocations * 100",
+            "Expression": "errors / invocations * 100",
             "Id": "expr_1",
             "Label": "% of invocations that errored, last 5 mins"
           },
@@ -642,7 +642,7 @@ class TestSnsFlow(TestTemplates):
             "ReturnData": false
           },
           {
-            "Id": "e",
+            "Id": "errors",
             "MetricStat": {
               "Metric": {
                 "Dimensions": [
@@ -712,7 +712,7 @@ class TestSnsFlow(TestTemplates):
         "DatapointsToAlarm": 1,
         "Metrics": [
           {
-            "Expression": "t / (invocations + t) * 100",
+            "Expression": "throttles / (invocations + t) * 100",
             "Id": "expr_1",
             "Label": "throttled requests % in last 30 mins"
           },
@@ -737,7 +737,7 @@ class TestSnsFlow(TestTemplates):
             "ReturnData": false
           },
           {
-            "Id": "t",
+            "Id": "throttles",
             "MetricStat": {
               "Metric": {
                 "Dimensions": [
@@ -775,7 +775,7 @@ class TestSnsFlow(TestTemplates):
               {
                 "Ref": "AWS::Region"
               },
-              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"e / invocations * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"errors / invocations * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
               {
                 "Ref": "snssubscribeLambdaFunctionE84E36B6"
               },
@@ -783,7 +783,7 @@ class TestSnsFlow(TestTemplates):
               {
                 "Ref": "snssubscribeLambdaFunctionE84E36B6"
               },
-              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"e\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
+              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
               {
                 "Ref": "AWS::Region"
               },
@@ -803,7 +803,7 @@ class TestSnsFlow(TestTemplates):
               {
                 "Ref": "AWS::Region"
               },
-              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"t / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"throttles / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
               {
                 "Ref": "snssubscribeLambdaFunctionE84E36B6"
               },
@@ -811,7 +811,7 @@ class TestSnsFlow(TestTemplates):
               {
                 "Ref": "snssubscribeLambdaFunctionE84E36B6"
               },
-              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"t\"}]],\"yAxis\":{}}}]}"
+              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
             ]
           ]
         }
@@ -832,17 +832,29 @@ class TestSnsFlow(TestTemplates):
     }
   },
   "Parameters": {
-    "AssetParameters3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5S3BucketD2320349": {
+    "AssetParametersef7aa034d437b1c1976e69f919345dcddf4b4c9c6a6947d000d52902c30271cfS3Bucket81A6DB81": {
       "Type": "String",
-      "Description": "S3 bucket for asset \"3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5\""
+      "Description": "S3 bucket for asset \"ef7aa034d437b1c1976e69f919345dcddf4b4c9c6a6947d000d52902c30271cf\""
     },
-    "AssetParameters3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5S3VersionKey91D22072": {
+    "AssetParametersef7aa034d437b1c1976e69f919345dcddf4b4c9c6a6947d000d52902c30271cfS3VersionKey99E114A0": {
       "Type": "String",
-      "Description": "S3 key for asset version \"3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5\""
+      "Description": "S3 key for asset version \"ef7aa034d437b1c1976e69f919345dcddf4b4c9c6a6947d000d52902c30271cf\""
     },
-    "AssetParameters3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5ArtifactHash8698A4CE": {
+    "AssetParametersef7aa034d437b1c1976e69f919345dcddf4b4c9c6a6947d000d52902c30271cfArtifactHashD148D3CB": {
       "Type": "String",
-      "Description": "Artifact hash for asset \"3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5\""
+      "Description": "Artifact hash for asset \"ef7aa034d437b1c1976e69f919345dcddf4b4c9c6a6947d000d52902c30271cf\""
+    },
+    "AssetParameters974996a9096d42156ceb01e12ea154d428b9b643131593d6d5dbc4dc9d11918fS3Bucket69F99350": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"974996a9096d42156ceb01e12ea154d428b9b643131593d6d5dbc4dc9d11918f\""
+    },
+    "AssetParameters974996a9096d42156ceb01e12ea154d428b9b643131593d6d5dbc4dc9d11918fS3VersionKey160115D9": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"974996a9096d42156ceb01e12ea154d428b9b643131593d6d5dbc4dc9d11918f\""
+    },
+    "AssetParameters974996a9096d42156ceb01e12ea154d428b9b643131593d6d5dbc4dc9d11918fArtifactHash41F53E92": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"974996a9096d42156ceb01e12ea154d428b9b643131593d6d5dbc4dc9d11918f\""
     }
   },
   "Conditions": {

@@ -136,7 +136,7 @@ class TestDynamoDBFlow(TestTemplates):
       "Properties": {
         "Code": {
           "S3Bucket": {
-            "Ref": "AssetParameters3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5S3BucketD2320349"
+            "Ref": "AssetParameters42961f7a43eb8def8a88d0711b3c95740379627ec280319af30490b76a248e16S3Bucket2E949244"
           },
           "S3Key": {
             "Fn::Join": [
@@ -149,7 +149,7 @@ class TestDynamoDBFlow(TestTemplates):
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5S3VersionKey91D22072"
+                          "Ref": "AssetParameters42961f7a43eb8def8a88d0711b3c95740379627ec280319af30490b76a248e16S3VersionKeyBF41F02A"
                         }
                       ]
                     }
@@ -162,7 +162,7 @@ class TestDynamoDBFlow(TestTemplates):
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5S3VersionKey91D22072"
+                          "Ref": "AssetParameters42961f7a43eb8def8a88d0711b3c95740379627ec280319af30490b76a248e16S3VersionKeyBF41F02A"
                         }
                       ]
                     }
@@ -198,7 +198,7 @@ class TestDynamoDBFlow(TestTemplates):
       ],
       "Metadata": {
         "aws:cdk:path": "DynamoDBFlow/hit_counter/LambdaFunction/Resource",
-        "aws:asset:path": "asset.3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5",
+        "aws:asset:path": "asset.42961f7a43eb8def8a88d0711b3c95740379627ec280319af30490b76a248e16",
         "aws:asset:is-bundled": false,
         "aws:asset:property": "Code"
       }
@@ -253,7 +253,7 @@ class TestDynamoDBFlow(TestTemplates):
         "DatapointsToAlarm": 1,
         "Metrics": [
           {
-            "Expression": "e / invocations * 100",
+            "Expression": "errors / invocations * 100",
             "Id": "expr_1",
             "Label": "% of invocations that errored, last 5 mins"
           },
@@ -278,7 +278,7 @@ class TestDynamoDBFlow(TestTemplates):
             "ReturnData": false
           },
           {
-            "Id": "e",
+            "Id": "errors",
             "MetricStat": {
               "Metric": {
                 "Dimensions": [
@@ -348,7 +348,7 @@ class TestDynamoDBFlow(TestTemplates):
         "DatapointsToAlarm": 1,
         "Metrics": [
           {
-            "Expression": "t / (invocations + t) * 100",
+            "Expression": "throttles / (invocations + t) * 100",
             "Id": "expr_1",
             "Label": "throttled requests % in last 30 mins"
           },
@@ -373,7 +373,7 @@ class TestDynamoDBFlow(TestTemplates):
             "ReturnData": false
           },
           {
-            "Id": "t",
+            "Id": "throttles",
             "MetricStat": {
               "Metric": {
                 "Dimensions": [
@@ -411,7 +411,7 @@ class TestDynamoDBFlow(TestTemplates):
               {
                 "Ref": "AWS::Region"
               },
-              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"e / invocations * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"errors / invocations * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
               {
                 "Ref": "hitcounterLambdaFunctionB862C182"
               },
@@ -419,7 +419,7 @@ class TestDynamoDBFlow(TestTemplates):
               {
                 "Ref": "hitcounterLambdaFunctionB862C182"
               },
-              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"e\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
+              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
               {
                 "Ref": "AWS::Region"
               },
@@ -439,7 +439,7 @@ class TestDynamoDBFlow(TestTemplates):
               {
                 "Ref": "AWS::Region"
               },
-              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"t / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"throttles / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
               {
                 "Ref": "hitcounterLambdaFunctionB862C182"
               },
@@ -447,7 +447,7 @@ class TestDynamoDBFlow(TestTemplates):
               {
                 "Ref": "hitcounterLambdaFunctionB862C182"
               },
-              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"t\"}]],\"yAxis\":{}}}]}"
+              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
             ]
           ]
         }
@@ -468,17 +468,17 @@ class TestDynamoDBFlow(TestTemplates):
     }
   },
   "Parameters": {
-    "AssetParameters3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5S3BucketD2320349": {
+    "AssetParameters42961f7a43eb8def8a88d0711b3c95740379627ec280319af30490b76a248e16S3Bucket2E949244": {
       "Type": "String",
-      "Description": "S3 bucket for asset \"3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5\""
+      "Description": "S3 bucket for asset \"42961f7a43eb8def8a88d0711b3c95740379627ec280319af30490b76a248e16\""
     },
-    "AssetParameters3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5S3VersionKey91D22072": {
+    "AssetParameters42961f7a43eb8def8a88d0711b3c95740379627ec280319af30490b76a248e16S3VersionKeyBF41F02A": {
       "Type": "String",
-      "Description": "S3 key for asset version \"3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5\""
+      "Description": "S3 key for asset version \"42961f7a43eb8def8a88d0711b3c95740379627ec280319af30490b76a248e16\""
     },
-    "AssetParameters3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5ArtifactHash8698A4CE": {
+    "AssetParameters42961f7a43eb8def8a88d0711b3c95740379627ec280319af30490b76a248e16ArtifactHashDDCB2305": {
       "Type": "String",
-      "Description": "Artifact hash for asset \"3685b746731556d1122cc06e6f3359cf30955051fc855f65044eea29ab8780b5\""
+      "Description": "Artifact hash for asset \"42961f7a43eb8def8a88d0711b3c95740379627ec280319af30490b76a248e16\""
     }
   },
   "Conditions": {
