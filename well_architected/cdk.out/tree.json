@@ -654,13 +654,13 @@
                   "version": "1.139.0"
                 }
               },
-              "Dynamo Lambda 2% Error": {
-                "id": "Dynamo Lambda 2% Error",
-                "path": "LambdaFunction/hit_counter/Dynamo Lambda 2% Error",
+              "Lambda invocation Errors > 2%": {
+                "id": "Lambda invocation Errors > 2%",
+                "path": "LambdaFunction/hit_counter/Lambda invocation Errors > 2%",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "LambdaFunction/hit_counter/Dynamo Lambda 2% Error/Resource",
+                    "path": "LambdaFunction/hit_counter/Lambda invocation Errors > 2%/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
                       "aws:cdk:cloudformation:props": {
@@ -734,13 +734,13 @@
                   "version": "1.139.0"
                 }
               },
-              "Dynamo Lambda p99 Long Duration (>1s)": {
-                "id": "Dynamo Lambda p99 Long Duration (>1s)",
-                "path": "LambdaFunction/hit_counter/Dynamo Lambda p99 Long Duration (>1s)",
+              "Lambda p99 Long Duration (>1s)": {
+                "id": "Lambda p99 Long Duration (>1s)",
+                "path": "LambdaFunction/hit_counter/Lambda p99 Long Duration (>1s)",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "LambdaFunction/hit_counter/Dynamo Lambda p99 Long Duration (>1s)/Resource",
+                    "path": "LambdaFunction/hit_counter/Lambda p99 Long Duration (>1s)/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
                       "aws:cdk:cloudformation:props": {
@@ -779,13 +779,13 @@
                   "version": "1.139.0"
                 }
               },
-              "Dynamo Lambda 2% Throttled": {
-                "id": "Dynamo Lambda 2% Throttled",
-                "path": "LambdaFunction/hit_counter/Dynamo Lambda 2% Throttled",
+              "Lambda Throttled invocations >2%": {
+                "id": "Lambda Throttled invocations >2%",
+                "path": "LambdaFunction/hit_counter/Lambda Throttled invocations >2%",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "LambdaFunction/hit_counter/Dynamo Lambda 2% Throttled/Resource",
+                    "path": "LambdaFunction/hit_counter/Lambda Throttled invocations >2%/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
                       "aws:cdk:cloudformation:props": {
@@ -801,7 +801,7 @@
                           {
                             "expression": "t / (invocations + t) * 100",
                             "id": "expr_1",
-                            "label": "% of throttled requests, last 30 mins"
+                            "label": "throttled requests % in last 30 mins"
                           },
                           {
                             "metricStat": {
@@ -873,7 +873,7 @@
                           "Fn::Join": [
                             "",
                             [
-                              "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Error %\",\"region\":\"",
+                              "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Error %\",\"region\":\"",
                               {
                                 "Ref": "AWS::Region"
                               },
@@ -885,7 +885,7 @@
                               {
                                 "Ref": "hitcounterLambdaFunctionB862C182"
                               },
-                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"e\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Duration\",\"region\":\"",
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"e\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
                               {
                                 "Ref": "AWS::Region"
                               },
@@ -901,11 +901,11 @@
                               {
                                 "Ref": "hitcounterLambdaFunctionB862C182"
                               },
-                              "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Throttle %\",\"region\":\"",
+                              "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Throttle %\",\"region\":\"",
                               {
                                 "Ref": "AWS::Region"
                               },
-                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of throttled requests, last 30 mins\",\"expression\":\"t / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"t / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
                               {
                                 "Ref": "hitcounterLambdaFunctionB862C182"
                               },
@@ -3446,13 +3446,13 @@
                   "version": "1.139.0"
                 }
               },
-              "Dynamo Lambda 2% Error": {
-                "id": "Dynamo Lambda 2% Error",
-                "path": "HttpFlow/http_api/Dynamo Lambda 2% Error",
+              "Lambda invocation Errors > 2%": {
+                "id": "Lambda invocation Errors > 2%",
+                "path": "HttpFlow/http_api/Lambda invocation Errors > 2%",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "HttpFlow/http_api/Dynamo Lambda 2% Error/Resource",
+                    "path": "HttpFlow/http_api/Lambda invocation Errors > 2%/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
                       "aws:cdk:cloudformation:props": {
@@ -3526,13 +3526,13 @@
                   "version": "1.139.0"
                 }
               },
-              "Dynamo Lambda p99 Long Duration (>1s)": {
-                "id": "Dynamo Lambda p99 Long Duration (>1s)",
-                "path": "HttpFlow/http_api/Dynamo Lambda p99 Long Duration (>1s)",
+              "Lambda p99 Long Duration (>1s)": {
+                "id": "Lambda p99 Long Duration (>1s)",
+                "path": "HttpFlow/http_api/Lambda p99 Long Duration (>1s)",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "HttpFlow/http_api/Dynamo Lambda p99 Long Duration (>1s)/Resource",
+                    "path": "HttpFlow/http_api/Lambda p99 Long Duration (>1s)/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
                       "aws:cdk:cloudformation:props": {
@@ -3571,13 +3571,13 @@
                   "version": "1.139.0"
                 }
               },
-              "Dynamo Lambda 2% Throttled": {
-                "id": "Dynamo Lambda 2% Throttled",
-                "path": "HttpFlow/http_api/Dynamo Lambda 2% Throttled",
+              "Lambda Throttled invocations >2%": {
+                "id": "Lambda Throttled invocations >2%",
+                "path": "HttpFlow/http_api/Lambda Throttled invocations >2%",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "HttpFlow/http_api/Dynamo Lambda 2% Throttled/Resource",
+                    "path": "HttpFlow/http_api/Lambda Throttled invocations >2%/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
                       "aws:cdk:cloudformation:props": {
@@ -3593,7 +3593,7 @@
                           {
                             "expression": "t / (invocations + t) * 100",
                             "id": "expr_1",
-                            "label": "% of throttled requests, last 30 mins"
+                            "label": "throttled requests % in last 30 mins"
                           },
                           {
                             "metricStat": {
@@ -3665,7 +3665,7 @@
                           "Fn::Join": [
                             "",
                             [
-                              "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Error %\",\"region\":\"",
+                              "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Error %\",\"region\":\"",
                               {
                                 "Ref": "AWS::Region"
                               },
@@ -3677,7 +3677,7 @@
                               {
                                 "Ref": "httpapiLambdaFunctionA00B9685"
                               },
-                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"e\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Duration\",\"region\":\"",
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"e\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
                               {
                                 "Ref": "AWS::Region"
                               },
@@ -3693,11 +3693,11 @@
                               {
                                 "Ref": "httpapiLambdaFunctionA00B9685"
                               },
-                              "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Throttle %\",\"region\":\"",
+                              "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Throttle %\",\"region\":\"",
                               {
                                 "Ref": "AWS::Region"
                               },
-                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of throttled requests, last 30 mins\",\"expression\":\"t / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"t / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
                               {
                                 "Ref": "httpapiLambdaFunctionA00B9685"
                               },
@@ -4175,13 +4175,13 @@
                   "version": "1.139.0"
                 }
               },
-              "Dynamo Lambda 2% Error": {
-                "id": "Dynamo Lambda 2% Error",
-                "path": "DynamoDBFlow/hit_counter/Dynamo Lambda 2% Error",
+              "Lambda invocation Errors > 2%": {
+                "id": "Lambda invocation Errors > 2%",
+                "path": "DynamoDBFlow/hit_counter/Lambda invocation Errors > 2%",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "DynamoDBFlow/hit_counter/Dynamo Lambda 2% Error/Resource",
+                    "path": "DynamoDBFlow/hit_counter/Lambda invocation Errors > 2%/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
                       "aws:cdk:cloudformation:props": {
@@ -4255,13 +4255,13 @@
                   "version": "1.139.0"
                 }
               },
-              "Dynamo Lambda p99 Long Duration (>1s)": {
-                "id": "Dynamo Lambda p99 Long Duration (>1s)",
-                "path": "DynamoDBFlow/hit_counter/Dynamo Lambda p99 Long Duration (>1s)",
+              "Lambda p99 Long Duration (>1s)": {
+                "id": "Lambda p99 Long Duration (>1s)",
+                "path": "DynamoDBFlow/hit_counter/Lambda p99 Long Duration (>1s)",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "DynamoDBFlow/hit_counter/Dynamo Lambda p99 Long Duration (>1s)/Resource",
+                    "path": "DynamoDBFlow/hit_counter/Lambda p99 Long Duration (>1s)/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
                       "aws:cdk:cloudformation:props": {
@@ -4300,13 +4300,13 @@
                   "version": "1.139.0"
                 }
               },
-              "Dynamo Lambda 2% Throttled": {
-                "id": "Dynamo Lambda 2% Throttled",
-                "path": "DynamoDBFlow/hit_counter/Dynamo Lambda 2% Throttled",
+              "Lambda Throttled invocations >2%": {
+                "id": "Lambda Throttled invocations >2%",
+                "path": "DynamoDBFlow/hit_counter/Lambda Throttled invocations >2%",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "DynamoDBFlow/hit_counter/Dynamo Lambda 2% Throttled/Resource",
+                    "path": "DynamoDBFlow/hit_counter/Lambda Throttled invocations >2%/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
                       "aws:cdk:cloudformation:props": {
@@ -4322,7 +4322,7 @@
                           {
                             "expression": "t / (invocations + t) * 100",
                             "id": "expr_1",
-                            "label": "% of throttled requests, last 30 mins"
+                            "label": "throttled requests % in last 30 mins"
                           },
                           {
                             "metricStat": {
@@ -4394,7 +4394,7 @@
                           "Fn::Join": [
                             "",
                             [
-                              "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Error %\",\"region\":\"",
+                              "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Error %\",\"region\":\"",
                               {
                                 "Ref": "AWS::Region"
                               },
@@ -4406,7 +4406,7 @@
                               {
                                 "Ref": "hitcounterLambdaFunctionB862C182"
                               },
-                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"e\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Duration\",\"region\":\"",
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"e\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
                               {
                                 "Ref": "AWS::Region"
                               },
@@ -4422,11 +4422,11 @@
                               {
                                 "Ref": "hitcounterLambdaFunctionB862C182"
                               },
-                              "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Throttle %\",\"region\":\"",
+                              "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Throttle %\",\"region\":\"",
                               {
                                 "Ref": "AWS::Region"
                               },
-                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of throttled requests, last 30 mins\",\"expression\":\"t / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"t / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
                               {
                                 "Ref": "hitcounterLambdaFunctionB862C182"
                               },
@@ -4874,13 +4874,13 @@
                   "version": "1.139.0"
                 }
               },
-              "Dynamo Lambda 2% Error": {
-                "id": "Dynamo Lambda 2% Error",
-                "path": "SnsFlow/sns_publish/Dynamo Lambda 2% Error",
+              "Lambda invocation Errors > 2%": {
+                "id": "Lambda invocation Errors > 2%",
+                "path": "SnsFlow/sns_publish/Lambda invocation Errors > 2%",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "SnsFlow/sns_publish/Dynamo Lambda 2% Error/Resource",
+                    "path": "SnsFlow/sns_publish/Lambda invocation Errors > 2%/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
                       "aws:cdk:cloudformation:props": {
@@ -4954,13 +4954,13 @@
                   "version": "1.139.0"
                 }
               },
-              "Dynamo Lambda p99 Long Duration (>1s)": {
-                "id": "Dynamo Lambda p99 Long Duration (>1s)",
-                "path": "SnsFlow/sns_publish/Dynamo Lambda p99 Long Duration (>1s)",
+              "Lambda p99 Long Duration (>1s)": {
+                "id": "Lambda p99 Long Duration (>1s)",
+                "path": "SnsFlow/sns_publish/Lambda p99 Long Duration (>1s)",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "SnsFlow/sns_publish/Dynamo Lambda p99 Long Duration (>1s)/Resource",
+                    "path": "SnsFlow/sns_publish/Lambda p99 Long Duration (>1s)/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
                       "aws:cdk:cloudformation:props": {
@@ -4999,13 +4999,13 @@
                   "version": "1.139.0"
                 }
               },
-              "Dynamo Lambda 2% Throttled": {
-                "id": "Dynamo Lambda 2% Throttled",
-                "path": "SnsFlow/sns_publish/Dynamo Lambda 2% Throttled",
+              "Lambda Throttled invocations >2%": {
+                "id": "Lambda Throttled invocations >2%",
+                "path": "SnsFlow/sns_publish/Lambda Throttled invocations >2%",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "SnsFlow/sns_publish/Dynamo Lambda 2% Throttled/Resource",
+                    "path": "SnsFlow/sns_publish/Lambda Throttled invocations >2%/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
                       "aws:cdk:cloudformation:props": {
@@ -5021,7 +5021,7 @@
                           {
                             "expression": "t / (invocations + t) * 100",
                             "id": "expr_1",
-                            "label": "% of throttled requests, last 30 mins"
+                            "label": "throttled requests % in last 30 mins"
                           },
                           {
                             "metricStat": {
@@ -5093,7 +5093,7 @@
                           "Fn::Join": [
                             "",
                             [
-                              "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Error %\",\"region\":\"",
+                              "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Error %\",\"region\":\"",
                               {
                                 "Ref": "AWS::Region"
                               },
@@ -5105,7 +5105,7 @@
                               {
                                 "Ref": "snspublishLambdaFunctionE7ECD8FF"
                               },
-                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"e\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Duration\",\"region\":\"",
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"e\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
                               {
                                 "Ref": "AWS::Region"
                               },
@@ -5121,11 +5121,11 @@
                               {
                                 "Ref": "snspublishLambdaFunctionE7ECD8FF"
                               },
-                              "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Throttle %\",\"region\":\"",
+                              "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Throttle %\",\"region\":\"",
                               {
                                 "Ref": "AWS::Region"
                               },
-                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of throttled requests, last 30 mins\",\"expression\":\"t / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"t / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
                               {
                                 "Ref": "snspublishLambdaFunctionE7ECD8FF"
                               },
@@ -5486,13 +5486,13 @@
                   "version": "1.139.0"
                 }
               },
-              "Dynamo Lambda 2% Error": {
-                "id": "Dynamo Lambda 2% Error",
-                "path": "SnsFlow/sns_subscribe/Dynamo Lambda 2% Error",
+              "Lambda invocation Errors > 2%": {
+                "id": "Lambda invocation Errors > 2%",
+                "path": "SnsFlow/sns_subscribe/Lambda invocation Errors > 2%",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "SnsFlow/sns_subscribe/Dynamo Lambda 2% Error/Resource",
+                    "path": "SnsFlow/sns_subscribe/Lambda invocation Errors > 2%/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
                       "aws:cdk:cloudformation:props": {
@@ -5566,13 +5566,13 @@
                   "version": "1.139.0"
                 }
               },
-              "Dynamo Lambda p99 Long Duration (>1s)": {
-                "id": "Dynamo Lambda p99 Long Duration (>1s)",
-                "path": "SnsFlow/sns_subscribe/Dynamo Lambda p99 Long Duration (>1s)",
+              "Lambda p99 Long Duration (>1s)": {
+                "id": "Lambda p99 Long Duration (>1s)",
+                "path": "SnsFlow/sns_subscribe/Lambda p99 Long Duration (>1s)",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "SnsFlow/sns_subscribe/Dynamo Lambda p99 Long Duration (>1s)/Resource",
+                    "path": "SnsFlow/sns_subscribe/Lambda p99 Long Duration (>1s)/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
                       "aws:cdk:cloudformation:props": {
@@ -5611,13 +5611,13 @@
                   "version": "1.139.0"
                 }
               },
-              "Dynamo Lambda 2% Throttled": {
-                "id": "Dynamo Lambda 2% Throttled",
-                "path": "SnsFlow/sns_subscribe/Dynamo Lambda 2% Throttled",
+              "Lambda Throttled invocations >2%": {
+                "id": "Lambda Throttled invocations >2%",
+                "path": "SnsFlow/sns_subscribe/Lambda Throttled invocations >2%",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "SnsFlow/sns_subscribe/Dynamo Lambda 2% Throttled/Resource",
+                    "path": "SnsFlow/sns_subscribe/Lambda Throttled invocations >2%/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
                       "aws:cdk:cloudformation:props": {
@@ -5633,7 +5633,7 @@
                           {
                             "expression": "t / (invocations + t) * 100",
                             "id": "expr_1",
-                            "label": "% of throttled requests, last 30 mins"
+                            "label": "throttled requests % in last 30 mins"
                           },
                           {
                             "metricStat": {
@@ -5705,7 +5705,7 @@
                           "Fn::Join": [
                             "",
                             [
-                              "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Error %\",\"region\":\"",
+                              "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Error %\",\"region\":\"",
                               {
                                 "Ref": "AWS::Region"
                               },
@@ -5717,7 +5717,7 @@
                               {
                                 "Ref": "snssubscribeLambdaFunctionE84E36B6"
                               },
-                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"e\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Duration\",\"region\":\"",
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"e\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
                               {
                                 "Ref": "AWS::Region"
                               },
@@ -5733,11 +5733,11 @@
                               {
                                 "Ref": "snssubscribeLambdaFunctionE84E36B6"
                               },
-                              "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Throttle %\",\"region\":\"",
+                              "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Throttle %\",\"region\":\"",
                               {
                                 "Ref": "AWS::Region"
                               },
-                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of throttled requests, last 30 mins\",\"expression\":\"t / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"t / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
                               {
                                 "Ref": "snssubscribeLambdaFunctionE84E36B6"
                               },
@@ -6143,13 +6143,13 @@
                   "version": "1.139.0"
                 }
               },
-              "Dynamo Lambda 2% Error": {
-                "id": "Dynamo Lambda 2% Error",
-                "path": "SqsFlow/sqs/Dynamo Lambda 2% Error",
+              "Lambda invocation Errors > 2%": {
+                "id": "Lambda invocation Errors > 2%",
+                "path": "SqsFlow/sqs/Lambda invocation Errors > 2%",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "SqsFlow/sqs/Dynamo Lambda 2% Error/Resource",
+                    "path": "SqsFlow/sqs/Lambda invocation Errors > 2%/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
                       "aws:cdk:cloudformation:props": {
@@ -6223,13 +6223,13 @@
                   "version": "1.139.0"
                 }
               },
-              "Dynamo Lambda p99 Long Duration (>1s)": {
-                "id": "Dynamo Lambda p99 Long Duration (>1s)",
-                "path": "SqsFlow/sqs/Dynamo Lambda p99 Long Duration (>1s)",
+              "Lambda p99 Long Duration (>1s)": {
+                "id": "Lambda p99 Long Duration (>1s)",
+                "path": "SqsFlow/sqs/Lambda p99 Long Duration (>1s)",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "SqsFlow/sqs/Dynamo Lambda p99 Long Duration (>1s)/Resource",
+                    "path": "SqsFlow/sqs/Lambda p99 Long Duration (>1s)/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
                       "aws:cdk:cloudformation:props": {
@@ -6268,13 +6268,13 @@
                   "version": "1.139.0"
                 }
               },
-              "Dynamo Lambda 2% Throttled": {
-                "id": "Dynamo Lambda 2% Throttled",
-                "path": "SqsFlow/sqs/Dynamo Lambda 2% Throttled",
+              "Lambda Throttled invocations >2%": {
+                "id": "Lambda Throttled invocations >2%",
+                "path": "SqsFlow/sqs/Lambda Throttled invocations >2%",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "SqsFlow/sqs/Dynamo Lambda 2% Throttled/Resource",
+                    "path": "SqsFlow/sqs/Lambda Throttled invocations >2%/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
                       "aws:cdk:cloudformation:props": {
@@ -6290,7 +6290,7 @@
                           {
                             "expression": "t / (invocations + t) * 100",
                             "id": "expr_1",
-                            "label": "% of throttled requests, last 30 mins"
+                            "label": "throttled requests % in last 30 mins"
                           },
                           {
                             "metricStat": {
@@ -6362,7 +6362,7 @@
                           "Fn::Join": [
                             "",
                             [
-                              "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Error %\",\"region\":\"",
+                              "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Error %\",\"region\":\"",
                               {
                                 "Ref": "AWS::Region"
                               },
@@ -6374,7 +6374,7 @@
                               {
                                 "Ref": "sqsLambdaFunctionDBCFBC0F"
                               },
-                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"e\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Duration\",\"region\":\"",
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"e\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
                               {
                                 "Ref": "AWS::Region"
                               },
@@ -6390,11 +6390,11 @@
                               {
                                 "Ref": "sqsLambdaFunctionDBCFBC0F"
                               },
-                              "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Throttle %\",\"region\":\"",
+                              "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Throttle %\",\"region\":\"",
                               {
                                 "Ref": "AWS::Region"
                               },
-                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of throttled requests, last 30 mins\",\"expression\":\"t / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"t / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
                               {
                                 "Ref": "sqsLambdaFunctionDBCFBC0F"
                               },
@@ -6746,13 +6746,13 @@
                   "version": "1.139.0"
                 }
               },
-              "Dynamo Lambda 2% Error": {
-                "id": "Dynamo Lambda 2% Error",
-                "path": "SqsFlow/sqs_subscribe/Dynamo Lambda 2% Error",
+              "Lambda invocation Errors > 2%": {
+                "id": "Lambda invocation Errors > 2%",
+                "path": "SqsFlow/sqs_subscribe/Lambda invocation Errors > 2%",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "SqsFlow/sqs_subscribe/Dynamo Lambda 2% Error/Resource",
+                    "path": "SqsFlow/sqs_subscribe/Lambda invocation Errors > 2%/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
                       "aws:cdk:cloudformation:props": {
@@ -6826,13 +6826,13 @@
                   "version": "1.139.0"
                 }
               },
-              "Dynamo Lambda p99 Long Duration (>1s)": {
-                "id": "Dynamo Lambda p99 Long Duration (>1s)",
-                "path": "SqsFlow/sqs_subscribe/Dynamo Lambda p99 Long Duration (>1s)",
+              "Lambda p99 Long Duration (>1s)": {
+                "id": "Lambda p99 Long Duration (>1s)",
+                "path": "SqsFlow/sqs_subscribe/Lambda p99 Long Duration (>1s)",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "SqsFlow/sqs_subscribe/Dynamo Lambda p99 Long Duration (>1s)/Resource",
+                    "path": "SqsFlow/sqs_subscribe/Lambda p99 Long Duration (>1s)/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
                       "aws:cdk:cloudformation:props": {
@@ -6871,13 +6871,13 @@
                   "version": "1.139.0"
                 }
               },
-              "Dynamo Lambda 2% Throttled": {
-                "id": "Dynamo Lambda 2% Throttled",
-                "path": "SqsFlow/sqs_subscribe/Dynamo Lambda 2% Throttled",
+              "Lambda Throttled invocations >2%": {
+                "id": "Lambda Throttled invocations >2%",
+                "path": "SqsFlow/sqs_subscribe/Lambda Throttled invocations >2%",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "SqsFlow/sqs_subscribe/Dynamo Lambda 2% Throttled/Resource",
+                    "path": "SqsFlow/sqs_subscribe/Lambda Throttled invocations >2%/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
                       "aws:cdk:cloudformation:props": {
@@ -6893,7 +6893,7 @@
                           {
                             "expression": "t / (invocations + t) * 100",
                             "id": "expr_1",
-                            "label": "% of throttled requests, last 30 mins"
+                            "label": "throttled requests % in last 30 mins"
                           },
                           {
                             "metricStat": {
@@ -6965,7 +6965,7 @@
                           "Fn::Join": [
                             "",
                             [
-                              "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Error %\",\"region\":\"",
+                              "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Error %\",\"region\":\"",
                               {
                                 "Ref": "AWS::Region"
                               },
@@ -6977,7 +6977,7 @@
                               {
                                 "Ref": "sqssubscribeLambdaFunction2B3EFD1F"
                               },
-                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"e\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Duration\",\"region\":\"",
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"e\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
                               {
                                 "Ref": "AWS::Region"
                               },
@@ -6993,11 +6993,11 @@
                               {
                                 "Ref": "sqssubscribeLambdaFunction2B3EFD1F"
                               },
-                              "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Throttle %\",\"region\":\"",
+                              "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Throttle %\",\"region\":\"",
                               {
                                 "Ref": "AWS::Region"
                               },
-                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of throttled requests, last 30 mins\",\"expression\":\"t / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"t / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
                               {
                                 "Ref": "sqssubscribeLambdaFunction2B3EFD1F"
                               },

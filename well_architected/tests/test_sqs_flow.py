@@ -213,7 +213,7 @@ class TestSqsFlow(TestTemplates):
         "aws:cdk:path": "SqsFlow/sqs/LambdaFunction/XRayTracerSnsFanOutTopic/Resource"
       }
     },
-    "sqsDynamoLambda2Error5FAEF8D5": {
+    "sqsLambdainvocationErrors2DA8BB648": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
@@ -275,10 +275,10 @@ class TestSqsFlow(TestTemplates):
         "TreatMissingData": "notBreaching"
       },
       "Metadata": {
-        "aws:cdk:path": "SqsFlow/sqs/Dynamo Lambda 2% Error/Resource"
+        "aws:cdk:path": "SqsFlow/sqs/Lambda invocation Errors > 2%/Resource"
       }
     },
-    "sqsDynamoLambdap99LongDuration1s13094CF2": {
+    "sqsLambdap99LongDuration1s7AB941BF": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
@@ -305,10 +305,10 @@ class TestSqsFlow(TestTemplates):
         "TreatMissingData": "notBreaching"
       },
       "Metadata": {
-        "aws:cdk:path": "SqsFlow/sqs/Dynamo Lambda p99 Long Duration (>1s)/Resource"
+        "aws:cdk:path": "SqsFlow/sqs/Lambda p99 Long Duration (>1s)/Resource"
       }
     },
-    "sqsDynamoLambda2ThrottledD8CF2508": {
+    "sqsLambdaThrottledinvocations2735F537D": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
@@ -323,7 +323,7 @@ class TestSqsFlow(TestTemplates):
           {
             "Expression": "t / (invocations + t) * 100",
             "Id": "expr_1",
-            "Label": "% of throttled requests, last 30 mins"
+            "Label": "throttled requests % in last 30 mins"
           },
           {
             "Id": "invocations",
@@ -370,7 +370,7 @@ class TestSqsFlow(TestTemplates):
         "TreatMissingData": "notBreaching"
       },
       "Metadata": {
-        "aws:cdk:path": "SqsFlow/sqs/Dynamo Lambda 2% Throttled/Resource"
+        "aws:cdk:path": "SqsFlow/sqs/Lambda Throttled invocations >2%/Resource"
       }
     },
     "sqsCloudWatchDashBoardAC79C904": {
@@ -380,7 +380,7 @@ class TestSqsFlow(TestTemplates):
           "Fn::Join": [
             "",
             [
-              "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Error %\",\"region\":\"",
+              "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Error %\",\"region\":\"",
               {
                 "Ref": "AWS::Region"
               },
@@ -392,7 +392,7 @@ class TestSqsFlow(TestTemplates):
               {
                 "Ref": "sqsLambdaFunctionDBCFBC0F"
               },
-              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"e\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Duration\",\"region\":\"",
+              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"e\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
               {
                 "Ref": "AWS::Region"
               },
@@ -408,11 +408,11 @@ class TestSqsFlow(TestTemplates):
               {
                 "Ref": "sqsLambdaFunctionDBCFBC0F"
               },
-              "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Throttle %\",\"region\":\"",
+              "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Throttle %\",\"region\":\"",
               {
                 "Ref": "AWS::Region"
               },
-              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of throttled requests, last 30 mins\",\"expression\":\"t / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"t / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
               {
                 "Ref": "sqsLambdaFunctionDBCFBC0F"
               },
@@ -598,7 +598,7 @@ class TestSqsFlow(TestTemplates):
         "aws:cdk:path": "SqsFlow/sqs_subscribe/LambdaFunction/SqsEventSource:SqsFlowRDSPublishQueueD1D2BBCF/Resource"
       }
     },
-    "sqssubscribeDynamoLambda2ErrorCE8B6912": {
+    "sqssubscribeLambdainvocationErrors291E8D7B4": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
@@ -660,10 +660,10 @@ class TestSqsFlow(TestTemplates):
         "TreatMissingData": "notBreaching"
       },
       "Metadata": {
-        "aws:cdk:path": "SqsFlow/sqs_subscribe/Dynamo Lambda 2% Error/Resource"
+        "aws:cdk:path": "SqsFlow/sqs_subscribe/Lambda invocation Errors > 2%/Resource"
       }
     },
-    "sqssubscribeDynamoLambdap99LongDuration1sE7D6C222": {
+    "sqssubscribeLambdap99LongDuration1sD4FA6C78": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
@@ -690,10 +690,10 @@ class TestSqsFlow(TestTemplates):
         "TreatMissingData": "notBreaching"
       },
       "Metadata": {
-        "aws:cdk:path": "SqsFlow/sqs_subscribe/Dynamo Lambda p99 Long Duration (>1s)/Resource"
+        "aws:cdk:path": "SqsFlow/sqs_subscribe/Lambda p99 Long Duration (>1s)/Resource"
       }
     },
-    "sqssubscribeDynamoLambda2Throttled7382DF58": {
+    "sqssubscribeLambdaThrottledinvocations21C107A97": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
@@ -708,7 +708,7 @@ class TestSqsFlow(TestTemplates):
           {
             "Expression": "t / (invocations + t) * 100",
             "Id": "expr_1",
-            "Label": "% of throttled requests, last 30 mins"
+            "Label": "throttled requests % in last 30 mins"
           },
           {
             "Id": "invocations",
@@ -755,7 +755,7 @@ class TestSqsFlow(TestTemplates):
         "TreatMissingData": "notBreaching"
       },
       "Metadata": {
-        "aws:cdk:path": "SqsFlow/sqs_subscribe/Dynamo Lambda 2% Throttled/Resource"
+        "aws:cdk:path": "SqsFlow/sqs_subscribe/Lambda Throttled invocations >2%/Resource"
       }
     },
     "sqssubscribeCloudWatchDashBoard2D9A2251": {
@@ -765,7 +765,7 @@ class TestSqsFlow(TestTemplates):
           "Fn::Join": [
             "",
             [
-              "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Error %\",\"region\":\"",
+              "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Error %\",\"region\":\"",
               {
                 "Ref": "AWS::Region"
               },
@@ -777,7 +777,7 @@ class TestSqsFlow(TestTemplates):
               {
                 "Ref": "sqssubscribeLambdaFunction2B3EFD1F"
               },
-              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"e\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Duration\",\"region\":\"",
+              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"e\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
               {
                 "Ref": "AWS::Region"
               },
@@ -793,11 +793,11 @@ class TestSqsFlow(TestTemplates):
               {
                 "Ref": "sqssubscribeLambdaFunction2B3EFD1F"
               },
-              "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Dynamo Lambda Throttle %\",\"region\":\"",
+              "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Throttle %\",\"region\":\"",
               {
                 "Ref": "AWS::Region"
               },
-              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of throttled requests, last 30 mins\",\"expression\":\"t / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"t / (invocations + t) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
               {
                 "Ref": "sqssubscribeLambdaFunction2B3EFD1F"
               },

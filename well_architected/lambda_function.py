@@ -54,7 +54,7 @@ class LambdaFunctionConstruct(WellArchitectedFrameworkConstruct):
     def create_lambda_throttled_percentage_metric(self):
         # note: throttled requests are not counted in total num of invocations
         return self.create_cloudwatch_math_expression(
-            label="% of throttled requests, last 30 mins",
+            label="throttled requests % in last 30 mins",
             expression="t / (invocations + t) * 100",
             using_metrics={
                 "invocations": self.get_lambda_function_metric("Invocations"),
@@ -65,7 +65,7 @@ class LambdaFunctionConstruct(WellArchitectedFrameworkConstruct):
     def create_2_percent_error_alarm(self):
         # 2% of Dynamo Lambda invocations erroring
         return self.create_cloudwatch_alarm(
-            id="Dynamo Lambda 2% Error",
+            id="Lambda invocation Errors > 2%",
             metric=self.create_lambda_error_percentage_metric(),
             threshold=2,
         )
@@ -73,29 +73,28 @@ class LambdaFunctionConstruct(WellArchitectedFrameworkConstruct):
     def create_long_duration_alarm(self):
         # 1% of Lambda invocations taking longer than 1 second
         return self.create_cloudwatch_alarm(
-            id="Dynamo Lambda p99 Long Duration (>1s)",
+            id="Lambda p99 Long Duration (>1s)",
             metric=self.lambda_function.metric_duration(statistic="p99"),
             threshold=1000,
         )
 
     def create_throttled_percentage_alarm(self):
-        # 2% of our lambda invocations are throttled
         return self.create_cloudwatch_alarm(
-            id="Dynamo Lambda 2% Throttled",
+            id="Lambda Throttled invocations >2%",
             metric=self.create_lambda_throttled_percentage_metric(),
             threshold=2,
         )
 
     def create_lambda_error_percentage_widget(self):
         return self.create_cloudwatch_widget(
-            title="Dynamo Lambda Error %",
+            title="Lambda Error %",
             stacked=False,
             left=[self.create_lambda_error_percentage_metric()],
         )
 
     def create_lambda_duration_widget(self):
         return self.create_cloudwatch_widget(
-            title="Dynamo Lambda Duration",
+            title="Lambda Duration",
             left=[
                 self.lambda_function.metric_duration(statistic=statistic)
                 for statistic in ('p50', 'p90', 'p99')
@@ -104,7 +103,7 @@ class LambdaFunctionConstruct(WellArchitectedFrameworkConstruct):
 
     def create_lambda_throttled_percentage_widget(self):
         return self.create_cloudwatch_widget(
-            title="Dynamo Lambda Throttle %",
+            title="Lambda Throttle %",
             left=[self.create_lambda_throttled_percentage_metric()],
             stacked=False,
         )
