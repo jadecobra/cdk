@@ -1,6 +1,6 @@
-from aws_cdk.core import Construct
+from aws_cdk.core import Construct, Stack
 from aws_cdk.aws_dynamodb import Table, Attribute, AttributeType, BillingMode
-from well_architected import WellArchitectedFramework, WellArchitectedFrameworkConstruct
+from well_architected import WellArchitectedFrameworkConstruct
 
 class DynamoDBTableConstruct(WellArchitectedFrameworkConstruct):
 
@@ -96,12 +96,12 @@ class DynamoDBTableConstruct(WellArchitectedFrameworkConstruct):
         )
 
 
-class DynamoDBTableStack(WellArchitectedFramework):
+class DynamoDBTableStack(Stack):
 
     def __init__(
         self, scope: Construct, id: str, error_topic=None, **kwargs
     ) -> None:
-        super().__init__(scope, id, error_topic=error_topic, **kwargs)
+        super().__init__(scope, id, **kwargs)
         self.dynamodb_table = DynamoDBTableConstruct(
             self, "Hits",
             error_topic=error_topic,
