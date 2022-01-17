@@ -1,19 +1,7 @@
 from aws_cdk.core import Construct, Duration, Stack
 from aws_cdk.aws_lambda import Function, Code, Runtime, Tracing
 from aws_cdk.aws_sns import ITopic
-from well_architected import WellArchitectedFramework, WellArchitectedFrameworkConstruct
-
-
-class LambdaFunctionStack(Stack):
-
-    def __init__(self, scope: Construct, id: str,
-        function_name=None, environment_variables=None, error_topic:ITopic=None,
-        **kwargs) -> None:
-        super().__init__(scope, id, **kwargs)
-        self.lambda_function = create_python_lambda_function(
-            self, function_name=function_name,
-            environment_variables=environment_variables
-        )
+from well_architected import WellArchitectedFrameworkConstruct
 
 class LambdaFunctionConstruct(WellArchitectedFrameworkConstruct):
 
@@ -113,6 +101,17 @@ class LambdaFunctionConstruct(WellArchitectedFrameworkConstruct):
             self.create_lambda_error_percentage_widget(),
             self.create_lambda_duration_widget(),
             self.create_lambda_throttled_percentage_widget(),
+        )
+
+class LambdaFunctionStack(Stack):
+
+    def __init__(self, scope: Construct, id: str,
+        function_name=None, environment_variables=None, error_topic:ITopic=None,
+        **kwargs) -> None:
+        super().__init__(scope, id, **kwargs)
+        self.lambda_function = create_python_lambda_function(
+            self, function_name=function_name,
+            environment_variables=environment_variables
         )
 
 def create_python_lambda_function(stack, function_name=None, environment_variables=None):

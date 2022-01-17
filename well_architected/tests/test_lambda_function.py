@@ -11,8 +11,7 @@ class TestLambdaFunction(TestTemplates):
     "hitcounterErrorTopicB8385607": {
       "Type": "AWS::SNS::Topic",
       "Properties": {
-        "DisplayName": "ErrorTopic",
-        "TopicName": "ErrorTopic"
+        "DisplayName": "ErrorTopic"
       },
       "Metadata": {
         "aws:cdk:path": "LambdaFunction/hit_counter/ErrorTopic/Resource"

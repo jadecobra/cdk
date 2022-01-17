@@ -100,6 +100,15 @@
         "aws:cdk:path": "LambdaHttpApiGateway/HttpAPI/DefaultStage/Resource"
       }
     },
+    "ApiGatewayCloudWatchErrorTopicB01304FE": {
+      "Type": "AWS::SNS::Topic",
+      "Properties": {
+        "DisplayName": "ErrorTopic"
+      },
+      "Metadata": {
+        "aws:cdk:path": "LambdaHttpApiGateway/ApiGatewayCloudWatch/ErrorTopic/Resource"
+      }
+    },
     "ApiGatewayCloudWatchAPIGateway4XXErrors11FFC618F": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {
@@ -308,7 +317,7 @@
     "CDKMetadata": {
       "Type": "AWS::CDK::Metadata",
       "Properties": {
-        "Analytics": "v2:deflate64:H4sIAAAAAAAA/12OwY7CMAxEv4V7MBRO3EBwWE5U5QtMEtosbVIlDhWK8u/UQWKlPc0ba8Z2BdV2B+vFHqewlOqxStJ5DelKKB/i6GwgHyWJ491eIo2xUKODi15q5jmiDBlns+AVCUfTIukJX88NpB+i8TAaDrKwbVwkXehsSbceucyBf/YvN//SllsFsuhxuCmEeVBrP5gQuCF7F9WEJDtIhx79UG4WOGHobg694tHX5JxF/aLO2dUWqjVUi99gzNJHS2bQ0Hz0DdgJEOsgAQAA"
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/12Oz07DMAyHn2X3zFvZiRvTOLATU+EFvCS0Zm0SJQ7VFOXdqYMEEid/P+vznw66wyPsN0+4pK02t13RPloob4z6pk7eJY5Zszp9uNfMITfqbfI5aiu8KoaYvKtKVhQMNCDbBe9fD1BemMMxkIhSJPY+s210dmyHiDIswr/4562/DO1Wg6omnK8GYW1cbJwpJZlILkF594G0mA2q0pPPZkHWI5TjhHFujzR4xjRePUYjrd9Qa1WXO4/e7Q7Q7aHbfCaibcyOabbQ/9RvfPZ+MDUBAAA="
       },
       "Metadata": {
         "aws:cdk:path": "LambdaHttpApiGateway/CDKMetadata/Default"

@@ -22,8 +22,7 @@ class TestSqsFlow(TestTemplates):
     "sqsErrorTopicC8E3DE0B": {
       "Type": "AWS::SNS::Topic",
       "Properties": {
-        "DisplayName": "ErrorTopic",
-        "TopicName": "ErrorTopic"
+        "DisplayName": "ErrorTopic"
       },
       "Metadata": {
         "aws:cdk:path": "SqsFlow/sqs/ErrorTopic/Resource"
@@ -432,8 +431,7 @@ class TestSqsFlow(TestTemplates):
     "sqssubscribeErrorTopicC4F29AB2": {
       "Type": "AWS::SNS::Topic",
       "Properties": {
-        "DisplayName": "ErrorTopic",
-        "TopicName": "ErrorTopic"
+        "DisplayName": "ErrorTopic"
       },
       "Metadata": {
         "aws:cdk:path": "SqsFlow/sqs_subscribe/ErrorTopic/Resource"

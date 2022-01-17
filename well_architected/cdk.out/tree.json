@@ -408,8 +408,7 @@
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::SNS::Topic",
                       "aws:cdk:cloudformation:props": {
-                        "displayName": "ErrorTopic",
-                        "topicName": "ErrorTopic"
+                        "displayName": "ErrorTopic"
                       }
                     },
                     "constructInfo": {
@@ -1444,6 +1443,30 @@
             "id": "ApiGatewayCloudWatch",
             "path": "LambdaRestAPIGateway/ApiGatewayCloudWatch",
             "children": {
+              "ErrorTopic": {
+                "id": "ErrorTopic",
+                "path": "LambdaRestAPIGateway/ApiGatewayCloudWatch/ErrorTopic",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "LambdaRestAPIGateway/ApiGatewayCloudWatch/ErrorTopic/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::SNS::Topic",
+                      "aws:cdk:cloudformation:props": {
+                        "displayName": "ErrorTopic"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-sns.CfnTopic",
+                      "version": "1.139.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-sns.Topic",
+                  "version": "1.139.0"
+                }
+              },
               "API Gateway 4XX Errors > 1%": {
                 "id": "API Gateway 4XX Errors > 1%",
                 "path": "LambdaRestAPIGateway/ApiGatewayCloudWatch/API Gateway 4XX Errors > 1%",
@@ -2125,6 +2148,30 @@
             "id": "ApiGatewayCloudWatch",
             "path": "LambdaHttpApiGateway/ApiGatewayCloudWatch",
             "children": {
+              "ErrorTopic": {
+                "id": "ErrorTopic",
+                "path": "LambdaHttpApiGateway/ApiGatewayCloudWatch/ErrorTopic",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "LambdaHttpApiGateway/ApiGatewayCloudWatch/ErrorTopic/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::SNS::Topic",
+                      "aws:cdk:cloudformation:props": {
+                        "displayName": "ErrorTopic"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-sns.CfnTopic",
+                      "version": "1.139.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-sns.Topic",
+                  "version": "1.139.0"
+                }
+              },
               "API Gateway 4XX Errors > 1%": {
                 "id": "API Gateway 4XX Errors > 1%",
                 "path": "LambdaHttpApiGateway/ApiGatewayCloudWatch/API Gateway 4XX Errors > 1%",
@@ -3174,8 +3221,7 @@
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::SNS::Topic",
                       "aws:cdk:cloudformation:props": {
-                        "displayName": "ErrorTopic",
-                        "topicName": "ErrorTopic"
+                        "displayName": "ErrorTopic"
                       }
                     },
                     "constructInfo": {
@@ -3869,8 +3915,7 @@
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::SNS::Topic",
                       "aws:cdk:cloudformation:props": {
-                        "displayName": "ErrorTopic",
-                        "topicName": "ErrorTopic"
+                        "displayName": "ErrorTopic"
                       }
                     },
                     "constructInfo": {
@@ -4575,8 +4620,7 @@
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::SNS::Topic",
                       "aws:cdk:cloudformation:props": {
-                        "displayName": "ErrorTopic",
-                        "topicName": "ErrorTopic"
+                        "displayName": "ErrorTopic"
                       }
                     },
                     "constructInfo": {
@@ -5214,8 +5258,7 @@
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::SNS::Topic",
                       "aws:cdk:cloudformation:props": {
-                        "displayName": "ErrorTopic",
-                        "topicName": "ErrorTopic"
+                        "displayName": "ErrorTopic"
                       }
                     },
                     "constructInfo": {
@@ -5850,8 +5893,7 @@
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::SNS::Topic",
                       "aws:cdk:cloudformation:props": {
-                        "displayName": "ErrorTopic",
-                        "topicName": "ErrorTopic"
+                        "displayName": "ErrorTopic"
                       }
                     },
                     "constructInfo": {
@@ -6483,8 +6525,7 @@
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::SNS::Topic",
                       "aws:cdk:cloudformation:props": {
-                        "displayName": "ErrorTopic",
-                        "topicName": "ErrorTopic"
+                        "displayName": "ErrorTopic"
                       }
                     },
                     "constructInfo": {

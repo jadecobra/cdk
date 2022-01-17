@@ -64,7 +64,6 @@ class WellArchitectedFrameworkConstruct(Construct):
     def create_error_topic(self):
         return Topic(
             self, "ErrorTopic",
-            topic_name="ErrorTopic",
             display_name="ErrorTopic",
         )
 

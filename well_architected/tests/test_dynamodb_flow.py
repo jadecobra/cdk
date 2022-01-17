@@ -37,8 +37,7 @@ class TestDynamoDBFlow(TestTemplates):
     "hitcounterErrorTopicB8385607": {
       "Type": "AWS::SNS::Topic",
       "Properties": {
-        "DisplayName": "ErrorTopic",
-        "TopicName": "ErrorTopic"
+        "DisplayName": "ErrorTopic"
       },
       "Metadata": {
         "aws:cdk:path": "DynamoDBFlow/hit_counter/ErrorTopic/Resource"

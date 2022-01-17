@@ -20,8 +20,7 @@ class TestSnsFlow(TestTemplates):
     "snspublishErrorTopic167BD513": {
       "Type": "AWS::SNS::Topic",
       "Properties": {
-        "DisplayName": "ErrorTopic",
-        "TopicName": "ErrorTopic"
+        "DisplayName": "ErrorTopic"
       },
       "Metadata": {
         "aws:cdk:path": "SnsFlow/sns_publish/ErrorTopic/Resource"
@@ -436,8 +435,7 @@ class TestSnsFlow(TestTemplates):
     "snssubscribeErrorTopicB1BEEA4E": {
       "Type": "AWS::SNS::Topic",
       "Properties": {
-        "DisplayName": "ErrorTopic",
-        "TopicName": "ErrorTopic"
+        "DisplayName": "ErrorTopic"
       },
       "Metadata": {
         "aws:cdk:path": "SnsFlow/sns_subscribe/ErrorTopic/Resource"
