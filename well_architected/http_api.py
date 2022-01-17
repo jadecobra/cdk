@@ -3,7 +3,6 @@ from aws_cdk.aws_lambda import Function
 from aws_cdk.aws_apigatewayv2 import HttpApi
 from aws_cdk.aws_apigatewayv2_integrations import HttpLambdaIntegration
 from api_gateway_cloudwatch import ApiGatewayCloudWatch
-from well_architected import WellArchitectedFramework
 
 class LambdaHttpApiGateway(Stack):
 
