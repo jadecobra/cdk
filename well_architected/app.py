@@ -7,7 +7,7 @@ from cloudwatch_dashboard import CloudWatchDashboard
 from dynamodb_table import DynamoDBTable
 from http_api import LambdaHttpApiGateway
 from sns_topic import SnsTopic
-from xray_tracer.xray_tracer import SnsRestApi
+from xray_tracer.sns_rest_api import SnsRestApi
 from xray_tracer.sqs_flow import SqsFlow
 from xray_tracer.sns_flow import SnsFlow
 from xray_tracer.dynamodb_flow import DynamoDBFlow
