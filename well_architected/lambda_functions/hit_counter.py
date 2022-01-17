@@ -6,7 +6,7 @@ from aws_xray_sdk.core import patch_all
 
 patch_all()
 
-table = boto3.resource('dynamodb').Table(os.environ['HITS_TABLE_NAME'])
+table = boto3.resource('dynamodb').Table(os.environ.get('HITS_TABLE_NAME'))
 
 def handler(event, context):
     return table.update_item(
