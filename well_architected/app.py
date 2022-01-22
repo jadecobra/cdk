@@ -72,3 +72,7 @@ class WellArchitected(App):
         return WebApplicationFirewall(self, id, target_arn=target_arn)
 
 WellArchitected().synth()
+
+# TODO
+# Well Architected Auditor - Config + Lambda + DynamoDB
+# new CDK pattern

@@ -186,7 +186,7 @@ class TestDynamoDBFlow(TestTemplates):
       "Properties": {
         "Code": {
           "S3Bucket": {
-            "Ref": "AssetParameters42961f7a43eb8def8a88d0711b3c95740379627ec280319af30490b76a248e16S3Bucket2E949244"
+            "Ref": "AssetParameters5923df62873c4d2fa5c3a153c7fd16a269dd08ac4c796664469420121ad60419S3BucketB2BDF437"
           },
           "S3Key": {
             "Fn::Join": [
@@ -199,7 +199,7 @@ class TestDynamoDBFlow(TestTemplates):
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters42961f7a43eb8def8a88d0711b3c95740379627ec280319af30490b76a248e16S3VersionKeyBF41F02A"
+                          "Ref": "AssetParameters5923df62873c4d2fa5c3a153c7fd16a269dd08ac4c796664469420121ad60419S3VersionKey5C3FFBDD"
                         }
                       ]
                     }
@@ -212,7 +212,7 @@ class TestDynamoDBFlow(TestTemplates):
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters42961f7a43eb8def8a88d0711b3c95740379627ec280319af30490b76a248e16S3VersionKeyBF41F02A"
+                          "Ref": "AssetParameters5923df62873c4d2fa5c3a153c7fd16a269dd08ac4c796664469420121ad60419S3VersionKey5C3FFBDD"
                         }
                       ]
                     }
@@ -253,7 +253,7 @@ class TestDynamoDBFlow(TestTemplates):
       ],
       "Metadata": {
         "aws:cdk:path": "DynamoDBFlow/hit_counter/LambdaFunction/Resource",
-        "aws:asset:path": "asset.42961f7a43eb8def8a88d0711b3c95740379627ec280319af30490b76a248e16",
+        "aws:asset:path": "asset.5923df62873c4d2fa5c3a153c7fd16a269dd08ac4c796664469420121ad60419",
         "aws:asset:is-bundled": false,
         "aws:asset:property": "Code"
       }
@@ -535,17 +535,17 @@ class TestDynamoDBFlow(TestTemplates):
       "Type": "String",
       "Description": "Artifact hash for asset \"d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81\""
     },
-    "AssetParameters42961f7a43eb8def8a88d0711b3c95740379627ec280319af30490b76a248e16S3Bucket2E949244": {
+    "AssetParameters5923df62873c4d2fa5c3a153c7fd16a269dd08ac4c796664469420121ad60419S3BucketB2BDF437": {
       "Type": "String",
-      "Description": "S3 bucket for asset \"42961f7a43eb8def8a88d0711b3c95740379627ec280319af30490b76a248e16\""
+      "Description": "S3 bucket for asset \"5923df62873c4d2fa5c3a153c7fd16a269dd08ac4c796664469420121ad60419\""
     },
-    "AssetParameters42961f7a43eb8def8a88d0711b3c95740379627ec280319af30490b76a248e16S3VersionKeyBF41F02A": {
+    "AssetParameters5923df62873c4d2fa5c3a153c7fd16a269dd08ac4c796664469420121ad60419S3VersionKey5C3FFBDD": {
       "Type": "String",
-      "Description": "S3 key for asset version \"42961f7a43eb8def8a88d0711b3c95740379627ec280319af30490b76a248e16\""
+      "Description": "S3 key for asset version \"5923df62873c4d2fa5c3a153c7fd16a269dd08ac4c796664469420121ad60419\""
     },
-    "AssetParameters42961f7a43eb8def8a88d0711b3c95740379627ec280319af30490b76a248e16ArtifactHashDDCB2305": {
+    "AssetParameters5923df62873c4d2fa5c3a153c7fd16a269dd08ac4c796664469420121ad60419ArtifactHash4E9C813A": {
       "Type": "String",
-      "Description": "Artifact hash for asset \"42961f7a43eb8def8a88d0711b3c95740379627ec280319af30490b76a248e16\""
+      "Description": "Artifact hash for asset \"5923df62873c4d2fa5c3a153c7fd16a269dd08ac4c796664469420121ad60419\""
     }
   },
   "Conditions": {
