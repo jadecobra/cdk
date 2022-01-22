@@ -3,7 +3,7 @@ import aws_cdk.aws_codepipeline_actions as codepipeline_actions
 import aws_cdk.aws_s3 as s3
 
 # how to deploy to an imported S3 bucket from a different AWS account
-pipeline = codepipeline.Pipeline(self, 'MyFirstPipeline')
+pipeline = codepipeline.Pipeline(self, 'Pipeline')
 stage = pipeline.add_stage(stage_name='Stage')
 stage.add_action(
     codepipeline_actions.S3DeployAcion(

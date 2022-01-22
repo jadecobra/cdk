@@ -2,7 +2,7 @@ import aws_cdk.aws_codepipeline_actiosn as codepipeline_actions
 import aws_cdk.aws_codepipeline as codepipeline
 
 # how to add an action to a stage
-pipeline = codepipeline.Pipeline(self, 'MyFirstPipeline')
+pipeline = codepipeline.Pipeline(self, 'Pipeline')
 source = pipeline.add_stage(stage_name='Source')
 source.add_action(codepipeline_actions.CodeCommitSourceAction())
 
