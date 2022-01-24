@@ -66,5 +66,6 @@ pipelines.CodeBuildStep(
     ),
 
     synth_code_build_defaults=pipelines.CodeBuildOptions(),
-    asset_publishing_code_build_defaults=
+    asset_publishing_code_build_defaults=pipelines.CodeBuildOptions(),
+    self_mutation_code_build_defaults=pipelines.CodeBuildOptions(),
 )
