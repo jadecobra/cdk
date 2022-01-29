@@ -14,10 +14,7 @@ class TestRestAPIGateway(TestTemplates):
         "RetentionInDays": 731
       },
       "UpdateReplacePolicy": "Retain",
-      "DeletionPolicy": "Retain",
-      "Metadata": {
-        "aws:cdk:path": "LambdaRestAPIGateway/helloAPILogs/Resource"
-      }
+      "DeletionPolicy": "Retain"
     },
     "LambdaAPIGateway527FD988": {
       "Type": "AWS::ApiGateway::RestApi",
@@ -28,9 +25,6 @@ class TestRestAPIGateway(TestTemplates):
           ]
         },
         "Name": "hello"
-      },
-      "Metadata": {
-        "aws:cdk:path": "LambdaRestAPIGateway/LambdaAPIGateway/Resource"
       }
     },
     "LambdaAPIGatewayCloudWatchRoleA621D6AA": {
@@ -62,9 +56,6 @@ class TestRestAPIGateway(TestTemplates):
             ]
           }
         ]
-      },
-      "Metadata": {
-        "aws:cdk:path": "LambdaRestAPIGateway/LambdaAPIGateway/CloudWatchRole/Resource"
       }
     },
     "LambdaAPIGatewayAccount80C6550F": {
@@ -79,12 +70,9 @@ class TestRestAPIGateway(TestTemplates):
       },
       "DependsOn": [
         "LambdaAPIGateway527FD988"
-      ],
-      "Metadata": {
-        "aws:cdk:path": "LambdaRestAPIGateway/LambdaAPIGateway/Account"
-      }
+      ]
     },
-    "LambdaAPIGatewayDeploymentE937914C8e2a69677d7c755d4c16351139f0b7c4": {
+    "LambdaAPIGatewayDeploymentE937914C5c746fc97cfebd293610d5e7f299055c": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -95,10 +83,7 @@ class TestRestAPIGateway(TestTemplates):
       "DependsOn": [
         "LambdaAPIGatewayhelloGET71776088",
         "LambdaAPIGatewayhello24FCF180"
-      ],
-      "Metadata": {
-        "aws:cdk:path": "LambdaRestAPIGateway/LambdaAPIGateway/Deployment/Resource"
-      }
+      ]
     },
     "LambdaAPIGatewayDeploymentStageprod74ACA052": {
       "Type": "AWS::ApiGateway::Stage",
@@ -116,7 +101,7 @@ class TestRestAPIGateway(TestTemplates):
           "Format": "$context.identity.sourceIp $context.identity.caller $context.identity.user [$context.requestTime] \"$context.httpMethod $context.resourcePath $context.protocol\" $context.status $context.responseLength $context.requestId"
         },
         "DeploymentId": {
-          "Ref": "LambdaAPIGatewayDeploymentE937914C8e2a69677d7c755d4c16351139f0b7c4"
+          "Ref": "LambdaAPIGatewayDeploymentE937914C5c746fc97cfebd293610d5e7f299055c"
         },
         "MethodSettings": [
           {
@@ -131,10 +116,7 @@ class TestRestAPIGateway(TestTemplates):
       },
       "DependsOn": [
         "LambdaAPIGatewayAccount80C6550F"
-      ],
-      "Metadata": {
-        "aws:cdk:path": "LambdaRestAPIGateway/LambdaAPIGateway/DeploymentStage.prod/Resource"
-      }
+      ]
     },
     "LambdaAPIGatewayhello24FCF180": {
       "Type": "AWS::ApiGateway::Resource",
@@ -149,9 +131,6 @@ class TestRestAPIGateway(TestTemplates):
         "RestApiId": {
           "Ref": "LambdaAPIGateway527FD988"
         }
-      },
-      "Metadata": {
-        "aws:cdk:path": "LambdaRestAPIGateway/LambdaAPIGateway/Default/hello/Resource"
       }
     },
     "LambdaAPIGatewayhelloGETApiPermissionLambdaRestAPIGatewayLambdaAPIGateway33BA6F57GEThello1DD4CFC3": {
@@ -190,9 +169,6 @@ class TestRestAPIGateway(TestTemplates):
             ]
           ]
         }
-      },
-      "Metadata": {
-        "aws:cdk:path": "LambdaRestAPIGateway/LambdaAPIGateway/Default/hello/GET/ApiPermission.LambdaRestAPIGatewayLambdaAPIGateway33BA6F57.GET..hello"
       }
     },
     "LambdaAPIGatewayhelloGETApiPermissionTestLambdaRestAPIGatewayLambdaAPIGateway33BA6F57GEThello193DFB32": {
@@ -227,9 +203,6 @@ class TestRestAPIGateway(TestTemplates):
             ]
           ]
         }
-      },
-      "Metadata": {
-        "aws:cdk:path": "LambdaRestAPIGateway/LambdaAPIGateway/Default/hello/GET/ApiPermission.Test.LambdaRestAPIGatewayLambdaAPIGateway33BA6F57.GET..hello"
       }
     },
     "LambdaAPIGatewayhelloGET71776088": {
@@ -283,18 +256,12 @@ class TestRestAPIGateway(TestTemplates):
             "StatusCode": "200"
           }
         ]
-      },
-      "Metadata": {
-        "aws:cdk:path": "LambdaRestAPIGateway/LambdaAPIGateway/Default/hello/GET/Resource"
       }
     },
     "ApiGatewayCloudWatchErrorTopicB01304FE": {
       "Type": "AWS::SNS::Topic",
       "Properties": {
         "DisplayName": "ErrorTopic"
-      },
-      "Metadata": {
-        "aws:cdk:path": "LambdaRestAPIGateway/ApiGatewayCloudWatch/ErrorTopic/Resource"
       }
     },
     "ApiGatewayCloudWatchAPIGateway4XXErrors11FFC618F": {
@@ -361,9 +328,6 @@ class TestRestAPIGateway(TestTemplates):
         ],
         "Threshold": 1,
         "TreatMissingData": "notBreaching"
-      },
-      "Metadata": {
-        "aws:cdk:path": "LambdaRestAPIGateway/ApiGatewayCloudWatch/API Gateway 4XX Errors > 1%/Resource"
       }
     },
     "ApiGatewayCloudWatchAPIGateway5XXErrors0001B6606": {
@@ -403,9 +367,6 @@ class TestRestAPIGateway(TestTemplates):
         ],
         "Threshold": 0,
         "TreatMissingData": "notBreaching"
-      },
-      "Metadata": {
-        "aws:cdk:path": "LambdaRestAPIGateway/ApiGatewayCloudWatch/API Gateway 5XX Errors > 0/Resource"
       }
     },
     "ApiGatewayCloudWatchAPIp99latencyalarm1s6545CFD1": {
@@ -445,9 +406,6 @@ class TestRestAPIGateway(TestTemplates):
         ],
         "Threshold": 1000,
         "TreatMissingData": "notBreaching"
-      },
-      "Metadata": {
-        "aws:cdk:path": "LambdaRestAPIGateway/ApiGatewayCloudWatch/API p99 latency alarm >= 1s/Resource"
       }
     },
     "ApiGatewayCloudWatchCloudWatchDashBoard278188F3": {
@@ -497,20 +455,7 @@ class TestRestAPIGateway(TestTemplates):
             ]
           ]
         }
-      },
-      "Metadata": {
-        "aws:cdk:path": "LambdaRestAPIGateway/ApiGatewayCloudWatch/CloudWatchDashBoard/Resource"
       }
-    },
-    "CDKMetadata": {
-      "Type": "AWS::CDK::Metadata",
-      "Properties": {
-        "Analytics": "v2:deflate64:H4sIAAAAAAAA/1WPzW7DIBCEnyV3QmLl1FvdROqlVaO0L7ABapMAi/iRZSHevYDr/pz4ZhntzHa0OzzQ/eYRJr9l/L5LDJ2g6T0Au5Pjp3mLwcZAjmh8cJGFOrsIj9ExUbl8cBkkmkzqiqRw8DS94PDsMNrqWLkYrBwgiAlmmsqO0Fv5vW7FnjGMJpCTsApnLUzL+6NKr6HlLrA2eQL/K/5VfBVhRF5HC2UiQZd4VIuvvJko0FcOtOizcFp6X+4h3pRDPtBKVo0NMmEKI58gsJGmXoHTrXWDE/jxiuBa2I/IOZPzXJLN7kC7Pe02Ny/l1pUrpRb0srxf3ktXm4cBAAA="
-      },
-      "Metadata": {
-        "aws:cdk:path": "LambdaRestAPIGateway/CDKMetadata/Default"
-      },
-      "Condition": "CDKMetadataAvailable"
     }
   },
   "Outputs": {
@@ -555,200 +500,6 @@ class TestRestAPIGateway(TestTemplates):
       "Export": {
         "Name": "LambdaRestAPIGateway:ExportsOutputRefLambdaAPIGatewayDeploymentStageprod74ACA052509E0E94"
       }
-    }
-  },
-  "Conditions": {
-    "CDKMetadataAvailable": {
-      "Fn::Or": [
-        {
-          "Fn::Or": [
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "af-south-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "ap-east-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "ap-northeast-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "ap-northeast-2"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "ap-south-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "ap-southeast-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "ap-southeast-2"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "ca-central-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "cn-north-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "cn-northwest-1"
-              ]
-            }
-          ]
-        },
-        {
-          "Fn::Or": [
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "eu-central-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "eu-north-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "eu-south-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "eu-west-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "eu-west-2"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "eu-west-3"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "me-south-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "sa-east-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "us-east-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "us-east-2"
-              ]
-            }
-          ]
-        },
-        {
-          "Fn::Or": [
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "us-west-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "us-west-2"
-              ]
-            }
-          ]
-        }
-      ]
     }
   }
 }

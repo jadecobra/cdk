@@ -3,21 +3,21 @@ from tests.utilities import TestTemplates, true, false
 
 class TestXRayTracer(TestTemplates):
 
-    def test_xray_tracer(self):
+    def test_sns_rest_api(self):
         self.assert_template_equal(
             'SnsRestApi',
             {
   "Resources": {
-    "RestApi0C43BF4B": {
+    "xrayTracerAPIA84CAE80": {
       "Type": "AWS::ApiGateway::RestApi",
       "Properties": {
-        "Name": "RestApi"
+        "Name": "xrayTracerAPI"
       },
       "Metadata": {
-        "aws:cdk:path": "SnsRestApi/RestApi/Resource"
+        "aws:cdk:path": "XRayTracer/xrayTracerAPI/Resource"
       }
     },
-    "RestApiCloudWatchRoleE3ED6605": {
+    "xrayTracerAPICloudWatchRoleCCB113F4": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -48,53 +48,53 @@ class TestXRayTracer(TestTemplates):
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "SnsRestApi/RestApi/CloudWatchRole/Resource"
+        "aws:cdk:path": "XRayTracer/xrayTracerAPI/CloudWatchRole/Resource"
       }
     },
-    "RestApiAccount7C83CF5A": {
+    "xrayTracerAPIAccount092EDE74": {
       "Type": "AWS::ApiGateway::Account",
       "Properties": {
         "CloudWatchRoleArn": {
           "Fn::GetAtt": [
-            "RestApiCloudWatchRoleE3ED6605",
+            "xrayTracerAPICloudWatchRoleCCB113F4",
             "Arn"
           ]
         }
       },
       "DependsOn": [
-        "RestApi0C43BF4B"
+        "xrayTracerAPIA84CAE80"
       ],
       "Metadata": {
-        "aws:cdk:path": "SnsRestApi/RestApi/Account"
+        "aws:cdk:path": "XRayTracer/xrayTracerAPI/Account"
       }
     },
-    "RestApiDeployment180EC50353456d9ae36c41aab4342990e922625e": {
+    "xrayTracerAPIDeploymentB3CB89A0721985a531d4b66ddba940aa934d59f0": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
-          "Ref": "RestApi0C43BF4B"
+          "Ref": "xrayTracerAPIA84CAE80"
         },
         "Description": "Automatically created by the RestApi construct"
       },
       "DependsOn": [
-        "RestApiproxyGET3EA512AF",
-        "RestApiproxyC95856DD",
-        "RestApiGET0F59260B",
-        "RestApiErrorResponseModelA6C9DD94",
-        "RestApiResponseModel056B6183"
+        "xrayTracerAPIproxyGET4E348609",
+        "xrayTracerAPIproxy719DA214",
+        "xrayTracerAPIGET7490A366",
+        "xrayTracerAPIErrorResponseModel24719E91",
+        "xrayTracerAPIResponseModel2591E14E"
       ],
       "Metadata": {
-        "aws:cdk:path": "SnsRestApi/RestApi/Deployment/Resource"
+        "aws:cdk:path": "XRayTracer/xrayTracerAPI/Deployment/Resource"
       }
     },
-    "RestApiDeploymentStageprod3855DE66": {
+    "xrayTracerAPIDeploymentStageprod85442A48": {
       "Type": "AWS::ApiGateway::Stage",
       "Properties": {
         "RestApiId": {
-          "Ref": "RestApi0C43BF4B"
+          "Ref": "xrayTracerAPIA84CAE80"
         },
         "DeploymentId": {
-          "Ref": "RestApiDeployment180EC50353456d9ae36c41aab4342990e922625e"
+          "Ref": "xrayTracerAPIDeploymentB3CB89A0721985a531d4b66ddba940aa934d59f0"
         },
         "MethodSettings": [
           {
@@ -109,24 +109,24 @@ class TestXRayTracer(TestTemplates):
         "TracingEnabled": true
       },
       "DependsOn": [
-        "RestApiAccount7C83CF5A"
+        "xrayTracerAPIAccount092EDE74"
       ],
       "Metadata": {
-        "aws:cdk:path": "SnsRestApi/RestApi/DeploymentStage.prod/Resource"
+        "aws:cdk:path": "XRayTracer/xrayTracerAPI/DeploymentStage.prod/Resource"
       }
     },
-    "RestApiGET0F59260B": {
+    "xrayTracerAPIGET7490A366": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
         "HttpMethod": "GET",
         "ResourceId": {
           "Fn::GetAtt": [
-            "RestApi0C43BF4B",
+            "xrayTracerAPIA84CAE80",
             "RootResourceId"
           ]
         },
         "RestApiId": {
-          "Ref": "RestApi0C43BF4B"
+          "Ref": "xrayTracerAPIA84CAE80"
         },
         "AuthorizationType": "NONE",
         "Integration": {
@@ -193,7 +193,7 @@ class TestXRayTracer(TestTemplates):
           {
             "ResponseModels": {
               "application/json": {
-                "Ref": "RestApiResponseModel056B6183"
+                "Ref": "xrayTracerAPIResponseModel2591E14E"
               }
             },
             "ResponseParameters": {
@@ -206,7 +206,7 @@ class TestXRayTracer(TestTemplates):
           {
             "ResponseModels": {
               "application/json": {
-                "Ref": "RestApiErrorResponseModelA6C9DD94"
+                "Ref": "xrayTracerAPIErrorResponseModel24719E91"
               }
             },
             "ResponseParameters": {
@@ -219,36 +219,36 @@ class TestXRayTracer(TestTemplates):
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "SnsRestApi/RestApi/Default/GET/Resource"
+        "aws:cdk:path": "XRayTracer/xrayTracerAPI/Default/GET/Resource"
       }
     },
-    "RestApiproxyC95856DD": {
+    "xrayTracerAPIproxy719DA214": {
       "Type": "AWS::ApiGateway::Resource",
       "Properties": {
         "ParentId": {
           "Fn::GetAtt": [
-            "RestApi0C43BF4B",
+            "xrayTracerAPIA84CAE80",
             "RootResourceId"
           ]
         },
         "PathPart": "{proxy+}",
         "RestApiId": {
-          "Ref": "RestApi0C43BF4B"
+          "Ref": "xrayTracerAPIA84CAE80"
         }
       },
       "Metadata": {
-        "aws:cdk:path": "SnsRestApi/RestApi/Default/{proxy+}/Resource"
+        "aws:cdk:path": "XRayTracer/xrayTracerAPI/Default/{proxy+}/Resource"
       }
     },
-    "RestApiproxyGET3EA512AF": {
+    "xrayTracerAPIproxyGET4E348609": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
         "HttpMethod": "GET",
         "ResourceId": {
-          "Ref": "RestApiproxyC95856DD"
+          "Ref": "xrayTracerAPIproxy719DA214"
         },
         "RestApiId": {
-          "Ref": "RestApi0C43BF4B"
+          "Ref": "xrayTracerAPIA84CAE80"
         },
         "AuthorizationType": "NONE",
         "Integration": {
@@ -315,7 +315,7 @@ class TestXRayTracer(TestTemplates):
           {
             "ResponseModels": {
               "application/json": {
-                "Ref": "RestApiResponseModel056B6183"
+                "Ref": "xrayTracerAPIResponseModel2591E14E"
               }
             },
             "ResponseParameters": {
@@ -328,7 +328,7 @@ class TestXRayTracer(TestTemplates):
           {
             "ResponseModels": {
               "application/json": {
-                "Ref": "RestApiErrorResponseModelA6C9DD94"
+                "Ref": "xrayTracerAPIErrorResponseModel24719E91"
               }
             },
             "ResponseParameters": {
@@ -341,14 +341,14 @@ class TestXRayTracer(TestTemplates):
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "SnsRestApi/RestApi/Default/{proxy+}/GET/Resource"
+        "aws:cdk:path": "XRayTracer/xrayTracerAPI/Default/{proxy+}/GET/Resource"
       }
     },
-    "RestApiResponseModel056B6183": {
+    "xrayTracerAPIResponseModel2591E14E": {
       "Type": "AWS::ApiGateway::Model",
       "Properties": {
         "RestApiId": {
-          "Ref": "RestApi0C43BF4B"
+          "Ref": "xrayTracerAPIA84CAE80"
         },
         "ContentType": "application/json",
         "Name": "ResponseModel",
@@ -364,14 +364,14 @@ class TestXRayTracer(TestTemplates):
         }
       },
       "Metadata": {
-        "aws:cdk:path": "SnsRestApi/RestApi/ResponseModel/Resource"
+        "aws:cdk:path": "XRayTracer/xrayTracerAPI/ResponseModel/Resource"
       }
     },
-    "RestApiErrorResponseModelA6C9DD94": {
+    "xrayTracerAPIErrorResponseModel24719E91": {
       "Type": "AWS::ApiGateway::Model",
       "Properties": {
         "RestApiId": {
-          "Ref": "RestApi0C43BF4B"
+          "Ref": "xrayTracerAPIA84CAE80"
         },
         "ContentType": "application/json",
         "Name": "ErrorResponseModel",
@@ -390,7 +390,7 @@ class TestXRayTracer(TestTemplates):
         }
       },
       "Metadata": {
-        "aws:cdk:path": "SnsRestApi/RestApi/ErrorResponseModel/Resource"
+        "aws:cdk:path": "XRayTracer/xrayTracerAPI/ErrorResponseModel/Resource"
       }
     },
     "ApiGatewaySNSRole1BAAAE75": {
@@ -410,7 +410,7 @@ class TestXRayTracer(TestTemplates):
         }
       },
       "Metadata": {
-        "aws:cdk:path": "SnsRestApi/ApiGatewaySNSRole/Resource"
+        "aws:cdk:path": "XRayTracer/ApiGatewaySNSRole/Resource"
       }
     },
     "ApiGatewaySNSRoleDefaultPolicyCA5D0260": {
@@ -436,7 +436,7 @@ class TestXRayTracer(TestTemplates):
         ]
       },
       "Metadata": {
-        "aws:cdk:path": "SnsRestApi/ApiGatewaySNSRole/DefaultPolicy/Resource"
+        "aws:cdk:path": "XRayTracer/ApiGatewaySNSRole/DefaultPolicy/Resource"
       }
     },
     "CDKMetadata": {
@@ -445,20 +445,20 @@ class TestXRayTracer(TestTemplates):
         "Analytics": "v2:deflate64:H4sIAAAAAAAA/02OSw7CMAxEz8I+BKqu2AFli0Bwgig1xdDGVeOoiqrcnaQf1JWf7fF4MpnlB7nfHFVvt7r87gZNHcjhyUp/RfEyN8etY1GQsdw5zWn2AEuu05A4LkpkJBNEshhUi5Vi6JWXQ9TxqcX5ZMGT1uQMiwu0NfkGzOi56uLvavSeYPl2VhbEFfhNZVrOtM7y5yuVUI+iBEGgamIaqidVqneqUfvUThRCEHcfHc0ul9leZpuPRdx2MSg2IB9T/QEEFiXVLgEAAA=="
       },
       "Metadata": {
-        "aws:cdk:path": "SnsRestApi/CDKMetadata/Default"
+        "aws:cdk:path": "XRayTracer/CDKMetadata/Default"
       },
       "Condition": "CDKMetadataAvailable"
     }
   },
   "Outputs": {
-    "RestApiEndpoint0551178A": {
+    "xrayTracerAPIEndpointA106537B": {
       "Value": {
         "Fn::Join": [
           "",
           [
             "https://",
             {
-              "Ref": "RestApi0C43BF4B"
+              "Ref": "xrayTracerAPIA84CAE80"
             },
             ".execute-api.",
             {
@@ -470,7 +470,7 @@ class TestXRayTracer(TestTemplates):
             },
             "/",
             {
-              "Ref": "RestApiDeploymentStageprod3855DE66"
+              "Ref": "xrayTracerAPIDeploymentStageprod85442A48"
             },
             "/"
           ]

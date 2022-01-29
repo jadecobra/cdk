@@ -75,4 +75,7 @@ WellArchitected().synth()
 
 # TODO
 # Well Architected Auditor - Config + Lambda + DynamoDB
-# new CDK pattern
+# EventBridge Circuit Breaker
+# abstract rest api from Lambda and SNS Rest API
+# remove metadata
+# write autocommiter

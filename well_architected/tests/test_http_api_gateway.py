@@ -13,9 +13,6 @@ class TestHTTPAPI(TestTemplates):
       "Properties": {
         "Name": "HttpAPI",
         "ProtocolType": "HTTP"
-      },
-      "Metadata": {
-        "aws:cdk:path": "LambdaHttpApiGateway/HttpAPI/Resource"
       }
     },
     "HttpAPIDefaultRouteHTTPLambdaIntegrationPermission5A5BB64C": {
@@ -50,9 +47,6 @@ class TestHTTPAPI(TestTemplates):
             ]
           ]
         }
-      },
-      "Metadata": {
-        "aws:cdk:path": "LambdaHttpApiGateway/HttpAPI/DefaultRoute/HTTPLambdaIntegration-Permission"
       }
     },
     "HttpAPIDefaultRouteHTTPLambdaIntegration7A40D12F": {
@@ -66,9 +60,6 @@ class TestHTTPAPI(TestTemplates):
           "Fn::ImportValue": "LambdaFunction:ExportsOutputFnGetAtthitcounterLambdaFunctionB862C182Arn3B74EE41"
         },
         "PayloadFormatVersion": "2.0"
-      },
-      "Metadata": {
-        "aws:cdk:path": "LambdaHttpApiGateway/HttpAPI/DefaultRoute/HTTPLambdaIntegration/Resource"
       }
     },
     "HttpAPIDefaultRouteF9949FE6": {
@@ -90,9 +81,6 @@ class TestHTTPAPI(TestTemplates):
             ]
           ]
         }
-      },
-      "Metadata": {
-        "aws:cdk:path": "LambdaHttpApiGateway/HttpAPI/DefaultRoute/Resource"
       }
     },
     "HttpAPIDefaultStage1BC7D78F": {
@@ -103,18 +91,12 @@ class TestHTTPAPI(TestTemplates):
         },
         "StageName": "$default",
         "AutoDeploy": true
-      },
-      "Metadata": {
-        "aws:cdk:path": "LambdaHttpApiGateway/HttpAPI/DefaultStage/Resource"
       }
     },
     "ApiGatewayCloudWatchErrorTopicB01304FE": {
       "Type": "AWS::SNS::Topic",
       "Properties": {
         "DisplayName": "ErrorTopic"
-      },
-      "Metadata": {
-        "aws:cdk:path": "LambdaHttpApiGateway/ApiGatewayCloudWatch/ErrorTopic/Resource"
       }
     },
     "ApiGatewayCloudWatchAPIGateway4XXErrors11FFC618F": {
@@ -181,9 +163,6 @@ class TestHTTPAPI(TestTemplates):
         ],
         "Threshold": 1,
         "TreatMissingData": "notBreaching"
-      },
-      "Metadata": {
-        "aws:cdk:path": "LambdaHttpApiGateway/ApiGatewayCloudWatch/API Gateway 4XX Errors > 1%/Resource"
       }
     },
     "ApiGatewayCloudWatchAPIGateway5XXErrors0001B6606": {
@@ -223,9 +202,6 @@ class TestHTTPAPI(TestTemplates):
         ],
         "Threshold": 0,
         "TreatMissingData": "notBreaching"
-      },
-      "Metadata": {
-        "aws:cdk:path": "LambdaHttpApiGateway/ApiGatewayCloudWatch/API Gateway 5XX Errors > 0/Resource"
       }
     },
     "ApiGatewayCloudWatchAPIp99latencyalarm1s6545CFD1": {
@@ -265,9 +241,6 @@ class TestHTTPAPI(TestTemplates):
         ],
         "Threshold": 1000,
         "TreatMissingData": "notBreaching"
-      },
-      "Metadata": {
-        "aws:cdk:path": "LambdaHttpApiGateway/ApiGatewayCloudWatch/API p99 latency alarm >= 1s/Resource"
       }
     },
     "ApiGatewayCloudWatchCloudWatchDashBoard278188F3": {
@@ -317,20 +290,7 @@ class TestHTTPAPI(TestTemplates):
             ]
           ]
         }
-      },
-      "Metadata": {
-        "aws:cdk:path": "LambdaHttpApiGateway/ApiGatewayCloudWatch/CloudWatchDashBoard/Resource"
       }
-    },
-    "CDKMetadata": {
-      "Type": "AWS::CDK::Metadata",
-      "Properties": {
-        "Analytics": "v2:deflate64:H4sIAAAAAAAA/12Oz07DMAyHn2X3zFvZiRvTOLATU+EFvCS0Zm0SJQ7VFOXdqYMEEid/P+vznw66wyPsN0+4pK02t13RPloob4z6pk7eJY5Zszp9uNfMITfqbfI5aiu8KoaYvKtKVhQMNCDbBe9fD1BemMMxkIhSJPY+s210dmyHiDIswr/4562/DO1Wg6omnK8GYW1cbJwpJZlILkF594G0mA2q0pPPZkHWI5TjhHFujzR4xjRePUYjrd9Qa1WXO4/e7Q7Q7aHbfCaibcyOabbQ/9RvfPZ+MDUBAAA="
-      },
-      "Metadata": {
-        "aws:cdk:path": "LambdaHttpApiGateway/CDKMetadata/Default"
-      },
-      "Condition": "CDKMetadataAvailable"
     }
   },
   "Outputs": {
@@ -355,200 +315,6 @@ class TestHTTPAPI(TestTemplates):
           ]
         ]
       }
-    }
-  },
-  "Conditions": {
-    "CDKMetadataAvailable": {
-      "Fn::Or": [
-        {
-          "Fn::Or": [
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "af-south-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "ap-east-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "ap-northeast-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "ap-northeast-2"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "ap-south-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "ap-southeast-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "ap-southeast-2"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "ca-central-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "cn-north-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "cn-northwest-1"
-              ]
-            }
-          ]
-        },
-        {
-          "Fn::Or": [
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "eu-central-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "eu-north-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "eu-south-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "eu-west-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "eu-west-2"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "eu-west-3"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "me-south-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "sa-east-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "us-east-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "us-east-2"
-              ]
-            }
-          ]
-        },
-        {
-          "Fn::Or": [
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "us-west-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "us-west-2"
-              ]
-            }
-          ]
-        }
-      ]
     }
   }
 }

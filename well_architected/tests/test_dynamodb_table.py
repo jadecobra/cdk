@@ -25,10 +25,7 @@ class TestDynamoDBTable(TestTemplates):
         "BillingMode": "PAY_PER_REQUEST"
       },
       "UpdateReplacePolicy": "Retain",
-      "DeletionPolicy": "Retain",
-      "Metadata": {
-        "aws:cdk:path": "DynamoDBTable/Hits/Hits/Resource"
-      }
+      "DeletionPolicy": "Retain"
     },
     "HitsDynamoDBUserErrors07CE7B5C5": {
       "Type": "AWS::CloudWatch::Alarm",
@@ -47,9 +44,6 @@ class TestDynamoDBTable(TestTemplates):
         "Statistic": "Sum",
         "Threshold": 0,
         "TreatMissingData": "notBreaching"
-      },
-      "Metadata": {
-        "aws:cdk:path": "DynamoDBTable/Hits/DynamoDB User Errors > 0/Resource"
       }
     },
     "HitsDynamoDBTableReadsWritesThrottledA2E6A6CD": {
@@ -112,9 +106,6 @@ class TestDynamoDBTable(TestTemplates):
         ],
         "Threshold": 1,
         "TreatMissingData": "notBreaching"
-      },
-      "Metadata": {
-        "aws:cdk:path": "DynamoDBTable/Hits/DynamoDB Table Reads--Writes Throttled/Resource"
       }
     },
     "HitsCloudWatchDashBoardD0EE794E": {
@@ -176,214 +167,7 @@ class TestDynamoDBTable(TestTemplates):
             ]
           ]
         }
-      },
-      "Metadata": {
-        "aws:cdk:path": "DynamoDBTable/Hits/CloudWatchDashBoard/Resource"
       }
-    },
-    "CDKMetadata": {
-      "Type": "AWS::CDK::Metadata",
-      "Properties": {
-        "Analytics": "v2:deflate64:H4sIAAAAAAAA/02MTQqDMBCFz+I+jgZX3bXYAxTtBcYkxVTNQDJBJOTurQqlq/e9H54E2VygLq64hlLpqUqKvIHUM6pJtOQC+6hYdCZQ9MqI9uX++bvQli25LPaHpDeHC+kB0hOH+ZgckIWaKeoVWY2QbjP6Ze9OuGMYB0Kv9+hncs7isfFIrmpA1iCLd7C29NGxXQx0p34AQPlDxsEAAAA="
-      },
-      "Metadata": {
-        "aws:cdk:path": "DynamoDBTable/CDKMetadata/Default"
-      },
-      "Condition": "CDKMetadataAvailable"
-    }
-  },
-  "Conditions": {
-    "CDKMetadataAvailable": {
-      "Fn::Or": [
-        {
-          "Fn::Or": [
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "af-south-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "ap-east-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "ap-northeast-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "ap-northeast-2"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "ap-south-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "ap-southeast-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "ap-southeast-2"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "ca-central-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "cn-north-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "cn-northwest-1"
-              ]
-            }
-          ]
-        },
-        {
-          "Fn::Or": [
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "eu-central-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "eu-north-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "eu-south-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "eu-west-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "eu-west-2"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "eu-west-3"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "me-south-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "sa-east-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "us-east-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "us-east-2"
-              ]
-            }
-          ]
-        },
-        {
-          "Fn::Or": [
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "us-west-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "us-west-2"
-              ]
-            }
-          ]
-        }
-      ]
     }
   },
   "Outputs": {

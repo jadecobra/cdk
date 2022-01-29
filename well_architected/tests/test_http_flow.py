@@ -12,9 +12,6 @@ class TestHttpFlow(TestTemplates):
       "Type": "AWS::SNS::Topic",
       "Properties": {
         "DisplayName": "ErrorTopic"
-      },
-      "Metadata": {
-        "aws:cdk:path": "HttpFlow/http/ErrorTopic/Resource"
       }
     },
     "httpawsxraysdkLambdaLayer26FEA83F": {
@@ -59,12 +56,6 @@ class TestHttpFlow(TestTemplates):
           }
         },
         "Description": "AWS XRay SDK Lambda Layer"
-      },
-      "Metadata": {
-        "aws:cdk:path": "HttpFlow/http/aws-xray-sdkLambdaLayer/Resource",
-        "aws:asset:path": "asset.d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81",
-        "aws:asset:is-bundled": false,
-        "aws:asset:property": "Content"
       }
     },
     "httpLambdaFunctionServiceRoleBB063197": {
@@ -96,9 +87,6 @@ class TestHttpFlow(TestTemplates):
             ]
           }
         ]
-      },
-      "Metadata": {
-        "aws:cdk:path": "HttpFlow/http/LambdaFunction/ServiceRole/Resource"
       }
     },
     "httpLambdaFunctionServiceRoleDefaultPolicy5FD0C40D": {
@@ -123,9 +111,6 @@ class TestHttpFlow(TestTemplates):
             "Ref": "httpLambdaFunctionServiceRoleBB063197"
           }
         ]
-      },
-      "Metadata": {
-        "aws:cdk:path": "HttpFlow/http/LambdaFunction/ServiceRole/DefaultPolicy/Resource"
       }
     },
     "httpLambdaFunction9ED72A36": {
@@ -190,13 +175,7 @@ class TestHttpFlow(TestTemplates):
       "DependsOn": [
         "httpLambdaFunctionServiceRoleDefaultPolicy5FD0C40D",
         "httpLambdaFunctionServiceRoleBB063197"
-      ],
-      "Metadata": {
-        "aws:cdk:path": "HttpFlow/http/LambdaFunction/Resource",
-        "aws:asset:path": "asset.32986536b3b46945ee3c22f84dda5e537c348c3a6a55627c6477eb9d16c5c0bd",
-        "aws:asset:is-bundled": false,
-        "aws:asset:property": "Code"
-      }
+      ]
     },
     "httpLambdaFunctionAllowInvokeXRayTracerSnsFanOutTopic4E706A09F3311B40": {
       "Type": "AWS::Lambda::Permission",
@@ -212,9 +191,6 @@ class TestHttpFlow(TestTemplates):
         "SourceArn": {
           "Fn::ImportValue": "XRayTracerSnsFanOutTopic:ExportsOutputRefXRayTracerSnsFanOutTopic129D23A131FFD088"
         }
-      },
-      "Metadata": {
-        "aws:cdk:path": "HttpFlow/http/LambdaFunction/AllowInvoke:XRayTracerSnsFanOutTopic4E706A09"
       }
     },
     "httpLambdaFunctionXRayTracerSnsFanOutTopic38CFBD2A": {
@@ -230,9 +206,6 @@ class TestHttpFlow(TestTemplates):
             "Arn"
           ]
         }
-      },
-      "Metadata": {
-        "aws:cdk:path": "HttpFlow/http/LambdaFunction/XRayTracerSnsFanOutTopic/Resource"
       }
     },
     "httpLambdainvocationErrors2490F7C4F": {
@@ -295,9 +268,6 @@ class TestHttpFlow(TestTemplates):
         ],
         "Threshold": 2,
         "TreatMissingData": "notBreaching"
-      },
-      "Metadata": {
-        "aws:cdk:path": "HttpFlow/http/Lambda invocation Errors > 2%/Resource"
       }
     },
     "httpLambdap99LongDuration1sCFCABB7C": {
@@ -325,9 +295,6 @@ class TestHttpFlow(TestTemplates):
         "Period": 300,
         "Threshold": 1000,
         "TreatMissingData": "notBreaching"
-      },
-      "Metadata": {
-        "aws:cdk:path": "HttpFlow/http/Lambda p99 Long Duration (>1s)/Resource"
       }
     },
     "httpLambdaThrottledinvocations203A2EC64": {
@@ -390,9 +357,6 @@ class TestHttpFlow(TestTemplates):
         ],
         "Threshold": 2,
         "TreatMissingData": "notBreaching"
-      },
-      "Metadata": {
-        "aws:cdk:path": "HttpFlow/http/Lambda Throttled invocations >2%/Resource"
       }
     },
     "httpCloudWatchDashBoard87A3CD2A": {
@@ -446,20 +410,7 @@ class TestHttpFlow(TestTemplates):
             ]
           ]
         }
-      },
-      "Metadata": {
-        "aws:cdk:path": "HttpFlow/http/CloudWatchDashBoard/Resource"
       }
-    },
-    "CDKMetadata": {
-      "Type": "AWS::CDK::Metadata",
-      "Properties": {
-        "Analytics": "v2:deflate64:H4sIAAAAAAAA/1WOsW7DMAxEvyW7zMTw1K1Jik4dDKfoTstsrNqSAlFCYAj691pyW6QT7x3Jw9VQN09w2D3jnSs5TPsorSOIF49yEmdr2LsgvTgyk1/NqzJXcf40LTrU5Mll6IhtcJKyXl8G5ZU1SeTIyIYhvtubknm7iUvoWTp1y2fZfeQkZtT9gBDfcCH3QY5/rv7xazDy9/1Rt+S0Yi5B3FSYazOU9ivDKciJ/AmZhEINsbNzaV1ma2cll5JSVBJytmG4o5cjxOOMTuflJl6Qx96iG7L1Bykl0S5+tGbfQH2AevfFSlUuGK80QbfNb2OjuiF1AQAA"
-      },
-      "Metadata": {
-        "aws:cdk:path": "HttpFlow/CDKMetadata/Default"
-      },
-      "Condition": "CDKMetadataAvailable"
     }
   },
   "Parameters": {
@@ -486,200 +437,6 @@ class TestHttpFlow(TestTemplates):
     "AssetParameters32986536b3b46945ee3c22f84dda5e537c348c3a6a55627c6477eb9d16c5c0bdArtifactHash97D2A9D2": {
       "Type": "String",
       "Description": "Artifact hash for asset \"32986536b3b46945ee3c22f84dda5e537c348c3a6a55627c6477eb9d16c5c0bd\""
-    }
-  },
-  "Conditions": {
-    "CDKMetadataAvailable": {
-      "Fn::Or": [
-        {
-          "Fn::Or": [
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "af-south-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "ap-east-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "ap-northeast-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "ap-northeast-2"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "ap-south-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "ap-southeast-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "ap-southeast-2"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "ca-central-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "cn-north-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "cn-northwest-1"
-              ]
-            }
-          ]
-        },
-        {
-          "Fn::Or": [
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "eu-central-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "eu-north-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "eu-south-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "eu-west-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "eu-west-2"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "eu-west-3"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "me-south-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "sa-east-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "us-east-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "us-east-2"
-              ]
-            }
-          ]
-        },
-        {
-          "Fn::Or": [
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "us-west-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "us-west-2"
-              ]
-            }
-          ]
-        }
-      ]
     }
   }
 }

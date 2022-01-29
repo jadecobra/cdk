@@ -24,10 +24,10 @@ def time_it(function, *args, description='run process', **kwargs):
     log_performance(log(result))
 
 system('clear')
-time_it(system, 'cdk ls', description='list all stacks')
 class TestTemplates(TestCase):
     maxDiff = None
 
-    def assert_template_equal(self, template_name, expected_template):
+    def assert_template_equal(self, template_name, stack_name):
+        time_it(system, f'cdk ls {template_name} --version-reporting=false --path-metadata=false --asset-metadata=false', description=f'synthesize stack: {template_name}')
         with open(f'cdk.out/{template_name}.template.json') as template:
-            self.assertEqual(load(template), expected_template)
+            self.assertEqual(load(template), stack_name)
