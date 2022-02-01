@@ -1,5 +1,4 @@
-refactor eventbridge circuit breaker
-
+fix import statements
 abstract rest api from lambda and sns rest apis
-
-write well architected auditor - config + lambda + dynamoDB
+write well architected auditor - config + lambda + dynamoDBrefactor eventbridge circuit breaker
+create simple webservice construct

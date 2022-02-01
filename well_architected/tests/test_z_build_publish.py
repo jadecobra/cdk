@@ -23,7 +23,7 @@ def get_task_file_contents(filename):
 def write_to_file(filename=None, contents=None):
     with open(tasks_path(filename), 'w') as writer:
         for item in contents:
-            writer.write(f'{item}\n')
+            writer.write(item)
 
 def get_unique(collection):
     return list(set(collection))
@@ -46,7 +46,6 @@ def commit(task):
 
 def record_task(task=None, response='y'):
     if response.lower() != 'y':
-        commit(input('enter commit message: '))
         print(f'go work on {task}...')
     else:
         commit(task)
@@ -55,14 +54,13 @@ def record_task(task=None, response='y'):
 class TestBuildDeploy(unittest.TestCase):
 
     def test_focusing_on_task(self):
-      create_todo()
-      task = get_todo()[0]
-      record_task(
-          task=task,
-          response=input(f'do you want to commit this change as {task}: [y]/n: ')
-      )
-
-      self.assertEqual(
-          sorted(get_unique(get_todo() + get_completed())),
-          sorted(get_tasks())
-      )
+        create_todo()
+        self.assertEqual(
+            sorted(get_unique(get_todo() + get_completed())),
+            sorted(get_tasks())
+        )
+        task = get_todo()[0]
+        record_task(
+            task=task,
+            response=input(f'do you want to commit this change as {task}: [y]/n: ')
+        )

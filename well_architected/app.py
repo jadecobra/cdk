@@ -11,6 +11,7 @@ from xray_tracer.sqs_flow import SqsFlow
 from xray_tracer.sns_flow import SnsFlow
 from xray_tracer.dynamodb_flow import DynamoDBFlow
 from xray_tracer.http_flow import HttpFlow
+import event_bridge_circuit_breaker
 
 class WellArchitected(App):
 
@@ -34,6 +35,7 @@ class WellArchitected(App):
         DynamoDBFlow(self, 'DynamoDBFlow', sns_topic=self.xray_sns_topic)
         SnsFlow(self, 'SnsFlow', sns_topic=self.xray_sns_topic)
         SqsFlow(self, 'SqsFlow', sns_topic=self.xray_sns_topic)
+        event_bridge_circuit_breaker.EventBridgeCircuitBreaker(self, 'EventBridgeCircuitBreaker')
 
     def create_http_api(self):
         self.http_api = LambdaHttpApiGateway(
