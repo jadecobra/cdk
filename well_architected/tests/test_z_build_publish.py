@@ -23,7 +23,7 @@ def get_task_file_contents(filename):
 def write_to_file(filename=None, contents=None):
     with open(tasks_path(filename), 'w') as writer:
         for item in contents:
-            writer.write(item)
+            writer.write(f'{item}\n')
 
 def get_unique(collection):
     return list(set(collection))

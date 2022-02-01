@@ -1,6 +1,4 @@
-write autocommiter
-write autocommitter
-remove metadata
 refactor eventbridge circuit breaker
 abstract rest api from lambda and sns rest apis
+create simple webservice construct
 write well architected auditor - config + lambda + dynamoDB

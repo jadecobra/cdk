@@ -1,4 +1,5 @@
+refactor eventbridge circuit breaker
+
 abstract rest api from lambda and sns rest apis
-write autocommitter
-write autocommiter
-write well architected auditor - config + lambda + dynamoDBrefactor eventbridge circuit breaker
+
+write well architected auditor - config + lambda + dynamoDB
