@@ -8,16 +8,13 @@ class TestXRayTracer(TestTemplates):
             'SnsRestApi',
             {
   "Resources": {
-    "xrayTracerAPIA84CAE80": {
+    "RestApi0C43BF4B": {
       "Type": "AWS::ApiGateway::RestApi",
       "Properties": {
-        "Name": "xrayTracerAPI"
-      },
-      "Metadata": {
-        "aws:cdk:path": "XRayTracer/xrayTracerAPI/Resource"
+        "Name": "RestApi"
       }
     },
-    "xrayTracerAPICloudWatchRoleCCB113F4": {
+    "RestApiCloudWatchRoleE3ED6605": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -46,55 +43,46 @@ class TestXRayTracer(TestTemplates):
             ]
           }
         ]
-      },
-      "Metadata": {
-        "aws:cdk:path": "XRayTracer/xrayTracerAPI/CloudWatchRole/Resource"
       }
     },
-    "xrayTracerAPIAccount092EDE74": {
+    "RestApiAccount7C83CF5A": {
       "Type": "AWS::ApiGateway::Account",
       "Properties": {
         "CloudWatchRoleArn": {
           "Fn::GetAtt": [
-            "xrayTracerAPICloudWatchRoleCCB113F4",
+            "RestApiCloudWatchRoleE3ED6605",
             "Arn"
           ]
         }
       },
       "DependsOn": [
-        "xrayTracerAPIA84CAE80"
-      ],
-      "Metadata": {
-        "aws:cdk:path": "XRayTracer/xrayTracerAPI/Account"
-      }
+        "RestApi0C43BF4B"
+      ]
     },
-    "xrayTracerAPIDeploymentB3CB89A0721985a531d4b66ddba940aa934d59f0": {
+    "RestApiDeployment180EC50310ca31bc7c64b136e655b95e390d9332": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
-          "Ref": "xrayTracerAPIA84CAE80"
+          "Ref": "RestApi0C43BF4B"
         },
         "Description": "Automatically created by the RestApi construct"
       },
       "DependsOn": [
-        "xrayTracerAPIproxyGET4E348609",
-        "xrayTracerAPIproxy719DA214",
-        "xrayTracerAPIGET7490A366",
-        "xrayTracerAPIErrorResponseModel24719E91",
-        "xrayTracerAPIResponseModel2591E14E"
-      ],
-      "Metadata": {
-        "aws:cdk:path": "XRayTracer/xrayTracerAPI/Deployment/Resource"
-      }
+        "RestApiproxyGET3EA512AF",
+        "RestApiproxyC95856DD",
+        "RestApiGET0F59260B",
+        "RestApiErrorResponseModelA6C9DD94",
+        "RestApiResponseModel056B6183"
+      ]
     },
-    "xrayTracerAPIDeploymentStageprod85442A48": {
+    "RestApiDeploymentStageprod3855DE66": {
       "Type": "AWS::ApiGateway::Stage",
       "Properties": {
         "RestApiId": {
-          "Ref": "xrayTracerAPIA84CAE80"
+          "Ref": "RestApi0C43BF4B"
         },
         "DeploymentId": {
-          "Ref": "xrayTracerAPIDeploymentB3CB89A0721985a531d4b66ddba940aa934d59f0"
+          "Ref": "RestApiDeployment180EC50310ca31bc7c64b136e655b95e390d9332"
         },
         "MethodSettings": [
           {
@@ -109,24 +97,21 @@ class TestXRayTracer(TestTemplates):
         "TracingEnabled": true
       },
       "DependsOn": [
-        "xrayTracerAPIAccount092EDE74"
-      ],
-      "Metadata": {
-        "aws:cdk:path": "XRayTracer/xrayTracerAPI/DeploymentStage.prod/Resource"
-      }
+        "RestApiAccount7C83CF5A"
+      ]
     },
-    "xrayTracerAPIGET7490A366": {
+    "RestApiGET0F59260B": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
         "HttpMethod": "GET",
         "ResourceId": {
           "Fn::GetAtt": [
-            "xrayTracerAPIA84CAE80",
+            "RestApi0C43BF4B",
             "RootResourceId"
           ]
         },
         "RestApiId": {
-          "Ref": "xrayTracerAPIA84CAE80"
+          "Ref": "RestApi0C43BF4B"
         },
         "AuthorizationType": "NONE",
         "Integration": {
@@ -193,7 +178,7 @@ class TestXRayTracer(TestTemplates):
           {
             "ResponseModels": {
               "application/json": {
-                "Ref": "xrayTracerAPIResponseModel2591E14E"
+                "Ref": "RestApiResponseModel056B6183"
               }
             },
             "ResponseParameters": {
@@ -206,7 +191,7 @@ class TestXRayTracer(TestTemplates):
           {
             "ResponseModels": {
               "application/json": {
-                "Ref": "xrayTracerAPIErrorResponseModel24719E91"
+                "Ref": "RestApiErrorResponseModelA6C9DD94"
               }
             },
             "ResponseParameters": {
@@ -217,38 +202,32 @@ class TestXRayTracer(TestTemplates):
             "StatusCode": "400"
           }
         ]
-      },
-      "Metadata": {
-        "aws:cdk:path": "XRayTracer/xrayTracerAPI/Default/GET/Resource"
       }
     },
-    "xrayTracerAPIproxy719DA214": {
+    "RestApiproxyC95856DD": {
       "Type": "AWS::ApiGateway::Resource",
       "Properties": {
         "ParentId": {
           "Fn::GetAtt": [
-            "xrayTracerAPIA84CAE80",
+            "RestApi0C43BF4B",
             "RootResourceId"
           ]
         },
         "PathPart": "{proxy+}",
         "RestApiId": {
-          "Ref": "xrayTracerAPIA84CAE80"
+          "Ref": "RestApi0C43BF4B"
         }
-      },
-      "Metadata": {
-        "aws:cdk:path": "XRayTracer/xrayTracerAPI/Default/{proxy+}/Resource"
       }
     },
-    "xrayTracerAPIproxyGET4E348609": {
+    "RestApiproxyGET3EA512AF": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
         "HttpMethod": "GET",
         "ResourceId": {
-          "Ref": "xrayTracerAPIproxy719DA214"
+          "Ref": "RestApiproxyC95856DD"
         },
         "RestApiId": {
-          "Ref": "xrayTracerAPIA84CAE80"
+          "Ref": "RestApi0C43BF4B"
         },
         "AuthorizationType": "NONE",
         "Integration": {
@@ -315,7 +294,7 @@ class TestXRayTracer(TestTemplates):
           {
             "ResponseModels": {
               "application/json": {
-                "Ref": "xrayTracerAPIResponseModel2591E14E"
+                "Ref": "RestApiResponseModel056B6183"
               }
             },
             "ResponseParameters": {
@@ -328,7 +307,7 @@ class TestXRayTracer(TestTemplates):
           {
             "ResponseModels": {
               "application/json": {
-                "Ref": "xrayTracerAPIErrorResponseModel24719E91"
+                "Ref": "RestApiErrorResponseModelA6C9DD94"
               }
             },
             "ResponseParameters": {
@@ -339,16 +318,13 @@ class TestXRayTracer(TestTemplates):
             "StatusCode": "400"
           }
         ]
-      },
-      "Metadata": {
-        "aws:cdk:path": "XRayTracer/xrayTracerAPI/Default/{proxy+}/GET/Resource"
       }
     },
-    "xrayTracerAPIResponseModel2591E14E": {
+    "RestApiResponseModel056B6183": {
       "Type": "AWS::ApiGateway::Model",
       "Properties": {
         "RestApiId": {
-          "Ref": "xrayTracerAPIA84CAE80"
+          "Ref": "RestApi0C43BF4B"
         },
         "ContentType": "application/json",
         "Name": "ResponseModel",
@@ -362,16 +338,13 @@ class TestXRayTracer(TestTemplates):
           "title": "pollResponse",
           "type": "object"
         }
-      },
-      "Metadata": {
-        "aws:cdk:path": "XRayTracer/xrayTracerAPI/ResponseModel/Resource"
       }
     },
-    "xrayTracerAPIErrorResponseModel24719E91": {
+    "RestApiErrorResponseModelA6C9DD94": {
       "Type": "AWS::ApiGateway::Model",
       "Properties": {
         "RestApiId": {
-          "Ref": "xrayTracerAPIA84CAE80"
+          "Ref": "RestApi0C43BF4B"
         },
         "ContentType": "application/json",
         "Name": "ErrorResponseModel",
@@ -388,9 +361,6 @@ class TestXRayTracer(TestTemplates):
           "title": "errorResponse",
           "type": "object"
         }
-      },
-      "Metadata": {
-        "aws:cdk:path": "XRayTracer/xrayTracerAPI/ErrorResponseModel/Resource"
       }
     },
     "ApiGatewaySNSRole1BAAAE75": {
@@ -408,9 +378,6 @@ class TestXRayTracer(TestTemplates):
           ],
           "Version": "2012-10-17"
         }
-      },
-      "Metadata": {
-        "aws:cdk:path": "XRayTracer/ApiGatewaySNSRole/Resource"
       }
     },
     "ApiGatewaySNSRoleDefaultPolicyCA5D0260": {
@@ -434,31 +401,18 @@ class TestXRayTracer(TestTemplates):
             "Ref": "ApiGatewaySNSRole1BAAAE75"
           }
         ]
-      },
-      "Metadata": {
-        "aws:cdk:path": "XRayTracer/ApiGatewaySNSRole/DefaultPolicy/Resource"
       }
-    },
-    "CDKMetadata": {
-      "Type": "AWS::CDK::Metadata",
-      "Properties": {
-        "Analytics": "v2:deflate64:H4sIAAAAAAAA/02OSw7CMAxEz8I+BKqu2AFli0Bwgig1xdDGVeOoiqrcnaQf1JWf7fF4MpnlB7nfHFVvt7r87gZNHcjhyUp/RfEyN8etY1GQsdw5zWn2AEuu05A4LkpkJBNEshhUi5Vi6JWXQ9TxqcX5ZMGT1uQMiwu0NfkGzOi56uLvavSeYPl2VhbEFfhNZVrOtM7y5yuVUI+iBEGgamIaqidVqneqUfvUThRCEHcfHc0ul9leZpuPRdx2MSg2IB9T/QEEFiXVLgEAAA=="
-      },
-      "Metadata": {
-        "aws:cdk:path": "XRayTracer/CDKMetadata/Default"
-      },
-      "Condition": "CDKMetadataAvailable"
     }
   },
   "Outputs": {
-    "xrayTracerAPIEndpointA106537B": {
+    "RestApiEndpoint0551178A": {
       "Value": {
         "Fn::Join": [
           "",
           [
             "https://",
             {
-              "Ref": "xrayTracerAPIA84CAE80"
+              "Ref": "RestApi0C43BF4B"
             },
             ".execute-api.",
             {
@@ -470,206 +424,12 @@ class TestXRayTracer(TestTemplates):
             },
             "/",
             {
-              "Ref": "xrayTracerAPIDeploymentStageprod85442A48"
+              "Ref": "RestApiDeploymentStageprod3855DE66"
             },
             "/"
           ]
         ]
       }
-    }
-  },
-  "Conditions": {
-    "CDKMetadataAvailable": {
-      "Fn::Or": [
-        {
-          "Fn::Or": [
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "af-south-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "ap-east-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "ap-northeast-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "ap-northeast-2"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "ap-south-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "ap-southeast-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "ap-southeast-2"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "ca-central-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "cn-north-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "cn-northwest-1"
-              ]
-            }
-          ]
-        },
-        {
-          "Fn::Or": [
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "eu-central-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "eu-north-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "eu-south-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "eu-west-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "eu-west-2"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "eu-west-3"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "me-south-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "sa-east-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "us-east-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "us-east-2"
-              ]
-            }
-          ]
-        },
-        {
-          "Fn::Or": [
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "us-west-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "us-west-2"
-              ]
-            }
-          ]
-        }
-      ]
     }
   }
 }

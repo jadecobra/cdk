@@ -14,18 +14,12 @@ class TestSqsFlow(TestTemplates):
         "VisibilityTimeout": 300
       },
       "UpdateReplacePolicy": "Delete",
-      "DeletionPolicy": "Delete",
-      "Metadata": {
-        "aws:cdk:path": "SqsFlow/RDSPublishQueue/Resource"
-      }
+      "DeletionPolicy": "Delete"
     },
     "sqsErrorTopicC8E3DE0B": {
       "Type": "AWS::SNS::Topic",
       "Properties": {
         "DisplayName": "ErrorTopic"
-      },
-      "Metadata": {
-        "aws:cdk:path": "SqsFlow/sqs/ErrorTopic/Resource"
       }
     },
     "sqsawsxraysdkLambdaLayer3F894DB7": {
@@ -70,12 +64,6 @@ class TestSqsFlow(TestTemplates):
           }
         },
         "Description": "AWS XRay SDK Lambda Layer"
-      },
-      "Metadata": {
-        "aws:cdk:path": "SqsFlow/sqs/aws-xray-sdkLambdaLayer/Resource",
-        "aws:asset:path": "asset.d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81",
-        "aws:asset:is-bundled": false,
-        "aws:asset:property": "Content"
       }
     },
     "sqsLambdaFunctionServiceRole62789435": {
@@ -107,9 +95,6 @@ class TestSqsFlow(TestTemplates):
             ]
           }
         ]
-      },
-      "Metadata": {
-        "aws:cdk:path": "SqsFlow/sqs/LambdaFunction/ServiceRole/Resource"
       }
     },
     "sqsLambdaFunctionServiceRoleDefaultPolicyE4DD722B": {
@@ -148,9 +133,6 @@ class TestSqsFlow(TestTemplates):
             "Ref": "sqsLambdaFunctionServiceRole62789435"
           }
         ]
-      },
-      "Metadata": {
-        "aws:cdk:path": "SqsFlow/sqs/LambdaFunction/ServiceRole/DefaultPolicy/Resource"
       }
     },
     "sqsLambdaFunctionDBCFBC0F": {
@@ -222,13 +204,7 @@ class TestSqsFlow(TestTemplates):
       "DependsOn": [
         "sqsLambdaFunctionServiceRoleDefaultPolicyE4DD722B",
         "sqsLambdaFunctionServiceRole62789435"
-      ],
-      "Metadata": {
-        "aws:cdk:path": "SqsFlow/sqs/LambdaFunction/Resource",
-        "aws:asset:path": "asset.cc629a1cbfb955ae6703ba4a9bf13234c83109279756439f1c139ce563d2667e",
-        "aws:asset:is-bundled": false,
-        "aws:asset:property": "Code"
-      }
+      ]
     },
     "sqsLambdaFunctionAllowInvokeXRayTracerSnsFanOutTopic4E706A091417C519": {
       "Type": "AWS::Lambda::Permission",
@@ -244,9 +220,6 @@ class TestSqsFlow(TestTemplates):
         "SourceArn": {
           "Fn::ImportValue": "XRayTracerSnsFanOutTopic:ExportsOutputRefXRayTracerSnsFanOutTopic129D23A131FFD088"
         }
-      },
-      "Metadata": {
-        "aws:cdk:path": "SqsFlow/sqs/LambdaFunction/AllowInvoke:XRayTracerSnsFanOutTopic4E706A09"
       }
     },
     "sqsLambdaFunctionXRayTracerSnsFanOutTopic1D1F6839": {
@@ -262,9 +235,6 @@ class TestSqsFlow(TestTemplates):
             "Arn"
           ]
         }
-      },
-      "Metadata": {
-        "aws:cdk:path": "SqsFlow/sqs/LambdaFunction/XRayTracerSnsFanOutTopic/Resource"
       }
     },
     "sqsLambdainvocationErrors2DA8BB648": {
@@ -327,9 +297,6 @@ class TestSqsFlow(TestTemplates):
         ],
         "Threshold": 2,
         "TreatMissingData": "notBreaching"
-      },
-      "Metadata": {
-        "aws:cdk:path": "SqsFlow/sqs/Lambda invocation Errors > 2%/Resource"
       }
     },
     "sqsLambdap99LongDuration1s7AB941BF": {
@@ -357,9 +324,6 @@ class TestSqsFlow(TestTemplates):
         "Period": 300,
         "Threshold": 1000,
         "TreatMissingData": "notBreaching"
-      },
-      "Metadata": {
-        "aws:cdk:path": "SqsFlow/sqs/Lambda p99 Long Duration (>1s)/Resource"
       }
     },
     "sqsLambdaThrottledinvocations2735F537D": {
@@ -422,9 +386,6 @@ class TestSqsFlow(TestTemplates):
         ],
         "Threshold": 2,
         "TreatMissingData": "notBreaching"
-      },
-      "Metadata": {
-        "aws:cdk:path": "SqsFlow/sqs/Lambda Throttled invocations >2%/Resource"
       }
     },
     "sqsCloudWatchDashBoardAC79C904": {
@@ -478,18 +439,12 @@ class TestSqsFlow(TestTemplates):
             ]
           ]
         }
-      },
-      "Metadata": {
-        "aws:cdk:path": "SqsFlow/sqs/CloudWatchDashBoard/Resource"
       }
     },
     "sqssubscribeErrorTopicC4F29AB2": {
       "Type": "AWS::SNS::Topic",
       "Properties": {
         "DisplayName": "ErrorTopic"
-      },
-      "Metadata": {
-        "aws:cdk:path": "SqsFlow/sqs_subscribe/ErrorTopic/Resource"
       }
     },
     "sqssubscribeawsxraysdkLambdaLayerA04517E9": {
@@ -534,12 +489,6 @@ class TestSqsFlow(TestTemplates):
           }
         },
         "Description": "AWS XRay SDK Lambda Layer"
-      },
-      "Metadata": {
-        "aws:cdk:path": "SqsFlow/sqs_subscribe/aws-xray-sdkLambdaLayer/Resource",
-        "aws:asset:path": "asset.d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81",
-        "aws:asset:is-bundled": false,
-        "aws:asset:property": "Content"
       }
     },
     "sqssubscribeLambdaFunctionServiceRole7577D75B": {
@@ -571,9 +520,6 @@ class TestSqsFlow(TestTemplates):
             ]
           }
         ]
-      },
-      "Metadata": {
-        "aws:cdk:path": "SqsFlow/sqs_subscribe/LambdaFunction/ServiceRole/Resource"
       }
     },
     "sqssubscribeLambdaFunctionServiceRoleDefaultPolicy47D1F13D": {
@@ -614,9 +560,6 @@ class TestSqsFlow(TestTemplates):
             "Ref": "sqssubscribeLambdaFunctionServiceRole7577D75B"
           }
         ]
-      },
-      "Metadata": {
-        "aws:cdk:path": "SqsFlow/sqs_subscribe/LambdaFunction/ServiceRole/DefaultPolicy/Resource"
       }
     },
     "sqssubscribeLambdaFunction2B3EFD1F": {
@@ -681,13 +624,7 @@ class TestSqsFlow(TestTemplates):
       "DependsOn": [
         "sqssubscribeLambdaFunctionServiceRoleDefaultPolicy47D1F13D",
         "sqssubscribeLambdaFunctionServiceRole7577D75B"
-      ],
-      "Metadata": {
-        "aws:cdk:path": "SqsFlow/sqs_subscribe/LambdaFunction/Resource",
-        "aws:asset:path": "asset.45a64ba94427aa8245e84b37bb9b08e693b04502538428e5ceab2adab6ff77c7",
-        "aws:asset:is-bundled": false,
-        "aws:asset:property": "Code"
-      }
+      ]
     },
     "sqssubscribeLambdaFunctionSqsEventSourceSqsFlowRDSPublishQueueD1D2BBCF2F32E4E5": {
       "Type": "AWS::Lambda::EventSourceMapping",
@@ -701,9 +638,6 @@ class TestSqsFlow(TestTemplates):
             "Arn"
           ]
         }
-      },
-      "Metadata": {
-        "aws:cdk:path": "SqsFlow/sqs_subscribe/LambdaFunction/SqsEventSource:SqsFlowRDSPublishQueueD1D2BBCF/Resource"
       }
     },
     "sqssubscribeLambdainvocationErrors291E8D7B4": {
@@ -766,9 +700,6 @@ class TestSqsFlow(TestTemplates):
         ],
         "Threshold": 2,
         "TreatMissingData": "notBreaching"
-      },
-      "Metadata": {
-        "aws:cdk:path": "SqsFlow/sqs_subscribe/Lambda invocation Errors > 2%/Resource"
       }
     },
     "sqssubscribeLambdap99LongDuration1sD4FA6C78": {
@@ -796,9 +727,6 @@ class TestSqsFlow(TestTemplates):
         "Period": 300,
         "Threshold": 1000,
         "TreatMissingData": "notBreaching"
-      },
-      "Metadata": {
-        "aws:cdk:path": "SqsFlow/sqs_subscribe/Lambda p99 Long Duration (>1s)/Resource"
       }
     },
     "sqssubscribeLambdaThrottledinvocations21C107A97": {
@@ -861,9 +789,6 @@ class TestSqsFlow(TestTemplates):
         ],
         "Threshold": 2,
         "TreatMissingData": "notBreaching"
-      },
-      "Metadata": {
-        "aws:cdk:path": "SqsFlow/sqs_subscribe/Lambda Throttled invocations >2%/Resource"
       }
     },
     "sqssubscribeCloudWatchDashBoard2D9A2251": {
@@ -917,20 +842,7 @@ class TestSqsFlow(TestTemplates):
             ]
           ]
         }
-      },
-      "Metadata": {
-        "aws:cdk:path": "SqsFlow/sqs_subscribe/CloudWatchDashBoard/Resource"
       }
-    },
-    "CDKMetadata": {
-      "Type": "AWS::CDK::Metadata",
-      "Properties": {
-        "Analytics": "v2:deflate64:H4sIAAAAAAAA/2WPQU/DMAyFf8vuabaqJ25sg51AKi3i7qZmDW2TEidMVZT/TpMONMTJ7322E7+c58Ud323u4UKZaPutF9og97UF0bOjVmSNE5btidAu8CzVmR3fVQkGRrRooqmQtDMCo15WWmmlVoHFJz19EvcvDl3qJhEYqQW+6kmKCFdRu4aEkVPcjfTWBzbA2LTA/RPMaN7Q0HXqjz85JX7Wb3WJZpSURh6/UNk6XfsM03RN858uNxYZxNDEU/bF84MTPdoDEDIJI/eVHlKqVEs9SDGn75IKTAzatRewouN+P4AZY3MVD0Bdo8G0Ef2aEAIrZ9tptS14vuP55oOkzIxTVo7Iq7V+A4FfJ9CzAQAA"
-      },
-      "Metadata": {
-        "aws:cdk:path": "SqsFlow/CDKMetadata/Default"
-      },
-      "Condition": "CDKMetadataAvailable"
     }
   },
   "Parameters": {
@@ -969,200 +881,6 @@ class TestSqsFlow(TestTemplates):
     "AssetParameters45a64ba94427aa8245e84b37bb9b08e693b04502538428e5ceab2adab6ff77c7ArtifactHashBA433240": {
       "Type": "String",
       "Description": "Artifact hash for asset \"45a64ba94427aa8245e84b37bb9b08e693b04502538428e5ceab2adab6ff77c7\""
-    }
-  },
-  "Conditions": {
-    "CDKMetadataAvailable": {
-      "Fn::Or": [
-        {
-          "Fn::Or": [
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "af-south-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "ap-east-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "ap-northeast-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "ap-northeast-2"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "ap-south-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "ap-southeast-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "ap-southeast-2"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "ca-central-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "cn-north-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "cn-northwest-1"
-              ]
-            }
-          ]
-        },
-        {
-          "Fn::Or": [
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "eu-central-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "eu-north-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "eu-south-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "eu-west-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "eu-west-2"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "eu-west-3"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "me-south-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "sa-east-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "us-east-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "us-east-2"
-              ]
-            }
-          ]
-        },
-        {
-          "Fn::Or": [
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "us-west-1"
-              ]
-            },
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AWS::Region"
-                },
-                "us-west-2"
-              ]
-            }
-          ]
-        }
-      ]
     }
   }
 }

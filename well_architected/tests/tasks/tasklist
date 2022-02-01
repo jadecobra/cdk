@@ -1,0 +1,6 @@
+write autocommiter
+write autocommitter
+remove metadata
+refactor eventbridge circuit breaker
+abstract rest api from lambda and sns rest apis
+write well architected auditor - config + lambda + dynamoDB

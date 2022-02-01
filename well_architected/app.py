@@ -72,10 +72,3 @@ class WellArchitected(App):
         return WebApplicationFirewall(self, id, target_arn=target_arn)
 
 WellArchitected().synth()
-
-# TODO
-# Well Architected Auditor - Config + Lambda + DynamoDB
-# EventBridge Circuit Breaker
-# abstract rest api from Lambda and SNS Rest API
-# remove metadata
-# write autocommiter
