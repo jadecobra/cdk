@@ -19,7 +19,7 @@ class EventBridgeCircuitBreaker(cdk.Stack):
         # DynamoDB Table
         # This will store our error records
         # TTL Docs - https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/time-to-live-ttl-how-to.html
-        table = dynamodb.Table(
+        dynamodb_table = dynamodb.Table(
             self, "CircuitBreaker",
             partition_key=dynamodb.Attribute(
                 name="RequestID",
@@ -33,7 +33,7 @@ class EventBridgeCircuitBreaker(cdk.Stack):
         )
 
         # Add an index that lets us query on site url and Expiration Time
-        table.add_global_secondary_index(
+        dynamodb_table.add_global_secondary_index(
             index_name='UrlIndex',
             partition_key=dynamodb.Attribute(
                 name="SiteUrl",
@@ -47,12 +47,12 @@ class EventBridgeCircuitBreaker(cdk.Stack):
 
         integrationaws_lambda = lambda_function.create_python_lambda_function(
             self, function_name='webservice',
-            environment_variables=dict(TABLE_NAME=table.table_name),
+            environment_variables=dict(TABLE_NAME=dynamodb_table.table_name),
             duration=20,
         )
 
         # grant the lambda role read/write permissions to our table
-        table.grant_read_data(integrationaws_lambda)
+        dynamodb_table.grant_read_data(integrationaws_lambda)
 
         # We need to give your lambda permission to put events on our EventBridge
         event_policy = iam.PolicyStatement(
@@ -64,11 +64,11 @@ class EventBridgeCircuitBreaker(cdk.Stack):
 
         erroraws_lambda = lambda_function.create_python_lambda_function(
             self, function_name='error',
-            environment_variables=dict(TABLE_NAME=table.table_name),
+            environment_variables=dict(TABLE_NAME=dynamodb_table.table_name),
             duration=3,
         )
 
-        table.grant_write_data(erroraws_lambda)
+        dynamodb_table.grant_write_data(erroraws_lambda)
 
         # Create EventBridge rule to route failures
         error_rule = aws_events.Rule(
