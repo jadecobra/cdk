@@ -1,5 +1,6 @@
 import os
-# os.system('pip install aws_cdk.aws_events_targets')
+import lambda_function
+
 from aws_cdk import (
     aws_lambda,
     aws_apigateway as api_gateway,
