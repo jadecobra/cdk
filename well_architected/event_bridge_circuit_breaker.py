@@ -62,13 +62,13 @@ class EventBridgeCircuitBreaker(cdk.Stack):
         )
         aws_integration_lambda.add_to_role_policy(event_policy)
 
-        erroraws_lambda = lambda_function.create_python_lambda_function(
+        error_lambda = lambda_function.create_python_lambda_function(
             self, function_name='error',
             environment_variables=dict(TABLE_NAME=dynamodb_table.table_name),
             duration=3,
         )
 
-        dynamodb_table.grant_write_data(erroraws_lambda)
+        dynamodb_table.grant_write_data(error_lambda)
 
         # Create EventBridge rule to route failures
         error_rule = aws_events.Rule(
@@ -83,7 +83,7 @@ class EventBridgeCircuitBreaker(cdk.Stack):
             )
         )
 
-        error_rule.add_target(targets.LambdaFunction(handler=erroraws_lambda))
+        error_rule.add_target(targets.LambdaFunction(handler=error_lambda))
 
         # defines an API Gateway REST API resource backed by our "integrationaws_lambda" function
         api_gateway.LambdaRestApi(
