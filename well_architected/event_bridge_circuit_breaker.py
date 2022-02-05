@@ -56,7 +56,7 @@ class EventBridgeCircuitBreaker(cdk.Stack):
         # )
 
         integrationaws_lambda = lambda_function.create_python_lambda_function(
-            function_name='webservice',
+            self, function_name='webservice',
             environment_variables=dict(TABLE_NAME=table.table_name)
         )
 
