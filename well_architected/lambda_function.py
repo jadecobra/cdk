@@ -6,7 +6,9 @@ from well_architected import WellArchitectedFrameworkConstruct
 class LambdaFunctionConstruct(WellArchitectedFrameworkConstruct):
 
     def __init__(self, scope: Construct, id: str,
-        function_name=None, environment_variables=None, error_topic:ITopic=None, layers:list[str]=None,
+        function_name=None, environment_variables=None,
+        error_topic:ITopic=None, layers:list[str]=None,
+        duration=60
         **kwargs) -> None:
         super().__init__(scope, id, error_topic=error_topic, **kwargs)
         self.lambda_function = Function(
@@ -14,7 +16,7 @@ class LambdaFunctionConstruct(WellArchitectedFrameworkConstruct):
             runtime=Runtime.PYTHON_3_8,
             handler=f'{function_name}.handler',
             code=Code.from_asset(f"lambda_functions/{function_name}"),
-            timeout=Duration.seconds(60),
+            timeout=Duration.seconds(duration),
             tracing=Tracing.ACTIVE,
             layers=self.create_layers(layers),
             environment=environment_variables,
