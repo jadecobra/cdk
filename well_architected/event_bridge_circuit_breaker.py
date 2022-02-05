@@ -46,12 +46,17 @@ class EventBridgeCircuitBreaker(cdk.Stack):
         )
 
         # defines an Integration Lambda to call our failing web service
-        integrationaws_lambda = aws_lambda.Function(
-            self, "WebserviceIntegrationLambdaHandler",
-            runtime=aws_lambda.Runtime.NODEJS_12_X,
-            handler="webservice.handler",
-            code=aws_lambda.Code.from_asset("lambda_functions/webservice"),
-            timeout=cdk.Duration.seconds(20),
+        # integrationaws_lambda = aws_lambda.Function(
+        #     self, "WebserviceIntegrationLambdaHandler",
+        #     runtime=aws_lambda.Runtime.NODEJS_12_X,
+        #     handler="webservice.handler",
+        #     code=aws_lambda.Code.from_asset("lambda_functions/webservice"),
+        #     timeout=cdk.Duration.seconds(20),
+        #     environment=dict(TABLE_NAME=table.table_name)
+        # )
+
+        integrationaws_lambda = lambda_function.create_python_lambda_function(
+            function_name='webservice',
             environment=dict(TABLE_NAME=table.table_name)
         )
 
