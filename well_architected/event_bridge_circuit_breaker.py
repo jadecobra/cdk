@@ -45,16 +45,6 @@ class EventBridgeCircuitBreaker(cdk.Stack):
             )
         )
 
-        # defines an Integration Lambda to call our failing web service
-        # integrationaws_lambda = aws_lambda.Function(
-        #     self, "WebserviceIntegrationLambdaHandler",
-        #     runtime=aws_lambda.Runtime.NODEJS_12_X,
-        #     handler="webservice.handler",
-        #     code=aws_lambda.Code.from_asset("lambda_functions/webservice"),
-        #     timeout=cdk.Duration.seconds(20),
-        #     environment=dict(TABLE_NAME=table.table_name)
-        # )
-
         integrationaws_lambda = lambda_function.create_python_lambda_function(
             self, function_name='webservice',
             environment_variables=dict(TABLE_NAME=table.table_name),
@@ -73,6 +63,15 @@ class EventBridgeCircuitBreaker(cdk.Stack):
         integrationaws_lambda.add_to_role_policy(event_policy)
 
         # defines a lambda to insert errors into dynamoDB
+        # erroraws_lambda = aws_lambda.Function(
+        #     self, "ErrorLambdaHandler",
+        #     runtime=aws_lambda.Runtime.NODEJS_12_X,
+        #     handler="error.handler",
+        #     code=aws_lambda.Code.from_asset("lambda_functions/error"),
+        #     timeout=cdk.Duration.seconds(3),
+        #     environment=dict(TABLE_NAME=table.table_name)
+        # )
+
         erroraws_lambda = aws_lambda.Function(
             self, "ErrorLambdaHandler",
             runtime=aws_lambda.Runtime.NODEJS_12_X,

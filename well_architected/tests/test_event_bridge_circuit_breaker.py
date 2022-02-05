@@ -273,7 +273,7 @@ class TestEventBridgeCircuitBreaker(TestTemplates):
           }
         ],
         "Runtime": "python3.8",
-        "Timeout": 60,
+        "Timeout": 20,
         "TracingConfig": {
           "Mode": "Active"
         }
