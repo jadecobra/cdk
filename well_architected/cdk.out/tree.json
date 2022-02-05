@@ -8458,220 +8458,627 @@
               "version": "1.142.0"
             }
           },
-          "ErrorLambdaHandler": {
-            "id": "ErrorLambdaHandler",
-            "path": "EventBridgeCircuitBreaker/ErrorLambdaHandler",
+          "error": {
+            "id": "error",
+            "path": "EventBridgeCircuitBreaker/error",
             "children": {
-              "ServiceRole": {
-                "id": "ServiceRole",
-                "path": "EventBridgeCircuitBreaker/ErrorLambdaHandler/ServiceRole",
+              "ErrorTopic": {
+                "id": "ErrorTopic",
+                "path": "EventBridgeCircuitBreaker/error/ErrorTopic",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "EventBridgeCircuitBreaker/ErrorLambdaHandler/ServiceRole/Resource",
+                    "path": "EventBridgeCircuitBreaker/error/ErrorTopic/Resource",
                     "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:type": "AWS::SNS::Topic",
                       "aws:cdk:cloudformation:props": {
-                        "assumeRolePolicyDocument": {
-                          "Statement": [
-                            {
-                              "Action": "sts:AssumeRole",
-                              "Effect": "Allow",
-                              "Principal": {
-                                "Service": "lambda.amazonaws.com"
-                              }
-                            }
-                          ],
-                          "Version": "2012-10-17"
-                        },
-                        "managedPolicyArns": [
-                          {
-                            "Fn::Join": [
-                              "",
-                              [
-                                "arn:",
-                                {
-                                  "Ref": "AWS::Partition"
-                                },
-                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-                              ]
-                            ]
-                          }
-                        ]
+                        "displayName": "ErrorTopic"
                       }
                     },
                     "constructInfo": {
-                      "fqn": "@aws-cdk/aws-iam.CfnRole",
+                      "fqn": "@aws-cdk/aws-sns.CfnTopic",
                       "version": "1.142.0"
                     }
-                  },
-                  "DefaultPolicy": {
-                    "id": "DefaultPolicy",
-                    "path": "EventBridgeCircuitBreaker/ErrorLambdaHandler/ServiceRole/DefaultPolicy",
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-sns.Topic",
+                  "version": "1.142.0"
+                }
+              },
+              "aws-xray-sdkLambdaLayer": {
+                "id": "aws-xray-sdkLambdaLayer",
+                "path": "EventBridgeCircuitBreaker/error/aws-xray-sdkLambdaLayer",
+                "children": {
+                  "Code": {
+                    "id": "Code",
+                    "path": "EventBridgeCircuitBreaker/error/aws-xray-sdkLambdaLayer/Code",
                     "children": {
-                      "Resource": {
-                        "id": "Resource",
-                        "path": "EventBridgeCircuitBreaker/ErrorLambdaHandler/ServiceRole/DefaultPolicy/Resource",
-                        "attributes": {
-                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
-                          "aws:cdk:cloudformation:props": {
-                            "policyDocument": {
-                              "Statement": [
-                                {
-                                  "Action": [
-                                    "dynamodb:BatchWriteItem",
-                                    "dynamodb:PutItem",
-                                    "dynamodb:UpdateItem",
-                                    "dynamodb:DeleteItem"
-                                  ],
-                                  "Effect": "Allow",
-                                  "Resource": [
-                                    {
-                                      "Fn::GetAtt": [
-                                        "CircuitBreaker4FAEA3DB",
-                                        "Arn"
-                                      ]
-                                    },
-                                    {
-                                      "Fn::Join": [
-                                        "",
-                                        [
-                                          {
-                                            "Fn::GetAtt": [
-                                              "CircuitBreaker4FAEA3DB",
-                                              "Arn"
-                                            ]
-                                          },
-                                          "/index/*"
-                                        ]
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ],
-                              "Version": "2012-10-17"
-                            },
-                            "policyName": "ErrorLambdaHandlerServiceRoleDefaultPolicy9B079F8F",
-                            "roles": [
-                              {
-                                "Ref": "ErrorLambdaHandlerServiceRole5D9F8D61"
-                              }
-                            ]
-                          }
-                        },
+                      "Stage": {
+                        "id": "Stage",
+                        "path": "EventBridgeCircuitBreaker/error/aws-xray-sdkLambdaLayer/Code/Stage",
                         "constructInfo": {
-                          "fqn": "@aws-cdk/aws-iam.CfnPolicy",
+                          "fqn": "@aws-cdk/core.AssetStaging",
+                          "version": "1.142.0"
+                        }
+                      },
+                      "AssetBucket": {
+                        "id": "AssetBucket",
+                        "path": "EventBridgeCircuitBreaker/error/aws-xray-sdkLambdaLayer/Code/AssetBucket",
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-s3.BucketBase",
                           "version": "1.142.0"
                         }
                       }
                     },
                     "constructInfo": {
-                      "fqn": "@aws-cdk/aws-iam.Policy",
-                      "version": "1.142.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-iam.Role",
-                  "version": "1.142.0"
-                }
-              },
-              "Code": {
-                "id": "Code",
-                "path": "EventBridgeCircuitBreaker/ErrorLambdaHandler/Code",
-                "children": {
-                  "Stage": {
-                    "id": "Stage",
-                    "path": "EventBridgeCircuitBreaker/ErrorLambdaHandler/Code/Stage",
-                    "constructInfo": {
-                      "fqn": "@aws-cdk/core.AssetStaging",
+                      "fqn": "@aws-cdk/aws-s3-assets.Asset",
                       "version": "1.142.0"
                     }
                   },
-                  "AssetBucket": {
-                    "id": "AssetBucket",
-                    "path": "EventBridgeCircuitBreaker/ErrorLambdaHandler/Code/AssetBucket",
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "EventBridgeCircuitBreaker/error/aws-xray-sdkLambdaLayer/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::Lambda::LayerVersion",
+                      "aws:cdk:cloudformation:props": {
+                        "content": {
+                          "s3Bucket": {
+                            "Ref": "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3BucketC7A2EC7F"
+                          },
+                          "s3Key": {
+                            "Fn::Join": [
+                              "",
+                              [
+                                {
+                                  "Fn::Select": [
+                                    0,
+                                    {
+                                      "Fn::Split": [
+                                        "||",
+                                        {
+                                          "Ref": "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3VersionKeyF23940AD"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Fn::Select": [
+                                    1,
+                                    {
+                                      "Fn::Split": [
+                                        "||",
+                                        {
+                                          "Ref": "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3VersionKeyF23940AD"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            ]
+                          }
+                        },
+                        "description": "AWS XRay SDK Lambda Layer"
+                      }
+                    },
                     "constructInfo": {
-                      "fqn": "@aws-cdk/aws-s3.BucketBase",
+                      "fqn": "@aws-cdk/aws-lambda.CfnLayerVersion",
                       "version": "1.142.0"
                     }
                   }
                 },
                 "constructInfo": {
-                  "fqn": "@aws-cdk/aws-s3-assets.Asset",
+                  "fqn": "@aws-cdk/aws-lambda.LayerVersion",
                   "version": "1.142.0"
                 }
               },
-              "Resource": {
-                "id": "Resource",
-                "path": "EventBridgeCircuitBreaker/ErrorLambdaHandler/Resource",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
-                  "aws:cdk:cloudformation:props": {
-                    "code": {
-                      "s3Bucket": {
-                        "Ref": "AssetParameters34999e271a6c0000ac59864501d50f7e791b73ebf11a0fe74d22aa36992ad318S3BucketCF4F15BD"
-                      },
-                      "s3Key": {
-                        "Fn::Join": [
-                          "",
-                          [
-                            {
-                              "Fn::Select": [
-                                0,
+              "LambdaFunction": {
+                "id": "LambdaFunction",
+                "path": "EventBridgeCircuitBreaker/error/LambdaFunction",
+                "children": {
+                  "ServiceRole": {
+                    "id": "ServiceRole",
+                    "path": "EventBridgeCircuitBreaker/error/LambdaFunction/ServiceRole",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "EventBridgeCircuitBreaker/error/LambdaFunction/ServiceRole/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                          "aws:cdk:cloudformation:props": {
+                            "assumeRolePolicyDocument": {
+                              "Statement": [
                                 {
-                                  "Fn::Split": [
-                                    "||",
-                                    {
-                                      "Ref": "AssetParameters34999e271a6c0000ac59864501d50f7e791b73ebf11a0fe74d22aa36992ad318S3VersionKeyFAF1B9D9"
-                                    }
-                                  ]
+                                  "Action": "sts:AssumeRole",
+                                  "Effect": "Allow",
+                                  "Principal": {
+                                    "Service": "lambda.amazonaws.com"
+                                  }
                                 }
-                              ]
+                              ],
+                              "Version": "2012-10-17"
                             },
-                            {
-                              "Fn::Select": [
-                                1,
-                                {
-                                  "Fn::Split": [
-                                    "||",
+                            "managedPolicyArns": [
+                              {
+                                "Fn::Join": [
+                                  "",
+                                  [
+                                    "arn:",
                                     {
-                                      "Ref": "AssetParameters34999e271a6c0000ac59864501d50f7e791b73ebf11a0fe74d22aa36992ad318S3VersionKeyFAF1B9D9"
-                                    }
+                                      "Ref": "AWS::Partition"
+                                    },
+                                    ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
                                   ]
-                                }
-                              ]
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-iam.CfnRole",
+                          "version": "1.142.0"
+                        }
+                      },
+                      "DefaultPolicy": {
+                        "id": "DefaultPolicy",
+                        "path": "EventBridgeCircuitBreaker/error/LambdaFunction/ServiceRole/DefaultPolicy",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "EventBridgeCircuitBreaker/error/LambdaFunction/ServiceRole/DefaultPolicy/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                              "aws:cdk:cloudformation:props": {
+                                "policyDocument": {
+                                  "Statement": [
+                                    {
+                                      "Action": [
+                                        "xray:PutTraceSegments",
+                                        "xray:PutTelemetryRecords"
+                                      ],
+                                      "Effect": "Allow",
+                                      "Resource": "*"
+                                    },
+                                    {
+                                      "Action": [
+                                        "dynamodb:BatchWriteItem",
+                                        "dynamodb:PutItem",
+                                        "dynamodb:UpdateItem",
+                                        "dynamodb:DeleteItem"
+                                      ],
+                                      "Effect": "Allow",
+                                      "Resource": [
+                                        {
+                                          "Fn::GetAtt": [
+                                            "CircuitBreaker4FAEA3DB",
+                                            "Arn"
+                                          ]
+                                        },
+                                        {
+                                          "Fn::Join": [
+                                            "",
+                                            [
+                                              {
+                                                "Fn::GetAtt": [
+                                                  "CircuitBreaker4FAEA3DB",
+                                                  "Arn"
+                                                ]
+                                              },
+                                              "/index/*"
+                                            ]
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ],
+                                  "Version": "2012-10-17"
+                                },
+                                "policyName": "errorLambdaFunctionServiceRoleDefaultPolicy7F656B38",
+                                "roles": [
+                                  {
+                                    "Ref": "errorLambdaFunctionServiceRoleBA0401A4"
+                                  }
+                                ]
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "@aws-cdk/aws-iam.CfnPolicy",
+                              "version": "1.142.0"
                             }
-                          ]
-                        ]
-                      }
-                    },
-                    "role": {
-                      "Fn::GetAtt": [
-                        "ErrorLambdaHandlerServiceRole5D9F8D61",
-                        "Arn"
-                      ]
-                    },
-                    "environment": {
-                      "variables": {
-                        "TABLE_NAME": {
-                          "Ref": "CircuitBreaker4FAEA3DB"
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-iam.Policy",
+                          "version": "1.142.0"
                         }
                       }
                     },
-                    "handler": "error.handler",
-                    "runtime": "nodejs12.x",
-                    "timeout": 3
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-iam.Role",
+                      "version": "1.142.0"
+                    }
+                  },
+                  "Code": {
+                    "id": "Code",
+                    "path": "EventBridgeCircuitBreaker/error/LambdaFunction/Code",
+                    "children": {
+                      "Stage": {
+                        "id": "Stage",
+                        "path": "EventBridgeCircuitBreaker/error/LambdaFunction/Code/Stage",
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/core.AssetStaging",
+                          "version": "1.142.0"
+                        }
+                      },
+                      "AssetBucket": {
+                        "id": "AssetBucket",
+                        "path": "EventBridgeCircuitBreaker/error/LambdaFunction/Code/AssetBucket",
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-s3.BucketBase",
+                          "version": "1.142.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-s3-assets.Asset",
+                      "version": "1.142.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "EventBridgeCircuitBreaker/error/LambdaFunction/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                      "aws:cdk:cloudformation:props": {
+                        "code": {
+                          "s3Bucket": {
+                            "Ref": "AssetParameters34999e271a6c0000ac59864501d50f7e791b73ebf11a0fe74d22aa36992ad318S3BucketCF4F15BD"
+                          },
+                          "s3Key": {
+                            "Fn::Join": [
+                              "",
+                              [
+                                {
+                                  "Fn::Select": [
+                                    0,
+                                    {
+                                      "Fn::Split": [
+                                        "||",
+                                        {
+                                          "Ref": "AssetParameters34999e271a6c0000ac59864501d50f7e791b73ebf11a0fe74d22aa36992ad318S3VersionKeyFAF1B9D9"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Fn::Select": [
+                                    1,
+                                    {
+                                      "Fn::Split": [
+                                        "||",
+                                        {
+                                          "Ref": "AssetParameters34999e271a6c0000ac59864501d50f7e791b73ebf11a0fe74d22aa36992ad318S3VersionKeyFAF1B9D9"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            ]
+                          }
+                        },
+                        "role": {
+                          "Fn::GetAtt": [
+                            "errorLambdaFunctionServiceRoleBA0401A4",
+                            "Arn"
+                          ]
+                        },
+                        "handler": "error.handler",
+                        "layers": [
+                          {
+                            "Ref": "errorawsxraysdkLambdaLayer7963DA8A"
+                          }
+                        ],
+                        "runtime": "python3.8",
+                        "timeout": 60,
+                        "tracingConfig": {
+                          "mode": "Active"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-lambda.CfnFunction",
+                      "version": "1.142.0"
+                    }
                   }
                 },
                 "constructInfo": {
-                  "fqn": "@aws-cdk/aws-lambda.CfnFunction",
+                  "fqn": "@aws-cdk/aws-lambda.Function",
+                  "version": "1.142.0"
+                }
+              },
+              "Lambda invocation Errors > 2%": {
+                "id": "Lambda invocation Errors > 2%",
+                "path": "EventBridgeCircuitBreaker/error/Lambda invocation Errors > 2%",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "EventBridgeCircuitBreaker/error/Lambda invocation Errors > 2%/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                      "aws:cdk:cloudformation:props": {
+                        "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                        "evaluationPeriods": 6,
+                        "alarmActions": [
+                          {
+                            "Ref": "errorErrorTopicE7B6AD64"
+                          }
+                        ],
+                        "datapointsToAlarm": 1,
+                        "metrics": [
+                          {
+                            "expression": "(errors / invocations) * 100",
+                            "id": "expr_1",
+                            "label": "% of invocations that errored, last 5 mins"
+                          },
+                          {
+                            "metricStat": {
+                              "metric": {
+                                "metricName": "Invocations",
+                                "namespace": "AWS/Lambda",
+                                "dimensions": [
+                                  {
+                                    "name": "FunctionName",
+                                    "value": {
+                                      "Ref": "errorLambdaFunction47F9F7B6"
+                                    }
+                                  }
+                                ]
+                              },
+                              "period": 300,
+                              "stat": "Sum"
+                            },
+                            "id": "invocations",
+                            "returnData": false
+                          },
+                          {
+                            "metricStat": {
+                              "metric": {
+                                "metricName": "Errors",
+                                "namespace": "AWS/Lambda",
+                                "dimensions": [
+                                  {
+                                    "name": "FunctionName",
+                                    "value": {
+                                      "Ref": "errorLambdaFunction47F9F7B6"
+                                    }
+                                  }
+                                ]
+                              },
+                              "period": 300,
+                              "stat": "Sum"
+                            },
+                            "id": "errors",
+                            "returnData": false
+                          }
+                        ],
+                        "threshold": 2,
+                        "treatMissingData": "notBreaching"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
+                  "version": "1.142.0"
+                }
+              },
+              "Lambda p99 Long Duration (>1s)": {
+                "id": "Lambda p99 Long Duration (>1s)",
+                "path": "EventBridgeCircuitBreaker/error/Lambda p99 Long Duration (>1s)",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "EventBridgeCircuitBreaker/error/Lambda p99 Long Duration (>1s)/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                      "aws:cdk:cloudformation:props": {
+                        "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                        "evaluationPeriods": 6,
+                        "alarmActions": [
+                          {
+                            "Ref": "errorErrorTopicE7B6AD64"
+                          }
+                        ],
+                        "datapointsToAlarm": 1,
+                        "dimensions": [
+                          {
+                            "name": "FunctionName",
+                            "value": {
+                              "Ref": "errorLambdaFunction47F9F7B6"
+                            }
+                          }
+                        ],
+                        "extendedStatistic": "p99",
+                        "metricName": "Duration",
+                        "namespace": "AWS/Lambda",
+                        "period": 300,
+                        "threshold": 1000,
+                        "treatMissingData": "notBreaching"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
+                  "version": "1.142.0"
+                }
+              },
+              "Lambda Throttled invocations >2%": {
+                "id": "Lambda Throttled invocations >2%",
+                "path": "EventBridgeCircuitBreaker/error/Lambda Throttled invocations >2%",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "EventBridgeCircuitBreaker/error/Lambda Throttled invocations >2%/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                      "aws:cdk:cloudformation:props": {
+                        "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                        "evaluationPeriods": 6,
+                        "alarmActions": [
+                          {
+                            "Ref": "errorErrorTopicE7B6AD64"
+                          }
+                        ],
+                        "datapointsToAlarm": 1,
+                        "metrics": [
+                          {
+                            "expression": "(throttles * 100) / (invocations + throttles)",
+                            "id": "expr_1",
+                            "label": "throttled requests % in last 30 mins"
+                          },
+                          {
+                            "metricStat": {
+                              "metric": {
+                                "metricName": "Invocations",
+                                "namespace": "AWS/Lambda",
+                                "dimensions": [
+                                  {
+                                    "name": "FunctionName",
+                                    "value": {
+                                      "Ref": "errorLambdaFunction47F9F7B6"
+                                    }
+                                  }
+                                ]
+                              },
+                              "period": 300,
+                              "stat": "Sum"
+                            },
+                            "id": "invocations",
+                            "returnData": false
+                          },
+                          {
+                            "metricStat": {
+                              "metric": {
+                                "metricName": "Throttles",
+                                "namespace": "AWS/Lambda",
+                                "dimensions": [
+                                  {
+                                    "name": "FunctionName",
+                                    "value": {
+                                      "Ref": "errorLambdaFunction47F9F7B6"
+                                    }
+                                  }
+                                ]
+                              },
+                              "period": 300,
+                              "stat": "Sum"
+                            },
+                            "id": "throttles",
+                            "returnData": false
+                          }
+                        ],
+                        "threshold": 2,
+                        "treatMissingData": "notBreaching"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
+                  "version": "1.142.0"
+                }
+              },
+              "CloudWatchDashBoard": {
+                "id": "CloudWatchDashBoard",
+                "path": "EventBridgeCircuitBreaker/error/CloudWatchDashBoard",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "EventBridgeCircuitBreaker/error/CloudWatchDashBoard/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::CloudWatch::Dashboard",
+                      "aws:cdk:cloudformation:props": {
+                        "dashboardBody": {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Error %\",\"region\":\"",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+                              {
+                                "Ref": "errorLambdaFunction47F9F7B6"
+                              },
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
+                              {
+                                "Ref": "errorLambdaFunction47F9F7B6"
+                              },
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+                              {
+                                "Ref": "errorLambdaFunction47F9F7B6"
+                              },
+                              "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+                              {
+                                "Ref": "errorLambdaFunction47F9F7B6"
+                              },
+                              "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+                              {
+                                "Ref": "errorLambdaFunction47F9F7B6"
+                              },
+                              "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Throttle %\",\"region\":\"",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+                              {
+                                "Ref": "errorLambdaFunction47F9F7B6"
+                              },
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
+                              {
+                                "Ref": "errorLambdaFunction47F9F7B6"
+                              },
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
+                            ]
+                          ]
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-cloudwatch.CfnDashboard",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-cloudwatch.Dashboard",
                   "version": "1.142.0"
                 }
               }
             },
             "constructInfo": {
-              "fqn": "@aws-cdk/aws-lambda.Function",
+              "fqn": "@aws-cdk/core.Construct",
               "version": "1.142.0"
             }
           },
@@ -8705,7 +9112,7 @@
                         "id": "Target0",
                         "arn": {
                           "Fn::GetAtt": [
-                            "ErrorLambdaHandler4224322A",
+                            "errorLambdaFunction47F9F7B6",
                             "Arn"
                           ]
                         }
@@ -8718,16 +9125,16 @@
                   "version": "1.142.0"
                 }
               },
-              "AllowEventRuleEventBridgeCircuitBreakerErrorLambdaHandlerA8CD3241": {
-                "id": "AllowEventRuleEventBridgeCircuitBreakerErrorLambdaHandlerA8CD3241",
-                "path": "EventBridgeCircuitBreaker/webserviceErrorRule/AllowEventRuleEventBridgeCircuitBreakerErrorLambdaHandlerA8CD3241",
+              "AllowEventRuleEventBridgeCircuitBreakererrorLambdaFunction3A1EB0D3": {
+                "id": "AllowEventRuleEventBridgeCircuitBreakererrorLambdaFunction3A1EB0D3",
+                "path": "EventBridgeCircuitBreaker/webserviceErrorRule/AllowEventRuleEventBridgeCircuitBreakererrorLambdaFunction3A1EB0D3",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                   "aws:cdk:cloudformation:props": {
                     "action": "lambda:InvokeFunction",
                     "functionName": {
                       "Fn::GetAtt": [
-                        "ErrorLambdaHandler4224322A",
+                        "errorLambdaFunction47F9F7B6",
                         "Arn"
                       ]
                     },

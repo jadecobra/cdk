@@ -72,13 +72,10 @@ class EventBridgeCircuitBreaker(cdk.Stack):
         #     environment=dict(TABLE_NAME=table.table_name)
         # )
 
-        erroraws_lambda = aws_lambda.Function(
-            self, "ErrorLambdaHandler",
-            runtime=aws_lambda.Runtime.NODEJS_12_X,
-            handler="error.handler",
-            code=aws_lambda.Code.from_asset("lambda_functions/error"),
-            timeout=cdk.Duration.seconds(3),
-            environment=dict(TABLE_NAME=table.table_name)
+        erroraws_lambda = lambda_function.create_python_lambda_function(
+            self, function_name='error',
+            environment_variables=dict(TABLE_NAME=table.table_name),
+            duration=3,
         )
 
         table.grant_write_data(erroraws_lambda)
