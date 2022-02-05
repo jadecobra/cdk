@@ -30,4 +30,4 @@ class TestTemplates(TestCase):
     def assert_template_equal(self, template_name, stack_name):
         time_it(system, f'cdk ls {template_name} --version-reporting=false --path-metadata=false --asset-metadata=false', description=f'synthesize stack: {template_name}')
         with open(f'cdk.out/{template_name}.template.json') as template:
-            self.assertEqual(load(template), stack_name)
+            return self.assertEqual(load(template), stack_name)

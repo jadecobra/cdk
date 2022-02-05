@@ -57,7 +57,7 @@ class EventBridgeCircuitBreaker(cdk.Stack):
 
         integrationaws_lambda = lambda_function.create_python_lambda_function(
             function_name='webservice',
-            environment=dict(TABLE_NAME=table.table_name)
+            environment_variables=dict(TABLE_NAME=table.table_name)
         )
 
         # grant the lambda role read/write permissions to our table
