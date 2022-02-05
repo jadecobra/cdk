@@ -132,9 +132,10 @@ class LambdaFunctionStack(Stack):
             environment_variables=environment_variables
         )
 
-def create_python_lambda_function(stack, function_name=None, environment_variables=None):
+def create_python_lambda_function(stack, function_name=None, environment_variables=None, duration=60):
     return LambdaFunctionConstruct(
         stack, function_name,
         function_name=function_name,
         environment_variables=environment_variables,
+        duration=duration,
     ).lambda_function
