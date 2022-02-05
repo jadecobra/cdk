@@ -8776,6 +8776,13 @@
                             "Arn"
                           ]
                         },
+                        "environment": {
+                          "variables": {
+                            "TABLE_NAME": {
+                              "Ref": "CircuitBreaker4FAEA3DB"
+                            }
+                          }
+                        },
                         "handler": "error.handler",
                         "layers": [
                           {
@@ -8783,7 +8790,7 @@
                           }
                         ],
                         "runtime": "python3.8",
-                        "timeout": 60,
+                        "timeout": 3,
                         "tracingConfig": {
                           "mode": "Active"
                         }
