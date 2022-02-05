@@ -45,14 +45,14 @@ class EventBridgeCircuitBreaker(cdk.Stack):
             )
         )
 
-        integrationaws_lambda = lambda_function.create_python_lambda_function(
+        aws_integration_lambda = lambda_function.create_python_lambda_function(
             self, function_name='webservice',
             environment_variables=dict(TABLE_NAME=dynamodb_table.table_name),
             duration=20,
         )
 
         # grant the lambda role read/write permissions to our table
-        dynamodb_table.grant_read_data(integrationaws_lambda)
+        dynamodb_table.grant_read_data(aws_integration_lambda)
 
         # We need to give your lambda permission to put events on our EventBridge
         event_policy = iam.PolicyStatement(
@@ -60,7 +60,7 @@ class EventBridgeCircuitBreaker(cdk.Stack):
             resources=['*'],
             actions=['events:PutEvents']
         )
-        integrationaws_lambda.add_to_role_policy(event_policy)
+        aws_integration_lambda.add_to_role_policy(event_policy)
 
         erroraws_lambda = lambda_function.create_python_lambda_function(
             self, function_name='error',
@@ -88,5 +88,5 @@ class EventBridgeCircuitBreaker(cdk.Stack):
         # defines an API Gateway REST API resource backed by our "integrationaws_lambda" function
         api_gateway.LambdaRestApi(
             self, 'CircuitBreakerGateway',
-            handler=integrationaws_lambda
+            handler=aws_integration_lambda
         )
