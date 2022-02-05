@@ -19,7 +19,7 @@ class EventBridgeCircuitBreaker(cdk.Stack):
         # DynamoDB Table
         # This will store our error records
         # TTL Docs - https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/time-to-live-ttl-how-to.html
-        dynamodb_table = dynamodb.Table(
+        error_records = dynamodb.Table(
             self, "CircuitBreaker",
             partition_key=dynamodb.Attribute(
                 name="RequestID",
@@ -33,7 +33,7 @@ class EventBridgeCircuitBreaker(cdk.Stack):
         )
 
         # Add an index that lets us query on site url and Expiration Time
-        dynamodb_table.add_global_secondary_index(
+        error_records.add_global_secondary_index(
             index_name='UrlIndex',
             partition_key=dynamodb.Attribute(
                 name="SiteUrl",
@@ -47,12 +47,12 @@ class EventBridgeCircuitBreaker(cdk.Stack):
 
         aws_integration_lambda = lambda_function.create_python_lambda_function(
             self, function_name='webservice',
-            environment_variables=dict(TABLE_NAME=dynamodb_table.table_name),
+            environment_variables=dict(TABLE_NAME=error_records.table_name),
             duration=20,
         )
 
         # grant the lambda role read/write permissions to our table
-        dynamodb_table.grant_read_data(aws_integration_lambda)
+        error_records.grant_read_data(aws_integration_lambda)
 
         # We need to give your lambda permission to put events on our EventBridge
         event_policy = iam.PolicyStatement(
@@ -64,11 +64,11 @@ class EventBridgeCircuitBreaker(cdk.Stack):
 
         error_lambda = lambda_function.create_python_lambda_function(
             self, function_name='error',
-            environment_variables=dict(TABLE_NAME=dynamodb_table.table_name),
+            environment_variables=dict(TABLE_NAME=error_records.table_name),
             duration=3,
         )
 
-        dynamodb_table.grant_write_data(error_lambda)
+        error_records.grant_write_data(error_lambda)
 
         # Create EventBridge rule to route failures
         error_rule = aws_events.Rule(
