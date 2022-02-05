@@ -8,7 +8,7 @@ class LambdaFunctionConstruct(WellArchitectedFrameworkConstruct):
     def __init__(self, scope: Construct, id: str,
         function_name=None, environment_variables=None,
         error_topic:ITopic=None, layers:list[str]=None,
-        duration=60
+        duration=60,
         **kwargs) -> None:
         super().__init__(scope, id, error_topic=error_topic, **kwargs)
         self.lambda_function = Function(
