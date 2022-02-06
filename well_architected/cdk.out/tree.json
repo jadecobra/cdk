@@ -38,32 +38,6 @@
               "version": "1.142.0"
             }
           },
-          "CDKMetadata": {
-            "id": "CDKMetadata",
-            "path": "SnsTopic/CDKMetadata",
-            "children": {
-              "Default": {
-                "id": "Default",
-                "path": "SnsTopic/CDKMetadata/Default",
-                "constructInfo": {
-                  "fqn": "@aws-cdk/core.CfnResource",
-                  "version": "1.142.0"
-                }
-              },
-              "Condition": {
-                "id": "Condition",
-                "path": "SnsTopic/CDKMetadata/Condition",
-                "constructInfo": {
-                  "fqn": "@aws-cdk/core.CfnCondition",
-                  "version": "1.142.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/core.Construct",
-              "version": "1.142.0"
-            }
-          },
           "Exports": {
             "id": "Exports",
             "path": "SnsTopic/Exports",
@@ -333,32 +307,6 @@
                 },
                 "constructInfo": {
                   "fqn": "@aws-cdk/aws-cloudwatch.Dashboard",
-                  "version": "1.142.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/core.Construct",
-              "version": "1.142.0"
-            }
-          },
-          "CDKMetadata": {
-            "id": "CDKMetadata",
-            "path": "DynamoDBTable/CDKMetadata",
-            "children": {
-              "Default": {
-                "id": "Default",
-                "path": "DynamoDBTable/CDKMetadata/Default",
-                "constructInfo": {
-                  "fqn": "@aws-cdk/core.CfnResource",
-                  "version": "1.142.0"
-                }
-              },
-              "Condition": {
-                "id": "Condition",
-                "path": "DynamoDBTable/CDKMetadata/Condition",
-                "constructInfo": {
-                  "fqn": "@aws-cdk/core.CfnCondition",
                   "version": "1.142.0"
                 }
               }
@@ -1106,32 +1054,6 @@
               "version": "1.142.0"
             }
           },
-          "CDKMetadata": {
-            "id": "CDKMetadata",
-            "path": "LambdaFunction/CDKMetadata",
-            "children": {
-              "Default": {
-                "id": "Default",
-                "path": "LambdaFunction/CDKMetadata/Default",
-                "constructInfo": {
-                  "fqn": "@aws-cdk/core.CfnResource",
-                  "version": "1.142.0"
-                }
-              },
-              "Condition": {
-                "id": "Condition",
-                "path": "LambdaFunction/CDKMetadata/Condition",
-                "constructInfo": {
-                  "fqn": "@aws-cdk/core.CfnCondition",
-                  "version": "1.142.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/core.Construct",
-              "version": "1.142.0"
-            }
-          },
           "Exports": {
             "id": "Exports",
             "path": "LambdaFunction/Exports",
@@ -1325,7 +1247,7 @@
                           "format": "$context.identity.sourceIp $context.identity.caller $context.identity.user [$context.requestTime] \"$context.httpMethod $context.resourcePath $context.protocol\" $context.status $context.responseLength $context.requestId"
                         },
                         "deploymentId": {
-                          "Ref": "LambdaAPIGatewayDeploymentE937914C8e2a69677d7c755d4c16351139f0b7c4"
+                          "Ref": "LambdaAPIGatewayDeploymentE937914C5c746fc97cfebd293610d5e7f299055c"
                         },
                         "methodSettings": [
                           {
@@ -1865,32 +1787,6 @@
               "version": "1.142.0"
             }
           },
-          "CDKMetadata": {
-            "id": "CDKMetadata",
-            "path": "LambdaRestAPIGateway/CDKMetadata",
-            "children": {
-              "Default": {
-                "id": "Default",
-                "path": "LambdaRestAPIGateway/CDKMetadata/Default",
-                "constructInfo": {
-                  "fqn": "@aws-cdk/core.CfnResource",
-                  "version": "1.142.0"
-                }
-              },
-              "Condition": {
-                "id": "Condition",
-                "path": "LambdaRestAPIGateway/CDKMetadata/Condition",
-                "constructInfo": {
-                  "fqn": "@aws-cdk/core.CfnCondition",
-                  "version": "1.142.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/core.Construct",
-              "version": "1.142.0"
-            }
-          },
           "Exports": {
             "id": "Exports",
             "path": "LambdaRestAPIGateway/Exports",
@@ -2068,32 +1964,6 @@
             "constructInfo": {
               "fqn": "@aws-cdk/aws-wafv2.CfnWebACLAssociation",
               "version": "1.139.0"
-            }
-          },
-          "CDKMetadata": {
-            "id": "CDKMetadata",
-            "path": "WebApplicationFirewall/CDKMetadata",
-            "children": {
-              "Default": {
-                "id": "Default",
-                "path": "WebApplicationFirewall/CDKMetadata/Default",
-                "constructInfo": {
-                  "fqn": "@aws-cdk/core.CfnResource",
-                  "version": "1.142.0"
-                }
-              },
-              "Condition": {
-                "id": "Condition",
-                "path": "WebApplicationFirewall/CDKMetadata/Condition",
-                "constructInfo": {
-                  "fqn": "@aws-cdk/core.CfnCondition",
-                  "version": "1.142.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/core.Construct",
-              "version": "1.142.0"
             }
           }
         },
@@ -2577,32 +2447,6 @@
               "fqn": "@aws-cdk/core.CfnOutput",
               "version": "1.142.0"
             }
-          },
-          "CDKMetadata": {
-            "id": "CDKMetadata",
-            "path": "LambdaHttpApiGateway/CDKMetadata",
-            "children": {
-              "Default": {
-                "id": "Default",
-                "path": "LambdaHttpApiGateway/CDKMetadata/Default",
-                "constructInfo": {
-                  "fqn": "@aws-cdk/core.CfnResource",
-                  "version": "1.142.0"
-                }
-              },
-              "Condition": {
-                "id": "Condition",
-                "path": "LambdaHttpApiGateway/CDKMetadata/Condition",
-                "constructInfo": {
-                  "fqn": "@aws-cdk/core.CfnCondition",
-                  "version": "1.142.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/core.Construct",
-              "version": "1.142.0"
-            }
           }
         },
         "constructInfo": {
@@ -2635,32 +2479,6 @@
             },
             "constructInfo": {
               "fqn": "@aws-cdk/aws-sns.Topic",
-              "version": "1.142.0"
-            }
-          },
-          "CDKMetadata": {
-            "id": "CDKMetadata",
-            "path": "XRayTracerSnsFanOutTopic/CDKMetadata",
-            "children": {
-              "Default": {
-                "id": "Default",
-                "path": "XRayTracerSnsFanOutTopic/CDKMetadata/Default",
-                "constructInfo": {
-                  "fqn": "@aws-cdk/core.CfnResource",
-                  "version": "1.142.0"
-                }
-              },
-              "Condition": {
-                "id": "Condition",
-                "path": "XRayTracerSnsFanOutTopic/CDKMetadata/Condition",
-                "constructInfo": {
-                  "fqn": "@aws-cdk/core.CfnCondition",
-                  "version": "1.142.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/core.Construct",
               "version": "1.142.0"
             }
           },
@@ -2819,7 +2637,7 @@
                           "Ref": "RestApi0C43BF4B"
                         },
                         "deploymentId": {
-                          "Ref": "RestApiDeployment180EC50353456d9ae36c41aab4342990e922625e"
+                          "Ref": "RestApiDeployment180EC50310ca31bc7c64b136e655b95e390d9332"
                         },
                         "methodSettings": [
                           {
@@ -3295,32 +3113,6 @@
             },
             "constructInfo": {
               "fqn": "@aws-cdk/aws-iam.Role",
-              "version": "1.142.0"
-            }
-          },
-          "CDKMetadata": {
-            "id": "CDKMetadata",
-            "path": "SnsRestApi/CDKMetadata",
-            "children": {
-              "Default": {
-                "id": "Default",
-                "path": "SnsRestApi/CDKMetadata/Default",
-                "constructInfo": {
-                  "fqn": "@aws-cdk/core.CfnResource",
-                  "version": "1.142.0"
-                }
-              },
-              "Condition": {
-                "id": "Condition",
-                "path": "SnsRestApi/CDKMetadata/Condition",
-                "constructInfo": {
-                  "fqn": "@aws-cdk/core.CfnCondition",
-                  "version": "1.142.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/core.Construct",
               "version": "1.142.0"
             }
           }
@@ -4053,32 +3845,6 @@
                 },
                 "constructInfo": {
                   "fqn": "@aws-cdk/core.Construct",
-                  "version": "1.142.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/core.Construct",
-              "version": "1.142.0"
-            }
-          },
-          "CDKMetadata": {
-            "id": "CDKMetadata",
-            "path": "HttpFlow/CDKMetadata",
-            "children": {
-              "Default": {
-                "id": "Default",
-                "path": "HttpFlow/CDKMetadata/Default",
-                "constructInfo": {
-                  "fqn": "@aws-cdk/core.CfnResource",
-                  "version": "1.142.0"
-                }
-              },
-              "Condition": {
-                "id": "Condition",
-                "path": "HttpFlow/CDKMetadata/Condition",
-                "constructInfo": {
-                  "fqn": "@aws-cdk/core.CfnCondition",
                   "version": "1.142.0"
                 }
               }
@@ -4898,32 +4664,6 @@
                 },
                 "constructInfo": {
                   "fqn": "@aws-cdk/core.Construct",
-                  "version": "1.142.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/core.Construct",
-              "version": "1.142.0"
-            }
-          },
-          "CDKMetadata": {
-            "id": "CDKMetadata",
-            "path": "DynamoDBFlow/CDKMetadata",
-            "children": {
-              "Default": {
-                "id": "Default",
-                "path": "DynamoDBFlow/CDKMetadata/Default",
-                "constructInfo": {
-                  "fqn": "@aws-cdk/core.CfnResource",
-                  "version": "1.142.0"
-                }
-              },
-              "Condition": {
-                "id": "Condition",
-                "path": "DynamoDBFlow/CDKMetadata/Condition",
-                "constructInfo": {
-                  "fqn": "@aws-cdk/core.CfnCondition",
                   "version": "1.142.0"
                 }
               }
@@ -6413,32 +6153,6 @@
               "fqn": "@aws-cdk/aws-sns.TopicBase",
               "version": "1.142.0"
             }
-          },
-          "CDKMetadata": {
-            "id": "CDKMetadata",
-            "path": "SnsFlow/CDKMetadata",
-            "children": {
-              "Default": {
-                "id": "Default",
-                "path": "SnsFlow/CDKMetadata/Default",
-                "constructInfo": {
-                  "fqn": "@aws-cdk/core.CfnResource",
-                  "version": "1.142.0"
-                }
-              },
-              "Condition": {
-                "id": "Condition",
-                "path": "SnsFlow/CDKMetadata/Condition",
-                "constructInfo": {
-                  "fqn": "@aws-cdk/core.CfnCondition",
-                  "version": "1.142.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/core.Construct",
-              "version": "1.142.0"
-            }
           }
         },
         "constructInfo": {
@@ -7897,32 +7611,6 @@
               "fqn": "@aws-cdk/core.Construct",
               "version": "1.142.0"
             }
-          },
-          "CDKMetadata": {
-            "id": "CDKMetadata",
-            "path": "SqsFlow/CDKMetadata",
-            "children": {
-              "Default": {
-                "id": "Default",
-                "path": "SqsFlow/CDKMetadata/Default",
-                "constructInfo": {
-                  "fqn": "@aws-cdk/core.CfnResource",
-                  "version": "1.142.0"
-                }
-              },
-              "Condition": {
-                "id": "Condition",
-                "path": "SqsFlow/CDKMetadata/Condition",
-                "constructInfo": {
-                  "fqn": "@aws-cdk/core.CfnCondition",
-                  "version": "1.142.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/core.Construct",
-              "version": "1.142.0"
-            }
           }
         },
         "constructInfo": {
@@ -8303,7 +7991,7 @@
                       "aws:cdk:cloudformation:props": {
                         "code": {
                           "s3Bucket": {
-                            "Ref": "AssetParametersd8fa8924b42700edfd14edbb97f11c331ada47e843cf4468b9b8645047e1a005S3Bucket22582398"
+                            "Ref": "AssetParameters1fe4af58915a6d0b8585a608b98957e3105ebb7162fd2c8f2a337e26b45a1605S3Bucket1E9609C3"
                           },
                           "s3Key": {
                             "Fn::Join": [
@@ -8316,7 +8004,7 @@
                                       "Fn::Split": [
                                         "||",
                                         {
-                                          "Ref": "AssetParametersd8fa8924b42700edfd14edbb97f11c331ada47e843cf4468b9b8645047e1a005S3VersionKey9DB7E1DD"
+                                          "Ref": "AssetParameters1fe4af58915a6d0b8585a608b98957e3105ebb7162fd2c8f2a337e26b45a1605S3VersionKey70A654B7"
                                         }
                                       ]
                                     }
@@ -8329,7 +8017,7 @@
                                       "Fn::Split": [
                                         "||",
                                         {
-                                          "Ref": "AssetParametersd8fa8924b42700edfd14edbb97f11c331ada47e843cf4468b9b8645047e1a005S3VersionKey9DB7E1DD"
+                                          "Ref": "AssetParameters1fe4af58915a6d0b8585a608b98957e3105ebb7162fd2c8f2a337e26b45a1605S3VersionKey70A654B7"
                                         }
                                       ]
                                     }
@@ -8347,7 +8035,7 @@
                         },
                         "environment": {
                           "variables": {
-                            "TABLE_NAME": {
+                            "ERROR_RECORDS": {
                               "Ref": "CircuitBreaker4FAEA3DB"
                             }
                           }
@@ -8696,13 +8384,13 @@
                   "version": "1.142.0"
                 }
               },
-              "d8fa8924b42700edfd14edbb97f11c331ada47e843cf4468b9b8645047e1a005": {
-                "id": "d8fa8924b42700edfd14edbb97f11c331ada47e843cf4468b9b8645047e1a005",
-                "path": "EventBridgeCircuitBreaker/AssetParameters/d8fa8924b42700edfd14edbb97f11c331ada47e843cf4468b9b8645047e1a005",
+              "1fe4af58915a6d0b8585a608b98957e3105ebb7162fd2c8f2a337e26b45a1605": {
+                "id": "1fe4af58915a6d0b8585a608b98957e3105ebb7162fd2c8f2a337e26b45a1605",
+                "path": "EventBridgeCircuitBreaker/AssetParameters/1fe4af58915a6d0b8585a608b98957e3105ebb7162fd2c8f2a337e26b45a1605",
                 "children": {
                   "S3Bucket": {
                     "id": "S3Bucket",
-                    "path": "EventBridgeCircuitBreaker/AssetParameters/d8fa8924b42700edfd14edbb97f11c331ada47e843cf4468b9b8645047e1a005/S3Bucket",
+                    "path": "EventBridgeCircuitBreaker/AssetParameters/1fe4af58915a6d0b8585a608b98957e3105ebb7162fd2c8f2a337e26b45a1605/S3Bucket",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -8710,7 +8398,7 @@
                   },
                   "S3VersionKey": {
                     "id": "S3VersionKey",
-                    "path": "EventBridgeCircuitBreaker/AssetParameters/d8fa8924b42700edfd14edbb97f11c331ada47e843cf4468b9b8645047e1a005/S3VersionKey",
+                    "path": "EventBridgeCircuitBreaker/AssetParameters/1fe4af58915a6d0b8585a608b98957e3105ebb7162fd2c8f2a337e26b45a1605/S3VersionKey",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -8718,7 +8406,7 @@
                   },
                   "ArtifactHash": {
                     "id": "ArtifactHash",
-                    "path": "EventBridgeCircuitBreaker/AssetParameters/d8fa8924b42700edfd14edbb97f11c331ada47e843cf4468b9b8645047e1a005/ArtifactHash",
+                    "path": "EventBridgeCircuitBreaker/AssetParameters/1fe4af58915a6d0b8585a608b98957e3105ebb7162fd2c8f2a337e26b45a1605/ArtifactHash",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -8730,13 +8418,13 @@
                   "version": "1.142.0"
                 }
               },
-              "762c39aa63007144d6cb020489a92b28917b4e5d27564e6bff7f7d6c3fd5200b": {
-                "id": "762c39aa63007144d6cb020489a92b28917b4e5d27564e6bff7f7d6c3fd5200b",
-                "path": "EventBridgeCircuitBreaker/AssetParameters/762c39aa63007144d6cb020489a92b28917b4e5d27564e6bff7f7d6c3fd5200b",
+              "44df117aa26070eec97be30d9450a4f5efdb18c79b84b1607418684bf2dae0a4": {
+                "id": "44df117aa26070eec97be30d9450a4f5efdb18c79b84b1607418684bf2dae0a4",
+                "path": "EventBridgeCircuitBreaker/AssetParameters/44df117aa26070eec97be30d9450a4f5efdb18c79b84b1607418684bf2dae0a4",
                 "children": {
                   "S3Bucket": {
                     "id": "S3Bucket",
-                    "path": "EventBridgeCircuitBreaker/AssetParameters/762c39aa63007144d6cb020489a92b28917b4e5d27564e6bff7f7d6c3fd5200b/S3Bucket",
+                    "path": "EventBridgeCircuitBreaker/AssetParameters/44df117aa26070eec97be30d9450a4f5efdb18c79b84b1607418684bf2dae0a4/S3Bucket",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -8744,7 +8432,7 @@
                   },
                   "S3VersionKey": {
                     "id": "S3VersionKey",
-                    "path": "EventBridgeCircuitBreaker/AssetParameters/762c39aa63007144d6cb020489a92b28917b4e5d27564e6bff7f7d6c3fd5200b/S3VersionKey",
+                    "path": "EventBridgeCircuitBreaker/AssetParameters/44df117aa26070eec97be30d9450a4f5efdb18c79b84b1607418684bf2dae0a4/S3VersionKey",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -8752,7 +8440,7 @@
                   },
                   "ArtifactHash": {
                     "id": "ArtifactHash",
-                    "path": "EventBridgeCircuitBreaker/AssetParameters/762c39aa63007144d6cb020489a92b28917b4e5d27564e6bff7f7d6c3fd5200b/ArtifactHash",
+                    "path": "EventBridgeCircuitBreaker/AssetParameters/44df117aa26070eec97be30d9450a4f5efdb18c79b84b1607418684bf2dae0a4/ArtifactHash",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -9046,7 +8734,7 @@
                       "aws:cdk:cloudformation:props": {
                         "code": {
                           "s3Bucket": {
-                            "Ref": "AssetParameters762c39aa63007144d6cb020489a92b28917b4e5d27564e6bff7f7d6c3fd5200bS3Bucket93AD9C3D"
+                            "Ref": "AssetParameters44df117aa26070eec97be30d9450a4f5efdb18c79b84b1607418684bf2dae0a4S3Bucket73883EEA"
                           },
                           "s3Key": {
                             "Fn::Join": [
@@ -9059,7 +8747,7 @@
                                       "Fn::Split": [
                                         "||",
                                         {
-                                          "Ref": "AssetParameters762c39aa63007144d6cb020489a92b28917b4e5d27564e6bff7f7d6c3fd5200bS3VersionKey61994CBC"
+                                          "Ref": "AssetParameters44df117aa26070eec97be30d9450a4f5efdb18c79b84b1607418684bf2dae0a4S3VersionKey534E5360"
                                         }
                                       ]
                                     }
@@ -9072,7 +8760,7 @@
                                       "Fn::Split": [
                                         "||",
                                         {
-                                          "Ref": "AssetParameters762c39aa63007144d6cb020489a92b28917b4e5d27564e6bff7f7d6c3fd5200bS3VersionKey61994CBC"
+                                          "Ref": "AssetParameters44df117aa26070eec97be30d9450a4f5efdb18c79b84b1607418684bf2dae0a4S3VersionKey534E5360"
                                         }
                                       ]
                                     }
@@ -9090,7 +8778,7 @@
                         },
                         "environment": {
                           "variables": {
-                            "TABLE_NAME": {
+                            "ERROR_RECORDS": {
                               "Ref": "CircuitBreaker4FAEA3DB"
                             }
                           }
@@ -9604,7 +9292,7 @@
                           "Ref": "CircuitBreakerGateway122B123C"
                         },
                         "deploymentId": {
-                          "Ref": "CircuitBreakerGatewayDeployment9F2A82FA1b76c9505b7fb61af652ef1210aa6ad3"
+                          "Ref": "CircuitBreakerGatewayDeployment9F2A82FA1735fcaff60de46340a0d2a3525fb797"
                         },
                         "stageName": "prod"
                       }
@@ -9981,32 +9669,6 @@
             },
             "constructInfo": {
               "fqn": "@aws-cdk/aws-apigateway.LambdaRestApi",
-              "version": "1.142.0"
-            }
-          },
-          "CDKMetadata": {
-            "id": "CDKMetadata",
-            "path": "EventBridgeCircuitBreaker/CDKMetadata",
-            "children": {
-              "Default": {
-                "id": "Default",
-                "path": "EventBridgeCircuitBreaker/CDKMetadata/Default",
-                "constructInfo": {
-                  "fqn": "@aws-cdk/core.CfnResource",
-                  "version": "1.142.0"
-                }
-              },
-              "Condition": {
-                "id": "Condition",
-                "path": "EventBridgeCircuitBreaker/CDKMetadata/Condition",
-                "constructInfo": {
-                  "fqn": "@aws-cdk/core.CfnCondition",
-                  "version": "1.142.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/core.Construct",
               "version": "1.142.0"
             }
           }

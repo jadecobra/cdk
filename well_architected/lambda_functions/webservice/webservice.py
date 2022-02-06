@@ -67,8 +67,9 @@ def handler(event, context):
         },
         KeyConditionExpression="SiteUrl = :v1 and ExpirationTime > :now",
         IndexName="UrlIndex",
-        TableName=os.environ.get('ERROR_TABLE_NAME'),
+        TableName=os.environ.get('ERROR_RECORDS'),
     )
+
     print('--- Recent Errors ---');
     print(len(recentErrors));
     print(json.dumps(recentErrors));

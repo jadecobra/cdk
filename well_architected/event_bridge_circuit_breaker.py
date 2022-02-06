@@ -15,16 +15,18 @@ class EventBridgeCircuitBreaker(cdk.Stack):
     def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
+        expiration_time_sort_key = dynamodb.Attribute(
+            name="ExpirationTime",
+            type=dynamodb.AttributeType.NUMBER
+        )
+
         error_records = dynamodb.Table(
             self, "CircuitBreaker",
             partition_key=dynamodb.Attribute(
                 name="RequestID",
                 type=dynamodb.AttributeType.STRING
             ),
-            sort_key=dynamodb.Attribute(
-                name="ExpirationTime",
-                type=dynamodb.AttributeType.NUMBER
-            ),
+            sort_key=expiration_time_sort_key,
             time_to_live_attribute='ExpirationTime'
         )
 
@@ -34,21 +36,20 @@ class EventBridgeCircuitBreaker(cdk.Stack):
                 name="SiteUrl",
                 type=dynamodb.AttributeType.STRING
             ),
-            sort_key=dynamodb.Attribute(
-                name="ExpirationTime",
-                type=dynamodb.AttributeType.NUMBER
-            )
+            sort_key=expiration_time_sort_key
         )
+
+        environment_variables = dict(ERROR_RECORDS=error_records.table_name)
 
         aws_integration_lambda = lambda_function.create_python_lambda_function(
             self, function_name='webservice',
-            environment_variables=dict(TABLE_NAME=error_records.table_name),
+            environment_variables=environment_variables,
             duration=20,
         )
 
         error_lambda = lambda_function.create_python_lambda_function(
             self, function_name='error',
-            environment_variables=dict(TABLE_NAME=error_records.table_name),
+            environment_variables=environment_variables,
             duration=3,
         )
 
