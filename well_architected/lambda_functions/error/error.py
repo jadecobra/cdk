@@ -1,24 +1,16 @@
+import boto3
+import random
+import string
+import time
 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const AWS = require('aws-sdk');
-AWS.config.region = process.env.AWS_REGION || 'us-east-1';
-exports.handler = async (event, context) => {
-    console.log(event);
-    // Create the DynamoDB service object
-    var ddb = new AWS.DynamoDB({ apiVersion: '2012-08-10' });
-    const secondsSinceEpoch = Math.round(Date.now() / 1000);
-    const expirationTime = '' + (secondsSinceEpoch + 60);
-    var params = {
-        TableName: process.env.TABLE_NAME,
-        Item: {
-            'RequestID': { S: Math.random().toString(36).substring(2) + Date.now().toString(36) },
-            'SiteUrl': { S: event.detail.siteUrl },
-            'ErrorType': { S: event.detail.errorType },
-            'ExpirationTime': { N: expirationTime }
+table = boto3.resource('dynamodb').Table(os.environ.get('ERROR_TABLE_NAME'))
+
+def handler(event, context):
+    return table.put_item(
+        Item={
+            'RequestID': { ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(10)) },
+            'SiteUrl': { event['detail']['siteUrl'] },
+            'ErrorType': { event['detail']['errorType'] },
+            'ExpirationTime': { time.time() + 60 }
         }
-    };
-    // Call DynamoDB to add the item to the table
-    let result = await ddb.putItem(params).promise();
-    console.log(result);
-};
+    )

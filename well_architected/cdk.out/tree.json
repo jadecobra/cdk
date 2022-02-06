@@ -8418,13 +8418,13 @@
                   "version": "1.142.0"
                 }
               },
-              "34999e271a6c0000ac59864501d50f7e791b73ebf11a0fe74d22aa36992ad318": {
-                "id": "34999e271a6c0000ac59864501d50f7e791b73ebf11a0fe74d22aa36992ad318",
-                "path": "EventBridgeCircuitBreaker/AssetParameters/34999e271a6c0000ac59864501d50f7e791b73ebf11a0fe74d22aa36992ad318",
+              "9b3e7614022843052fd662f43be2d71f1f204bf53f9d7e5dc2a95ef10dce3d05": {
+                "id": "9b3e7614022843052fd662f43be2d71f1f204bf53f9d7e5dc2a95ef10dce3d05",
+                "path": "EventBridgeCircuitBreaker/AssetParameters/9b3e7614022843052fd662f43be2d71f1f204bf53f9d7e5dc2a95ef10dce3d05",
                 "children": {
                   "S3Bucket": {
                     "id": "S3Bucket",
-                    "path": "EventBridgeCircuitBreaker/AssetParameters/34999e271a6c0000ac59864501d50f7e791b73ebf11a0fe74d22aa36992ad318/S3Bucket",
+                    "path": "EventBridgeCircuitBreaker/AssetParameters/9b3e7614022843052fd662f43be2d71f1f204bf53f9d7e5dc2a95ef10dce3d05/S3Bucket",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -8432,7 +8432,7 @@
                   },
                   "S3VersionKey": {
                     "id": "S3VersionKey",
-                    "path": "EventBridgeCircuitBreaker/AssetParameters/34999e271a6c0000ac59864501d50f7e791b73ebf11a0fe74d22aa36992ad318/S3VersionKey",
+                    "path": "EventBridgeCircuitBreaker/AssetParameters/9b3e7614022843052fd662f43be2d71f1f204bf53f9d7e5dc2a95ef10dce3d05/S3VersionKey",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -8440,7 +8440,7 @@
                   },
                   "ArtifactHash": {
                     "id": "ArtifactHash",
-                    "path": "EventBridgeCircuitBreaker/AssetParameters/34999e271a6c0000ac59864501d50f7e791b73ebf11a0fe74d22aa36992ad318/ArtifactHash",
+                    "path": "EventBridgeCircuitBreaker/AssetParameters/9b3e7614022843052fd662f43be2d71f1f204bf53f9d7e5dc2a95ef10dce3d05/ArtifactHash",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -8734,7 +8734,7 @@
                       "aws:cdk:cloudformation:props": {
                         "code": {
                           "s3Bucket": {
-                            "Ref": "AssetParameters34999e271a6c0000ac59864501d50f7e791b73ebf11a0fe74d22aa36992ad318S3BucketCF4F15BD"
+                            "Ref": "AssetParameters9b3e7614022843052fd662f43be2d71f1f204bf53f9d7e5dc2a95ef10dce3d05S3Bucket229612B4"
                           },
                           "s3Key": {
                             "Fn::Join": [
@@ -8747,7 +8747,7 @@
                                       "Fn::Split": [
                                         "||",
                                         {
-                                          "Ref": "AssetParameters34999e271a6c0000ac59864501d50f7e791b73ebf11a0fe74d22aa36992ad318S3VersionKeyFAF1B9D9"
+                                          "Ref": "AssetParameters9b3e7614022843052fd662f43be2d71f1f204bf53f9d7e5dc2a95ef10dce3d05S3VersionKeyE5C41126"
                                         }
                                       ]
                                     }
@@ -8760,7 +8760,7 @@
                                       "Fn::Split": [
                                         "||",
                                         {
-                                          "Ref": "AssetParameters34999e271a6c0000ac59864501d50f7e791b73ebf11a0fe74d22aa36992ad318S3VersionKeyFAF1B9D9"
+                                          "Ref": "AssetParameters9b3e7614022843052fd662f43be2d71f1f204bf53f9d7e5dc2a95ef10dce3d05S3VersionKeyE5C41126"
                                         }
                                       ]
                                     }
