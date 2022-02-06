@@ -10229,3 +10229,15 @@
 2022-02-06 00:54:22.774169::Time taken to synthesize stack: SNSTopic::  2.5999 seconds
 2022-02-06 00:54:25.249509::Time taken to synthesize stack: SqsFlow::  2.4741 seconds
 2022-02-06 00:54:28.086421::Time taken to synthesize stack: WebApplicationFirewall::  2.8356 seconds
+2022-02-06 09:43:27.459373::Time taken to synthesize stack: DynamoDBFlow::  3.2533 seconds
+2022-02-06 09:43:30.269253::Time taken to synthesize stack: DynamoDBTable::  2.8077 seconds
+2022-02-06 09:43:32.896656::Time taken to synthesize stack: EventBridgeCircuitBreaker::  2.6270 seconds
+2022-02-06 09:43:35.574972::Time taken to synthesize stack: LambdaHttpApiGateway::  2.6777 seconds
+2022-02-06 09:43:38.219311::Time taken to synthesize stack: HttpFlow::  2.6439 seconds
+2022-02-06 09:43:41.004052::Time taken to synthesize stack: LambdaFunction::  2.7843 seconds
+2022-02-06 09:43:43.716631::Time taken to synthesize stack: LambdaRestAPIGateway::  2.7121 seconds
+2022-02-06 09:43:46.423926::Time taken to synthesize stack: SnsFlow::  2.7065 seconds
+2022-02-06 09:43:49.062118::Time taken to synthesize stack: SnsRestApi::  2.6376 seconds
+2022-02-06 09:43:51.737420::Time taken to synthesize stack: SNSTopic::  2.6749 seconds
+2022-02-06 09:43:54.344492::Time taken to synthesize stack: SqsFlow::  2.6058 seconds
+2022-02-06 09:43:56.981693::Time taken to synthesize stack: WebApplicationFirewall::  2.6367 seconds
