@@ -65,8 +65,8 @@ class TestEventBridgeCircuitBreaker(TestTemplates):
           "Enabled": true
         }
       },
-      "UpdateReplacePolicy": "Retain",
-      "DeletionPolicy": "Retain"
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete"
     },
     "webserviceErrorTopic186C4EDE": {
       "Type": "AWS::SNS::Topic",

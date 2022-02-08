@@ -1,11 +1,11 @@
-from aws_cdk.core import Construct, Stack
+import aws_cdk.core as cdk
 from aws_cdk.aws_dynamodb import Table, Attribute, AttributeType, BillingMode
 from well_architected import WellArchitectedFrameworkConstruct
 
 class DynamoDBTableConstruct(WellArchitectedFrameworkConstruct):
 
     def __init__(
-        self, scope: Construct, id: str, error_topic=None, **kwargs
+        self, scope: cdk.Construct, id: str, error_topic=None, **kwargs
     ) -> None:
         super().__init__(scope, id, error_topic=error_topic, **kwargs)
         self.dynamodb_table = Table(
@@ -13,8 +13,9 @@ class DynamoDBTableConstruct(WellArchitectedFrameworkConstruct):
             billing_mode=BillingMode.PAY_PER_REQUEST,
             partition_key=Attribute(
                 name="path",
-                type=AttributeType.STRING
+                type=AttributeType.STRING,
             ),
+            removal_policy=cdk.RemovalPolicy.DESTROY,
         )
         self.create_user_errors_alarm()
         self.create_throttles_alarm()
@@ -96,10 +97,10 @@ class DynamoDBTableConstruct(WellArchitectedFrameworkConstruct):
         )
 
 
-class DynamoDBTableStack(Stack):
+class DynamoDBTableStack(cdk.Stack):
 
     def __init__(
-        self, scope: Construct, id: str, error_topic=None, **kwargs
+        self, scope: cdk.Construct, id: str, error_topic=None, **kwargs
     ) -> None:
         super().__init__(scope, id, **kwargs)
         self.dynamodb_table = DynamoDBTableConstruct(

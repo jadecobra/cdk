@@ -27,8 +27,10 @@ class EventBridgeCircuitBreaker(cdk.Stack):
                 type=dynamodb.AttributeType.STRING
             ),
             sort_key=expiration_time_sort_key,
-            time_to_live_attribute='ExpirationTime'
+            time_to_live_attribute='ExpirationTime',
+            removal_policy=cdk.RemovalPolicy.DESTROY,
         )
+
 
         error_records.add_global_secondary_index(
             index_name='UrlIndex',

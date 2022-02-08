@@ -24,8 +24,8 @@ class TestDynamoDBTable(TestTemplates):
         ],
         "BillingMode": "PAY_PER_REQUEST"
       },
-      "UpdateReplacePolicy": "Retain",
-      "DeletionPolicy": "Retain"
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete"
     },
     "HitsDynamoDBUserErrors07CE7B5C5": {
       "Type": "AWS::CloudWatch::Alarm",
