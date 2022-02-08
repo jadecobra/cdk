@@ -5,7 +5,7 @@ import os
 import datetime
 
 eventbridge = boto3.client('events')
-dynamo = boto3.client('dynamodb')
+table = boto3.resource('dynamodb').Table(os.environ.get('ERROR_RECORDS'))
 
 def call_fake_service(serviceURL):
     # In here assume we made an http request to google and it was down,
@@ -58,16 +58,15 @@ def send_response(status, body):
     }
 
 def handler(event, context):
-    serviceURL = 'www.google.com';
+    serviceURL = 'www.google.com'
 
-    recentErrors = dynamo.query(
+    recentErrors = table.query(
         ExpressionAttributeValues={
             ":v1": { "S": serviceURL },
             ":now": { "N": str(time.time()) }
         },
         KeyConditionExpression="SiteUrl = :v1 and ExpirationTime > :now",
         IndexName="UrlIndex",
-        TableName=os.environ.get('ERROR_RECORDS'),
     )
 
     print('--- Recent Errors ---');
