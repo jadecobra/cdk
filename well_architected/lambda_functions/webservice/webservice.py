@@ -8,11 +8,19 @@ eventbridge = boto3.client('events')
 # table = boto3.resource('dynamodb').Table(os.environ.get('ERROR_RECORDS'))
 # do resources require a connection?
 
+def delimiter():
+    print('='*80)
+
+def header(message):
+    delimiter()
+    print(f'\t{message}')
+    delimiter()
+
 def call_fake_service(serviceURL):
     # In here assume we made an http request to google and it was down,
     # 10 sec hard coded delay for simulation
 
-    print('--- Calling Webservice, recent errors below threshold ---');
+    header('Calling Webservice, recent errors below threshold ---');
     time.sleep(1)
     print('\t--- Service Call Failure ---');
     errorType = '\t\tservice timeout exception'

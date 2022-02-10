@@ -7991,7 +7991,7 @@
                       "aws:cdk:cloudformation:props": {
                         "code": {
                           "s3Bucket": {
-                            "Ref": "AssetParameters6798702cc359edfb1f5aec6e1810f6edef3d5f390f62a075aa5725680839cbc1S3Bucket9B993B50"
+                            "Ref": "AssetParameters4557f2c4dc1766e84627161be74e33434d9cf01c2b2910dd6a38d6ab714ce2bbS3Bucket1957488E"
                           },
                           "s3Key": {
                             "Fn::Join": [
@@ -8004,7 +8004,7 @@
                                       "Fn::Split": [
                                         "||",
                                         {
-                                          "Ref": "AssetParameters6798702cc359edfb1f5aec6e1810f6edef3d5f390f62a075aa5725680839cbc1S3VersionKeyF95E6231"
+                                          "Ref": "AssetParameters4557f2c4dc1766e84627161be74e33434d9cf01c2b2910dd6a38d6ab714ce2bbS3VersionKey76E4286C"
                                         }
                                       ]
                                     }
@@ -8017,7 +8017,7 @@
                                       "Fn::Split": [
                                         "||",
                                         {
-                                          "Ref": "AssetParameters6798702cc359edfb1f5aec6e1810f6edef3d5f390f62a075aa5725680839cbc1S3VersionKeyF95E6231"
+                                          "Ref": "AssetParameters4557f2c4dc1766e84627161be74e33434d9cf01c2b2910dd6a38d6ab714ce2bbS3VersionKey76E4286C"
                                         }
                                       ]
                                     }
@@ -8384,13 +8384,13 @@
                   "version": "1.142.0"
                 }
               },
-              "6798702cc359edfb1f5aec6e1810f6edef3d5f390f62a075aa5725680839cbc1": {
-                "id": "6798702cc359edfb1f5aec6e1810f6edef3d5f390f62a075aa5725680839cbc1",
-                "path": "EventBridgeCircuitBreaker/AssetParameters/6798702cc359edfb1f5aec6e1810f6edef3d5f390f62a075aa5725680839cbc1",
+              "4557f2c4dc1766e84627161be74e33434d9cf01c2b2910dd6a38d6ab714ce2bb": {
+                "id": "4557f2c4dc1766e84627161be74e33434d9cf01c2b2910dd6a38d6ab714ce2bb",
+                "path": "EventBridgeCircuitBreaker/AssetParameters/4557f2c4dc1766e84627161be74e33434d9cf01c2b2910dd6a38d6ab714ce2bb",
                 "children": {
                   "S3Bucket": {
                     "id": "S3Bucket",
-                    "path": "EventBridgeCircuitBreaker/AssetParameters/6798702cc359edfb1f5aec6e1810f6edef3d5f390f62a075aa5725680839cbc1/S3Bucket",
+                    "path": "EventBridgeCircuitBreaker/AssetParameters/4557f2c4dc1766e84627161be74e33434d9cf01c2b2910dd6a38d6ab714ce2bb/S3Bucket",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -8398,7 +8398,7 @@
                   },
                   "S3VersionKey": {
                     "id": "S3VersionKey",
-                    "path": "EventBridgeCircuitBreaker/AssetParameters/6798702cc359edfb1f5aec6e1810f6edef3d5f390f62a075aa5725680839cbc1/S3VersionKey",
+                    "path": "EventBridgeCircuitBreaker/AssetParameters/4557f2c4dc1766e84627161be74e33434d9cf01c2b2910dd6a38d6ab714ce2bb/S3VersionKey",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -8406,7 +8406,7 @@
                   },
                   "ArtifactHash": {
                     "id": "ArtifactHash",
-                    "path": "EventBridgeCircuitBreaker/AssetParameters/6798702cc359edfb1f5aec6e1810f6edef3d5f390f62a075aa5725680839cbc1/ArtifactHash",
+                    "path": "EventBridgeCircuitBreaker/AssetParameters/4557f2c4dc1766e84627161be74e33434d9cf01c2b2910dd6a38d6ab714ce2bb/ArtifactHash",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
