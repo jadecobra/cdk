@@ -4,7 +4,10 @@ from well_architected import WellArchitectedFrameworkConstruct
 
 class ApiGatewayCloudWatch(WellArchitectedFrameworkConstruct):
 
-    def __init__(self, scope: Construct, id: str, api_id=None, error_topic=None, **kwargs) -> None:
+    def __init__(self,
+        scope: Construct, id: str, api_id=None,
+        error_topic=None, **kwargs
+    ) -> None:
         super().__init__(scope, id, **kwargs)
         self.api_id = api_id
         self.error_topic = error_topic

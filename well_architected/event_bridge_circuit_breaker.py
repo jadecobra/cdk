@@ -51,18 +51,13 @@ class EventBridgeCircuitBreaker(cdk.Stack):
 
         environment_variables = dict(ERROR_RECORDS=error_records.table_name)
 
-        # webservice = lambda_function.create_python_lambda_function(
-        #     self, function_name='webservice',
-        #     environment_variables=environment_variables,
-        #     duration=20,
-        # )
         webservice = lambda_function.LambdaFunctionConstruct(
             self, 'webservice',
             error_topic=error_topic,
             function_name='webservice',
             environment_variables=environment_variables,
             duration=20,
-        )
+        ).lambda_function
 
         error_lambda = lambda_function.LambdaFunctionConstruct(
             self, 'error',
@@ -72,10 +67,10 @@ class EventBridgeCircuitBreaker(cdk.Stack):
             duration=3,
         ).lambda_function
 
-        error_records.grant_read_data(webservice.lambda_function)
+        error_records.grant_read_data(webservice)
         error_records.grant_write_data(error_lambda)
 
-        webservice.lambda_function.add_to_role_policy(
+        webservice.add_to_role_policy(
             iam.PolicyStatement(
                 effect=iam.Effect.ALLOW,
                 resources=['*'],
@@ -97,13 +92,8 @@ class EventBridgeCircuitBreaker(cdk.Stack):
 
         error_rule.add_target(targets.LambdaFunction(handler=error_lambda))
 
-        # api_gateway.LambdaRestApi(
-        #     self, 'CircuitBreakerGateway',
-        #     handler=webservice.lambda_function,
-        # )
-
         rest_api.LambdaRestAPIGatewayConstruct(
             self, 'CircuitBreakerGateway',
-            lambda_function=webservice.lambda_function,
+            lambda_function=webservice,
             error_topic=error_topic,
         )
