@@ -1,0 +1,17 @@
+{
+  "Resources": {
+    "SnsTopic2C1570A4": {
+      "Type": "AWS::SNS::Topic"
+    }
+  },
+  "Outputs": {
+    "ExportsOutputRefSnsTopic2C1570A4EE4BCC49": {
+      "Value": {
+        "Ref": "SnsTopic2C1570A4"
+      },
+      "Export": {
+        "Name": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
+      }
+    }
+  }
+}
