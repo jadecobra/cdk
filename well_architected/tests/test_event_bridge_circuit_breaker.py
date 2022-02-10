@@ -1,6 +1,5 @@
 from tests.utilities import TestTemplates, true, false
-import unittest
-@unittest.skip
+
 class TestEventBridgeCircuitBreaker(TestTemplates):
 
     def test_event_bridge_circuit_breaker(self):

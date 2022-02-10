@@ -38,7 +38,7 @@ def create_service_timeout_exception_after(seconds):
 
 def service_call_failure_after(seconds=1, service_url=None):
     header('\tCalling Webservice, recent errors below threshold');
-    create_service_timeout_exception_after(0)
+    create_service_timeout_exception_after()
     error_type = '\t\tservice timeout exception'
     print(error_type)
     print('\t--- EventBridge Response ---');
