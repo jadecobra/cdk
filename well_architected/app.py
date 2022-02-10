@@ -1,4 +1,4 @@
-from rest_api import LambdaRestAPIGateway
+from rest_api import LambdaRestAPIGatewayStack
 from web_application_firewall import WebApplicationFirewall
 from lambda_function import LambdaFunctionStack
 from lambda_layer import LambdaLayer
@@ -47,7 +47,7 @@ class WellArchitected(cdk.App):
         )
 
     def create_rest_api(self):
-        self.rest_api = LambdaRestAPIGateway(
+        self.rest_api = LambdaRestAPIGatewayStack(
             self, 'LambdaRestAPIGateway',
             lambda_function=self.lambda_function.lambda_function,
             error_topic=self.error_topic,
