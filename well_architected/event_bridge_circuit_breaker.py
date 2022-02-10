@@ -43,7 +43,7 @@ class EventBridgeCircuitBreaker(cdk.Stack):
 
         environment_variables = dict(ERROR_RECORDS=error_records.table_name)
 
-        aws_integration_lambda = lambda_function.create_python_lambda_function(
+        webservice = lambda_function.create_python_lambda_function(
             self, function_name='webservice',
             environment_variables=environment_variables,
             duration=20,
@@ -55,10 +55,10 @@ class EventBridgeCircuitBreaker(cdk.Stack):
             duration=3,
         )
 
-        error_records.grant_read_data(aws_integration_lambda)
+        error_records.grant_read_data(webservice)
         error_records.grant_write_data(error_lambda)
 
-        aws_integration_lambda.add_to_role_policy(
+        webservice.add_to_role_policy(
             iam.PolicyStatement(
                 effect=iam.Effect.ALLOW,
                 resources=['*'],
@@ -82,5 +82,5 @@ class EventBridgeCircuitBreaker(cdk.Stack):
 
         api_gateway.LambdaRestApi(
             self, 'CircuitBreakerGateway',
-            handler=aws_integration_lambda
+            handler=webservice
         )
