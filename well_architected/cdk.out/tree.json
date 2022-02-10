@@ -7849,34 +7849,34 @@
         "id": "EventBridgeCircuitBreaker",
         "path": "EventBridgeCircuitBreaker",
         "children": {
+          "EventBridgeCircuitBreaker": {
+            "id": "EventBridgeCircuitBreaker",
+            "path": "EventBridgeCircuitBreaker/EventBridgeCircuitBreaker",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "EventBridgeCircuitBreaker/EventBridgeCircuitBreaker/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::SNS::Topic",
+                  "aws:cdk:cloudformation:props": {
+                    "displayName": "ErrorTopic"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-sns.CfnTopic",
+                  "version": "1.142.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/aws-sns.Topic",
+              "version": "1.142.0"
+            }
+          },
           "CircuitBreaker": {
             "id": "CircuitBreaker",
             "path": "EventBridgeCircuitBreaker/CircuitBreaker",
             "children": {
-              "ErrorTopic": {
-                "id": "ErrorTopic",
-                "path": "EventBridgeCircuitBreaker/CircuitBreaker/ErrorTopic",
-                "children": {
-                  "Resource": {
-                    "id": "Resource",
-                    "path": "EventBridgeCircuitBreaker/CircuitBreaker/ErrorTopic/Resource",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::SNS::Topic",
-                      "aws:cdk:cloudformation:props": {
-                        "displayName": "ErrorTopic"
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "@aws-cdk/aws-sns.CfnTopic",
-                      "version": "1.142.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-sns.Topic",
-                  "version": "1.142.0"
-                }
-              },
               "CircuitBreaker": {
                 "id": "CircuitBreaker",
                 "path": "EventBridgeCircuitBreaker/CircuitBreaker/CircuitBreaker",
@@ -7969,7 +7969,7 @@
                         "evaluationPeriods": 6,
                         "alarmActions": [
                           {
-                            "Ref": "CircuitBreakerErrorTopicBA5B2ED9"
+                            "Ref": "EventBridgeCircuitBreaker73FCFBB5"
                           }
                         ],
                         "datapointsToAlarm": 1,
@@ -8006,7 +8006,7 @@
                         "evaluationPeriods": 6,
                         "alarmActions": [
                           {
-                            "Ref": "CircuitBreakerErrorTopicBA5B2ED9"
+                            "Ref": "EventBridgeCircuitBreaker73FCFBB5"
                           }
                         ],
                         "datapointsToAlarm": 1,
@@ -8161,30 +8161,6 @@
             "id": "webservice",
             "path": "EventBridgeCircuitBreaker/webservice",
             "children": {
-              "ErrorTopic": {
-                "id": "ErrorTopic",
-                "path": "EventBridgeCircuitBreaker/webservice/ErrorTopic",
-                "children": {
-                  "Resource": {
-                    "id": "Resource",
-                    "path": "EventBridgeCircuitBreaker/webservice/ErrorTopic/Resource",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::SNS::Topic",
-                      "aws:cdk:cloudformation:props": {
-                        "displayName": "ErrorTopic"
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "@aws-cdk/aws-sns.CfnTopic",
-                      "version": "1.142.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-sns.Topic",
-                  "version": "1.142.0"
-                }
-              },
               "aws-xray-sdkLambdaLayer": {
                 "id": "aws-xray-sdkLambdaLayer",
                 "path": "EventBridgeCircuitBreaker/webservice/aws-xray-sdkLambdaLayer",
@@ -8528,7 +8504,7 @@
                         "evaluationPeriods": 6,
                         "alarmActions": [
                           {
-                            "Ref": "webserviceErrorTopic186C4EDE"
+                            "Ref": "EventBridgeCircuitBreaker73FCFBB5"
                           }
                         ],
                         "datapointsToAlarm": 1,
@@ -8608,7 +8584,7 @@
                         "evaluationPeriods": 6,
                         "alarmActions": [
                           {
-                            "Ref": "webserviceErrorTopic186C4EDE"
+                            "Ref": "EventBridgeCircuitBreaker73FCFBB5"
                           }
                         ],
                         "datapointsToAlarm": 1,
@@ -8653,7 +8629,7 @@
                         "evaluationPeriods": 6,
                         "alarmActions": [
                           {
-                            "Ref": "webserviceErrorTopic186C4EDE"
+                            "Ref": "EventBridgeCircuitBreaker73FCFBB5"
                           }
                         ],
                         "datapointsToAlarm": 1,
@@ -8912,30 +8888,6 @@
             "id": "error",
             "path": "EventBridgeCircuitBreaker/error",
             "children": {
-              "ErrorTopic": {
-                "id": "ErrorTopic",
-                "path": "EventBridgeCircuitBreaker/error/ErrorTopic",
-                "children": {
-                  "Resource": {
-                    "id": "Resource",
-                    "path": "EventBridgeCircuitBreaker/error/ErrorTopic/Resource",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::SNS::Topic",
-                      "aws:cdk:cloudformation:props": {
-                        "displayName": "ErrorTopic"
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "@aws-cdk/aws-sns.CfnTopic",
-                      "version": "1.142.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-sns.Topic",
-                  "version": "1.142.0"
-                }
-              },
               "aws-xray-sdkLambdaLayer": {
                 "id": "aws-xray-sdkLambdaLayer",
                 "path": "EventBridgeCircuitBreaker/error/aws-xray-sdkLambdaLayer",
@@ -9271,7 +9223,7 @@
                         "evaluationPeriods": 6,
                         "alarmActions": [
                           {
-                            "Ref": "errorErrorTopicE7B6AD64"
+                            "Ref": "EventBridgeCircuitBreaker73FCFBB5"
                           }
                         ],
                         "datapointsToAlarm": 1,
@@ -9351,7 +9303,7 @@
                         "evaluationPeriods": 6,
                         "alarmActions": [
                           {
-                            "Ref": "errorErrorTopicE7B6AD64"
+                            "Ref": "EventBridgeCircuitBreaker73FCFBB5"
                           }
                         ],
                         "datapointsToAlarm": 1,
@@ -9396,7 +9348,7 @@
                         "evaluationPeriods": 6,
                         "alarmActions": [
                           {
-                            "Ref": "errorErrorTopicE7B6AD64"
+                            "Ref": "EventBridgeCircuitBreaker73FCFBB5"
                           }
                         ],
                         "datapointsToAlarm": 1,
@@ -9619,460 +9571,77 @@
             "id": "CircuitBreakerGateway",
             "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway",
             "children": {
-              "Resource": {
-                "id": "Resource",
-                "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/Resource",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::ApiGateway::RestApi",
-                  "aws:cdk:cloudformation:props": {
-                    "name": "CircuitBreakerGateway"
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-apigateway.CfnRestApi",
-                  "version": "1.142.0"
-                }
-              },
-              "CloudWatchRole": {
-                "id": "CloudWatchRole",
-                "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/CloudWatchRole",
+              "helloAPILogs": {
+                "id": "helloAPILogs",
+                "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/helloAPILogs",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/CloudWatchRole/Resource",
+                    "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/helloAPILogs/Resource",
                     "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:type": "AWS::Logs::LogGroup",
                       "aws:cdk:cloudformation:props": {
-                        "assumeRolePolicyDocument": {
-                          "Statement": [
-                            {
-                              "Action": "sts:AssumeRole",
-                              "Effect": "Allow",
-                              "Principal": {
-                                "Service": "apigateway.amazonaws.com"
-                              }
-                            }
-                          ],
-                          "Version": "2012-10-17"
-                        },
-                        "managedPolicyArns": [
-                          {
-                            "Fn::Join": [
-                              "",
-                              [
-                                "arn:",
-                                {
-                                  "Ref": "AWS::Partition"
-                                },
-                                ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
-                              ]
-                            ]
-                          }
-                        ]
+                        "retentionInDays": 731
                       }
                     },
                     "constructInfo": {
-                      "fqn": "@aws-cdk/aws-iam.CfnRole",
+                      "fqn": "@aws-cdk/aws-logs.CfnLogGroup",
                       "version": "1.142.0"
                     }
                   }
                 },
                 "constructInfo": {
-                  "fqn": "@aws-cdk/aws-iam.Role",
+                  "fqn": "@aws-cdk/aws-logs.LogGroup",
                   "version": "1.142.0"
                 }
               },
-              "Account": {
-                "id": "Account",
-                "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/Account",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::ApiGateway::Account",
-                  "aws:cdk:cloudformation:props": {
-                    "cloudWatchRoleArn": {
-                      "Fn::GetAtt": [
-                        "CircuitBreakerGatewayCloudWatchRole934DF897",
-                        "Arn"
-                      ]
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-apigateway.CfnAccount",
-                  "version": "1.142.0"
-                }
-              },
-              "Deployment": {
-                "id": "Deployment",
-                "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/Deployment",
+              "LambdaAPIGateway": {
+                "id": "LambdaAPIGateway",
+                "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/LambdaAPIGateway",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/Deployment/Resource",
+                    "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/LambdaAPIGateway/Resource",
                     "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::ApiGateway::Deployment",
+                      "aws:cdk:cloudformation:type": "AWS::ApiGateway::RestApi",
                       "aws:cdk:cloudformation:props": {
-                        "restApiId": {
-                          "Ref": "CircuitBreakerGateway122B123C"
+                        "endpointConfiguration": {
+                          "types": [
+                            "REGIONAL"
+                          ]
                         },
-                        "description": "Automatically created by the RestApi construct"
+                        "name": "hello"
                       }
                     },
                     "constructInfo": {
-                      "fqn": "@aws-cdk/aws-apigateway.CfnDeployment",
-                      "version": "1.142.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-apigateway.Deployment",
-                  "version": "1.142.0"
-                }
-              },
-              "DeploymentStage.prod": {
-                "id": "DeploymentStage.prod",
-                "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/DeploymentStage.prod",
-                "children": {
-                  "Resource": {
-                    "id": "Resource",
-                    "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/DeploymentStage.prod/Resource",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::ApiGateway::Stage",
-                      "aws:cdk:cloudformation:props": {
-                        "restApiId": {
-                          "Ref": "CircuitBreakerGateway122B123C"
-                        },
-                        "deploymentId": {
-                          "Ref": "CircuitBreakerGatewayDeployment9F2A82FA1735fcaff60de46340a0d2a3525fb797"
-                        },
-                        "stageName": "prod"
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "@aws-cdk/aws-apigateway.CfnStage",
-                      "version": "1.142.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-apigateway.Stage",
-                  "version": "1.142.0"
-                }
-              },
-              "Endpoint": {
-                "id": "Endpoint",
-                "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/Endpoint",
-                "constructInfo": {
-                  "fqn": "@aws-cdk/core.CfnOutput",
-                  "version": "1.142.0"
-                }
-              },
-              "Default": {
-                "id": "Default",
-                "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/Default",
-                "children": {
-                  "{proxy+}": {
-                    "id": "{proxy+}",
-                    "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/Default/{proxy+}",
-                    "children": {
-                      "Resource": {
-                        "id": "Resource",
-                        "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/Default/{proxy+}/Resource",
-                        "attributes": {
-                          "aws:cdk:cloudformation:type": "AWS::ApiGateway::Resource",
-                          "aws:cdk:cloudformation:props": {
-                            "parentId": {
-                              "Fn::GetAtt": [
-                                "CircuitBreakerGateway122B123C",
-                                "RootResourceId"
-                              ]
-                            },
-                            "pathPart": "{proxy+}",
-                            "restApiId": {
-                              "Ref": "CircuitBreakerGateway122B123C"
-                            }
-                          }
-                        },
-                        "constructInfo": {
-                          "fqn": "@aws-cdk/aws-apigateway.CfnResource",
-                          "version": "1.142.0"
-                        }
-                      },
-                      "ANY": {
-                        "id": "ANY",
-                        "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/Default/{proxy+}/ANY",
-                        "children": {
-                          "ApiPermission.EventBridgeCircuitBreakerCircuitBreakerGatewayE76DF368.ANY..{proxy+}": {
-                            "id": "ApiPermission.EventBridgeCircuitBreakerCircuitBreakerGatewayE76DF368.ANY..{proxy+}",
-                            "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/Default/{proxy+}/ANY/ApiPermission.EventBridgeCircuitBreakerCircuitBreakerGatewayE76DF368.ANY..{proxy+}",
-                            "attributes": {
-                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
-                              "aws:cdk:cloudformation:props": {
-                                "action": "lambda:InvokeFunction",
-                                "functionName": {
-                                  "Fn::GetAtt": [
-                                    "webserviceLambdaFunctionB896CD05",
-                                    "Arn"
-                                  ]
-                                },
-                                "principal": "apigateway.amazonaws.com",
-                                "sourceArn": {
-                                  "Fn::Join": [
-                                    "",
-                                    [
-                                      "arn:",
-                                      {
-                                        "Ref": "AWS::Partition"
-                                      },
-                                      ":execute-api:",
-                                      {
-                                        "Ref": "AWS::Region"
-                                      },
-                                      ":",
-                                      {
-                                        "Ref": "AWS::AccountId"
-                                      },
-                                      ":",
-                                      {
-                                        "Ref": "CircuitBreakerGateway122B123C"
-                                      },
-                                      "/",
-                                      {
-                                        "Ref": "CircuitBreakerGatewayDeploymentStageprod84F6B9E5"
-                                      },
-                                      "/*/*"
-                                    ]
-                                  ]
-                                }
-                              }
-                            },
-                            "constructInfo": {
-                              "fqn": "@aws-cdk/aws-lambda.CfnPermission",
-                              "version": "1.142.0"
-                            }
-                          },
-                          "ApiPermission.Test.EventBridgeCircuitBreakerCircuitBreakerGatewayE76DF368.ANY..{proxy+}": {
-                            "id": "ApiPermission.Test.EventBridgeCircuitBreakerCircuitBreakerGatewayE76DF368.ANY..{proxy+}",
-                            "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/Default/{proxy+}/ANY/ApiPermission.Test.EventBridgeCircuitBreakerCircuitBreakerGatewayE76DF368.ANY..{proxy+}",
-                            "attributes": {
-                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
-                              "aws:cdk:cloudformation:props": {
-                                "action": "lambda:InvokeFunction",
-                                "functionName": {
-                                  "Fn::GetAtt": [
-                                    "webserviceLambdaFunctionB896CD05",
-                                    "Arn"
-                                  ]
-                                },
-                                "principal": "apigateway.amazonaws.com",
-                                "sourceArn": {
-                                  "Fn::Join": [
-                                    "",
-                                    [
-                                      "arn:",
-                                      {
-                                        "Ref": "AWS::Partition"
-                                      },
-                                      ":execute-api:",
-                                      {
-                                        "Ref": "AWS::Region"
-                                      },
-                                      ":",
-                                      {
-                                        "Ref": "AWS::AccountId"
-                                      },
-                                      ":",
-                                      {
-                                        "Ref": "CircuitBreakerGateway122B123C"
-                                      },
-                                      "/test-invoke-stage/*/*"
-                                    ]
-                                  ]
-                                }
-                              }
-                            },
-                            "constructInfo": {
-                              "fqn": "@aws-cdk/aws-lambda.CfnPermission",
-                              "version": "1.142.0"
-                            }
-                          },
-                          "Resource": {
-                            "id": "Resource",
-                            "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/Default/{proxy+}/ANY/Resource",
-                            "attributes": {
-                              "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
-                              "aws:cdk:cloudformation:props": {
-                                "httpMethod": "ANY",
-                                "resourceId": {
-                                  "Ref": "CircuitBreakerGatewayproxy1147E2CF"
-                                },
-                                "restApiId": {
-                                  "Ref": "CircuitBreakerGateway122B123C"
-                                },
-                                "authorizationType": "NONE",
-                                "integration": {
-                                  "type": "AWS_PROXY",
-                                  "uri": {
-                                    "Fn::Join": [
-                                      "",
-                                      [
-                                        "arn:",
-                                        {
-                                          "Ref": "AWS::Partition"
-                                        },
-                                        ":apigateway:",
-                                        {
-                                          "Ref": "AWS::Region"
-                                        },
-                                        ":lambda:path/2015-03-31/functions/",
-                                        {
-                                          "Fn::GetAtt": [
-                                            "webserviceLambdaFunctionB896CD05",
-                                            "Arn"
-                                          ]
-                                        },
-                                        "/invocations"
-                                      ]
-                                    ]
-                                  },
-                                  "integrationHttpMethod": "POST"
-                                }
-                              }
-                            },
-                            "constructInfo": {
-                              "fqn": "@aws-cdk/aws-apigateway.CfnMethod",
-                              "version": "1.142.0"
-                            }
-                          }
-                        },
-                        "constructInfo": {
-                          "fqn": "@aws-cdk/aws-apigateway.Method",
-                          "version": "1.142.0"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "@aws-cdk/aws-apigateway.ProxyResource",
+                      "fqn": "@aws-cdk/aws-apigateway.CfnRestApi",
                       "version": "1.142.0"
                     }
                   },
-                  "ANY": {
-                    "id": "ANY",
-                    "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/Default/ANY",
+                  "CloudWatchRole": {
+                    "id": "CloudWatchRole",
+                    "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/LambdaAPIGateway/CloudWatchRole",
                     "children": {
-                      "ApiPermission.EventBridgeCircuitBreakerCircuitBreakerGatewayE76DF368.ANY..": {
-                        "id": "ApiPermission.EventBridgeCircuitBreakerCircuitBreakerGatewayE76DF368.ANY..",
-                        "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/Default/ANY/ApiPermission.EventBridgeCircuitBreakerCircuitBreakerGatewayE76DF368.ANY..",
-                        "attributes": {
-                          "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
-                          "aws:cdk:cloudformation:props": {
-                            "action": "lambda:InvokeFunction",
-                            "functionName": {
-                              "Fn::GetAtt": [
-                                "webserviceLambdaFunctionB896CD05",
-                                "Arn"
-                              ]
-                            },
-                            "principal": "apigateway.amazonaws.com",
-                            "sourceArn": {
-                              "Fn::Join": [
-                                "",
-                                [
-                                  "arn:",
-                                  {
-                                    "Ref": "AWS::Partition"
-                                  },
-                                  ":execute-api:",
-                                  {
-                                    "Ref": "AWS::Region"
-                                  },
-                                  ":",
-                                  {
-                                    "Ref": "AWS::AccountId"
-                                  },
-                                  ":",
-                                  {
-                                    "Ref": "CircuitBreakerGateway122B123C"
-                                  },
-                                  "/",
-                                  {
-                                    "Ref": "CircuitBreakerGatewayDeploymentStageprod84F6B9E5"
-                                  },
-                                  "/*/"
-                                ]
-                              ]
-                            }
-                          }
-                        },
-                        "constructInfo": {
-                          "fqn": "@aws-cdk/aws-lambda.CfnPermission",
-                          "version": "1.142.0"
-                        }
-                      },
-                      "ApiPermission.Test.EventBridgeCircuitBreakerCircuitBreakerGatewayE76DF368.ANY..": {
-                        "id": "ApiPermission.Test.EventBridgeCircuitBreakerCircuitBreakerGatewayE76DF368.ANY..",
-                        "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/Default/ANY/ApiPermission.Test.EventBridgeCircuitBreakerCircuitBreakerGatewayE76DF368.ANY..",
-                        "attributes": {
-                          "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
-                          "aws:cdk:cloudformation:props": {
-                            "action": "lambda:InvokeFunction",
-                            "functionName": {
-                              "Fn::GetAtt": [
-                                "webserviceLambdaFunctionB896CD05",
-                                "Arn"
-                              ]
-                            },
-                            "principal": "apigateway.amazonaws.com",
-                            "sourceArn": {
-                              "Fn::Join": [
-                                "",
-                                [
-                                  "arn:",
-                                  {
-                                    "Ref": "AWS::Partition"
-                                  },
-                                  ":execute-api:",
-                                  {
-                                    "Ref": "AWS::Region"
-                                  },
-                                  ":",
-                                  {
-                                    "Ref": "AWS::AccountId"
-                                  },
-                                  ":",
-                                  {
-                                    "Ref": "CircuitBreakerGateway122B123C"
-                                  },
-                                  "/test-invoke-stage/*/"
-                                ]
-                              ]
-                            }
-                          }
-                        },
-                        "constructInfo": {
-                          "fqn": "@aws-cdk/aws-lambda.CfnPermission",
-                          "version": "1.142.0"
-                        }
-                      },
                       "Resource": {
                         "id": "Resource",
-                        "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/Default/ANY/Resource",
+                        "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/LambdaAPIGateway/CloudWatchRole/Resource",
                         "attributes": {
-                          "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                           "aws:cdk:cloudformation:props": {
-                            "httpMethod": "ANY",
-                            "resourceId": {
-                              "Fn::GetAtt": [
-                                "CircuitBreakerGateway122B123C",
-                                "RootResourceId"
-                              ]
+                            "assumeRolePolicyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": "sts:AssumeRole",
+                                  "Effect": "Allow",
+                                  "Principal": {
+                                    "Service": "apigateway.amazonaws.com"
+                                  }
+                                }
+                              ],
+                              "Version": "2012-10-17"
                             },
-                            "restApiId": {
-                              "Ref": "CircuitBreakerGateway122B123C"
-                            },
-                            "authorizationType": "NONE",
-                            "integration": {
-                              "type": "AWS_PROXY",
-                              "uri": {
+                            "managedPolicyArns": [
+                              {
                                 "Fn::Join": [
                                   "",
                                   [
@@ -10080,45 +9649,645 @@
                                     {
                                       "Ref": "AWS::Partition"
                                     },
-                                    ":apigateway:",
-                                    {
-                                      "Ref": "AWS::Region"
-                                    },
-                                    ":lambda:path/2015-03-31/functions/",
-                                    {
-                                      "Fn::GetAtt": [
-                                        "webserviceLambdaFunctionB896CD05",
-                                        "Arn"
-                                      ]
-                                    },
-                                    "/invocations"
+                                    ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
                                   ]
                                 ]
-                              },
-                              "integrationHttpMethod": "POST"
-                            }
+                              }
+                            ]
                           }
                         },
                         "constructInfo": {
-                          "fqn": "@aws-cdk/aws-apigateway.CfnMethod",
+                          "fqn": "@aws-cdk/aws-iam.CfnRole",
                           "version": "1.142.0"
                         }
                       }
                     },
                     "constructInfo": {
-                      "fqn": "@aws-cdk/aws-apigateway.Method",
+                      "fqn": "@aws-cdk/aws-iam.Role",
+                      "version": "1.142.0"
+                    }
+                  },
+                  "Account": {
+                    "id": "Account",
+                    "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/LambdaAPIGateway/Account",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::ApiGateway::Account",
+                      "aws:cdk:cloudformation:props": {
+                        "cloudWatchRoleArn": {
+                          "Fn::GetAtt": [
+                            "CircuitBreakerGatewayLambdaAPIGatewayCloudWatchRole6CB01894",
+                            "Arn"
+                          ]
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-apigateway.CfnAccount",
+                      "version": "1.142.0"
+                    }
+                  },
+                  "Deployment": {
+                    "id": "Deployment",
+                    "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/LambdaAPIGateway/Deployment",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/LambdaAPIGateway/Deployment/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::ApiGateway::Deployment",
+                          "aws:cdk:cloudformation:props": {
+                            "restApiId": {
+                              "Ref": "CircuitBreakerGatewayLambdaAPIGateway85372CFB"
+                            },
+                            "description": "Automatically created by the RestApi construct"
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-apigateway.CfnDeployment",
+                          "version": "1.142.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-apigateway.Deployment",
+                      "version": "1.142.0"
+                    }
+                  },
+                  "DeploymentStage.prod": {
+                    "id": "DeploymentStage.prod",
+                    "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/LambdaAPIGateway/DeploymentStage.prod",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/LambdaAPIGateway/DeploymentStage.prod/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::ApiGateway::Stage",
+                          "aws:cdk:cloudformation:props": {
+                            "restApiId": {
+                              "Ref": "CircuitBreakerGatewayLambdaAPIGateway85372CFB"
+                            },
+                            "accessLogSetting": {
+                              "destinationArn": {
+                                "Fn::GetAtt": [
+                                  "CircuitBreakerGatewayhelloAPILogs75BEA819",
+                                  "Arn"
+                                ]
+                              },
+                              "format": "$context.identity.sourceIp $context.identity.caller $context.identity.user [$context.requestTime] \"$context.httpMethod $context.resourcePath $context.protocol\" $context.status $context.responseLength $context.requestId"
+                            },
+                            "deploymentId": {
+                              "Ref": "CircuitBreakerGatewayLambdaAPIGatewayDeploymentA78582AA8c4478ff9071ad74109ccc07d77d3186"
+                            },
+                            "methodSettings": [
+                              {
+                                "httpMethod": "*",
+                                "resourcePath": "/*",
+                                "dataTraceEnabled": false,
+                                "throttlingBurstLimit": 200,
+                                "throttlingRateLimit": 100
+                              }
+                            ],
+                            "stageName": "prod"
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-apigateway.CfnStage",
+                          "version": "1.142.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-apigateway.Stage",
+                      "version": "1.142.0"
+                    }
+                  },
+                  "Endpoint": {
+                    "id": "Endpoint",
+                    "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/LambdaAPIGateway/Endpoint",
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/core.CfnOutput",
+                      "version": "1.142.0"
+                    }
+                  },
+                  "Default": {
+                    "id": "Default",
+                    "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/LambdaAPIGateway/Default",
+                    "children": {
+                      "hello": {
+                        "id": "hello",
+                        "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/LambdaAPIGateway/Default/hello",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/LambdaAPIGateway/Default/hello/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::ApiGateway::Resource",
+                              "aws:cdk:cloudformation:props": {
+                                "parentId": {
+                                  "Fn::GetAtt": [
+                                    "CircuitBreakerGatewayLambdaAPIGateway85372CFB",
+                                    "RootResourceId"
+                                  ]
+                                },
+                                "pathPart": "hello",
+                                "restApiId": {
+                                  "Ref": "CircuitBreakerGatewayLambdaAPIGateway85372CFB"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "@aws-cdk/aws-apigateway.CfnResource",
+                              "version": "1.142.0"
+                            }
+                          },
+                          "GET": {
+                            "id": "GET",
+                            "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/LambdaAPIGateway/Default/hello/GET",
+                            "children": {
+                              "ApiPermission.EventBridgeCircuitBreakerCircuitBreakerGatewayLambdaAPIGateway9002669A.GET..hello": {
+                                "id": "ApiPermission.EventBridgeCircuitBreakerCircuitBreakerGatewayLambdaAPIGateway9002669A.GET..hello",
+                                "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/LambdaAPIGateway/Default/hello/GET/ApiPermission.EventBridgeCircuitBreakerCircuitBreakerGatewayLambdaAPIGateway9002669A.GET..hello",
+                                "attributes": {
+                                  "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                                  "aws:cdk:cloudformation:props": {
+                                    "action": "lambda:InvokeFunction",
+                                    "functionName": {
+                                      "Fn::GetAtt": [
+                                        "webserviceLambdaFunctionB896CD05",
+                                        "Arn"
+                                      ]
+                                    },
+                                    "principal": "apigateway.amazonaws.com",
+                                    "sourceArn": {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          "arn:",
+                                          {
+                                            "Ref": "AWS::Partition"
+                                          },
+                                          ":execute-api:",
+                                          {
+                                            "Ref": "AWS::Region"
+                                          },
+                                          ":",
+                                          {
+                                            "Ref": "AWS::AccountId"
+                                          },
+                                          ":",
+                                          {
+                                            "Ref": "CircuitBreakerGatewayLambdaAPIGateway85372CFB"
+                                          },
+                                          "/",
+                                          {
+                                            "Ref": "CircuitBreakerGatewayLambdaAPIGatewayDeploymentStageprod834862D8"
+                                          },
+                                          "/GET/hello"
+                                        ]
+                                      ]
+                                    }
+                                  }
+                                },
+                                "constructInfo": {
+                                  "fqn": "@aws-cdk/aws-lambda.CfnPermission",
+                                  "version": "1.142.0"
+                                }
+                              },
+                              "ApiPermission.Test.EventBridgeCircuitBreakerCircuitBreakerGatewayLambdaAPIGateway9002669A.GET..hello": {
+                                "id": "ApiPermission.Test.EventBridgeCircuitBreakerCircuitBreakerGatewayLambdaAPIGateway9002669A.GET..hello",
+                                "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/LambdaAPIGateway/Default/hello/GET/ApiPermission.Test.EventBridgeCircuitBreakerCircuitBreakerGatewayLambdaAPIGateway9002669A.GET..hello",
+                                "attributes": {
+                                  "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                                  "aws:cdk:cloudformation:props": {
+                                    "action": "lambda:InvokeFunction",
+                                    "functionName": {
+                                      "Fn::GetAtt": [
+                                        "webserviceLambdaFunctionB896CD05",
+                                        "Arn"
+                                      ]
+                                    },
+                                    "principal": "apigateway.amazonaws.com",
+                                    "sourceArn": {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          "arn:",
+                                          {
+                                            "Ref": "AWS::Partition"
+                                          },
+                                          ":execute-api:",
+                                          {
+                                            "Ref": "AWS::Region"
+                                          },
+                                          ":",
+                                          {
+                                            "Ref": "AWS::AccountId"
+                                          },
+                                          ":",
+                                          {
+                                            "Ref": "CircuitBreakerGatewayLambdaAPIGateway85372CFB"
+                                          },
+                                          "/test-invoke-stage/GET/hello"
+                                        ]
+                                      ]
+                                    }
+                                  }
+                                },
+                                "constructInfo": {
+                                  "fqn": "@aws-cdk/aws-lambda.CfnPermission",
+                                  "version": "1.142.0"
+                                }
+                              },
+                              "Resource": {
+                                "id": "Resource",
+                                "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/LambdaAPIGateway/Default/hello/GET/Resource",
+                                "attributes": {
+                                  "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
+                                  "aws:cdk:cloudformation:props": {
+                                    "httpMethod": "GET",
+                                    "resourceId": {
+                                      "Ref": "CircuitBreakerGatewayLambdaAPIGatewayhello6620EC20"
+                                    },
+                                    "restApiId": {
+                                      "Ref": "CircuitBreakerGatewayLambdaAPIGateway85372CFB"
+                                    },
+                                    "authorizationType": "NONE",
+                                    "integration": {
+                                      "type": "AWS",
+                                      "uri": {
+                                        "Fn::Join": [
+                                          "",
+                                          [
+                                            "arn:",
+                                            {
+                                              "Ref": "AWS::Partition"
+                                            },
+                                            ":apigateway:",
+                                            {
+                                              "Ref": "AWS::Region"
+                                            },
+                                            ":lambda:path/2015-03-31/functions/",
+                                            {
+                                              "Fn::GetAtt": [
+                                                "webserviceLambdaFunctionB896CD05",
+                                                "Arn"
+                                              ]
+                                            },
+                                            "/invocations"
+                                          ]
+                                        ]
+                                      },
+                                      "integrationHttpMethod": "POST",
+                                      "integrationResponses": [
+                                        {
+                                          "statusCode": "200",
+                                          "responseParameters": {
+                                            "method.response.header.Access-Control-Allow-Origin": "'*'"
+                                          }
+                                        }
+                                      ]
+                                    },
+                                    "methodResponses": [
+                                      {
+                                        "statusCode": "200",
+                                        "responseParameters": {
+                                          "method.response.header.Access-Control-Allow-Origin": true
+                                        }
+                                      }
+                                    ]
+                                  }
+                                },
+                                "constructInfo": {
+                                  "fqn": "@aws-cdk/aws-apigateway.CfnMethod",
+                                  "version": "1.142.0"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "@aws-cdk/aws-apigateway.Method",
+                              "version": "1.142.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-apigateway.Resource",
+                          "version": "1.142.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-apigateway.ResourceBase",
                       "version": "1.142.0"
                     }
                   }
                 },
                 "constructInfo": {
-                  "fqn": "@aws-cdk/aws-apigateway.ResourceBase",
+                  "fqn": "@aws-cdk/aws-apigateway.RestApi",
+                  "version": "1.142.0"
+                }
+              },
+              "ApiGatewayCloudWatch": {
+                "id": "ApiGatewayCloudWatch",
+                "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/ApiGatewayCloudWatch",
+                "children": {
+                  "ErrorTopic": {
+                    "id": "ErrorTopic",
+                    "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/ApiGatewayCloudWatch/ErrorTopic",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/ApiGatewayCloudWatch/ErrorTopic/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::SNS::Topic",
+                          "aws:cdk:cloudformation:props": {
+                            "displayName": "ErrorTopic"
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-sns.CfnTopic",
+                          "version": "1.142.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-sns.Topic",
+                      "version": "1.142.0"
+                    }
+                  },
+                  "API Gateway 4XX Errors > 1%": {
+                    "id": "API Gateway 4XX Errors > 1%",
+                    "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/ApiGatewayCloudWatch/API Gateway 4XX Errors > 1%",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/ApiGatewayCloudWatch/API Gateway 4XX Errors > 1%/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                          "aws:cdk:cloudformation:props": {
+                            "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                            "evaluationPeriods": 6,
+                            "alarmActions": [
+                              {
+                                "Ref": "EventBridgeCircuitBreaker73FCFBB5"
+                              }
+                            ],
+                            "datapointsToAlarm": 1,
+                            "metrics": [
+                              {
+                                "expression": "m1/m2*100",
+                                "id": "expr_1",
+                                "label": "% API Gateway 4xx Errors"
+                              },
+                              {
+                                "metricStat": {
+                                  "metric": {
+                                    "metricName": "4XXError",
+                                    "namespace": "AWS/ApiGateway",
+                                    "dimensions": [
+                                      {
+                                        "name": "ApiId",
+                                        "value": {
+                                          "Ref": "CircuitBreakerGatewayLambdaAPIGateway85372CFB"
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  "period": 300,
+                                  "stat": "Sum",
+                                  "unit": "Count"
+                                },
+                                "id": "m1",
+                                "label": "4XX Errors",
+                                "returnData": false
+                              },
+                              {
+                                "metricStat": {
+                                  "metric": {
+                                    "metricName": "Count",
+                                    "namespace": "AWS/ApiGateway",
+                                    "dimensions": [
+                                      {
+                                        "name": "ApiId",
+                                        "value": {
+                                          "Ref": "CircuitBreakerGatewayLambdaAPIGateway85372CFB"
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  "period": 300,
+                                  "stat": "Sum",
+                                  "unit": "Count"
+                                },
+                                "id": "m2",
+                                "label": "# Requests",
+                                "returnData": false
+                              }
+                            ],
+                            "threshold": 1,
+                            "treatMissingData": "notBreaching"
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
+                          "version": "1.142.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
+                      "version": "1.142.0"
+                    }
+                  },
+                  "API Gateway 5XX Errors > 0": {
+                    "id": "API Gateway 5XX Errors > 0",
+                    "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/ApiGatewayCloudWatch/API Gateway 5XX Errors > 0",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/ApiGatewayCloudWatch/API Gateway 5XX Errors > 0/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                          "aws:cdk:cloudformation:props": {
+                            "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                            "evaluationPeriods": 6,
+                            "alarmActions": [
+                              {
+                                "Ref": "EventBridgeCircuitBreaker73FCFBB5"
+                              }
+                            ],
+                            "datapointsToAlarm": 1,
+                            "metrics": [
+                              {
+                                "metricStat": {
+                                  "metric": {
+                                    "metricName": "5XXError",
+                                    "namespace": "AWS/ApiGateway",
+                                    "dimensions": [
+                                      {
+                                        "name": "ApiId",
+                                        "value": {
+                                          "Ref": "CircuitBreakerGatewayLambdaAPIGateway85372CFB"
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  "period": 900,
+                                  "stat": "p99",
+                                  "unit": "Count"
+                                },
+                                "id": "m1",
+                                "label": "5XX Errors",
+                                "returnData": true
+                              }
+                            ],
+                            "threshold": 0,
+                            "treatMissingData": "notBreaching"
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
+                          "version": "1.142.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
+                      "version": "1.142.0"
+                    }
+                  },
+                  "API p99 latency alarm >= 1s": {
+                    "id": "API p99 latency alarm >= 1s",
+                    "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/ApiGatewayCloudWatch/API p99 latency alarm >= 1s",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/ApiGatewayCloudWatch/API p99 latency alarm >= 1s/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                          "aws:cdk:cloudformation:props": {
+                            "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                            "evaluationPeriods": 6,
+                            "alarmActions": [
+                              {
+                                "Ref": "EventBridgeCircuitBreaker73FCFBB5"
+                              }
+                            ],
+                            "datapointsToAlarm": 1,
+                            "metrics": [
+                              {
+                                "metricStat": {
+                                  "metric": {
+                                    "metricName": "Latency",
+                                    "namespace": "AWS/ApiGateway",
+                                    "dimensions": [
+                                      {
+                                        "name": "ApiId",
+                                        "value": {
+                                          "Ref": "CircuitBreakerGatewayLambdaAPIGateway85372CFB"
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  "period": 900,
+                                  "stat": "p99",
+                                  "unit": "Count"
+                                },
+                                "id": "m1",
+                                "label": "API GW Latency",
+                                "returnData": true
+                              }
+                            ],
+                            "threshold": 1000,
+                            "treatMissingData": "notBreaching"
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
+                          "version": "1.142.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
+                      "version": "1.142.0"
+                    }
+                  },
+                  "CloudWatchDashBoard": {
+                    "id": "CloudWatchDashBoard",
+                    "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/ApiGatewayCloudWatch/CloudWatchDashBoard",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/ApiGatewayCloudWatch/CloudWatchDashBoard/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::CloudWatch::Dashboard",
+                          "aws:cdk:cloudformation:props": {
+                            "dashboardBody": {
+                              "Fn::Join": [
+                                "",
+                                [
+                                  "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Requests\",\"region\":\"",
+                                  {
+                                    "Ref": "AWS::Region"
+                                  },
+                                  "\",\"stacked\":false,\"metrics\":[[\"AWS/ApiGateway\",\"Count\",\"ApiId\",\"",
+                                  {
+                                    "Ref": "CircuitBreakerGatewayLambdaAPIGateway85372CFB"
+                                  },
+                                  "\",{\"label\":\"# Requests\",\"period\":900,\"stat\":\"Sum\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"API GW Latency\",\"region\":\"",
+                                  {
+                                    "Ref": "AWS::Region"
+                                  },
+                                  "\",\"stacked\":true,\"metrics\":[[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
+                                  {
+                                    "Ref": "CircuitBreakerGatewayLambdaAPIGateway85372CFB"
+                                  },
+                                  "\",{\"label\":\"API Latency p50\",\"period\":900,\"stat\":\"p50\"}],[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
+                                  {
+                                    "Ref": "CircuitBreakerGatewayLambdaAPIGateway85372CFB"
+                                  },
+                                  "\",{\"label\":\"API Latency p90\",\"period\":900,\"stat\":\"p90\"}],[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
+                                  {
+                                    "Ref": "CircuitBreakerGatewayLambdaAPIGateway85372CFB"
+                                  },
+                                  "\",{\"label\":\"API Latency p99\",\"period\":900,\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"API GW Errors\",\"region\":\"",
+                                  {
+                                    "Ref": "AWS::Region"
+                                  },
+                                  "\",\"stacked\":true,\"metrics\":[[\"AWS/ApiGateway\",\"4XXError\",\"ApiId\",\"",
+                                  {
+                                    "Ref": "CircuitBreakerGatewayLambdaAPIGateway85372CFB"
+                                  },
+                                  "\",{\"label\":\"4XX Errors\",\"period\":900,\"stat\":\"Sum\"}],[\"AWS/ApiGateway\",\"5XXError\",\"ApiId\",\"",
+                                  {
+                                    "Ref": "CircuitBreakerGatewayLambdaAPIGateway85372CFB"
+                                  },
+                                  "\",{\"label\":\"5XX Errors\",\"period\":900,\"stat\":\"Sum\"}]],\"yAxis\":{}}}]}"
+                                ]
+                              ]
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-cloudwatch.CfnDashboard",
+                          "version": "1.142.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-cloudwatch.Dashboard",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/core.Construct",
                   "version": "1.142.0"
                 }
               }
             },
             "constructInfo": {
-              "fqn": "@aws-cdk/aws-apigateway.LambdaRestApi",
+              "fqn": "@aws-cdk/core.Construct",
               "version": "1.142.0"
             }
           }

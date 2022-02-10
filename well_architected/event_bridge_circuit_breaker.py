@@ -2,6 +2,7 @@ import os
 import lambda_function
 import dynamodb_table
 import rest_api
+import sns_topic
 
 from aws_cdk import (
     aws_apigateway as api_gateway,
@@ -9,6 +10,7 @@ from aws_cdk import (
     aws_events,
     aws_events_targets as targets,
     aws_iam as iam,
+    aws_sns as sns,
     core as cdk,
 )
 
@@ -17,6 +19,11 @@ class EventBridgeCircuitBreaker(cdk.Stack):
     def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
+        error_topic = sns.Topic(
+            self, id,
+            display_name='ErrorTopic'
+        )
+
         expiration_time_sort_key = dynamodb.Attribute(
             name="ExpirationTime",
             type=dynamodb.AttributeType.NUMBER
@@ -24,6 +31,7 @@ class EventBridgeCircuitBreaker(cdk.Stack):
 
         error_records = dynamodb_table.DynamoDBTableConstruct(
             self, 'CircuitBreaker',
+            error_topic=error_topic,
             partition_key=dynamodb.Attribute(
                 name="RequestID",
                 type=dynamodb.AttributeType.STRING
@@ -50,16 +58,19 @@ class EventBridgeCircuitBreaker(cdk.Stack):
         # )
         webservice = lambda_function.LambdaFunctionConstruct(
             self, 'webservice',
+            error_topic=error_topic,
             function_name='webservice',
             environment_variables=environment_variables,
             duration=20,
         )
 
-        error_lambda = lambda_function.create_python_lambda_function(
-            self, function_name='error',
+        error_lambda = lambda_function.LambdaFunctionConstruct(
+            self, 'error',
+            function_name='error',
+            error_topic=error_topic,
             environment_variables=environment_variables,
             duration=3,
-        )
+        ).lambda_function
 
         error_records.grant_read_data(webservice.lambda_function)
         error_records.grant_write_data(error_lambda)
@@ -86,13 +97,13 @@ class EventBridgeCircuitBreaker(cdk.Stack):
 
         error_rule.add_target(targets.LambdaFunction(handler=error_lambda))
 
-        api_gateway.LambdaRestApi(
-            self, 'CircuitBreakerGateway',
-            handler=webservice.lambda_function,
-        )
-
-        # rest_api.LambdaRestAPIGatewayConstruct(
+        # api_gateway.LambdaRestApi(
         #     self, 'CircuitBreakerGateway',
-        #     lambda_function=webservice.lambda_function,
-        #     error_topic=webservice.error_topic,
+        #     handler=webservice.lambda_function,
         # )
+
+        rest_api.LambdaRestAPIGatewayConstruct(
+            self, 'CircuitBreakerGateway',
+            lambda_function=webservice.lambda_function,
+            error_topic=error_topic,
+        )
