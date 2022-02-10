@@ -24,7 +24,6 @@ def time_it(function, *args, description='run process', **kwargs):
     log_performance(log(result))
 
 
-
 class TestTemplates(unittest.TestCase):
 
     maxDiff = None
