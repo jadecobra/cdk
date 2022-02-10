@@ -35,20 +35,11 @@ def service_call_failure_after(seconds=1, service_url=None):
     header('\tCalling Webservice, recent errors below threshold');
     time.sleep(seconds)
     print('\t--- Service Call Failure ---');
-    errorType = '\t\tservice timeout exception'
-    print(errorType)
-    print('\t--- EventBridge Response ---');
-    return {
-        'DetailType': 'httpcall',
-        'EventBusName': 'default',
-        'Source': 'cdkpatterns.eventbridge.circuitbreaker',
-        'Time': datetime.datetime.now(),
-        'Detail': json.dumps({
-            'status': 'fail',
-            'siteUrl': service_url,
-            'errorType': errorType
-        })
-    }
+    error_type = '\t\tservice timeout exception'
+    print(error_type)
+    return event_bridge_entry(
+        error_type=error_type, service_url=service_url
+    )
 
 def call_fake_service(serviceURL):
 
