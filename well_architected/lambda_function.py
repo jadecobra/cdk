@@ -2,6 +2,7 @@ from aws_cdk.core import Construct, Duration, Stack
 from aws_cdk.aws_lambda import Function, Code, Runtime, Tracing, LayerVersion
 from aws_cdk.aws_sns import ITopic
 from well_architected import WellArchitectedFrameworkConstruct
+import utilities
 
 class LambdaFunctionConstruct(WellArchitectedFrameworkConstruct):
 
@@ -12,7 +13,7 @@ class LambdaFunctionConstruct(WellArchitectedFrameworkConstruct):
         **kwargs) -> None:
         super().__init__(scope, id, error_topic=error_topic, **kwargs)
         self.lambda_function = Function(
-            self, "LambdaFunction",
+            self, id,
             runtime=Runtime.PYTHON_3_8,
             handler=f'{function_name}.handler',
             code=Code.from_asset(f"lambda_functions/{function_name}"),

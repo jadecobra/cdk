@@ -12,7 +12,7 @@
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Fn::ImportValue": "LambdaFunction:ExportsOutputFnGetAtthitcounterLambdaFunctionB862C182Arn3B74EE41"
+          "Fn::ImportValue": "HitCounter:ExportsOutputFnGetAtthitcounter16ED794AArn690230F8"
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -49,7 +49,7 @@
         },
         "IntegrationType": "AWS_PROXY",
         "IntegrationUri": {
-          "Fn::ImportValue": "LambdaFunction:ExportsOutputFnGetAtthitcounterLambdaFunctionB862C182Arn3B74EE41"
+          "Fn::ImportValue": "HitCounter:ExportsOutputFnGetAtthitcounter16ED794AArn690230F8"
         },
         "PayloadFormatVersion": "2.0"
       }

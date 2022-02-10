@@ -218,7 +218,7 @@
         "Description": "AWS XRay SDK Lambda Layer"
       }
     },
-    "hitcounterLambdaFunctionServiceRoleE2452AC5": {
+    "hitcounterServiceRole916161D0": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -249,7 +249,7 @@
         ]
       }
     },
-    "hitcounterLambdaFunctionServiceRoleDefaultPolicyBCDA98FD": {
+    "hitcounterServiceRoleDefaultPolicy57141E48": {
       "Type": "AWS::IAM::Policy",
       "Properties": {
         "PolicyDocument": {
@@ -292,15 +292,15 @@
           ],
           "Version": "2012-10-17"
         },
-        "PolicyName": "hitcounterLambdaFunctionServiceRoleDefaultPolicyBCDA98FD",
+        "PolicyName": "hitcounterServiceRoleDefaultPolicy57141E48",
         "Roles": [
           {
-            "Ref": "hitcounterLambdaFunctionServiceRoleE2452AC5"
+            "Ref": "hitcounterServiceRole916161D0"
           }
         ]
       }
     },
-    "hitcounterLambdaFunctionB862C182": {
+    "hitcounter16ED794A": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
@@ -343,7 +343,7 @@
         },
         "Role": {
           "Fn::GetAtt": [
-            "hitcounterLambdaFunctionServiceRoleE2452AC5",
+            "hitcounterServiceRole916161D0",
             "Arn"
           ]
         },
@@ -367,17 +367,17 @@
         }
       },
       "DependsOn": [
-        "hitcounterLambdaFunctionServiceRoleDefaultPolicyBCDA98FD",
-        "hitcounterLambdaFunctionServiceRoleE2452AC5"
+        "hitcounterServiceRoleDefaultPolicy57141E48",
+        "hitcounterServiceRole916161D0"
       ]
     },
-    "hitcounterLambdaFunctionAllowInvokeXRayTracerSnsFanOutTopic4E706A091FB77B96": {
+    "hitcounterAllowInvokeXRayTracerSnsFanOutTopic4E706A09A8BA4892": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "hitcounterLambdaFunctionB862C182",
+            "hitcounter16ED794A",
             "Arn"
           ]
         },
@@ -387,7 +387,7 @@
         }
       }
     },
-    "hitcounterLambdaFunctionXRayTracerSnsFanOutTopicAFE0C45F": {
+    "hitcounterXRayTracerSnsFanOutTopic58809020": {
       "Type": "AWS::SNS::Subscription",
       "Properties": {
         "Protocol": "lambda",
@@ -396,7 +396,7 @@
         },
         "Endpoint": {
           "Fn::GetAtt": [
-            "hitcounterLambdaFunctionB862C182",
+            "hitcounter16ED794A",
             "Arn"
           ]
         }
@@ -427,7 +427,7 @@
                   {
                     "Name": "FunctionName",
                     "Value": {
-                      "Ref": "hitcounterLambdaFunctionB862C182"
+                      "Ref": "hitcounter16ED794A"
                     }
                   }
                 ],
@@ -447,7 +447,7 @@
                   {
                     "Name": "FunctionName",
                     "Value": {
-                      "Ref": "hitcounterLambdaFunctionB862C182"
+                      "Ref": "hitcounter16ED794A"
                     }
                   }
                 ],
@@ -479,7 +479,7 @@
           {
             "Name": "FunctionName",
             "Value": {
-              "Ref": "hitcounterLambdaFunctionB862C182"
+              "Ref": "hitcounter16ED794A"
             }
           }
         ],
@@ -516,7 +516,7 @@
                   {
                     "Name": "FunctionName",
                     "Value": {
-                      "Ref": "hitcounterLambdaFunctionB862C182"
+                      "Ref": "hitcounter16ED794A"
                     }
                   }
                 ],
@@ -536,7 +536,7 @@
                   {
                     "Name": "FunctionName",
                     "Value": {
-                      "Ref": "hitcounterLambdaFunctionB862C182"
+                      "Ref": "hitcounter16ED794A"
                     }
                   }
                 ],
@@ -566,11 +566,11 @@
               },
               "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
               {
-                "Ref": "hitcounterLambdaFunctionB862C182"
+                "Ref": "hitcounter16ED794A"
               },
               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
               {
-                "Ref": "hitcounterLambdaFunctionB862C182"
+                "Ref": "hitcounter16ED794A"
               },
               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
               {
@@ -578,15 +578,15 @@
               },
               "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
               {
-                "Ref": "hitcounterLambdaFunctionB862C182"
+                "Ref": "hitcounter16ED794A"
               },
               "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
               {
-                "Ref": "hitcounterLambdaFunctionB862C182"
+                "Ref": "hitcounter16ED794A"
               },
               "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
               {
-                "Ref": "hitcounterLambdaFunctionB862C182"
+                "Ref": "hitcounter16ED794A"
               },
               "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Throttle %\",\"region\":\"",
               {
@@ -594,11 +594,11 @@
               },
               "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
               {
-                "Ref": "hitcounterLambdaFunctionB862C182"
+                "Ref": "hitcounter16ED794A"
               },
               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
               {
-                "Ref": "hitcounterLambdaFunctionB862C182"
+                "Ref": "hitcounter16ED794A"
               },
               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
             ]

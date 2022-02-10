@@ -70,7 +70,7 @@ class WellArchitected(cdk.App):
 
     def create_lambda_function(self, environment_variables=None, error_topic=None):
         return LambdaFunctionStack(
-            self, 'LambdaFunction',
+            self, 'HitCounter',
             function_name='hit_counter',
             environment_variables=environment_variables,
             error_topic=error_topic

@@ -348,25 +348,25 @@
           "version": "1.142.0"
         }
       },
-      "LambdaFunction": {
-        "id": "LambdaFunction",
-        "path": "LambdaFunction",
+      "HitCounter": {
+        "id": "HitCounter",
+        "path": "HitCounter",
         "children": {
           "hit_counter": {
             "id": "hit_counter",
-            "path": "LambdaFunction/hit_counter",
+            "path": "HitCounter/hit_counter",
             "children": {
               "aws-xray-sdkLambdaLayer": {
                 "id": "aws-xray-sdkLambdaLayer",
-                "path": "LambdaFunction/hit_counter/aws-xray-sdkLambdaLayer",
+                "path": "HitCounter/hit_counter/aws-xray-sdkLambdaLayer",
                 "children": {
                   "Code": {
                     "id": "Code",
-                    "path": "LambdaFunction/hit_counter/aws-xray-sdkLambdaLayer/Code",
+                    "path": "HitCounter/hit_counter/aws-xray-sdkLambdaLayer/Code",
                     "children": {
                       "Stage": {
                         "id": "Stage",
-                        "path": "LambdaFunction/hit_counter/aws-xray-sdkLambdaLayer/Code/Stage",
+                        "path": "HitCounter/hit_counter/aws-xray-sdkLambdaLayer/Code/Stage",
                         "constructInfo": {
                           "fqn": "@aws-cdk/core.AssetStaging",
                           "version": "1.142.0"
@@ -374,7 +374,7 @@
                       },
                       "AssetBucket": {
                         "id": "AssetBucket",
-                        "path": "LambdaFunction/hit_counter/aws-xray-sdkLambdaLayer/Code/AssetBucket",
+                        "path": "HitCounter/hit_counter/aws-xray-sdkLambdaLayer/Code/AssetBucket",
                         "constructInfo": {
                           "fqn": "@aws-cdk/aws-s3.BucketBase",
                           "version": "1.142.0"
@@ -388,7 +388,7 @@
                   },
                   "Resource": {
                     "id": "Resource",
-                    "path": "LambdaFunction/hit_counter/aws-xray-sdkLambdaLayer/Resource",
+                    "path": "HitCounter/hit_counter/aws-xray-sdkLambdaLayer/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::Lambda::LayerVersion",
                       "aws:cdk:cloudformation:props": {
@@ -444,17 +444,17 @@
                   "version": "1.142.0"
                 }
               },
-              "LambdaFunction": {
-                "id": "LambdaFunction",
-                "path": "LambdaFunction/hit_counter/LambdaFunction",
+              "hit_counter": {
+                "id": "hit_counter",
+                "path": "HitCounter/hit_counter/hit_counter",
                 "children": {
                   "ServiceRole": {
                     "id": "ServiceRole",
-                    "path": "LambdaFunction/hit_counter/LambdaFunction/ServiceRole",
+                    "path": "HitCounter/hit_counter/hit_counter/ServiceRole",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "LambdaFunction/hit_counter/LambdaFunction/ServiceRole/Resource",
+                        "path": "HitCounter/hit_counter/hit_counter/ServiceRole/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                           "aws:cdk:cloudformation:props": {
@@ -493,11 +493,11 @@
                       },
                       "DefaultPolicy": {
                         "id": "DefaultPolicy",
-                        "path": "LambdaFunction/hit_counter/LambdaFunction/ServiceRole/DefaultPolicy",
+                        "path": "HitCounter/hit_counter/hit_counter/ServiceRole/DefaultPolicy",
                         "children": {
                           "Resource": {
                             "id": "Resource",
-                            "path": "LambdaFunction/hit_counter/LambdaFunction/ServiceRole/DefaultPolicy/Resource",
+                            "path": "HitCounter/hit_counter/hit_counter/ServiceRole/DefaultPolicy/Resource",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
                               "aws:cdk:cloudformation:props": {
@@ -538,10 +538,10 @@
                                   ],
                                   "Version": "2012-10-17"
                                 },
-                                "policyName": "hitcounterLambdaFunctionServiceRoleDefaultPolicyBCDA98FD",
+                                "policyName": "hitcounterServiceRoleDefaultPolicy57141E48",
                                 "roles": [
                                   {
-                                    "Ref": "hitcounterLambdaFunctionServiceRoleE2452AC5"
+                                    "Ref": "hitcounterServiceRole916161D0"
                                   }
                                 ]
                               }
@@ -565,11 +565,11 @@
                   },
                   "Code": {
                     "id": "Code",
-                    "path": "LambdaFunction/hit_counter/LambdaFunction/Code",
+                    "path": "HitCounter/hit_counter/hit_counter/Code",
                     "children": {
                       "Stage": {
                         "id": "Stage",
-                        "path": "LambdaFunction/hit_counter/LambdaFunction/Code/Stage",
+                        "path": "HitCounter/hit_counter/hit_counter/Code/Stage",
                         "constructInfo": {
                           "fqn": "@aws-cdk/core.AssetStaging",
                           "version": "1.142.0"
@@ -577,7 +577,7 @@
                       },
                       "AssetBucket": {
                         "id": "AssetBucket",
-                        "path": "LambdaFunction/hit_counter/LambdaFunction/Code/AssetBucket",
+                        "path": "HitCounter/hit_counter/hit_counter/Code/AssetBucket",
                         "constructInfo": {
                           "fqn": "@aws-cdk/aws-s3.BucketBase",
                           "version": "1.142.0"
@@ -591,7 +591,7 @@
                   },
                   "Resource": {
                     "id": "Resource",
-                    "path": "LambdaFunction/hit_counter/LambdaFunction/Resource",
+                    "path": "HitCounter/hit_counter/hit_counter/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
                       "aws:cdk:cloudformation:props": {
@@ -635,7 +635,7 @@
                         },
                         "role": {
                           "Fn::GetAtt": [
-                            "hitcounterLambdaFunctionServiceRoleE2452AC5",
+                            "hitcounterServiceRole916161D0",
                             "Arn"
                           ]
                         },
@@ -672,11 +672,11 @@
               },
               "Lambda invocation Errors > 2%": {
                 "id": "Lambda invocation Errors > 2%",
-                "path": "LambdaFunction/hit_counter/Lambda invocation Errors > 2%",
+                "path": "HitCounter/hit_counter/Lambda invocation Errors > 2%",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "LambdaFunction/hit_counter/Lambda invocation Errors > 2%/Resource",
+                    "path": "HitCounter/hit_counter/Lambda invocation Errors > 2%/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
                       "aws:cdk:cloudformation:props": {
@@ -703,7 +703,7 @@
                                   {
                                     "name": "FunctionName",
                                     "value": {
-                                      "Ref": "hitcounterLambdaFunctionB862C182"
+                                      "Ref": "hitcounter16ED794A"
                                     }
                                   }
                                 ]
@@ -723,7 +723,7 @@
                                   {
                                     "name": "FunctionName",
                                     "value": {
-                                      "Ref": "hitcounterLambdaFunctionB862C182"
+                                      "Ref": "hitcounter16ED794A"
                                     }
                                   }
                                 ]
@@ -752,11 +752,11 @@
               },
               "Lambda p99 Long Duration (>1s)": {
                 "id": "Lambda p99 Long Duration (>1s)",
-                "path": "LambdaFunction/hit_counter/Lambda p99 Long Duration (>1s)",
+                "path": "HitCounter/hit_counter/Lambda p99 Long Duration (>1s)",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "LambdaFunction/hit_counter/Lambda p99 Long Duration (>1s)/Resource",
+                    "path": "HitCounter/hit_counter/Lambda p99 Long Duration (>1s)/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
                       "aws:cdk:cloudformation:props": {
@@ -772,7 +772,7 @@
                           {
                             "name": "FunctionName",
                             "value": {
-                              "Ref": "hitcounterLambdaFunctionB862C182"
+                              "Ref": "hitcounter16ED794A"
                             }
                           }
                         ],
@@ -797,11 +797,11 @@
               },
               "Lambda Throttled invocations >2%": {
                 "id": "Lambda Throttled invocations >2%",
-                "path": "LambdaFunction/hit_counter/Lambda Throttled invocations >2%",
+                "path": "HitCounter/hit_counter/Lambda Throttled invocations >2%",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "LambdaFunction/hit_counter/Lambda Throttled invocations >2%/Resource",
+                    "path": "HitCounter/hit_counter/Lambda Throttled invocations >2%/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
                       "aws:cdk:cloudformation:props": {
@@ -828,7 +828,7 @@
                                   {
                                     "name": "FunctionName",
                                     "value": {
-                                      "Ref": "hitcounterLambdaFunctionB862C182"
+                                      "Ref": "hitcounter16ED794A"
                                     }
                                   }
                                 ]
@@ -848,7 +848,7 @@
                                   {
                                     "name": "FunctionName",
                                     "value": {
-                                      "Ref": "hitcounterLambdaFunctionB862C182"
+                                      "Ref": "hitcounter16ED794A"
                                     }
                                   }
                                 ]
@@ -877,11 +877,11 @@
               },
               "CloudWatchDashBoard": {
                 "id": "CloudWatchDashBoard",
-                "path": "LambdaFunction/hit_counter/CloudWatchDashBoard",
+                "path": "HitCounter/hit_counter/CloudWatchDashBoard",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "LambdaFunction/hit_counter/CloudWatchDashBoard/Resource",
+                    "path": "HitCounter/hit_counter/CloudWatchDashBoard/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::CloudWatch::Dashboard",
                       "aws:cdk:cloudformation:props": {
@@ -895,11 +895,11 @@
                               },
                               "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
                               {
-                                "Ref": "hitcounterLambdaFunctionB862C182"
+                                "Ref": "hitcounter16ED794A"
                               },
                               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
                               {
-                                "Ref": "hitcounterLambdaFunctionB862C182"
+                                "Ref": "hitcounter16ED794A"
                               },
                               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
                               {
@@ -907,15 +907,15 @@
                               },
                               "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
                               {
-                                "Ref": "hitcounterLambdaFunctionB862C182"
+                                "Ref": "hitcounter16ED794A"
                               },
                               "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
                               {
-                                "Ref": "hitcounterLambdaFunctionB862C182"
+                                "Ref": "hitcounter16ED794A"
                               },
                               "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
                               {
-                                "Ref": "hitcounterLambdaFunctionB862C182"
+                                "Ref": "hitcounter16ED794A"
                               },
                               "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Throttle %\",\"region\":\"",
                               {
@@ -923,11 +923,11 @@
                               },
                               "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
                               {
-                                "Ref": "hitcounterLambdaFunctionB862C182"
+                                "Ref": "hitcounter16ED794A"
                               },
                               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
                               {
-                                "Ref": "hitcounterLambdaFunctionB862C182"
+                                "Ref": "hitcounter16ED794A"
                               },
                               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
                             ]
@@ -954,15 +954,15 @@
           },
           "AssetParameters": {
             "id": "AssetParameters",
-            "path": "LambdaFunction/AssetParameters",
+            "path": "HitCounter/AssetParameters",
             "children": {
               "d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81": {
                 "id": "d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81",
-                "path": "LambdaFunction/AssetParameters/d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81",
+                "path": "HitCounter/AssetParameters/d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81",
                 "children": {
                   "S3Bucket": {
                     "id": "S3Bucket",
-                    "path": "LambdaFunction/AssetParameters/d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81/S3Bucket",
+                    "path": "HitCounter/AssetParameters/d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81/S3Bucket",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -970,7 +970,7 @@
                   },
                   "S3VersionKey": {
                     "id": "S3VersionKey",
-                    "path": "LambdaFunction/AssetParameters/d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81/S3VersionKey",
+                    "path": "HitCounter/AssetParameters/d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81/S3VersionKey",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -978,7 +978,7 @@
                   },
                   "ArtifactHash": {
                     "id": "ArtifactHash",
-                    "path": "LambdaFunction/AssetParameters/d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81/ArtifactHash",
+                    "path": "HitCounter/AssetParameters/d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81/ArtifactHash",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -992,11 +992,11 @@
               },
               "5923df62873c4d2fa5c3a153c7fd16a269dd08ac4c796664469420121ad60419": {
                 "id": "5923df62873c4d2fa5c3a153c7fd16a269dd08ac4c796664469420121ad60419",
-                "path": "LambdaFunction/AssetParameters/5923df62873c4d2fa5c3a153c7fd16a269dd08ac4c796664469420121ad60419",
+                "path": "HitCounter/AssetParameters/5923df62873c4d2fa5c3a153c7fd16a269dd08ac4c796664469420121ad60419",
                 "children": {
                   "S3Bucket": {
                     "id": "S3Bucket",
-                    "path": "LambdaFunction/AssetParameters/5923df62873c4d2fa5c3a153c7fd16a269dd08ac4c796664469420121ad60419/S3Bucket",
+                    "path": "HitCounter/AssetParameters/5923df62873c4d2fa5c3a153c7fd16a269dd08ac4c796664469420121ad60419/S3Bucket",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -1004,7 +1004,7 @@
                   },
                   "S3VersionKey": {
                     "id": "S3VersionKey",
-                    "path": "LambdaFunction/AssetParameters/5923df62873c4d2fa5c3a153c7fd16a269dd08ac4c796664469420121ad60419/S3VersionKey",
+                    "path": "HitCounter/AssetParameters/5923df62873c4d2fa5c3a153c7fd16a269dd08ac4c796664469420121ad60419/S3VersionKey",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -1012,7 +1012,7 @@
                   },
                   "ArtifactHash": {
                     "id": "ArtifactHash",
-                    "path": "LambdaFunction/AssetParameters/5923df62873c4d2fa5c3a153c7fd16a269dd08ac4c796664469420121ad60419/ArtifactHash",
+                    "path": "HitCounter/AssetParameters/5923df62873c4d2fa5c3a153c7fd16a269dd08ac4c796664469420121ad60419/ArtifactHash",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -1032,11 +1032,11 @@
           },
           "Exports": {
             "id": "Exports",
-            "path": "LambdaFunction/Exports",
+            "path": "HitCounter/Exports",
             "children": {
-              "Output{\"Fn::GetAtt\":[\"hitcounterLambdaFunctionB862C182\",\"Arn\"]}": {
-                "id": "Output{\"Fn::GetAtt\":[\"hitcounterLambdaFunctionB862C182\",\"Arn\"]}",
-                "path": "LambdaFunction/Exports/Output{\"Fn::GetAtt\":[\"hitcounterLambdaFunctionB862C182\",\"Arn\"]}",
+              "Output{\"Fn::GetAtt\":[\"hitcounter16ED794A\",\"Arn\"]}": {
+                "id": "Output{\"Fn::GetAtt\":[\"hitcounter16ED794A\",\"Arn\"]}",
+                "path": "HitCounter/Exports/Output{\"Fn::GetAtt\":[\"hitcounter16ED794A\",\"Arn\"]}",
                 "constructInfo": {
                   "fqn": "@aws-cdk/core.CfnOutput",
                   "version": "1.142.0"
@@ -1227,7 +1227,7 @@
                               "format": "$context.identity.sourceIp $context.identity.caller $context.identity.user [$context.requestTime] \"$context.httpMethod $context.resourcePath $context.protocol\" $context.status $context.responseLength $context.requestId"
                             },
                             "deploymentId": {
-                              "Ref": "LambdaRestAPIGatewayLambdaAPIGatewayDeployment9A76D4A5098fa556cafe809d24415eaa67ebb3b1"
+                              "Ref": "LambdaRestAPIGatewayLambdaAPIGatewayDeployment9A76D4A5413149b2932fb6dc335173c7a8fd98b8"
                             },
                             "methodSettings": [
                               {
@@ -1303,7 +1303,7 @@
                                   "aws:cdk:cloudformation:props": {
                                     "action": "lambda:InvokeFunction",
                                     "functionName": {
-                                      "Fn::ImportValue": "LambdaFunction:ExportsOutputFnGetAtthitcounterLambdaFunctionB862C182Arn3B74EE41"
+                                      "Fn::ImportValue": "HitCounter:ExportsOutputFnGetAtthitcounter16ED794AArn690230F8"
                                     },
                                     "principal": "apigateway.amazonaws.com",
                                     "sourceArn": {
@@ -1349,7 +1349,7 @@
                                   "aws:cdk:cloudformation:props": {
                                     "action": "lambda:InvokeFunction",
                                     "functionName": {
-                                      "Fn::ImportValue": "LambdaFunction:ExportsOutputFnGetAtthitcounterLambdaFunctionB862C182Arn3B74EE41"
+                                      "Fn::ImportValue": "HitCounter:ExportsOutputFnGetAtthitcounter16ED794AArn690230F8"
                                     },
                                     "principal": "apigateway.amazonaws.com",
                                     "sourceArn": {
@@ -1413,7 +1413,7 @@
                                             },
                                             ":lambda:path/2015-03-31/functions/",
                                             {
-                                              "Fn::ImportValue": "LambdaFunction:ExportsOutputFnGetAtthitcounterLambdaFunctionB862C182Arn3B74EE41"
+                                              "Fn::ImportValue": "HitCounter:ExportsOutputFnGetAtthitcounter16ED794AArn690230F8"
                                             },
                                             "/invocations"
                                           ]
@@ -1949,7 +1949,7 @@
                       "aws:cdk:cloudformation:props": {
                         "action": "lambda:InvokeFunction",
                         "functionName": {
-                          "Fn::ImportValue": "LambdaFunction:ExportsOutputFnGetAtthitcounterLambdaFunctionB862C182Arn3B74EE41"
+                          "Fn::ImportValue": "HitCounter:ExportsOutputFnGetAtthitcounter16ED794AArn690230F8"
                         },
                         "principal": "apigateway.amazonaws.com",
                         "sourceArn": {
@@ -1998,7 +1998,7 @@
                             },
                             "integrationType": "AWS_PROXY",
                             "integrationUri": {
-                              "Fn::ImportValue": "LambdaFunction:ExportsOutputFnGetAtthitcounterLambdaFunctionB862C182Arn3B74EE41"
+                              "Fn::ImportValue": "HitCounter:ExportsOutputFnGetAtthitcounter16ED794AArn690230F8"
                             },
                             "payloadFormatVersion": "2.0"
                           }
@@ -3184,17 +3184,17 @@
                   "version": "1.142.0"
                 }
               },
-              "LambdaFunction": {
-                "id": "LambdaFunction",
-                "path": "HttpFlow/http/LambdaFunction",
+              "http": {
+                "id": "http",
+                "path": "HttpFlow/http/http",
                 "children": {
                   "ServiceRole": {
                     "id": "ServiceRole",
-                    "path": "HttpFlow/http/LambdaFunction/ServiceRole",
+                    "path": "HttpFlow/http/http/ServiceRole",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "HttpFlow/http/LambdaFunction/ServiceRole/Resource",
+                        "path": "HttpFlow/http/http/ServiceRole/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                           "aws:cdk:cloudformation:props": {
@@ -3233,11 +3233,11 @@
                       },
                       "DefaultPolicy": {
                         "id": "DefaultPolicy",
-                        "path": "HttpFlow/http/LambdaFunction/ServiceRole/DefaultPolicy",
+                        "path": "HttpFlow/http/http/ServiceRole/DefaultPolicy",
                         "children": {
                           "Resource": {
                             "id": "Resource",
-                            "path": "HttpFlow/http/LambdaFunction/ServiceRole/DefaultPolicy/Resource",
+                            "path": "HttpFlow/http/http/ServiceRole/DefaultPolicy/Resource",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
                               "aws:cdk:cloudformation:props": {
@@ -3254,10 +3254,10 @@
                                   ],
                                   "Version": "2012-10-17"
                                 },
-                                "policyName": "httpLambdaFunctionServiceRoleDefaultPolicy5FD0C40D",
+                                "policyName": "httpServiceRoleDefaultPolicy147444D9",
                                 "roles": [
                                   {
-                                    "Ref": "httpLambdaFunctionServiceRoleBB063197"
+                                    "Ref": "httpServiceRole196012CB"
                                   }
                                 ]
                               }
@@ -3281,11 +3281,11 @@
                   },
                   "Code": {
                     "id": "Code",
-                    "path": "HttpFlow/http/LambdaFunction/Code",
+                    "path": "HttpFlow/http/http/Code",
                     "children": {
                       "Stage": {
                         "id": "Stage",
-                        "path": "HttpFlow/http/LambdaFunction/Code/Stage",
+                        "path": "HttpFlow/http/http/Code/Stage",
                         "constructInfo": {
                           "fqn": "@aws-cdk/core.AssetStaging",
                           "version": "1.142.0"
@@ -3293,7 +3293,7 @@
                       },
                       "AssetBucket": {
                         "id": "AssetBucket",
-                        "path": "HttpFlow/http/LambdaFunction/Code/AssetBucket",
+                        "path": "HttpFlow/http/http/Code/AssetBucket",
                         "constructInfo": {
                           "fqn": "@aws-cdk/aws-s3.BucketBase",
                           "version": "1.142.0"
@@ -3307,7 +3307,7 @@
                   },
                   "Resource": {
                     "id": "Resource",
-                    "path": "HttpFlow/http/LambdaFunction/Resource",
+                    "path": "HttpFlow/http/http/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
                       "aws:cdk:cloudformation:props": {
@@ -3351,7 +3351,7 @@
                         },
                         "role": {
                           "Fn::GetAtt": [
-                            "httpLambdaFunctionServiceRoleBB063197",
+                            "httpServiceRole196012CB",
                             "Arn"
                           ]
                         },
@@ -3375,14 +3375,14 @@
                   },
                   "AllowInvoke:XRayTracerSnsFanOutTopic4E706A09": {
                     "id": "AllowInvoke:XRayTracerSnsFanOutTopic4E706A09",
-                    "path": "HttpFlow/http/LambdaFunction/AllowInvoke:XRayTracerSnsFanOutTopic4E706A09",
+                    "path": "HttpFlow/http/http/AllowInvoke:XRayTracerSnsFanOutTopic4E706A09",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                       "aws:cdk:cloudformation:props": {
                         "action": "lambda:InvokeFunction",
                         "functionName": {
                           "Fn::GetAtt": [
-                            "httpLambdaFunction9ED72A36",
+                            "http08BB5357",
                             "Arn"
                           ]
                         },
@@ -3399,11 +3399,11 @@
                   },
                   "XRayTracerSnsFanOutTopic": {
                     "id": "XRayTracerSnsFanOutTopic",
-                    "path": "HttpFlow/http/LambdaFunction/XRayTracerSnsFanOutTopic",
+                    "path": "HttpFlow/http/http/XRayTracerSnsFanOutTopic",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "HttpFlow/http/LambdaFunction/XRayTracerSnsFanOutTopic/Resource",
+                        "path": "HttpFlow/http/http/XRayTracerSnsFanOutTopic/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::SNS::Subscription",
                           "aws:cdk:cloudformation:props": {
@@ -3413,7 +3413,7 @@
                             },
                             "endpoint": {
                               "Fn::GetAtt": [
-                                "httpLambdaFunction9ED72A36",
+                                "http08BB5357",
                                 "Arn"
                               ]
                             }
@@ -3469,7 +3469,7 @@
                                   {
                                     "name": "FunctionName",
                                     "value": {
-                                      "Ref": "httpLambdaFunction9ED72A36"
+                                      "Ref": "http08BB5357"
                                     }
                                   }
                                 ]
@@ -3489,7 +3489,7 @@
                                   {
                                     "name": "FunctionName",
                                     "value": {
-                                      "Ref": "httpLambdaFunction9ED72A36"
+                                      "Ref": "http08BB5357"
                                     }
                                   }
                                 ]
@@ -3538,7 +3538,7 @@
                           {
                             "name": "FunctionName",
                             "value": {
-                              "Ref": "httpLambdaFunction9ED72A36"
+                              "Ref": "http08BB5357"
                             }
                           }
                         ],
@@ -3594,7 +3594,7 @@
                                   {
                                     "name": "FunctionName",
                                     "value": {
-                                      "Ref": "httpLambdaFunction9ED72A36"
+                                      "Ref": "http08BB5357"
                                     }
                                   }
                                 ]
@@ -3614,7 +3614,7 @@
                                   {
                                     "name": "FunctionName",
                                     "value": {
-                                      "Ref": "httpLambdaFunction9ED72A36"
+                                      "Ref": "http08BB5357"
                                     }
                                   }
                                 ]
@@ -3661,11 +3661,11 @@
                               },
                               "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
                               {
-                                "Ref": "httpLambdaFunction9ED72A36"
+                                "Ref": "http08BB5357"
                               },
                               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
                               {
-                                "Ref": "httpLambdaFunction9ED72A36"
+                                "Ref": "http08BB5357"
                               },
                               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
                               {
@@ -3673,15 +3673,15 @@
                               },
                               "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
                               {
-                                "Ref": "httpLambdaFunction9ED72A36"
+                                "Ref": "http08BB5357"
                               },
                               "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
                               {
-                                "Ref": "httpLambdaFunction9ED72A36"
+                                "Ref": "http08BB5357"
                               },
                               "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
                               {
-                                "Ref": "httpLambdaFunction9ED72A36"
+                                "Ref": "http08BB5357"
                               },
                               "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Throttle %\",\"region\":\"",
                               {
@@ -3689,11 +3689,11 @@
                               },
                               "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
                               {
-                                "Ref": "httpLambdaFunction9ED72A36"
+                                "Ref": "http08BB5357"
                               },
                               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
                               {
-                                "Ref": "httpLambdaFunction9ED72A36"
+                                "Ref": "http08BB5357"
                               },
                               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
                             ]
@@ -4196,17 +4196,17 @@
                   "version": "1.142.0"
                 }
               },
-              "LambdaFunction": {
-                "id": "LambdaFunction",
-                "path": "DynamoDBFlow/hit_counter/LambdaFunction",
+              "hit_counter": {
+                "id": "hit_counter",
+                "path": "DynamoDBFlow/hit_counter/hit_counter",
                 "children": {
                   "ServiceRole": {
                     "id": "ServiceRole",
-                    "path": "DynamoDBFlow/hit_counter/LambdaFunction/ServiceRole",
+                    "path": "DynamoDBFlow/hit_counter/hit_counter/ServiceRole",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "DynamoDBFlow/hit_counter/LambdaFunction/ServiceRole/Resource",
+                        "path": "DynamoDBFlow/hit_counter/hit_counter/ServiceRole/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                           "aws:cdk:cloudformation:props": {
@@ -4245,11 +4245,11 @@
                       },
                       "DefaultPolicy": {
                         "id": "DefaultPolicy",
-                        "path": "DynamoDBFlow/hit_counter/LambdaFunction/ServiceRole/DefaultPolicy",
+                        "path": "DynamoDBFlow/hit_counter/hit_counter/ServiceRole/DefaultPolicy",
                         "children": {
                           "Resource": {
                             "id": "Resource",
-                            "path": "DynamoDBFlow/hit_counter/LambdaFunction/ServiceRole/DefaultPolicy/Resource",
+                            "path": "DynamoDBFlow/hit_counter/hit_counter/ServiceRole/DefaultPolicy/Resource",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
                               "aws:cdk:cloudformation:props": {
@@ -4293,10 +4293,10 @@
                                   ],
                                   "Version": "2012-10-17"
                                 },
-                                "policyName": "hitcounterLambdaFunctionServiceRoleDefaultPolicyBCDA98FD",
+                                "policyName": "hitcounterServiceRoleDefaultPolicy57141E48",
                                 "roles": [
                                   {
-                                    "Ref": "hitcounterLambdaFunctionServiceRoleE2452AC5"
+                                    "Ref": "hitcounterServiceRole916161D0"
                                   }
                                 ]
                               }
@@ -4320,11 +4320,11 @@
                   },
                   "Code": {
                     "id": "Code",
-                    "path": "DynamoDBFlow/hit_counter/LambdaFunction/Code",
+                    "path": "DynamoDBFlow/hit_counter/hit_counter/Code",
                     "children": {
                       "Stage": {
                         "id": "Stage",
-                        "path": "DynamoDBFlow/hit_counter/LambdaFunction/Code/Stage",
+                        "path": "DynamoDBFlow/hit_counter/hit_counter/Code/Stage",
                         "constructInfo": {
                           "fqn": "@aws-cdk/core.AssetStaging",
                           "version": "1.142.0"
@@ -4332,7 +4332,7 @@
                       },
                       "AssetBucket": {
                         "id": "AssetBucket",
-                        "path": "DynamoDBFlow/hit_counter/LambdaFunction/Code/AssetBucket",
+                        "path": "DynamoDBFlow/hit_counter/hit_counter/Code/AssetBucket",
                         "constructInfo": {
                           "fqn": "@aws-cdk/aws-s3.BucketBase",
                           "version": "1.142.0"
@@ -4346,7 +4346,7 @@
                   },
                   "Resource": {
                     "id": "Resource",
-                    "path": "DynamoDBFlow/hit_counter/LambdaFunction/Resource",
+                    "path": "DynamoDBFlow/hit_counter/hit_counter/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
                       "aws:cdk:cloudformation:props": {
@@ -4390,7 +4390,7 @@
                         },
                         "role": {
                           "Fn::GetAtt": [
-                            "hitcounterLambdaFunctionServiceRoleE2452AC5",
+                            "hitcounterServiceRole916161D0",
                             "Arn"
                           ]
                         },
@@ -4421,14 +4421,14 @@
                   },
                   "AllowInvoke:XRayTracerSnsFanOutTopic4E706A09": {
                     "id": "AllowInvoke:XRayTracerSnsFanOutTopic4E706A09",
-                    "path": "DynamoDBFlow/hit_counter/LambdaFunction/AllowInvoke:XRayTracerSnsFanOutTopic4E706A09",
+                    "path": "DynamoDBFlow/hit_counter/hit_counter/AllowInvoke:XRayTracerSnsFanOutTopic4E706A09",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                       "aws:cdk:cloudformation:props": {
                         "action": "lambda:InvokeFunction",
                         "functionName": {
                           "Fn::GetAtt": [
-                            "hitcounterLambdaFunctionB862C182",
+                            "hitcounter16ED794A",
                             "Arn"
                           ]
                         },
@@ -4445,11 +4445,11 @@
                   },
                   "XRayTracerSnsFanOutTopic": {
                     "id": "XRayTracerSnsFanOutTopic",
-                    "path": "DynamoDBFlow/hit_counter/LambdaFunction/XRayTracerSnsFanOutTopic",
+                    "path": "DynamoDBFlow/hit_counter/hit_counter/XRayTracerSnsFanOutTopic",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "DynamoDBFlow/hit_counter/LambdaFunction/XRayTracerSnsFanOutTopic/Resource",
+                        "path": "DynamoDBFlow/hit_counter/hit_counter/XRayTracerSnsFanOutTopic/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::SNS::Subscription",
                           "aws:cdk:cloudformation:props": {
@@ -4459,7 +4459,7 @@
                             },
                             "endpoint": {
                               "Fn::GetAtt": [
-                                "hitcounterLambdaFunctionB862C182",
+                                "hitcounter16ED794A",
                                 "Arn"
                               ]
                             }
@@ -4515,7 +4515,7 @@
                                   {
                                     "name": "FunctionName",
                                     "value": {
-                                      "Ref": "hitcounterLambdaFunctionB862C182"
+                                      "Ref": "hitcounter16ED794A"
                                     }
                                   }
                                 ]
@@ -4535,7 +4535,7 @@
                                   {
                                     "name": "FunctionName",
                                     "value": {
-                                      "Ref": "hitcounterLambdaFunctionB862C182"
+                                      "Ref": "hitcounter16ED794A"
                                     }
                                   }
                                 ]
@@ -4584,7 +4584,7 @@
                           {
                             "name": "FunctionName",
                             "value": {
-                              "Ref": "hitcounterLambdaFunctionB862C182"
+                              "Ref": "hitcounter16ED794A"
                             }
                           }
                         ],
@@ -4640,7 +4640,7 @@
                                   {
                                     "name": "FunctionName",
                                     "value": {
-                                      "Ref": "hitcounterLambdaFunctionB862C182"
+                                      "Ref": "hitcounter16ED794A"
                                     }
                                   }
                                 ]
@@ -4660,7 +4660,7 @@
                                   {
                                     "name": "FunctionName",
                                     "value": {
-                                      "Ref": "hitcounterLambdaFunctionB862C182"
+                                      "Ref": "hitcounter16ED794A"
                                     }
                                   }
                                 ]
@@ -4707,11 +4707,11 @@
                               },
                               "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
                               {
-                                "Ref": "hitcounterLambdaFunctionB862C182"
+                                "Ref": "hitcounter16ED794A"
                               },
                               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
                               {
-                                "Ref": "hitcounterLambdaFunctionB862C182"
+                                "Ref": "hitcounter16ED794A"
                               },
                               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
                               {
@@ -4719,15 +4719,15 @@
                               },
                               "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
                               {
-                                "Ref": "hitcounterLambdaFunctionB862C182"
+                                "Ref": "hitcounter16ED794A"
                               },
                               "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
                               {
-                                "Ref": "hitcounterLambdaFunctionB862C182"
+                                "Ref": "hitcounter16ED794A"
                               },
                               "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
                               {
-                                "Ref": "hitcounterLambdaFunctionB862C182"
+                                "Ref": "hitcounter16ED794A"
                               },
                               "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Throttle %\",\"region\":\"",
                               {
@@ -4735,11 +4735,11 @@
                               },
                               "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
                               {
-                                "Ref": "hitcounterLambdaFunctionB862C182"
+                                "Ref": "hitcounter16ED794A"
                               },
                               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
                               {
-                                "Ref": "hitcounterLambdaFunctionB862C182"
+                                "Ref": "hitcounter16ED794A"
                               },
                               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
                             ]
@@ -4992,17 +4992,17 @@
                   "version": "1.142.0"
                 }
               },
-              "LambdaFunction": {
-                "id": "LambdaFunction",
-                "path": "SnsFlow/sns_publish/LambdaFunction",
+              "sns_publish": {
+                "id": "sns_publish",
+                "path": "SnsFlow/sns_publish/sns_publish",
                 "children": {
                   "ServiceRole": {
                     "id": "ServiceRole",
-                    "path": "SnsFlow/sns_publish/LambdaFunction/ServiceRole",
+                    "path": "SnsFlow/sns_publish/sns_publish/ServiceRole",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "SnsFlow/sns_publish/LambdaFunction/ServiceRole/Resource",
+                        "path": "SnsFlow/sns_publish/sns_publish/ServiceRole/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                           "aws:cdk:cloudformation:props": {
@@ -5041,11 +5041,11 @@
                       },
                       "DefaultPolicy": {
                         "id": "DefaultPolicy",
-                        "path": "SnsFlow/sns_publish/LambdaFunction/ServiceRole/DefaultPolicy",
+                        "path": "SnsFlow/sns_publish/sns_publish/ServiceRole/DefaultPolicy",
                         "children": {
                           "Resource": {
                             "id": "Resource",
-                            "path": "SnsFlow/sns_publish/LambdaFunction/ServiceRole/DefaultPolicy/Resource",
+                            "path": "SnsFlow/sns_publish/sns_publish/ServiceRole/DefaultPolicy/Resource",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
                               "aws:cdk:cloudformation:props": {
@@ -5069,10 +5069,10 @@
                                   ],
                                   "Version": "2012-10-17"
                                 },
-                                "policyName": "snspublishLambdaFunctionServiceRoleDefaultPolicyD927DA99",
+                                "policyName": "snspublishServiceRoleDefaultPolicy891E9911",
                                 "roles": [
                                   {
-                                    "Ref": "snspublishLambdaFunctionServiceRoleBE8DA9C2"
+                                    "Ref": "snspublishServiceRole41AE9565"
                                   }
                                 ]
                               }
@@ -5096,11 +5096,11 @@
                   },
                   "Code": {
                     "id": "Code",
-                    "path": "SnsFlow/sns_publish/LambdaFunction/Code",
+                    "path": "SnsFlow/sns_publish/sns_publish/Code",
                     "children": {
                       "Stage": {
                         "id": "Stage",
-                        "path": "SnsFlow/sns_publish/LambdaFunction/Code/Stage",
+                        "path": "SnsFlow/sns_publish/sns_publish/Code/Stage",
                         "constructInfo": {
                           "fqn": "@aws-cdk/core.AssetStaging",
                           "version": "1.142.0"
@@ -5108,7 +5108,7 @@
                       },
                       "AssetBucket": {
                         "id": "AssetBucket",
-                        "path": "SnsFlow/sns_publish/LambdaFunction/Code/AssetBucket",
+                        "path": "SnsFlow/sns_publish/sns_publish/Code/AssetBucket",
                         "constructInfo": {
                           "fqn": "@aws-cdk/aws-s3.BucketBase",
                           "version": "1.142.0"
@@ -5122,7 +5122,7 @@
                   },
                   "Resource": {
                     "id": "Resource",
-                    "path": "SnsFlow/sns_publish/LambdaFunction/Resource",
+                    "path": "SnsFlow/sns_publish/sns_publish/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
                       "aws:cdk:cloudformation:props": {
@@ -5166,7 +5166,7 @@
                         },
                         "role": {
                           "Fn::GetAtt": [
-                            "snspublishLambdaFunctionServiceRoleBE8DA9C2",
+                            "snspublishServiceRole41AE9565",
                             "Arn"
                           ]
                         },
@@ -5197,14 +5197,14 @@
                   },
                   "AllowInvoke:SnsFlowSNSTopicACE071C8": {
                     "id": "AllowInvoke:SnsFlowSNSTopicACE071C8",
-                    "path": "SnsFlow/sns_publish/LambdaFunction/AllowInvoke:SnsFlowSNSTopicACE071C8",
+                    "path": "SnsFlow/sns_publish/sns_publish/AllowInvoke:SnsFlowSNSTopicACE071C8",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                       "aws:cdk:cloudformation:props": {
                         "action": "lambda:InvokeFunction",
                         "functionName": {
                           "Fn::GetAtt": [
-                            "snspublishLambdaFunctionE7ECD8FF",
+                            "snspublish9BCF2005",
                             "Arn"
                           ]
                         },
@@ -5221,11 +5221,11 @@
                   },
                   "SNSTopic": {
                     "id": "SNSTopic",
-                    "path": "SnsFlow/sns_publish/LambdaFunction/SNSTopic",
+                    "path": "SnsFlow/sns_publish/sns_publish/SNSTopic",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "SnsFlow/sns_publish/LambdaFunction/SNSTopic/Resource",
+                        "path": "SnsFlow/sns_publish/sns_publish/SNSTopic/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::SNS::Subscription",
                           "aws:cdk:cloudformation:props": {
@@ -5235,7 +5235,7 @@
                             },
                             "endpoint": {
                               "Fn::GetAtt": [
-                                "snspublishLambdaFunctionE7ECD8FF",
+                                "snspublish9BCF2005",
                                 "Arn"
                               ]
                             },
@@ -5304,7 +5304,7 @@
                                   {
                                     "name": "FunctionName",
                                     "value": {
-                                      "Ref": "snspublishLambdaFunctionE7ECD8FF"
+                                      "Ref": "snspublish9BCF2005"
                                     }
                                   }
                                 ]
@@ -5324,7 +5324,7 @@
                                   {
                                     "name": "FunctionName",
                                     "value": {
-                                      "Ref": "snspublishLambdaFunctionE7ECD8FF"
+                                      "Ref": "snspublish9BCF2005"
                                     }
                                   }
                                 ]
@@ -5373,7 +5373,7 @@
                           {
                             "name": "FunctionName",
                             "value": {
-                              "Ref": "snspublishLambdaFunctionE7ECD8FF"
+                              "Ref": "snspublish9BCF2005"
                             }
                           }
                         ],
@@ -5429,7 +5429,7 @@
                                   {
                                     "name": "FunctionName",
                                     "value": {
-                                      "Ref": "snspublishLambdaFunctionE7ECD8FF"
+                                      "Ref": "snspublish9BCF2005"
                                     }
                                   }
                                 ]
@@ -5449,7 +5449,7 @@
                                   {
                                     "name": "FunctionName",
                                     "value": {
-                                      "Ref": "snspublishLambdaFunctionE7ECD8FF"
+                                      "Ref": "snspublish9BCF2005"
                                     }
                                   }
                                 ]
@@ -5496,11 +5496,11 @@
                               },
                               "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
                               {
-                                "Ref": "snspublishLambdaFunctionE7ECD8FF"
+                                "Ref": "snspublish9BCF2005"
                               },
                               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
                               {
-                                "Ref": "snspublishLambdaFunctionE7ECD8FF"
+                                "Ref": "snspublish9BCF2005"
                               },
                               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
                               {
@@ -5508,15 +5508,15 @@
                               },
                               "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
                               {
-                                "Ref": "snspublishLambdaFunctionE7ECD8FF"
+                                "Ref": "snspublish9BCF2005"
                               },
                               "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
                               {
-                                "Ref": "snspublishLambdaFunctionE7ECD8FF"
+                                "Ref": "snspublish9BCF2005"
                               },
                               "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
                               {
-                                "Ref": "snspublishLambdaFunctionE7ECD8FF"
+                                "Ref": "snspublish9BCF2005"
                               },
                               "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Throttle %\",\"region\":\"",
                               {
@@ -5524,11 +5524,11 @@
                               },
                               "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
                               {
-                                "Ref": "snspublishLambdaFunctionE7ECD8FF"
+                                "Ref": "snspublish9BCF2005"
                               },
                               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
                               {
-                                "Ref": "snspublishLambdaFunctionE7ECD8FF"
+                                "Ref": "snspublish9BCF2005"
                               },
                               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
                             ]
@@ -5781,17 +5781,17 @@
                   "version": "1.142.0"
                 }
               },
-              "LambdaFunction": {
-                "id": "LambdaFunction",
-                "path": "SnsFlow/sns_subscribe/LambdaFunction",
+              "sns_subscribe": {
+                "id": "sns_subscribe",
+                "path": "SnsFlow/sns_subscribe/sns_subscribe",
                 "children": {
                   "ServiceRole": {
                     "id": "ServiceRole",
-                    "path": "SnsFlow/sns_subscribe/LambdaFunction/ServiceRole",
+                    "path": "SnsFlow/sns_subscribe/sns_subscribe/ServiceRole",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "SnsFlow/sns_subscribe/LambdaFunction/ServiceRole/Resource",
+                        "path": "SnsFlow/sns_subscribe/sns_subscribe/ServiceRole/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                           "aws:cdk:cloudformation:props": {
@@ -5830,11 +5830,11 @@
                       },
                       "DefaultPolicy": {
                         "id": "DefaultPolicy",
-                        "path": "SnsFlow/sns_subscribe/LambdaFunction/ServiceRole/DefaultPolicy",
+                        "path": "SnsFlow/sns_subscribe/sns_subscribe/ServiceRole/DefaultPolicy",
                         "children": {
                           "Resource": {
                             "id": "Resource",
-                            "path": "SnsFlow/sns_subscribe/LambdaFunction/ServiceRole/DefaultPolicy/Resource",
+                            "path": "SnsFlow/sns_subscribe/sns_subscribe/ServiceRole/DefaultPolicy/Resource",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
                               "aws:cdk:cloudformation:props": {
@@ -5851,10 +5851,10 @@
                                   ],
                                   "Version": "2012-10-17"
                                 },
-                                "policyName": "snssubscribeLambdaFunctionServiceRoleDefaultPolicy7C3E54A8",
+                                "policyName": "snssubscribeServiceRoleDefaultPolicy60A7045C",
                                 "roles": [
                                   {
-                                    "Ref": "snssubscribeLambdaFunctionServiceRole6068C33F"
+                                    "Ref": "snssubscribeServiceRoleAAA46EA6"
                                   }
                                 ]
                               }
@@ -5878,11 +5878,11 @@
                   },
                   "Code": {
                     "id": "Code",
-                    "path": "SnsFlow/sns_subscribe/LambdaFunction/Code",
+                    "path": "SnsFlow/sns_subscribe/sns_subscribe/Code",
                     "children": {
                       "Stage": {
                         "id": "Stage",
-                        "path": "SnsFlow/sns_subscribe/LambdaFunction/Code/Stage",
+                        "path": "SnsFlow/sns_subscribe/sns_subscribe/Code/Stage",
                         "constructInfo": {
                           "fqn": "@aws-cdk/core.AssetStaging",
                           "version": "1.142.0"
@@ -5890,7 +5890,7 @@
                       },
                       "AssetBucket": {
                         "id": "AssetBucket",
-                        "path": "SnsFlow/sns_subscribe/LambdaFunction/Code/AssetBucket",
+                        "path": "SnsFlow/sns_subscribe/sns_subscribe/Code/AssetBucket",
                         "constructInfo": {
                           "fqn": "@aws-cdk/aws-s3.BucketBase",
                           "version": "1.142.0"
@@ -5904,7 +5904,7 @@
                   },
                   "Resource": {
                     "id": "Resource",
-                    "path": "SnsFlow/sns_subscribe/LambdaFunction/Resource",
+                    "path": "SnsFlow/sns_subscribe/sns_subscribe/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
                       "aws:cdk:cloudformation:props": {
@@ -5948,7 +5948,7 @@
                         },
                         "role": {
                           "Fn::GetAtt": [
-                            "snssubscribeLambdaFunctionServiceRole6068C33F",
+                            "snssubscribeServiceRoleAAA46EA6",
                             "Arn"
                           ]
                         },
@@ -5972,14 +5972,14 @@
                   },
                   "AllowInvoke:SnsFlowTheXRayTracerSnsTopic2E3ECD15": {
                     "id": "AllowInvoke:SnsFlowTheXRayTracerSnsTopic2E3ECD15",
-                    "path": "SnsFlow/sns_subscribe/LambdaFunction/AllowInvoke:SnsFlowTheXRayTracerSnsTopic2E3ECD15",
+                    "path": "SnsFlow/sns_subscribe/sns_subscribe/AllowInvoke:SnsFlowTheXRayTracerSnsTopic2E3ECD15",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                       "aws:cdk:cloudformation:props": {
                         "action": "lambda:InvokeFunction",
                         "functionName": {
                           "Fn::GetAtt": [
-                            "snssubscribeLambdaFunctionE84E36B6",
+                            "snssubscribe6C2EAAAC",
                             "Arn"
                           ]
                         },
@@ -5996,11 +5996,11 @@
                   },
                   "TheXRayTracerSnsTopic": {
                     "id": "TheXRayTracerSnsTopic",
-                    "path": "SnsFlow/sns_subscribe/LambdaFunction/TheXRayTracerSnsTopic",
+                    "path": "SnsFlow/sns_subscribe/sns_subscribe/TheXRayTracerSnsTopic",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "SnsFlow/sns_subscribe/LambdaFunction/TheXRayTracerSnsTopic/Resource",
+                        "path": "SnsFlow/sns_subscribe/sns_subscribe/TheXRayTracerSnsTopic/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::SNS::Subscription",
                           "aws:cdk:cloudformation:props": {
@@ -6010,7 +6010,7 @@
                             },
                             "endpoint": {
                               "Fn::GetAtt": [
-                                "snssubscribeLambdaFunctionE84E36B6",
+                                "snssubscribe6C2EAAAC",
                                 "Arn"
                               ]
                             }
@@ -6066,7 +6066,7 @@
                                   {
                                     "name": "FunctionName",
                                     "value": {
-                                      "Ref": "snssubscribeLambdaFunctionE84E36B6"
+                                      "Ref": "snssubscribe6C2EAAAC"
                                     }
                                   }
                                 ]
@@ -6086,7 +6086,7 @@
                                   {
                                     "name": "FunctionName",
                                     "value": {
-                                      "Ref": "snssubscribeLambdaFunctionE84E36B6"
+                                      "Ref": "snssubscribe6C2EAAAC"
                                     }
                                   }
                                 ]
@@ -6135,7 +6135,7 @@
                           {
                             "name": "FunctionName",
                             "value": {
-                              "Ref": "snssubscribeLambdaFunctionE84E36B6"
+                              "Ref": "snssubscribe6C2EAAAC"
                             }
                           }
                         ],
@@ -6191,7 +6191,7 @@
                                   {
                                     "name": "FunctionName",
                                     "value": {
-                                      "Ref": "snssubscribeLambdaFunctionE84E36B6"
+                                      "Ref": "snssubscribe6C2EAAAC"
                                     }
                                   }
                                 ]
@@ -6211,7 +6211,7 @@
                                   {
                                     "name": "FunctionName",
                                     "value": {
-                                      "Ref": "snssubscribeLambdaFunctionE84E36B6"
+                                      "Ref": "snssubscribe6C2EAAAC"
                                     }
                                   }
                                 ]
@@ -6258,11 +6258,11 @@
                               },
                               "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
                               {
-                                "Ref": "snssubscribeLambdaFunctionE84E36B6"
+                                "Ref": "snssubscribe6C2EAAAC"
                               },
                               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
                               {
-                                "Ref": "snssubscribeLambdaFunctionE84E36B6"
+                                "Ref": "snssubscribe6C2EAAAC"
                               },
                               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
                               {
@@ -6270,15 +6270,15 @@
                               },
                               "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
                               {
-                                "Ref": "snssubscribeLambdaFunctionE84E36B6"
+                                "Ref": "snssubscribe6C2EAAAC"
                               },
                               "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
                               {
-                                "Ref": "snssubscribeLambdaFunctionE84E36B6"
+                                "Ref": "snssubscribe6C2EAAAC"
                               },
                               "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
                               {
-                                "Ref": "snssubscribeLambdaFunctionE84E36B6"
+                                "Ref": "snssubscribe6C2EAAAC"
                               },
                               "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Throttle %\",\"region\":\"",
                               {
@@ -6286,11 +6286,11 @@
                               },
                               "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
                               {
-                                "Ref": "snssubscribeLambdaFunctionE84E36B6"
+                                "Ref": "snssubscribe6C2EAAAC"
                               },
                               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
                               {
-                                "Ref": "snssubscribeLambdaFunctionE84E36B6"
+                                "Ref": "snssubscribe6C2EAAAC"
                               },
                               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
                             ]
@@ -6473,17 +6473,17 @@
                   "version": "1.142.0"
                 }
               },
-              "LambdaFunction": {
-                "id": "LambdaFunction",
-                "path": "SqsFlow/sqs/LambdaFunction",
+              "sqs": {
+                "id": "sqs",
+                "path": "SqsFlow/sqs/sqs",
                 "children": {
                   "ServiceRole": {
                     "id": "ServiceRole",
-                    "path": "SqsFlow/sqs/LambdaFunction/ServiceRole",
+                    "path": "SqsFlow/sqs/sqs/ServiceRole",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "SqsFlow/sqs/LambdaFunction/ServiceRole/Resource",
+                        "path": "SqsFlow/sqs/sqs/ServiceRole/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                           "aws:cdk:cloudformation:props": {
@@ -6522,11 +6522,11 @@
                       },
                       "DefaultPolicy": {
                         "id": "DefaultPolicy",
-                        "path": "SqsFlow/sqs/LambdaFunction/ServiceRole/DefaultPolicy",
+                        "path": "SqsFlow/sqs/sqs/ServiceRole/DefaultPolicy",
                         "children": {
                           "Resource": {
                             "id": "Resource",
-                            "path": "SqsFlow/sqs/LambdaFunction/ServiceRole/DefaultPolicy/Resource",
+                            "path": "SqsFlow/sqs/sqs/ServiceRole/DefaultPolicy/Resource",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
                               "aws:cdk:cloudformation:props": {
@@ -6557,10 +6557,10 @@
                                   ],
                                   "Version": "2012-10-17"
                                 },
-                                "policyName": "sqsLambdaFunctionServiceRoleDefaultPolicyE4DD722B",
+                                "policyName": "sqsServiceRoleDefaultPolicyF070FD2A",
                                 "roles": [
                                   {
-                                    "Ref": "sqsLambdaFunctionServiceRole62789435"
+                                    "Ref": "sqsServiceRoleE2D33633"
                                   }
                                 ]
                               }
@@ -6584,11 +6584,11 @@
                   },
                   "Code": {
                     "id": "Code",
-                    "path": "SqsFlow/sqs/LambdaFunction/Code",
+                    "path": "SqsFlow/sqs/sqs/Code",
                     "children": {
                       "Stage": {
                         "id": "Stage",
-                        "path": "SqsFlow/sqs/LambdaFunction/Code/Stage",
+                        "path": "SqsFlow/sqs/sqs/Code/Stage",
                         "constructInfo": {
                           "fqn": "@aws-cdk/core.AssetStaging",
                           "version": "1.142.0"
@@ -6596,7 +6596,7 @@
                       },
                       "AssetBucket": {
                         "id": "AssetBucket",
-                        "path": "SqsFlow/sqs/LambdaFunction/Code/AssetBucket",
+                        "path": "SqsFlow/sqs/sqs/Code/AssetBucket",
                         "constructInfo": {
                           "fqn": "@aws-cdk/aws-s3.BucketBase",
                           "version": "1.142.0"
@@ -6610,7 +6610,7 @@
                   },
                   "Resource": {
                     "id": "Resource",
-                    "path": "SqsFlow/sqs/LambdaFunction/Resource",
+                    "path": "SqsFlow/sqs/sqs/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
                       "aws:cdk:cloudformation:props": {
@@ -6654,7 +6654,7 @@
                         },
                         "role": {
                           "Fn::GetAtt": [
-                            "sqsLambdaFunctionServiceRole62789435",
+                            "sqsServiceRoleE2D33633",
                             "Arn"
                           ]
                         },
@@ -6685,14 +6685,14 @@
                   },
                   "AllowInvoke:XRayTracerSnsFanOutTopic4E706A09": {
                     "id": "AllowInvoke:XRayTracerSnsFanOutTopic4E706A09",
-                    "path": "SqsFlow/sqs/LambdaFunction/AllowInvoke:XRayTracerSnsFanOutTopic4E706A09",
+                    "path": "SqsFlow/sqs/sqs/AllowInvoke:XRayTracerSnsFanOutTopic4E706A09",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                       "aws:cdk:cloudformation:props": {
                         "action": "lambda:InvokeFunction",
                         "functionName": {
                           "Fn::GetAtt": [
-                            "sqsLambdaFunctionDBCFBC0F",
+                            "sqsF562C4DE",
                             "Arn"
                           ]
                         },
@@ -6709,11 +6709,11 @@
                   },
                   "XRayTracerSnsFanOutTopic": {
                     "id": "XRayTracerSnsFanOutTopic",
-                    "path": "SqsFlow/sqs/LambdaFunction/XRayTracerSnsFanOutTopic",
+                    "path": "SqsFlow/sqs/sqs/XRayTracerSnsFanOutTopic",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "SqsFlow/sqs/LambdaFunction/XRayTracerSnsFanOutTopic/Resource",
+                        "path": "SqsFlow/sqs/sqs/XRayTracerSnsFanOutTopic/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::SNS::Subscription",
                           "aws:cdk:cloudformation:props": {
@@ -6723,7 +6723,7 @@
                             },
                             "endpoint": {
                               "Fn::GetAtt": [
-                                "sqsLambdaFunctionDBCFBC0F",
+                                "sqsF562C4DE",
                                 "Arn"
                               ]
                             }
@@ -6779,7 +6779,7 @@
                                   {
                                     "name": "FunctionName",
                                     "value": {
-                                      "Ref": "sqsLambdaFunctionDBCFBC0F"
+                                      "Ref": "sqsF562C4DE"
                                     }
                                   }
                                 ]
@@ -6799,7 +6799,7 @@
                                   {
                                     "name": "FunctionName",
                                     "value": {
-                                      "Ref": "sqsLambdaFunctionDBCFBC0F"
+                                      "Ref": "sqsF562C4DE"
                                     }
                                   }
                                 ]
@@ -6848,7 +6848,7 @@
                           {
                             "name": "FunctionName",
                             "value": {
-                              "Ref": "sqsLambdaFunctionDBCFBC0F"
+                              "Ref": "sqsF562C4DE"
                             }
                           }
                         ],
@@ -6904,7 +6904,7 @@
                                   {
                                     "name": "FunctionName",
                                     "value": {
-                                      "Ref": "sqsLambdaFunctionDBCFBC0F"
+                                      "Ref": "sqsF562C4DE"
                                     }
                                   }
                                 ]
@@ -6924,7 +6924,7 @@
                                   {
                                     "name": "FunctionName",
                                     "value": {
-                                      "Ref": "sqsLambdaFunctionDBCFBC0F"
+                                      "Ref": "sqsF562C4DE"
                                     }
                                   }
                                 ]
@@ -6971,11 +6971,11 @@
                               },
                               "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
                               {
-                                "Ref": "sqsLambdaFunctionDBCFBC0F"
+                                "Ref": "sqsF562C4DE"
                               },
                               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
                               {
-                                "Ref": "sqsLambdaFunctionDBCFBC0F"
+                                "Ref": "sqsF562C4DE"
                               },
                               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
                               {
@@ -6983,15 +6983,15 @@
                               },
                               "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
                               {
-                                "Ref": "sqsLambdaFunctionDBCFBC0F"
+                                "Ref": "sqsF562C4DE"
                               },
                               "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
                               {
-                                "Ref": "sqsLambdaFunctionDBCFBC0F"
+                                "Ref": "sqsF562C4DE"
                               },
                               "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
                               {
-                                "Ref": "sqsLambdaFunctionDBCFBC0F"
+                                "Ref": "sqsF562C4DE"
                               },
                               "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Throttle %\",\"region\":\"",
                               {
@@ -6999,11 +6999,11 @@
                               },
                               "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
                               {
-                                "Ref": "sqsLambdaFunctionDBCFBC0F"
+                                "Ref": "sqsF562C4DE"
                               },
                               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
                               {
-                                "Ref": "sqsLambdaFunctionDBCFBC0F"
+                                "Ref": "sqsF562C4DE"
                               },
                               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
                             ]
@@ -7256,17 +7256,17 @@
                   "version": "1.142.0"
                 }
               },
-              "LambdaFunction": {
-                "id": "LambdaFunction",
-                "path": "SqsFlow/sqs_subscribe/LambdaFunction",
+              "sqs_subscribe": {
+                "id": "sqs_subscribe",
+                "path": "SqsFlow/sqs_subscribe/sqs_subscribe",
                 "children": {
                   "ServiceRole": {
                     "id": "ServiceRole",
-                    "path": "SqsFlow/sqs_subscribe/LambdaFunction/ServiceRole",
+                    "path": "SqsFlow/sqs_subscribe/sqs_subscribe/ServiceRole",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "SqsFlow/sqs_subscribe/LambdaFunction/ServiceRole/Resource",
+                        "path": "SqsFlow/sqs_subscribe/sqs_subscribe/ServiceRole/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                           "aws:cdk:cloudformation:props": {
@@ -7305,11 +7305,11 @@
                       },
                       "DefaultPolicy": {
                         "id": "DefaultPolicy",
-                        "path": "SqsFlow/sqs_subscribe/LambdaFunction/ServiceRole/DefaultPolicy",
+                        "path": "SqsFlow/sqs_subscribe/sqs_subscribe/ServiceRole/DefaultPolicy",
                         "children": {
                           "Resource": {
                             "id": "Resource",
-                            "path": "SqsFlow/sqs_subscribe/LambdaFunction/ServiceRole/DefaultPolicy/Resource",
+                            "path": "SqsFlow/sqs_subscribe/sqs_subscribe/ServiceRole/DefaultPolicy/Resource",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
                               "aws:cdk:cloudformation:props": {
@@ -7342,10 +7342,10 @@
                                   ],
                                   "Version": "2012-10-17"
                                 },
-                                "policyName": "sqssubscribeLambdaFunctionServiceRoleDefaultPolicy47D1F13D",
+                                "policyName": "sqssubscribeServiceRoleDefaultPolicyDAF7C120",
                                 "roles": [
                                   {
-                                    "Ref": "sqssubscribeLambdaFunctionServiceRole7577D75B"
+                                    "Ref": "sqssubscribeServiceRole297EB299"
                                   }
                                 ]
                               }
@@ -7369,11 +7369,11 @@
                   },
                   "Code": {
                     "id": "Code",
-                    "path": "SqsFlow/sqs_subscribe/LambdaFunction/Code",
+                    "path": "SqsFlow/sqs_subscribe/sqs_subscribe/Code",
                     "children": {
                       "Stage": {
                         "id": "Stage",
-                        "path": "SqsFlow/sqs_subscribe/LambdaFunction/Code/Stage",
+                        "path": "SqsFlow/sqs_subscribe/sqs_subscribe/Code/Stage",
                         "constructInfo": {
                           "fqn": "@aws-cdk/core.AssetStaging",
                           "version": "1.142.0"
@@ -7381,7 +7381,7 @@
                       },
                       "AssetBucket": {
                         "id": "AssetBucket",
-                        "path": "SqsFlow/sqs_subscribe/LambdaFunction/Code/AssetBucket",
+                        "path": "SqsFlow/sqs_subscribe/sqs_subscribe/Code/AssetBucket",
                         "constructInfo": {
                           "fqn": "@aws-cdk/aws-s3.BucketBase",
                           "version": "1.142.0"
@@ -7395,7 +7395,7 @@
                   },
                   "Resource": {
                     "id": "Resource",
-                    "path": "SqsFlow/sqs_subscribe/LambdaFunction/Resource",
+                    "path": "SqsFlow/sqs_subscribe/sqs_subscribe/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
                       "aws:cdk:cloudformation:props": {
@@ -7439,7 +7439,7 @@
                         },
                         "role": {
                           "Fn::GetAtt": [
-                            "sqssubscribeLambdaFunctionServiceRole7577D75B",
+                            "sqssubscribeServiceRole297EB299",
                             "Arn"
                           ]
                         },
@@ -7463,16 +7463,16 @@
                   },
                   "SqsEventSource:SqsFlowRDSPublishQueueD1D2BBCF": {
                     "id": "SqsEventSource:SqsFlowRDSPublishQueueD1D2BBCF",
-                    "path": "SqsFlow/sqs_subscribe/LambdaFunction/SqsEventSource:SqsFlowRDSPublishQueueD1D2BBCF",
+                    "path": "SqsFlow/sqs_subscribe/sqs_subscribe/SqsEventSource:SqsFlowRDSPublishQueueD1D2BBCF",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "SqsFlow/sqs_subscribe/LambdaFunction/SqsEventSource:SqsFlowRDSPublishQueueD1D2BBCF/Resource",
+                        "path": "SqsFlow/sqs_subscribe/sqs_subscribe/SqsEventSource:SqsFlowRDSPublishQueueD1D2BBCF/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::Lambda::EventSourceMapping",
                           "aws:cdk:cloudformation:props": {
                             "functionName": {
-                              "Ref": "sqssubscribeLambdaFunction2B3EFD1F"
+                              "Ref": "sqssubscribeB7A2E97A"
                             },
                             "eventSourceArn": {
                               "Fn::GetAtt": [
@@ -7532,7 +7532,7 @@
                                   {
                                     "name": "FunctionName",
                                     "value": {
-                                      "Ref": "sqssubscribeLambdaFunction2B3EFD1F"
+                                      "Ref": "sqssubscribeB7A2E97A"
                                     }
                                   }
                                 ]
@@ -7552,7 +7552,7 @@
                                   {
                                     "name": "FunctionName",
                                     "value": {
-                                      "Ref": "sqssubscribeLambdaFunction2B3EFD1F"
+                                      "Ref": "sqssubscribeB7A2E97A"
                                     }
                                   }
                                 ]
@@ -7601,7 +7601,7 @@
                           {
                             "name": "FunctionName",
                             "value": {
-                              "Ref": "sqssubscribeLambdaFunction2B3EFD1F"
+                              "Ref": "sqssubscribeB7A2E97A"
                             }
                           }
                         ],
@@ -7657,7 +7657,7 @@
                                   {
                                     "name": "FunctionName",
                                     "value": {
-                                      "Ref": "sqssubscribeLambdaFunction2B3EFD1F"
+                                      "Ref": "sqssubscribeB7A2E97A"
                                     }
                                   }
                                 ]
@@ -7677,7 +7677,7 @@
                                   {
                                     "name": "FunctionName",
                                     "value": {
-                                      "Ref": "sqssubscribeLambdaFunction2B3EFD1F"
+                                      "Ref": "sqssubscribeB7A2E97A"
                                     }
                                   }
                                 ]
@@ -7724,11 +7724,11 @@
                               },
                               "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
                               {
-                                "Ref": "sqssubscribeLambdaFunction2B3EFD1F"
+                                "Ref": "sqssubscribeB7A2E97A"
                               },
                               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
                               {
-                                "Ref": "sqssubscribeLambdaFunction2B3EFD1F"
+                                "Ref": "sqssubscribeB7A2E97A"
                               },
                               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
                               {
@@ -7736,15 +7736,15 @@
                               },
                               "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
                               {
-                                "Ref": "sqssubscribeLambdaFunction2B3EFD1F"
+                                "Ref": "sqssubscribeB7A2E97A"
                               },
                               "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
                               {
-                                "Ref": "sqssubscribeLambdaFunction2B3EFD1F"
+                                "Ref": "sqssubscribeB7A2E97A"
                               },
                               "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
                               {
-                                "Ref": "sqssubscribeLambdaFunction2B3EFD1F"
+                                "Ref": "sqssubscribeB7A2E97A"
                               },
                               "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Throttle %\",\"region\":\"",
                               {
@@ -7752,11 +7752,11 @@
                               },
                               "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
                               {
-                                "Ref": "sqssubscribeLambdaFunction2B3EFD1F"
+                                "Ref": "sqssubscribeB7A2E97A"
                               },
                               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
                               {
-                                "Ref": "sqssubscribeLambdaFunction2B3EFD1F"
+                                "Ref": "sqssubscribeB7A2E97A"
                               },
                               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
                             ]
@@ -8191,17 +8191,17 @@
                   "version": "1.142.0"
                 }
               },
-              "LambdaFunction": {
-                "id": "LambdaFunction",
-                "path": "EventBridgeCircuitBreaker/webservice/LambdaFunction",
+              "webservice": {
+                "id": "webservice",
+                "path": "EventBridgeCircuitBreaker/webservice/webservice",
                 "children": {
                   "ServiceRole": {
                     "id": "ServiceRole",
-                    "path": "EventBridgeCircuitBreaker/webservice/LambdaFunction/ServiceRole",
+                    "path": "EventBridgeCircuitBreaker/webservice/webservice/ServiceRole",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "EventBridgeCircuitBreaker/webservice/LambdaFunction/ServiceRole/Resource",
+                        "path": "EventBridgeCircuitBreaker/webservice/webservice/ServiceRole/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                           "aws:cdk:cloudformation:props": {
@@ -8240,11 +8240,11 @@
                       },
                       "DefaultPolicy": {
                         "id": "DefaultPolicy",
-                        "path": "EventBridgeCircuitBreaker/webservice/LambdaFunction/ServiceRole/DefaultPolicy",
+                        "path": "EventBridgeCircuitBreaker/webservice/webservice/ServiceRole/DefaultPolicy",
                         "children": {
                           "Resource": {
                             "id": "Resource",
-                            "path": "EventBridgeCircuitBreaker/webservice/LambdaFunction/ServiceRole/DefaultPolicy/Resource",
+                            "path": "EventBridgeCircuitBreaker/webservice/webservice/ServiceRole/DefaultPolicy/Resource",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
                               "aws:cdk:cloudformation:props": {
@@ -8300,10 +8300,10 @@
                                   ],
                                   "Version": "2012-10-17"
                                 },
-                                "policyName": "webserviceLambdaFunctionServiceRoleDefaultPolicyE1BC4E3D",
+                                "policyName": "webserviceServiceRoleDefaultPolicy0D25860E",
                                 "roles": [
                                   {
-                                    "Ref": "webserviceLambdaFunctionServiceRole834310C5"
+                                    "Ref": "webserviceServiceRoleAB27EEDE"
                                   }
                                 ]
                               }
@@ -8327,11 +8327,11 @@
                   },
                   "Code": {
                     "id": "Code",
-                    "path": "EventBridgeCircuitBreaker/webservice/LambdaFunction/Code",
+                    "path": "EventBridgeCircuitBreaker/webservice/webservice/Code",
                     "children": {
                       "Stage": {
                         "id": "Stage",
-                        "path": "EventBridgeCircuitBreaker/webservice/LambdaFunction/Code/Stage",
+                        "path": "EventBridgeCircuitBreaker/webservice/webservice/Code/Stage",
                         "constructInfo": {
                           "fqn": "@aws-cdk/core.AssetStaging",
                           "version": "1.142.0"
@@ -8339,7 +8339,7 @@
                       },
                       "AssetBucket": {
                         "id": "AssetBucket",
-                        "path": "EventBridgeCircuitBreaker/webservice/LambdaFunction/Code/AssetBucket",
+                        "path": "EventBridgeCircuitBreaker/webservice/webservice/Code/AssetBucket",
                         "constructInfo": {
                           "fqn": "@aws-cdk/aws-s3.BucketBase",
                           "version": "1.142.0"
@@ -8353,7 +8353,7 @@
                   },
                   "Resource": {
                     "id": "Resource",
-                    "path": "EventBridgeCircuitBreaker/webservice/LambdaFunction/Resource",
+                    "path": "EventBridgeCircuitBreaker/webservice/webservice/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
                       "aws:cdk:cloudformation:props": {
@@ -8397,7 +8397,7 @@
                         },
                         "role": {
                           "Fn::GetAtt": [
-                            "webserviceLambdaFunctionServiceRole834310C5",
+                            "webserviceServiceRoleAB27EEDE",
                             "Arn"
                           ]
                         },
@@ -8465,7 +8465,7 @@
                                   {
                                     "name": "FunctionName",
                                     "value": {
-                                      "Ref": "webserviceLambdaFunctionB896CD05"
+                                      "Ref": "webservice8D02A20B"
                                     }
                                   }
                                 ]
@@ -8485,7 +8485,7 @@
                                   {
                                     "name": "FunctionName",
                                     "value": {
-                                      "Ref": "webserviceLambdaFunctionB896CD05"
+                                      "Ref": "webservice8D02A20B"
                                     }
                                   }
                                 ]
@@ -8534,7 +8534,7 @@
                           {
                             "name": "FunctionName",
                             "value": {
-                              "Ref": "webserviceLambdaFunctionB896CD05"
+                              "Ref": "webservice8D02A20B"
                             }
                           }
                         ],
@@ -8590,7 +8590,7 @@
                                   {
                                     "name": "FunctionName",
                                     "value": {
-                                      "Ref": "webserviceLambdaFunctionB896CD05"
+                                      "Ref": "webservice8D02A20B"
                                     }
                                   }
                                 ]
@@ -8610,7 +8610,7 @@
                                   {
                                     "name": "FunctionName",
                                     "value": {
-                                      "Ref": "webserviceLambdaFunctionB896CD05"
+                                      "Ref": "webservice8D02A20B"
                                     }
                                   }
                                 ]
@@ -8657,11 +8657,11 @@
                               },
                               "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
                               {
-                                "Ref": "webserviceLambdaFunctionB896CD05"
+                                "Ref": "webservice8D02A20B"
                               },
                               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
                               {
-                                "Ref": "webserviceLambdaFunctionB896CD05"
+                                "Ref": "webservice8D02A20B"
                               },
                               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
                               {
@@ -8669,15 +8669,15 @@
                               },
                               "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
                               {
-                                "Ref": "webserviceLambdaFunctionB896CD05"
+                                "Ref": "webservice8D02A20B"
                               },
                               "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
                               {
-                                "Ref": "webserviceLambdaFunctionB896CD05"
+                                "Ref": "webservice8D02A20B"
                               },
                               "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
                               {
-                                "Ref": "webserviceLambdaFunctionB896CD05"
+                                "Ref": "webservice8D02A20B"
                               },
                               "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Throttle %\",\"region\":\"",
                               {
@@ -8685,11 +8685,11 @@
                               },
                               "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
                               {
-                                "Ref": "webserviceLambdaFunctionB896CD05"
+                                "Ref": "webservice8D02A20B"
                               },
                               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
                               {
-                                "Ref": "webserviceLambdaFunctionB896CD05"
+                                "Ref": "webservice8D02A20B"
                               },
                               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
                             ]
@@ -8918,17 +8918,17 @@
                   "version": "1.142.0"
                 }
               },
-              "LambdaFunction": {
-                "id": "LambdaFunction",
-                "path": "EventBridgeCircuitBreaker/error/LambdaFunction",
+              "error": {
+                "id": "error",
+                "path": "EventBridgeCircuitBreaker/error/error",
                 "children": {
                   "ServiceRole": {
                     "id": "ServiceRole",
-                    "path": "EventBridgeCircuitBreaker/error/LambdaFunction/ServiceRole",
+                    "path": "EventBridgeCircuitBreaker/error/error/ServiceRole",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "EventBridgeCircuitBreaker/error/LambdaFunction/ServiceRole/Resource",
+                        "path": "EventBridgeCircuitBreaker/error/error/ServiceRole/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                           "aws:cdk:cloudformation:props": {
@@ -8967,11 +8967,11 @@
                       },
                       "DefaultPolicy": {
                         "id": "DefaultPolicy",
-                        "path": "EventBridgeCircuitBreaker/error/LambdaFunction/ServiceRole/DefaultPolicy",
+                        "path": "EventBridgeCircuitBreaker/error/error/ServiceRole/DefaultPolicy",
                         "children": {
                           "Resource": {
                             "id": "Resource",
-                            "path": "EventBridgeCircuitBreaker/error/LambdaFunction/ServiceRole/DefaultPolicy/Resource",
+                            "path": "EventBridgeCircuitBreaker/error/error/ServiceRole/DefaultPolicy/Resource",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
                               "aws:cdk:cloudformation:props": {
@@ -9019,10 +9019,10 @@
                                   ],
                                   "Version": "2012-10-17"
                                 },
-                                "policyName": "errorLambdaFunctionServiceRoleDefaultPolicy7F656B38",
+                                "policyName": "errorServiceRoleDefaultPolicy2A228A83",
                                 "roles": [
                                   {
-                                    "Ref": "errorLambdaFunctionServiceRoleBA0401A4"
+                                    "Ref": "errorServiceRole2AB0AC7F"
                                   }
                                 ]
                               }
@@ -9046,11 +9046,11 @@
                   },
                   "Code": {
                     "id": "Code",
-                    "path": "EventBridgeCircuitBreaker/error/LambdaFunction/Code",
+                    "path": "EventBridgeCircuitBreaker/error/error/Code",
                     "children": {
                       "Stage": {
                         "id": "Stage",
-                        "path": "EventBridgeCircuitBreaker/error/LambdaFunction/Code/Stage",
+                        "path": "EventBridgeCircuitBreaker/error/error/Code/Stage",
                         "constructInfo": {
                           "fqn": "@aws-cdk/core.AssetStaging",
                           "version": "1.142.0"
@@ -9058,7 +9058,7 @@
                       },
                       "AssetBucket": {
                         "id": "AssetBucket",
-                        "path": "EventBridgeCircuitBreaker/error/LambdaFunction/Code/AssetBucket",
+                        "path": "EventBridgeCircuitBreaker/error/error/Code/AssetBucket",
                         "constructInfo": {
                           "fqn": "@aws-cdk/aws-s3.BucketBase",
                           "version": "1.142.0"
@@ -9072,7 +9072,7 @@
                   },
                   "Resource": {
                     "id": "Resource",
-                    "path": "EventBridgeCircuitBreaker/error/LambdaFunction/Resource",
+                    "path": "EventBridgeCircuitBreaker/error/error/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
                       "aws:cdk:cloudformation:props": {
@@ -9116,7 +9116,7 @@
                         },
                         "role": {
                           "Fn::GetAtt": [
-                            "errorLambdaFunctionServiceRoleBA0401A4",
+                            "errorServiceRole2AB0AC7F",
                             "Arn"
                           ]
                         },
@@ -9184,7 +9184,7 @@
                                   {
                                     "name": "FunctionName",
                                     "value": {
-                                      "Ref": "errorLambdaFunction47F9F7B6"
+                                      "Ref": "error4C31D02F"
                                     }
                                   }
                                 ]
@@ -9204,7 +9204,7 @@
                                   {
                                     "name": "FunctionName",
                                     "value": {
-                                      "Ref": "errorLambdaFunction47F9F7B6"
+                                      "Ref": "error4C31D02F"
                                     }
                                   }
                                 ]
@@ -9253,7 +9253,7 @@
                           {
                             "name": "FunctionName",
                             "value": {
-                              "Ref": "errorLambdaFunction47F9F7B6"
+                              "Ref": "error4C31D02F"
                             }
                           }
                         ],
@@ -9309,7 +9309,7 @@
                                   {
                                     "name": "FunctionName",
                                     "value": {
-                                      "Ref": "errorLambdaFunction47F9F7B6"
+                                      "Ref": "error4C31D02F"
                                     }
                                   }
                                 ]
@@ -9329,7 +9329,7 @@
                                   {
                                     "name": "FunctionName",
                                     "value": {
-                                      "Ref": "errorLambdaFunction47F9F7B6"
+                                      "Ref": "error4C31D02F"
                                     }
                                   }
                                 ]
@@ -9376,11 +9376,11 @@
                               },
                               "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
                               {
-                                "Ref": "errorLambdaFunction47F9F7B6"
+                                "Ref": "error4C31D02F"
                               },
                               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
                               {
-                                "Ref": "errorLambdaFunction47F9F7B6"
+                                "Ref": "error4C31D02F"
                               },
                               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
                               {
@@ -9388,15 +9388,15 @@
                               },
                               "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
                               {
-                                "Ref": "errorLambdaFunction47F9F7B6"
+                                "Ref": "error4C31D02F"
                               },
                               "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
                               {
-                                "Ref": "errorLambdaFunction47F9F7B6"
+                                "Ref": "error4C31D02F"
                               },
                               "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
                               {
-                                "Ref": "errorLambdaFunction47F9F7B6"
+                                "Ref": "error4C31D02F"
                               },
                               "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Throttle %\",\"region\":\"",
                               {
@@ -9404,11 +9404,11 @@
                               },
                               "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
                               {
-                                "Ref": "errorLambdaFunction47F9F7B6"
+                                "Ref": "error4C31D02F"
                               },
                               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
                               {
-                                "Ref": "errorLambdaFunction47F9F7B6"
+                                "Ref": "error4C31D02F"
                               },
                               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
                             ]
@@ -9463,7 +9463,7 @@
                         "id": "Target0",
                         "arn": {
                           "Fn::GetAtt": [
-                            "errorLambdaFunction47F9F7B6",
+                            "error4C31D02F",
                             "Arn"
                           ]
                         }
@@ -9476,16 +9476,16 @@
                   "version": "1.142.0"
                 }
               },
-              "AllowEventRuleEventBridgeCircuitBreakererrorLambdaFunction3A1EB0D3": {
-                "id": "AllowEventRuleEventBridgeCircuitBreakererrorLambdaFunction3A1EB0D3",
-                "path": "EventBridgeCircuitBreaker/webserviceErrorRule/AllowEventRuleEventBridgeCircuitBreakererrorLambdaFunction3A1EB0D3",
+              "AllowEventRuleEventBridgeCircuitBreakererror50BABD73": {
+                "id": "AllowEventRuleEventBridgeCircuitBreakererror50BABD73",
+                "path": "EventBridgeCircuitBreaker/webserviceErrorRule/AllowEventRuleEventBridgeCircuitBreakererror50BABD73",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                   "aws:cdk:cloudformation:props": {
                     "action": "lambda:InvokeFunction",
                     "functionName": {
                       "Fn::GetAtt": [
-                        "errorLambdaFunction47F9F7B6",
+                        "error4C31D02F",
                         "Arn"
                       ]
                     },
@@ -9678,7 +9678,7 @@
                               "format": "$context.identity.sourceIp $context.identity.caller $context.identity.user [$context.requestTime] \"$context.httpMethod $context.resourcePath $context.protocol\" $context.status $context.responseLength $context.requestId"
                             },
                             "deploymentId": {
-                              "Ref": "CircuitBreakerGatewayLambdaAPIGatewayDeploymentA78582AA8c4478ff9071ad74109ccc07d77d3186"
+                              "Ref": "CircuitBreakerGatewayLambdaAPIGatewayDeploymentA78582AA610a194120063f625c19b9bb8821dacc"
                             },
                             "methodSettings": [
                               {
@@ -9755,7 +9755,7 @@
                                     "action": "lambda:InvokeFunction",
                                     "functionName": {
                                       "Fn::GetAtt": [
-                                        "webserviceLambdaFunctionB896CD05",
+                                        "webservice8D02A20B",
                                         "Arn"
                                       ]
                                     },
@@ -9804,7 +9804,7 @@
                                     "action": "lambda:InvokeFunction",
                                     "functionName": {
                                       "Fn::GetAtt": [
-                                        "webserviceLambdaFunctionB896CD05",
+                                        "webservice8D02A20B",
                                         "Arn"
                                       ]
                                     },
@@ -9871,7 +9871,7 @@
                                             ":lambda:path/2015-03-31/functions/",
                                             {
                                               "Fn::GetAtt": [
-                                                "webserviceLambdaFunctionB896CD05",
+                                                "webservice8D02A20B",
                                                 "Arn"
                                               ]
                                             },
