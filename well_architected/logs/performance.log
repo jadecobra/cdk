@@ -12150,3 +12150,16 @@
 2022-02-10 14:45:18.463710::Time taken to synthesize stack: DynamoDBFlow::  2.5629 seconds
 2022-02-10 14:45:21.044814::Time taken to synthesize stack: DynamoDBTable::  2.5778 seconds
 2022-02-10 14:45:23.548529::Time taken to synthesize stack: EventBridgeCircuitBreaker::  2.5007 seconds
+2022-02-10 14:46:34.658962::Time taken to synthesize stack: DynamoDBFlow::  1.6879 seconds
+2022-02-10 14:46:37.017091::Time taken to synthesize stack: DynamoDBTable::  2.3549 seconds
+2022-02-10 14:46:39.336082::Time taken to synthesize stack: EventBridgeCircuitBreaker::  2.3160 seconds
+2022-02-10 14:49:51.872936::Time taken to synthesize stack: DynamoDBFlow::  2.2833 seconds
+2022-02-10 14:49:54.171582::Time taken to synthesize stack: DynamoDBTable::  2.2955 seconds
+2022-02-10 14:49:56.397710::Time taken to synthesize stack: EventBridgeCircuitBreaker::  2.2231 seconds
+2022-02-10 14:50:09.512545::Time taken to synthesize stack: DynamoDBFlow::  2.5056 seconds
+2022-02-10 14:51:39.682071::Time taken to synthesize stack: DynamoDBFlow::  2.5658 seconds
+2022-02-10 14:51:42.316105::Time taken to synthesize stack: DynamoDBTable::  2.6307 seconds
+2022-02-10 14:51:44.824655::Time taken to synthesize stack: EventBridgeCircuitBreaker::  2.5054 seconds
+2022-02-10 14:52:15.768599::Time taken to synthesize stack: DynamoDBFlow::  2.5863 seconds
+2022-02-10 14:52:18.434645::Time taken to synthesize stack: DynamoDBTable::  2.6623 seconds
+2022-02-10 14:52:20.958026::Time taken to synthesize stack: EventBridgeCircuitBreaker::  2.5194 seconds
