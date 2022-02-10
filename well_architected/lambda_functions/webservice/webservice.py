@@ -5,7 +5,7 @@ import os
 import datetime
 
 eventbridge = boto3.client('events')
-table = boto3.resource('dynamodb').Table(os.environ.get('ERROR_RECORDS'))
+# table = boto3.resource('dynamodb').Table(os.environ.get('ERROR_RECORDS'))
 
 def call_fake_service(serviceURL):
     # In here assume we made an http request to google and it was down,
