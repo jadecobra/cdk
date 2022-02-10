@@ -51,21 +51,19 @@ class EventBridgeCircuitBreaker(cdk.Stack):
 
         environment_variables = dict(ERROR_RECORDS=error_records.table_name)
 
-        webservice = lambda_function.LambdaFunctionConstruct(
-            self, 'webservice',
+        webservice = lambda_function.create_python_lambda_function(
+            self, function_name='webservice',
             error_topic=error_topic,
-            function_name='webservice',
             environment_variables=environment_variables,
             duration=20,
-        ).lambda_function
+        )
 
-        error_lambda = lambda_function.LambdaFunctionConstruct(
-            self, 'error',
-            function_name='error',
+        error_lambda = lambda_function.create_python_lambda_function(
+            self, function_name='error',
             error_topic=error_topic,
             environment_variables=environment_variables,
             duration=3,
-        ).lambda_function
+        )
 
         error_records.grant_read_data(webservice)
         error_records.grant_write_data(error_lambda)
