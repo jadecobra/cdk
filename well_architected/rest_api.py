@@ -21,6 +21,10 @@ class LambdaRestAPIGatewayConstruct(Construct):
 
         )
 
+        # fix resource_arn
+        # self.resource_arn = f"arn:aws:apigateway:{self.region}::/restapis/{self.api_id}/stages/{self.rest_api.deployment_stage.stage_name}"
+        self.resource_arn = "arn:aws:apigateway:{self.region}::/restapis/{self.api_id}/stages/{self.rest_api.deployment_stage.stage_name}"
+
         api_gateway_cloudwatch.ApiGatewayCloudWatch(
             self, 'ApiGatewayCloudWatch',
             api_id=self.api_id,
@@ -101,8 +105,9 @@ class LambdaRestAPIGatewayConstruct(Construct):
 class LambdaRestAPIGateway(Stack):
 
     def __init__(self, scope: Construct, id: str, lambda_function: Function, error_topic:ITopic=None, **kwargs) -> None:
-        super().__init__(
-            scope, id,
+        super().__init__(scope, id, **kwargs)
+        self.rest_api = LambdaRestAPIGatewayConstruct(
+            self, id,
             lambda_function=lambda_function,
             error_topic=error_topic,
             **kwargs

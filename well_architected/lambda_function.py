@@ -129,7 +129,8 @@ class LambdaFunctionStack(Stack):
         super().__init__(scope, id, **kwargs)
         self.lambda_function = create_python_lambda_function(
             self, function_name=function_name,
-            environment_variables=environment_variables
+            environment_variables=environment_variables,
+            error_topic=error_topic,
         )
 
 def create_python_lambda_function(

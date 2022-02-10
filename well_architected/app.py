@@ -51,7 +51,7 @@ class WellArchitected(cdk.App):
             self, 'LambdaRestAPIGateway',
             lambda_function=self.lambda_function.lambda_function,
             error_topic=self.error_topic,
-        )
+        ).rest_api
 
         self.create_web_application_firewall(
             id='WebApplicationFirewall',

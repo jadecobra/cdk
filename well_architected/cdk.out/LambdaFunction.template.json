@@ -1,11 +1,5 @@
 {
   "Resources": {
-    "hitcounterErrorTopicB8385607": {
-      "Type": "AWS::SNS::Topic",
-      "Properties": {
-        "DisplayName": "ErrorTopic"
-      }
-    },
     "hitcounterawsxraysdkLambdaLayerC2C52DF3": {
       "Type": "AWS::Lambda::LayerVersion",
       "Properties": {
@@ -207,7 +201,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "hitcounterErrorTopicB8385607"
+            "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -269,7 +263,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "hitcounterErrorTopicB8385607"
+            "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -296,7 +290,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "hitcounterErrorTopicB8385607"
+            "Fn::ImportValue": "SnsTopic:ExportsOutputRefSnsTopic2C1570A4EE4BCC49"
           }
         ],
         "DatapointsToAlarm": 1,
