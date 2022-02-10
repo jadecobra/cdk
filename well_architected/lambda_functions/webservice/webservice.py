@@ -16,15 +16,30 @@ def header(message):
     print(f'\t{message}')
     delimiter()
 
+def service_call_failure_after(seconds)
+    time.sleep(seconds)
+    print('\t--- Service Call Failure ---');
+    errorType = '\t\tservice timeout exception'
+    print(errorType)
+    print('\t--- EventBridge Response ---');
+    return {
+        'DetailType': 'httpcall',
+        'EventBusName': 'default',
+        'Source': 'cdkpatterns.eventbridge.circuitbreaker',
+        'Time': datetime.datetime.now(),
+        'Detail': json.dumps({
+            'status': 'fail',
+            'siteUrl': serviceURL,
+            'errorType': errorType
+        })
+    }
+
 def call_fake_service(serviceURL):
     # In here assume we made an http request to google and it was down,
     # 10 sec hard coded delay for simulation
 
-    header('Calling Webservice, recent errors below threshold ---');
-    time.sleep(1)
-    print('\t--- Service Call Failure ---');
-    errorType = '\t\tservice timeout exception'
-    print(errorType)
+    header('\tCalling Webservice, recent errors below threshold');
+    return service_call_failure_after(1)
 
     print('\t--- EventBridge Response ---');
     print(
