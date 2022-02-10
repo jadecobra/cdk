@@ -9,7 +9,6 @@ class DynamoDBTableConstruct(well_architected.WellArchitectedFrameworkConstruct)
             partition_key: aws_dynamodb.Attribute=None,
             sort_key: aws_dynamodb.Attribute=None,
             time_to_live_attribute=None,
-            table_name=None,
             **kwargs
     ) -> None:
         super().__init__(scope, id, error_topic=error_topic,
@@ -115,7 +114,7 @@ class DynamoDBTableStack(cdk.Stack):
     ) -> None:
         super().__init__(scope, id, **kwargs)
         self.dynamodb_table = DynamoDBTableConstruct(
-            self, table_name,
+            self, id,
             error_topic=error_topic,
             partition_key=partition_key,
             sort_key=sort_key,

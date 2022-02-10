@@ -66,17 +66,17 @@
         "id": "DynamoDBTable",
         "path": "DynamoDBTable",
         "children": {
-          "Hits": {
-            "id": "Hits",
-            "path": "DynamoDBTable/Hits",
+          "DynamoDBTable": {
+            "id": "DynamoDBTable",
+            "path": "DynamoDBTable/DynamoDBTable",
             "children": {
-              "Hits": {
-                "id": "Hits",
-                "path": "DynamoDBTable/Hits/Hits",
+              "DynamoDBTable": {
+                "id": "DynamoDBTable",
+                "path": "DynamoDBTable/DynamoDBTable/DynamoDBTable",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "DynamoDBTable/Hits/Hits/Resource",
+                    "path": "DynamoDBTable/DynamoDBTable/DynamoDBTable/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::DynamoDB::Table",
                       "aws:cdk:cloudformation:props": {
@@ -102,7 +102,7 @@
                   },
                   "ScalingRole": {
                     "id": "ScalingRole",
-                    "path": "DynamoDBTable/Hits/Hits/ScalingRole",
+                    "path": "DynamoDBTable/DynamoDBTable/DynamoDBTable/ScalingRole",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.Resource",
                       "version": "1.142.0"
@@ -116,11 +116,11 @@
               },
               "DynamoDB User Errors > 0": {
                 "id": "DynamoDB User Errors > 0",
-                "path": "DynamoDBTable/Hits/DynamoDB User Errors > 0",
+                "path": "DynamoDBTable/DynamoDBTable/DynamoDB User Errors > 0",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "DynamoDBTable/Hits/DynamoDB User Errors > 0/Resource",
+                    "path": "DynamoDBTable/DynamoDBTable/DynamoDB User Errors > 0/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
                       "aws:cdk:cloudformation:props": {
@@ -153,11 +153,11 @@
               },
               "DynamoDB Table Reads--Writes Throttled": {
                 "id": "DynamoDB Table Reads--Writes Throttled",
-                "path": "DynamoDBTable/Hits/DynamoDB Table Reads--Writes Throttled",
+                "path": "DynamoDBTable/DynamoDBTable/DynamoDB Table Reads--Writes Throttled",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "DynamoDBTable/Hits/DynamoDB Table Reads--Writes Throttled/Resource",
+                    "path": "DynamoDBTable/DynamoDBTable/DynamoDB Table Reads--Writes Throttled/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
                       "aws:cdk:cloudformation:props": {
@@ -184,7 +184,7 @@
                                   {
                                     "name": "TableName",
                                     "value": {
-                                      "Ref": "Hits9BF577DE"
+                                      "Ref": "DynamoDBTable1F15138A"
                                     }
                                   }
                                 ]
@@ -204,7 +204,7 @@
                                   {
                                     "name": "TableName",
                                     "value": {
-                                      "Ref": "Hits9BF577DE"
+                                      "Ref": "DynamoDBTable1F15138A"
                                     }
                                   }
                                 ]
@@ -233,11 +233,11 @@
               },
               "CloudWatchDashBoard": {
                 "id": "CloudWatchDashBoard",
-                "path": "DynamoDBTable/Hits/CloudWatchDashBoard",
+                "path": "DynamoDBTable/DynamoDBTable/CloudWatchDashBoard",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "DynamoDBTable/Hits/CloudWatchDashBoard/Resource",
+                    "path": "DynamoDBTable/DynamoDBTable/CloudWatchDashBoard/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::CloudWatch::Dashboard",
                       "aws:cdk:cloudformation:props": {
@@ -251,23 +251,23 @@
                               },
                               "\",\"stacked\":true,\"metrics\":[[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"GetItem\",\"TableName\",\"",
                               {
-                                "Ref": "Hits9BF577DE"
+                                "Ref": "DynamoDBTable1F15138A"
                               },
                               "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"UpdateItem\",\"TableName\",\"",
                               {
-                                "Ref": "Hits9BF577DE"
+                                "Ref": "DynamoDBTable1F15138A"
                               },
                               "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"PutItem\",\"TableName\",\"",
                               {
-                                "Ref": "Hits9BF577DE"
+                                "Ref": "DynamoDBTable1F15138A"
                               },
                               "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"DeleteItem\",\"TableName\",\"",
                               {
-                                "Ref": "Hits9BF577DE"
+                                "Ref": "DynamoDBTable1F15138A"
                               },
                               "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"Query\",\"TableName\",\"",
                               {
-                                "Ref": "Hits9BF577DE"
+                                "Ref": "DynamoDBTable1F15138A"
                               },
                               "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"DynamoDB Consumed Read/Write Units\",\"region\":\"",
                               {
@@ -275,11 +275,11 @@
                               },
                               "\",\"stacked\":false,\"metrics\":[[\"AWS/DynamoDB\",\"ConsumedReadCapacityUnits\",\"TableName\",\"",
                               {
-                                "Ref": "Hits9BF577DE"
+                                "Ref": "DynamoDBTable1F15138A"
                               },
                               "\"],[\"AWS/DynamoDB\",\"ConsumedWriteCapacityUnits\",\"TableName\",\"",
                               {
-                                "Ref": "Hits9BF577DE"
+                                "Ref": "DynamoDBTable1F15138A"
                               },
                               "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"DynamoDB Throttles\",\"region\":\"",
                               {
@@ -287,11 +287,11 @@
                               },
                               "\",\"stacked\":true,\"metrics\":[[\"AWS/DynamoDB\",\"ReadThrottleEvents\",\"TableName\",\"",
                               {
-                                "Ref": "Hits9BF577DE"
+                                "Ref": "DynamoDBTable1F15138A"
                               },
                               "\",{\"stat\":\"Sum\"}],[\"AWS/DynamoDB\",\"WriteThrottleEvents\",\"TableName\",\"",
                               {
-                                "Ref": "Hits9BF577DE"
+                                "Ref": "DynamoDBTable1F15138A"
                               },
                               "\",{\"stat\":\"Sum\"}]],\"yAxis\":{}}}]}"
                             ]
@@ -320,17 +320,17 @@
             "id": "Exports",
             "path": "DynamoDBTable/Exports",
             "children": {
-              "Output{\"Fn::GetAtt\":[\"Hits9BF577DE\",\"Arn\"]}": {
-                "id": "Output{\"Fn::GetAtt\":[\"Hits9BF577DE\",\"Arn\"]}",
-                "path": "DynamoDBTable/Exports/Output{\"Fn::GetAtt\":[\"Hits9BF577DE\",\"Arn\"]}",
+              "Output{\"Fn::GetAtt\":[\"DynamoDBTable1F15138A\",\"Arn\"]}": {
+                "id": "Output{\"Fn::GetAtt\":[\"DynamoDBTable1F15138A\",\"Arn\"]}",
+                "path": "DynamoDBTable/Exports/Output{\"Fn::GetAtt\":[\"DynamoDBTable1F15138A\",\"Arn\"]}",
                 "constructInfo": {
                   "fqn": "@aws-cdk/core.CfnOutput",
                   "version": "1.142.0"
                 }
               },
-              "Output{\"Ref\":\"Hits9BF577DE\"}": {
-                "id": "Output{\"Ref\":\"Hits9BF577DE\"}",
-                "path": "DynamoDBTable/Exports/Output{\"Ref\":\"Hits9BF577DE\"}",
+              "Output{\"Ref\":\"DynamoDBTable1F15138A\"}": {
+                "id": "Output{\"Ref\":\"DynamoDBTable1F15138A\"}",
+                "path": "DynamoDBTable/Exports/Output{\"Ref\":\"DynamoDBTable1F15138A\"}",
                 "constructInfo": {
                   "fqn": "@aws-cdk/core.CfnOutput",
                   "version": "1.142.0"
@@ -552,7 +552,7 @@
                                       "Effect": "Allow",
                                       "Resource": [
                                         {
-                                          "Fn::ImportValue": "DynamoDBTable:ExportsOutputFnGetAttHits9BF577DEArnFF8B7C1B"
+                                          "Fn::ImportValue": "DynamoDBTable:ExportsOutputFnGetAttDynamoDBTable1F15138AArn4A52DCA0"
                                         },
                                         {
                                           "Ref": "AWS::NoValue"
@@ -666,7 +666,7 @@
                         "environment": {
                           "variables": {
                             "HITS_TABLE_NAME": {
-                              "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefHits9BF577DEBF202F48"
+                              "Fn::ImportValue": "DynamoDBTable:ExportsOutputRefDynamoDBTable1F15138AF3051970"
                             }
                           }
                         },

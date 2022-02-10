@@ -32,8 +32,7 @@ class EventBridgeCircuitBreaker(cdk.Stack):
         #     removal_policy=cdk.RemovalPolicy.DESTROY,
         # )
         error_records = dynamodb_table.DynamoDBTableConstruct(
-            self, "CircuitBreaker",
-            table_name='CircuitBreaker',
+            self, 'CircuitBreaker',
             partition_key=dynamodb.Attribute(
                 name="RequestID",
                 type=dynamodb.AttributeType.STRING

@@ -1,6 +1,6 @@
 {
   "Resources": {
-    "Hits9BF577DE": {
+    "DynamoDBTable1F15138A": {
       "Type": "AWS::DynamoDB::Table",
       "Properties": {
         "KeySchema": [
@@ -20,7 +20,7 @@
       "UpdateReplacePolicy": "Delete",
       "DeletionPolicy": "Delete"
     },
-    "HitsDynamoDBUserErrors07CE7B5C5": {
+    "DynamoDBTableDynamoDBUserErrors0BB446AE5": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
@@ -39,7 +39,7 @@
         "TreatMissingData": "notBreaching"
       }
     },
-    "HitsDynamoDBTableReadsWritesThrottledA2E6A6CD": {
+    "DynamoDBTableDynamoDBTableReadsWritesThrottled47AA0D46": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
@@ -64,7 +64,7 @@
                   {
                     "Name": "TableName",
                     "Value": {
-                      "Ref": "Hits9BF577DE"
+                      "Ref": "DynamoDBTable1F15138A"
                     }
                   }
                 ],
@@ -84,7 +84,7 @@
                   {
                     "Name": "TableName",
                     "Value": {
-                      "Ref": "Hits9BF577DE"
+                      "Ref": "DynamoDBTable1F15138A"
                     }
                   }
                 ],
@@ -101,7 +101,7 @@
         "TreatMissingData": "notBreaching"
       }
     },
-    "HitsCloudWatchDashBoardD0EE794E": {
+    "DynamoDBTableCloudWatchDashBoardC342B4EC": {
       "Type": "AWS::CloudWatch::Dashboard",
       "Properties": {
         "DashboardBody": {
@@ -114,23 +114,23 @@
               },
               "\",\"stacked\":true,\"metrics\":[[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"GetItem\",\"TableName\",\"",
               {
-                "Ref": "Hits9BF577DE"
+                "Ref": "DynamoDBTable1F15138A"
               },
               "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"UpdateItem\",\"TableName\",\"",
               {
-                "Ref": "Hits9BF577DE"
+                "Ref": "DynamoDBTable1F15138A"
               },
               "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"PutItem\",\"TableName\",\"",
               {
-                "Ref": "Hits9BF577DE"
+                "Ref": "DynamoDBTable1F15138A"
               },
               "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"DeleteItem\",\"TableName\",\"",
               {
-                "Ref": "Hits9BF577DE"
+                "Ref": "DynamoDBTable1F15138A"
               },
               "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"Query\",\"TableName\",\"",
               {
-                "Ref": "Hits9BF577DE"
+                "Ref": "DynamoDBTable1F15138A"
               },
               "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"DynamoDB Consumed Read/Write Units\",\"region\":\"",
               {
@@ -138,11 +138,11 @@
               },
               "\",\"stacked\":false,\"metrics\":[[\"AWS/DynamoDB\",\"ConsumedReadCapacityUnits\",\"TableName\",\"",
               {
-                "Ref": "Hits9BF577DE"
+                "Ref": "DynamoDBTable1F15138A"
               },
               "\"],[\"AWS/DynamoDB\",\"ConsumedWriteCapacityUnits\",\"TableName\",\"",
               {
-                "Ref": "Hits9BF577DE"
+                "Ref": "DynamoDBTable1F15138A"
               },
               "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"DynamoDB Throttles\",\"region\":\"",
               {
@@ -150,11 +150,11 @@
               },
               "\",\"stacked\":true,\"metrics\":[[\"AWS/DynamoDB\",\"ReadThrottleEvents\",\"TableName\",\"",
               {
-                "Ref": "Hits9BF577DE"
+                "Ref": "DynamoDBTable1F15138A"
               },
               "\",{\"stat\":\"Sum\"}],[\"AWS/DynamoDB\",\"WriteThrottleEvents\",\"TableName\",\"",
               {
-                "Ref": "Hits9BF577DE"
+                "Ref": "DynamoDBTable1F15138A"
               },
               "\",{\"stat\":\"Sum\"}]],\"yAxis\":{}}}]}"
             ]
@@ -164,23 +164,23 @@
     }
   },
   "Outputs": {
-    "ExportsOutputFnGetAttHits9BF577DEArnFF8B7C1B": {
+    "ExportsOutputFnGetAttDynamoDBTable1F15138AArn4A52DCA0": {
       "Value": {
         "Fn::GetAtt": [
-          "Hits9BF577DE",
+          "DynamoDBTable1F15138A",
           "Arn"
         ]
       },
       "Export": {
-        "Name": "DynamoDBTable:ExportsOutputFnGetAttHits9BF577DEArnFF8B7C1B"
+        "Name": "DynamoDBTable:ExportsOutputFnGetAttDynamoDBTable1F15138AArn4A52DCA0"
       }
     },
-    "ExportsOutputRefHits9BF577DEBF202F48": {
+    "ExportsOutputRefDynamoDBTable1F15138AF3051970": {
       "Value": {
-        "Ref": "Hits9BF577DE"
+        "Ref": "DynamoDBTable1F15138A"
       },
       "Export": {
-        "Name": "DynamoDBTable:ExportsOutputRefHits9BF577DEBF202F48"
+        "Name": "DynamoDBTable:ExportsOutputRefDynamoDBTable1F15138AF3051970"
       }
     }
   }
