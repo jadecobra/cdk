@@ -16,8 +16,7 @@ def header(message):
     print(f'\t{message}')
     delimiter()
 
-def event_bridge_entry(error_type=None, service_url=None):
-    print('\t--- EventBridge Response ---');
+def create_event_bridge_entry(error_type=None, service_url=None):
     return {
         'DetailType': 'httpcall',
         'EventBusName': 'default',
@@ -30,14 +29,20 @@ def event_bridge_entry(error_type=None, service_url=None):
         })
     }
 
+class ServiceTimeoutException(Exception):
+    pass
+
+def create_service_timeout_exception_after(seconds):
+    time.sleep(seconds)
+    raise ServiceTimeoutException
 
 def service_call_failure_after(seconds=1, service_url=None):
     header('\tCalling Webservice, recent errors below threshold');
-    time.sleep(seconds)
-    print('\t--- Service Call Failure ---');
+    create_service_timeout_exception_after(0)
     error_type = '\t\tservice timeout exception'
     print(error_type)
-    return event_bridge_entry(
+    print('\t--- EventBridge Response ---');
+    return create_event_bridge_entry(
         error_type=error_type, service_url=service_url
     )
 
