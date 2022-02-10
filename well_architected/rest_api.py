@@ -113,7 +113,7 @@ class LambdaRestAPIGateway(Stack):
         )
         self.resource_arn = f"arn:aws:apigateway:{self.region}::/restapis/{self.api_id}/stages/{self.rest_api.deployment_stage.stage_name}"
 
-        ApiGatewayCloudWatch(
+        api_gateway_cloudwatch.ApiGatewayCloudWatch(
             self, 'ApiGatewayCloudWatch',
             api_id=self.api_id,
             error_topic=self.error_topic,

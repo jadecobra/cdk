@@ -12301,3 +12301,6 @@
 2022-02-10 15:25:46.930153::Time taken to synthesize stack: DynamoDBFlow::  2.2547 seconds
 2022-02-10 15:25:49.122458::Time taken to synthesize stack: DynamoDBTable::  2.1881 seconds
 2022-02-10 15:25:51.427680::Time taken to synthesize stack: EventBridgeCircuitBreaker::  2.3022 seconds
+2022-02-10 15:26:02.323995::Time taken to synthesize stack: DynamoDBFlow::  2.1880 seconds
+2022-02-10 15:26:04.517860::Time taken to synthesize stack: DynamoDBTable::  2.1906 seconds
+2022-02-10 15:26:06.683310::Time taken to synthesize stack: EventBridgeCircuitBreaker::  2.1624 seconds
