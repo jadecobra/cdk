@@ -6,34 +6,35 @@ import datetime
 
 eventbridge = boto3.client('events')
 # table = boto3.resource('dynamodb').Table(os.environ.get('ERROR_RECORDS'))
+# do resources require a connection?
 
 def call_fake_service(serviceURL):
     # In here assume we made an http request to google and it was down,
     # 10 sec hard coded delay for simulation
 
     print('--- Calling Webservice, recent errors below threshold ---');
-    time.sleep(10)
-    print('--- Service Call Failure ---');
-    errorType = 'service timeout exception'
+    time.sleep(1)
+    print('\t--- Service Call Failure ---');
+    errorType = '\t\tservice timeout exception'
     print(errorType)
 
-    print('--- EventBridge Response ---');
+    print('\t--- EventBridge Response ---');
     print(
-        eventbridge.put_events(
-            Entries=[
-                {
-                    'DetailType': 'httpcall',
-                    'EventBusName': 'default',
-                    'Source': 'cdkpatterns.eventbridge.circuitbreaker',
-                    'Time': datetime.datetime.now(),
-                    'Detail': json.dumps({
-                        'status': 'fail',
-                        'siteUrl': serviceURL,
-                        'errorType': errorType
-                    })
-                }
-            ]
-        )
+        # eventbridge.put_events(
+        #     Entries=[
+        #         {
+        #             'DetailType': 'httpcall',
+        #             'EventBusName': 'default',
+        #             'Source': 'cdkpatterns.eventbridge.circuitbreaker',
+        #             'Time': datetime.datetime.now(),
+        #             'Detail': json.dumps({
+        #                 'status': 'fail',
+        #                 'siteUrl': serviceURL,
+        #                 'errorType': errorType
+        #             })
+        #         }
+        #     ]
+        # )
     )
 
 def circuit_breaker(recentErrors=None, serviceURL=None):
