@@ -9,12 +9,6 @@ class DynamoDBFlow(cdk.Stack):
     def __init__(self, scope: cdk.Construct, id: str, sns_topic: aws_sns.ITopic = None, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        # table = Table(
-        #     self, "Hits",
-        #     partition_key=Attribute(
-        #         name="path", type=AttributeType.STRING
-        #     )
-        # )
         table = dynamodb_table.DynamoDBTableConstruct(
             self, "Hits",
             partition_key=aws_dynamodb.Attribute(
