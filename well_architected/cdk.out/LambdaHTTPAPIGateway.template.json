@@ -85,12 +85,6 @@
         "AutoDeploy": true
       }
     },
-    "ApiGatewayCloudWatchErrorTopicB01304FE": {
-      "Type": "AWS::SNS::Topic",
-      "Properties": {
-        "DisplayName": "ErrorTopic"
-      }
-    },
     "ApiGatewayCloudWatchAPIGateway4XXErrors11FFC618F": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {

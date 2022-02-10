@@ -1329,12 +1329,6 @@
         ]
       }
     },
-    "CircuitBreakerGatewayApiGatewayCloudWatchErrorTopic0CCBECAA": {
-      "Type": "AWS::SNS::Topic",
-      "Properties": {
-        "DisplayName": "ErrorTopic"
-      }
-    },
     "CircuitBreakerGatewayApiGatewayCloudWatchAPIGateway4XXErrors1A8143D67": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {

@@ -8,9 +8,10 @@ class ApiGatewayCloudWatch(WellArchitectedFrameworkConstruct):
         scope: Construct, id: str, api_id=None,
         error_topic=None, **kwargs
     ) -> None:
-        super().__init__(scope, id, **kwargs)
+        super().__init__(
+            scope, id, error_topic=error_topic, **kwargs
+        )
         self.api_id = api_id
-        self.error_topic = error_topic
         self.create_api_gateway_4xx_alarm()
         self.create_api_gateway_5xx_alarm()
         self.create_api_gateway_latency_alarm()

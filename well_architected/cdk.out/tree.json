@@ -1472,30 +1472,6 @@
                 "id": "ApiGatewayCloudWatch",
                 "path": "LambdaRestAPIGateway/LambdaRestAPIGateway/ApiGatewayCloudWatch",
                 "children": {
-                  "ErrorTopic": {
-                    "id": "ErrorTopic",
-                    "path": "LambdaRestAPIGateway/LambdaRestAPIGateway/ApiGatewayCloudWatch/ErrorTopic",
-                    "children": {
-                      "Resource": {
-                        "id": "Resource",
-                        "path": "LambdaRestAPIGateway/LambdaRestAPIGateway/ApiGatewayCloudWatch/ErrorTopic/Resource",
-                        "attributes": {
-                          "aws:cdk:cloudformation:type": "AWS::SNS::Topic",
-                          "aws:cdk:cloudformation:props": {
-                            "displayName": "ErrorTopic"
-                          }
-                        },
-                        "constructInfo": {
-                          "fqn": "@aws-cdk/aws-sns.CfnTopic",
-                          "version": "1.142.0"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "@aws-cdk/aws-sns.Topic",
-                      "version": "1.142.0"
-                    }
-                  },
                   "API Gateway 4XX Errors > 1%": {
                     "id": "API Gateway 4XX Errors > 1%",
                     "path": "LambdaRestAPIGateway/LambdaRestAPIGateway/ApiGatewayCloudWatch/API Gateway 4XX Errors > 1%",
@@ -2087,30 +2063,6 @@
             "id": "ApiGatewayCloudWatch",
             "path": "LambdaHttpApiGateway/ApiGatewayCloudWatch",
             "children": {
-              "ErrorTopic": {
-                "id": "ErrorTopic",
-                "path": "LambdaHttpApiGateway/ApiGatewayCloudWatch/ErrorTopic",
-                "children": {
-                  "Resource": {
-                    "id": "Resource",
-                    "path": "LambdaHttpApiGateway/ApiGatewayCloudWatch/ErrorTopic/Resource",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::SNS::Topic",
-                      "aws:cdk:cloudformation:props": {
-                        "displayName": "ErrorTopic"
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "@aws-cdk/aws-sns.CfnTopic",
-                      "version": "1.142.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-sns.Topic",
-                  "version": "1.142.0"
-                }
-              },
               "API Gateway 4XX Errors > 1%": {
                 "id": "API Gateway 4XX Errors > 1%",
                 "path": "LambdaHttpApiGateway/ApiGatewayCloudWatch/API Gateway 4XX Errors > 1%",
@@ -9932,30 +9884,6 @@
                 "id": "ApiGatewayCloudWatch",
                 "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/ApiGatewayCloudWatch",
                 "children": {
-                  "ErrorTopic": {
-                    "id": "ErrorTopic",
-                    "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/ApiGatewayCloudWatch/ErrorTopic",
-                    "children": {
-                      "Resource": {
-                        "id": "Resource",
-                        "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/ApiGatewayCloudWatch/ErrorTopic/Resource",
-                        "attributes": {
-                          "aws:cdk:cloudformation:type": "AWS::SNS::Topic",
-                          "aws:cdk:cloudformation:props": {
-                            "displayName": "ErrorTopic"
-                          }
-                        },
-                        "constructInfo": {
-                          "fqn": "@aws-cdk/aws-sns.CfnTopic",
-                          "version": "1.142.0"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "@aws-cdk/aws-sns.Topic",
-                      "version": "1.142.0"
-                    }
-                  },
                   "API Gateway 4XX Errors > 1%": {
                     "id": "API Gateway 4XX Errors > 1%",
                     "path": "EventBridgeCircuitBreaker/CircuitBreakerGateway/ApiGatewayCloudWatch/API Gateway 4XX Errors > 1%",
