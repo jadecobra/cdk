@@ -2,8 +2,8 @@ from aws_cdk.core import Construct, Stack
 from aws_cdk.aws_logs import LogGroup
 from aws_cdk.aws_lambda import Function
 from aws_cdk.aws_sns import ITopic
-from api_gateway_cloudwatch import ApiGatewayCloudWatch
 
+import api_gateway_cloudwatch
 import aws_cdk.aws_apigateway as api_gateway
 
 
@@ -20,9 +20,8 @@ class LambdaRestAPIGatewayConstruct(Construct):
             lambda_function=lambda_function,
 
         )
-        # self.resource_arn = f"arn:aws:apigateway:{self.region}::/restapis/{self.api_id}/stages/{self.rest_api.deployment_stage.stage_name}"
 
-        ApiGatewayCloudWatch(
+        api_gateway_cloudwatch.ApiGatewayCloudWatch(
             self, 'ApiGatewayCloudWatch',
             api_id=self.api_id,
             error_topic=self.error_topic,
