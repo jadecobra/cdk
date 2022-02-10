@@ -61,6 +61,7 @@ class WellArchitected(cdk.App):
     def create_dynamodb_table(self, error_topic):
         return DynamoDBTableStack(
             self, 'DynamoDBTable',
+            table_name='Hits',
             error_topic=error_topic,
             partition_key=aws_dynamodb.Attribute(
                 name="path",

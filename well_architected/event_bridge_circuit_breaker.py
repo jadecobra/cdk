@@ -21,16 +21,27 @@ class EventBridgeCircuitBreaker(cdk.Stack):
             type=dynamodb.AttributeType.NUMBER
         )
 
-        error_records = dynamodb.Table(
+        # error_records = dynamodb.Table(
+        #     self, "CircuitBreaker",
+        #     partition_key=dynamodb.Attribute(
+        #         name="RequestID",
+        #         type=dynamodb.AttributeType.STRING
+        #     ),
+        #     sort_key=expiration_time_sort_key,
+        #     time_to_live_attribute='ExpirationTime',
+        #     removal_policy=cdk.RemovalPolicy.DESTROY,
+        # )
+        error_records = dynamodb_table.DynamoDBTableConstruct(
             self, "CircuitBreaker",
+            table_name='CircuitBreaker',
             partition_key=dynamodb.Attribute(
                 name="RequestID",
                 type=dynamodb.AttributeType.STRING
             ),
             sort_key=expiration_time_sort_key,
             time_to_live_attribute='ExpirationTime',
-            removal_policy=cdk.RemovalPolicy.DESTROY,
-        )
+            # removal_policy=cdk.RemovalPolicy.DESTROY,
+        ).dynamodb_table
 
 
         error_records.add_global_secondary_index(

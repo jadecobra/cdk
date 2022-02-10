@@ -5,19 +5,23 @@ import well_architected
 class DynamoDBTableConstruct(well_architected.WellArchitectedFrameworkConstruct):
 
     def __init__(
-        self, scope: cdk.Construct, id: str, error_topic=None, partition_key: aws_dynamodb.Attribute=None,
+        self, scope: cdk.Construct, id: str, error_topic=None,
+            partition_key: aws_dynamodb.Attribute=None,
             sort_key: aws_dynamodb.Attribute=None,
+            time_to_live_attribute=None,
+            table_name=None,
             **kwargs
     ) -> None:
         super().__init__(scope, id, error_topic=error_topic,
             **kwargs
         )
         self.dynamodb_table = aws_dynamodb.Table(
-            self, "Hits",
+            self, id,
             billing_mode=aws_dynamodb.BillingMode.PAY_PER_REQUEST,
             partition_key=partition_key,
             sort_key=sort_key,
             removal_policy=cdk.RemovalPolicy.DESTROY,
+            time_to_live_attribute=time_to_live_attribute,
         )
         self.create_user_errors_alarm()
         self.create_throttles_alarm()
@@ -105,12 +109,15 @@ class DynamoDBTableStack(cdk.Stack):
         self, scope: cdk.Construct, id: str, error_topic=None,
             partition_key: aws_dynamodb.Attribute=None,
             sort_key: aws_dynamodb.Attribute=None,
+            time_to_live_attribute=None,
+            table_name=None,
             **kwargs
     ) -> None:
         super().__init__(scope, id, **kwargs)
         self.dynamodb_table = DynamoDBTableConstruct(
-            self, "Hits",
+            self, table_name,
             error_topic=error_topic,
             partition_key=partition_key,
-            sort_key=sort_key
+            sort_key=sort_key,
+            time_to_live_attribute=time_to_live_attribute,
         ).dynamodb_table

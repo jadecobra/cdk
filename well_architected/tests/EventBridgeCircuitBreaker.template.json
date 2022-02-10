@@ -1,6 +1,12 @@
 {
   "Resources": {
-    "CircuitBreaker4FAEA3DB": {
+    "CircuitBreakerErrorTopicBA5B2ED9": {
+      "Type": "AWS::SNS::Topic",
+      "Properties": {
+        "DisplayName": "ErrorTopic"
+      }
+    },
+    "CircuitBreaker471A1E98": {
       "Type": "AWS::DynamoDB::Table",
       "Properties": {
         "KeySchema": [
@@ -27,6 +33,7 @@
             "AttributeType": "S"
           }
         ],
+        "BillingMode": "PAY_PER_REQUEST",
         "GlobalSecondaryIndexes": [
           {
             "IndexName": "UrlIndex",
@@ -42,17 +49,9 @@
             ],
             "Projection": {
               "ProjectionType": "ALL"
-            },
-            "ProvisionedThroughput": {
-              "ReadCapacityUnits": 5,
-              "WriteCapacityUnits": 5
             }
           }
         ],
-        "ProvisionedThroughput": {
-          "ReadCapacityUnits": 5,
-          "WriteCapacityUnits": 5
-        },
         "TimeToLiveSpecification": {
           "AttributeName": "ExpirationTime",
           "Enabled": true
@@ -60,6 +59,148 @@
       },
       "UpdateReplacePolicy": "Delete",
       "DeletionPolicy": "Delete"
+    },
+    "CircuitBreakerDynamoDBUserErrors042445DA8": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": 6,
+        "AlarmActions": [
+          {
+            "Ref": "CircuitBreakerErrorTopicBA5B2ED9"
+          }
+        ],
+        "DatapointsToAlarm": 1,
+        "MetricName": "UserErrors",
+        "Namespace": "AWS/DynamoDB",
+        "Period": 300,
+        "Statistic": "Sum",
+        "Threshold": 0,
+        "TreatMissingData": "notBreaching"
+      }
+    },
+    "CircuitBreakerDynamoDBTableReadsWritesThrottled9DB6450C": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": 6,
+        "AlarmActions": [
+          {
+            "Ref": "CircuitBreakerErrorTopicBA5B2ED9"
+          }
+        ],
+        "DatapointsToAlarm": 1,
+        "Metrics": [
+          {
+            "Expression": "m1 + m2",
+            "Id": "expr_1",
+            "Label": "DynamoDB Throttles"
+          },
+          {
+            "Id": "m1",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "TableName",
+                    "Value": {
+                      "Ref": "CircuitBreaker471A1E98"
+                    }
+                  }
+                ],
+                "MetricName": "ReadThrottleEvents",
+                "Namespace": "AWS/DynamoDB"
+              },
+              "Period": 300,
+              "Stat": "Sum"
+            },
+            "ReturnData": false
+          },
+          {
+            "Id": "m2",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "TableName",
+                    "Value": {
+                      "Ref": "CircuitBreaker471A1E98"
+                    }
+                  }
+                ],
+                "MetricName": "WriteThrottleEvents",
+                "Namespace": "AWS/DynamoDB"
+              },
+              "Period": 300,
+              "Stat": "Sum"
+            },
+            "ReturnData": false
+          }
+        ],
+        "Threshold": 1,
+        "TreatMissingData": "notBreaching"
+      }
+    },
+    "CircuitBreakerCloudWatchDashBoardE40B349C": {
+      "Type": "AWS::CloudWatch::Dashboard",
+      "Properties": {
+        "DashboardBody": {
+          "Fn::Join": [
+            "",
+            [
+              "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"DynamoDB Latency\",\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"stacked\":true,\"metrics\":[[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"GetItem\",\"TableName\",\"",
+              {
+                "Ref": "CircuitBreaker471A1E98"
+              },
+              "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"UpdateItem\",\"TableName\",\"",
+              {
+                "Ref": "CircuitBreaker471A1E98"
+              },
+              "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"PutItem\",\"TableName\",\"",
+              {
+                "Ref": "CircuitBreaker471A1E98"
+              },
+              "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"DeleteItem\",\"TableName\",\"",
+              {
+                "Ref": "CircuitBreaker471A1E98"
+              },
+              "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"Query\",\"TableName\",\"",
+              {
+                "Ref": "CircuitBreaker471A1E98"
+              },
+              "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"DynamoDB Consumed Read/Write Units\",\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"stacked\":false,\"metrics\":[[\"AWS/DynamoDB\",\"ConsumedReadCapacityUnits\",\"TableName\",\"",
+              {
+                "Ref": "CircuitBreaker471A1E98"
+              },
+              "\"],[\"AWS/DynamoDB\",\"ConsumedWriteCapacityUnits\",\"TableName\",\"",
+              {
+                "Ref": "CircuitBreaker471A1E98"
+              },
+              "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"DynamoDB Throttles\",\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"stacked\":true,\"metrics\":[[\"AWS/DynamoDB\",\"ReadThrottleEvents\",\"TableName\",\"",
+              {
+                "Ref": "CircuitBreaker471A1E98"
+              },
+              "\",{\"stat\":\"Sum\"}],[\"AWS/DynamoDB\",\"WriteThrottleEvents\",\"TableName\",\"",
+              {
+                "Ref": "CircuitBreaker471A1E98"
+              },
+              "\",{\"stat\":\"Sum\"}]],\"yAxis\":{}}}]}"
+            ]
+          ]
+        }
+      }
     },
     "webserviceErrorTopic186C4EDE": {
       "Type": "AWS::SNS::Topic",
@@ -169,7 +310,7 @@
               "Resource": [
                 {
                   "Fn::GetAtt": [
-                    "CircuitBreaker4FAEA3DB",
+                    "CircuitBreaker471A1E98",
                     "Arn"
                   ]
                 },
@@ -179,7 +320,7 @@
                     [
                       {
                         "Fn::GetAtt": [
-                          "CircuitBreaker4FAEA3DB",
+                          "CircuitBreaker471A1E98",
                           "Arn"
                         ]
                       },
@@ -255,7 +396,7 @@
         "Environment": {
           "Variables": {
             "ERROR_RECORDS": {
-              "Ref": "CircuitBreaker4FAEA3DB"
+              "Ref": "CircuitBreaker471A1E98"
             }
           }
         },
@@ -585,7 +726,7 @@
               "Resource": [
                 {
                   "Fn::GetAtt": [
-                    "CircuitBreaker4FAEA3DB",
+                    "CircuitBreaker471A1E98",
                     "Arn"
                   ]
                 },
@@ -595,7 +736,7 @@
                     [
                       {
                         "Fn::GetAtt": [
-                          "CircuitBreaker4FAEA3DB",
+                          "CircuitBreaker471A1E98",
                           "Arn"
                         ]
                       },
@@ -666,7 +807,7 @@
         "Environment": {
           "Variables": {
             "ERROR_RECORDS": {
-              "Ref": "CircuitBreaker4FAEA3DB"
+              "Ref": "CircuitBreaker471A1E98"
             }
           }
         },

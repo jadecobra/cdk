@@ -7626,42 +7626,43 @@
             "id": "CircuitBreaker",
             "path": "EventBridgeCircuitBreaker/CircuitBreaker",
             "children": {
-              "Resource": {
-                "id": "Resource",
-                "path": "EventBridgeCircuitBreaker/CircuitBreaker/Resource",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::DynamoDB::Table",
-                  "aws:cdk:cloudformation:props": {
-                    "keySchema": [
-                      {
-                        "attributeName": "RequestID",
-                        "keyType": "HASH"
-                      },
-                      {
-                        "attributeName": "ExpirationTime",
-                        "keyType": "RANGE"
+              "ErrorTopic": {
+                "id": "ErrorTopic",
+                "path": "EventBridgeCircuitBreaker/CircuitBreaker/ErrorTopic",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "EventBridgeCircuitBreaker/CircuitBreaker/ErrorTopic/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::SNS::Topic",
+                      "aws:cdk:cloudformation:props": {
+                        "displayName": "ErrorTopic"
                       }
-                    ],
-                    "attributeDefinitions": [
-                      {
-                        "attributeName": "RequestID",
-                        "attributeType": "S"
-                      },
-                      {
-                        "attributeName": "ExpirationTime",
-                        "attributeType": "N"
-                      },
-                      {
-                        "attributeName": "SiteUrl",
-                        "attributeType": "S"
-                      }
-                    ],
-                    "globalSecondaryIndexes": [
-                      {
-                        "indexName": "UrlIndex",
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-sns.CfnTopic",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-sns.Topic",
+                  "version": "1.142.0"
+                }
+              },
+              "CircuitBreaker": {
+                "id": "CircuitBreaker",
+                "path": "EventBridgeCircuitBreaker/CircuitBreaker/CircuitBreaker",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "EventBridgeCircuitBreaker/CircuitBreaker/CircuitBreaker/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::DynamoDB::Table",
+                      "aws:cdk:cloudformation:props": {
                         "keySchema": [
                           {
-                            "attributeName": "SiteUrl",
+                            "attributeName": "RequestID",
                             "keyType": "HASH"
                           },
                           {
@@ -7669,42 +7670,264 @@
                             "keyType": "RANGE"
                           }
                         ],
-                        "projection": {
-                          "projectionType": "ALL"
-                        },
-                        "provisionedThroughput": {
-                          "readCapacityUnits": 5,
-                          "writeCapacityUnits": 5
+                        "attributeDefinitions": [
+                          {
+                            "attributeName": "RequestID",
+                            "attributeType": "S"
+                          },
+                          {
+                            "attributeName": "ExpirationTime",
+                            "attributeType": "N"
+                          },
+                          {
+                            "attributeName": "SiteUrl",
+                            "attributeType": "S"
+                          }
+                        ],
+                        "billingMode": "PAY_PER_REQUEST",
+                        "globalSecondaryIndexes": [
+                          {
+                            "indexName": "UrlIndex",
+                            "keySchema": [
+                              {
+                                "attributeName": "SiteUrl",
+                                "keyType": "HASH"
+                              },
+                              {
+                                "attributeName": "ExpirationTime",
+                                "keyType": "RANGE"
+                              }
+                            ],
+                            "projection": {
+                              "projectionType": "ALL"
+                            }
+                          }
+                        ],
+                        "timeToLiveSpecification": {
+                          "attributeName": "ExpirationTime",
+                          "enabled": true
                         }
                       }
-                    ],
-                    "provisionedThroughput": {
-                      "readCapacityUnits": 5,
-                      "writeCapacityUnits": 5
                     },
-                    "timeToLiveSpecification": {
-                      "attributeName": "ExpirationTime",
-                      "enabled": true
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-dynamodb.CfnTable",
+                      "version": "1.139.0"
+                    }
+                  },
+                  "ScalingRole": {
+                    "id": "ScalingRole",
+                    "path": "EventBridgeCircuitBreaker/CircuitBreaker/CircuitBreaker/ScalingRole",
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/core.Resource",
+                      "version": "1.142.0"
                     }
                   }
                 },
                 "constructInfo": {
-                  "fqn": "@aws-cdk/aws-dynamodb.CfnTable",
+                  "fqn": "@aws-cdk/aws-dynamodb.Table",
                   "version": "1.139.0"
                 }
               },
-              "ScalingRole": {
-                "id": "ScalingRole",
-                "path": "EventBridgeCircuitBreaker/CircuitBreaker/ScalingRole",
+              "DynamoDB User Errors > 0": {
+                "id": "DynamoDB User Errors > 0",
+                "path": "EventBridgeCircuitBreaker/CircuitBreaker/DynamoDB User Errors > 0",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "EventBridgeCircuitBreaker/CircuitBreaker/DynamoDB User Errors > 0/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                      "aws:cdk:cloudformation:props": {
+                        "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                        "evaluationPeriods": 6,
+                        "alarmActions": [
+                          {
+                            "Ref": "CircuitBreakerErrorTopicBA5B2ED9"
+                          }
+                        ],
+                        "datapointsToAlarm": 1,
+                        "metricName": "UserErrors",
+                        "namespace": "AWS/DynamoDB",
+                        "period": 300,
+                        "statistic": "Sum",
+                        "threshold": 0,
+                        "treatMissingData": "notBreaching"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
                 "constructInfo": {
-                  "fqn": "@aws-cdk/core.Resource",
+                  "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
+                  "version": "1.142.0"
+                }
+              },
+              "DynamoDB Table Reads--Writes Throttled": {
+                "id": "DynamoDB Table Reads--Writes Throttled",
+                "path": "EventBridgeCircuitBreaker/CircuitBreaker/DynamoDB Table Reads--Writes Throttled",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "EventBridgeCircuitBreaker/CircuitBreaker/DynamoDB Table Reads--Writes Throttled/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                      "aws:cdk:cloudformation:props": {
+                        "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                        "evaluationPeriods": 6,
+                        "alarmActions": [
+                          {
+                            "Ref": "CircuitBreakerErrorTopicBA5B2ED9"
+                          }
+                        ],
+                        "datapointsToAlarm": 1,
+                        "metrics": [
+                          {
+                            "expression": "m1 + m2",
+                            "id": "expr_1",
+                            "label": "DynamoDB Throttles"
+                          },
+                          {
+                            "metricStat": {
+                              "metric": {
+                                "metricName": "ReadThrottleEvents",
+                                "namespace": "AWS/DynamoDB",
+                                "dimensions": [
+                                  {
+                                    "name": "TableName",
+                                    "value": {
+                                      "Ref": "CircuitBreaker471A1E98"
+                                    }
+                                  }
+                                ]
+                              },
+                              "period": 300,
+                              "stat": "Sum"
+                            },
+                            "id": "m1",
+                            "returnData": false
+                          },
+                          {
+                            "metricStat": {
+                              "metric": {
+                                "metricName": "WriteThrottleEvents",
+                                "namespace": "AWS/DynamoDB",
+                                "dimensions": [
+                                  {
+                                    "name": "TableName",
+                                    "value": {
+                                      "Ref": "CircuitBreaker471A1E98"
+                                    }
+                                  }
+                                ]
+                              },
+                              "period": 300,
+                              "stat": "Sum"
+                            },
+                            "id": "m2",
+                            "returnData": false
+                          }
+                        ],
+                        "threshold": 1,
+                        "treatMissingData": "notBreaching"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
+                  "version": "1.142.0"
+                }
+              },
+              "CloudWatchDashBoard": {
+                "id": "CloudWatchDashBoard",
+                "path": "EventBridgeCircuitBreaker/CircuitBreaker/CloudWatchDashBoard",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "EventBridgeCircuitBreaker/CircuitBreaker/CloudWatchDashBoard/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::CloudWatch::Dashboard",
+                      "aws:cdk:cloudformation:props": {
+                        "dashboardBody": {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"DynamoDB Latency\",\"region\":\"",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              "\",\"stacked\":true,\"metrics\":[[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"GetItem\",\"TableName\",\"",
+                              {
+                                "Ref": "CircuitBreaker471A1E98"
+                              },
+                              "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"UpdateItem\",\"TableName\",\"",
+                              {
+                                "Ref": "CircuitBreaker471A1E98"
+                              },
+                              "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"PutItem\",\"TableName\",\"",
+                              {
+                                "Ref": "CircuitBreaker471A1E98"
+                              },
+                              "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"DeleteItem\",\"TableName\",\"",
+                              {
+                                "Ref": "CircuitBreaker471A1E98"
+                              },
+                              "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"Query\",\"TableName\",\"",
+                              {
+                                "Ref": "CircuitBreaker471A1E98"
+                              },
+                              "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"DynamoDB Consumed Read/Write Units\",\"region\":\"",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              "\",\"stacked\":false,\"metrics\":[[\"AWS/DynamoDB\",\"ConsumedReadCapacityUnits\",\"TableName\",\"",
+                              {
+                                "Ref": "CircuitBreaker471A1E98"
+                              },
+                              "\"],[\"AWS/DynamoDB\",\"ConsumedWriteCapacityUnits\",\"TableName\",\"",
+                              {
+                                "Ref": "CircuitBreaker471A1E98"
+                              },
+                              "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"DynamoDB Throttles\",\"region\":\"",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              "\",\"stacked\":true,\"metrics\":[[\"AWS/DynamoDB\",\"ReadThrottleEvents\",\"TableName\",\"",
+                              {
+                                "Ref": "CircuitBreaker471A1E98"
+                              },
+                              "\",{\"stat\":\"Sum\"}],[\"AWS/DynamoDB\",\"WriteThrottleEvents\",\"TableName\",\"",
+                              {
+                                "Ref": "CircuitBreaker471A1E98"
+                              },
+                              "\",{\"stat\":\"Sum\"}]],\"yAxis\":{}}}]}"
+                            ]
+                          ]
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-cloudwatch.CfnDashboard",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-cloudwatch.Dashboard",
                   "version": "1.142.0"
                 }
               }
             },
             "constructInfo": {
-              "fqn": "@aws-cdk/aws-dynamodb.Table",
-              "version": "1.139.0"
+              "fqn": "@aws-cdk/core.Construct",
+              "version": "1.142.0"
             }
           },
           "webservice": {
@@ -7904,7 +8127,7 @@
                                       "Resource": [
                                         {
                                           "Fn::GetAtt": [
-                                            "CircuitBreaker4FAEA3DB",
+                                            "CircuitBreaker471A1E98",
                                             "Arn"
                                           ]
                                         },
@@ -7914,7 +8137,7 @@
                                             [
                                               {
                                                 "Fn::GetAtt": [
-                                                  "CircuitBreaker4FAEA3DB",
+                                                  "CircuitBreaker471A1E98",
                                                   "Arn"
                                                 ]
                                               },
@@ -8036,7 +8259,7 @@
                         "environment": {
                           "variables": {
                             "ERROR_RECORDS": {
-                              "Ref": "CircuitBreaker4FAEA3DB"
+                              "Ref": "CircuitBreaker471A1E98"
                             }
                           }
                         },
@@ -8652,7 +8875,7 @@
                                       "Resource": [
                                         {
                                           "Fn::GetAtt": [
-                                            "CircuitBreaker4FAEA3DB",
+                                            "CircuitBreaker471A1E98",
                                             "Arn"
                                           ]
                                         },
@@ -8662,7 +8885,7 @@
                                             [
                                               {
                                                 "Fn::GetAtt": [
-                                                  "CircuitBreaker4FAEA3DB",
+                                                  "CircuitBreaker471A1E98",
                                                   "Arn"
                                                 ]
                                               },
@@ -8779,7 +9002,7 @@
                         "environment": {
                           "variables": {
                             "ERROR_RECORDS": {
-                              "Ref": "CircuitBreaker4FAEA3DB"
+                              "Ref": "CircuitBreaker471A1E98"
                             }
                           }
                         },
