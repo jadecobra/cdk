@@ -1,20 +1,22 @@
 import aws_cdk.core as cdk
-from aws_cdk.aws_dynamodb import Table, Attribute, AttributeType, BillingMode
-from well_architected import WellArchitectedFrameworkConstruct
+import aws_cdk.aws_dynamodb as aws_dynamodb
+import well_architected
 
-class DynamoDBTableConstruct(WellArchitectedFrameworkConstruct):
+class DynamoDBTableConstruct(well_architected.WellArchitectedFrameworkConstruct):
 
     def __init__(
-        self, scope: cdk.Construct, id: str, error_topic=None, **kwargs
+        self, scope: cdk.Construct, id: str, error_topic=None, partition_key: aws_dynamodb.Attribute=None,
+            sort_key: aws_dynamodb.Attribute=None,
+            **kwargs
     ) -> None:
-        super().__init__(scope, id, error_topic=error_topic, **kwargs)
-        self.dynamodb_table = Table(
+        super().__init__(scope, id, error_topic=error_topic,
+            **kwargs
+        )
+        self.dynamodb_table = aws_dynamodb.Table(
             self, "Hits",
-            billing_mode=BillingMode.PAY_PER_REQUEST,
-            partition_key=Attribute(
-                name="path",
-                type=AttributeType.STRING,
-            ),
+            billing_mode=aws_dynamodb.BillingMode.PAY_PER_REQUEST,
+            partition_key=partition_key,
+            sort_key=sort_key,
             removal_policy=cdk.RemovalPolicy.DESTROY,
         )
         self.create_user_errors_alarm()
@@ -100,10 +102,15 @@ class DynamoDBTableConstruct(WellArchitectedFrameworkConstruct):
 class DynamoDBTableStack(cdk.Stack):
 
     def __init__(
-        self, scope: cdk.Construct, id: str, error_topic=None, **kwargs
+        self, scope: cdk.Construct, id: str, error_topic=None,
+            partition_key: aws_dynamodb.Attribute=None,
+            sort_key: aws_dynamodb.Attribute=None,
+            **kwargs
     ) -> None:
         super().__init__(scope, id, **kwargs)
         self.dynamodb_table = DynamoDBTableConstruct(
             self, "Hits",
             error_topic=error_topic,
+            partition_key=partition_key,
+            sort_key=sort_key
         ).dynamodb_table

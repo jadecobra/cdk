@@ -1,5 +1,6 @@
 import os
 import lambda_function
+import dynamodb_table
 
 from aws_cdk import (
     aws_apigateway as api_gateway,

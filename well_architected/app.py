@@ -1,4 +1,3 @@
-from aws_cdk.core import App
 from rest_api import LambdaRestAPIGateway
 from web_application_firewall import WebApplicationFirewall
 from lambda_function import LambdaFunctionStack
@@ -11,9 +10,12 @@ from xray_tracer.sqs_flow import SqsFlow
 from xray_tracer.sns_flow import SnsFlow
 from xray_tracer.dynamodb_flow import DynamoDBFlow
 from xray_tracer.http_flow import HttpFlow
-import event_bridge_circuit_breaker
 
-class WellArchitected(App):
+import aws_cdk.core as cdk
+import event_bridge_circuit_breaker
+import aws_cdk.aws_dynamodb as aws_dynamodb
+
+class WellArchitected(cdk.App):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -59,7 +61,11 @@ class WellArchitected(App):
     def create_dynamodb_table(self, error_topic):
         return DynamoDBTableStack(
             self, 'DynamoDBTable',
-            error_topic=error_topic
+            error_topic=error_topic,
+            partition_key=aws_dynamodb.Attribute(
+                name="path",
+                type=aws_dynamodb.AttributeType.STRING,
+            )
         )
 
     def create_lambda_function(self, environment_variables=None, error_topic=None):

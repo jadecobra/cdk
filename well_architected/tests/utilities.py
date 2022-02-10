@@ -28,9 +28,9 @@ class TestTemplates(unittest.TestCase):
 
     maxDiff = None
 
-    @unittest.expectedFailure
-    def assert_template_equal(self, template_name, stack_name):
+    def assert_template_equal(self, stack_name):
         os.system('clear')
-        # time_it(os.system, f'cdk ls {template_name} --version-reporting=false --path-metadata=false --asset-metadata=false', description=f'synthesize stack: {template_name}')
-        # with open(f'cdk.out/{template_name}.template.json') as template:
-        #     return self.assertEqual(json.load(template), stack_name)
+        time_it(os.system, f'cdk ls {stack_name} --version-reporting=false --path-metadata=false --asset-metadata=false', description=f'synthesize stack: {stack_name}')
+        with open(f'cdk.out/{stack_name}.template.json') as template:
+            with open(f'tests/{stack_name}.template.json') as fixture:
+                return self.assertEqual(json.load(template), json.load(fixture))
