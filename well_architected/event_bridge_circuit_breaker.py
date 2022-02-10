@@ -1,6 +1,7 @@
 import os
 import lambda_function
 import dynamodb_table
+import rest_api
 
 from aws_cdk import (
     aws_apigateway as api_gateway,
@@ -42,8 +43,14 @@ class EventBridgeCircuitBreaker(cdk.Stack):
 
         environment_variables = dict(ERROR_RECORDS=error_records.table_name)
 
-        webservice = lambda_function.create_python_lambda_function(
-            self, function_name='webservice',
+        # webservice = lambda_function.create_python_lambda_function(
+        #     self, function_name='webservice',
+        #     environment_variables=environment_variables,
+        #     duration=20,
+        # )
+        webservice = lambda_function.LambdaFunctionConstruct(
+            self, 'webservice',
+            function_name='webservice',
             environment_variables=environment_variables,
             duration=20,
         )
@@ -54,10 +61,10 @@ class EventBridgeCircuitBreaker(cdk.Stack):
             duration=3,
         )
 
-        error_records.grant_read_data(webservice)
+        error_records.grant_read_data(webservice.lambda_function)
         error_records.grant_write_data(error_lambda)
 
-        webservice.add_to_role_policy(
+        webservice.lambda_function.add_to_role_policy(
             iam.PolicyStatement(
                 effect=iam.Effect.ALLOW,
                 resources=['*'],
@@ -81,5 +88,11 @@ class EventBridgeCircuitBreaker(cdk.Stack):
 
         api_gateway.LambdaRestApi(
             self, 'CircuitBreakerGateway',
-            handler=webservice
+            handler=webservice.lambda_function,
         )
+
+        # rest_api.LambdaRestAPIGatewayConstruct(
+        #     self, 'CircuitBreakerGateway',
+        #     lambda_function=webservice.lambda_function,
+        #     error_topic=webservice.error_topic,
+        # )
