@@ -14,6 +14,7 @@ from xray_tracer.http_flow import HttpFlow
 import aws_cdk.core as cdk
 import event_bridge_circuit_breaker
 import aws_cdk.aws_dynamodb as aws_dynamodb
+import event_bridge_etl
 
 class WellArchitected(cdk.App):
 
@@ -38,6 +39,7 @@ class WellArchitected(cdk.App):
         SnsFlow(self, 'SnsFlow', sns_topic=self.xray_sns_topic)
         SqsFlow(self, 'SqsFlow', sns_topic=self.xray_sns_topic)
         event_bridge_circuit_breaker.EventBridgeCircuitBreaker(self, 'EventBridgeCircuitBreaker')
+        event_bridge_etl.EventbridgeEtl(self, 'EventBridgeEtl')
 
     def create_http_api(self):
         self.http_api = LambdaHttpApiGateway(
