@@ -77,7 +77,7 @@ class EventbridgeEtl(cdk.Stack):
         bucket.grant_read(task_definition.task_role)
 
         container = task_definition.add_container('AppContainer',
-                                                  image=ecs.ContainerImage.from_asset('container/s3DataExtractionTask'),
+                                                  image=ecs.ContainerImage.from_asset('containers/s3DataExtractionTask'),
                                                   logging=logging,
                                                   environment={
                                                       'S3_BUCKET_NAME': bucket.bucket_name,
@@ -106,7 +106,7 @@ class EventbridgeEtl(cdk.Stack):
         extract_lambda = _lambda.Function(self, "extractLambdaHandler",
                                           runtime=_lambda.Runtime.NODEJS_12_X,
                                           handler="s3SqsEventConsumer.handler",
-                                          code=_lambda.Code.from_asset("lambda_fns/extract"),
+                                          code=_lambda.Code.from_asset("lambda_functions/extract"),
                                           reserved_concurrent_executions=lambda_throttle_size,
                                           environment={
                                               "CLUSTER_NAME": cluster.cluster_name,
@@ -138,7 +138,7 @@ class EventbridgeEtl(cdk.Stack):
         transform_lambda = _lambda.Function(self, "TransformLambdaHandler",
                                             runtime=_lambda.Runtime.NODEJS_12_X,
                                             handler="transform.handler",
-                                            code=_lambda.Code.from_asset("lambda_fns/transform"),
+                                            code=_lambda.Code.from_asset("lambda_functions/transform"),
                                             reserved_concurrent_executions=lambda_throttle_size,
                                             timeout=cdk.Duration.seconds(3)
                                             )
@@ -162,7 +162,7 @@ class EventbridgeEtl(cdk.Stack):
         load_lambda = _lambda.Function(self, "LoadLambdaHandler",
                                        runtime=_lambda.Runtime.NODEJS_12_X,
                                        handler="load.handler",
-                                       code=_lambda.Code.from_asset("lambda_fns/load"),
+                                       code=_lambda.Code.from_asset("lambda_functions/load"),
                                        reserved_concurrent_executions=lambda_throttle_size,
                                        timeout=cdk.Duration.seconds(3),
                                        environment={
@@ -186,10 +186,10 @@ class EventbridgeEtl(cdk.Stack):
         # Watch for all cdkpatterns.the-eventbridge-etl events and log them centrally
         ####
 
-        observe_lambda = _lambda.Function(self, "ObserveLambdaHandler",
+        observe_lambda = _lambda.Function(self, "ObserveLam bdaHandler",
                                           runtime=_lambda.Runtime.NODEJS_12_X,
                                           handler="observe.handler",
-                                          code=_lambda.Code.from_asset("lambda_fns/observe"),
+                                          code=_lambda.Code.from_asset("lambda_functions/observe"),
                                           reserved_concurrent_executions=lambda_throttle_size,
                                           timeout=cdk.Duration.seconds(3)
                                           )
