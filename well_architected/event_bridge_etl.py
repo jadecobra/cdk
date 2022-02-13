@@ -14,25 +14,28 @@ from aws_cdk import (
     core as cdk
 )
 import json
+import dynamodb_table
 
 
 class EventbridgeEtl(cdk.Stack):
 
+    # If left unchecked this pattern could "fan out" on the transform and load
+    # lambdas to the point that it consumes all resources on the account. This is
+    # why we are limiting concurrency to 2 on all 3 lambdas. Feel free to raise this.
+    lambda_throttle_size = 2
+
     def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
-
-        # If left unchecked this pattern could "fan out" on the transform and load
-        # lambdas to the point that it consumes all resources on the account. This is
-        # why we are limiting concurrency to 2 on all 3 lambdas. Feel free to raise this.
-        lambda_throttle_size = 2
 
         ####
         # DynamoDB Table
         # This is where our transformed data ends up
         ####
-        table = dynamo_db.Table(self, "TransformedData",
-                                partition_key=dynamo_db.Attribute(name="id", type=dynamo_db.AttributeType.STRING)
-                                )
+        table = dynamo_db.Table(
+            self, "TransformedData",
+            partition_key=dynamo_db.Attribute(name="id", type=dynamo_db.AttributeType.STRING
+            )
+        )
 
         ####
         # S3 Landing Bucket
@@ -107,7 +110,7 @@ class EventbridgeEtl(cdk.Stack):
                                           runtime=_lambda.Runtime.NODEJS_12_X,
                                           handler="s3SqsEventConsumer.handler",
                                           code=_lambda.Code.from_asset("lambda_functions/extract"),
-                                          reserved_concurrent_executions=lambda_throttle_size,
+                                          reserved_concurrent_executions=self.lambda_throttle_size,
                                           environment={
                                               "CLUSTER_NAME": cluster.cluster_name,
                                               "TASK_DEFINITION": task_definition.task_definition_arn,
@@ -139,7 +142,7 @@ class EventbridgeEtl(cdk.Stack):
                                             runtime=_lambda.Runtime.NODEJS_12_X,
                                             handler="transform.handler",
                                             code=_lambda.Code.from_asset("lambda_functions/transform"),
-                                            reserved_concurrent_executions=lambda_throttle_size,
+                                            reserved_concurrent_executions=self.lambda_throttle_size,
                                             timeout=cdk.Duration.seconds(3)
                                             )
         transform_lambda.add_to_role_policy(event_bridge_put_policy)
@@ -163,7 +166,7 @@ class EventbridgeEtl(cdk.Stack):
                                        runtime=_lambda.Runtime.NODEJS_12_X,
                                        handler="load.handler",
                                        code=_lambda.Code.from_asset("lambda_functions/load"),
-                                       reserved_concurrent_executions=lambda_throttle_size,
+                                       reserved_concurrent_executions=self.lambda_throttle_size,
                                        timeout=cdk.Duration.seconds(3),
                                        environment={
                                            "TABLE_NAME": table.table_name
@@ -190,7 +193,7 @@ class EventbridgeEtl(cdk.Stack):
                                           runtime=_lambda.Runtime.NODEJS_12_X,
                                           handler="observe.handler",
                                           code=_lambda.Code.from_asset("lambda_functions/observe"),
-                                          reserved_concurrent_executions=lambda_throttle_size,
+                                          reserved_concurrent_executions=self.lambda_throttle_size,
                                           timeout=cdk.Duration.seconds(3)
                                           )
 
