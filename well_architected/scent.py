@@ -1,7 +1,7 @@
-from sniffer.api import *
-from subprocess import run
+import sniffer
+import subprocess
 
-@runnable
+@sniffer.api.runnable
 def run_tests(*args):
-    if run('python -m unittest -f', shell=True).returncode == 0:
+    if subprocess.run('python -m unittest -f', shell=True).returncode == 0:
         return True

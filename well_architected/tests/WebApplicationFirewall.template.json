@@ -100,25 +100,7 @@
     "WAFAPIGatewayAssociation": {
       "Type": "AWS::WAFv2::WebACLAssociation",
       "Properties": {
-        "ResourceArn": {
-          "Fn::Join": [
-            "",
-            [
-              "arn:aws:apigateway:",
-              {
-                "Ref": "AWS::Region"
-              },
-              "::/restapis/",
-              {
-                "Fn::ImportValue": "LambdaRestAPIGateway:ExportsOutputRefLambdaAPIGateway527FD98828FC969E"
-              },
-              "/stages/",
-              {
-                "Fn::ImportValue": "LambdaRestAPIGateway:ExportsOutputRefLambdaAPIGatewayDeploymentStageprod74ACA052509E0E94"
-              }
-            ]
-          ]
-        },
+        "ResourceArn": "arn:aws:apigateway:{self.region}::/restapis/{self.api_id}/stages/{self.rest_api.deployment_stage.stage_name}",
         "WebACLArn": {
           "Fn::GetAtt": [
             "WebACL",
