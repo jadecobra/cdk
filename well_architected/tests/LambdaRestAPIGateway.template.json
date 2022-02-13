@@ -1,6 +1,6 @@
 {
   "Resources": {
-    "helloAPILogs01DC10B3": {
+    "LambdaRestAPIGatewayhelloAPILogsF3E3F115": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
         "RetentionInDays": 731
@@ -8,7 +8,7 @@
       "UpdateReplacePolicy": "Retain",
       "DeletionPolicy": "Retain"
     },
-    "LambdaAPIGateway527FD988": {
+    "LambdaRestAPIGatewayLambdaAPIGatewayB6B22A60": {
       "Type": "AWS::ApiGateway::RestApi",
       "Properties": {
         "EndpointConfiguration": {
@@ -19,7 +19,7 @@
         "Name": "hello"
       }
     },
-    "LambdaAPIGatewayCloudWatchRoleA621D6AA": {
+    "LambdaRestAPIGatewayLambdaAPIGatewayCloudWatchRole9799FEF4": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -50,50 +50,50 @@
         ]
       }
     },
-    "LambdaAPIGatewayAccount80C6550F": {
+    "LambdaRestAPIGatewayLambdaAPIGatewayAccount454B86A6": {
       "Type": "AWS::ApiGateway::Account",
       "Properties": {
         "CloudWatchRoleArn": {
           "Fn::GetAtt": [
-            "LambdaAPIGatewayCloudWatchRoleA621D6AA",
+            "LambdaRestAPIGatewayLambdaAPIGatewayCloudWatchRole9799FEF4",
             "Arn"
           ]
         }
       },
       "DependsOn": [
-        "LambdaAPIGateway527FD988"
+        "LambdaRestAPIGatewayLambdaAPIGatewayB6B22A60"
       ]
     },
-    "LambdaAPIGatewayDeploymentE937914C5c746fc97cfebd293610d5e7f299055c": {
+    "LambdaRestAPIGatewayLambdaAPIGatewayDeployment9A76D4A5413149b2932fb6dc335173c7a8fd98b8": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
-          "Ref": "LambdaAPIGateway527FD988"
+          "Ref": "LambdaRestAPIGatewayLambdaAPIGatewayB6B22A60"
         },
         "Description": "Automatically created by the RestApi construct"
       },
       "DependsOn": [
-        "LambdaAPIGatewayhelloGET71776088",
-        "LambdaAPIGatewayhello24FCF180"
+        "LambdaRestAPIGatewayLambdaAPIGatewayhelloGET66D4DFA3",
+        "LambdaRestAPIGatewayLambdaAPIGatewayhelloB066B6DE"
       ]
     },
-    "LambdaAPIGatewayDeploymentStageprod74ACA052": {
+    "LambdaRestAPIGatewayLambdaAPIGatewayDeploymentStageprodC2D49345": {
       "Type": "AWS::ApiGateway::Stage",
       "Properties": {
         "RestApiId": {
-          "Ref": "LambdaAPIGateway527FD988"
+          "Ref": "LambdaRestAPIGatewayLambdaAPIGatewayB6B22A60"
         },
         "AccessLogSetting": {
           "DestinationArn": {
             "Fn::GetAtt": [
-              "helloAPILogs01DC10B3",
+              "LambdaRestAPIGatewayhelloAPILogsF3E3F115",
               "Arn"
             ]
           },
           "Format": "$context.identity.sourceIp $context.identity.caller $context.identity.user [$context.requestTime] \"$context.httpMethod $context.resourcePath $context.protocol\" $context.status $context.responseLength $context.requestId"
         },
         "DeploymentId": {
-          "Ref": "LambdaAPIGatewayDeploymentE937914C5c746fc97cfebd293610d5e7f299055c"
+          "Ref": "LambdaRestAPIGatewayLambdaAPIGatewayDeployment9A76D4A5413149b2932fb6dc335173c7a8fd98b8"
         },
         "MethodSettings": [
           {
@@ -107,30 +107,30 @@
         "StageName": "prod"
       },
       "DependsOn": [
-        "LambdaAPIGatewayAccount80C6550F"
+        "LambdaRestAPIGatewayLambdaAPIGatewayAccount454B86A6"
       ]
     },
-    "LambdaAPIGatewayhello24FCF180": {
+    "LambdaRestAPIGatewayLambdaAPIGatewayhelloB066B6DE": {
       "Type": "AWS::ApiGateway::Resource",
       "Properties": {
         "ParentId": {
           "Fn::GetAtt": [
-            "LambdaAPIGateway527FD988",
+            "LambdaRestAPIGatewayLambdaAPIGatewayB6B22A60",
             "RootResourceId"
           ]
         },
         "PathPart": "hello",
         "RestApiId": {
-          "Ref": "LambdaAPIGateway527FD988"
+          "Ref": "LambdaRestAPIGatewayLambdaAPIGatewayB6B22A60"
         }
       }
     },
-    "LambdaAPIGatewayhelloGETApiPermissionLambdaRestAPIGatewayLambdaAPIGateway33BA6F57GEThello1DD4CFC3": {
+    "LambdaRestAPIGatewayLambdaAPIGatewayhelloGETApiPermissionLambdaRestAPIGatewayLambdaAPIGateway081874FAGEThelloBE7AB926": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Fn::ImportValue": "LambdaFunction:ExportsOutputFnGetAtthitcounterLambdaFunctionB862C182Arn3B74EE41"
+          "Fn::ImportValue": "HitCounter:ExportsOutputFnGetAtthitcounter16ED794AArn690230F8"
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -151,11 +151,11 @@
               },
               ":",
               {
-                "Ref": "LambdaAPIGateway527FD988"
+                "Ref": "LambdaRestAPIGatewayLambdaAPIGatewayB6B22A60"
               },
               "/",
               {
-                "Ref": "LambdaAPIGatewayDeploymentStageprod74ACA052"
+                "Ref": "LambdaRestAPIGatewayLambdaAPIGatewayDeploymentStageprodC2D49345"
               },
               "/GET/hello"
             ]
@@ -163,12 +163,12 @@
         }
       }
     },
-    "LambdaAPIGatewayhelloGETApiPermissionTestLambdaRestAPIGatewayLambdaAPIGateway33BA6F57GEThello193DFB32": {
+    "LambdaRestAPIGatewayLambdaAPIGatewayhelloGETApiPermissionTestLambdaRestAPIGatewayLambdaAPIGateway081874FAGEThello502202EB": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Fn::ImportValue": "LambdaFunction:ExportsOutputFnGetAtthitcounterLambdaFunctionB862C182Arn3B74EE41"
+          "Fn::ImportValue": "HitCounter:ExportsOutputFnGetAtthitcounter16ED794AArn690230F8"
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -189,7 +189,7 @@
               },
               ":",
               {
-                "Ref": "LambdaAPIGateway527FD988"
+                "Ref": "LambdaRestAPIGatewayLambdaAPIGatewayB6B22A60"
               },
               "/test-invoke-stage/GET/hello"
             ]
@@ -197,15 +197,15 @@
         }
       }
     },
-    "LambdaAPIGatewayhelloGET71776088": {
+    "LambdaRestAPIGatewayLambdaAPIGatewayhelloGET66D4DFA3": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
         "HttpMethod": "GET",
         "ResourceId": {
-          "Ref": "LambdaAPIGatewayhello24FCF180"
+          "Ref": "LambdaRestAPIGatewayLambdaAPIGatewayhelloB066B6DE"
         },
         "RestApiId": {
-          "Ref": "LambdaAPIGateway527FD988"
+          "Ref": "LambdaRestAPIGatewayLambdaAPIGatewayB6B22A60"
         },
         "AuthorizationType": "NONE",
         "Integration": {
@@ -233,7 +233,7 @@
                 },
                 ":lambda:path/2015-03-31/functions/",
                 {
-                  "Fn::ImportValue": "LambdaFunction:ExportsOutputFnGetAtthitcounterLambdaFunctionB862C182Arn3B74EE41"
+                  "Fn::ImportValue": "HitCounter:ExportsOutputFnGetAtthitcounter16ED794AArn690230F8"
                 },
                 "/invocations"
               ]
@@ -250,13 +250,7 @@
         ]
       }
     },
-    "ApiGatewayCloudWatchErrorTopicB01304FE": {
-      "Type": "AWS::SNS::Topic",
-      "Properties": {
-        "DisplayName": "ErrorTopic"
-      }
-    },
-    "ApiGatewayCloudWatchAPIGateway4XXErrors11FFC618F": {
+    "LambdaRestAPIGatewayApiGatewayCloudWatchAPIGateway4XXErrors1B80E234C": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
@@ -282,7 +276,7 @@
                   {
                     "Name": "ApiId",
                     "Value": {
-                      "Ref": "LambdaAPIGateway527FD988"
+                      "Ref": "LambdaRestAPIGatewayLambdaAPIGatewayB6B22A60"
                     }
                   }
                 ],
@@ -304,7 +298,7 @@
                   {
                     "Name": "ApiId",
                     "Value": {
-                      "Ref": "LambdaAPIGateway527FD988"
+                      "Ref": "LambdaRestAPIGatewayLambdaAPIGatewayB6B22A60"
                     }
                   }
                 ],
@@ -322,7 +316,7 @@
         "TreatMissingData": "notBreaching"
       }
     },
-    "ApiGatewayCloudWatchAPIGateway5XXErrors0001B6606": {
+    "LambdaRestAPIGatewayApiGatewayCloudWatchAPIGateway5XXErrors030AE5F1F": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
@@ -343,7 +337,7 @@
                   {
                     "Name": "ApiId",
                     "Value": {
-                      "Ref": "LambdaAPIGateway527FD988"
+                      "Ref": "LambdaRestAPIGatewayLambdaAPIGatewayB6B22A60"
                     }
                   }
                 ],
@@ -361,7 +355,7 @@
         "TreatMissingData": "notBreaching"
       }
     },
-    "ApiGatewayCloudWatchAPIp99latencyalarm1s6545CFD1": {
+    "LambdaRestAPIGatewayApiGatewayCloudWatchAPIp99latencyalarm1sEDD6F760": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
@@ -382,7 +376,7 @@
                   {
                     "Name": "ApiId",
                     "Value": {
-                      "Ref": "LambdaAPIGateway527FD988"
+                      "Ref": "LambdaRestAPIGatewayLambdaAPIGatewayB6B22A60"
                     }
                   }
                 ],
@@ -400,7 +394,7 @@
         "TreatMissingData": "notBreaching"
       }
     },
-    "ApiGatewayCloudWatchCloudWatchDashBoard278188F3": {
+    "LambdaRestAPIGatewayApiGatewayCloudWatchCloudWatchDashBoard79B38CA0": {
       "Type": "AWS::CloudWatch::Dashboard",
       "Properties": {
         "DashboardBody": {
@@ -413,7 +407,7 @@
               },
               "\",\"stacked\":false,\"metrics\":[[\"AWS/ApiGateway\",\"Count\",\"ApiId\",\"",
               {
-                "Ref": "LambdaAPIGateway527FD988"
+                "Ref": "LambdaRestAPIGatewayLambdaAPIGatewayB6B22A60"
               },
               "\",{\"label\":\"# Requests\",\"period\":900,\"stat\":\"Sum\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"API GW Latency\",\"region\":\"",
               {
@@ -421,15 +415,15 @@
               },
               "\",\"stacked\":true,\"metrics\":[[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
               {
-                "Ref": "LambdaAPIGateway527FD988"
+                "Ref": "LambdaRestAPIGatewayLambdaAPIGatewayB6B22A60"
               },
               "\",{\"label\":\"API Latency p50\",\"period\":900,\"stat\":\"p50\"}],[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
               {
-                "Ref": "LambdaAPIGateway527FD988"
+                "Ref": "LambdaRestAPIGatewayLambdaAPIGatewayB6B22A60"
               },
               "\",{\"label\":\"API Latency p90\",\"period\":900,\"stat\":\"p90\"}],[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
               {
-                "Ref": "LambdaAPIGateway527FD988"
+                "Ref": "LambdaRestAPIGatewayLambdaAPIGatewayB6B22A60"
               },
               "\",{\"label\":\"API Latency p99\",\"period\":900,\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"API GW Errors\",\"region\":\"",
               {
@@ -437,11 +431,11 @@
               },
               "\",\"stacked\":true,\"metrics\":[[\"AWS/ApiGateway\",\"4XXError\",\"ApiId\",\"",
               {
-                "Ref": "LambdaAPIGateway527FD988"
+                "Ref": "LambdaRestAPIGatewayLambdaAPIGatewayB6B22A60"
               },
               "\",{\"label\":\"4XX Errors\",\"period\":900,\"stat\":\"Sum\"}],[\"AWS/ApiGateway\",\"5XXError\",\"ApiId\",\"",
               {
-                "Ref": "LambdaAPIGateway527FD988"
+                "Ref": "LambdaRestAPIGatewayLambdaAPIGatewayB6B22A60"
               },
               "\",{\"label\":\"5XX Errors\",\"period\":900,\"stat\":\"Sum\"}]],\"yAxis\":{}}}]}"
             ]
@@ -451,14 +445,14 @@
     }
   },
   "Outputs": {
-    "LambdaAPIGatewayEndpoint5DC258E1": {
+    "LambdaRestAPIGatewayLambdaAPIGatewayEndpoint55E68789": {
       "Value": {
         "Fn::Join": [
           "",
           [
             "https://",
             {
-              "Ref": "LambdaAPIGateway527FD988"
+              "Ref": "LambdaRestAPIGatewayLambdaAPIGatewayB6B22A60"
             },
             ".execute-api.",
             {
@@ -470,27 +464,11 @@
             },
             "/",
             {
-              "Ref": "LambdaAPIGatewayDeploymentStageprod74ACA052"
+              "Ref": "LambdaRestAPIGatewayLambdaAPIGatewayDeploymentStageprodC2D49345"
             },
             "/"
           ]
         ]
-      }
-    },
-    "ExportsOutputRefLambdaAPIGateway527FD98828FC969E": {
-      "Value": {
-        "Ref": "LambdaAPIGateway527FD988"
-      },
-      "Export": {
-        "Name": "LambdaRestAPIGateway:ExportsOutputRefLambdaAPIGateway527FD98828FC969E"
-      }
-    },
-    "ExportsOutputRefLambdaAPIGatewayDeploymentStageprod74ACA052509E0E94": {
-      "Value": {
-        "Ref": "LambdaAPIGatewayDeploymentStageprod74ACA052"
-      },
-      "Export": {
-        "Name": "LambdaRestAPIGateway:ExportsOutputRefLambdaAPIGatewayDeploymentStageprod74ACA052509E0E94"
       }
     }
   }

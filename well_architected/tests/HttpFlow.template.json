@@ -50,7 +50,7 @@
         "Description": "AWS XRay SDK Lambda Layer"
       }
     },
-    "httpLambdaFunctionServiceRoleBB063197": {
+    "httpServiceRole196012CB": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -81,7 +81,7 @@
         ]
       }
     },
-    "httpLambdaFunctionServiceRoleDefaultPolicy5FD0C40D": {
+    "httpServiceRoleDefaultPolicy147444D9": {
       "Type": "AWS::IAM::Policy",
       "Properties": {
         "PolicyDocument": {
@@ -97,15 +97,15 @@
           ],
           "Version": "2012-10-17"
         },
-        "PolicyName": "httpLambdaFunctionServiceRoleDefaultPolicy5FD0C40D",
+        "PolicyName": "httpServiceRoleDefaultPolicy147444D9",
         "Roles": [
           {
-            "Ref": "httpLambdaFunctionServiceRoleBB063197"
+            "Ref": "httpServiceRole196012CB"
           }
         ]
       }
     },
-    "httpLambdaFunction9ED72A36": {
+    "http08BB5357": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
@@ -148,7 +148,7 @@
         },
         "Role": {
           "Fn::GetAtt": [
-            "httpLambdaFunctionServiceRoleBB063197",
+            "httpServiceRole196012CB",
             "Arn"
           ]
         },
@@ -165,17 +165,17 @@
         }
       },
       "DependsOn": [
-        "httpLambdaFunctionServiceRoleDefaultPolicy5FD0C40D",
-        "httpLambdaFunctionServiceRoleBB063197"
+        "httpServiceRoleDefaultPolicy147444D9",
+        "httpServiceRole196012CB"
       ]
     },
-    "httpLambdaFunctionAllowInvokeXRayTracerSnsFanOutTopic4E706A09F3311B40": {
+    "httpAllowInvokeXRayTracerSnsFanOutTopic4E706A096D07D92D": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "httpLambdaFunction9ED72A36",
+            "http08BB5357",
             "Arn"
           ]
         },
@@ -185,7 +185,7 @@
         }
       }
     },
-    "httpLambdaFunctionXRayTracerSnsFanOutTopic38CFBD2A": {
+    "httpXRayTracerSnsFanOutTopic138D6018": {
       "Type": "AWS::SNS::Subscription",
       "Properties": {
         "Protocol": "lambda",
@@ -194,7 +194,7 @@
         },
         "Endpoint": {
           "Fn::GetAtt": [
-            "httpLambdaFunction9ED72A36",
+            "http08BB5357",
             "Arn"
           ]
         }
@@ -225,7 +225,7 @@
                   {
                     "Name": "FunctionName",
                     "Value": {
-                      "Ref": "httpLambdaFunction9ED72A36"
+                      "Ref": "http08BB5357"
                     }
                   }
                 ],
@@ -245,7 +245,7 @@
                   {
                     "Name": "FunctionName",
                     "Value": {
-                      "Ref": "httpLambdaFunction9ED72A36"
+                      "Ref": "http08BB5357"
                     }
                   }
                 ],
@@ -277,7 +277,7 @@
           {
             "Name": "FunctionName",
             "Value": {
-              "Ref": "httpLambdaFunction9ED72A36"
+              "Ref": "http08BB5357"
             }
           }
         ],
@@ -314,7 +314,7 @@
                   {
                     "Name": "FunctionName",
                     "Value": {
-                      "Ref": "httpLambdaFunction9ED72A36"
+                      "Ref": "http08BB5357"
                     }
                   }
                 ],
@@ -334,7 +334,7 @@
                   {
                     "Name": "FunctionName",
                     "Value": {
-                      "Ref": "httpLambdaFunction9ED72A36"
+                      "Ref": "http08BB5357"
                     }
                   }
                 ],
@@ -364,11 +364,11 @@
               },
               "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
               {
-                "Ref": "httpLambdaFunction9ED72A36"
+                "Ref": "http08BB5357"
               },
               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
               {
-                "Ref": "httpLambdaFunction9ED72A36"
+                "Ref": "http08BB5357"
               },
               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
               {
@@ -376,15 +376,15 @@
               },
               "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
               {
-                "Ref": "httpLambdaFunction9ED72A36"
+                "Ref": "http08BB5357"
               },
               "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
               {
-                "Ref": "httpLambdaFunction9ED72A36"
+                "Ref": "http08BB5357"
               },
               "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
               {
-                "Ref": "httpLambdaFunction9ED72A36"
+                "Ref": "http08BB5357"
               },
               "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Throttle %\",\"region\":\"",
               {
@@ -392,11 +392,11 @@
               },
               "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
               {
-                "Ref": "httpLambdaFunction9ED72A36"
+                "Ref": "http08BB5357"
               },
               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
               {
-                "Ref": "httpLambdaFunction9ED72A36"
+                "Ref": "http08BB5357"
               },
               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
             ]
