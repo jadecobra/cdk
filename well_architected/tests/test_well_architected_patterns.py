@@ -8,6 +8,7 @@ class TestWellArchitectedPatterns(TestTemplates):
             'DynamoDBFlow',
             'DynamoDBTable',
             'EventBridgeCircuitBreaker',
+            'EventBridgeEtl',
             'LambdaHttpApiGateway',
             'HttpFlow',
             'LambdaFunction',
