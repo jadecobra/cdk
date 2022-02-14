@@ -24,17 +24,6 @@ class EventbridgeEtl(cdk.Stack):
     # why we are limiting concurrency to 2 on all 3 lambdas. Feel free to raise this.
     lambda_throttle_size = 2
 
-    @staticmethod
-    def create_iam_policy(resources=None, actions=None):
-        return iam.PolicyStatement(
-            effect=iam.Effect.ALLOW,
-            resources=resources if resources else ["*"],
-            actions=actions
-        )
-
-    def create_event_bridge_iam_policy(self):
-        return self.create_iam_policy(actions=['events:PutEvents'])
-
     def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
         self.upload_bucket = s3.Bucket(self, "LandingBucket")
@@ -151,18 +140,25 @@ class EventbridgeEtl(cdk.Stack):
         transform_function.add_to_role_policy(self.event_bridge_put_policy)
 
         # Create EventBridge rule to route extraction events
-        transform_rule = events.Rule(
-            self, 'transformRule',
+        # transform_rule = events.Rule(
+        #     self, 'transformRule',
+        #     description='Data extracted from S3, Needs transformation',
+        #     event_pattern=events.EventPattern(
+        #         source=['cdkpatterns.the-eventbridge-etl'],
+        #         detail_type=['s3RecordExtraction'],
+        #         detail={
+        #             "status": ["extracted"]
+        #         }
+        #     )
+        # )
+        transform_rule = self.create_event_bridge_rule(
+            name='transform',
             description='Data extracted from S3, Needs transformation',
-            event_pattern=events.EventPattern(
-                source=['cdkpatterns.the-eventbridge-etl'],
-                detail_type=['s3RecordExtraction'],
-                detail={
-                    "status": ["extracted"]
-                }
-            )
+            detail_type='s3RecordExtraction',
+            status="extracted"
         )
-        transform_rule.add_target(event_bridge_targets.LambdaFunction(handler=transform_function))
+        transform_rule.add_target(event_bridge_targets.LambdaFunction(handler=transform_function)
+        )
 
         ####
         # Load
@@ -235,4 +231,30 @@ class EventbridgeEtl(cdk.Stack):
         bucket.add_event_notification(
             s3.EventType.OBJECT_CREATED,
             s3_notifications.SqsDestination(sqs_queue)
+        )
+
+    @staticmethod
+    def create_iam_policy(resources=None, actions=None):
+        return iam.PolicyStatement(
+            effect=iam.Effect.ALLOW,
+            resources=resources if resources else ["*"],
+            actions=actions
+        )
+
+    def create_event_bridge_iam_policy(self):
+        return self.create_iam_policy(actions=['events:PutEvents'])
+
+    def create_event_bridge_rule(
+        self, name=None, description=None, detail_type=None, status=None
+    ):
+        return events.Rule(
+            self, f'{name}Rule',
+            description=description,
+            event_pattern=events.EventPattern(
+                source=['cdkpatterns.the-eventbridge-etl'],
+                detail_type=[detail_type],
+                detail={
+                    "status": [status]
+                }
+            )
         )
