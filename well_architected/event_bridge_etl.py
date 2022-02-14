@@ -96,7 +96,6 @@ class EventbridgeEtl(cdk.Stack):
         transformer = self.create_lambda_function(
             logical_name="TransformLambdaHandler",
             function_name="transform",
-            event_bridge_rule_name='transform',
             event_bridge_rule_description='Data extracted from S3, Needs transformation',
             event_bridge_detail_type='s3RecordExtraction',
             event_bridge_detail_status="extracted",
@@ -112,7 +111,6 @@ class EventbridgeEtl(cdk.Stack):
             environment_variables={
                 "TABLE_NAME": self.transformed_data.table_name
             },
-            event_bridge_rule_name='load',
             event_bridge_rule_description='Load Transformed Data to DynamoDB',
             event_bridge_detail_type='transform',
             event_bridge_detail_status="transformed",
@@ -132,14 +130,12 @@ class EventbridgeEtl(cdk.Stack):
         self.create_lambda_function(
             logical_name="ObserveLam bdaHandler",
             function_name="observe",
-            event_bridge_rule_name='observe',
             event_bridge_rule_description='all events are caught here and logged centrally'
         )
 
     def create_lambda_function(
         self, logical_name=None, function_name=None,
         concurrent_executions=2, timeout=3, environment_variables=None,
-        event_bridge_rule_name=None,
         event_bridge_rule_description=None,
         event_bridge_detail_type=None,
         event_bridge_detail_status=None
@@ -153,9 +149,9 @@ class EventbridgeEtl(cdk.Stack):
             timeout=cdk.Duration.seconds(timeout),
             environment=environment_variables,
         )
-        if event_bridge_rule_name:
+        if event_bridge_rule_description:
             self.create_event_bridge_rule(
-                name=event_bridge_rule_name,
+                name=function_name,
                 description=event_bridge_rule_description,
                 detail_type=event_bridge_detail_type,
                 status=event_bridge_detail_status,
