@@ -139,15 +139,13 @@ class EventbridgeEtl(cdk.Stack):
 
         transform_function.add_to_role_policy(self.event_bridge_put_policy)
 
-        transform_rule = self.create_event_bridge_rule(
+        self.create_event_bridge_rule(
             name='transform',
             description='Data extracted from S3, Needs transformation',
             detail_type='s3RecordExtraction',
             status="extracted",
             lambda_function=transform_function,
         )
-        # transform_rule.add_target(event_bridge_targets.LambdaFunction(handler=transform_function)
-        # )
 
         ####
         # Load
@@ -168,14 +166,13 @@ class EventbridgeEtl(cdk.Stack):
         load_function.add_to_role_policy(self.event_bridge_put_policy)
         self.transformed_data.grant_read_write_data(load_function)
 
-        load_rule = self.create_event_bridge_rule(
+        self.create_event_bridge_rule(
             name='load',
             description='Load Transformed Data to DynamoDB',
             detail_type='transform',
             status="transformed",
             lambda_function=load_function,
         )
-        # load_rule.add_target(event_bridge_targets.LambdaFunction(handler=load_function))
 
         ####
         # Observe
@@ -191,13 +188,11 @@ class EventbridgeEtl(cdk.Stack):
             timeout=cdk.Duration.seconds(3)
         )
 
-        observe_rule = self.create_event_bridge_rule(
+        self.create_event_bridge_rule(
             name='observe',
             description='all events are caught here and logged centrally',
             lambda_function=observe_function,
         )
-
-        # observe_rule.add_target(event_bridge_targets.LambdaFunction(handler=observe_function))
 
     def create_dynamodb_table(self):
         return dynamodb_table.DynamoDBTableConstruct(
