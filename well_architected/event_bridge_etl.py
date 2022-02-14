@@ -136,9 +136,9 @@ class EventbridgeEtl(cdk.Stack):
         #     timeout=cdk.Duration.seconds(3)
         # )
 
-        transformer = self.create_lambda_function()(
+        transformer = self.create_lambda_function(
             logical_name="TransformLambdaHandler",
-            function="transform",
+            function_name="transform",
         )
 
 
