@@ -27,16 +27,12 @@ class EventbridgeEtl(cdk.Stack):
     def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        table = dynamodb_table.DynamoDBTableConstruct(
+        dynamodb_table = dynamodb_table.DynamoDBTableConstruct(
             self, 'TransformedData',
             partition_key=dynamo_db.Attribute(name="id", type=dynamo_db.AttributeType.STRING
             )
         ).dynamodb_table
 
-        ####
-        # S3 Landing Bucket
-        # This is where the user uploads the file to be transformed
-        ####
         upload_bucket = s3.Bucket(self, "LandingBucket")
 
         ####
@@ -165,11 +161,11 @@ class EventbridgeEtl(cdk.Stack):
                                        reserved_concurrent_executions=self.lambda_throttle_size,
                                        timeout=cdk.Duration.seconds(3),
                                        environment={
-                                           "TABLE_NAME": table.table_name
+                                           "TABLE_NAME": dynamodb_table.table_name
                                        }
                                        )
         load_lambda.add_to_role_policy(event_bridge_put_policy)
-        table.grant_read_write_data(load_lambda)
+        dynamodb_table.grant_read_write_data(load_lambda)
 
         load_rule = events.Rule(self, 'loadRule',
                                 description='Data transformed, Needs loaded into dynamodb',
