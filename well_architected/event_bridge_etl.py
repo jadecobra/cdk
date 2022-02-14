@@ -184,13 +184,18 @@ class EventbridgeEtl(cdk.Stack):
         # Watch for all cdkpatterns.the-eventbridge-etl events and log them centrally
         ####
 
-        observer = _lambda.Function(
-            self, "ObserveLam bdaHandler",
-            runtime=_lambda.Runtime.NODEJS_12_X,
-            handler="observe.handler",
-            code=_lambda.Code.from_asset("lambda_functions/observe"),
-            reserved_concurrent_executions=self.lambda_throttle_size,
-            timeout=cdk.Duration.seconds(3)
+        # observer = _lambda.Function(
+        #     self, "ObserveLam bdaHandler",
+        #     runtime=_lambda.Runtime.NODEJS_12_X,
+        #     handler="observe.handler",
+        #     code=_lambda.Code.from_asset("lambda_functions/observe"),
+        #     reserved_concurrent_executions=self.lambda_throttle_size,
+        #     timeout=cdk.Duration.seconds(3)
+        # )
+        observer = self.create_lambda_function(
+            logical_name="ObserveLam bdaHandler",
+            function_name="observe",
+            timeout=3
         )
 
         self.create_event_bridge_rule(
