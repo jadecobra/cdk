@@ -1112,9 +1112,10 @@
             "CONTAINER_NAME": "AppContainer"
           }
         },
-        "Handler": "s3SqsEventConsumer.handler",
+        "Handler": "extract.handler",
         "ReservedConcurrentExecutions": 2,
-        "Runtime": "nodejs12.x"
+        "Runtime": "nodejs12.x",
+        "Timeout": 3
       },
       "DependsOn": [
         "extractLambdaHandlerServiceRoleDefaultPolicyB880CB8F",

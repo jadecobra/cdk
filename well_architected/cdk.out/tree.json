@@ -11946,9 +11946,10 @@
                         "CONTAINER_NAME": "AppContainer"
                       }
                     },
-                    "handler": "s3SqsEventConsumer.handler",
+                    "handler": "extract.handler",
                     "reservedConcurrentExecutions": 2,
-                    "runtime": "nodejs12.x"
+                    "runtime": "nodejs12.x",
+                    "timeout": 3
                   }
                 },
                 "constructInfo": {

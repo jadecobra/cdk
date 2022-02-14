@@ -103,7 +103,7 @@ class EventbridgeEtl(cdk.Stack):
         # )
         extractor = self.create_lambda_function(
             logical_name="extractLambdaHandler",
-            function_name="s3SqsEventConsumer",
+            function_name='extract',
             environment_variables={
                 "CLUSTER_NAME": self.ecs_cluster.cluster_name,
                 "TASK_DEFINITION": self.task_definition.task_definition_arn,
