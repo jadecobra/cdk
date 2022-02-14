@@ -83,20 +83,25 @@ class EventbridgeEtl(cdk.Stack):
             lambda_event_sources.SqsEventSource(queue=self.upload_queue)
         )
 
-        for policy in (
-            self.create_iam_policy(
-                resources=[self.ecs_task_definition.task_definition_arn],
-                actions=['ecs:RunTask']
-            ),
-            self.create_iam_policy(
-                resources=[
-                    self.ecs_task_definition.obtain_execution_role().role_arn,
-                    self.ecs_task_definition.task_role.role_arn
-                ],
-                actions=['iam:PassRole']
-            )
-        ):
-            extractor.add_to_role_policy(policy)
+        # for policy in (
+        #     self.create_iam_policy(
+        #         resources=[self.ecs_task_definition.task_definition_arn],
+        #         actions=['ecs:RunTask']
+        #     ),
+        #     self.create_iam_policy(
+        #         resources=[
+        #             self.ecs_task_definition.obtain_execution_role().role_arn,
+        #             self.ecs_task_definition.task_role.role_arn
+        #         ],
+        #         actions=['iam:PassRole']
+        #     )
+        # ):
+        #     # extractor.add_to_role_policy(policy)
+        #     self.add_policies_to_lambda_functions(extractor, policy=policy)
+        self.grant_ecs_task_permissions(
+            ecs_task_definition=self.ecs_task_definition,
+            lambda_function=extractor
+        )
 
 
 
@@ -227,6 +232,21 @@ class EventbridgeEtl(cdk.Stack):
         for lambda_function in lambda_functions:
             lambda_function.add_to_role_policy(policy)
 
+    def grant_ecs_task_permissions(self, ecs_task_definition=None, lambda_function=None):
+        for policy in (
+            self.create_iam_policy(
+                resources=[ecs_task_definition.task_definition_arn],
+                actions=['ecs:RunTask']
+            ),
+            self.create_iam_policy(
+                resources=[
+                    ecs_task_definition.obtain_execution_role().role_arn,
+                    ecs_task_definition.task_role.role_arn
+                ],
+                actions=['iam:PassRole']
+            )
+        ):
+            self.add_policies_to_lambda_functions(lambda_function, policy=policy)
 
     @staticmethod
     def get_subnet_ids(vpc):
