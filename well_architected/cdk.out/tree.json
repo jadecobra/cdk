@@ -12630,7 +12630,7 @@
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::Events::Rule",
                   "aws:cdk:cloudformation:props": {
-                    "description": "Data transformed, Needs loaded into dynamodb",
+                    "description": "Load Transformed Data to DynamoDB",
                     "eventPattern": {
                       "detail": {
                         "status": [

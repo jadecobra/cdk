@@ -10,7 +10,7 @@ from aws_cdk import (
     aws_ecs as ecs,
     aws_logs as logs,
     aws_events as events,
-    aws_events_targets as targets,
+    aws_events_targets as event_bridge_targets,
     core as cdk
 )
 import json
@@ -112,7 +112,9 @@ class EventbridgeEtl(cdk.Stack):
                 "CONTAINER_NAME": self.extraction_task.container_name
             }
         )
-        extract_function.add_event_source(lambda_event_sources.SqsEventSource(queue=self.upload_queue))
+        extract_function.add_event_source(
+            lambda_event_sources.SqsEventSource(queue=self.upload_queue)
+        )
 
         for policy in (
             self.event_bridge_put_policy,
@@ -167,26 +169,31 @@ class EventbridgeEtl(cdk.Stack):
         # load the transformed data in dynamodb
         ####
 
-        load_function = _lambda.Function(self, "LoadLambdaHandler",
-                                       runtime=_lambda.Runtime.NODEJS_12_X,
-                                       handler="load.handler",
-                                       code=_lambda.Code.from_asset("lambda_functions/load"),
-                                       reserved_concurrent_executions=self.lambda_throttle_size,
-                                       timeout=cdk.Duration.seconds(3),
-                                       environment={
-                                           "TABLE_NAME": self.transformed_data.table_name
-                                       }
-                                       )
+        load_function = _lambda.Function(
+            self, "LoadLambdaHandler",
+            runtime=_lambda.Runtime.NODEJS_12_X,
+            handler="load.handler",
+            code=_lambda.Code.from_asset("lambda_functions/load"),
+            reserved_concurrent_executions=self.lambda_throttle_size,
+            timeout=cdk.Duration.seconds(3),
+            environment={
+                "TABLE_NAME": self.transformed_data.table_name
+            }
+        )
         load_function.add_to_role_policy(self.event_bridge_put_policy)
         self.transformed_data.grant_read_write_data(load_function)
 
-        load_rule = events.Rule(self, 'loadRule',
-                                description='Data transformed, Needs loaded into dynamodb',
-                                event_pattern=events.EventPattern(source=['cdkpatterns.the-eventbridge-etl'],
-                                                                  detail_type=['transform'],
-                                                                  detail={
-                                                                      "status": ["transformed"]
-                                                                  }))
+        load_rule = events.Rule(
+            self, 'loadRule',
+            description='Load Transformed Data to DynamoDB',
+            event_pattern=events.EventPattern(
+                source=['cdkpatterns.the-eventbridge-etl'],
+                detail_type=['transform'],
+                detail={
+                    "status": ["transformed"]
+                }
+            )
+        )
         load_rule.add_target(event_bridge_targets.LambdaFunction(handler=load_function))
 
         ####
