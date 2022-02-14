@@ -143,10 +143,11 @@ class EventbridgeEtl(cdk.Stack):
             name='transform',
             description='Data extracted from S3, Needs transformation',
             detail_type='s3RecordExtraction',
-            status="extracted"
+            status="extracted",
+            lambda_function=transform_function,
         )
-        transform_rule.add_target(event_bridge_targets.LambdaFunction(handler=transform_function)
-        )
+        # transform_rule.add_target(event_bridge_targets.LambdaFunction(handler=transform_function)
+        # )
 
         ####
         # Load
@@ -171,9 +172,10 @@ class EventbridgeEtl(cdk.Stack):
             name='load',
             description='Load Transformed Data to DynamoDB',
             detail_type='transform',
-            status="transformed"
+            status="transformed",
+            lambda_function=load_function,
         )
-        load_rule.add_target(event_bridge_targets.LambdaFunction(handler=load_function))
+        # load_rule.add_target(event_bridge_targets.LambdaFunction(handler=load_function))
 
         ####
         # Observe
@@ -192,10 +194,10 @@ class EventbridgeEtl(cdk.Stack):
         observe_rule = self.create_event_bridge_rule(
             name='observe',
             description='all events are caught here and logged centrally',
-
+            lambda_function=observe_function,
         )
 
-        observe_rule.add_target(event_bridge_targets.LambdaFunction(handler=observe_function))
+        # observe_rule.add_target(event_bridge_targets.LambdaFunction(handler=observe_function))
 
     def create_dynamodb_table(self):
         return dynamodb_table.DynamoDBTableConstruct(
@@ -231,9 +233,10 @@ class EventbridgeEtl(cdk.Stack):
         return self.create_iam_policy(actions=['events:PutEvents'])
 
     def create_event_bridge_rule(
-        self, name=None, description=None, detail_type=None, status=None
+        self, name=None, description=None, detail_type=None, status=None,
+        lambda_function=None
     ):
-        return events.Rule(
+        rule = events.Rule(
             self, f'{name}Rule',
             description=description,
             event_pattern=events.EventPattern(
@@ -242,3 +245,7 @@ class EventbridgeEtl(cdk.Stack):
                 detail={"status": [status]} if status else None
             )
         )
+        rule.add_target(
+            event_bridge_targets.LambdaFunction(handler=lambda_function)
+        )
+        return rule
