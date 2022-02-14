@@ -54,24 +54,9 @@ class EventbridgeEtl(cdk.Stack):
             }
         )
 
-        ####
-        # Lambdas
-        #
-        # These are used for 4 phases:
-        #
-        # Extract    - kicks of ecs fargate task to download data and splinter to eventbridge events
-        # Transform  - takes the two comma separated strings and produces a json object
-        # Load       - inserts the data into dynamodb
-        # Observe    - This is a lambda that subscribes to all events and logs them centrally
-        ####
-
-        ####
-        # Extract
-        # defines an AWS Lambda resource to trigger our fargate ecs task
-        ####
         extractor = self.create_lambda_function(
-            logical_name="extractLambdaHandler",
-            function_name='extract',
+            logical_name='extractor',
+            function_name='extractor',
             environment_variables={
                 "CLUSTER_NAME": self.ecs_cluster.cluster_name,
                 "TASK_DEFINITION": self.ecs_task_definition.task_definition_arn,
@@ -81,16 +66,16 @@ class EventbridgeEtl(cdk.Stack):
         )
 
         transformer = self.create_lambda_function(
-            logical_name="TransformLambdaHandler",
-            function_name="transform",
+            logical_name='transformer',
+            function_name='transformer',
             event_bridge_rule_description='Data extracted from S3, Needs transformation',
             event_bridge_detail_type='s3RecordExtraction',
             event_bridge_detail_status="extracted",
         )
 
         loader = self.create_lambda_function(
-            logical_name="LoadLambdaHandler",
-            function_name="load",
+            logical_name="loader",
+            function_name="loader",
             environment_variables={
                 "TABLE_NAME": self.transformed_data.table_name
             },
@@ -99,6 +84,13 @@ class EventbridgeEtl(cdk.Stack):
             event_bridge_detail_status="transformed",
         )
 
+        self.create_lambda_function(
+            logical_name="observer",
+            function_name="observer",
+            event_bridge_rule_description='observe and log all events'
+        )
+
+        # IAM
         self.grant_ecs_task_permissions(
             ecs_task_definition=self.ecs_task_definition,
             lambda_function=extractor
@@ -113,15 +105,8 @@ class EventbridgeEtl(cdk.Stack):
         )
         self.upload_queue.grant_consume_messages(extractor)
         self.transformed_data.grant_read_write_data(loader)
-        ####
-        # Observe
-        # Watch for all cdkpatterns.the-eventbridge-etl events and log them centrally
-        ####
-        self.create_lambda_function(
-            logical_name="ObserveLam bdaHandler",
-            function_name="observe",
-            event_bridge_rule_description='all events are caught here and logged centrally'
-        )
+
+
 
     def create_event_bridge_rule(
         self, name=None, description=None, detail_type=None, status=None,

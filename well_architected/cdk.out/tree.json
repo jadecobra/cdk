@@ -11710,17 +11710,17 @@
               "version": "1.142.0"
             }
           },
-          "extractLambdaHandler": {
-            "id": "extractLambdaHandler",
-            "path": "EventBridgeEtl/extractLambdaHandler",
+          "extractor": {
+            "id": "extractor",
+            "path": "EventBridgeEtl/extractor",
             "children": {
               "ServiceRole": {
                 "id": "ServiceRole",
-                "path": "EventBridgeEtl/extractLambdaHandler/ServiceRole",
+                "path": "EventBridgeEtl/extractor/ServiceRole",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "EventBridgeEtl/extractLambdaHandler/ServiceRole/Resource",
+                    "path": "EventBridgeEtl/extractor/ServiceRole/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                       "aws:cdk:cloudformation:props": {
@@ -11759,11 +11759,11 @@
                   },
                   "DefaultPolicy": {
                     "id": "DefaultPolicy",
-                    "path": "EventBridgeEtl/extractLambdaHandler/ServiceRole/DefaultPolicy",
+                    "path": "EventBridgeEtl/extractor/ServiceRole/DefaultPolicy",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "EventBridgeEtl/extractLambdaHandler/ServiceRole/DefaultPolicy/Resource",
+                        "path": "EventBridgeEtl/extractor/ServiceRole/DefaultPolicy/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
                           "aws:cdk:cloudformation:props": {
@@ -11818,10 +11818,10 @@
                               ],
                               "Version": "2012-10-17"
                             },
-                            "policyName": "extractLambdaHandlerServiceRoleDefaultPolicyB880CB8F",
+                            "policyName": "extractorServiceRoleDefaultPolicy778C96DE",
                             "roles": [
                               {
-                                "Ref": "extractLambdaHandlerServiceRole8A50F829"
+                                "Ref": "extractorServiceRole12C0E5F0"
                               }
                             ]
                           }
@@ -11845,11 +11845,11 @@
               },
               "Code": {
                 "id": "Code",
-                "path": "EventBridgeEtl/extractLambdaHandler/Code",
+                "path": "EventBridgeEtl/extractor/Code",
                 "children": {
                   "Stage": {
                     "id": "Stage",
-                    "path": "EventBridgeEtl/extractLambdaHandler/Code/Stage",
+                    "path": "EventBridgeEtl/extractor/Code/Stage",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.AssetStaging",
                       "version": "1.142.0"
@@ -11857,7 +11857,7 @@
                   },
                   "AssetBucket": {
                     "id": "AssetBucket",
-                    "path": "EventBridgeEtl/extractLambdaHandler/Code/AssetBucket",
+                    "path": "EventBridgeEtl/extractor/Code/AssetBucket",
                     "constructInfo": {
                       "fqn": "@aws-cdk/aws-s3.BucketBase",
                       "version": "1.142.0"
@@ -11871,13 +11871,13 @@
               },
               "Resource": {
                 "id": "Resource",
-                "path": "EventBridgeEtl/extractLambdaHandler/Resource",
+                "path": "EventBridgeEtl/extractor/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
                   "aws:cdk:cloudformation:props": {
                     "code": {
                       "s3Bucket": {
-                        "Ref": "AssetParameters58849f9180cb7f2861f1e203704c9a3fdac57a943fec76e086f6ea1eb6d4be67S3BucketEC317B6D"
+                        "Ref": "AssetParameters7d6718cecd4933ee680e31483c1de1db4308603c1013287a397e7baba811dd5aS3BucketFC966DDD"
                       },
                       "s3Key": {
                         "Fn::Join": [
@@ -11890,7 +11890,7 @@
                                   "Fn::Split": [
                                     "||",
                                     {
-                                      "Ref": "AssetParameters58849f9180cb7f2861f1e203704c9a3fdac57a943fec76e086f6ea1eb6d4be67S3VersionKey36CEFF88"
+                                      "Ref": "AssetParameters7d6718cecd4933ee680e31483c1de1db4308603c1013287a397e7baba811dd5aS3VersionKeyD608ABCA"
                                     }
                                   ]
                                 }
@@ -11903,7 +11903,7 @@
                                   "Fn::Split": [
                                     "||",
                                     {
-                                      "Ref": "AssetParameters58849f9180cb7f2861f1e203704c9a3fdac57a943fec76e086f6ea1eb6d4be67S3VersionKey36CEFF88"
+                                      "Ref": "AssetParameters7d6718cecd4933ee680e31483c1de1db4308603c1013287a397e7baba811dd5aS3VersionKeyD608ABCA"
                                     }
                                   ]
                                 }
@@ -11915,7 +11915,7 @@
                     },
                     "role": {
                       "Fn::GetAtt": [
-                        "extractLambdaHandlerServiceRole8A50F829",
+                        "extractorServiceRole12C0E5F0",
                         "Arn"
                       ]
                     },
@@ -11946,7 +11946,7 @@
                         "CONTAINER_NAME": "AppContainer"
                       }
                     },
-                    "handler": "extract.handler",
+                    "handler": "extractor.handler",
                     "reservedConcurrentExecutions": 2,
                     "runtime": "nodejs12.x",
                     "timeout": 3
@@ -11959,16 +11959,16 @@
               },
               "SqsEventSource:EventBridgeEtlnewObjectInLandingBucketEventQueue474140A7": {
                 "id": "SqsEventSource:EventBridgeEtlnewObjectInLandingBucketEventQueue474140A7",
-                "path": "EventBridgeEtl/extractLambdaHandler/SqsEventSource:EventBridgeEtlnewObjectInLandingBucketEventQueue474140A7",
+                "path": "EventBridgeEtl/extractor/SqsEventSource:EventBridgeEtlnewObjectInLandingBucketEventQueue474140A7",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "EventBridgeEtl/extractLambdaHandler/SqsEventSource:EventBridgeEtlnewObjectInLandingBucketEventQueue474140A7/Resource",
+                    "path": "EventBridgeEtl/extractor/SqsEventSource:EventBridgeEtlnewObjectInLandingBucketEventQueue474140A7/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::Lambda::EventSourceMapping",
                       "aws:cdk:cloudformation:props": {
                         "functionName": {
-                          "Ref": "extractLambdaHandlerD06B8F09"
+                          "Ref": "extractor28E8DDEE"
                         },
                         "eventSourceArn": {
                           "Fn::GetAtt": [
@@ -11999,13 +11999,13 @@
             "id": "AssetParameters",
             "path": "EventBridgeEtl/AssetParameters",
             "children": {
-              "58849f9180cb7f2861f1e203704c9a3fdac57a943fec76e086f6ea1eb6d4be67": {
-                "id": "58849f9180cb7f2861f1e203704c9a3fdac57a943fec76e086f6ea1eb6d4be67",
-                "path": "EventBridgeEtl/AssetParameters/58849f9180cb7f2861f1e203704c9a3fdac57a943fec76e086f6ea1eb6d4be67",
+              "7d6718cecd4933ee680e31483c1de1db4308603c1013287a397e7baba811dd5a": {
+                "id": "7d6718cecd4933ee680e31483c1de1db4308603c1013287a397e7baba811dd5a",
+                "path": "EventBridgeEtl/AssetParameters/7d6718cecd4933ee680e31483c1de1db4308603c1013287a397e7baba811dd5a",
                 "children": {
                   "S3Bucket": {
                     "id": "S3Bucket",
-                    "path": "EventBridgeEtl/AssetParameters/58849f9180cb7f2861f1e203704c9a3fdac57a943fec76e086f6ea1eb6d4be67/S3Bucket",
+                    "path": "EventBridgeEtl/AssetParameters/7d6718cecd4933ee680e31483c1de1db4308603c1013287a397e7baba811dd5a/S3Bucket",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -12013,7 +12013,7 @@
                   },
                   "S3VersionKey": {
                     "id": "S3VersionKey",
-                    "path": "EventBridgeEtl/AssetParameters/58849f9180cb7f2861f1e203704c9a3fdac57a943fec76e086f6ea1eb6d4be67/S3VersionKey",
+                    "path": "EventBridgeEtl/AssetParameters/7d6718cecd4933ee680e31483c1de1db4308603c1013287a397e7baba811dd5a/S3VersionKey",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -12021,7 +12021,7 @@
                   },
                   "ArtifactHash": {
                     "id": "ArtifactHash",
-                    "path": "EventBridgeEtl/AssetParameters/58849f9180cb7f2861f1e203704c9a3fdac57a943fec76e086f6ea1eb6d4be67/ArtifactHash",
+                    "path": "EventBridgeEtl/AssetParameters/7d6718cecd4933ee680e31483c1de1db4308603c1013287a397e7baba811dd5a/ArtifactHash",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -12033,13 +12033,13 @@
                   "version": "1.142.0"
                 }
               },
-              "d3d726173eaa294c196439ce320b013550b324a364b6d9cdd82c189c2b66030e": {
-                "id": "d3d726173eaa294c196439ce320b013550b324a364b6d9cdd82c189c2b66030e",
-                "path": "EventBridgeEtl/AssetParameters/d3d726173eaa294c196439ce320b013550b324a364b6d9cdd82c189c2b66030e",
+              "da0b25bff29f2bc7e9527f77cabf47db4317c597764d84fd5c573156d20ced6d": {
+                "id": "da0b25bff29f2bc7e9527f77cabf47db4317c597764d84fd5c573156d20ced6d",
+                "path": "EventBridgeEtl/AssetParameters/da0b25bff29f2bc7e9527f77cabf47db4317c597764d84fd5c573156d20ced6d",
                 "children": {
                   "S3Bucket": {
                     "id": "S3Bucket",
-                    "path": "EventBridgeEtl/AssetParameters/d3d726173eaa294c196439ce320b013550b324a364b6d9cdd82c189c2b66030e/S3Bucket",
+                    "path": "EventBridgeEtl/AssetParameters/da0b25bff29f2bc7e9527f77cabf47db4317c597764d84fd5c573156d20ced6d/S3Bucket",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -12047,7 +12047,7 @@
                   },
                   "S3VersionKey": {
                     "id": "S3VersionKey",
-                    "path": "EventBridgeEtl/AssetParameters/d3d726173eaa294c196439ce320b013550b324a364b6d9cdd82c189c2b66030e/S3VersionKey",
+                    "path": "EventBridgeEtl/AssetParameters/da0b25bff29f2bc7e9527f77cabf47db4317c597764d84fd5c573156d20ced6d/S3VersionKey",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -12055,7 +12055,7 @@
                   },
                   "ArtifactHash": {
                     "id": "ArtifactHash",
-                    "path": "EventBridgeEtl/AssetParameters/d3d726173eaa294c196439ce320b013550b324a364b6d9cdd82c189c2b66030e/ArtifactHash",
+                    "path": "EventBridgeEtl/AssetParameters/da0b25bff29f2bc7e9527f77cabf47db4317c597764d84fd5c573156d20ced6d/ArtifactHash",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -12067,13 +12067,13 @@
                   "version": "1.142.0"
                 }
               },
-              "aadf7f421b24dab7feb0d731b98dc1a00fda0b989af399341b05c609619afbb5": {
-                "id": "aadf7f421b24dab7feb0d731b98dc1a00fda0b989af399341b05c609619afbb5",
-                "path": "EventBridgeEtl/AssetParameters/aadf7f421b24dab7feb0d731b98dc1a00fda0b989af399341b05c609619afbb5",
+              "5481099d81c7f61c11c6ceae7372966cbba68abad8d9b66f9323a98b709639e4": {
+                "id": "5481099d81c7f61c11c6ceae7372966cbba68abad8d9b66f9323a98b709639e4",
+                "path": "EventBridgeEtl/AssetParameters/5481099d81c7f61c11c6ceae7372966cbba68abad8d9b66f9323a98b709639e4",
                 "children": {
                   "S3Bucket": {
                     "id": "S3Bucket",
-                    "path": "EventBridgeEtl/AssetParameters/aadf7f421b24dab7feb0d731b98dc1a00fda0b989af399341b05c609619afbb5/S3Bucket",
+                    "path": "EventBridgeEtl/AssetParameters/5481099d81c7f61c11c6ceae7372966cbba68abad8d9b66f9323a98b709639e4/S3Bucket",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -12081,7 +12081,7 @@
                   },
                   "S3VersionKey": {
                     "id": "S3VersionKey",
-                    "path": "EventBridgeEtl/AssetParameters/aadf7f421b24dab7feb0d731b98dc1a00fda0b989af399341b05c609619afbb5/S3VersionKey",
+                    "path": "EventBridgeEtl/AssetParameters/5481099d81c7f61c11c6ceae7372966cbba68abad8d9b66f9323a98b709639e4/S3VersionKey",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -12089,7 +12089,7 @@
                   },
                   "ArtifactHash": {
                     "id": "ArtifactHash",
-                    "path": "EventBridgeEtl/AssetParameters/aadf7f421b24dab7feb0d731b98dc1a00fda0b989af399341b05c609619afbb5/ArtifactHash",
+                    "path": "EventBridgeEtl/AssetParameters/5481099d81c7f61c11c6ceae7372966cbba68abad8d9b66f9323a98b709639e4/ArtifactHash",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -12101,13 +12101,13 @@
                   "version": "1.142.0"
                 }
               },
-              "c5375331ac170f60032c90b65695ecfcb89fed67c9a27ec04fdac4fcf0222671": {
-                "id": "c5375331ac170f60032c90b65695ecfcb89fed67c9a27ec04fdac4fcf0222671",
-                "path": "EventBridgeEtl/AssetParameters/c5375331ac170f60032c90b65695ecfcb89fed67c9a27ec04fdac4fcf0222671",
+              "67bfcaa568283347b1242d63a1f0eaa516e258ab0a57b374cb3fc59217a1b6cc": {
+                "id": "67bfcaa568283347b1242d63a1f0eaa516e258ab0a57b374cb3fc59217a1b6cc",
+                "path": "EventBridgeEtl/AssetParameters/67bfcaa568283347b1242d63a1f0eaa516e258ab0a57b374cb3fc59217a1b6cc",
                 "children": {
                   "S3Bucket": {
                     "id": "S3Bucket",
-                    "path": "EventBridgeEtl/AssetParameters/c5375331ac170f60032c90b65695ecfcb89fed67c9a27ec04fdac4fcf0222671/S3Bucket",
+                    "path": "EventBridgeEtl/AssetParameters/67bfcaa568283347b1242d63a1f0eaa516e258ab0a57b374cb3fc59217a1b6cc/S3Bucket",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -12115,7 +12115,7 @@
                   },
                   "S3VersionKey": {
                     "id": "S3VersionKey",
-                    "path": "EventBridgeEtl/AssetParameters/c5375331ac170f60032c90b65695ecfcb89fed67c9a27ec04fdac4fcf0222671/S3VersionKey",
+                    "path": "EventBridgeEtl/AssetParameters/67bfcaa568283347b1242d63a1f0eaa516e258ab0a57b374cb3fc59217a1b6cc/S3VersionKey",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -12123,7 +12123,7 @@
                   },
                   "ArtifactHash": {
                     "id": "ArtifactHash",
-                    "path": "EventBridgeEtl/AssetParameters/c5375331ac170f60032c90b65695ecfcb89fed67c9a27ec04fdac4fcf0222671/ArtifactHash",
+                    "path": "EventBridgeEtl/AssetParameters/67bfcaa568283347b1242d63a1f0eaa516e258ab0a57b374cb3fc59217a1b6cc/ArtifactHash",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -12141,17 +12141,17 @@
               "version": "1.142.0"
             }
           },
-          "TransformLambdaHandler": {
-            "id": "TransformLambdaHandler",
-            "path": "EventBridgeEtl/TransformLambdaHandler",
+          "transformer": {
+            "id": "transformer",
+            "path": "EventBridgeEtl/transformer",
             "children": {
               "ServiceRole": {
                 "id": "ServiceRole",
-                "path": "EventBridgeEtl/TransformLambdaHandler/ServiceRole",
+                "path": "EventBridgeEtl/transformer/ServiceRole",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "EventBridgeEtl/TransformLambdaHandler/ServiceRole/Resource",
+                    "path": "EventBridgeEtl/transformer/ServiceRole/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                       "aws:cdk:cloudformation:props": {
@@ -12190,11 +12190,11 @@
                   },
                   "DefaultPolicy": {
                     "id": "DefaultPolicy",
-                    "path": "EventBridgeEtl/TransformLambdaHandler/ServiceRole/DefaultPolicy",
+                    "path": "EventBridgeEtl/transformer/ServiceRole/DefaultPolicy",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "EventBridgeEtl/TransformLambdaHandler/ServiceRole/DefaultPolicy/Resource",
+                        "path": "EventBridgeEtl/transformer/ServiceRole/DefaultPolicy/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
                           "aws:cdk:cloudformation:props": {
@@ -12208,10 +12208,10 @@
                               ],
                               "Version": "2012-10-17"
                             },
-                            "policyName": "TransformLambdaHandlerServiceRoleDefaultPolicy94353D30",
+                            "policyName": "transformerServiceRoleDefaultPolicy472DB935",
                             "roles": [
                               {
-                                "Ref": "TransformLambdaHandlerServiceRole710C039E"
+                                "Ref": "transformerServiceRole0163859E"
                               }
                             ]
                           }
@@ -12235,11 +12235,11 @@
               },
               "Code": {
                 "id": "Code",
-                "path": "EventBridgeEtl/TransformLambdaHandler/Code",
+                "path": "EventBridgeEtl/transformer/Code",
                 "children": {
                   "Stage": {
                     "id": "Stage",
-                    "path": "EventBridgeEtl/TransformLambdaHandler/Code/Stage",
+                    "path": "EventBridgeEtl/transformer/Code/Stage",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.AssetStaging",
                       "version": "1.142.0"
@@ -12247,7 +12247,7 @@
                   },
                   "AssetBucket": {
                     "id": "AssetBucket",
-                    "path": "EventBridgeEtl/TransformLambdaHandler/Code/AssetBucket",
+                    "path": "EventBridgeEtl/transformer/Code/AssetBucket",
                     "constructInfo": {
                       "fqn": "@aws-cdk/aws-s3.BucketBase",
                       "version": "1.142.0"
@@ -12261,13 +12261,13 @@
               },
               "Resource": {
                 "id": "Resource",
-                "path": "EventBridgeEtl/TransformLambdaHandler/Resource",
+                "path": "EventBridgeEtl/transformer/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
                   "aws:cdk:cloudformation:props": {
                     "code": {
                       "s3Bucket": {
-                        "Ref": "AssetParametersd3d726173eaa294c196439ce320b013550b324a364b6d9cdd82c189c2b66030eS3Bucket4CF5B946"
+                        "Ref": "AssetParametersda0b25bff29f2bc7e9527f77cabf47db4317c597764d84fd5c573156d20ced6dS3Bucket6F436E85"
                       },
                       "s3Key": {
                         "Fn::Join": [
@@ -12280,7 +12280,7 @@
                                   "Fn::Split": [
                                     "||",
                                     {
-                                      "Ref": "AssetParametersd3d726173eaa294c196439ce320b013550b324a364b6d9cdd82c189c2b66030eS3VersionKey9334959A"
+                                      "Ref": "AssetParametersda0b25bff29f2bc7e9527f77cabf47db4317c597764d84fd5c573156d20ced6dS3VersionKeyABBAFDA5"
                                     }
                                   ]
                                 }
@@ -12293,7 +12293,7 @@
                                   "Fn::Split": [
                                     "||",
                                     {
-                                      "Ref": "AssetParametersd3d726173eaa294c196439ce320b013550b324a364b6d9cdd82c189c2b66030eS3VersionKey9334959A"
+                                      "Ref": "AssetParametersda0b25bff29f2bc7e9527f77cabf47db4317c597764d84fd5c573156d20ced6dS3VersionKeyABBAFDA5"
                                     }
                                   ]
                                 }
@@ -12305,11 +12305,11 @@
                     },
                     "role": {
                       "Fn::GetAtt": [
-                        "TransformLambdaHandlerServiceRole710C039E",
+                        "transformerServiceRole0163859E",
                         "Arn"
                       ]
                     },
-                    "handler": "transform.handler",
+                    "handler": "transformer.handler",
                     "reservedConcurrentExecutions": 2,
                     "runtime": "nodejs12.x",
                     "timeout": 3
@@ -12326,13 +12326,13 @@
               "version": "1.142.0"
             }
           },
-          "transformRule": {
-            "id": "transformRule",
-            "path": "EventBridgeEtl/transformRule",
+          "transformerRule": {
+            "id": "transformerRule",
+            "path": "EventBridgeEtl/transformerRule",
             "children": {
               "Resource": {
                 "id": "Resource",
-                "path": "EventBridgeEtl/transformRule/Resource",
+                "path": "EventBridgeEtl/transformerRule/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::Events::Rule",
                   "aws:cdk:cloudformation:props": {
@@ -12356,7 +12356,7 @@
                         "id": "Target0",
                         "arn": {
                           "Fn::GetAtt": [
-                            "TransformLambdaHandler60ABE8EE",
+                            "transformer45242959",
                             "Arn"
                           ]
                         }
@@ -12369,23 +12369,23 @@
                   "version": "1.142.0"
                 }
               },
-              "AllowEventRuleEventBridgeEtlTransformLambdaHandler7D9AF44C": {
-                "id": "AllowEventRuleEventBridgeEtlTransformLambdaHandler7D9AF44C",
-                "path": "EventBridgeEtl/transformRule/AllowEventRuleEventBridgeEtlTransformLambdaHandler7D9AF44C",
+              "AllowEventRuleEventBridgeEtltransformerBC87AE2A": {
+                "id": "AllowEventRuleEventBridgeEtltransformerBC87AE2A",
+                "path": "EventBridgeEtl/transformerRule/AllowEventRuleEventBridgeEtltransformerBC87AE2A",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                   "aws:cdk:cloudformation:props": {
                     "action": "lambda:InvokeFunction",
                     "functionName": {
                       "Fn::GetAtt": [
-                        "TransformLambdaHandler60ABE8EE",
+                        "transformer45242959",
                         "Arn"
                       ]
                     },
                     "principal": "events.amazonaws.com",
                     "sourceArn": {
                       "Fn::GetAtt": [
-                        "transformRuleFEA34632",
+                        "transformerRuleA9C7F670",
                         "Arn"
                       ]
                     }
@@ -12402,17 +12402,17 @@
               "version": "1.142.0"
             }
           },
-          "LoadLambdaHandler": {
-            "id": "LoadLambdaHandler",
-            "path": "EventBridgeEtl/LoadLambdaHandler",
+          "loader": {
+            "id": "loader",
+            "path": "EventBridgeEtl/loader",
             "children": {
               "ServiceRole": {
                 "id": "ServiceRole",
-                "path": "EventBridgeEtl/LoadLambdaHandler/ServiceRole",
+                "path": "EventBridgeEtl/loader/ServiceRole",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "EventBridgeEtl/LoadLambdaHandler/ServiceRole/Resource",
+                    "path": "EventBridgeEtl/loader/ServiceRole/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                       "aws:cdk:cloudformation:props": {
@@ -12451,11 +12451,11 @@
                   },
                   "DefaultPolicy": {
                     "id": "DefaultPolicy",
-                    "path": "EventBridgeEtl/LoadLambdaHandler/ServiceRole/DefaultPolicy",
+                    "path": "EventBridgeEtl/loader/ServiceRole/DefaultPolicy",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "EventBridgeEtl/LoadLambdaHandler/ServiceRole/DefaultPolicy/Resource",
+                        "path": "EventBridgeEtl/loader/ServiceRole/DefaultPolicy/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
                           "aws:cdk:cloudformation:props": {
@@ -12496,10 +12496,10 @@
                               ],
                               "Version": "2012-10-17"
                             },
-                            "policyName": "LoadLambdaHandlerServiceRoleDefaultPolicy63B03BA2",
+                            "policyName": "loaderServiceRoleDefaultPolicyEEB1BF44",
                             "roles": [
                               {
-                                "Ref": "LoadLambdaHandlerServiceRole83E61748"
+                                "Ref": "loaderServiceRole5A433B5E"
                               }
                             ]
                           }
@@ -12523,11 +12523,11 @@
               },
               "Code": {
                 "id": "Code",
-                "path": "EventBridgeEtl/LoadLambdaHandler/Code",
+                "path": "EventBridgeEtl/loader/Code",
                 "children": {
                   "Stage": {
                     "id": "Stage",
-                    "path": "EventBridgeEtl/LoadLambdaHandler/Code/Stage",
+                    "path": "EventBridgeEtl/loader/Code/Stage",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.AssetStaging",
                       "version": "1.142.0"
@@ -12535,7 +12535,7 @@
                   },
                   "AssetBucket": {
                     "id": "AssetBucket",
-                    "path": "EventBridgeEtl/LoadLambdaHandler/Code/AssetBucket",
+                    "path": "EventBridgeEtl/loader/Code/AssetBucket",
                     "constructInfo": {
                       "fqn": "@aws-cdk/aws-s3.BucketBase",
                       "version": "1.142.0"
@@ -12549,13 +12549,13 @@
               },
               "Resource": {
                 "id": "Resource",
-                "path": "EventBridgeEtl/LoadLambdaHandler/Resource",
+                "path": "EventBridgeEtl/loader/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
                   "aws:cdk:cloudformation:props": {
                     "code": {
                       "s3Bucket": {
-                        "Ref": "AssetParametersaadf7f421b24dab7feb0d731b98dc1a00fda0b989af399341b05c609619afbb5S3Bucket37E689F8"
+                        "Ref": "AssetParameters5481099d81c7f61c11c6ceae7372966cbba68abad8d9b66f9323a98b709639e4S3Bucket349BFD92"
                       },
                       "s3Key": {
                         "Fn::Join": [
@@ -12568,7 +12568,7 @@
                                   "Fn::Split": [
                                     "||",
                                     {
-                                      "Ref": "AssetParametersaadf7f421b24dab7feb0d731b98dc1a00fda0b989af399341b05c609619afbb5S3VersionKeyBF2DF622"
+                                      "Ref": "AssetParameters5481099d81c7f61c11c6ceae7372966cbba68abad8d9b66f9323a98b709639e4S3VersionKeyEDA3A683"
                                     }
                                   ]
                                 }
@@ -12581,7 +12581,7 @@
                                   "Fn::Split": [
                                     "||",
                                     {
-                                      "Ref": "AssetParametersaadf7f421b24dab7feb0d731b98dc1a00fda0b989af399341b05c609619afbb5S3VersionKeyBF2DF622"
+                                      "Ref": "AssetParameters5481099d81c7f61c11c6ceae7372966cbba68abad8d9b66f9323a98b709639e4S3VersionKeyEDA3A683"
                                     }
                                   ]
                                 }
@@ -12593,7 +12593,7 @@
                     },
                     "role": {
                       "Fn::GetAtt": [
-                        "LoadLambdaHandlerServiceRole83E61748",
+                        "loaderServiceRole5A433B5E",
                         "Arn"
                       ]
                     },
@@ -12604,7 +12604,7 @@
                         }
                       }
                     },
-                    "handler": "load.handler",
+                    "handler": "loader.handler",
                     "reservedConcurrentExecutions": 2,
                     "runtime": "nodejs12.x",
                     "timeout": 3
@@ -12621,13 +12621,13 @@
               "version": "1.142.0"
             }
           },
-          "loadRule": {
-            "id": "loadRule",
-            "path": "EventBridgeEtl/loadRule",
+          "loaderRule": {
+            "id": "loaderRule",
+            "path": "EventBridgeEtl/loaderRule",
             "children": {
               "Resource": {
                 "id": "Resource",
-                "path": "EventBridgeEtl/loadRule/Resource",
+                "path": "EventBridgeEtl/loaderRule/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::Events::Rule",
                   "aws:cdk:cloudformation:props": {
@@ -12651,7 +12651,7 @@
                         "id": "Target0",
                         "arn": {
                           "Fn::GetAtt": [
-                            "LoadLambdaHandlerFDA03D53",
+                            "loader7ADF6D64",
                             "Arn"
                           ]
                         }
@@ -12664,23 +12664,23 @@
                   "version": "1.142.0"
                 }
               },
-              "AllowEventRuleEventBridgeEtlLoadLambdaHandler3EBCACF9": {
-                "id": "AllowEventRuleEventBridgeEtlLoadLambdaHandler3EBCACF9",
-                "path": "EventBridgeEtl/loadRule/AllowEventRuleEventBridgeEtlLoadLambdaHandler3EBCACF9",
+              "AllowEventRuleEventBridgeEtlloader8D35F91F": {
+                "id": "AllowEventRuleEventBridgeEtlloader8D35F91F",
+                "path": "EventBridgeEtl/loaderRule/AllowEventRuleEventBridgeEtlloader8D35F91F",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                   "aws:cdk:cloudformation:props": {
                     "action": "lambda:InvokeFunction",
                     "functionName": {
                       "Fn::GetAtt": [
-                        "LoadLambdaHandlerFDA03D53",
+                        "loader7ADF6D64",
                         "Arn"
                       ]
                     },
                     "principal": "events.amazonaws.com",
                     "sourceArn": {
                       "Fn::GetAtt": [
-                        "loadRuleF0FAF418",
+                        "loaderRule16B863C1",
                         "Arn"
                       ]
                     }
@@ -12697,17 +12697,17 @@
               "version": "1.142.0"
             }
           },
-          "ObserveLam bdaHandler": {
-            "id": "ObserveLam bdaHandler",
-            "path": "EventBridgeEtl/ObserveLam bdaHandler",
+          "observer": {
+            "id": "observer",
+            "path": "EventBridgeEtl/observer",
             "children": {
               "ServiceRole": {
                 "id": "ServiceRole",
-                "path": "EventBridgeEtl/ObserveLam bdaHandler/ServiceRole",
+                "path": "EventBridgeEtl/observer/ServiceRole",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "EventBridgeEtl/ObserveLam bdaHandler/ServiceRole/Resource",
+                    "path": "EventBridgeEtl/observer/ServiceRole/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                       "aws:cdk:cloudformation:props": {
@@ -12752,11 +12752,11 @@
               },
               "Code": {
                 "id": "Code",
-                "path": "EventBridgeEtl/ObserveLam bdaHandler/Code",
+                "path": "EventBridgeEtl/observer/Code",
                 "children": {
                   "Stage": {
                     "id": "Stage",
-                    "path": "EventBridgeEtl/ObserveLam bdaHandler/Code/Stage",
+                    "path": "EventBridgeEtl/observer/Code/Stage",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.AssetStaging",
                       "version": "1.142.0"
@@ -12764,7 +12764,7 @@
                   },
                   "AssetBucket": {
                     "id": "AssetBucket",
-                    "path": "EventBridgeEtl/ObserveLam bdaHandler/Code/AssetBucket",
+                    "path": "EventBridgeEtl/observer/Code/AssetBucket",
                     "constructInfo": {
                       "fqn": "@aws-cdk/aws-s3.BucketBase",
                       "version": "1.142.0"
@@ -12778,13 +12778,13 @@
               },
               "Resource": {
                 "id": "Resource",
-                "path": "EventBridgeEtl/ObserveLam bdaHandler/Resource",
+                "path": "EventBridgeEtl/observer/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
                   "aws:cdk:cloudformation:props": {
                     "code": {
                       "s3Bucket": {
-                        "Ref": "AssetParametersc5375331ac170f60032c90b65695ecfcb89fed67c9a27ec04fdac4fcf0222671S3Bucket2ABDD10B"
+                        "Ref": "AssetParameters67bfcaa568283347b1242d63a1f0eaa516e258ab0a57b374cb3fc59217a1b6ccS3BucketCC41D51F"
                       },
                       "s3Key": {
                         "Fn::Join": [
@@ -12797,7 +12797,7 @@
                                   "Fn::Split": [
                                     "||",
                                     {
-                                      "Ref": "AssetParametersc5375331ac170f60032c90b65695ecfcb89fed67c9a27ec04fdac4fcf0222671S3VersionKeyAD83FB04"
+                                      "Ref": "AssetParameters67bfcaa568283347b1242d63a1f0eaa516e258ab0a57b374cb3fc59217a1b6ccS3VersionKey3DE682D2"
                                     }
                                   ]
                                 }
@@ -12810,7 +12810,7 @@
                                   "Fn::Split": [
                                     "||",
                                     {
-                                      "Ref": "AssetParametersc5375331ac170f60032c90b65695ecfcb89fed67c9a27ec04fdac4fcf0222671S3VersionKeyAD83FB04"
+                                      "Ref": "AssetParameters67bfcaa568283347b1242d63a1f0eaa516e258ab0a57b374cb3fc59217a1b6ccS3VersionKey3DE682D2"
                                     }
                                   ]
                                 }
@@ -12822,11 +12822,11 @@
                     },
                     "role": {
                       "Fn::GetAtt": [
-                        "ObserveLambdaHandlerServiceRoleEB4F0BDB",
+                        "observerServiceRole2C8CB539",
                         "Arn"
                       ]
                     },
-                    "handler": "observe.handler",
+                    "handler": "observer.handler",
                     "reservedConcurrentExecutions": 2,
                     "runtime": "nodejs12.x",
                     "timeout": 3
@@ -12843,17 +12843,17 @@
               "version": "1.142.0"
             }
           },
-          "observeRule": {
-            "id": "observeRule",
-            "path": "EventBridgeEtl/observeRule",
+          "observerRule": {
+            "id": "observerRule",
+            "path": "EventBridgeEtl/observerRule",
             "children": {
               "Resource": {
                 "id": "Resource",
-                "path": "EventBridgeEtl/observeRule/Resource",
+                "path": "EventBridgeEtl/observerRule/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::Events::Rule",
                   "aws:cdk:cloudformation:props": {
-                    "description": "all events are caught here and logged centrally",
+                    "description": "observe and log all events",
                     "eventPattern": {
                       "source": [
                         "cdkpatterns.the-eventbridge-etl"
@@ -12865,7 +12865,7 @@
                         "id": "Target0",
                         "arn": {
                           "Fn::GetAtt": [
-                            "ObserveLambdaHandlerBF27CE8B",
+                            "observer83FEAD49",
                             "Arn"
                           ]
                         }
@@ -12878,23 +12878,23 @@
                   "version": "1.142.0"
                 }
               },
-              "AllowEventRuleEventBridgeEtlObserveLambdaHandlerC8492BCF": {
-                "id": "AllowEventRuleEventBridgeEtlObserveLambdaHandlerC8492BCF",
-                "path": "EventBridgeEtl/observeRule/AllowEventRuleEventBridgeEtlObserveLambdaHandlerC8492BCF",
+              "AllowEventRuleEventBridgeEtlobserverC2A380EF": {
+                "id": "AllowEventRuleEventBridgeEtlobserverC2A380EF",
+                "path": "EventBridgeEtl/observerRule/AllowEventRuleEventBridgeEtlobserverC2A380EF",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                   "aws:cdk:cloudformation:props": {
                     "action": "lambda:InvokeFunction",
                     "functionName": {
                       "Fn::GetAtt": [
-                        "ObserveLambdaHandlerBF27CE8B",
+                        "observer83FEAD49",
                         "Arn"
                       ]
                     },
                     "principal": "events.amazonaws.com",
                     "sourceArn": {
                       "Fn::GetAtt": [
-                        "observeRule9CF2E16C",
+                        "observerRule7DADF317",
                         "Arn"
                       ]
                     }
