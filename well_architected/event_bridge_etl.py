@@ -114,23 +114,6 @@ class EventbridgeEtl(cdk.Stack):
         )
         extract_function.add_event_source(lambda_event_sources.SqsEventSource(queue=self.upload_queue))
 
-        # extract_function.add_to_role_policy(self.event_bridge_put_policy)
-        # extract_function.add_to_role_policy(
-        #     self.create_iam_policy(
-        #         resources=[self.task_definition.task_definition_arn],
-        #         actions=['ecs:RunTask']
-        #     )
-        # )
-        # extract_function.add_to_role_policy(
-        #     self.create_iam_policy(
-        #         resources=[
-        #             self.task_definition.obtain_execution_role().role_arn,
-        #             self.task_definition.task_role.role_arn
-        #         ],
-        #         actions=['iam:PassRole']
-        #     )
-        # )
-
         for policy in (
             self.event_bridge_put_policy,
             self.create_iam_policy(
@@ -148,12 +131,13 @@ class EventbridgeEtl(cdk.Stack):
             extract_function.add_to_role_policy(policy)
 
         self.upload_queue.grant_consume_messages(extract_function)
+
         ####
         # Transform
         # defines a lambda to transform the data that was extracted from s3
         ####
 
-        transform_lambda = _lambda.Function(
+        transform_function = _lambda.Function(
             self, "TransformLambdaHandler",
             runtime=_lambda.Runtime.NODEJS_12_X,
             handler="transform.handler",
@@ -161,25 +145,29 @@ class EventbridgeEtl(cdk.Stack):
             reserved_concurrent_executions=self.lambda_throttle_size,
             timeout=cdk.Duration.seconds(3)
         )
-        transform_lambda.add_to_role_policy(self.event_bridge_put_policy)
+
+        transform_function.add_to_role_policy(self.event_bridge_put_policy)
 
         # Create EventBridge rule to route extraction events
         transform_rule = events.Rule(
             self, 'transformRule',
-                                     description='Data extracted from S3, Needs transformed',
-                                     event_pattern=events.EventPattern(source=['cdkpatterns.the-eventbridge-etl'],
-                                                                       detail_type=['s3RecordExtraction'],
-                                                                       detail={
-                                                                           "status": ["extracted"]
-                                                                       }))
-        transform_rule.add_target(targets.LambdaFunction(handler=transform_lambda))
+            description='Data extracted from S3, Needs transformation',
+            event_pattern=events.EventPattern(
+                source=['cdkpatterns.the-eventbridge-etl'],
+                detail_type=['s3RecordExtraction'],
+                detail={
+                    "status": ["extracted"]
+                }
+            )
+        )
+        transform_rule.add_target(event_bridge_targets.LambdaFunction(handler=transform_function))
 
         ####
         # Load
         # load the transformed data in dynamodb
         ####
 
-        load_lambda = _lambda.Function(self, "LoadLambdaHandler",
+        load_function = _lambda.Function(self, "LoadLambdaHandler",
                                        runtime=_lambda.Runtime.NODEJS_12_X,
                                        handler="load.handler",
                                        code=_lambda.Code.from_asset("lambda_functions/load"),
@@ -189,8 +177,8 @@ class EventbridgeEtl(cdk.Stack):
                                            "TABLE_NAME": self.transformed_data.table_name
                                        }
                                        )
-        load_lambda.add_to_role_policy(self.event_bridge_put_policy)
-        self.transformed_data.grant_read_write_data(load_lambda)
+        load_function.add_to_role_policy(self.event_bridge_put_policy)
+        self.transformed_data.grant_read_write_data(load_function)
 
         load_rule = events.Rule(self, 'loadRule',
                                 description='Data transformed, Needs loaded into dynamodb',
@@ -199,7 +187,7 @@ class EventbridgeEtl(cdk.Stack):
                                                                   detail={
                                                                       "status": ["transformed"]
                                                                   }))
-        load_rule.add_target(targets.LambdaFunction(handler=load_lambda))
+        load_rule.add_target(event_bridge_targets.LambdaFunction(handler=load_function))
 
         ####
         # Observe
@@ -218,7 +206,7 @@ class EventbridgeEtl(cdk.Stack):
                                    description='all events are caught here and logged centrally',
                                    event_pattern=events.EventPattern(source=['cdkpatterns.the-eventbridge-etl']))
 
-        observe_rule.add_target(targets.LambdaFunction(handler=observe_lambda))
+        observe_rule.add_target(event_bridge_targets.LambdaFunction(handler=observe_lambda))
 
     def create_dynamodb_table(self):
         return dynamodb_table.DynamoDBTableConstruct(

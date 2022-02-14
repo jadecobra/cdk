@@ -12335,7 +12335,7 @@
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::Events::Rule",
                   "aws:cdk:cloudformation:props": {
-                    "description": "Data extracted from S3, Needs transformed",
+                    "description": "Data extracted from S3, Needs transformation",
                     "eventPattern": {
                       "detail": {
                         "status": [
