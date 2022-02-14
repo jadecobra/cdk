@@ -88,13 +88,23 @@ class EventbridgeEtl(cdk.Stack):
         # Extract
         # defines an AWS Lambda resource to trigger our fargate ecs task
         ####
-        extractor = _lambda.Function(
-            self, "extractLambdaHandler",
-            runtime=_lambda.Runtime.NODEJS_12_X,
-            handler="s3SqsEventConsumer.handler",
-            code=_lambda.Code.from_asset("lambda_functions/extract"),
-            reserved_concurrent_executions=self.lambda_throttle_size,
-            environment={
+        # extractor = _lambda.Function(
+        #     self, "extractLambdaHandler",
+        #     runtime=_lambda.Runtime.NODEJS_12_X,
+        #     handler="s3SqsEventConsumer.handler",
+        #     code=_lambda.Code.from_asset("lambda_functions/extract"),
+        #     reserved_concurrent_executions=self.lambda_throttle_size,
+        #     environment={
+        #         "CLUSTER_NAME": self.ecs_cluster.cluster_name,
+        #         "TASK_DEFINITION": self.task_definition.task_definition_arn,
+        #         "SUBNETS": json.dumps(self.subnet_ids),
+        #         "CONTAINER_NAME": self.extraction_task.container_name
+        #     }
+        # )
+        extractor = self.create_lambda_function(
+            logical_name="extractLambdaHandler",
+            function_name="s3SqsEventConsumer",
+            environment_variables={
                 "CLUSTER_NAME": self.ecs_cluster.cluster_name,
                 "TASK_DEFINITION": self.task_definition.task_definition_arn,
                 "SUBNETS": json.dumps(self.subnet_ids),
@@ -127,21 +137,10 @@ class EventbridgeEtl(cdk.Stack):
         # defines a lambda to transform the data that was extracted from s3
         ####
 
-        # transformer = _lambda.Function(
-        #     self, "TransformLambdaHandler",
-        #     runtime=_lambda.Runtime.NODEJS_12_X,
-        #     handler="transform.handler",
-        #     code=_lambda.Code.from_asset("lambda_functions/transform"),
-        #     reserved_concurrent_executions=self.lambda_throttle_size,
-        #     timeout=cdk.Duration.seconds(3)
-        # )
-
         transformer = self.create_lambda_function(
             logical_name="TransformLambdaHandler",
             function_name="transform",
         )
-
-
 
         self.create_event_bridge_rule(
             name='transform',
