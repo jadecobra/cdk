@@ -96,14 +96,10 @@ class EventbridgeEtl(cdk.Stack):
         transformer = self.create_lambda_function(
             logical_name="TransformLambdaHandler",
             function_name="transform",
-        )
-
-        self.create_event_bridge_rule(
-            name='transform',
-            description='Data extracted from S3, Needs transformation',
-            detail_type='s3RecordExtraction',
-            status="extracted",
-            lambda_function=transformer,
+            event_bridge_rule_name='transform',
+            event_bridge_rule_description='Data extracted from S3, Needs transformation',
+            event_bridge_detail_type='s3RecordExtraction',
+            event_bridge_detail_status="extracted",
         )
 
         ####
@@ -115,16 +111,11 @@ class EventbridgeEtl(cdk.Stack):
             function_name="load",
             environment_variables={
                 "TABLE_NAME": self.transformed_data.table_name
-            }
-        )
-
-
-        self.create_event_bridge_rule(
-            name='load',
-            description='Load Transformed Data to DynamoDB',
-            detail_type='transform',
-            status="transformed",
-            lambda_function=loader,
+            },
+            event_bridge_rule_name='load',
+            event_bridge_rule_description='Load Transformed Data to DynamoDB',
+            event_bridge_detail_type='transform',
+            event_bridge_detail_status="transformed",
         )
 
         self.add_policies_to_lambda_functions(
@@ -138,24 +129,20 @@ class EventbridgeEtl(cdk.Stack):
         # Observe
         # Watch for all cdkpatterns.the-eventbridge-etl events and log them centrally
         ####
-        observer = self.create_lambda_function(
+        self.create_lambda_function(
             logical_name="ObserveLam bdaHandler",
             function_name="observe",
             event_bridge_rule_name='observe',
             event_bridge_rule_description='all events are caught here and logged centrally'
         )
 
-        # self.create_event_bridge_rule(
-        #     name='observe',
-        #     description='all events are caught here and logged centrally',
-        #     lambda_function=observer,
-        # )
-
     def create_lambda_function(
         self, logical_name=None, function_name=None,
         concurrent_executions=2, timeout=3, environment_variables=None,
         event_bridge_rule_name=None,
         event_bridge_rule_description=None,
+        event_bridge_detail_type=None,
+        event_bridge_detail_status=None
     ):
         lambda_function = _lambda.Function(
             self, logical_name,
@@ -170,6 +157,8 @@ class EventbridgeEtl(cdk.Stack):
             self.create_event_bridge_rule(
                 name=event_bridge_rule_name,
                 description=event_bridge_rule_description,
+                detail_type=event_bridge_detail_type,
+                status=event_bridge_detail_status,
                 lambda_function=lambda_function,
             )
         return lambda_function
