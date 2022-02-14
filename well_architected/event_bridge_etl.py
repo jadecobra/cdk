@@ -55,7 +55,6 @@ class EventbridgeEtl(cdk.Stack):
         )
 
         extractor = self.create_lambda_function(
-            logical_name='extractor',
             function_name='extractor',
             environment_variables={
                 "CLUSTER_NAME": self.ecs_cluster.cluster_name,
@@ -66,7 +65,6 @@ class EventbridgeEtl(cdk.Stack):
         )
 
         transformer = self.create_lambda_function(
-            logical_name='transformer',
             function_name='transformer',
             event_bridge_rule_description='Data extracted from S3, Needs transformation',
             event_bridge_detail_type='s3RecordExtraction',
@@ -74,7 +72,6 @@ class EventbridgeEtl(cdk.Stack):
         )
 
         loader = self.create_lambda_function(
-            logical_name="loader",
             function_name="loader",
             environment_variables={
                 "TABLE_NAME": self.transformed_data.table_name
@@ -85,8 +82,7 @@ class EventbridgeEtl(cdk.Stack):
         )
 
         self.create_lambda_function(
-            logical_name="observer",
-            function_name="observer",
+                        function_name="observer",
             event_bridge_rule_description='observe and log all events'
         )
 
@@ -127,14 +123,14 @@ class EventbridgeEtl(cdk.Stack):
         return rule
 
     def create_lambda_function(
-        self, logical_name=None, function_name=None,
+        self, function_name=None,
         concurrent_executions=2, timeout=3, environment_variables=None,
         event_bridge_rule_description=None,
         event_bridge_detail_type=None,
         event_bridge_detail_status=None
     ):
         lambda_function = _lambda.Function(
-            self, logical_name,
+            self, function_name,
             runtime=_lambda.Runtime.NODEJS_12_X,
             handler=f'{function_name}.handler',
             code=_lambda.Code.from_asset(f'lambda_functions/{function_name}'),
