@@ -24,6 +24,10 @@ class EventbridgeEtl(cdk.Stack):
     # why we are limiting concurrency to 2 on all 3 lambdas. Feel free to raise this.
     lambda_throttle_size = 2
 
+    @staticmethod
+    def get_subnet_ids(vpc):
+        return json.dumps([subnet.subnet_id for subnet in vpc.private_subnets])
+
     def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
         self.upload_bucket = s3.Bucket(self, "LandingBucket")
@@ -45,7 +49,6 @@ class EventbridgeEtl(cdk.Stack):
         # memory/storage
         ####
         self.vpc = ec2.Vpc(self, "Vpc", max_azs=2)
-        self.subnet_ids = [subnet.subnet_id for subnet in self.vpc.private_subnets]
 
         self.logging = ecs.AwsLogDriver(
             stream_prefix='TheEventBridgeETL',
@@ -88,26 +91,13 @@ class EventbridgeEtl(cdk.Stack):
         # Extract
         # defines an AWS Lambda resource to trigger our fargate ecs task
         ####
-        # extractor = _lambda.Function(
-        #     self, "extractLambdaHandler",
-        #     runtime=_lambda.Runtime.NODEJS_12_X,
-        #     handler="s3SqsEventConsumer.handler",
-        #     code=_lambda.Code.from_asset("lambda_functions/extract"),
-        #     reserved_concurrent_executions=self.lambda_throttle_size,
-        #     environment={
-        #         "CLUSTER_NAME": self.ecs_cluster.cluster_name,
-        #         "TASK_DEFINITION": self.task_definition.task_definition_arn,
-        #         "SUBNETS": json.dumps(self.subnet_ids),
-        #         "CONTAINER_NAME": self.extraction_task.container_name
-        #     }
-        # )
         extractor = self.create_lambda_function(
             logical_name="extractLambdaHandler",
             function_name='extract',
             environment_variables={
                 "CLUSTER_NAME": self.ecs_cluster.cluster_name,
                 "TASK_DEFINITION": self.task_definition.task_definition_arn,
-                "SUBNETS": json.dumps(self.subnet_ids),
+                "SUBNETS": self.get_subnet_ids(self.vpc),
                 "CONTAINER_NAME": self.extraction_task.container_name
             }
         )
