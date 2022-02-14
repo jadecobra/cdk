@@ -1,6 +1,12 @@
 {
   "Resources": {
-    "TransformedDataB0572681": {
+    "TransformedDataErrorTopic9205B960": {
+      "Type": "AWS::SNS::Topic",
+      "Properties": {
+        "DisplayName": "ErrorTopic"
+      }
+    },
+    "TransformedData0F179200": {
       "Type": "AWS::DynamoDB::Table",
       "Properties": {
         "KeySchema": [
@@ -15,13 +21,152 @@
             "AttributeType": "S"
           }
         ],
-        "ProvisionedThroughput": {
-          "ReadCapacityUnits": 5,
-          "WriteCapacityUnits": 5
-        }
+        "BillingMode": "PAY_PER_REQUEST"
       },
-      "UpdateReplacePolicy": "Retain",
-      "DeletionPolicy": "Retain"
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete"
+    },
+    "TransformedDataDynamoDBUserErrors024AE8883": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": 6,
+        "AlarmActions": [
+          {
+            "Ref": "TransformedDataErrorTopic9205B960"
+          }
+        ],
+        "DatapointsToAlarm": 1,
+        "MetricName": "UserErrors",
+        "Namespace": "AWS/DynamoDB",
+        "Period": 300,
+        "Statistic": "Sum",
+        "Threshold": 0,
+        "TreatMissingData": "notBreaching"
+      }
+    },
+    "TransformedDataDynamoDBTableReadsWritesThrottledFA5D4E5E": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": 6,
+        "AlarmActions": [
+          {
+            "Ref": "TransformedDataErrorTopic9205B960"
+          }
+        ],
+        "DatapointsToAlarm": 1,
+        "Metrics": [
+          {
+            "Expression": "m1 + m2",
+            "Id": "expr_1",
+            "Label": "DynamoDB Throttles"
+          },
+          {
+            "Id": "m1",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "TableName",
+                    "Value": {
+                      "Ref": "TransformedData0F179200"
+                    }
+                  }
+                ],
+                "MetricName": "ReadThrottleEvents",
+                "Namespace": "AWS/DynamoDB"
+              },
+              "Period": 300,
+              "Stat": "Sum"
+            },
+            "ReturnData": false
+          },
+          {
+            "Id": "m2",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "TableName",
+                    "Value": {
+                      "Ref": "TransformedData0F179200"
+                    }
+                  }
+                ],
+                "MetricName": "WriteThrottleEvents",
+                "Namespace": "AWS/DynamoDB"
+              },
+              "Period": 300,
+              "Stat": "Sum"
+            },
+            "ReturnData": false
+          }
+        ],
+        "Threshold": 1,
+        "TreatMissingData": "notBreaching"
+      }
+    },
+    "TransformedDataCloudWatchDashBoardBB415568": {
+      "Type": "AWS::CloudWatch::Dashboard",
+      "Properties": {
+        "DashboardBody": {
+          "Fn::Join": [
+            "",
+            [
+              "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"DynamoDB Latency\",\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"stacked\":true,\"metrics\":[[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"GetItem\",\"TableName\",\"",
+              {
+                "Ref": "TransformedData0F179200"
+              },
+              "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"UpdateItem\",\"TableName\",\"",
+              {
+                "Ref": "TransformedData0F179200"
+              },
+              "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"PutItem\",\"TableName\",\"",
+              {
+                "Ref": "TransformedData0F179200"
+              },
+              "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"DeleteItem\",\"TableName\",\"",
+              {
+                "Ref": "TransformedData0F179200"
+              },
+              "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"Query\",\"TableName\",\"",
+              {
+                "Ref": "TransformedData0F179200"
+              },
+              "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"DynamoDB Consumed Read/Write Units\",\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"stacked\":false,\"metrics\":[[\"AWS/DynamoDB\",\"ConsumedReadCapacityUnits\",\"TableName\",\"",
+              {
+                "Ref": "TransformedData0F179200"
+              },
+              "\"],[\"AWS/DynamoDB\",\"ConsumedWriteCapacityUnits\",\"TableName\",\"",
+              {
+                "Ref": "TransformedData0F179200"
+              },
+              "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"DynamoDB Throttles\",\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"stacked\":true,\"metrics\":[[\"AWS/DynamoDB\",\"ReadThrottleEvents\",\"TableName\",\"",
+              {
+                "Ref": "TransformedData0F179200"
+              },
+              "\",{\"stat\":\"Sum\"}],[\"AWS/DynamoDB\",\"WriteThrottleEvents\",\"TableName\",\"",
+              {
+                "Ref": "TransformedData0F179200"
+              },
+              "\",{\"stat\":\"Sum\"}]],\"yAxis\":{}}}]}"
+            ]
+          ]
+        }
+      }
     },
     "LandingBucket23FE90FB": {
       "Type": "AWS::S3::Bucket",
@@ -1208,7 +1353,7 @@
               "Resource": [
                 {
                   "Fn::GetAtt": [
-                    "TransformedDataB0572681",
+                    "TransformedData0F179200",
                     "Arn"
                   ]
                 },
@@ -1278,7 +1423,7 @@
         "Environment": {
           "Variables": {
             "TABLE_NAME": {
-              "Ref": "TransformedDataB0572681"
+              "Ref": "TransformedData0F179200"
             }
           }
         },

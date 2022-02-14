@@ -31,11 +31,16 @@ class EventbridgeEtl(cdk.Stack):
         # DynamoDB Table
         # This is where our transformed data ends up
         ####
-        table = dynamo_db.Table(
-            self, "TransformedData",
+        # table = dynamo_db.Table(
+        #     self, "TransformedData",
+        #     partition_key=dynamo_db.Attribute(name="id", type=dynamo_db.AttributeType.STRING
+        #     )
+        # )
+        table = dynamodb_table.DynamoDBTableConstruct(
+            self, 'TransformedData',
             partition_key=dynamo_db.Attribute(name="id", type=dynamo_db.AttributeType.STRING
             )
-        )
+        ).dynamodb_table
 
         ####
         # S3 Landing Bucket

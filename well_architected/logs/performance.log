@@ -12828,3 +12828,11 @@
 2022-02-13 09:50:53.537621::Time taken to synthesize stack: WebApplicationFirewall::  2.6793 seconds
 2022-02-13 09:51:18.434917::Time taken to synthesize stack: EventBridgeEtl::  3.3675 seconds
 2022-02-13 09:51:28.842118::Time taken to synthesize stack: EventBridgeEtl::  2.8671 seconds
+2022-02-13 09:52:04.343037::Time taken to synthesize stack: EventBridgeEtl::  3.2657 seconds
+2022-02-13 09:52:50.280603::Time taken to synthesize stack: EventBridgeEtl::  3.4451 seconds
+2022-02-13 13:49:27.441331::Time taken to synthesize stack: EventBridgeEtl::  3.6489 seconds
+2022-02-13 13:50:05.379593::Time taken to synthesize stack: EventBridgeEtl::  3.3103 seconds
+2022-02-13 13:50:22.284743::Time taken to synthesize stack: EventBridgeEtl::  3.0630 seconds
+2022-02-14 06:18:52.835563::Time taken to synthesize stack: EventBridgeEtl::  3.6895 seconds
+2022-02-14 06:19:01.568926::Time taken to synthesize stack: EventBridgeEtl::  3.1658 seconds
+2022-02-14 06:19:35.541393::Time taken to synthesize stack: EventBridgeEtl::  3.2439 seconds

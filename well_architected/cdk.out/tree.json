@@ -10175,47 +10175,274 @@
             "id": "TransformedData",
             "path": "EventBridgeEtl/TransformedData",
             "children": {
-              "Resource": {
-                "id": "Resource",
-                "path": "EventBridgeEtl/TransformedData/Resource",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::DynamoDB::Table",
-                  "aws:cdk:cloudformation:props": {
-                    "keySchema": [
-                      {
-                        "attributeName": "id",
-                        "keyType": "HASH"
+              "ErrorTopic": {
+                "id": "ErrorTopic",
+                "path": "EventBridgeEtl/TransformedData/ErrorTopic",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "EventBridgeEtl/TransformedData/ErrorTopic/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::SNS::Topic",
+                      "aws:cdk:cloudformation:props": {
+                        "displayName": "ErrorTopic"
                       }
-                    ],
-                    "attributeDefinitions": [
-                      {
-                        "attributeName": "id",
-                        "attributeType": "S"
-                      }
-                    ],
-                    "provisionedThroughput": {
-                      "readCapacityUnits": 5,
-                      "writeCapacityUnits": 5
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-sns.CfnTopic",
+                      "version": "1.142.0"
                     }
                   }
                 },
                 "constructInfo": {
-                  "fqn": "@aws-cdk/aws-dynamodb.CfnTable",
+                  "fqn": "@aws-cdk/aws-sns.Topic",
+                  "version": "1.142.0"
+                }
+              },
+              "TransformedData": {
+                "id": "TransformedData",
+                "path": "EventBridgeEtl/TransformedData/TransformedData",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "EventBridgeEtl/TransformedData/TransformedData/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::DynamoDB::Table",
+                      "aws:cdk:cloudformation:props": {
+                        "keySchema": [
+                          {
+                            "attributeName": "id",
+                            "keyType": "HASH"
+                          }
+                        ],
+                        "attributeDefinitions": [
+                          {
+                            "attributeName": "id",
+                            "attributeType": "S"
+                          }
+                        ],
+                        "billingMode": "PAY_PER_REQUEST"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-dynamodb.CfnTable",
+                      "version": "1.139.0"
+                    }
+                  },
+                  "ScalingRole": {
+                    "id": "ScalingRole",
+                    "path": "EventBridgeEtl/TransformedData/TransformedData/ScalingRole",
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/core.Resource",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-dynamodb.Table",
                   "version": "1.139.0"
                 }
               },
-              "ScalingRole": {
-                "id": "ScalingRole",
-                "path": "EventBridgeEtl/TransformedData/ScalingRole",
+              "DynamoDB User Errors > 0": {
+                "id": "DynamoDB User Errors > 0",
+                "path": "EventBridgeEtl/TransformedData/DynamoDB User Errors > 0",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "EventBridgeEtl/TransformedData/DynamoDB User Errors > 0/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                      "aws:cdk:cloudformation:props": {
+                        "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                        "evaluationPeriods": 6,
+                        "alarmActions": [
+                          {
+                            "Ref": "TransformedDataErrorTopic9205B960"
+                          }
+                        ],
+                        "datapointsToAlarm": 1,
+                        "metricName": "UserErrors",
+                        "namespace": "AWS/DynamoDB",
+                        "period": 300,
+                        "statistic": "Sum",
+                        "threshold": 0,
+                        "treatMissingData": "notBreaching"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
                 "constructInfo": {
-                  "fqn": "@aws-cdk/core.Resource",
+                  "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
+                  "version": "1.142.0"
+                }
+              },
+              "DynamoDB Table Reads--Writes Throttled": {
+                "id": "DynamoDB Table Reads--Writes Throttled",
+                "path": "EventBridgeEtl/TransformedData/DynamoDB Table Reads--Writes Throttled",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "EventBridgeEtl/TransformedData/DynamoDB Table Reads--Writes Throttled/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                      "aws:cdk:cloudformation:props": {
+                        "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                        "evaluationPeriods": 6,
+                        "alarmActions": [
+                          {
+                            "Ref": "TransformedDataErrorTopic9205B960"
+                          }
+                        ],
+                        "datapointsToAlarm": 1,
+                        "metrics": [
+                          {
+                            "expression": "m1 + m2",
+                            "id": "expr_1",
+                            "label": "DynamoDB Throttles"
+                          },
+                          {
+                            "metricStat": {
+                              "metric": {
+                                "metricName": "ReadThrottleEvents",
+                                "namespace": "AWS/DynamoDB",
+                                "dimensions": [
+                                  {
+                                    "name": "TableName",
+                                    "value": {
+                                      "Ref": "TransformedData0F179200"
+                                    }
+                                  }
+                                ]
+                              },
+                              "period": 300,
+                              "stat": "Sum"
+                            },
+                            "id": "m1",
+                            "returnData": false
+                          },
+                          {
+                            "metricStat": {
+                              "metric": {
+                                "metricName": "WriteThrottleEvents",
+                                "namespace": "AWS/DynamoDB",
+                                "dimensions": [
+                                  {
+                                    "name": "TableName",
+                                    "value": {
+                                      "Ref": "TransformedData0F179200"
+                                    }
+                                  }
+                                ]
+                              },
+                              "period": 300,
+                              "stat": "Sum"
+                            },
+                            "id": "m2",
+                            "returnData": false
+                          }
+                        ],
+                        "threshold": 1,
+                        "treatMissingData": "notBreaching"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
+                  "version": "1.142.0"
+                }
+              },
+              "CloudWatchDashBoard": {
+                "id": "CloudWatchDashBoard",
+                "path": "EventBridgeEtl/TransformedData/CloudWatchDashBoard",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "EventBridgeEtl/TransformedData/CloudWatchDashBoard/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::CloudWatch::Dashboard",
+                      "aws:cdk:cloudformation:props": {
+                        "dashboardBody": {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"DynamoDB Latency\",\"region\":\"",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              "\",\"stacked\":true,\"metrics\":[[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"GetItem\",\"TableName\",\"",
+                              {
+                                "Ref": "TransformedData0F179200"
+                              },
+                              "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"UpdateItem\",\"TableName\",\"",
+                              {
+                                "Ref": "TransformedData0F179200"
+                              },
+                              "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"PutItem\",\"TableName\",\"",
+                              {
+                                "Ref": "TransformedData0F179200"
+                              },
+                              "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"DeleteItem\",\"TableName\",\"",
+                              {
+                                "Ref": "TransformedData0F179200"
+                              },
+                              "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"Query\",\"TableName\",\"",
+                              {
+                                "Ref": "TransformedData0F179200"
+                              },
+                              "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"DynamoDB Consumed Read/Write Units\",\"region\":\"",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              "\",\"stacked\":false,\"metrics\":[[\"AWS/DynamoDB\",\"ConsumedReadCapacityUnits\",\"TableName\",\"",
+                              {
+                                "Ref": "TransformedData0F179200"
+                              },
+                              "\"],[\"AWS/DynamoDB\",\"ConsumedWriteCapacityUnits\",\"TableName\",\"",
+                              {
+                                "Ref": "TransformedData0F179200"
+                              },
+                              "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"DynamoDB Throttles\",\"region\":\"",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              "\",\"stacked\":true,\"metrics\":[[\"AWS/DynamoDB\",\"ReadThrottleEvents\",\"TableName\",\"",
+                              {
+                                "Ref": "TransformedData0F179200"
+                              },
+                              "\",{\"stat\":\"Sum\"}],[\"AWS/DynamoDB\",\"WriteThrottleEvents\",\"TableName\",\"",
+                              {
+                                "Ref": "TransformedData0F179200"
+                              },
+                              "\",{\"stat\":\"Sum\"}]],\"yAxis\":{}}}]}"
+                            ]
+                          ]
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-cloudwatch.CfnDashboard",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-cloudwatch.Dashboard",
                   "version": "1.142.0"
                 }
               }
             },
             "constructInfo": {
-              "fqn": "@aws-cdk/aws-dynamodb.Table",
-              "version": "1.139.0"
+              "fqn": "@aws-cdk/core.Construct",
+              "version": "1.142.0"
             }
           },
           "LandingBucket": {
@@ -12256,7 +12483,7 @@
                                   "Resource": [
                                     {
                                       "Fn::GetAtt": [
-                                        "TransformedDataB0572681",
+                                        "TransformedData0F179200",
                                         "Arn"
                                       ]
                                     },
@@ -12372,7 +12599,7 @@
                     "environment": {
                       "variables": {
                         "TABLE_NAME": {
-                          "Ref": "TransformedDataB0572681"
+                          "Ref": "TransformedData0F179200"
                         }
                       }
                     },
