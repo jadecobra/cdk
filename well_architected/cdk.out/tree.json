@@ -10171,6 +10171,46 @@
         "id": "EventBridgeEtl",
         "path": "EventBridgeEtl",
         "children": {
+          "LandingBucket": {
+            "id": "LandingBucket",
+            "path": "EventBridgeEtl/LandingBucket",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "EventBridgeEtl/LandingBucket/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::S3::Bucket",
+                  "aws:cdk:cloudformation:props": {}
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-s3.CfnBucket",
+                  "version": "1.142.0"
+                }
+              },
+              "Notifications": {
+                "id": "Notifications",
+                "path": "EventBridgeEtl/LandingBucket/Notifications",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "EventBridgeEtl/LandingBucket/Notifications/Resource",
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/core.CfnResource",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/core.Construct",
+                  "version": "1.142.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/aws-s3.Bucket",
+              "version": "1.142.0"
+            }
+          },
           "TransformedData": {
             "id": "TransformedData",
             "path": "EventBridgeEtl/TransformedData",
@@ -10442,46 +10482,6 @@
             },
             "constructInfo": {
               "fqn": "@aws-cdk/core.Construct",
-              "version": "1.142.0"
-            }
-          },
-          "LandingBucket": {
-            "id": "LandingBucket",
-            "path": "EventBridgeEtl/LandingBucket",
-            "children": {
-              "Resource": {
-                "id": "Resource",
-                "path": "EventBridgeEtl/LandingBucket/Resource",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::S3::Bucket",
-                  "aws:cdk:cloudformation:props": {}
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-s3.CfnBucket",
-                  "version": "1.142.0"
-                }
-              },
-              "Notifications": {
-                "id": "Notifications",
-                "path": "EventBridgeEtl/LandingBucket/Notifications",
-                "children": {
-                  "Resource": {
-                    "id": "Resource",
-                    "path": "EventBridgeEtl/LandingBucket/Notifications/Resource",
-                    "constructInfo": {
-                      "fqn": "@aws-cdk/core.CfnResource",
-                      "version": "1.142.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/core.Construct",
-                  "version": "1.142.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/aws-s3.Bucket",
               "version": "1.142.0"
             }
           },

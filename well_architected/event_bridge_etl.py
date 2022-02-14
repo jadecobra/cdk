@@ -3,7 +3,7 @@ from aws_cdk import (
     aws_lambda_event_sources as _event,
     aws_dynamodb as dynamo_db,
     aws_s3 as s3,
-    aws_s3_notifications as s3n,
+    aws_s3_notifications as s3_notifications,
     aws_sqs as sqs,
     aws_iam as iam,
     aws_ec2 as ec2,
@@ -24,29 +24,27 @@ class EventbridgeEtl(cdk.Stack):
     # why we are limiting concurrency to 2 on all 3 lambdas. Feel free to raise this.
     lambda_throttle_size = 2
 
-    def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
-        super().__init__(scope, id, **kwargs)
-
-        table = dynamodb_table.DynamoDBTableConstruct(
-            self, 'TransformedData',
-            partition_key=dynamo_db.Attribute(name="id", type=dynamo_db.AttributeType.STRING
-            )
-        ).dynamodb_table
-
-        upload_bucket = s3.Bucket(self, "LandingBucket")
-
-        ####
-        # Queue that listens for S3 Bucket events
-        ####
-        upload_queue = sqs.Queue(self, 'newObjectInLandingBucketEventQueue', visibility_timeout=cdk.Duration.seconds(300))
-
-        upload_bucket.add_event_notification(
-            s3.EventType.OBJECT_CREATED, s3n.SqsDestination(upload_queue)
+    @staticmethod
+    def create_iam_policy(resources=None, actions=None):
+        return iam.PolicyStatement(
+            effect=iam.Effect.ALLOW,
+            resources=resources if resources else ["*"],
+            actions=actions
         )
 
-        # EventBridge Permissions
-        event_bridge_put_policy = iam.PolicyStatement(
-            effect=iam.Effect.ALLOW, resources=['*'], actions=['events:PutEvents'])
+    def create_event_bridge_iam_policy(self):
+        return self.create_iam_policy(actions=['events:PutEvents'])
+
+    def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
+        super().__init__(scope, id, **kwargs)
+        self.upload_bucket = s3.Bucket(self, "LandingBucket")
+
+        self.transformed_data = self.create_dynamodb_table()
+        self.upload_queue = self.create_sqs_queue()
+        self.create_s3_sqs_notification(
+            bucket=self.upload_bucket, sqs_queue=self.upload_queue
+        )
+        self.event_bridge_put_policy = self.create_event_bridge_iam_policy()
 
         ####
         # Fargate ECS Task Creation to pull data from S3
@@ -57,29 +55,34 @@ class EventbridgeEtl(cdk.Stack):
         # download the whole file. Lambda has limitations on runtime and
         # memory/storage
         ####
-        vpc = ec2.Vpc(self, "Vpc", max_azs=2)
+        self.vpc = ec2.Vpc(self, "Vpc", max_azs=2)
+        self.subnet_ids = [subnet.subnet_id for subnet in self.vpc.private_subnets]
 
-        logging = ecs.AwsLogDriver(stream_prefix='TheEventBridgeETL', log_retention=logs.RetentionDays.ONE_WEEK)
+        self.logging = ecs.AwsLogDriver(
+            stream_prefix='TheEventBridgeETL',
+            log_retention=logs.RetentionDays.ONE_WEEK
+        )
 
-        cluster = ecs.Cluster(self, 'Ec2Cluster', vpc=vpc)
+        self.ecs_cluster = ecs.Cluster(self, 'Ec2Cluster', vpc=self.vpc)
 
-        task_definition = ecs.TaskDefinition(self, 'FargateTaskDefinition',
-                                             memory_mib="512",
-                                             cpu="256",
-                                             compatibility=ecs.Compatibility.FARGATE)
+        self.task_definition = ecs.TaskDefinition(
+            self, 'FargateTaskDefinition',
+            memory_mib="512",
+            cpu="256",
+            compatibility=ecs.Compatibility.FARGATE
+        )
+        self.task_definition.add_to_task_role_policy(self.event_bridge_put_policy)
+        self.upload_bucket.grant_read(self.task_definition.task_role)
 
-        # We need to give our fargate container permission to put events on our EventBridge
-        task_definition.add_to_task_role_policy(event_bridge_put_policy)
-        # Grant fargate container access to the object that was uploaded to s3
-        upload_bucket.grant_read(task_definition.task_role)
-
-        container = task_definition.add_container('AppContainer',
-                                                  image=ecs.ContainerImage.from_asset('containers/s3DataExtractionTask'),
-                                                  logging=logging,
-                                                  environment={
-                                                      'S3_BUCKET_NAME': upload_bucket.bucket_name,
-                                                      'S3_OBJECT_KEY': ''
-                                                  })
+        self.extraction_task = self.task_definition.add_container(
+            'AppContainer',
+            image=ecs.ContainerImage.from_asset('containers/s3DataExtractionTask'),
+            logging=self.logging,
+            environment={
+                'S3_BUCKET_NAME': self.upload_bucket.bucket_name,
+                'S3_OBJECT_KEY': ''
+            }
+        )
 
         ####
         # Lambdas
@@ -92,40 +95,40 @@ class EventbridgeEtl(cdk.Stack):
         # Observe    - This is a lambda that subscribes to all events and logs them centrally
         ####
 
-        subnet_ids = []
-        for subnet in vpc.private_subnets:
-            subnet_ids.append(subnet.subnet_id)
-
         ####
         # Extract
         # defines an AWS Lambda resource to trigger our fargate ecs task
         ####
-        extract_lambda = _lambda.Function(self, "extractLambdaHandler",
-                                          runtime=_lambda.Runtime.NODEJS_12_X,
-                                          handler="s3SqsEventConsumer.handler",
-                                          code=_lambda.Code.from_asset("lambda_functions/extract"),
-                                          reserved_concurrent_executions=self.lambda_throttle_size,
-                                          environment={
-                                              "CLUSTER_NAME": cluster.cluster_name,
-                                              "TASK_DEFINITION": task_definition.task_definition_arn,
-                                              "SUBNETS": json.dumps(subnet_ids),
-                                              "CONTAINER_NAME": container.container_name
-                                          }
-                                          )
-        upload_queue.grant_consume_messages(extract_lambda)
-        extract_lambda.add_event_source(_event.SqsEventSource(queue=upload_queue))
-        extract_lambda.add_to_role_policy(event_bridge_put_policy)
+        extract_function = _lambda.Function(
+            self, "extractLambdaHandler",
+            runtime=_lambda.Runtime.NODEJS_12_X,
+            handler="s3SqsEventConsumer.handler",
+            code=_lambda.Code.from_asset("lambda_functions/extract"),
+            reserved_concurrent_executions=self.lambda_throttle_size,
+            environment={
+                "CLUSTER_NAME": self.ecs_cluster.cluster_name,
+                "TASK_DEFINITION": self.task_definition.task_definition_arn,
+                "SUBNETS": json.dumps(self.subnet_ids),
+                "CONTAINER_NAME": self.extraction_task.container_name
+            }
+        )
+        extract_function.add_event_source(_event.SqsEventSource(queue=self.upload_queue))
+        extract_function.add_to_role_policy(self.event_bridge_put_policy)
+        self.upload_queue.grant_consume_messages(extract_function)
 
-        run_task_policy_statement = iam.PolicyStatement(
-            effect=iam.Effect.ALLOW, resources=[task_definition.task_definition_arn], actions=['ecs:RunTask'])
-        extract_lambda.add_to_role_policy(run_task_policy_statement)
+        extract_function.add_to_role_policy(
+            self.create_iam_policy(
+                resources=[self.task_definition.task_definition_arn],
+                actions=['ecs:RunTask']
+            )
+        )
 
         task_execution_role_policy_statement = iam.PolicyStatement(
             effect=iam.Effect.ALLOW,
-            resources=[task_definition.obtain_execution_role().role_arn,
-                       task_definition.task_role.role_arn],
+            resources=[self.task_definition.obtain_execution_role().role_arn,
+                       self.task_definition.task_role.role_arn],
             actions=['iam:PassRole'])
-        extract_lambda.add_to_role_policy(task_execution_role_policy_statement)
+        extract_function.add_to_role_policy(task_execution_role_policy_statement)
 
         ####
         # Transform
@@ -139,7 +142,7 @@ class EventbridgeEtl(cdk.Stack):
                                             reserved_concurrent_executions=self.lambda_throttle_size,
                                             timeout=cdk.Duration.seconds(3)
                                             )
-        transform_lambda.add_to_role_policy(event_bridge_put_policy)
+        transform_lambda.add_to_role_policy(self.event_bridge_put_policy)
 
         # Create EventBridge rule to route extraction events
         transform_rule = events.Rule(self, 'transformRule',
@@ -163,11 +166,11 @@ class EventbridgeEtl(cdk.Stack):
                                        reserved_concurrent_executions=self.lambda_throttle_size,
                                        timeout=cdk.Duration.seconds(3),
                                        environment={
-                                           "TABLE_NAME": table.table_name
+                                           "TABLE_NAME": self.transformed_data.table_name
                                        }
                                        )
-        load_lambda.add_to_role_policy(event_bridge_put_policy)
-        table.grant_read_write_data(load_lambda)
+        load_lambda.add_to_role_policy(self.event_bridge_put_policy)
+        self.transformed_data.grant_read_write_data(load_lambda)
 
         load_rule = events.Rule(self, 'loadRule',
                                 description='Data transformed, Needs loaded into dynamodb',
@@ -196,3 +199,25 @@ class EventbridgeEtl(cdk.Stack):
                                    event_pattern=events.EventPattern(source=['cdkpatterns.the-eventbridge-etl']))
 
         observe_rule.add_target(targets.LambdaFunction(handler=observe_lambda))
+
+    def create_dynamodb_table(self):
+        return dynamodb_table.DynamoDBTableConstruct(
+            self, 'TransformedData',
+            partition_key=dynamo_db.Attribute(
+                name="id",
+                type=dynamo_db.AttributeType.STRING
+            )
+        ).dynamodb_table
+
+    def create_sqs_queue(self):
+        return sqs.Queue(
+            self, 'newObjectInLandingBucketEventQueue',
+            visibility_timeout=cdk.Duration.seconds(300)
+        )
+
+    @staticmethod
+    def create_s3_sqs_notification(bucket=None, sqs_queue=None):
+        bucket.add_event_notification(
+            s3.EventType.OBJECT_CREATED,
+            s3_notifications.SqsDestination(sqs_queue)
+        )
