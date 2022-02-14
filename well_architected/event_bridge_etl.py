@@ -1,6 +1,6 @@
 from aws_cdk import (
     aws_lambda as _lambda,
-    aws_lambda_event_sources as _event,
+    aws_lambda_event_sources as lambda_event_sources,
     aws_dynamodb as dynamo_db,
     aws_s3 as s3,
     aws_s3_notifications as s3_notifications,
@@ -112,40 +112,60 @@ class EventbridgeEtl(cdk.Stack):
                 "CONTAINER_NAME": self.extraction_task.container_name
             }
         )
-        extract_function.add_event_source(_event.SqsEventSource(queue=self.upload_queue))
-        extract_function.add_to_role_policy(self.event_bridge_put_policy)
-        self.upload_queue.grant_consume_messages(extract_function)
+        extract_function.add_event_source(lambda_event_sources.SqsEventSource(queue=self.upload_queue))
 
-        extract_function.add_to_role_policy(
+        # extract_function.add_to_role_policy(self.event_bridge_put_policy)
+        # extract_function.add_to_role_policy(
+        #     self.create_iam_policy(
+        #         resources=[self.task_definition.task_definition_arn],
+        #         actions=['ecs:RunTask']
+        #     )
+        # )
+        # extract_function.add_to_role_policy(
+        #     self.create_iam_policy(
+        #         resources=[
+        #             self.task_definition.obtain_execution_role().role_arn,
+        #             self.task_definition.task_role.role_arn
+        #         ],
+        #         actions=['iam:PassRole']
+        #     )
+        # )
+
+        for policy in (
+            self.event_bridge_put_policy,
             self.create_iam_policy(
                 resources=[self.task_definition.task_definition_arn],
                 actions=['ecs:RunTask']
+            ),
+            self.create_iam_policy(
+                resources=[
+                    self.task_definition.obtain_execution_role().role_arn,
+                    self.task_definition.task_role.role_arn
+                ],
+                actions=['iam:PassRole']
             )
-        )
+        ):
+            extract_function.add_to_role_policy(policy)
 
-        task_execution_role_policy_statement = iam.PolicyStatement(
-            effect=iam.Effect.ALLOW,
-            resources=[self.task_definition.obtain_execution_role().role_arn,
-                       self.task_definition.task_role.role_arn],
-            actions=['iam:PassRole'])
-        extract_function.add_to_role_policy(task_execution_role_policy_statement)
-
+        self.upload_queue.grant_consume_messages(extract_function)
         ####
         # Transform
         # defines a lambda to transform the data that was extracted from s3
         ####
 
-        transform_lambda = _lambda.Function(self, "TransformLambdaHandler",
-                                            runtime=_lambda.Runtime.NODEJS_12_X,
-                                            handler="transform.handler",
-                                            code=_lambda.Code.from_asset("lambda_functions/transform"),
-                                            reserved_concurrent_executions=self.lambda_throttle_size,
-                                            timeout=cdk.Duration.seconds(3)
-                                            )
+        transform_lambda = _lambda.Function(
+            self, "TransformLambdaHandler",
+            runtime=_lambda.Runtime.NODEJS_12_X,
+            handler="transform.handler",
+            code=_lambda.Code.from_asset("lambda_functions/transform"),
+            reserved_concurrent_executions=self.lambda_throttle_size,
+            timeout=cdk.Duration.seconds(3)
+        )
         transform_lambda.add_to_role_policy(self.event_bridge_put_policy)
 
         # Create EventBridge rule to route extraction events
-        transform_rule = events.Rule(self, 'transformRule',
+        transform_rule = events.Rule(
+            self, 'transformRule',
                                      description='Data extracted from S3, Needs transformed',
                                      event_pattern=events.EventPattern(source=['cdkpatterns.the-eventbridge-etl'],
                                                                        detail_type=['s3RecordExtraction'],
