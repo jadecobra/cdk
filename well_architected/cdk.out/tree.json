@@ -11786,11 +11786,6 @@
                                   }
                                 },
                                 {
-                                  "Action": "events:PutEvents",
-                                  "Effect": "Allow",
-                                  "Resource": "*"
-                                },
-                                {
                                   "Action": "ecs:RunTask",
                                   "Effect": "Allow",
                                   "Resource": {
@@ -11814,6 +11809,11 @@
                                       ]
                                     }
                                   ]
+                                },
+                                {
+                                  "Action": "events:PutEvents",
+                                  "Effect": "Allow",
+                                  "Resource": "*"
                                 }
                               ],
                               "Version": "2012-10-17"

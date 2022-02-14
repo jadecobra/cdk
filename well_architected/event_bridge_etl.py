@@ -88,7 +88,7 @@ class EventbridgeEtl(cdk.Stack):
         # Extract
         # defines an AWS Lambda resource to trigger our fargate ecs task
         ####
-        extract_function = _lambda.Function(
+        extractor = _lambda.Function(
             self, "extractLambdaHandler",
             runtime=_lambda.Runtime.NODEJS_12_X,
             handler="s3SqsEventConsumer.handler",
@@ -101,12 +101,11 @@ class EventbridgeEtl(cdk.Stack):
                 "CONTAINER_NAME": self.extraction_task.container_name
             }
         )
-        extract_function.add_event_source(
+        extractor.add_event_source(
             lambda_event_sources.SqsEventSource(queue=self.upload_queue)
         )
 
         for policy in (
-            self.event_bridge_put_policy,
             self.create_iam_policy(
                 resources=[self.task_definition.task_definition_arn],
                 actions=['ecs:RunTask']
@@ -119,16 +118,16 @@ class EventbridgeEtl(cdk.Stack):
                 actions=['iam:PassRole']
             )
         ):
-            extract_function.add_to_role_policy(policy)
+            extractor.add_to_role_policy(policy)
 
-        self.upload_queue.grant_consume_messages(extract_function)
+
 
         ####
         # Transform
         # defines a lambda to transform the data that was extracted from s3
         ####
 
-        transform_function = _lambda.Function(
+        transformer = _lambda.Function(
             self, "TransformLambdaHandler",
             runtime=_lambda.Runtime.NODEJS_12_X,
             handler="transform.handler",
@@ -137,14 +136,14 @@ class EventbridgeEtl(cdk.Stack):
             timeout=cdk.Duration.seconds(3)
         )
 
-        transform_function.add_to_role_policy(self.event_bridge_put_policy)
+
 
         self.create_event_bridge_rule(
             name='transform',
             description='Data extracted from S3, Needs transformation',
             detail_type='s3RecordExtraction',
             status="extracted",
-            lambda_function=transform_function,
+            lambda_function=transformer,
         )
 
         ####
@@ -152,7 +151,7 @@ class EventbridgeEtl(cdk.Stack):
         # load the transformed data in dynamodb
         ####
 
-        load_function = _lambda.Function(
+        loader = _lambda.Function(
             self, "LoadLambdaHandler",
             runtime=_lambda.Runtime.NODEJS_12_X,
             handler="load.handler",
@@ -163,23 +162,29 @@ class EventbridgeEtl(cdk.Stack):
                 "TABLE_NAME": self.transformed_data.table_name
             }
         )
-        load_function.add_to_role_policy(self.event_bridge_put_policy)
-        self.transformed_data.grant_read_write_data(load_function)
+
 
         self.create_event_bridge_rule(
             name='load',
             description='Load Transformed Data to DynamoDB',
             detail_type='transform',
             status="transformed",
-            lambda_function=load_function,
+            lambda_function=loader,
         )
 
+        self.add_policies_to_lambda_functions(
+            extractor, transformer, loader,
+            policy=self.event_bridge_put_policy
+        )
+
+        self.upload_queue.grant_consume_messages(extractor)
+        self.transformed_data.grant_read_write_data(loader)
         ####
         # Observe
         # Watch for all cdkpatterns.the-eventbridge-etl events and log them centrally
         ####
 
-        observe_function = _lambda.Function(
+        observer = _lambda.Function(
             self, "ObserveLam bdaHandler",
             runtime=_lambda.Runtime.NODEJS_12_X,
             handler="observe.handler",
@@ -191,7 +196,17 @@ class EventbridgeEtl(cdk.Stack):
         self.create_event_bridge_rule(
             name='observe',
             description='all events are caught here and logged centrally',
-            lambda_function=observe_function,
+            lambda_function=observer,
+        )
+
+    def create_lambda_function(self, logical_name=None, function_name=None, concurrent_executions=2, timeout=None):
+        return _lambda.Function(
+            self, logical_name,
+            runtime=_lambda.Runtime.NODEJS_12_X,
+            handler=f"{function_name}.handler",
+            code=_lambda.Code.from_asset("lambda_functions/{function_name}"),
+            reserved_concurrent_executions=concurrent_executions,
+            timeout=cdk.Duration.seconds(timeout)
         )
 
     def create_dynamodb_table(self):
@@ -244,3 +259,7 @@ class EventbridgeEtl(cdk.Stack):
             event_bridge_targets.LambdaFunction(handler=lambda_function)
         )
         return rule
+
+    def add_policies_to_lambda_functions(self, *lambda_functions, policy=None):
+        for lambda_function in lambda_functions:
+            lambda_function.add_to_role_policy(policy)
