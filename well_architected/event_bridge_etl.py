@@ -127,13 +127,18 @@ class EventbridgeEtl(cdk.Stack):
         # defines a lambda to transform the data that was extracted from s3
         ####
 
-        transformer = _lambda.Function(
-            self, "TransformLambdaHandler",
-            runtime=_lambda.Runtime.NODEJS_12_X,
-            handler="transform.handler",
-            code=_lambda.Code.from_asset("lambda_functions/transform"),
-            reserved_concurrent_executions=self.lambda_throttle_size,
-            timeout=cdk.Duration.seconds(3)
+        # transformer = _lambda.Function(
+        #     self, "TransformLambdaHandler",
+        #     runtime=_lambda.Runtime.NODEJS_12_X,
+        #     handler="transform.handler",
+        #     code=_lambda.Code.from_asset("lambda_functions/transform"),
+        #     reserved_concurrent_executions=self.lambda_throttle_size,
+        #     timeout=cdk.Duration.seconds(3)
+        # )
+
+        transformer = self.create_lambda_function()(
+            logical_name="TransformLambdaHandler",
+            function="transform",
         )
 
 
@@ -153,7 +158,6 @@ class EventbridgeEtl(cdk.Stack):
         loader = self.create_lambda_function(
             logical_name="LoadLambdaHandler",
             function_name="load",
-            timeout=3,
             environment_variables={
                 "TABLE_NAME": self.transformed_data.table_name
             }
@@ -182,7 +186,6 @@ class EventbridgeEtl(cdk.Stack):
         observer = self.create_lambda_function(
             logical_name="ObserveLam bdaHandler",
             function_name="observe",
-            timeout=3
         )
 
         self.create_event_bridge_rule(
