@@ -82,27 +82,10 @@ class EventbridgeEtl(cdk.Stack):
         extractor.add_event_source(
             lambda_event_sources.SqsEventSource(queue=self.upload_queue)
         )
-
-        # for policy in (
-        #     self.create_iam_policy(
-        #         resources=[self.ecs_task_definition.task_definition_arn],
-        #         actions=['ecs:RunTask']
-        #     ),
-        #     self.create_iam_policy(
-        #         resources=[
-        #             self.ecs_task_definition.obtain_execution_role().role_arn,
-        #             self.ecs_task_definition.task_role.role_arn
-        #         ],
-        #         actions=['iam:PassRole']
-        #     )
-        # ):
-        #     # extractor.add_to_role_policy(policy)
-        #     self.add_policies_to_lambda_functions(extractor, policy=policy)
         self.grant_ecs_task_permissions(
             ecs_task_definition=self.ecs_task_definition,
             lambda_function=extractor
         )
-
 
 
         ####
@@ -158,16 +141,23 @@ class EventbridgeEtl(cdk.Stack):
         observer = self.create_lambda_function(
             logical_name="ObserveLam bdaHandler",
             function_name="observe",
+            event_bridge_rule_name='observe',
+            event_bridge_rule_description='all events are caught here and logged centrally'
         )
 
-        self.create_event_bridge_rule(
-            name='observe',
-            description='all events are caught here and logged centrally',
-            lambda_function=observer,
-        )
+        # self.create_event_bridge_rule(
+        #     name='observe',
+        #     description='all events are caught here and logged centrally',
+        #     lambda_function=observer,
+        # )
 
-    def create_lambda_function(self, logical_name=None, function_name=None, concurrent_executions=2, timeout=3, environment_variables=None):
-        return _lambda.Function(
+    def create_lambda_function(
+        self, logical_name=None, function_name=None,
+        concurrent_executions=2, timeout=3, environment_variables=None,
+        event_bridge_rule_name=None,
+        event_bridge_rule_description=None,
+    ):
+        lambda_function = _lambda.Function(
             self, logical_name,
             runtime=_lambda.Runtime.NODEJS_12_X,
             handler=f'{function_name}.handler',
@@ -176,6 +166,13 @@ class EventbridgeEtl(cdk.Stack):
             timeout=cdk.Duration.seconds(timeout),
             environment=environment_variables,
         )
+        if event_bridge_rule_name:
+            self.create_event_bridge_rule(
+                name=event_bridge_rule_name,
+                description=event_bridge_rule_description,
+                lambda_function=lambda_function,
+            )
+        return lambda_function
 
     def create_dynamodb_table(self):
         return dynamodb_table.DynamoDBTableConstruct(

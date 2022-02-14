@@ -12970,3 +12970,8 @@
 2022-02-14 10:15:38.225343::Time taken to synthesize stack: EventBridgeEtl::  3.8708 seconds
 2022-02-14 10:16:16.106647::Time taken to synthesize stack: EventBridgeEtl::  4.0444 seconds
 2022-02-14 10:18:05.420786::Time taken to synthesize stack: EventBridgeEtl::  4.2002 seconds
+2022-02-14 10:18:55.578032::Time taken to synthesize stack: EventBridgeEtl::  3.9471 seconds
+2022-02-14 10:21:13.191863::Time taken to synthesize stack: EventBridgeEtl::  3.8729 seconds
+2022-02-14 10:21:37.230721::Time taken to synthesize stack: EventBridgeEtl::  4.0054 seconds
+2022-02-14 10:25:04.003103::Time taken to synthesize stack: EventBridgeEtl::  3.9359 seconds
+2022-02-14 10:26:06.772472::Time taken to synthesize stack: EventBridgeEtl::  3.8839 seconds
