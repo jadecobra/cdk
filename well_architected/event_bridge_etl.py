@@ -28,6 +28,13 @@ class EventbridgeEtl(cdk.Stack):
     def get_subnet_ids(vpc):
         return json.dumps([subnet.subnet_id for subnet in vpc.private_subnets])
 
+    @staticmethod
+    def logging():
+        return ecs.AwsLogDriver(
+            stream_prefix='TheEventBridgeETL',
+            log_retention=logs.RetentionDays.ONE_WEEK
+        )
+
     def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
         self.upload_bucket = s3.Bucket(self, "LandingBucket")
@@ -50,10 +57,10 @@ class EventbridgeEtl(cdk.Stack):
         ####
         self.vpc = ec2.Vpc(self, "Vpc", max_azs=2)
 
-        self.logging = ecs.AwsLogDriver(
-            stream_prefix='TheEventBridgeETL',
-            log_retention=logs.RetentionDays.ONE_WEEK
-        )
+        # self.logging = ecs.AwsLogDriver(
+        #     stream_prefix='TheEventBridgeETL',
+        #     log_retention=logs.RetentionDays.ONE_WEEK
+        # )
 
         self.ecs_cluster = ecs.Cluster(self, 'Ec2Cluster', vpc=self.vpc)
 
@@ -69,7 +76,8 @@ class EventbridgeEtl(cdk.Stack):
         self.extraction_task = self.task_definition.add_container(
             'AppContainer',
             image=ecs.ContainerImage.from_asset('containers/s3DataExtractionTask'),
-            logging=self.logging,
+            # logging=self.logging,
+            logging=self.logging(),
             environment={
                 'S3_BUCKET_NAME': self.upload_bucket.bucket_name,
                 'S3_OBJECT_KEY': ''
