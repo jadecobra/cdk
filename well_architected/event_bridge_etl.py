@@ -212,12 +212,17 @@ class EventbridgeEtl(cdk.Stack):
             timeout=cdk.Duration.seconds(3)
         )
 
-        observe_rule = events.Rule(
-            self, 'observeRule',
+        # observe_rule = events.Rule(
+        #     self, 'observeRule',
+        #     description='all events are caught here and logged centrally',
+        #     event_pattern=events.EventPattern(
+        #         source=['cdkpatterns.the-eventbridge-etl']
+        #     )
+        # )
+        observe_rule = self.create_event_bridge_rule(
+            name='observe',
             description='all events are caught here and logged centrally',
-            event_pattern=events.EventPattern(
-                source=['cdkpatterns.the-eventbridge-etl']
-            )
+
         )
 
         observe_rule.add_target(event_bridge_targets.LambdaFunction(handler=observe_function))
