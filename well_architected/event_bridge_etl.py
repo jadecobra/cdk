@@ -150,15 +150,11 @@ class EventbridgeEtl(cdk.Stack):
         # Load
         # load the transformed data in dynamodb
         ####
-
-        loader = _lambda.Function(
-            self, "LoadLambdaHandler",
-            runtime=_lambda.Runtime.NODEJS_12_X,
-            handler="load.handler",
-            code=_lambda.Code.from_asset("lambda_functions/load"),
-            reserved_concurrent_executions=self.lambda_throttle_size,
-            timeout=cdk.Duration.seconds(3),
-            environment={
+        loader = self.create_lambda_function(
+            logical_name="LoadLambdaHandler",
+            function_name="load",
+            timeout=3,
+            environment_variables={
                 "TABLE_NAME": self.transformed_data.table_name
             }
         )
@@ -183,15 +179,6 @@ class EventbridgeEtl(cdk.Stack):
         # Observe
         # Watch for all cdkpatterns.the-eventbridge-etl events and log them centrally
         ####
-
-        # observer = _lambda.Function(
-        #     self, "ObserveLam bdaHandler",
-        #     runtime=_lambda.Runtime.NODEJS_12_X,
-        #     handler="observe.handler",
-        #     code=_lambda.Code.from_asset("lambda_functions/observe"),
-        #     reserved_concurrent_executions=self.lambda_throttle_size,
-        #     timeout=cdk.Duration.seconds(3)
-        # )
         observer = self.create_lambda_function(
             logical_name="ObserveLam bdaHandler",
             function_name="observe",
@@ -204,14 +191,15 @@ class EventbridgeEtl(cdk.Stack):
             lambda_function=observer,
         )
 
-    def create_lambda_function(self, logical_name=None, function_name=None, concurrent_executions=2, timeout=None):
+    def create_lambda_function(self, logical_name=None, function_name=None, concurrent_executions=2, timeout=3, environment_variables=None):
         return _lambda.Function(
             self, logical_name,
             runtime=_lambda.Runtime.NODEJS_12_X,
-            handler=f"{function_name}.handler",
-            code=_lambda.Code.from_asset("lambda_functions/{function_name}"),
+            handler=f'{function_name}.handler',
+            code=_lambda.Code.from_asset(f'lambda_functions/{function_name}'),
             reserved_concurrent_executions=concurrent_executions,
-            timeout=cdk.Duration.seconds(timeout)
+            timeout=cdk.Duration.seconds(timeout),
+            environment=environment_variables,
         )
 
     def create_dynamodb_table(self):
