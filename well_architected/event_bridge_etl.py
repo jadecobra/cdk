@@ -27,7 +27,7 @@ class EventbridgeEtl(cdk.Stack):
     def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        dynamodb_table = dynamodb_table.DynamoDBTableConstruct(
+        table = dynamodb_table.DynamoDBTableConstruct(
             self, 'TransformedData',
             partition_key=dynamo_db.Attribute(name="id", type=dynamo_db.AttributeType.STRING
             )
@@ -38,9 +38,11 @@ class EventbridgeEtl(cdk.Stack):
         ####
         # Queue that listens for S3 Bucket events
         ####
-        queue = sqs.Queue(self, 'newObjectInLandingBucketEventQueue', visibility_timeout=cdk.Duration.seconds(300))
+        upload_queue = sqs.Queue(self, 'newObjectInLandingBucketEventQueue', visibility_timeout=cdk.Duration.seconds(300))
 
-        upload_bucket.add_event_notification(s3.EventType.OBJECT_CREATED, s3n.SqsDestination(queue))
+        upload_bucket.add_event_notification(
+            s3.EventType.OBJECT_CREATED, s3n.SqsDestination(upload_queue)
+        )
 
         # EventBridge Permissions
         event_bridge_put_policy = iam.PolicyStatement(
@@ -110,8 +112,8 @@ class EventbridgeEtl(cdk.Stack):
                                               "CONTAINER_NAME": container.container_name
                                           }
                                           )
-        queue.grant_consume_messages(extract_lambda)
-        extract_lambda.add_event_source(_event.SqsEventSource(queue=queue))
+        upload_queue.grant_consume_messages(extract_lambda)
+        extract_lambda.add_event_source(_event.SqsEventSource(queue=upload_queue))
         extract_lambda.add_to_role_policy(event_bridge_put_policy)
 
         run_task_policy_statement = iam.PolicyStatement(
@@ -161,11 +163,11 @@ class EventbridgeEtl(cdk.Stack):
                                        reserved_concurrent_executions=self.lambda_throttle_size,
                                        timeout=cdk.Duration.seconds(3),
                                        environment={
-                                           "TABLE_NAME": dynamodb_table.table_name
+                                           "TABLE_NAME": table.table_name
                                        }
                                        )
         load_lambda.add_to_role_policy(event_bridge_put_policy)
-        dynamodb_table.grant_read_write_data(load_lambda)
+        table.grant_read_write_data(load_lambda)
 
         load_rule = events.Rule(self, 'loadRule',
                                 description='Data transformed, Needs loaded into dynamodb',
