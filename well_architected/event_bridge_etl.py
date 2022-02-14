@@ -19,22 +19,6 @@ import dynamodb_table
 
 class EventbridgeEtl(cdk.Stack):
 
-    # If left unchecked this pattern could "fan out" on the transform and load
-    # lambdas to the point that it consumes all resources on the account. This is
-    # why we are limiting concurrency to 2 on all 3 lambdas. Feel free to raise this.
-    lambda_throttle_size = 2
-
-    @staticmethod
-    def get_subnet_ids(vpc):
-        return json.dumps([subnet.subnet_id for subnet in vpc.private_subnets])
-
-    @staticmethod
-    def logging():
-        return ecs.AwsLogDriver(
-            stream_prefix='TheEventBridgeETL',
-            log_retention=logs.RetentionDays.ONE_WEEK
-        )
-
     def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
         self.upload_bucket = s3.Bucket(self, "LandingBucket")
@@ -48,35 +32,21 @@ class EventbridgeEtl(cdk.Stack):
 
         ####
         # Fargate ECS Task Creation to pull data from S3
-        #
-        # Fargate is used here because if you had a seriously large file,
-        # you could stream the data to fargate for as long as needed before
-        # putting the data onto eventbridge or up the memory/storage to
-        # download the whole file. Lambda has limitations on runtime and
-        # memory/storage
         ####
         self.vpc = ec2.Vpc(self, "Vpc", max_azs=2)
-
-        # self.logging = ecs.AwsLogDriver(
-        #     stream_prefix='TheEventBridgeETL',
-        #     log_retention=logs.RetentionDays.ONE_WEEK
-        # )
-
         self.ecs_cluster = ecs.Cluster(self, 'Ec2Cluster', vpc=self.vpc)
-
-        self.task_definition = ecs.TaskDefinition(
+        self.ecs_task_definition = ecs.TaskDefinition(
             self, 'FargateTaskDefinition',
             memory_mib="512",
             cpu="256",
             compatibility=ecs.Compatibility.FARGATE
         )
-        self.task_definition.add_to_task_role_policy(self.event_bridge_put_policy)
-        self.upload_bucket.grant_read(self.task_definition.task_role)
+        self.ecs_task_definition.add_to_task_role_policy(self.event_bridge_put_policy)
+        self.upload_bucket.grant_read(self.ecs_task_definition.task_role)
 
-        self.extraction_task = self.task_definition.add_container(
+        self.extraction_task = self.ecs_task_definition.add_container(
             'AppContainer',
             image=ecs.ContainerImage.from_asset('containers/s3DataExtractionTask'),
-            # logging=self.logging,
             logging=self.logging(),
             environment={
                 'S3_BUCKET_NAME': self.upload_bucket.bucket_name,
@@ -104,7 +74,7 @@ class EventbridgeEtl(cdk.Stack):
             function_name='extract',
             environment_variables={
                 "CLUSTER_NAME": self.ecs_cluster.cluster_name,
-                "TASK_DEFINITION": self.task_definition.task_definition_arn,
+                "TASK_DEFINITION": self.ecs_task_definition.task_definition_arn,
                 "SUBNETS": self.get_subnet_ids(self.vpc),
                 "CONTAINER_NAME": self.extraction_task.container_name
             }
@@ -115,13 +85,13 @@ class EventbridgeEtl(cdk.Stack):
 
         for policy in (
             self.create_iam_policy(
-                resources=[self.task_definition.task_definition_arn],
+                resources=[self.ecs_task_definition.task_definition_arn],
                 actions=['ecs:RunTask']
             ),
             self.create_iam_policy(
                 resources=[
-                    self.task_definition.obtain_execution_role().role_arn,
-                    self.task_definition.task_role.role_arn
+                    self.ecs_task_definition.obtain_execution_role().role_arn,
+                    self.ecs_task_definition.task_role.role_arn
                 ],
                 actions=['iam:PassRole']
             )
@@ -256,3 +226,15 @@ class EventbridgeEtl(cdk.Stack):
     def add_policies_to_lambda_functions(self, *lambda_functions, policy=None):
         for lambda_function in lambda_functions:
             lambda_function.add_to_role_policy(policy)
+
+
+    @staticmethod
+    def get_subnet_ids(vpc):
+        return json.dumps([subnet.subnet_id for subnet in vpc.private_subnets])
+
+    @staticmethod
+    def logging():
+        return ecs.AwsLogDriver(
+            stream_prefix='TheEventBridgeETL',
+            log_retention=logs.RetentionDays.ONE_WEEK
+        )
