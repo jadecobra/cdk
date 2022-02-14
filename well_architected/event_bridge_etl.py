@@ -139,18 +139,6 @@ class EventbridgeEtl(cdk.Stack):
 
         transform_function.add_to_role_policy(self.event_bridge_put_policy)
 
-        # Create EventBridge rule to route extraction events
-        # transform_rule = events.Rule(
-        #     self, 'transformRule',
-        #     description='Data extracted from S3, Needs transformation',
-        #     event_pattern=events.EventPattern(
-        #         source=['cdkpatterns.the-eventbridge-etl'],
-        #         detail_type=['s3RecordExtraction'],
-        #         detail={
-        #             "status": ["extracted"]
-        #         }
-        #     )
-        # )
         transform_rule = self.create_event_bridge_rule(
             name='transform',
             description='Data extracted from S3, Needs transformation',
@@ -179,17 +167,6 @@ class EventbridgeEtl(cdk.Stack):
         load_function.add_to_role_policy(self.event_bridge_put_policy)
         self.transformed_data.grant_read_write_data(load_function)
 
-        # load_rule = events.Rule(
-        #     self, 'loadRule',
-        #     description='Load Transformed Data to DynamoDB',
-        #     event_pattern=events.EventPattern(
-        #         source=['cdkpatterns.the-eventbridge-etl'],
-        #         detail_type=['transform'],
-        #         detail={
-        #             "status": ["transformed"]
-        #         }
-        #     )
-        # )
         load_rule = self.create_event_bridge_rule(
             name='load',
             description='Load Transformed Data to DynamoDB',
@@ -212,13 +189,6 @@ class EventbridgeEtl(cdk.Stack):
             timeout=cdk.Duration.seconds(3)
         )
 
-        # observe_rule = events.Rule(
-        #     self, 'observeRule',
-        #     description='all events are caught here and logged centrally',
-        #     event_pattern=events.EventPattern(
-        #         source=['cdkpatterns.the-eventbridge-etl']
-        #     )
-        # )
         observe_rule = self.create_event_bridge_rule(
             name='observe',
             description='all events are caught here and logged centrally',
