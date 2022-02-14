@@ -27,15 +27,6 @@ class EventbridgeEtl(cdk.Stack):
     def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        ####
-        # DynamoDB Table
-        # This is where our transformed data ends up
-        ####
-        # table = dynamo_db.Table(
-        #     self, "TransformedData",
-        #     partition_key=dynamo_db.Attribute(name="id", type=dynamo_db.AttributeType.STRING
-        #     )
-        # )
         table = dynamodb_table.DynamoDBTableConstruct(
             self, 'TransformedData',
             partition_key=dynamo_db.Attribute(name="id", type=dynamo_db.AttributeType.STRING
@@ -46,14 +37,14 @@ class EventbridgeEtl(cdk.Stack):
         # S3 Landing Bucket
         # This is where the user uploads the file to be transformed
         ####
-        bucket = s3.Bucket(self, "LandingBucket")
+        upload_bucket = s3.Bucket(self, "LandingBucket")
 
         ####
         # Queue that listens for S3 Bucket events
         ####
         queue = sqs.Queue(self, 'newObjectInLandingBucketEventQueue', visibility_timeout=cdk.Duration.seconds(300))
 
-        bucket.add_event_notification(s3.EventType.OBJECT_CREATED, s3n.SqsDestination(queue))
+        upload_bucket.add_event_notification(s3.EventType.OBJECT_CREATED, s3n.SqsDestination(queue))
 
         # EventBridge Permissions
         event_bridge_put_policy = iam.PolicyStatement(
@@ -82,13 +73,13 @@ class EventbridgeEtl(cdk.Stack):
         # We need to give our fargate container permission to put events on our EventBridge
         task_definition.add_to_task_role_policy(event_bridge_put_policy)
         # Grant fargate container access to the object that was uploaded to s3
-        bucket.grant_read(task_definition.task_role)
+        upload_bucket.grant_read(task_definition.task_role)
 
         container = task_definition.add_container('AppContainer',
                                                   image=ecs.ContainerImage.from_asset('containers/s3DataExtractionTask'),
                                                   logging=logging,
                                                   environment={
-                                                      'S3_BUCKET_NAME': bucket.bucket_name,
+                                                      'S3_BUCKET_NAME': upload_bucket.bucket_name,
                                                       'S3_OBJECT_KEY': ''
                                                   })
 
