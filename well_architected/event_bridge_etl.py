@@ -179,16 +179,22 @@ class EventbridgeEtl(cdk.Stack):
         load_function.add_to_role_policy(self.event_bridge_put_policy)
         self.transformed_data.grant_read_write_data(load_function)
 
-        load_rule = events.Rule(
-            self, 'loadRule',
+        # load_rule = events.Rule(
+        #     self, 'loadRule',
+        #     description='Load Transformed Data to DynamoDB',
+        #     event_pattern=events.EventPattern(
+        #         source=['cdkpatterns.the-eventbridge-etl'],
+        #         detail_type=['transform'],
+        #         detail={
+        #             "status": ["transformed"]
+        #         }
+        #     )
+        # )
+        load_rule = self.create_event_bridge_rule(
+            name='load',
             description='Load Transformed Data to DynamoDB',
-            event_pattern=events.EventPattern(
-                source=['cdkpatterns.the-eventbridge-etl'],
-                detail_type=['transform'],
-                detail={
-                    "status": ["transformed"]
-                }
-            )
+            detail_type='transform',
+            status="transformed"
         )
         load_rule.add_target(event_bridge_targets.LambdaFunction(handler=load_function))
 
@@ -197,19 +203,24 @@ class EventbridgeEtl(cdk.Stack):
         # Watch for all cdkpatterns.the-eventbridge-etl events and log them centrally
         ####
 
-        observe_lambda = _lambda.Function(self, "ObserveLam bdaHandler",
-                                          runtime=_lambda.Runtime.NODEJS_12_X,
-                                          handler="observe.handler",
-                                          code=_lambda.Code.from_asset("lambda_functions/observe"),
-                                          reserved_concurrent_executions=self.lambda_throttle_size,
-                                          timeout=cdk.Duration.seconds(3)
-                                          )
+        observe_function = _lambda.Function(
+            self, "ObserveLam bdaHandler",
+            runtime=_lambda.Runtime.NODEJS_12_X,
+            handler="observe.handler",
+            code=_lambda.Code.from_asset("lambda_functions/observe"),
+            reserved_concurrent_executions=self.lambda_throttle_size,
+            timeout=cdk.Duration.seconds(3)
+        )
 
-        observe_rule = events.Rule(self, 'observeRule',
-                                   description='all events are caught here and logged centrally',
-                                   event_pattern=events.EventPattern(source=['cdkpatterns.the-eventbridge-etl']))
+        observe_rule = events.Rule(
+            self, 'observeRule',
+            description='all events are caught here and logged centrally',
+            event_pattern=events.EventPattern(
+                source=['cdkpatterns.the-eventbridge-etl']
+            )
+        )
 
-        observe_rule.add_target(event_bridge_targets.LambdaFunction(handler=observe_lambda))
+        observe_rule.add_target(event_bridge_targets.LambdaFunction(handler=observe_function))
 
     def create_dynamodb_table(self):
         return dynamodb_table.DynamoDBTableConstruct(
@@ -252,9 +263,7 @@ class EventbridgeEtl(cdk.Stack):
             description=description,
             event_pattern=events.EventPattern(
                 source=['cdkpatterns.the-eventbridge-etl'],
-                detail_type=[detail_type],
-                detail={
-                    "status": [status]
-                }
+                detail_type=[detail_type] if detail_type else None,
+                detail={"status": [status]} if status else None
             )
         )
