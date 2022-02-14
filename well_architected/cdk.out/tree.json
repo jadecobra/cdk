@@ -11770,22 +11770,6 @@
                             "policyDocument": {
                               "Statement": [
                                 {
-                                  "Action": [
-                                    "sqs:ReceiveMessage",
-                                    "sqs:ChangeMessageVisibility",
-                                    "sqs:GetQueueUrl",
-                                    "sqs:DeleteMessage",
-                                    "sqs:GetQueueAttributes"
-                                  ],
-                                  "Effect": "Allow",
-                                  "Resource": {
-                                    "Fn::GetAtt": [
-                                      "newObjectInLandingBucketEventQueue67CBE2F2",
-                                      "Arn"
-                                    ]
-                                  }
-                                },
-                                {
                                   "Action": "ecs:RunTask",
                                   "Effect": "Allow",
                                   "Resource": {
@@ -11814,6 +11798,22 @@
                                   "Action": "events:PutEvents",
                                   "Effect": "Allow",
                                   "Resource": "*"
+                                },
+                                {
+                                  "Action": [
+                                    "sqs:ReceiveMessage",
+                                    "sqs:ChangeMessageVisibility",
+                                    "sqs:GetQueueUrl",
+                                    "sqs:DeleteMessage",
+                                    "sqs:GetQueueAttributes"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "newObjectInLandingBucketEventQueue67CBE2F2",
+                                      "Arn"
+                                    ]
+                                  }
                                 }
                               ],
                               "Version": "2012-10-17"

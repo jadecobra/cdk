@@ -79,19 +79,6 @@ class EventbridgeEtl(cdk.Stack):
                 "CONTAINER_NAME": self.extraction_task.container_name
             }
         )
-        extractor.add_event_source(
-            lambda_event_sources.SqsEventSource(queue=self.upload_queue)
-        )
-        self.grant_ecs_task_permissions(
-            ecs_task_definition=self.ecs_task_definition,
-            lambda_function=extractor
-        )
-
-
-        ####
-        # Transform
-        # defines a lambda to transform the data that was extracted from s3
-        ####
 
         transformer = self.create_lambda_function(
             logical_name="TransformLambdaHandler",
@@ -101,10 +88,6 @@ class EventbridgeEtl(cdk.Stack):
             event_bridge_detail_status="extracted",
         )
 
-        ####
-        # Load
-        # load the transformed data in dynamodb
-        ####
         loader = self.create_lambda_function(
             logical_name="LoadLambdaHandler",
             function_name="load",
@@ -116,11 +99,18 @@ class EventbridgeEtl(cdk.Stack):
             event_bridge_detail_status="transformed",
         )
 
+        self.grant_ecs_task_permissions(
+            ecs_task_definition=self.ecs_task_definition,
+            lambda_function=extractor
+        )
         self.add_policies_to_lambda_functions(
             extractor, transformer, loader,
             policy=self.event_bridge_put_policy
         )
 
+        extractor.add_event_source(
+            lambda_event_sources.SqsEventSource(queue=self.upload_queue)
+        )
         self.upload_queue.grant_consume_messages(extractor)
         self.transformed_data.grant_read_write_data(loader)
         ####
@@ -132,6 +122,24 @@ class EventbridgeEtl(cdk.Stack):
             function_name="observe",
             event_bridge_rule_description='all events are caught here and logged centrally'
         )
+
+    def create_event_bridge_rule(
+        self, name=None, description=None, detail_type=None, status=None,
+        lambda_function=None
+    ):
+        rule = events.Rule(
+            self, f'{name}Rule',
+            description=description,
+            event_pattern=events.EventPattern(
+                source=['cdkpatterns.the-eventbridge-etl'],
+                detail_type=[detail_type] if detail_type else None,
+                detail={"status": [status]} if status else None
+            )
+        )
+        rule.add_target(
+            event_bridge_targets.LambdaFunction(handler=lambda_function)
+        )
+        return rule
 
     def create_lambda_function(
         self, logical_name=None, function_name=None,
@@ -191,24 +199,6 @@ class EventbridgeEtl(cdk.Stack):
 
     def create_event_bridge_iam_policy(self):
         return self.create_iam_policy(actions=['events:PutEvents'])
-
-    def create_event_bridge_rule(
-        self, name=None, description=None, detail_type=None, status=None,
-        lambda_function=None
-    ):
-        rule = events.Rule(
-            self, f'{name}Rule',
-            description=description,
-            event_pattern=events.EventPattern(
-                source=['cdkpatterns.the-eventbridge-etl'],
-                detail_type=[detail_type] if detail_type else None,
-                detail={"status": [status]} if status else None
-            )
-        )
-        rule.add_target(
-            event_bridge_targets.LambdaFunction(handler=lambda_function)
-        )
-        return rule
 
     def add_policies_to_lambda_functions(self, *lambda_functions, policy=None):
         for lambda_function in lambda_functions:
