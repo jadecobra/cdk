@@ -54,7 +54,7 @@ class EventbridgeEtl(cdk.Stack):
             }
         )
 
-        extractor = self.create_lambda_function(
+        self.extractor = self.create_lambda_function(
             function_name='extractor',
             environment_variables={
                 "CLUSTER_NAME": self.ecs_cluster.cluster_name,
@@ -64,14 +64,14 @@ class EventbridgeEtl(cdk.Stack):
             }
         )
 
-        transformer = self.create_lambda_function(
+        self.transformer = self.create_lambda_function(
             function_name='transformer',
             event_bridge_rule_description='Data extracted from S3, Needs transformation',
             event_bridge_detail_type='s3RecordExtraction',
             event_bridge_detail_status="extracted",
         )
 
-        loader = self.create_lambda_function(
+        self.loader = self.create_lambda_function(
             function_name="loader",
             environment_variables={
                 "TABLE_NAME": self.transformed_data.table_name
@@ -89,18 +89,18 @@ class EventbridgeEtl(cdk.Stack):
         # IAM
         self.grant_ecs_task_permissions(
             ecs_task_definition=self.ecs_task_definition,
-            lambda_function=extractor
+            lambda_function=self.extractor
         )
         self.add_policies_to_lambda_functions(
-            extractor, transformer, loader,
+            self.extractor, self.transformer, self.loader,
             policy=self.event_bridge_put_policy
         )
 
-        extractor.add_event_source(
+        self.extractor.add_event_source(
             lambda_event_sources.SqsEventSource(queue=self.upload_queue)
         )
-        self.upload_queue.grant_consume_messages(extractor)
-        self.transformed_data.grant_read_write_data(loader)
+        self.upload_queue.grant_consume_messages(self.extractor)
+        self.transformed_data.grant_read_write_data(self.loader)
 
 
 
