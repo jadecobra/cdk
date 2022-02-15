@@ -44,11 +44,13 @@ class WellArchitected(cdk.App):
         DynamoDBFlow(self, 'DynamoDBFlow', sns_topic=self.xray_sns_topic)
         SnsFlow(self, 'SnsFlow', sns_topic=self.xray_sns_topic)
         SqsFlow(self, 'SqsFlow', sns_topic=self.xray_sns_topic)
-        event_bridge_circuit_breaker.EventBridgeCircuitBreaker(self, 'EventBridgeCircuitBreaker')
+        event_bridge_circuit_breaker.EventBridgeCircuitBreaker(
+            self, 'EventBridgeCircuitBreaker'
+        )
         event_bridge_etl.EventbridgeEtl(self, 'EventBridgeEtl')
-        TheLambdalithStack(self, "the-lambda-lith-stack")
-        TheFatLambdaStack(self, "the-fat-lambda-stack")
-        TheSinglePurposeFunctionStack(self, "the-single-purpose-function-stack")
+        TheLambdalithStack(self, "LambdaLith")
+        TheFatLambdaStack(self, "FatLambda")
+        TheSinglePurposeFunctionStack(self, "SinglePurposeLambda")
 
     def create_http_api(self):
         self.http_api = LambdaHttpApiGateway(

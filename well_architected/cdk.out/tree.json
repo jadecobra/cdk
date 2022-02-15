@@ -12917,21 +12917,21 @@
           "version": "1.142.0"
         }
       },
-      "the-lambda-lith-stack": {
-        "id": "the-lambda-lith-stack",
-        "path": "the-lambda-lith-stack",
+      "LambdaLith": {
+        "id": "LambdaLith",
+        "path": "LambdaLith",
         "children": {
           "lambdalithHandler": {
             "id": "lambdalithHandler",
-            "path": "the-lambda-lith-stack/lambdalithHandler",
+            "path": "LambdaLith/lambdalithHandler",
             "children": {
               "ServiceRole": {
                 "id": "ServiceRole",
-                "path": "the-lambda-lith-stack/lambdalithHandler/ServiceRole",
+                "path": "LambdaLith/lambdalithHandler/ServiceRole",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "the-lambda-lith-stack/lambdalithHandler/ServiceRole/Resource",
+                    "path": "LambdaLith/lambdalithHandler/ServiceRole/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                       "aws:cdk:cloudformation:props": {
@@ -12976,11 +12976,11 @@
               },
               "Code": {
                 "id": "Code",
-                "path": "the-lambda-lith-stack/lambdalithHandler/Code",
+                "path": "LambdaLith/lambdalithHandler/Code",
                 "children": {
                   "Stage": {
                     "id": "Stage",
-                    "path": "the-lambda-lith-stack/lambdalithHandler/Code/Stage",
+                    "path": "LambdaLith/lambdalithHandler/Code/Stage",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.AssetStaging",
                       "version": "1.142.0"
@@ -12988,7 +12988,7 @@
                   },
                   "AssetBucket": {
                     "id": "AssetBucket",
-                    "path": "the-lambda-lith-stack/lambdalithHandler/Code/AssetBucket",
+                    "path": "LambdaLith/lambdalithHandler/Code/AssetBucket",
                     "constructInfo": {
                       "fqn": "@aws-cdk/aws-s3.BucketBase",
                       "version": "1.142.0"
@@ -13002,7 +13002,7 @@
               },
               "Resource": {
                 "id": "Resource",
-                "path": "the-lambda-lith-stack/lambdalithHandler/Resource",
+                "path": "LambdaLith/lambdalithHandler/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
                   "aws:cdk:cloudformation:props": {
@@ -13067,15 +13067,15 @@
           },
           "AssetParameters": {
             "id": "AssetParameters",
-            "path": "the-lambda-lith-stack/AssetParameters",
+            "path": "LambdaLith/AssetParameters",
             "children": {
               "5c76ec19d166edb38c1b9d914f89daec22f89857591e1558f1deee370b685bb5": {
                 "id": "5c76ec19d166edb38c1b9d914f89daec22f89857591e1558f1deee370b685bb5",
-                "path": "the-lambda-lith-stack/AssetParameters/5c76ec19d166edb38c1b9d914f89daec22f89857591e1558f1deee370b685bb5",
+                "path": "LambdaLith/AssetParameters/5c76ec19d166edb38c1b9d914f89daec22f89857591e1558f1deee370b685bb5",
                 "children": {
                   "S3Bucket": {
                     "id": "S3Bucket",
-                    "path": "the-lambda-lith-stack/AssetParameters/5c76ec19d166edb38c1b9d914f89daec22f89857591e1558f1deee370b685bb5/S3Bucket",
+                    "path": "LambdaLith/AssetParameters/5c76ec19d166edb38c1b9d914f89daec22f89857591e1558f1deee370b685bb5/S3Bucket",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -13083,7 +13083,7 @@
                   },
                   "S3VersionKey": {
                     "id": "S3VersionKey",
-                    "path": "the-lambda-lith-stack/AssetParameters/5c76ec19d166edb38c1b9d914f89daec22f89857591e1558f1deee370b685bb5/S3VersionKey",
+                    "path": "LambdaLith/AssetParameters/5c76ec19d166edb38c1b9d914f89daec22f89857591e1558f1deee370b685bb5/S3VersionKey",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -13091,7 +13091,7 @@
                   },
                   "ArtifactHash": {
                     "id": "ArtifactHash",
-                    "path": "the-lambda-lith-stack/AssetParameters/5c76ec19d166edb38c1b9d914f89daec22f89857591e1558f1deee370b685bb5/ArtifactHash",
+                    "path": "LambdaLith/AssetParameters/5c76ec19d166edb38c1b9d914f89daec22f89857591e1558f1deee370b685bb5/ArtifactHash",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -13111,11 +13111,11 @@
           },
           "LambdalithAPI": {
             "id": "LambdalithAPI",
-            "path": "the-lambda-lith-stack/LambdalithAPI",
+            "path": "LambdaLith/LambdalithAPI",
             "children": {
               "Resource": {
                 "id": "Resource",
-                "path": "the-lambda-lith-stack/LambdalithAPI/Resource",
+                "path": "LambdaLith/LambdalithAPI/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::ApiGateway::RestApi",
                   "aws:cdk:cloudformation:props": {
@@ -13129,11 +13129,11 @@
               },
               "CloudWatchRole": {
                 "id": "CloudWatchRole",
-                "path": "the-lambda-lith-stack/LambdalithAPI/CloudWatchRole",
+                "path": "LambdaLith/LambdalithAPI/CloudWatchRole",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "the-lambda-lith-stack/LambdalithAPI/CloudWatchRole/Resource",
+                    "path": "LambdaLith/LambdalithAPI/CloudWatchRole/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                       "aws:cdk:cloudformation:props": {
@@ -13178,7 +13178,7 @@
               },
               "Account": {
                 "id": "Account",
-                "path": "the-lambda-lith-stack/LambdalithAPI/Account",
+                "path": "LambdaLith/LambdalithAPI/Account",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::ApiGateway::Account",
                   "aws:cdk:cloudformation:props": {
@@ -13197,11 +13197,11 @@
               },
               "Deployment": {
                 "id": "Deployment",
-                "path": "the-lambda-lith-stack/LambdalithAPI/Deployment",
+                "path": "LambdaLith/LambdalithAPI/Deployment",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "the-lambda-lith-stack/LambdalithAPI/Deployment/Resource",
+                    "path": "LambdaLith/LambdalithAPI/Deployment/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::ApiGateway::Deployment",
                       "aws:cdk:cloudformation:props": {
@@ -13224,11 +13224,11 @@
               },
               "DeploymentStage.prod": {
                 "id": "DeploymentStage.prod",
-                "path": "the-lambda-lith-stack/LambdalithAPI/DeploymentStage.prod",
+                "path": "LambdaLith/LambdalithAPI/DeploymentStage.prod",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "the-lambda-lith-stack/LambdalithAPI/DeploymentStage.prod/Resource",
+                    "path": "LambdaLith/LambdalithAPI/DeploymentStage.prod/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::ApiGateway::Stage",
                       "aws:cdk:cloudformation:props": {
@@ -13254,7 +13254,7 @@
               },
               "Endpoint": {
                 "id": "Endpoint",
-                "path": "the-lambda-lith-stack/LambdalithAPI/Endpoint",
+                "path": "LambdaLith/LambdalithAPI/Endpoint",
                 "constructInfo": {
                   "fqn": "@aws-cdk/core.CfnOutput",
                   "version": "1.142.0"
@@ -13262,15 +13262,15 @@
               },
               "Default": {
                 "id": "Default",
-                "path": "the-lambda-lith-stack/LambdalithAPI/Default",
+                "path": "LambdaLith/LambdalithAPI/Default",
                 "children": {
                   "{proxy+}": {
                     "id": "{proxy+}",
-                    "path": "the-lambda-lith-stack/LambdalithAPI/Default/{proxy+}",
+                    "path": "LambdaLith/LambdalithAPI/Default/{proxy+}",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "the-lambda-lith-stack/LambdalithAPI/Default/{proxy+}/Resource",
+                        "path": "LambdaLith/LambdalithAPI/Default/{proxy+}/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::ApiGateway::Resource",
                           "aws:cdk:cloudformation:props": {
@@ -13293,11 +13293,11 @@
                       },
                       "ANY": {
                         "id": "ANY",
-                        "path": "the-lambda-lith-stack/LambdalithAPI/Default/{proxy+}/ANY",
+                        "path": "LambdaLith/LambdalithAPI/Default/{proxy+}/ANY",
                         "children": {
-                          "ApiPermission.thelambdalithstackLambdalithAPI338AC9DF.ANY..{proxy+}": {
-                            "id": "ApiPermission.thelambdalithstackLambdalithAPI338AC9DF.ANY..{proxy+}",
-                            "path": "the-lambda-lith-stack/LambdalithAPI/Default/{proxy+}/ANY/ApiPermission.thelambdalithstackLambdalithAPI338AC9DF.ANY..{proxy+}",
+                          "ApiPermission.LambdaLithLambdalithAPI023ADF34.ANY..{proxy+}": {
+                            "id": "ApiPermission.LambdaLithLambdalithAPI023ADF34.ANY..{proxy+}",
+                            "path": "LambdaLith/LambdalithAPI/Default/{proxy+}/ANY/ApiPermission.LambdaLithLambdalithAPI023ADF34.ANY..{proxy+}",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                               "aws:cdk:cloudformation:props": {
@@ -13344,9 +13344,9 @@
                               "version": "1.142.0"
                             }
                           },
-                          "ApiPermission.Test.thelambdalithstackLambdalithAPI338AC9DF.ANY..{proxy+}": {
-                            "id": "ApiPermission.Test.thelambdalithstackLambdalithAPI338AC9DF.ANY..{proxy+}",
-                            "path": "the-lambda-lith-stack/LambdalithAPI/Default/{proxy+}/ANY/ApiPermission.Test.thelambdalithstackLambdalithAPI338AC9DF.ANY..{proxy+}",
+                          "ApiPermission.Test.LambdaLithLambdalithAPI023ADF34.ANY..{proxy+}": {
+                            "id": "ApiPermission.Test.LambdaLithLambdalithAPI023ADF34.ANY..{proxy+}",
+                            "path": "LambdaLith/LambdalithAPI/Default/{proxy+}/ANY/ApiPermission.Test.LambdaLithLambdalithAPI023ADF34.ANY..{proxy+}",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                               "aws:cdk:cloudformation:props": {
@@ -13391,7 +13391,7 @@
                           },
                           "Resource": {
                             "id": "Resource",
-                            "path": "the-lambda-lith-stack/LambdalithAPI/Default/{proxy+}/ANY/Resource",
+                            "path": "LambdaLith/LambdalithAPI/Default/{proxy+}/ANY/Resource",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
                               "aws:cdk:cloudformation:props": {
@@ -13451,11 +13451,11 @@
                   },
                   "ANY": {
                     "id": "ANY",
-                    "path": "the-lambda-lith-stack/LambdalithAPI/Default/ANY",
+                    "path": "LambdaLith/LambdalithAPI/Default/ANY",
                     "children": {
-                      "ApiPermission.thelambdalithstackLambdalithAPI338AC9DF.ANY..": {
-                        "id": "ApiPermission.thelambdalithstackLambdalithAPI338AC9DF.ANY..",
-                        "path": "the-lambda-lith-stack/LambdalithAPI/Default/ANY/ApiPermission.thelambdalithstackLambdalithAPI338AC9DF.ANY..",
+                      "ApiPermission.LambdaLithLambdalithAPI023ADF34.ANY..": {
+                        "id": "ApiPermission.LambdaLithLambdalithAPI023ADF34.ANY..",
+                        "path": "LambdaLith/LambdalithAPI/Default/ANY/ApiPermission.LambdaLithLambdalithAPI023ADF34.ANY..",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                           "aws:cdk:cloudformation:props": {
@@ -13502,9 +13502,9 @@
                           "version": "1.142.0"
                         }
                       },
-                      "ApiPermission.Test.thelambdalithstackLambdalithAPI338AC9DF.ANY..": {
-                        "id": "ApiPermission.Test.thelambdalithstackLambdalithAPI338AC9DF.ANY..",
-                        "path": "the-lambda-lith-stack/LambdalithAPI/Default/ANY/ApiPermission.Test.thelambdalithstackLambdalithAPI338AC9DF.ANY..",
+                      "ApiPermission.Test.LambdaLithLambdalithAPI023ADF34.ANY..": {
+                        "id": "ApiPermission.Test.LambdaLithLambdalithAPI023ADF34.ANY..",
+                        "path": "LambdaLith/LambdalithAPI/Default/ANY/ApiPermission.Test.LambdaLithLambdalithAPI023ADF34.ANY..",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                           "aws:cdk:cloudformation:props": {
@@ -13549,7 +13549,7 @@
                       },
                       "Resource": {
                         "id": "Resource",
-                        "path": "the-lambda-lith-stack/LambdalithAPI/Default/ANY/Resource",
+                        "path": "LambdaLith/LambdalithAPI/Default/ANY/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
                           "aws:cdk:cloudformation:props": {
@@ -13622,21 +13622,21 @@
           "version": "1.142.0"
         }
       },
-      "the-fat-lambda-stack": {
-        "id": "the-fat-lambda-stack",
-        "path": "the-fat-lambda-stack",
+      "FatLambda": {
+        "id": "FatLambda",
+        "path": "FatLambda",
         "children": {
           "addLambdaHandler": {
             "id": "addLambdaHandler",
-            "path": "the-fat-lambda-stack/addLambdaHandler",
+            "path": "FatLambda/addLambdaHandler",
             "children": {
               "ServiceRole": {
                 "id": "ServiceRole",
-                "path": "the-fat-lambda-stack/addLambdaHandler/ServiceRole",
+                "path": "FatLambda/addLambdaHandler/ServiceRole",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "the-fat-lambda-stack/addLambdaHandler/ServiceRole/Resource",
+                    "path": "FatLambda/addLambdaHandler/ServiceRole/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                       "aws:cdk:cloudformation:props": {
@@ -13681,11 +13681,11 @@
               },
               "Code": {
                 "id": "Code",
-                "path": "the-fat-lambda-stack/addLambdaHandler/Code",
+                "path": "FatLambda/addLambdaHandler/Code",
                 "children": {
                   "Stage": {
                     "id": "Stage",
-                    "path": "the-fat-lambda-stack/addLambdaHandler/Code/Stage",
+                    "path": "FatLambda/addLambdaHandler/Code/Stage",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.AssetStaging",
                       "version": "1.142.0"
@@ -13693,7 +13693,7 @@
                   },
                   "AssetBucket": {
                     "id": "AssetBucket",
-                    "path": "the-fat-lambda-stack/addLambdaHandler/Code/AssetBucket",
+                    "path": "FatLambda/addLambdaHandler/Code/AssetBucket",
                     "constructInfo": {
                       "fqn": "@aws-cdk/aws-s3.BucketBase",
                       "version": "1.142.0"
@@ -13707,7 +13707,7 @@
               },
               "Resource": {
                 "id": "Resource",
-                "path": "the-fat-lambda-stack/addLambdaHandler/Resource",
+                "path": "FatLambda/addLambdaHandler/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
                   "aws:cdk:cloudformation:props": {
@@ -13772,15 +13772,15 @@
           },
           "AssetParameters": {
             "id": "AssetParameters",
-            "path": "the-fat-lambda-stack/AssetParameters",
+            "path": "FatLambda/AssetParameters",
             "children": {
               "acc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96": {
                 "id": "acc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96",
-                "path": "the-fat-lambda-stack/AssetParameters/acc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96",
+                "path": "FatLambda/AssetParameters/acc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96",
                 "children": {
                   "S3Bucket": {
                     "id": "S3Bucket",
-                    "path": "the-fat-lambda-stack/AssetParameters/acc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96/S3Bucket",
+                    "path": "FatLambda/AssetParameters/acc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96/S3Bucket",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -13788,7 +13788,7 @@
                   },
                   "S3VersionKey": {
                     "id": "S3VersionKey",
-                    "path": "the-fat-lambda-stack/AssetParameters/acc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96/S3VersionKey",
+                    "path": "FatLambda/AssetParameters/acc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96/S3VersionKey",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -13796,7 +13796,7 @@
                   },
                   "ArtifactHash": {
                     "id": "ArtifactHash",
-                    "path": "the-fat-lambda-stack/AssetParameters/acc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96/ArtifactHash",
+                    "path": "FatLambda/AssetParameters/acc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96/ArtifactHash",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -13816,15 +13816,15 @@
           },
           "subtractLambdaHandler": {
             "id": "subtractLambdaHandler",
-            "path": "the-fat-lambda-stack/subtractLambdaHandler",
+            "path": "FatLambda/subtractLambdaHandler",
             "children": {
               "ServiceRole": {
                 "id": "ServiceRole",
-                "path": "the-fat-lambda-stack/subtractLambdaHandler/ServiceRole",
+                "path": "FatLambda/subtractLambdaHandler/ServiceRole",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "the-fat-lambda-stack/subtractLambdaHandler/ServiceRole/Resource",
+                    "path": "FatLambda/subtractLambdaHandler/ServiceRole/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                       "aws:cdk:cloudformation:props": {
@@ -13869,11 +13869,11 @@
               },
               "Code": {
                 "id": "Code",
-                "path": "the-fat-lambda-stack/subtractLambdaHandler/Code",
+                "path": "FatLambda/subtractLambdaHandler/Code",
                 "children": {
                   "Stage": {
                     "id": "Stage",
-                    "path": "the-fat-lambda-stack/subtractLambdaHandler/Code/Stage",
+                    "path": "FatLambda/subtractLambdaHandler/Code/Stage",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.AssetStaging",
                       "version": "1.142.0"
@@ -13881,7 +13881,7 @@
                   },
                   "AssetBucket": {
                     "id": "AssetBucket",
-                    "path": "the-fat-lambda-stack/subtractLambdaHandler/Code/AssetBucket",
+                    "path": "FatLambda/subtractLambdaHandler/Code/AssetBucket",
                     "constructInfo": {
                       "fqn": "@aws-cdk/aws-s3.BucketBase",
                       "version": "1.142.0"
@@ -13895,7 +13895,7 @@
               },
               "Resource": {
                 "id": "Resource",
-                "path": "the-fat-lambda-stack/subtractLambdaHandler/Resource",
+                "path": "FatLambda/subtractLambdaHandler/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
                   "aws:cdk:cloudformation:props": {
@@ -13960,15 +13960,15 @@
           },
           "multiplyLambdaHandler": {
             "id": "multiplyLambdaHandler",
-            "path": "the-fat-lambda-stack/multiplyLambdaHandler",
+            "path": "FatLambda/multiplyLambdaHandler",
             "children": {
               "ServiceRole": {
                 "id": "ServiceRole",
-                "path": "the-fat-lambda-stack/multiplyLambdaHandler/ServiceRole",
+                "path": "FatLambda/multiplyLambdaHandler/ServiceRole",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "the-fat-lambda-stack/multiplyLambdaHandler/ServiceRole/Resource",
+                    "path": "FatLambda/multiplyLambdaHandler/ServiceRole/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                       "aws:cdk:cloudformation:props": {
@@ -14013,11 +14013,11 @@
               },
               "Code": {
                 "id": "Code",
-                "path": "the-fat-lambda-stack/multiplyLambdaHandler/Code",
+                "path": "FatLambda/multiplyLambdaHandler/Code",
                 "children": {
                   "Stage": {
                     "id": "Stage",
-                    "path": "the-fat-lambda-stack/multiplyLambdaHandler/Code/Stage",
+                    "path": "FatLambda/multiplyLambdaHandler/Code/Stage",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.AssetStaging",
                       "version": "1.142.0"
@@ -14025,7 +14025,7 @@
                   },
                   "AssetBucket": {
                     "id": "AssetBucket",
-                    "path": "the-fat-lambda-stack/multiplyLambdaHandler/Code/AssetBucket",
+                    "path": "FatLambda/multiplyLambdaHandler/Code/AssetBucket",
                     "constructInfo": {
                       "fqn": "@aws-cdk/aws-s3.BucketBase",
                       "version": "1.142.0"
@@ -14039,7 +14039,7 @@
               },
               "Resource": {
                 "id": "Resource",
-                "path": "the-fat-lambda-stack/multiplyLambdaHandler/Resource",
+                "path": "FatLambda/multiplyLambdaHandler/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
                   "aws:cdk:cloudformation:props": {
@@ -14104,11 +14104,11 @@
           },
           "fatLambdaAPI": {
             "id": "fatLambdaAPI",
-            "path": "the-fat-lambda-stack/fatLambdaAPI",
+            "path": "FatLambda/fatLambdaAPI",
             "children": {
               "Resource": {
                 "id": "Resource",
-                "path": "the-fat-lambda-stack/fatLambdaAPI/Resource",
+                "path": "FatLambda/fatLambdaAPI/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::ApiGateway::RestApi",
                   "aws:cdk:cloudformation:props": {
@@ -14122,11 +14122,11 @@
               },
               "CloudWatchRole": {
                 "id": "CloudWatchRole",
-                "path": "the-fat-lambda-stack/fatLambdaAPI/CloudWatchRole",
+                "path": "FatLambda/fatLambdaAPI/CloudWatchRole",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "the-fat-lambda-stack/fatLambdaAPI/CloudWatchRole/Resource",
+                    "path": "FatLambda/fatLambdaAPI/CloudWatchRole/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                       "aws:cdk:cloudformation:props": {
@@ -14171,7 +14171,7 @@
               },
               "Account": {
                 "id": "Account",
-                "path": "the-fat-lambda-stack/fatLambdaAPI/Account",
+                "path": "FatLambda/fatLambdaAPI/Account",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::ApiGateway::Account",
                   "aws:cdk:cloudformation:props": {
@@ -14190,11 +14190,11 @@
               },
               "Deployment": {
                 "id": "Deployment",
-                "path": "the-fat-lambda-stack/fatLambdaAPI/Deployment",
+                "path": "FatLambda/fatLambdaAPI/Deployment",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "the-fat-lambda-stack/fatLambdaAPI/Deployment/Resource",
+                    "path": "FatLambda/fatLambdaAPI/Deployment/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::ApiGateway::Deployment",
                       "aws:cdk:cloudformation:props": {
@@ -14217,11 +14217,11 @@
               },
               "DeploymentStage.prod": {
                 "id": "DeploymentStage.prod",
-                "path": "the-fat-lambda-stack/fatLambdaAPI/DeploymentStage.prod",
+                "path": "FatLambda/fatLambdaAPI/DeploymentStage.prod",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "the-fat-lambda-stack/fatLambdaAPI/DeploymentStage.prod/Resource",
+                    "path": "FatLambda/fatLambdaAPI/DeploymentStage.prod/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::ApiGateway::Stage",
                       "aws:cdk:cloudformation:props": {
@@ -14247,7 +14247,7 @@
               },
               "Endpoint": {
                 "id": "Endpoint",
-                "path": "the-fat-lambda-stack/fatLambdaAPI/Endpoint",
+                "path": "FatLambda/fatLambdaAPI/Endpoint",
                 "constructInfo": {
                   "fqn": "@aws-cdk/core.CfnOutput",
                   "version": "1.142.0"
@@ -14255,15 +14255,15 @@
               },
               "Default": {
                 "id": "Default",
-                "path": "the-fat-lambda-stack/fatLambdaAPI/Default",
+                "path": "FatLambda/fatLambdaAPI/Default",
                 "children": {
                   "add": {
                     "id": "add",
-                    "path": "the-fat-lambda-stack/fatLambdaAPI/Default/add",
+                    "path": "FatLambda/fatLambdaAPI/Default/add",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "the-fat-lambda-stack/fatLambdaAPI/Default/add/Resource",
+                        "path": "FatLambda/fatLambdaAPI/Default/add/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::ApiGateway::Resource",
                           "aws:cdk:cloudformation:props": {
@@ -14286,11 +14286,11 @@
                       },
                       "GET": {
                         "id": "GET",
-                        "path": "the-fat-lambda-stack/fatLambdaAPI/Default/add/GET",
+                        "path": "FatLambda/fatLambdaAPI/Default/add/GET",
                         "children": {
-                          "ApiPermission.thefatlambdastackfatLambdaAPI36EE7B78.GET..add": {
-                            "id": "ApiPermission.thefatlambdastackfatLambdaAPI36EE7B78.GET..add",
-                            "path": "the-fat-lambda-stack/fatLambdaAPI/Default/add/GET/ApiPermission.thefatlambdastackfatLambdaAPI36EE7B78.GET..add",
+                          "ApiPermission.FatLambdafatLambdaAPI3E8C7AFA.GET..add": {
+                            "id": "ApiPermission.FatLambdafatLambdaAPI3E8C7AFA.GET..add",
+                            "path": "FatLambda/fatLambdaAPI/Default/add/GET/ApiPermission.FatLambdafatLambdaAPI3E8C7AFA.GET..add",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                               "aws:cdk:cloudformation:props": {
@@ -14337,9 +14337,9 @@
                               "version": "1.142.0"
                             }
                           },
-                          "ApiPermission.Test.thefatlambdastackfatLambdaAPI36EE7B78.GET..add": {
-                            "id": "ApiPermission.Test.thefatlambdastackfatLambdaAPI36EE7B78.GET..add",
-                            "path": "the-fat-lambda-stack/fatLambdaAPI/Default/add/GET/ApiPermission.Test.thefatlambdastackfatLambdaAPI36EE7B78.GET..add",
+                          "ApiPermission.Test.FatLambdafatLambdaAPI3E8C7AFA.GET..add": {
+                            "id": "ApiPermission.Test.FatLambdafatLambdaAPI3E8C7AFA.GET..add",
+                            "path": "FatLambda/fatLambdaAPI/Default/add/GET/ApiPermission.Test.FatLambdafatLambdaAPI3E8C7AFA.GET..add",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                               "aws:cdk:cloudformation:props": {
@@ -14384,7 +14384,7 @@
                           },
                           "Resource": {
                             "id": "Resource",
-                            "path": "the-fat-lambda-stack/fatLambdaAPI/Default/add/GET/Resource",
+                            "path": "FatLambda/fatLambdaAPI/Default/add/GET/Resource",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
                               "aws:cdk:cloudformation:props": {
@@ -14444,11 +14444,11 @@
                   },
                   "subtract": {
                     "id": "subtract",
-                    "path": "the-fat-lambda-stack/fatLambdaAPI/Default/subtract",
+                    "path": "FatLambda/fatLambdaAPI/Default/subtract",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "the-fat-lambda-stack/fatLambdaAPI/Default/subtract/Resource",
+                        "path": "FatLambda/fatLambdaAPI/Default/subtract/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::ApiGateway::Resource",
                           "aws:cdk:cloudformation:props": {
@@ -14471,11 +14471,11 @@
                       },
                       "GET": {
                         "id": "GET",
-                        "path": "the-fat-lambda-stack/fatLambdaAPI/Default/subtract/GET",
+                        "path": "FatLambda/fatLambdaAPI/Default/subtract/GET",
                         "children": {
-                          "ApiPermission.thefatlambdastackfatLambdaAPI36EE7B78.GET..subtract": {
-                            "id": "ApiPermission.thefatlambdastackfatLambdaAPI36EE7B78.GET..subtract",
-                            "path": "the-fat-lambda-stack/fatLambdaAPI/Default/subtract/GET/ApiPermission.thefatlambdastackfatLambdaAPI36EE7B78.GET..subtract",
+                          "ApiPermission.FatLambdafatLambdaAPI3E8C7AFA.GET..subtract": {
+                            "id": "ApiPermission.FatLambdafatLambdaAPI3E8C7AFA.GET..subtract",
+                            "path": "FatLambda/fatLambdaAPI/Default/subtract/GET/ApiPermission.FatLambdafatLambdaAPI3E8C7AFA.GET..subtract",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                               "aws:cdk:cloudformation:props": {
@@ -14522,9 +14522,9 @@
                               "version": "1.142.0"
                             }
                           },
-                          "ApiPermission.Test.thefatlambdastackfatLambdaAPI36EE7B78.GET..subtract": {
-                            "id": "ApiPermission.Test.thefatlambdastackfatLambdaAPI36EE7B78.GET..subtract",
-                            "path": "the-fat-lambda-stack/fatLambdaAPI/Default/subtract/GET/ApiPermission.Test.thefatlambdastackfatLambdaAPI36EE7B78.GET..subtract",
+                          "ApiPermission.Test.FatLambdafatLambdaAPI3E8C7AFA.GET..subtract": {
+                            "id": "ApiPermission.Test.FatLambdafatLambdaAPI3E8C7AFA.GET..subtract",
+                            "path": "FatLambda/fatLambdaAPI/Default/subtract/GET/ApiPermission.Test.FatLambdafatLambdaAPI3E8C7AFA.GET..subtract",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                               "aws:cdk:cloudformation:props": {
@@ -14569,7 +14569,7 @@
                           },
                           "Resource": {
                             "id": "Resource",
-                            "path": "the-fat-lambda-stack/fatLambdaAPI/Default/subtract/GET/Resource",
+                            "path": "FatLambda/fatLambdaAPI/Default/subtract/GET/Resource",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
                               "aws:cdk:cloudformation:props": {
@@ -14629,11 +14629,11 @@
                   },
                   "multiply": {
                     "id": "multiply",
-                    "path": "the-fat-lambda-stack/fatLambdaAPI/Default/multiply",
+                    "path": "FatLambda/fatLambdaAPI/Default/multiply",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "the-fat-lambda-stack/fatLambdaAPI/Default/multiply/Resource",
+                        "path": "FatLambda/fatLambdaAPI/Default/multiply/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::ApiGateway::Resource",
                           "aws:cdk:cloudformation:props": {
@@ -14656,11 +14656,11 @@
                       },
                       "GET": {
                         "id": "GET",
-                        "path": "the-fat-lambda-stack/fatLambdaAPI/Default/multiply/GET",
+                        "path": "FatLambda/fatLambdaAPI/Default/multiply/GET",
                         "children": {
-                          "ApiPermission.thefatlambdastackfatLambdaAPI36EE7B78.GET..multiply": {
-                            "id": "ApiPermission.thefatlambdastackfatLambdaAPI36EE7B78.GET..multiply",
-                            "path": "the-fat-lambda-stack/fatLambdaAPI/Default/multiply/GET/ApiPermission.thefatlambdastackfatLambdaAPI36EE7B78.GET..multiply",
+                          "ApiPermission.FatLambdafatLambdaAPI3E8C7AFA.GET..multiply": {
+                            "id": "ApiPermission.FatLambdafatLambdaAPI3E8C7AFA.GET..multiply",
+                            "path": "FatLambda/fatLambdaAPI/Default/multiply/GET/ApiPermission.FatLambdafatLambdaAPI3E8C7AFA.GET..multiply",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                               "aws:cdk:cloudformation:props": {
@@ -14707,9 +14707,9 @@
                               "version": "1.142.0"
                             }
                           },
-                          "ApiPermission.Test.thefatlambdastackfatLambdaAPI36EE7B78.GET..multiply": {
-                            "id": "ApiPermission.Test.thefatlambdastackfatLambdaAPI36EE7B78.GET..multiply",
-                            "path": "the-fat-lambda-stack/fatLambdaAPI/Default/multiply/GET/ApiPermission.Test.thefatlambdastackfatLambdaAPI36EE7B78.GET..multiply",
+                          "ApiPermission.Test.FatLambdafatLambdaAPI3E8C7AFA.GET..multiply": {
+                            "id": "ApiPermission.Test.FatLambdafatLambdaAPI3E8C7AFA.GET..multiply",
+                            "path": "FatLambda/fatLambdaAPI/Default/multiply/GET/ApiPermission.Test.FatLambdafatLambdaAPI3E8C7AFA.GET..multiply",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                               "aws:cdk:cloudformation:props": {
@@ -14754,7 +14754,7 @@
                           },
                           "Resource": {
                             "id": "Resource",
-                            "path": "the-fat-lambda-stack/fatLambdaAPI/Default/multiply/GET/Resource",
+                            "path": "FatLambda/fatLambdaAPI/Default/multiply/GET/Resource",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
                               "aws:cdk:cloudformation:props": {
@@ -14830,21 +14830,21 @@
           "version": "1.142.0"
         }
       },
-      "the-single-purpose-function-stack": {
-        "id": "the-single-purpose-function-stack",
-        "path": "the-single-purpose-function-stack",
+      "SinglePurposeLambda": {
+        "id": "SinglePurposeLambda",
+        "path": "SinglePurposeLambda",
         "children": {
           "addLambdaHandler": {
             "id": "addLambdaHandler",
-            "path": "the-single-purpose-function-stack/addLambdaHandler",
+            "path": "SinglePurposeLambda/addLambdaHandler",
             "children": {
               "ServiceRole": {
                 "id": "ServiceRole",
-                "path": "the-single-purpose-function-stack/addLambdaHandler/ServiceRole",
+                "path": "SinglePurposeLambda/addLambdaHandler/ServiceRole",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "the-single-purpose-function-stack/addLambdaHandler/ServiceRole/Resource",
+                    "path": "SinglePurposeLambda/addLambdaHandler/ServiceRole/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                       "aws:cdk:cloudformation:props": {
@@ -14889,11 +14889,11 @@
               },
               "Code": {
                 "id": "Code",
-                "path": "the-single-purpose-function-stack/addLambdaHandler/Code",
+                "path": "SinglePurposeLambda/addLambdaHandler/Code",
                 "children": {
                   "Stage": {
                     "id": "Stage",
-                    "path": "the-single-purpose-function-stack/addLambdaHandler/Code/Stage",
+                    "path": "SinglePurposeLambda/addLambdaHandler/Code/Stage",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.AssetStaging",
                       "version": "1.142.0"
@@ -14901,7 +14901,7 @@
                   },
                   "AssetBucket": {
                     "id": "AssetBucket",
-                    "path": "the-single-purpose-function-stack/addLambdaHandler/Code/AssetBucket",
+                    "path": "SinglePurposeLambda/addLambdaHandler/Code/AssetBucket",
                     "constructInfo": {
                       "fqn": "@aws-cdk/aws-s3.BucketBase",
                       "version": "1.142.0"
@@ -14915,7 +14915,7 @@
               },
               "Resource": {
                 "id": "Resource",
-                "path": "the-single-purpose-function-stack/addLambdaHandler/Resource",
+                "path": "SinglePurposeLambda/addLambdaHandler/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
                   "aws:cdk:cloudformation:props": {
@@ -14980,15 +14980,15 @@
           },
           "AssetParameters": {
             "id": "AssetParameters",
-            "path": "the-single-purpose-function-stack/AssetParameters",
+            "path": "SinglePurposeLambda/AssetParameters",
             "children": {
               "1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0": {
                 "id": "1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0",
-                "path": "the-single-purpose-function-stack/AssetParameters/1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0",
+                "path": "SinglePurposeLambda/AssetParameters/1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0",
                 "children": {
                   "S3Bucket": {
                     "id": "S3Bucket",
-                    "path": "the-single-purpose-function-stack/AssetParameters/1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0/S3Bucket",
+                    "path": "SinglePurposeLambda/AssetParameters/1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0/S3Bucket",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -14996,7 +14996,7 @@
                   },
                   "S3VersionKey": {
                     "id": "S3VersionKey",
-                    "path": "the-single-purpose-function-stack/AssetParameters/1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0/S3VersionKey",
+                    "path": "SinglePurposeLambda/AssetParameters/1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0/S3VersionKey",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -15004,7 +15004,7 @@
                   },
                   "ArtifactHash": {
                     "id": "ArtifactHash",
-                    "path": "the-single-purpose-function-stack/AssetParameters/1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0/ArtifactHash",
+                    "path": "SinglePurposeLambda/AssetParameters/1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0/ArtifactHash",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -15024,15 +15024,15 @@
           },
           "subtractLambdaHandler": {
             "id": "subtractLambdaHandler",
-            "path": "the-single-purpose-function-stack/subtractLambdaHandler",
+            "path": "SinglePurposeLambda/subtractLambdaHandler",
             "children": {
               "ServiceRole": {
                 "id": "ServiceRole",
-                "path": "the-single-purpose-function-stack/subtractLambdaHandler/ServiceRole",
+                "path": "SinglePurposeLambda/subtractLambdaHandler/ServiceRole",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "the-single-purpose-function-stack/subtractLambdaHandler/ServiceRole/Resource",
+                    "path": "SinglePurposeLambda/subtractLambdaHandler/ServiceRole/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                       "aws:cdk:cloudformation:props": {
@@ -15077,11 +15077,11 @@
               },
               "Code": {
                 "id": "Code",
-                "path": "the-single-purpose-function-stack/subtractLambdaHandler/Code",
+                "path": "SinglePurposeLambda/subtractLambdaHandler/Code",
                 "children": {
                   "Stage": {
                     "id": "Stage",
-                    "path": "the-single-purpose-function-stack/subtractLambdaHandler/Code/Stage",
+                    "path": "SinglePurposeLambda/subtractLambdaHandler/Code/Stage",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.AssetStaging",
                       "version": "1.142.0"
@@ -15089,7 +15089,7 @@
                   },
                   "AssetBucket": {
                     "id": "AssetBucket",
-                    "path": "the-single-purpose-function-stack/subtractLambdaHandler/Code/AssetBucket",
+                    "path": "SinglePurposeLambda/subtractLambdaHandler/Code/AssetBucket",
                     "constructInfo": {
                       "fqn": "@aws-cdk/aws-s3.BucketBase",
                       "version": "1.142.0"
@@ -15103,7 +15103,7 @@
               },
               "Resource": {
                 "id": "Resource",
-                "path": "the-single-purpose-function-stack/subtractLambdaHandler/Resource",
+                "path": "SinglePurposeLambda/subtractLambdaHandler/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
                   "aws:cdk:cloudformation:props": {
@@ -15168,15 +15168,15 @@
           },
           "multiplyLambdaHandler": {
             "id": "multiplyLambdaHandler",
-            "path": "the-single-purpose-function-stack/multiplyLambdaHandler",
+            "path": "SinglePurposeLambda/multiplyLambdaHandler",
             "children": {
               "ServiceRole": {
                 "id": "ServiceRole",
-                "path": "the-single-purpose-function-stack/multiplyLambdaHandler/ServiceRole",
+                "path": "SinglePurposeLambda/multiplyLambdaHandler/ServiceRole",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "the-single-purpose-function-stack/multiplyLambdaHandler/ServiceRole/Resource",
+                    "path": "SinglePurposeLambda/multiplyLambdaHandler/ServiceRole/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                       "aws:cdk:cloudformation:props": {
@@ -15221,11 +15221,11 @@
               },
               "Code": {
                 "id": "Code",
-                "path": "the-single-purpose-function-stack/multiplyLambdaHandler/Code",
+                "path": "SinglePurposeLambda/multiplyLambdaHandler/Code",
                 "children": {
                   "Stage": {
                     "id": "Stage",
-                    "path": "the-single-purpose-function-stack/multiplyLambdaHandler/Code/Stage",
+                    "path": "SinglePurposeLambda/multiplyLambdaHandler/Code/Stage",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.AssetStaging",
                       "version": "1.142.0"
@@ -15233,7 +15233,7 @@
                   },
                   "AssetBucket": {
                     "id": "AssetBucket",
-                    "path": "the-single-purpose-function-stack/multiplyLambdaHandler/Code/AssetBucket",
+                    "path": "SinglePurposeLambda/multiplyLambdaHandler/Code/AssetBucket",
                     "constructInfo": {
                       "fqn": "@aws-cdk/aws-s3.BucketBase",
                       "version": "1.142.0"
@@ -15247,7 +15247,7 @@
               },
               "Resource": {
                 "id": "Resource",
-                "path": "the-single-purpose-function-stack/multiplyLambdaHandler/Resource",
+                "path": "SinglePurposeLambda/multiplyLambdaHandler/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
                   "aws:cdk:cloudformation:props": {
@@ -15312,11 +15312,11 @@
           },
           "singlePurposeFunctionAPI": {
             "id": "singlePurposeFunctionAPI",
-            "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI",
+            "path": "SinglePurposeLambda/singlePurposeFunctionAPI",
             "children": {
               "Resource": {
                 "id": "Resource",
-                "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Resource",
+                "path": "SinglePurposeLambda/singlePurposeFunctionAPI/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::ApiGateway::RestApi",
                   "aws:cdk:cloudformation:props": {
@@ -15330,11 +15330,11 @@
               },
               "CloudWatchRole": {
                 "id": "CloudWatchRole",
-                "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/CloudWatchRole",
+                "path": "SinglePurposeLambda/singlePurposeFunctionAPI/CloudWatchRole",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/CloudWatchRole/Resource",
+                    "path": "SinglePurposeLambda/singlePurposeFunctionAPI/CloudWatchRole/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                       "aws:cdk:cloudformation:props": {
@@ -15379,7 +15379,7 @@
               },
               "Account": {
                 "id": "Account",
-                "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Account",
+                "path": "SinglePurposeLambda/singlePurposeFunctionAPI/Account",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::ApiGateway::Account",
                   "aws:cdk:cloudformation:props": {
@@ -15398,11 +15398,11 @@
               },
               "Deployment": {
                 "id": "Deployment",
-                "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Deployment",
+                "path": "SinglePurposeLambda/singlePurposeFunctionAPI/Deployment",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Deployment/Resource",
+                    "path": "SinglePurposeLambda/singlePurposeFunctionAPI/Deployment/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::ApiGateway::Deployment",
                       "aws:cdk:cloudformation:props": {
@@ -15425,11 +15425,11 @@
               },
               "DeploymentStage.prod": {
                 "id": "DeploymentStage.prod",
-                "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/DeploymentStage.prod",
+                "path": "SinglePurposeLambda/singlePurposeFunctionAPI/DeploymentStage.prod",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/DeploymentStage.prod/Resource",
+                    "path": "SinglePurposeLambda/singlePurposeFunctionAPI/DeploymentStage.prod/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::ApiGateway::Stage",
                       "aws:cdk:cloudformation:props": {
@@ -15455,7 +15455,7 @@
               },
               "Endpoint": {
                 "id": "Endpoint",
-                "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Endpoint",
+                "path": "SinglePurposeLambda/singlePurposeFunctionAPI/Endpoint",
                 "constructInfo": {
                   "fqn": "@aws-cdk/core.CfnOutput",
                   "version": "1.142.0"
@@ -15463,15 +15463,15 @@
               },
               "Default": {
                 "id": "Default",
-                "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Default",
+                "path": "SinglePurposeLambda/singlePurposeFunctionAPI/Default",
                 "children": {
                   "add": {
                     "id": "add",
-                    "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Default/add",
+                    "path": "SinglePurposeLambda/singlePurposeFunctionAPI/Default/add",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Default/add/Resource",
+                        "path": "SinglePurposeLambda/singlePurposeFunctionAPI/Default/add/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::ApiGateway::Resource",
                           "aws:cdk:cloudformation:props": {
@@ -15494,11 +15494,11 @@
                       },
                       "GET": {
                         "id": "GET",
-                        "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Default/add/GET",
+                        "path": "SinglePurposeLambda/singlePurposeFunctionAPI/Default/add/GET",
                         "children": {
-                          "ApiPermission.thesinglepurposefunctionstacksinglePurposeFunctionAPI3424B195.GET..add": {
-                            "id": "ApiPermission.thesinglepurposefunctionstacksinglePurposeFunctionAPI3424B195.GET..add",
-                            "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Default/add/GET/ApiPermission.thesinglepurposefunctionstacksinglePurposeFunctionAPI3424B195.GET..add",
+                          "ApiPermission.SinglePurposeLambdasinglePurposeFunctionAPI0FF43536.GET..add": {
+                            "id": "ApiPermission.SinglePurposeLambdasinglePurposeFunctionAPI0FF43536.GET..add",
+                            "path": "SinglePurposeLambda/singlePurposeFunctionAPI/Default/add/GET/ApiPermission.SinglePurposeLambdasinglePurposeFunctionAPI0FF43536.GET..add",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                               "aws:cdk:cloudformation:props": {
@@ -15545,9 +15545,9 @@
                               "version": "1.142.0"
                             }
                           },
-                          "ApiPermission.Test.thesinglepurposefunctionstacksinglePurposeFunctionAPI3424B195.GET..add": {
-                            "id": "ApiPermission.Test.thesinglepurposefunctionstacksinglePurposeFunctionAPI3424B195.GET..add",
-                            "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Default/add/GET/ApiPermission.Test.thesinglepurposefunctionstacksinglePurposeFunctionAPI3424B195.GET..add",
+                          "ApiPermission.Test.SinglePurposeLambdasinglePurposeFunctionAPI0FF43536.GET..add": {
+                            "id": "ApiPermission.Test.SinglePurposeLambdasinglePurposeFunctionAPI0FF43536.GET..add",
+                            "path": "SinglePurposeLambda/singlePurposeFunctionAPI/Default/add/GET/ApiPermission.Test.SinglePurposeLambdasinglePurposeFunctionAPI0FF43536.GET..add",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                               "aws:cdk:cloudformation:props": {
@@ -15592,7 +15592,7 @@
                           },
                           "Resource": {
                             "id": "Resource",
-                            "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Default/add/GET/Resource",
+                            "path": "SinglePurposeLambda/singlePurposeFunctionAPI/Default/add/GET/Resource",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
                               "aws:cdk:cloudformation:props": {
@@ -15652,11 +15652,11 @@
                   },
                   "subtract": {
                     "id": "subtract",
-                    "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Default/subtract",
+                    "path": "SinglePurposeLambda/singlePurposeFunctionAPI/Default/subtract",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Default/subtract/Resource",
+                        "path": "SinglePurposeLambda/singlePurposeFunctionAPI/Default/subtract/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::ApiGateway::Resource",
                           "aws:cdk:cloudformation:props": {
@@ -15679,11 +15679,11 @@
                       },
                       "GET": {
                         "id": "GET",
-                        "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Default/subtract/GET",
+                        "path": "SinglePurposeLambda/singlePurposeFunctionAPI/Default/subtract/GET",
                         "children": {
-                          "ApiPermission.thesinglepurposefunctionstacksinglePurposeFunctionAPI3424B195.GET..subtract": {
-                            "id": "ApiPermission.thesinglepurposefunctionstacksinglePurposeFunctionAPI3424B195.GET..subtract",
-                            "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Default/subtract/GET/ApiPermission.thesinglepurposefunctionstacksinglePurposeFunctionAPI3424B195.GET..subtract",
+                          "ApiPermission.SinglePurposeLambdasinglePurposeFunctionAPI0FF43536.GET..subtract": {
+                            "id": "ApiPermission.SinglePurposeLambdasinglePurposeFunctionAPI0FF43536.GET..subtract",
+                            "path": "SinglePurposeLambda/singlePurposeFunctionAPI/Default/subtract/GET/ApiPermission.SinglePurposeLambdasinglePurposeFunctionAPI0FF43536.GET..subtract",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                               "aws:cdk:cloudformation:props": {
@@ -15730,9 +15730,9 @@
                               "version": "1.142.0"
                             }
                           },
-                          "ApiPermission.Test.thesinglepurposefunctionstacksinglePurposeFunctionAPI3424B195.GET..subtract": {
-                            "id": "ApiPermission.Test.thesinglepurposefunctionstacksinglePurposeFunctionAPI3424B195.GET..subtract",
-                            "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Default/subtract/GET/ApiPermission.Test.thesinglepurposefunctionstacksinglePurposeFunctionAPI3424B195.GET..subtract",
+                          "ApiPermission.Test.SinglePurposeLambdasinglePurposeFunctionAPI0FF43536.GET..subtract": {
+                            "id": "ApiPermission.Test.SinglePurposeLambdasinglePurposeFunctionAPI0FF43536.GET..subtract",
+                            "path": "SinglePurposeLambda/singlePurposeFunctionAPI/Default/subtract/GET/ApiPermission.Test.SinglePurposeLambdasinglePurposeFunctionAPI0FF43536.GET..subtract",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                               "aws:cdk:cloudformation:props": {
@@ -15777,7 +15777,7 @@
                           },
                           "Resource": {
                             "id": "Resource",
-                            "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Default/subtract/GET/Resource",
+                            "path": "SinglePurposeLambda/singlePurposeFunctionAPI/Default/subtract/GET/Resource",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
                               "aws:cdk:cloudformation:props": {
@@ -15837,11 +15837,11 @@
                   },
                   "multiply": {
                     "id": "multiply",
-                    "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Default/multiply",
+                    "path": "SinglePurposeLambda/singlePurposeFunctionAPI/Default/multiply",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Default/multiply/Resource",
+                        "path": "SinglePurposeLambda/singlePurposeFunctionAPI/Default/multiply/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::ApiGateway::Resource",
                           "aws:cdk:cloudformation:props": {
@@ -15864,11 +15864,11 @@
                       },
                       "GET": {
                         "id": "GET",
-                        "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Default/multiply/GET",
+                        "path": "SinglePurposeLambda/singlePurposeFunctionAPI/Default/multiply/GET",
                         "children": {
-                          "ApiPermission.thesinglepurposefunctionstacksinglePurposeFunctionAPI3424B195.GET..multiply": {
-                            "id": "ApiPermission.thesinglepurposefunctionstacksinglePurposeFunctionAPI3424B195.GET..multiply",
-                            "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Default/multiply/GET/ApiPermission.thesinglepurposefunctionstacksinglePurposeFunctionAPI3424B195.GET..multiply",
+                          "ApiPermission.SinglePurposeLambdasinglePurposeFunctionAPI0FF43536.GET..multiply": {
+                            "id": "ApiPermission.SinglePurposeLambdasinglePurposeFunctionAPI0FF43536.GET..multiply",
+                            "path": "SinglePurposeLambda/singlePurposeFunctionAPI/Default/multiply/GET/ApiPermission.SinglePurposeLambdasinglePurposeFunctionAPI0FF43536.GET..multiply",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                               "aws:cdk:cloudformation:props": {
@@ -15915,9 +15915,9 @@
                               "version": "1.142.0"
                             }
                           },
-                          "ApiPermission.Test.thesinglepurposefunctionstacksinglePurposeFunctionAPI3424B195.GET..multiply": {
-                            "id": "ApiPermission.Test.thesinglepurposefunctionstacksinglePurposeFunctionAPI3424B195.GET..multiply",
-                            "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Default/multiply/GET/ApiPermission.Test.thesinglepurposefunctionstacksinglePurposeFunctionAPI3424B195.GET..multiply",
+                          "ApiPermission.Test.SinglePurposeLambdasinglePurposeFunctionAPI0FF43536.GET..multiply": {
+                            "id": "ApiPermission.Test.SinglePurposeLambdasinglePurposeFunctionAPI0FF43536.GET..multiply",
+                            "path": "SinglePurposeLambda/singlePurposeFunctionAPI/Default/multiply/GET/ApiPermission.Test.SinglePurposeLambdasinglePurposeFunctionAPI0FF43536.GET..multiply",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                               "aws:cdk:cloudformation:props": {
@@ -15962,7 +15962,7 @@
                           },
                           "Resource": {
                             "id": "Resource",
-                            "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Default/multiply/GET/Resource",
+                            "path": "SinglePurposeLambda/singlePurposeFunctionAPI/Default/multiply/GET/Resource",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
                               "aws:cdk:cloudformation:props": {
