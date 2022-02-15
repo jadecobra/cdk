@@ -9,7 +9,7 @@ class TestWellArchitectedPatterns(TestTemplates):
             # 'DynamoDBTable',
             # 'EventBridgeCircuitBreaker',
             # 'EventBridgeEtl',
-            'FatLambda',
+            # 'FatLambda',
             # 'HitCounter',
             # 'HttpFlow',
             # 'LambdaHttpApiGateway',

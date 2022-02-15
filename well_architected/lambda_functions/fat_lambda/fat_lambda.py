@@ -1,36 +1,37 @@
+def get_query_string_parameter(event=None, parameter=None):
+    try:
+        return int(event["queryStringParameters"][parameter])
+    except KeyError:
+        return 0
+
+def get_first_number(event):
+    return get_query_string_parameter(event, parameter='firstNumber')
+
+def get_second_number(event):
+    return get_query_string_parameter(event, parameter='secondNumber')
+
 def extract_parameters(event):
-    try:
-        first_num = event["queryStringParameters"]['firstNumber']
-    except KeyError:
-        first_num = 0
-
-    try:
-        second_num = event["queryStringParameters"]['secondNumber']
-    except KeyError:
-        second_num = 0
-
-    return first_num, second_num
+    return (
+        get_query_string_parameter(event=event, parameter='firstNumber'),
+        get_query_string_parameter(event=event, parameter='secondNumber')
+    )
 
 
 def add(event, context):
-    first_num, second_num = extract_parameters(event)
-
-    result = int(first_num) + int(second_num)
-    print("The result of % s + % s = %s" % (first_num, second_num, result))
-    return {'body': result, 'statusCode': 200}
+    return {
+        'body': get_first_number(event) + get_second_number(event),
+        'statusCode': 200
+    }
 
 
 def subtract(event, context):
-    first_num, second_num = extract_parameters(event)
-
-    result = int(first_num) - int(second_num)
-    print("The result of % s - % s = %s" % (first_num, second_num, result))
-    return {'body': result, 'statusCode': 200}
-
+    return {
+        'body': get_first_number(event) - get_second_number(event),
+        'statusCode': 200
+    }
 
 def multiply(event, context):
-    first_num, second_num = extract_parameters(event)
-
-    result = int(first_num) * int(second_num)
-    print("The result of % s * % s = %s" % (first_num, second_num, result))
-    return {'body': result, 'statusCode': 200}
+    return {
+        'body': get_first_number(event) * get_second_number(event),
+        'statusCode': 200
+    }
