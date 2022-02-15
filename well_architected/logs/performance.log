@@ -13109,3 +13109,7 @@
 2022-02-14 18:31:47.677443::Time taken to synthesize stack: LambdaRestAPIGateway::  3.4614 seconds
 2022-02-14 18:31:51.021914::Time taken to synthesize stack: SinglePurposeLambda::  3.3368 seconds
 2022-02-14 18:31:54.365521::Time taken to synthesize stack: SnsFlow::  3.3397 seconds
+2022-02-14 18:31:57.719408::Time taken to synthesize stack: SnsRestApi::  3.3474 seconds
+2022-02-14 18:32:01.015423::Time taken to synthesize stack: SNSTopic::  3.2912 seconds
+2022-02-14 18:32:04.332507::Time taken to synthesize stack: SqsFlow::  3.3108 seconds
+2022-02-14 18:32:07.709312::Time taken to synthesize stack: WebApplicationFirewall::  3.3713 seconds
