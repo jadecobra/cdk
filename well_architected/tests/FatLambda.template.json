@@ -1,0 +1,783 @@
+{
+  "Resources": {
+    "addLambdaHandlerServiceRole37B65F50": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    "addLambdaHandler9017B0E5": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "AssetParametersacc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96S3Bucket13A473DB"
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersacc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96S3VersionKeyCEFEC6BC"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersacc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96S3VersionKeyCEFEC6BC"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "addLambdaHandlerServiceRole37B65F50",
+            "Arn"
+          ]
+        },
+        "Handler": "fatlambda.add",
+        "Runtime": "python3.8"
+      },
+      "DependsOn": [
+        "addLambdaHandlerServiceRole37B65F50"
+      ]
+    },
+    "subtractLambdaHandlerServiceRole4A6E4302": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    "subtractLambdaHandler5C3056BE": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "AssetParametersacc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96S3Bucket13A473DB"
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersacc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96S3VersionKeyCEFEC6BC"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersacc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96S3VersionKeyCEFEC6BC"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "subtractLambdaHandlerServiceRole4A6E4302",
+            "Arn"
+          ]
+        },
+        "Handler": "fatlambda.subtract",
+        "Runtime": "python3.8"
+      },
+      "DependsOn": [
+        "subtractLambdaHandlerServiceRole4A6E4302"
+      ]
+    },
+    "multiplyLambdaHandlerServiceRole902757A2": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    "multiplyLambdaHandler7068AFA9": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "AssetParametersacc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96S3Bucket13A473DB"
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersacc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96S3VersionKeyCEFEC6BC"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersacc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96S3VersionKeyCEFEC6BC"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "multiplyLambdaHandlerServiceRole902757A2",
+            "Arn"
+          ]
+        },
+        "Handler": "fatlambda.multiply",
+        "Runtime": "python3.8"
+      },
+      "DependsOn": [
+        "multiplyLambdaHandlerServiceRole902757A2"
+      ]
+    },
+    "fatLambdaAPIDE58F80F": {
+      "Type": "AWS::ApiGateway::RestApi",
+      "Properties": {
+        "Name": "fatLambdaAPI"
+      }
+    },
+    "fatLambdaAPICloudWatchRole1BD7739C": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "apigateway.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    "fatLambdaAPIAccount90F9D9B9": {
+      "Type": "AWS::ApiGateway::Account",
+      "Properties": {
+        "CloudWatchRoleArn": {
+          "Fn::GetAtt": [
+            "fatLambdaAPICloudWatchRole1BD7739C",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "fatLambdaAPIDE58F80F"
+      ]
+    },
+    "fatLambdaAPIDeploymentAB28B6F2f72ae8ad1f9c25276559c83c584ebaa9": {
+      "Type": "AWS::ApiGateway::Deployment",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "fatLambdaAPIDE58F80F"
+        },
+        "Description": "Automatically created by the RestApi construct"
+      },
+      "DependsOn": [
+        "fatLambdaAPIaddGET0E753E34",
+        "fatLambdaAPIadd5163AE8B",
+        "fatLambdaAPImultiplyGET69DC6CC1",
+        "fatLambdaAPImultiplyDDE1F047",
+        "fatLambdaAPIsubtractGETCA4F04B1",
+        "fatLambdaAPIsubtract252EA067"
+      ]
+    },
+    "fatLambdaAPIDeploymentStageprod0C322274": {
+      "Type": "AWS::ApiGateway::Stage",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "fatLambdaAPIDE58F80F"
+        },
+        "DeploymentId": {
+          "Ref": "fatLambdaAPIDeploymentAB28B6F2f72ae8ad1f9c25276559c83c584ebaa9"
+        },
+        "StageName": "prod"
+      },
+      "DependsOn": [
+        "fatLambdaAPIAccount90F9D9B9"
+      ]
+    },
+    "fatLambdaAPIadd5163AE8B": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "fatLambdaAPIDE58F80F",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "add",
+        "RestApiId": {
+          "Ref": "fatLambdaAPIDE58F80F"
+        }
+      }
+    },
+    "fatLambdaAPIaddGETApiPermissionFatLambdafatLambdaAPI3E8C7AFAGETadd81A3173C": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "addLambdaHandler9017B0E5",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "fatLambdaAPIDE58F80F"
+              },
+              "/",
+              {
+                "Ref": "fatLambdaAPIDeploymentStageprod0C322274"
+              },
+              "/GET/add"
+            ]
+          ]
+        }
+      }
+    },
+    "fatLambdaAPIaddGETApiPermissionTestFatLambdafatLambdaAPI3E8C7AFAGETaddBB75DA66": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "addLambdaHandler9017B0E5",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "fatLambdaAPIDE58F80F"
+              },
+              "/test-invoke-stage/GET/add"
+            ]
+          ]
+        }
+      }
+    },
+    "fatLambdaAPIaddGET0E753E34": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "GET",
+        "ResourceId": {
+          "Ref": "fatLambdaAPIadd5163AE8B"
+        },
+        "RestApiId": {
+          "Ref": "fatLambdaAPIDE58F80F"
+        },
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "addLambdaHandler9017B0E5",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        }
+      }
+    },
+    "fatLambdaAPIsubtract252EA067": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "fatLambdaAPIDE58F80F",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "subtract",
+        "RestApiId": {
+          "Ref": "fatLambdaAPIDE58F80F"
+        }
+      }
+    },
+    "fatLambdaAPIsubtractGETApiPermissionFatLambdafatLambdaAPI3E8C7AFAGETsubtract7AFCC71F": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "subtractLambdaHandler5C3056BE",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "fatLambdaAPIDE58F80F"
+              },
+              "/",
+              {
+                "Ref": "fatLambdaAPIDeploymentStageprod0C322274"
+              },
+              "/GET/subtract"
+            ]
+          ]
+        }
+      }
+    },
+    "fatLambdaAPIsubtractGETApiPermissionTestFatLambdafatLambdaAPI3E8C7AFAGETsubtract91DA3395": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "subtractLambdaHandler5C3056BE",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "fatLambdaAPIDE58F80F"
+              },
+              "/test-invoke-stage/GET/subtract"
+            ]
+          ]
+        }
+      }
+    },
+    "fatLambdaAPIsubtractGETCA4F04B1": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "GET",
+        "ResourceId": {
+          "Ref": "fatLambdaAPIsubtract252EA067"
+        },
+        "RestApiId": {
+          "Ref": "fatLambdaAPIDE58F80F"
+        },
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "subtractLambdaHandler5C3056BE",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        }
+      }
+    },
+    "fatLambdaAPImultiplyDDE1F047": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "fatLambdaAPIDE58F80F",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "multiply",
+        "RestApiId": {
+          "Ref": "fatLambdaAPIDE58F80F"
+        }
+      }
+    },
+    "fatLambdaAPImultiplyGETApiPermissionFatLambdafatLambdaAPI3E8C7AFAGETmultiply96BAA0E4": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "multiplyLambdaHandler7068AFA9",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "fatLambdaAPIDE58F80F"
+              },
+              "/",
+              {
+                "Ref": "fatLambdaAPIDeploymentStageprod0C322274"
+              },
+              "/GET/multiply"
+            ]
+          ]
+        }
+      }
+    },
+    "fatLambdaAPImultiplyGETApiPermissionTestFatLambdafatLambdaAPI3E8C7AFAGETmultiply71FBCF46": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "multiplyLambdaHandler7068AFA9",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "fatLambdaAPIDE58F80F"
+              },
+              "/test-invoke-stage/GET/multiply"
+            ]
+          ]
+        }
+      }
+    },
+    "fatLambdaAPImultiplyGET69DC6CC1": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "GET",
+        "ResourceId": {
+          "Ref": "fatLambdaAPImultiplyDDE1F047"
+        },
+        "RestApiId": {
+          "Ref": "fatLambdaAPIDE58F80F"
+        },
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "multiplyLambdaHandler7068AFA9",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        }
+      }
+    }
+  },
+  "Parameters": {
+    "AssetParametersacc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96S3Bucket13A473DB": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"acc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96\""
+    },
+    "AssetParametersacc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96S3VersionKeyCEFEC6BC": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"acc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96\""
+    },
+    "AssetParametersacc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96ArtifactHashC6F57953": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"acc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96\""
+    }
+  },
+  "Outputs": {
+    "fatLambdaAPIEndpointF80F7646": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Ref": "fatLambdaAPIDE58F80F"
+            },
+            ".execute-api.",
+            {
+              "Ref": "AWS::Region"
+            },
+            ".",
+            {
+              "Ref": "AWS::URLSuffix"
+            },
+            "/",
+            {
+              "Ref": "fatLambdaAPIDeploymentStageprod0C322274"
+            },
+            "/"
+          ]
+        ]
+      }
+    }
+  }
+}

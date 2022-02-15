@@ -1,0 +1,465 @@
+{
+  "Resources": {
+    "lambdalithHandlerServiceRole5EF8B2D9": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    "lambdalithHandlerA7E51B4B": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "AssetParameters5c76ec19d166edb38c1b9d914f89daec22f89857591e1558f1deee370b685bb5S3Bucket30785438"
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParameters5c76ec19d166edb38c1b9d914f89daec22f89857591e1558f1deee370b685bb5S3VersionKey4555258B"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParameters5c76ec19d166edb38c1b9d914f89daec22f89857591e1558f1deee370b685bb5S3VersionKey4555258B"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "lambdalithHandlerServiceRole5EF8B2D9",
+            "Arn"
+          ]
+        },
+        "Handler": "lambdalith.handler",
+        "Runtime": "python3.8"
+      },
+      "DependsOn": [
+        "lambdalithHandlerServiceRole5EF8B2D9"
+      ]
+    },
+    "LambdalithAPI8485C28D": {
+      "Type": "AWS::ApiGateway::RestApi",
+      "Properties": {
+        "Name": "LambdalithAPI"
+      }
+    },
+    "LambdalithAPICloudWatchRoleA48FDF3A": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "apigateway.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    "LambdalithAPIAccountE79B9952": {
+      "Type": "AWS::ApiGateway::Account",
+      "Properties": {
+        "CloudWatchRoleArn": {
+          "Fn::GetAtt": [
+            "LambdalithAPICloudWatchRoleA48FDF3A",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "LambdalithAPI8485C28D"
+      ]
+    },
+    "LambdalithAPIDeployment2B6139A49ce83c20442b3731fcba5ba06f3a5d9a": {
+      "Type": "AWS::ApiGateway::Deployment",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "LambdalithAPI8485C28D"
+        },
+        "Description": "Automatically created by the RestApi construct"
+      },
+      "DependsOn": [
+        "LambdalithAPIproxyANY76B6A38E",
+        "LambdalithAPIproxy7C4B2DE8",
+        "LambdalithAPIANY5D3590BA"
+      ]
+    },
+    "LambdalithAPIDeploymentStageprod8B685305": {
+      "Type": "AWS::ApiGateway::Stage",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "LambdalithAPI8485C28D"
+        },
+        "DeploymentId": {
+          "Ref": "LambdalithAPIDeployment2B6139A49ce83c20442b3731fcba5ba06f3a5d9a"
+        },
+        "StageName": "prod"
+      },
+      "DependsOn": [
+        "LambdalithAPIAccountE79B9952"
+      ]
+    },
+    "LambdalithAPIproxy7C4B2DE8": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "LambdalithAPI8485C28D",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "{proxy+}",
+        "RestApiId": {
+          "Ref": "LambdalithAPI8485C28D"
+        }
+      }
+    },
+    "LambdalithAPIproxyANYApiPermissionLambdaLithLambdalithAPI023ADF34ANYproxyBE79F587": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "lambdalithHandlerA7E51B4B",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "LambdalithAPI8485C28D"
+              },
+              "/",
+              {
+                "Ref": "LambdalithAPIDeploymentStageprod8B685305"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "LambdalithAPIproxyANYApiPermissionTestLambdaLithLambdalithAPI023ADF34ANYproxy77B45A4F": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "lambdalithHandlerA7E51B4B",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "LambdalithAPI8485C28D"
+              },
+              "/test-invoke-stage/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "LambdalithAPIproxyANY76B6A38E": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "ANY",
+        "ResourceId": {
+          "Ref": "LambdalithAPIproxy7C4B2DE8"
+        },
+        "RestApiId": {
+          "Ref": "LambdalithAPI8485C28D"
+        },
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "lambdalithHandlerA7E51B4B",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        }
+      }
+    },
+    "LambdalithAPIANYApiPermissionLambdaLithLambdalithAPI023ADF34ANY3C0BE16D": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "lambdalithHandlerA7E51B4B",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "LambdalithAPI8485C28D"
+              },
+              "/",
+              {
+                "Ref": "LambdalithAPIDeploymentStageprod8B685305"
+              },
+              "/*/"
+            ]
+          ]
+        }
+      }
+    },
+    "LambdalithAPIANYApiPermissionTestLambdaLithLambdalithAPI023ADF34ANYAC528EAC": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "lambdalithHandlerA7E51B4B",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "LambdalithAPI8485C28D"
+              },
+              "/test-invoke-stage/*/"
+            ]
+          ]
+        }
+      }
+    },
+    "LambdalithAPIANY5D3590BA": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "ANY",
+        "ResourceId": {
+          "Fn::GetAtt": [
+            "LambdalithAPI8485C28D",
+            "RootResourceId"
+          ]
+        },
+        "RestApiId": {
+          "Ref": "LambdalithAPI8485C28D"
+        },
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "lambdalithHandlerA7E51B4B",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        }
+      }
+    }
+  },
+  "Parameters": {
+    "AssetParameters5c76ec19d166edb38c1b9d914f89daec22f89857591e1558f1deee370b685bb5S3Bucket30785438": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"5c76ec19d166edb38c1b9d914f89daec22f89857591e1558f1deee370b685bb5\""
+    },
+    "AssetParameters5c76ec19d166edb38c1b9d914f89daec22f89857591e1558f1deee370b685bb5S3VersionKey4555258B": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"5c76ec19d166edb38c1b9d914f89daec22f89857591e1558f1deee370b685bb5\""
+    },
+    "AssetParameters5c76ec19d166edb38c1b9d914f89daec22f89857591e1558f1deee370b685bb5ArtifactHash6A13486F": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"5c76ec19d166edb38c1b9d914f89daec22f89857591e1558f1deee370b685bb5\""
+    }
+  },
+  "Outputs": {
+    "LambdalithAPIEndpoint0CB0D0D9": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Ref": "LambdalithAPI8485C28D"
+            },
+            ".execute-api.",
+            {
+              "Ref": "AWS::Region"
+            },
+            ".",
+            {
+              "Ref": "AWS::URLSuffix"
+            },
+            "/",
+            {
+              "Ref": "LambdalithAPIDeploymentStageprod8B685305"
+            },
+            "/"
+          ]
+        ]
+      }
+    }
+  }
+}
