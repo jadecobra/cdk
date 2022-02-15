@@ -82,7 +82,7 @@ class EventbridgeEtl(cdk.Stack):
         )
 
         self.create_lambda_function(
-                        function_name="observer",
+            function_name="observer",
             event_bridge_rule_description='observe and log all events'
         )
 
