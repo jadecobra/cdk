@@ -13626,17 +13626,17 @@
         "id": "FatLambda",
         "path": "FatLambda",
         "children": {
-          "addLambdaHandler": {
-            "id": "addLambdaHandler",
-            "path": "FatLambda/addLambdaHandler",
+          "add": {
+            "id": "add",
+            "path": "FatLambda/add",
             "children": {
               "ServiceRole": {
                 "id": "ServiceRole",
-                "path": "FatLambda/addLambdaHandler/ServiceRole",
+                "path": "FatLambda/add/ServiceRole",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "FatLambda/addLambdaHandler/ServiceRole/Resource",
+                    "path": "FatLambda/add/ServiceRole/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                       "aws:cdk:cloudformation:props": {
@@ -13681,11 +13681,11 @@
               },
               "Code": {
                 "id": "Code",
-                "path": "FatLambda/addLambdaHandler/Code",
+                "path": "FatLambda/add/Code",
                 "children": {
                   "Stage": {
                     "id": "Stage",
-                    "path": "FatLambda/addLambdaHandler/Code/Stage",
+                    "path": "FatLambda/add/Code/Stage",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.AssetStaging",
                       "version": "1.142.0"
@@ -13693,7 +13693,7 @@
                   },
                   "AssetBucket": {
                     "id": "AssetBucket",
-                    "path": "FatLambda/addLambdaHandler/Code/AssetBucket",
+                    "path": "FatLambda/add/Code/AssetBucket",
                     "constructInfo": {
                       "fqn": "@aws-cdk/aws-s3.BucketBase",
                       "version": "1.142.0"
@@ -13707,7 +13707,7 @@
               },
               "Resource": {
                 "id": "Resource",
-                "path": "FatLambda/addLambdaHandler/Resource",
+                "path": "FatLambda/add/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
                   "aws:cdk:cloudformation:props": {
@@ -13751,7 +13751,7 @@
                     },
                     "role": {
                       "Fn::GetAtt": [
-                        "addLambdaHandlerServiceRole37B65F50",
+                        "addServiceRole725BBB92",
                         "Arn"
                       ]
                     },
@@ -13814,17 +13814,17 @@
               "version": "1.142.0"
             }
           },
-          "subtractLambdaHandler": {
-            "id": "subtractLambdaHandler",
-            "path": "FatLambda/subtractLambdaHandler",
+          "subtract": {
+            "id": "subtract",
+            "path": "FatLambda/subtract",
             "children": {
               "ServiceRole": {
                 "id": "ServiceRole",
-                "path": "FatLambda/subtractLambdaHandler/ServiceRole",
+                "path": "FatLambda/subtract/ServiceRole",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "FatLambda/subtractLambdaHandler/ServiceRole/Resource",
+                    "path": "FatLambda/subtract/ServiceRole/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                       "aws:cdk:cloudformation:props": {
@@ -13869,11 +13869,11 @@
               },
               "Code": {
                 "id": "Code",
-                "path": "FatLambda/subtractLambdaHandler/Code",
+                "path": "FatLambda/subtract/Code",
                 "children": {
                   "Stage": {
                     "id": "Stage",
-                    "path": "FatLambda/subtractLambdaHandler/Code/Stage",
+                    "path": "FatLambda/subtract/Code/Stage",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.AssetStaging",
                       "version": "1.142.0"
@@ -13881,7 +13881,7 @@
                   },
                   "AssetBucket": {
                     "id": "AssetBucket",
-                    "path": "FatLambda/subtractLambdaHandler/Code/AssetBucket",
+                    "path": "FatLambda/subtract/Code/AssetBucket",
                     "constructInfo": {
                       "fqn": "@aws-cdk/aws-s3.BucketBase",
                       "version": "1.142.0"
@@ -13895,7 +13895,7 @@
               },
               "Resource": {
                 "id": "Resource",
-                "path": "FatLambda/subtractLambdaHandler/Resource",
+                "path": "FatLambda/subtract/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
                   "aws:cdk:cloudformation:props": {
@@ -13939,7 +13939,7 @@
                     },
                     "role": {
                       "Fn::GetAtt": [
-                        "subtractLambdaHandlerServiceRole4A6E4302",
+                        "subtractServiceRoleD77DEA26",
                         "Arn"
                       ]
                     },
@@ -13958,17 +13958,17 @@
               "version": "1.142.0"
             }
           },
-          "multiplyLambdaHandler": {
-            "id": "multiplyLambdaHandler",
-            "path": "FatLambda/multiplyLambdaHandler",
+          "multiply": {
+            "id": "multiply",
+            "path": "FatLambda/multiply",
             "children": {
               "ServiceRole": {
                 "id": "ServiceRole",
-                "path": "FatLambda/multiplyLambdaHandler/ServiceRole",
+                "path": "FatLambda/multiply/ServiceRole",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "FatLambda/multiplyLambdaHandler/ServiceRole/Resource",
+                    "path": "FatLambda/multiply/ServiceRole/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                       "aws:cdk:cloudformation:props": {
@@ -14013,11 +14013,11 @@
               },
               "Code": {
                 "id": "Code",
-                "path": "FatLambda/multiplyLambdaHandler/Code",
+                "path": "FatLambda/multiply/Code",
                 "children": {
                   "Stage": {
                     "id": "Stage",
-                    "path": "FatLambda/multiplyLambdaHandler/Code/Stage",
+                    "path": "FatLambda/multiply/Code/Stage",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.AssetStaging",
                       "version": "1.142.0"
@@ -14025,7 +14025,7 @@
                   },
                   "AssetBucket": {
                     "id": "AssetBucket",
-                    "path": "FatLambda/multiplyLambdaHandler/Code/AssetBucket",
+                    "path": "FatLambda/multiply/Code/AssetBucket",
                     "constructInfo": {
                       "fqn": "@aws-cdk/aws-s3.BucketBase",
                       "version": "1.142.0"
@@ -14039,7 +14039,7 @@
               },
               "Resource": {
                 "id": "Resource",
-                "path": "FatLambda/multiplyLambdaHandler/Resource",
+                "path": "FatLambda/multiply/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
                   "aws:cdk:cloudformation:props": {
@@ -14083,7 +14083,7 @@
                     },
                     "role": {
                       "Fn::GetAtt": [
-                        "multiplyLambdaHandlerServiceRole902757A2",
+                        "multiplyServiceRole316F0748",
                         "Arn"
                       ]
                     },
@@ -14229,7 +14229,7 @@
                           "Ref": "fatLambdaAPIDE58F80F"
                         },
                         "deploymentId": {
-                          "Ref": "fatLambdaAPIDeploymentAB28B6F2f72ae8ad1f9c25276559c83c584ebaa9"
+                          "Ref": "fatLambdaAPIDeploymentAB28B6F20ce69b41ce0564a826d2fa935c98f6d4"
                         },
                         "stageName": "prod"
                       }
@@ -14297,7 +14297,7 @@
                                 "action": "lambda:InvokeFunction",
                                 "functionName": {
                                   "Fn::GetAtt": [
-                                    "addLambdaHandler9017B0E5",
+                                    "addDEC2DAFB",
                                     "Arn"
                                   ]
                                 },
@@ -14346,7 +14346,7 @@
                                 "action": "lambda:InvokeFunction",
                                 "functionName": {
                                   "Fn::GetAtt": [
-                                    "addLambdaHandler9017B0E5",
+                                    "addDEC2DAFB",
                                     "Arn"
                                   ]
                                 },
@@ -14413,7 +14413,7 @@
                                         ":lambda:path/2015-03-31/functions/",
                                         {
                                           "Fn::GetAtt": [
-                                            "addLambdaHandler9017B0E5",
+                                            "addDEC2DAFB",
                                             "Arn"
                                           ]
                                         },
@@ -14482,7 +14482,7 @@
                                 "action": "lambda:InvokeFunction",
                                 "functionName": {
                                   "Fn::GetAtt": [
-                                    "subtractLambdaHandler5C3056BE",
+                                    "subtractF02BF038",
                                     "Arn"
                                   ]
                                 },
@@ -14531,7 +14531,7 @@
                                 "action": "lambda:InvokeFunction",
                                 "functionName": {
                                   "Fn::GetAtt": [
-                                    "subtractLambdaHandler5C3056BE",
+                                    "subtractF02BF038",
                                     "Arn"
                                   ]
                                 },
@@ -14598,7 +14598,7 @@
                                         ":lambda:path/2015-03-31/functions/",
                                         {
                                           "Fn::GetAtt": [
-                                            "subtractLambdaHandler5C3056BE",
+                                            "subtractF02BF038",
                                             "Arn"
                                           ]
                                         },
@@ -14667,7 +14667,7 @@
                                 "action": "lambda:InvokeFunction",
                                 "functionName": {
                                   "Fn::GetAtt": [
-                                    "multiplyLambdaHandler7068AFA9",
+                                    "multiply33748501",
                                     "Arn"
                                   ]
                                 },
@@ -14716,7 +14716,7 @@
                                 "action": "lambda:InvokeFunction",
                                 "functionName": {
                                   "Fn::GetAtt": [
-                                    "multiplyLambdaHandler7068AFA9",
+                                    "multiply33748501",
                                     "Arn"
                                   ]
                                 },
@@ -14783,7 +14783,7 @@
                                         ":lambda:path/2015-03-31/functions/",
                                         {
                                           "Fn::GetAtt": [
-                                            "multiplyLambdaHandler7068AFA9",
+                                            "multiply33748501",
                                             "Arn"
                                           ]
                                         },

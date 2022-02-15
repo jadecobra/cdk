@@ -1,6 +1,6 @@
 {
   "Resources": {
-    "addLambdaHandlerServiceRole37B65F50": {
+    "addServiceRole725BBB92": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -31,7 +31,7 @@
         ]
       }
     },
-    "addLambdaHandler9017B0E5": {
+    "addDEC2DAFB": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
@@ -74,7 +74,7 @@
         },
         "Role": {
           "Fn::GetAtt": [
-            "addLambdaHandlerServiceRole37B65F50",
+            "addServiceRole725BBB92",
             "Arn"
           ]
         },
@@ -82,10 +82,10 @@
         "Runtime": "python3.8"
       },
       "DependsOn": [
-        "addLambdaHandlerServiceRole37B65F50"
+        "addServiceRole725BBB92"
       ]
     },
-    "subtractLambdaHandlerServiceRole4A6E4302": {
+    "subtractServiceRoleD77DEA26": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -116,7 +116,7 @@
         ]
       }
     },
-    "subtractLambdaHandler5C3056BE": {
+    "subtractF02BF038": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
@@ -159,7 +159,7 @@
         },
         "Role": {
           "Fn::GetAtt": [
-            "subtractLambdaHandlerServiceRole4A6E4302",
+            "subtractServiceRoleD77DEA26",
             "Arn"
           ]
         },
@@ -167,10 +167,10 @@
         "Runtime": "python3.8"
       },
       "DependsOn": [
-        "subtractLambdaHandlerServiceRole4A6E4302"
+        "subtractServiceRoleD77DEA26"
       ]
     },
-    "multiplyLambdaHandlerServiceRole902757A2": {
+    "multiplyServiceRole316F0748": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -201,7 +201,7 @@
         ]
       }
     },
-    "multiplyLambdaHandler7068AFA9": {
+    "multiply33748501": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
@@ -244,7 +244,7 @@
         },
         "Role": {
           "Fn::GetAtt": [
-            "multiplyLambdaHandlerServiceRole902757A2",
+            "multiplyServiceRole316F0748",
             "Arn"
           ]
         },
@@ -252,7 +252,7 @@
         "Runtime": "python3.8"
       },
       "DependsOn": [
-        "multiplyLambdaHandlerServiceRole902757A2"
+        "multiplyServiceRole316F0748"
       ]
     },
     "fatLambdaAPIDE58F80F": {
@@ -306,7 +306,7 @@
         "fatLambdaAPIDE58F80F"
       ]
     },
-    "fatLambdaAPIDeploymentAB28B6F2f72ae8ad1f9c25276559c83c584ebaa9": {
+    "fatLambdaAPIDeploymentAB28B6F20ce69b41ce0564a826d2fa935c98f6d4": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -330,7 +330,7 @@
           "Ref": "fatLambdaAPIDE58F80F"
         },
         "DeploymentId": {
-          "Ref": "fatLambdaAPIDeploymentAB28B6F2f72ae8ad1f9c25276559c83c584ebaa9"
+          "Ref": "fatLambdaAPIDeploymentAB28B6F20ce69b41ce0564a826d2fa935c98f6d4"
         },
         "StageName": "prod"
       },
@@ -359,7 +359,7 @@
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "addLambdaHandler9017B0E5",
+            "addDEC2DAFB",
             "Arn"
           ]
         },
@@ -400,7 +400,7 @@
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "addLambdaHandler9017B0E5",
+            "addDEC2DAFB",
             "Arn"
           ]
         },
@@ -460,7 +460,7 @@
                 ":lambda:path/2015-03-31/functions/",
                 {
                   "Fn::GetAtt": [
-                    "addLambdaHandler9017B0E5",
+                    "addDEC2DAFB",
                     "Arn"
                   ]
                 },
@@ -492,7 +492,7 @@
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "subtractLambdaHandler5C3056BE",
+            "subtractF02BF038",
             "Arn"
           ]
         },
@@ -533,7 +533,7 @@
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "subtractLambdaHandler5C3056BE",
+            "subtractF02BF038",
             "Arn"
           ]
         },
@@ -593,7 +593,7 @@
                 ":lambda:path/2015-03-31/functions/",
                 {
                   "Fn::GetAtt": [
-                    "subtractLambdaHandler5C3056BE",
+                    "subtractF02BF038",
                     "Arn"
                   ]
                 },
@@ -625,7 +625,7 @@
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "multiplyLambdaHandler7068AFA9",
+            "multiply33748501",
             "Arn"
           ]
         },
@@ -666,7 +666,7 @@
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "multiplyLambdaHandler7068AFA9",
+            "multiply33748501",
             "Arn"
           ]
         },
@@ -726,7 +726,7 @@
                 ":lambda:path/2015-03-31/functions/",
                 {
                   "Fn::GetAtt": [
-                    "multiplyLambdaHandler7068AFA9",
+                    "multiply33748501",
                     "Arn"
                   ]
                 },
