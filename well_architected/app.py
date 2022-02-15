@@ -17,7 +17,7 @@ import aws_cdk.aws_dynamodb as aws_dynamodb
 import event_bridge_circuit_breaker
 import event_bridge_etl
 
-from lambda_trilogy.lambda_lith import TheLambdalithStack
+from lambda_trilogy.lambda_lith import LambdaLith
 from lambda_trilogy.fat_lambda import TheFatLambdaStack
 from lambda_trilogy.single_purpose_lambda import TheSinglePurposeFunctionStack
 
@@ -48,7 +48,7 @@ class WellArchitected(cdk.App):
             self, 'EventBridgeCircuitBreaker'
         )
         event_bridge_etl.EventbridgeEtl(self, 'EventBridgeEtl')
-        TheLambdalithStack(self, "LambdaLith")
+        LambdaLith(self, "LambdaLith")
         TheFatLambdaStack(self, "FatLambda")
         TheSinglePurposeFunctionStack(self, "SinglePurposeLambda")
 

@@ -1,23 +1,19 @@
 from aws_cdk import (
     aws_lambda as _lambda,
     aws_apigateway as api_gw,
-    core
+    core as cdk
 )
+import lambda_function
+import rest_api
 
+class LambdaLith(cdk.Stack):
 
-class TheLambdalithStack(core.Stack):
-
-    def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
+    def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        lambda_lith = _lambda.Function(
-            self, "lambdalithHandler",
-            runtime=_lambda.Runtime.PYTHON_3_8,
-            handler="lambdalith.handler",
-            code=_lambda.Code.from_asset("lambda_functions/lambda_lith")
+        rest_api.LambdaRestAPIGatewayConstruct(
+            self, 'LambdaLithRestAPIGateway',
+            lambda_function=lambda_function.create_python_lambda_function(
+                self, function_name='lambdalith'
+            ),
         )
-
-        # defines an API Gateway REST API resource backed by our "lambda_lith" function.
-        api_gw.LambdaRestApi(self, 'LambdalithAPI',
-                             handler=lambda_lith
-                             )
