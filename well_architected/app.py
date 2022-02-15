@@ -12,13 +12,14 @@ from xray_tracer.dynamodb_flow import DynamoDBFlow
 from xray_tracer.http_flow import HttpFlow
 
 import aws_cdk.core as cdk
-import event_bridge_circuit_breaker
 import aws_cdk.aws_dynamodb as aws_dynamodb
+
+import event_bridge_circuit_breaker
 import event_bridge_etl
 
-from lambda_trilogy.the_lambda_lith_stack import TheLambdalithStack
-from lambda_trilogy.the_fat_lambda_stack import TheFatLambdaStack
-from lambda_trilogy.single_purpose_function_stack import TheSinglePurposeFunctionStack
+from lambda_trilogy.lambda_lith import TheLambdalithStack
+from lambda_trilogy.fat_lambda import TheFatLambdaStack
+from lambda_trilogy.single_purpose_lambda import TheSinglePurposeFunctionStack
 
 
 class WellArchitected(cdk.App):
