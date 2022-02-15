@@ -1,4 +1,4 @@
-import sniffer
+import sniffer.api
 import subprocess
 
 @sniffer.api.runnable

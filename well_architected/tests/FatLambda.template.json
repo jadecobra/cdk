@@ -36,7 +36,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": {
-            "Ref": "AssetParametersacc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96S3Bucket13A473DB"
+            "Ref": "AssetParameters49acc6e4e37e0cb461a893cc0390e21abb58c54d8e4ff7fbc4b8a7838bcf9223S3Bucket3D972573"
           },
           "S3Key": {
             "Fn::Join": [
@@ -49,7 +49,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParametersacc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96S3VersionKeyCEFEC6BC"
+                          "Ref": "AssetParameters49acc6e4e37e0cb461a893cc0390e21abb58c54d8e4ff7fbc4b8a7838bcf9223S3VersionKey52BE4113"
                         }
                       ]
                     }
@@ -62,7 +62,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParametersacc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96S3VersionKeyCEFEC6BC"
+                          "Ref": "AssetParameters49acc6e4e37e0cb461a893cc0390e21abb58c54d8e4ff7fbc4b8a7838bcf9223S3VersionKey52BE4113"
                         }
                       ]
                     }
@@ -121,7 +121,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": {
-            "Ref": "AssetParametersacc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96S3Bucket13A473DB"
+            "Ref": "AssetParameters49acc6e4e37e0cb461a893cc0390e21abb58c54d8e4ff7fbc4b8a7838bcf9223S3Bucket3D972573"
           },
           "S3Key": {
             "Fn::Join": [
@@ -134,7 +134,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParametersacc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96S3VersionKeyCEFEC6BC"
+                          "Ref": "AssetParameters49acc6e4e37e0cb461a893cc0390e21abb58c54d8e4ff7fbc4b8a7838bcf9223S3VersionKey52BE4113"
                         }
                       ]
                     }
@@ -147,7 +147,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParametersacc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96S3VersionKeyCEFEC6BC"
+                          "Ref": "AssetParameters49acc6e4e37e0cb461a893cc0390e21abb58c54d8e4ff7fbc4b8a7838bcf9223S3VersionKey52BE4113"
                         }
                       ]
                     }
@@ -206,7 +206,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": {
-            "Ref": "AssetParametersacc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96S3Bucket13A473DB"
+            "Ref": "AssetParameters49acc6e4e37e0cb461a893cc0390e21abb58c54d8e4ff7fbc4b8a7838bcf9223S3Bucket3D972573"
           },
           "S3Key": {
             "Fn::Join": [
@@ -219,7 +219,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParametersacc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96S3VersionKeyCEFEC6BC"
+                          "Ref": "AssetParameters49acc6e4e37e0cb461a893cc0390e21abb58c54d8e4ff7fbc4b8a7838bcf9223S3VersionKey52BE4113"
                         }
                       ]
                     }
@@ -232,7 +232,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParametersacc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96S3VersionKeyCEFEC6BC"
+                          "Ref": "AssetParameters49acc6e4e37e0cb461a893cc0390e21abb58c54d8e4ff7fbc4b8a7838bcf9223S3VersionKey52BE4113"
                         }
                       ]
                     }
@@ -255,13 +255,13 @@
         "multiplyServiceRole316F0748"
       ]
     },
-    "fatLambdaAPIDE58F80F": {
+    "RestAPI1CC12F26": {
       "Type": "AWS::ApiGateway::RestApi",
       "Properties": {
-        "Name": "fatLambdaAPI"
+        "Name": "RestAPI"
       }
     },
-    "fatLambdaAPICloudWatchRole1BD7739C": {
+    "RestAPICloudWatchRole025FE33D": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -292,68 +292,68 @@
         ]
       }
     },
-    "fatLambdaAPIAccount90F9D9B9": {
+    "RestAPIAccountB5481627": {
       "Type": "AWS::ApiGateway::Account",
       "Properties": {
         "CloudWatchRoleArn": {
           "Fn::GetAtt": [
-            "fatLambdaAPICloudWatchRole1BD7739C",
+            "RestAPICloudWatchRole025FE33D",
             "Arn"
           ]
         }
       },
       "DependsOn": [
-        "fatLambdaAPIDE58F80F"
+        "RestAPI1CC12F26"
       ]
     },
-    "fatLambdaAPIDeploymentAB28B6F20ce69b41ce0564a826d2fa935c98f6d4": {
+    "RestAPIDeploymentD35A53805be04916372a561f962c5e06a0031817": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
-          "Ref": "fatLambdaAPIDE58F80F"
+          "Ref": "RestAPI1CC12F26"
         },
         "Description": "Automatically created by the RestApi construct"
       },
       "DependsOn": [
-        "fatLambdaAPIaddGET0E753E34",
-        "fatLambdaAPIadd5163AE8B",
-        "fatLambdaAPImultiplyGET69DC6CC1",
-        "fatLambdaAPImultiplyDDE1F047",
-        "fatLambdaAPIsubtractGETCA4F04B1",
-        "fatLambdaAPIsubtract252EA067"
+        "RestAPIaddGET5398420A",
+        "RestAPIaddB43F7E0F",
+        "RestAPImultiplyGETA148C513",
+        "RestAPImultiply94C09729",
+        "RestAPIsubtractGET2EE925DE",
+        "RestAPIsubtract81B2D098"
       ]
     },
-    "fatLambdaAPIDeploymentStageprod0C322274": {
+    "RestAPIDeploymentStageprod21CF62B9": {
       "Type": "AWS::ApiGateway::Stage",
       "Properties": {
         "RestApiId": {
-          "Ref": "fatLambdaAPIDE58F80F"
+          "Ref": "RestAPI1CC12F26"
         },
         "DeploymentId": {
-          "Ref": "fatLambdaAPIDeploymentAB28B6F20ce69b41ce0564a826d2fa935c98f6d4"
+          "Ref": "RestAPIDeploymentD35A53805be04916372a561f962c5e06a0031817"
         },
         "StageName": "prod"
       },
       "DependsOn": [
-        "fatLambdaAPIAccount90F9D9B9"
+        "RestAPIAccountB5481627"
       ]
     },
-    "fatLambdaAPIadd5163AE8B": {
+    "RestAPIaddB43F7E0F": {
       "Type": "AWS::ApiGateway::Resource",
       "Properties": {
         "ParentId": {
           "Fn::GetAtt": [
-            "fatLambdaAPIDE58F80F",
+            "RestAPI1CC12F26",
             "RootResourceId"
           ]
         },
         "PathPart": "add",
         "RestApiId": {
-          "Ref": "fatLambdaAPIDE58F80F"
+          "Ref": "RestAPI1CC12F26"
         }
       }
     },
-    "fatLambdaAPIaddGETApiPermissionFatLambdafatLambdaAPI3E8C7AFAGETadd81A3173C": {
+    "RestAPIaddGETApiPermissionFatLambdaRestAPIBE8F5A7DGETaddBD041951": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:InvokeFunction",
@@ -382,11 +382,11 @@
               },
               ":",
               {
-                "Ref": "fatLambdaAPIDE58F80F"
+                "Ref": "RestAPI1CC12F26"
               },
               "/",
               {
-                "Ref": "fatLambdaAPIDeploymentStageprod0C322274"
+                "Ref": "RestAPIDeploymentStageprod21CF62B9"
               },
               "/GET/add"
             ]
@@ -394,7 +394,7 @@
         }
       }
     },
-    "fatLambdaAPIaddGETApiPermissionTestFatLambdafatLambdaAPI3E8C7AFAGETaddBB75DA66": {
+    "RestAPIaddGETApiPermissionTestFatLambdaRestAPIBE8F5A7DGETaddC8355A9C": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:InvokeFunction",
@@ -423,7 +423,7 @@
               },
               ":",
               {
-                "Ref": "fatLambdaAPIDE58F80F"
+                "Ref": "RestAPI1CC12F26"
               },
               "/test-invoke-stage/GET/add"
             ]
@@ -431,15 +431,15 @@
         }
       }
     },
-    "fatLambdaAPIaddGET0E753E34": {
+    "RestAPIaddGET5398420A": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
         "HttpMethod": "GET",
         "ResourceId": {
-          "Ref": "fatLambdaAPIadd5163AE8B"
+          "Ref": "RestAPIaddB43F7E0F"
         },
         "RestApiId": {
-          "Ref": "fatLambdaAPIDE58F80F"
+          "Ref": "RestAPI1CC12F26"
         },
         "AuthorizationType": "NONE",
         "Integration": {
@@ -471,22 +471,22 @@
         }
       }
     },
-    "fatLambdaAPIsubtract252EA067": {
+    "RestAPIsubtract81B2D098": {
       "Type": "AWS::ApiGateway::Resource",
       "Properties": {
         "ParentId": {
           "Fn::GetAtt": [
-            "fatLambdaAPIDE58F80F",
+            "RestAPI1CC12F26",
             "RootResourceId"
           ]
         },
         "PathPart": "subtract",
         "RestApiId": {
-          "Ref": "fatLambdaAPIDE58F80F"
+          "Ref": "RestAPI1CC12F26"
         }
       }
     },
-    "fatLambdaAPIsubtractGETApiPermissionFatLambdafatLambdaAPI3E8C7AFAGETsubtract7AFCC71F": {
+    "RestAPIsubtractGETApiPermissionFatLambdaRestAPIBE8F5A7DGETsubtractE8D2825D": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:InvokeFunction",
@@ -515,11 +515,11 @@
               },
               ":",
               {
-                "Ref": "fatLambdaAPIDE58F80F"
+                "Ref": "RestAPI1CC12F26"
               },
               "/",
               {
-                "Ref": "fatLambdaAPIDeploymentStageprod0C322274"
+                "Ref": "RestAPIDeploymentStageprod21CF62B9"
               },
               "/GET/subtract"
             ]
@@ -527,7 +527,7 @@
         }
       }
     },
-    "fatLambdaAPIsubtractGETApiPermissionTestFatLambdafatLambdaAPI3E8C7AFAGETsubtract91DA3395": {
+    "RestAPIsubtractGETApiPermissionTestFatLambdaRestAPIBE8F5A7DGETsubtract59ED578F": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:InvokeFunction",
@@ -556,7 +556,7 @@
               },
               ":",
               {
-                "Ref": "fatLambdaAPIDE58F80F"
+                "Ref": "RestAPI1CC12F26"
               },
               "/test-invoke-stage/GET/subtract"
             ]
@@ -564,15 +564,15 @@
         }
       }
     },
-    "fatLambdaAPIsubtractGETCA4F04B1": {
+    "RestAPIsubtractGET2EE925DE": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
         "HttpMethod": "GET",
         "ResourceId": {
-          "Ref": "fatLambdaAPIsubtract252EA067"
+          "Ref": "RestAPIsubtract81B2D098"
         },
         "RestApiId": {
-          "Ref": "fatLambdaAPIDE58F80F"
+          "Ref": "RestAPI1CC12F26"
         },
         "AuthorizationType": "NONE",
         "Integration": {
@@ -604,22 +604,22 @@
         }
       }
     },
-    "fatLambdaAPImultiplyDDE1F047": {
+    "RestAPImultiply94C09729": {
       "Type": "AWS::ApiGateway::Resource",
       "Properties": {
         "ParentId": {
           "Fn::GetAtt": [
-            "fatLambdaAPIDE58F80F",
+            "RestAPI1CC12F26",
             "RootResourceId"
           ]
         },
         "PathPart": "multiply",
         "RestApiId": {
-          "Ref": "fatLambdaAPIDE58F80F"
+          "Ref": "RestAPI1CC12F26"
         }
       }
     },
-    "fatLambdaAPImultiplyGETApiPermissionFatLambdafatLambdaAPI3E8C7AFAGETmultiply96BAA0E4": {
+    "RestAPImultiplyGETApiPermissionFatLambdaRestAPIBE8F5A7DGETmultiplyE46A67A3": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:InvokeFunction",
@@ -648,11 +648,11 @@
               },
               ":",
               {
-                "Ref": "fatLambdaAPIDE58F80F"
+                "Ref": "RestAPI1CC12F26"
               },
               "/",
               {
-                "Ref": "fatLambdaAPIDeploymentStageprod0C322274"
+                "Ref": "RestAPIDeploymentStageprod21CF62B9"
               },
               "/GET/multiply"
             ]
@@ -660,7 +660,7 @@
         }
       }
     },
-    "fatLambdaAPImultiplyGETApiPermissionTestFatLambdafatLambdaAPI3E8C7AFAGETmultiply71FBCF46": {
+    "RestAPImultiplyGETApiPermissionTestFatLambdaRestAPIBE8F5A7DGETmultiplyE04DE679": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:InvokeFunction",
@@ -689,7 +689,7 @@
               },
               ":",
               {
-                "Ref": "fatLambdaAPIDE58F80F"
+                "Ref": "RestAPI1CC12F26"
               },
               "/test-invoke-stage/GET/multiply"
             ]
@@ -697,15 +697,15 @@
         }
       }
     },
-    "fatLambdaAPImultiplyGET69DC6CC1": {
+    "RestAPImultiplyGETA148C513": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
         "HttpMethod": "GET",
         "ResourceId": {
-          "Ref": "fatLambdaAPImultiplyDDE1F047"
+          "Ref": "RestAPImultiply94C09729"
         },
         "RestApiId": {
-          "Ref": "fatLambdaAPIDE58F80F"
+          "Ref": "RestAPI1CC12F26"
         },
         "AuthorizationType": "NONE",
         "Integration": {
@@ -739,28 +739,28 @@
     }
   },
   "Parameters": {
-    "AssetParametersacc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96S3Bucket13A473DB": {
+    "AssetParameters49acc6e4e37e0cb461a893cc0390e21abb58c54d8e4ff7fbc4b8a7838bcf9223S3Bucket3D972573": {
       "Type": "String",
-      "Description": "S3 bucket for asset \"acc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96\""
+      "Description": "S3 bucket for asset \"49acc6e4e37e0cb461a893cc0390e21abb58c54d8e4ff7fbc4b8a7838bcf9223\""
     },
-    "AssetParametersacc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96S3VersionKeyCEFEC6BC": {
+    "AssetParameters49acc6e4e37e0cb461a893cc0390e21abb58c54d8e4ff7fbc4b8a7838bcf9223S3VersionKey52BE4113": {
       "Type": "String",
-      "Description": "S3 key for asset version \"acc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96\""
+      "Description": "S3 key for asset version \"49acc6e4e37e0cb461a893cc0390e21abb58c54d8e4ff7fbc4b8a7838bcf9223\""
     },
-    "AssetParametersacc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96ArtifactHashC6F57953": {
+    "AssetParameters49acc6e4e37e0cb461a893cc0390e21abb58c54d8e4ff7fbc4b8a7838bcf9223ArtifactHash15864AA2": {
       "Type": "String",
-      "Description": "Artifact hash for asset \"acc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96\""
+      "Description": "Artifact hash for asset \"49acc6e4e37e0cb461a893cc0390e21abb58c54d8e4ff7fbc4b8a7838bcf9223\""
     }
   },
   "Outputs": {
-    "fatLambdaAPIEndpointF80F7646": {
+    "RestAPIEndpointB14C3C54": {
       "Value": {
         "Fn::Join": [
           "",
           [
             "https://",
             {
-              "Ref": "fatLambdaAPIDE58F80F"
+              "Ref": "RestAPI1CC12F26"
             },
             ".execute-api.",
             {
@@ -772,7 +772,7 @@
             },
             "/",
             {
-              "Ref": "fatLambdaAPIDeploymentStageprod0C322274"
+              "Ref": "RestAPIDeploymentStageprod21CF62B9"
             },
             "/"
           ]

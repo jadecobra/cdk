@@ -13713,7 +13713,7 @@
                   "aws:cdk:cloudformation:props": {
                     "code": {
                       "s3Bucket": {
-                        "Ref": "AssetParametersacc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96S3Bucket13A473DB"
+                        "Ref": "AssetParameters49acc6e4e37e0cb461a893cc0390e21abb58c54d8e4ff7fbc4b8a7838bcf9223S3Bucket3D972573"
                       },
                       "s3Key": {
                         "Fn::Join": [
@@ -13726,7 +13726,7 @@
                                   "Fn::Split": [
                                     "||",
                                     {
-                                      "Ref": "AssetParametersacc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96S3VersionKeyCEFEC6BC"
+                                      "Ref": "AssetParameters49acc6e4e37e0cb461a893cc0390e21abb58c54d8e4ff7fbc4b8a7838bcf9223S3VersionKey52BE4113"
                                     }
                                   ]
                                 }
@@ -13739,7 +13739,7 @@
                                   "Fn::Split": [
                                     "||",
                                     {
-                                      "Ref": "AssetParametersacc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96S3VersionKeyCEFEC6BC"
+                                      "Ref": "AssetParameters49acc6e4e37e0cb461a893cc0390e21abb58c54d8e4ff7fbc4b8a7838bcf9223S3VersionKey52BE4113"
                                     }
                                   ]
                                 }
@@ -13774,13 +13774,13 @@
             "id": "AssetParameters",
             "path": "FatLambda/AssetParameters",
             "children": {
-              "acc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96": {
-                "id": "acc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96",
-                "path": "FatLambda/AssetParameters/acc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96",
+              "49acc6e4e37e0cb461a893cc0390e21abb58c54d8e4ff7fbc4b8a7838bcf9223": {
+                "id": "49acc6e4e37e0cb461a893cc0390e21abb58c54d8e4ff7fbc4b8a7838bcf9223",
+                "path": "FatLambda/AssetParameters/49acc6e4e37e0cb461a893cc0390e21abb58c54d8e4ff7fbc4b8a7838bcf9223",
                 "children": {
                   "S3Bucket": {
                     "id": "S3Bucket",
-                    "path": "FatLambda/AssetParameters/acc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96/S3Bucket",
+                    "path": "FatLambda/AssetParameters/49acc6e4e37e0cb461a893cc0390e21abb58c54d8e4ff7fbc4b8a7838bcf9223/S3Bucket",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -13788,7 +13788,7 @@
                   },
                   "S3VersionKey": {
                     "id": "S3VersionKey",
-                    "path": "FatLambda/AssetParameters/acc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96/S3VersionKey",
+                    "path": "FatLambda/AssetParameters/49acc6e4e37e0cb461a893cc0390e21abb58c54d8e4ff7fbc4b8a7838bcf9223/S3VersionKey",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -13796,7 +13796,7 @@
                   },
                   "ArtifactHash": {
                     "id": "ArtifactHash",
-                    "path": "FatLambda/AssetParameters/acc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96/ArtifactHash",
+                    "path": "FatLambda/AssetParameters/49acc6e4e37e0cb461a893cc0390e21abb58c54d8e4ff7fbc4b8a7838bcf9223/ArtifactHash",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -13901,7 +13901,7 @@
                   "aws:cdk:cloudformation:props": {
                     "code": {
                       "s3Bucket": {
-                        "Ref": "AssetParametersacc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96S3Bucket13A473DB"
+                        "Ref": "AssetParameters49acc6e4e37e0cb461a893cc0390e21abb58c54d8e4ff7fbc4b8a7838bcf9223S3Bucket3D972573"
                       },
                       "s3Key": {
                         "Fn::Join": [
@@ -13914,7 +13914,7 @@
                                   "Fn::Split": [
                                     "||",
                                     {
-                                      "Ref": "AssetParametersacc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96S3VersionKeyCEFEC6BC"
+                                      "Ref": "AssetParameters49acc6e4e37e0cb461a893cc0390e21abb58c54d8e4ff7fbc4b8a7838bcf9223S3VersionKey52BE4113"
                                     }
                                   ]
                                 }
@@ -13927,7 +13927,7 @@
                                   "Fn::Split": [
                                     "||",
                                     {
-                                      "Ref": "AssetParametersacc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96S3VersionKeyCEFEC6BC"
+                                      "Ref": "AssetParameters49acc6e4e37e0cb461a893cc0390e21abb58c54d8e4ff7fbc4b8a7838bcf9223S3VersionKey52BE4113"
                                     }
                                   ]
                                 }
@@ -14045,7 +14045,7 @@
                   "aws:cdk:cloudformation:props": {
                     "code": {
                       "s3Bucket": {
-                        "Ref": "AssetParametersacc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96S3Bucket13A473DB"
+                        "Ref": "AssetParameters49acc6e4e37e0cb461a893cc0390e21abb58c54d8e4ff7fbc4b8a7838bcf9223S3Bucket3D972573"
                       },
                       "s3Key": {
                         "Fn::Join": [
@@ -14058,7 +14058,7 @@
                                   "Fn::Split": [
                                     "||",
                                     {
-                                      "Ref": "AssetParametersacc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96S3VersionKeyCEFEC6BC"
+                                      "Ref": "AssetParameters49acc6e4e37e0cb461a893cc0390e21abb58c54d8e4ff7fbc4b8a7838bcf9223S3VersionKey52BE4113"
                                     }
                                   ]
                                 }
@@ -14071,7 +14071,7 @@
                                   "Fn::Split": [
                                     "||",
                                     {
-                                      "Ref": "AssetParametersacc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96S3VersionKeyCEFEC6BC"
+                                      "Ref": "AssetParameters49acc6e4e37e0cb461a893cc0390e21abb58c54d8e4ff7fbc4b8a7838bcf9223S3VersionKey52BE4113"
                                     }
                                   ]
                                 }
@@ -14102,17 +14102,17 @@
               "version": "1.142.0"
             }
           },
-          "fatLambdaAPI": {
-            "id": "fatLambdaAPI",
-            "path": "FatLambda/fatLambdaAPI",
+          "RestAPI": {
+            "id": "RestAPI",
+            "path": "FatLambda/RestAPI",
             "children": {
               "Resource": {
                 "id": "Resource",
-                "path": "FatLambda/fatLambdaAPI/Resource",
+                "path": "FatLambda/RestAPI/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::ApiGateway::RestApi",
                   "aws:cdk:cloudformation:props": {
-                    "name": "fatLambdaAPI"
+                    "name": "RestAPI"
                   }
                 },
                 "constructInfo": {
@@ -14122,11 +14122,11 @@
               },
               "CloudWatchRole": {
                 "id": "CloudWatchRole",
-                "path": "FatLambda/fatLambdaAPI/CloudWatchRole",
+                "path": "FatLambda/RestAPI/CloudWatchRole",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "FatLambda/fatLambdaAPI/CloudWatchRole/Resource",
+                    "path": "FatLambda/RestAPI/CloudWatchRole/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                       "aws:cdk:cloudformation:props": {
@@ -14171,13 +14171,13 @@
               },
               "Account": {
                 "id": "Account",
-                "path": "FatLambda/fatLambdaAPI/Account",
+                "path": "FatLambda/RestAPI/Account",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::ApiGateway::Account",
                   "aws:cdk:cloudformation:props": {
                     "cloudWatchRoleArn": {
                       "Fn::GetAtt": [
-                        "fatLambdaAPICloudWatchRole1BD7739C",
+                        "RestAPICloudWatchRole025FE33D",
                         "Arn"
                       ]
                     }
@@ -14190,16 +14190,16 @@
               },
               "Deployment": {
                 "id": "Deployment",
-                "path": "FatLambda/fatLambdaAPI/Deployment",
+                "path": "FatLambda/RestAPI/Deployment",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "FatLambda/fatLambdaAPI/Deployment/Resource",
+                    "path": "FatLambda/RestAPI/Deployment/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::ApiGateway::Deployment",
                       "aws:cdk:cloudformation:props": {
                         "restApiId": {
-                          "Ref": "fatLambdaAPIDE58F80F"
+                          "Ref": "RestAPI1CC12F26"
                         },
                         "description": "Automatically created by the RestApi construct"
                       }
@@ -14217,19 +14217,19 @@
               },
               "DeploymentStage.prod": {
                 "id": "DeploymentStage.prod",
-                "path": "FatLambda/fatLambdaAPI/DeploymentStage.prod",
+                "path": "FatLambda/RestAPI/DeploymentStage.prod",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "FatLambda/fatLambdaAPI/DeploymentStage.prod/Resource",
+                    "path": "FatLambda/RestAPI/DeploymentStage.prod/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::ApiGateway::Stage",
                       "aws:cdk:cloudformation:props": {
                         "restApiId": {
-                          "Ref": "fatLambdaAPIDE58F80F"
+                          "Ref": "RestAPI1CC12F26"
                         },
                         "deploymentId": {
-                          "Ref": "fatLambdaAPIDeploymentAB28B6F20ce69b41ce0564a826d2fa935c98f6d4"
+                          "Ref": "RestAPIDeploymentD35A53805be04916372a561f962c5e06a0031817"
                         },
                         "stageName": "prod"
                       }
@@ -14247,7 +14247,7 @@
               },
               "Endpoint": {
                 "id": "Endpoint",
-                "path": "FatLambda/fatLambdaAPI/Endpoint",
+                "path": "FatLambda/RestAPI/Endpoint",
                 "constructInfo": {
                   "fqn": "@aws-cdk/core.CfnOutput",
                   "version": "1.142.0"
@@ -14255,27 +14255,27 @@
               },
               "Default": {
                 "id": "Default",
-                "path": "FatLambda/fatLambdaAPI/Default",
+                "path": "FatLambda/RestAPI/Default",
                 "children": {
                   "add": {
                     "id": "add",
-                    "path": "FatLambda/fatLambdaAPI/Default/add",
+                    "path": "FatLambda/RestAPI/Default/add",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "FatLambda/fatLambdaAPI/Default/add/Resource",
+                        "path": "FatLambda/RestAPI/Default/add/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::ApiGateway::Resource",
                           "aws:cdk:cloudformation:props": {
                             "parentId": {
                               "Fn::GetAtt": [
-                                "fatLambdaAPIDE58F80F",
+                                "RestAPI1CC12F26",
                                 "RootResourceId"
                               ]
                             },
                             "pathPart": "add",
                             "restApiId": {
-                              "Ref": "fatLambdaAPIDE58F80F"
+                              "Ref": "RestAPI1CC12F26"
                             }
                           }
                         },
@@ -14286,11 +14286,11 @@
                       },
                       "GET": {
                         "id": "GET",
-                        "path": "FatLambda/fatLambdaAPI/Default/add/GET",
+                        "path": "FatLambda/RestAPI/Default/add/GET",
                         "children": {
-                          "ApiPermission.FatLambdafatLambdaAPI3E8C7AFA.GET..add": {
-                            "id": "ApiPermission.FatLambdafatLambdaAPI3E8C7AFA.GET..add",
-                            "path": "FatLambda/fatLambdaAPI/Default/add/GET/ApiPermission.FatLambdafatLambdaAPI3E8C7AFA.GET..add",
+                          "ApiPermission.FatLambdaRestAPIBE8F5A7D.GET..add": {
+                            "id": "ApiPermission.FatLambdaRestAPIBE8F5A7D.GET..add",
+                            "path": "FatLambda/RestAPI/Default/add/GET/ApiPermission.FatLambdaRestAPIBE8F5A7D.GET..add",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                               "aws:cdk:cloudformation:props": {
@@ -14320,11 +14320,11 @@
                                       },
                                       ":",
                                       {
-                                        "Ref": "fatLambdaAPIDE58F80F"
+                                        "Ref": "RestAPI1CC12F26"
                                       },
                                       "/",
                                       {
-                                        "Ref": "fatLambdaAPIDeploymentStageprod0C322274"
+                                        "Ref": "RestAPIDeploymentStageprod21CF62B9"
                                       },
                                       "/GET/add"
                                     ]
@@ -14337,9 +14337,9 @@
                               "version": "1.142.0"
                             }
                           },
-                          "ApiPermission.Test.FatLambdafatLambdaAPI3E8C7AFA.GET..add": {
-                            "id": "ApiPermission.Test.FatLambdafatLambdaAPI3E8C7AFA.GET..add",
-                            "path": "FatLambda/fatLambdaAPI/Default/add/GET/ApiPermission.Test.FatLambdafatLambdaAPI3E8C7AFA.GET..add",
+                          "ApiPermission.Test.FatLambdaRestAPIBE8F5A7D.GET..add": {
+                            "id": "ApiPermission.Test.FatLambdaRestAPIBE8F5A7D.GET..add",
+                            "path": "FatLambda/RestAPI/Default/add/GET/ApiPermission.Test.FatLambdaRestAPIBE8F5A7D.GET..add",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                               "aws:cdk:cloudformation:props": {
@@ -14369,7 +14369,7 @@
                                       },
                                       ":",
                                       {
-                                        "Ref": "fatLambdaAPIDE58F80F"
+                                        "Ref": "RestAPI1CC12F26"
                                       },
                                       "/test-invoke-stage/GET/add"
                                     ]
@@ -14384,16 +14384,16 @@
                           },
                           "Resource": {
                             "id": "Resource",
-                            "path": "FatLambda/fatLambdaAPI/Default/add/GET/Resource",
+                            "path": "FatLambda/RestAPI/Default/add/GET/Resource",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
                               "aws:cdk:cloudformation:props": {
                                 "httpMethod": "GET",
                                 "resourceId": {
-                                  "Ref": "fatLambdaAPIadd5163AE8B"
+                                  "Ref": "RestAPIaddB43F7E0F"
                                 },
                                 "restApiId": {
-                                  "Ref": "fatLambdaAPIDE58F80F"
+                                  "Ref": "RestAPI1CC12F26"
                                 },
                                 "authorizationType": "NONE",
                                 "integration": {
@@ -14444,23 +14444,23 @@
                   },
                   "subtract": {
                     "id": "subtract",
-                    "path": "FatLambda/fatLambdaAPI/Default/subtract",
+                    "path": "FatLambda/RestAPI/Default/subtract",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "FatLambda/fatLambdaAPI/Default/subtract/Resource",
+                        "path": "FatLambda/RestAPI/Default/subtract/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::ApiGateway::Resource",
                           "aws:cdk:cloudformation:props": {
                             "parentId": {
                               "Fn::GetAtt": [
-                                "fatLambdaAPIDE58F80F",
+                                "RestAPI1CC12F26",
                                 "RootResourceId"
                               ]
                             },
                             "pathPart": "subtract",
                             "restApiId": {
-                              "Ref": "fatLambdaAPIDE58F80F"
+                              "Ref": "RestAPI1CC12F26"
                             }
                           }
                         },
@@ -14471,11 +14471,11 @@
                       },
                       "GET": {
                         "id": "GET",
-                        "path": "FatLambda/fatLambdaAPI/Default/subtract/GET",
+                        "path": "FatLambda/RestAPI/Default/subtract/GET",
                         "children": {
-                          "ApiPermission.FatLambdafatLambdaAPI3E8C7AFA.GET..subtract": {
-                            "id": "ApiPermission.FatLambdafatLambdaAPI3E8C7AFA.GET..subtract",
-                            "path": "FatLambda/fatLambdaAPI/Default/subtract/GET/ApiPermission.FatLambdafatLambdaAPI3E8C7AFA.GET..subtract",
+                          "ApiPermission.FatLambdaRestAPIBE8F5A7D.GET..subtract": {
+                            "id": "ApiPermission.FatLambdaRestAPIBE8F5A7D.GET..subtract",
+                            "path": "FatLambda/RestAPI/Default/subtract/GET/ApiPermission.FatLambdaRestAPIBE8F5A7D.GET..subtract",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                               "aws:cdk:cloudformation:props": {
@@ -14505,11 +14505,11 @@
                                       },
                                       ":",
                                       {
-                                        "Ref": "fatLambdaAPIDE58F80F"
+                                        "Ref": "RestAPI1CC12F26"
                                       },
                                       "/",
                                       {
-                                        "Ref": "fatLambdaAPIDeploymentStageprod0C322274"
+                                        "Ref": "RestAPIDeploymentStageprod21CF62B9"
                                       },
                                       "/GET/subtract"
                                     ]
@@ -14522,9 +14522,9 @@
                               "version": "1.142.0"
                             }
                           },
-                          "ApiPermission.Test.FatLambdafatLambdaAPI3E8C7AFA.GET..subtract": {
-                            "id": "ApiPermission.Test.FatLambdafatLambdaAPI3E8C7AFA.GET..subtract",
-                            "path": "FatLambda/fatLambdaAPI/Default/subtract/GET/ApiPermission.Test.FatLambdafatLambdaAPI3E8C7AFA.GET..subtract",
+                          "ApiPermission.Test.FatLambdaRestAPIBE8F5A7D.GET..subtract": {
+                            "id": "ApiPermission.Test.FatLambdaRestAPIBE8F5A7D.GET..subtract",
+                            "path": "FatLambda/RestAPI/Default/subtract/GET/ApiPermission.Test.FatLambdaRestAPIBE8F5A7D.GET..subtract",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                               "aws:cdk:cloudformation:props": {
@@ -14554,7 +14554,7 @@
                                       },
                                       ":",
                                       {
-                                        "Ref": "fatLambdaAPIDE58F80F"
+                                        "Ref": "RestAPI1CC12F26"
                                       },
                                       "/test-invoke-stage/GET/subtract"
                                     ]
@@ -14569,16 +14569,16 @@
                           },
                           "Resource": {
                             "id": "Resource",
-                            "path": "FatLambda/fatLambdaAPI/Default/subtract/GET/Resource",
+                            "path": "FatLambda/RestAPI/Default/subtract/GET/Resource",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
                               "aws:cdk:cloudformation:props": {
                                 "httpMethod": "GET",
                                 "resourceId": {
-                                  "Ref": "fatLambdaAPIsubtract252EA067"
+                                  "Ref": "RestAPIsubtract81B2D098"
                                 },
                                 "restApiId": {
-                                  "Ref": "fatLambdaAPIDE58F80F"
+                                  "Ref": "RestAPI1CC12F26"
                                 },
                                 "authorizationType": "NONE",
                                 "integration": {
@@ -14629,23 +14629,23 @@
                   },
                   "multiply": {
                     "id": "multiply",
-                    "path": "FatLambda/fatLambdaAPI/Default/multiply",
+                    "path": "FatLambda/RestAPI/Default/multiply",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "FatLambda/fatLambdaAPI/Default/multiply/Resource",
+                        "path": "FatLambda/RestAPI/Default/multiply/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::ApiGateway::Resource",
                           "aws:cdk:cloudformation:props": {
                             "parentId": {
                               "Fn::GetAtt": [
-                                "fatLambdaAPIDE58F80F",
+                                "RestAPI1CC12F26",
                                 "RootResourceId"
                               ]
                             },
                             "pathPart": "multiply",
                             "restApiId": {
-                              "Ref": "fatLambdaAPIDE58F80F"
+                              "Ref": "RestAPI1CC12F26"
                             }
                           }
                         },
@@ -14656,11 +14656,11 @@
                       },
                       "GET": {
                         "id": "GET",
-                        "path": "FatLambda/fatLambdaAPI/Default/multiply/GET",
+                        "path": "FatLambda/RestAPI/Default/multiply/GET",
                         "children": {
-                          "ApiPermission.FatLambdafatLambdaAPI3E8C7AFA.GET..multiply": {
-                            "id": "ApiPermission.FatLambdafatLambdaAPI3E8C7AFA.GET..multiply",
-                            "path": "FatLambda/fatLambdaAPI/Default/multiply/GET/ApiPermission.FatLambdafatLambdaAPI3E8C7AFA.GET..multiply",
+                          "ApiPermission.FatLambdaRestAPIBE8F5A7D.GET..multiply": {
+                            "id": "ApiPermission.FatLambdaRestAPIBE8F5A7D.GET..multiply",
+                            "path": "FatLambda/RestAPI/Default/multiply/GET/ApiPermission.FatLambdaRestAPIBE8F5A7D.GET..multiply",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                               "aws:cdk:cloudformation:props": {
@@ -14690,11 +14690,11 @@
                                       },
                                       ":",
                                       {
-                                        "Ref": "fatLambdaAPIDE58F80F"
+                                        "Ref": "RestAPI1CC12F26"
                                       },
                                       "/",
                                       {
-                                        "Ref": "fatLambdaAPIDeploymentStageprod0C322274"
+                                        "Ref": "RestAPIDeploymentStageprod21CF62B9"
                                       },
                                       "/GET/multiply"
                                     ]
@@ -14707,9 +14707,9 @@
                               "version": "1.142.0"
                             }
                           },
-                          "ApiPermission.Test.FatLambdafatLambdaAPI3E8C7AFA.GET..multiply": {
-                            "id": "ApiPermission.Test.FatLambdafatLambdaAPI3E8C7AFA.GET..multiply",
-                            "path": "FatLambda/fatLambdaAPI/Default/multiply/GET/ApiPermission.Test.FatLambdafatLambdaAPI3E8C7AFA.GET..multiply",
+                          "ApiPermission.Test.FatLambdaRestAPIBE8F5A7D.GET..multiply": {
+                            "id": "ApiPermission.Test.FatLambdaRestAPIBE8F5A7D.GET..multiply",
+                            "path": "FatLambda/RestAPI/Default/multiply/GET/ApiPermission.Test.FatLambdaRestAPIBE8F5A7D.GET..multiply",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                               "aws:cdk:cloudformation:props": {
@@ -14739,7 +14739,7 @@
                                       },
                                       ":",
                                       {
-                                        "Ref": "fatLambdaAPIDE58F80F"
+                                        "Ref": "RestAPI1CC12F26"
                                       },
                                       "/test-invoke-stage/GET/multiply"
                                     ]
@@ -14754,16 +14754,16 @@
                           },
                           "Resource": {
                             "id": "Resource",
-                            "path": "FatLambda/fatLambdaAPI/Default/multiply/GET/Resource",
+                            "path": "FatLambda/RestAPI/Default/multiply/GET/Resource",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
                               "aws:cdk:cloudformation:props": {
                                 "httpMethod": "GET",
                                 "resourceId": {
-                                  "Ref": "fatLambdaAPImultiplyDDE1F047"
+                                  "Ref": "RestAPImultiply94C09729"
                                 },
                                 "restApiId": {
-                                  "Ref": "fatLambdaAPIDE58F80F"
+                                  "Ref": "RestAPI1CC12F26"
                                 },
                                 "authorizationType": "NONE",
                                 "integration": {

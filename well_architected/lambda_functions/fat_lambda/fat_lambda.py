@@ -1,11 +1,11 @@
-def extract_params(event):
+def extract_parameters(event):
     try:
-        first_num = event["queryStringParameters"]['firstNum']
+        first_num = event["queryStringParameters"]['firstNumber']
     except KeyError:
         first_num = 0
 
     try:
-        second_num = event["queryStringParameters"]['secondNum']
+        second_num = event["queryStringParameters"]['secondNumber']
     except KeyError:
         second_num = 0
 
@@ -13,7 +13,7 @@ def extract_params(event):
 
 
 def add(event, context):
-    first_num, second_num = extract_params(event)
+    first_num, second_num = extract_parameters(event)
 
     result = int(first_num) + int(second_num)
     print("The result of % s + % s = %s" % (first_num, second_num, result))
@@ -21,7 +21,7 @@ def add(event, context):
 
 
 def subtract(event, context):
-    first_num, second_num = extract_params(event)
+    first_num, second_num = extract_parameters(event)
 
     result = int(first_num) - int(second_num)
     print("The result of % s - % s = %s" % (first_num, second_num, result))
@@ -29,7 +29,7 @@ def subtract(event, context):
 
 
 def multiply(event, context):
-    first_num, second_num = extract_params(event)
+    first_num, second_num = extract_parameters(event)
 
     result = int(first_num) * int(second_num)
     print("The result of % s * % s = %s" % (first_num, second_num, result))

@@ -16,7 +16,7 @@ class TheFatLambdaStack(cdk.Stack):
         multiplier = self.create_lambda_function('multiply')
 
         rest_api = api_gateway.LambdaRestApi(
-            self, 'fatLambdaAPI',
+            self, 'RestAPI',
             handler=adder,
             proxy=False
         )
