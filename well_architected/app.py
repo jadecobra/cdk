@@ -16,6 +16,11 @@ import event_bridge_circuit_breaker
 import aws_cdk.aws_dynamodb as aws_dynamodb
 import event_bridge_etl
 
+from lambda_trilogy.the_lambda_lith_stack import TheLambdalithStack
+from lambda_trilogy.the_fat_lambda_stack import TheFatLambdaStack
+from lambda_trilogy.single_purpose_function_stack import TheSinglePurposeFunctionStack
+
+
 class WellArchitected(cdk.App):
 
     def __init__(self, *args, **kwargs):
@@ -40,6 +45,9 @@ class WellArchitected(cdk.App):
         SqsFlow(self, 'SqsFlow', sns_topic=self.xray_sns_topic)
         event_bridge_circuit_breaker.EventBridgeCircuitBreaker(self, 'EventBridgeCircuitBreaker')
         event_bridge_etl.EventbridgeEtl(self, 'EventBridgeEtl')
+        TheLambdalithStack(self, "the-lambda-lith-stack")
+        TheFatLambdaStack(self, "the-fat-lambda-stack")
+        TheSinglePurposeFunctionStack(self, "the-single-purpose-function-stack")
 
     def create_http_api(self):
         self.http_api = LambdaHttpApiGateway(
