@@ -13273,3 +13273,7 @@
 2022-02-14 20:07:36.973698::Time taken to synthesize stack: FatLambda::  4.3007 seconds
 2022-02-14 20:07:58.804113::Time taken to synthesize stack: LambdaLith::  5.0632 seconds
 2022-02-14 20:08:02.663069::Time taken to synthesize stack: SinglePurposeLambda::  3.8505 seconds
+2022-02-14 20:08:40.823236::Time taken to synthesize stack: LambdaLith::  4.4783 seconds
+2022-02-14 20:08:44.458801::Time taken to synthesize stack: SinglePurposeLambda::  3.6290 seconds
+2022-02-14 20:09:48.873032::Time taken to synthesize stack: LambdaLith::  4.7663 seconds
+2022-02-14 20:09:52.502470::Time taken to synthesize stack: SinglePurposeLambda::  3.6214 seconds

@@ -19,10 +19,16 @@ class TestFatLambdaFunction(unittest.TestCase):
             }
         }
 
-    def test_extract_parameters(self):
+    def test_get_first_number(self):
         self.assertEqual(
-            fat_lambda.extract_parameters(self.query_string_parameters()),
-            (self.first_number, self.second_number)
+            fat_lambda.get_first_number(self.query_string_parameters()),
+            self.first_number
+        )
+
+    def test_get_second_number(self):
+        self.assertEqual(
+            fat_lambda.get_second_number(self.query_string_parameters()),
+            self.second_number
         )
 
     def test_multiply(self):

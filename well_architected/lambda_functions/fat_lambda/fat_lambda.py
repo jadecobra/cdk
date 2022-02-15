@@ -10,13 +10,6 @@ def get_first_number(event):
 def get_second_number(event):
     return get_query_string_parameter(event, parameter='secondNumber')
 
-def extract_parameters(event):
-    return (
-        get_query_string_parameter(event=event, parameter='firstNumber'),
-        get_query_string_parameter(event=event, parameter='secondNumber')
-    )
-
-
 def add(event, context):
     return {
         'body': get_first_number(event) + get_second_number(event),
