@@ -45,12 +45,21 @@ class TheFatLambdaStack(core.Stack):
             proxy=False
         )
 
-        api.root.resource_for_path('add').add_method(
-            'GET', api_gw.LambdaIntegration(add_lambda)
-        )
-        api.root.resource_for_path('subtract').add_method(
-            'GET', api_gw.LambdaIntegration(subtract_lambda)
-        )
-        api.root.resource_for_path('multiply').add_method(
-            'GET', api_gw.LambdaIntegration(multiply_lambda)
-        )
+        # api.root.resource_for_path('add').add_method(
+        #     'GET', api_gw.LambdaIntegration(add_lambda)
+        # )
+        # api.root.resource_for_path('subtract').add_method(
+        #     'GET', api_gw.LambdaIntegration(subtract_lambda)
+        # )
+        # api.root.resource_for_path('multiply').add_method(
+        #     'GET', api_gw.LambdaIntegration(multiply_lambda)
+        # )
+
+        for path, lambda_function in {
+            'add': add_lambda,
+            'subtract': subtract_lambda,
+            'multiply': multiply_lambda,
+        }.items():
+            api.root.resource_for_path(path).add_method(
+                'GET', api_gw.LambdaIntegration(lambda_function)
+            )
