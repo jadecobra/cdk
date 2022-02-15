@@ -1,6 +1,6 @@
 {
   "Resources": {
-    "addLambdaHandlerServiceRole37B65F50": {
+    "addServiceRole725BBB92": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -31,7 +31,7 @@
         ]
       }
     },
-    "addLambdaHandler9017B0E5": {
+    "addDEC2DAFB": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
@@ -74,7 +74,7 @@
         },
         "Role": {
           "Fn::GetAtt": [
-            "addLambdaHandlerServiceRole37B65F50",
+            "addServiceRole725BBB92",
             "Arn"
           ]
         },
@@ -82,10 +82,10 @@
         "Runtime": "python3.8"
       },
       "DependsOn": [
-        "addLambdaHandlerServiceRole37B65F50"
+        "addServiceRole725BBB92"
       ]
     },
-    "subtractLambdaHandlerServiceRole4A6E4302": {
+    "subtractServiceRoleD77DEA26": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -116,7 +116,7 @@
         ]
       }
     },
-    "subtractLambdaHandler5C3056BE": {
+    "subtractF02BF038": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
@@ -159,7 +159,7 @@
         },
         "Role": {
           "Fn::GetAtt": [
-            "subtractLambdaHandlerServiceRole4A6E4302",
+            "subtractServiceRoleD77DEA26",
             "Arn"
           ]
         },
@@ -167,10 +167,10 @@
         "Runtime": "python3.8"
       },
       "DependsOn": [
-        "subtractLambdaHandlerServiceRole4A6E4302"
+        "subtractServiceRoleD77DEA26"
       ]
     },
-    "multiplyLambdaHandlerServiceRole902757A2": {
+    "multiplyServiceRole316F0748": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -201,7 +201,7 @@
         ]
       }
     },
-    "multiplyLambdaHandler7068AFA9": {
+    "multiply33748501": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
@@ -244,7 +244,7 @@
         },
         "Role": {
           "Fn::GetAtt": [
-            "multiplyLambdaHandlerServiceRole902757A2",
+            "multiplyServiceRole316F0748",
             "Arn"
           ]
         },
@@ -252,16 +252,16 @@
         "Runtime": "python3.8"
       },
       "DependsOn": [
-        "multiplyLambdaHandlerServiceRole902757A2"
+        "multiplyServiceRole316F0748"
       ]
     },
-    "singlePurposeFunctionAPIFCBB8F61": {
+    "RestAPI1CC12F26": {
       "Type": "AWS::ApiGateway::RestApi",
       "Properties": {
-        "Name": "singlePurposeFunctionAPI"
+        "Name": "RestAPI"
       }
     },
-    "singlePurposeFunctionAPICloudWatchRoleD608303E": {
+    "RestAPICloudWatchRole025FE33D": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -292,74 +292,74 @@
         ]
       }
     },
-    "singlePurposeFunctionAPIAccount8412F5CF": {
+    "RestAPIAccountB5481627": {
       "Type": "AWS::ApiGateway::Account",
       "Properties": {
         "CloudWatchRoleArn": {
           "Fn::GetAtt": [
-            "singlePurposeFunctionAPICloudWatchRoleD608303E",
+            "RestAPICloudWatchRole025FE33D",
             "Arn"
           ]
         }
       },
       "DependsOn": [
-        "singlePurposeFunctionAPIFCBB8F61"
+        "RestAPI1CC12F26"
       ]
     },
-    "singlePurposeFunctionAPIDeployment9D6988510afed3a2df5c9d37c891669a47fffec5": {
+    "RestAPIDeploymentD35A53805be04916372a561f962c5e06a0031817": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
-          "Ref": "singlePurposeFunctionAPIFCBB8F61"
+          "Ref": "RestAPI1CC12F26"
         },
         "Description": "Automatically created by the RestApi construct"
       },
       "DependsOn": [
-        "singlePurposeFunctionAPIaddGET205737F6",
-        "singlePurposeFunctionAPIaddFA413A45",
-        "singlePurposeFunctionAPImultiplyGETC1DAF962",
-        "singlePurposeFunctionAPImultiply7242F0E4",
-        "singlePurposeFunctionAPIsubtractGET7F649E89",
-        "singlePurposeFunctionAPIsubtract76C9781F"
+        "RestAPIaddGET5398420A",
+        "RestAPIaddB43F7E0F",
+        "RestAPImultiplyGETA148C513",
+        "RestAPImultiply94C09729",
+        "RestAPIsubtractGET2EE925DE",
+        "RestAPIsubtract81B2D098"
       ]
     },
-    "singlePurposeFunctionAPIDeploymentStageprod28E44715": {
+    "RestAPIDeploymentStageprod21CF62B9": {
       "Type": "AWS::ApiGateway::Stage",
       "Properties": {
         "RestApiId": {
-          "Ref": "singlePurposeFunctionAPIFCBB8F61"
+          "Ref": "RestAPI1CC12F26"
         },
         "DeploymentId": {
-          "Ref": "singlePurposeFunctionAPIDeployment9D6988510afed3a2df5c9d37c891669a47fffec5"
+          "Ref": "RestAPIDeploymentD35A53805be04916372a561f962c5e06a0031817"
         },
         "StageName": "prod"
       },
       "DependsOn": [
-        "singlePurposeFunctionAPIAccount8412F5CF"
+        "RestAPIAccountB5481627"
       ]
     },
-    "singlePurposeFunctionAPIaddFA413A45": {
+    "RestAPIaddB43F7E0F": {
       "Type": "AWS::ApiGateway::Resource",
       "Properties": {
         "ParentId": {
           "Fn::GetAtt": [
-            "singlePurposeFunctionAPIFCBB8F61",
+            "RestAPI1CC12F26",
             "RootResourceId"
           ]
         },
         "PathPart": "add",
         "RestApiId": {
-          "Ref": "singlePurposeFunctionAPIFCBB8F61"
+          "Ref": "RestAPI1CC12F26"
         }
       }
     },
-    "singlePurposeFunctionAPIaddGETApiPermissionSinglePurposeLambdasinglePurposeFunctionAPI0FF43536GETadd80A2C909": {
+    "RestAPIaddGETApiPermissionSinglePurposeLambdaRestAPI997E4753GETaddD2C39BFA": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "addLambdaHandler9017B0E5",
+            "addDEC2DAFB",
             "Arn"
           ]
         },
@@ -382,11 +382,11 @@
               },
               ":",
               {
-                "Ref": "singlePurposeFunctionAPIFCBB8F61"
+                "Ref": "RestAPI1CC12F26"
               },
               "/",
               {
-                "Ref": "singlePurposeFunctionAPIDeploymentStageprod28E44715"
+                "Ref": "RestAPIDeploymentStageprod21CF62B9"
               },
               "/GET/add"
             ]
@@ -394,13 +394,13 @@
         }
       }
     },
-    "singlePurposeFunctionAPIaddGETApiPermissionTestSinglePurposeLambdasinglePurposeFunctionAPI0FF43536GETaddDF5C8A35": {
+    "RestAPIaddGETApiPermissionTestSinglePurposeLambdaRestAPI997E4753GETadd9F1362E9": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "addLambdaHandler9017B0E5",
+            "addDEC2DAFB",
             "Arn"
           ]
         },
@@ -423,7 +423,7 @@
               },
               ":",
               {
-                "Ref": "singlePurposeFunctionAPIFCBB8F61"
+                "Ref": "RestAPI1CC12F26"
               },
               "/test-invoke-stage/GET/add"
             ]
@@ -431,15 +431,15 @@
         }
       }
     },
-    "singlePurposeFunctionAPIaddGET205737F6": {
+    "RestAPIaddGET5398420A": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
         "HttpMethod": "GET",
         "ResourceId": {
-          "Ref": "singlePurposeFunctionAPIaddFA413A45"
+          "Ref": "RestAPIaddB43F7E0F"
         },
         "RestApiId": {
-          "Ref": "singlePurposeFunctionAPIFCBB8F61"
+          "Ref": "RestAPI1CC12F26"
         },
         "AuthorizationType": "NONE",
         "Integration": {
@@ -460,7 +460,7 @@
                 ":lambda:path/2015-03-31/functions/",
                 {
                   "Fn::GetAtt": [
-                    "addLambdaHandler9017B0E5",
+                    "addDEC2DAFB",
                     "Arn"
                   ]
                 },
@@ -471,28 +471,28 @@
         }
       }
     },
-    "singlePurposeFunctionAPIsubtract76C9781F": {
+    "RestAPIsubtract81B2D098": {
       "Type": "AWS::ApiGateway::Resource",
       "Properties": {
         "ParentId": {
           "Fn::GetAtt": [
-            "singlePurposeFunctionAPIFCBB8F61",
+            "RestAPI1CC12F26",
             "RootResourceId"
           ]
         },
         "PathPart": "subtract",
         "RestApiId": {
-          "Ref": "singlePurposeFunctionAPIFCBB8F61"
+          "Ref": "RestAPI1CC12F26"
         }
       }
     },
-    "singlePurposeFunctionAPIsubtractGETApiPermissionSinglePurposeLambdasinglePurposeFunctionAPI0FF43536GETsubtractD99AC4F3": {
+    "RestAPIsubtractGETApiPermissionSinglePurposeLambdaRestAPI997E4753GETsubtractFE38A908": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "subtractLambdaHandler5C3056BE",
+            "subtractF02BF038",
             "Arn"
           ]
         },
@@ -515,11 +515,11 @@
               },
               ":",
               {
-                "Ref": "singlePurposeFunctionAPIFCBB8F61"
+                "Ref": "RestAPI1CC12F26"
               },
               "/",
               {
-                "Ref": "singlePurposeFunctionAPIDeploymentStageprod28E44715"
+                "Ref": "RestAPIDeploymentStageprod21CF62B9"
               },
               "/GET/subtract"
             ]
@@ -527,13 +527,13 @@
         }
       }
     },
-    "singlePurposeFunctionAPIsubtractGETApiPermissionTestSinglePurposeLambdasinglePurposeFunctionAPI0FF43536GETsubtract25C6082B": {
+    "RestAPIsubtractGETApiPermissionTestSinglePurposeLambdaRestAPI997E4753GETsubtract05E4025D": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "subtractLambdaHandler5C3056BE",
+            "subtractF02BF038",
             "Arn"
           ]
         },
@@ -556,7 +556,7 @@
               },
               ":",
               {
-                "Ref": "singlePurposeFunctionAPIFCBB8F61"
+                "Ref": "RestAPI1CC12F26"
               },
               "/test-invoke-stage/GET/subtract"
             ]
@@ -564,15 +564,15 @@
         }
       }
     },
-    "singlePurposeFunctionAPIsubtractGET7F649E89": {
+    "RestAPIsubtractGET2EE925DE": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
         "HttpMethod": "GET",
         "ResourceId": {
-          "Ref": "singlePurposeFunctionAPIsubtract76C9781F"
+          "Ref": "RestAPIsubtract81B2D098"
         },
         "RestApiId": {
-          "Ref": "singlePurposeFunctionAPIFCBB8F61"
+          "Ref": "RestAPI1CC12F26"
         },
         "AuthorizationType": "NONE",
         "Integration": {
@@ -593,7 +593,7 @@
                 ":lambda:path/2015-03-31/functions/",
                 {
                   "Fn::GetAtt": [
-                    "subtractLambdaHandler5C3056BE",
+                    "subtractF02BF038",
                     "Arn"
                   ]
                 },
@@ -604,28 +604,28 @@
         }
       }
     },
-    "singlePurposeFunctionAPImultiply7242F0E4": {
+    "RestAPImultiply94C09729": {
       "Type": "AWS::ApiGateway::Resource",
       "Properties": {
         "ParentId": {
           "Fn::GetAtt": [
-            "singlePurposeFunctionAPIFCBB8F61",
+            "RestAPI1CC12F26",
             "RootResourceId"
           ]
         },
         "PathPart": "multiply",
         "RestApiId": {
-          "Ref": "singlePurposeFunctionAPIFCBB8F61"
+          "Ref": "RestAPI1CC12F26"
         }
       }
     },
-    "singlePurposeFunctionAPImultiplyGETApiPermissionSinglePurposeLambdasinglePurposeFunctionAPI0FF43536GETmultiplyB071B5E1": {
+    "RestAPImultiplyGETApiPermissionSinglePurposeLambdaRestAPI997E4753GETmultiply80E78E27": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "multiplyLambdaHandler7068AFA9",
+            "multiply33748501",
             "Arn"
           ]
         },
@@ -648,11 +648,11 @@
               },
               ":",
               {
-                "Ref": "singlePurposeFunctionAPIFCBB8F61"
+                "Ref": "RestAPI1CC12F26"
               },
               "/",
               {
-                "Ref": "singlePurposeFunctionAPIDeploymentStageprod28E44715"
+                "Ref": "RestAPIDeploymentStageprod21CF62B9"
               },
               "/GET/multiply"
             ]
@@ -660,13 +660,13 @@
         }
       }
     },
-    "singlePurposeFunctionAPImultiplyGETApiPermissionTestSinglePurposeLambdasinglePurposeFunctionAPI0FF43536GETmultiply05F6AB2D": {
+    "RestAPImultiplyGETApiPermissionTestSinglePurposeLambdaRestAPI997E4753GETmultiply4E189C3C": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "multiplyLambdaHandler7068AFA9",
+            "multiply33748501",
             "Arn"
           ]
         },
@@ -689,7 +689,7 @@
               },
               ":",
               {
-                "Ref": "singlePurposeFunctionAPIFCBB8F61"
+                "Ref": "RestAPI1CC12F26"
               },
               "/test-invoke-stage/GET/multiply"
             ]
@@ -697,15 +697,15 @@
         }
       }
     },
-    "singlePurposeFunctionAPImultiplyGETC1DAF962": {
+    "RestAPImultiplyGETA148C513": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
         "HttpMethod": "GET",
         "ResourceId": {
-          "Ref": "singlePurposeFunctionAPImultiply7242F0E4"
+          "Ref": "RestAPImultiply94C09729"
         },
         "RestApiId": {
-          "Ref": "singlePurposeFunctionAPIFCBB8F61"
+          "Ref": "RestAPI1CC12F26"
         },
         "AuthorizationType": "NONE",
         "Integration": {
@@ -726,7 +726,7 @@
                 ":lambda:path/2015-03-31/functions/",
                 {
                   "Fn::GetAtt": [
-                    "multiplyLambdaHandler7068AFA9",
+                    "multiply33748501",
                     "Arn"
                   ]
                 },
@@ -753,14 +753,14 @@
     }
   },
   "Outputs": {
-    "singlePurposeFunctionAPIEndpoint7F6D64C1": {
+    "RestAPIEndpointB14C3C54": {
       "Value": {
         "Fn::Join": [
           "",
           [
             "https://",
             {
-              "Ref": "singlePurposeFunctionAPIFCBB8F61"
+              "Ref": "RestAPI1CC12F26"
             },
             ".execute-api.",
             {
@@ -772,7 +772,7 @@
             },
             "/",
             {
-              "Ref": "singlePurposeFunctionAPIDeploymentStageprod28E44715"
+              "Ref": "RestAPIDeploymentStageprod21CF62B9"
             },
             "/"
           ]
