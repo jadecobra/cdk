@@ -12916,6 +12916,3127 @@
           "fqn": "@aws-cdk/core.Stack",
           "version": "1.142.0"
         }
+      },
+      "the-lambda-lith-stack": {
+        "id": "the-lambda-lith-stack",
+        "path": "the-lambda-lith-stack",
+        "children": {
+          "lambdalithHandler": {
+            "id": "lambdalithHandler",
+            "path": "the-lambda-lith-stack/lambdalithHandler",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "the-lambda-lith-stack/lambdalithHandler/ServiceRole",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "the-lambda-lith-stack/lambdalithHandler/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-iam.CfnRole",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-iam.Role",
+                  "version": "1.142.0"
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "the-lambda-lith-stack/lambdalithHandler/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "the-lambda-lith-stack/lambdalithHandler/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/core.AssetStaging",
+                      "version": "1.142.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "the-lambda-lith-stack/lambdalithHandler/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-s3.BucketBase",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-s3-assets.Asset",
+                  "version": "1.142.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "the-lambda-lith-stack/lambdalithHandler/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": {
+                        "Ref": "AssetParameters5c76ec19d166edb38c1b9d914f89daec22f89857591e1558f1deee370b685bb5S3Bucket30785438"
+                      },
+                      "s3Key": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            {
+                              "Fn::Select": [
+                                0,
+                                {
+                                  "Fn::Split": [
+                                    "||",
+                                    {
+                                      "Ref": "AssetParameters5c76ec19d166edb38c1b9d914f89daec22f89857591e1558f1deee370b685bb5S3VersionKey4555258B"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Fn::Select": [
+                                1,
+                                {
+                                  "Fn::Split": [
+                                    "||",
+                                    {
+                                      "Ref": "AssetParameters5c76ec19d166edb38c1b9d914f89daec22f89857591e1558f1deee370b685bb5S3VersionKey4555258B"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        ]
+                      }
+                    },
+                    "role": {
+                      "Fn::GetAtt": [
+                        "lambdalithHandlerServiceRole5EF8B2D9",
+                        "Arn"
+                      ]
+                    },
+                    "handler": "lambdalith.handler",
+                    "runtime": "python3.8"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-lambda.CfnFunction",
+                  "version": "1.142.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/aws-lambda.Function",
+              "version": "1.142.0"
+            }
+          },
+          "AssetParameters": {
+            "id": "AssetParameters",
+            "path": "the-lambda-lith-stack/AssetParameters",
+            "children": {
+              "5c76ec19d166edb38c1b9d914f89daec22f89857591e1558f1deee370b685bb5": {
+                "id": "5c76ec19d166edb38c1b9d914f89daec22f89857591e1558f1deee370b685bb5",
+                "path": "the-lambda-lith-stack/AssetParameters/5c76ec19d166edb38c1b9d914f89daec22f89857591e1558f1deee370b685bb5",
+                "children": {
+                  "S3Bucket": {
+                    "id": "S3Bucket",
+                    "path": "the-lambda-lith-stack/AssetParameters/5c76ec19d166edb38c1b9d914f89daec22f89857591e1558f1deee370b685bb5/S3Bucket",
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/core.CfnParameter",
+                      "version": "1.142.0"
+                    }
+                  },
+                  "S3VersionKey": {
+                    "id": "S3VersionKey",
+                    "path": "the-lambda-lith-stack/AssetParameters/5c76ec19d166edb38c1b9d914f89daec22f89857591e1558f1deee370b685bb5/S3VersionKey",
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/core.CfnParameter",
+                      "version": "1.142.0"
+                    }
+                  },
+                  "ArtifactHash": {
+                    "id": "ArtifactHash",
+                    "path": "the-lambda-lith-stack/AssetParameters/5c76ec19d166edb38c1b9d914f89daec22f89857591e1558f1deee370b685bb5/ArtifactHash",
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/core.CfnParameter",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/core.Construct",
+                  "version": "1.142.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/core.Construct",
+              "version": "1.142.0"
+            }
+          },
+          "LambdalithAPI": {
+            "id": "LambdalithAPI",
+            "path": "the-lambda-lith-stack/LambdalithAPI",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "the-lambda-lith-stack/LambdalithAPI/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::ApiGateway::RestApi",
+                  "aws:cdk:cloudformation:props": {
+                    "name": "LambdalithAPI"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-apigateway.CfnRestApi",
+                  "version": "1.142.0"
+                }
+              },
+              "CloudWatchRole": {
+                "id": "CloudWatchRole",
+                "path": "the-lambda-lith-stack/LambdalithAPI/CloudWatchRole",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "the-lambda-lith-stack/LambdalithAPI/CloudWatchRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "apigateway.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-iam.CfnRole",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-iam.Role",
+                  "version": "1.142.0"
+                }
+              },
+              "Account": {
+                "id": "Account",
+                "path": "the-lambda-lith-stack/LambdalithAPI/Account",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::ApiGateway::Account",
+                  "aws:cdk:cloudformation:props": {
+                    "cloudWatchRoleArn": {
+                      "Fn::GetAtt": [
+                        "LambdalithAPICloudWatchRoleA48FDF3A",
+                        "Arn"
+                      ]
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-apigateway.CfnAccount",
+                  "version": "1.142.0"
+                }
+              },
+              "Deployment": {
+                "id": "Deployment",
+                "path": "the-lambda-lith-stack/LambdalithAPI/Deployment",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "the-lambda-lith-stack/LambdalithAPI/Deployment/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::ApiGateway::Deployment",
+                      "aws:cdk:cloudformation:props": {
+                        "restApiId": {
+                          "Ref": "LambdalithAPI8485C28D"
+                        },
+                        "description": "Automatically created by the RestApi construct"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-apigateway.CfnDeployment",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-apigateway.Deployment",
+                  "version": "1.142.0"
+                }
+              },
+              "DeploymentStage.prod": {
+                "id": "DeploymentStage.prod",
+                "path": "the-lambda-lith-stack/LambdalithAPI/DeploymentStage.prod",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "the-lambda-lith-stack/LambdalithAPI/DeploymentStage.prod/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::ApiGateway::Stage",
+                      "aws:cdk:cloudformation:props": {
+                        "restApiId": {
+                          "Ref": "LambdalithAPI8485C28D"
+                        },
+                        "deploymentId": {
+                          "Ref": "LambdalithAPIDeployment2B6139A49ce83c20442b3731fcba5ba06f3a5d9a"
+                        },
+                        "stageName": "prod"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-apigateway.CfnStage",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-apigateway.Stage",
+                  "version": "1.142.0"
+                }
+              },
+              "Endpoint": {
+                "id": "Endpoint",
+                "path": "the-lambda-lith-stack/LambdalithAPI/Endpoint",
+                "constructInfo": {
+                  "fqn": "@aws-cdk/core.CfnOutput",
+                  "version": "1.142.0"
+                }
+              },
+              "Default": {
+                "id": "Default",
+                "path": "the-lambda-lith-stack/LambdalithAPI/Default",
+                "children": {
+                  "{proxy+}": {
+                    "id": "{proxy+}",
+                    "path": "the-lambda-lith-stack/LambdalithAPI/Default/{proxy+}",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "the-lambda-lith-stack/LambdalithAPI/Default/{proxy+}/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::ApiGateway::Resource",
+                          "aws:cdk:cloudformation:props": {
+                            "parentId": {
+                              "Fn::GetAtt": [
+                                "LambdalithAPI8485C28D",
+                                "RootResourceId"
+                              ]
+                            },
+                            "pathPart": "{proxy+}",
+                            "restApiId": {
+                              "Ref": "LambdalithAPI8485C28D"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-apigateway.CfnResource",
+                          "version": "1.142.0"
+                        }
+                      },
+                      "ANY": {
+                        "id": "ANY",
+                        "path": "the-lambda-lith-stack/LambdalithAPI/Default/{proxy+}/ANY",
+                        "children": {
+                          "ApiPermission.thelambdalithstackLambdalithAPI338AC9DF.ANY..{proxy+}": {
+                            "id": "ApiPermission.thelambdalithstackLambdalithAPI338AC9DF.ANY..{proxy+}",
+                            "path": "the-lambda-lith-stack/LambdalithAPI/Default/{proxy+}/ANY/ApiPermission.thelambdalithstackLambdalithAPI338AC9DF.ANY..{proxy+}",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "lambdalithHandlerA7E51B4B",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":execute-api:",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "LambdalithAPI8485C28D"
+                                      },
+                                      "/",
+                                      {
+                                        "Ref": "LambdalithAPIDeploymentStageprod8B685305"
+                                      },
+                                      "/*/*"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "@aws-cdk/aws-lambda.CfnPermission",
+                              "version": "1.142.0"
+                            }
+                          },
+                          "ApiPermission.Test.thelambdalithstackLambdalithAPI338AC9DF.ANY..{proxy+}": {
+                            "id": "ApiPermission.Test.thelambdalithstackLambdalithAPI338AC9DF.ANY..{proxy+}",
+                            "path": "the-lambda-lith-stack/LambdalithAPI/Default/{proxy+}/ANY/ApiPermission.Test.thelambdalithstackLambdalithAPI338AC9DF.ANY..{proxy+}",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "lambdalithHandlerA7E51B4B",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":execute-api:",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "LambdalithAPI8485C28D"
+                                      },
+                                      "/test-invoke-stage/*/*"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "@aws-cdk/aws-lambda.CfnPermission",
+                              "version": "1.142.0"
+                            }
+                          },
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "the-lambda-lith-stack/LambdalithAPI/Default/{proxy+}/ANY/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
+                              "aws:cdk:cloudformation:props": {
+                                "httpMethod": "ANY",
+                                "resourceId": {
+                                  "Ref": "LambdalithAPIproxy7C4B2DE8"
+                                },
+                                "restApiId": {
+                                  "Ref": "LambdalithAPI8485C28D"
+                                },
+                                "authorizationType": "NONE",
+                                "integration": {
+                                  "type": "AWS_PROXY",
+                                  "uri": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":apigateway:",
+                                        {
+                                          "Ref": "AWS::Region"
+                                        },
+                                        ":lambda:path/2015-03-31/functions/",
+                                        {
+                                          "Fn::GetAtt": [
+                                            "lambdalithHandlerA7E51B4B",
+                                            "Arn"
+                                          ]
+                                        },
+                                        "/invocations"
+                                      ]
+                                    ]
+                                  },
+                                  "integrationHttpMethod": "POST"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "@aws-cdk/aws-apigateway.CfnMethod",
+                              "version": "1.142.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-apigateway.Method",
+                          "version": "1.142.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-apigateway.ProxyResource",
+                      "version": "1.142.0"
+                    }
+                  },
+                  "ANY": {
+                    "id": "ANY",
+                    "path": "the-lambda-lith-stack/LambdalithAPI/Default/ANY",
+                    "children": {
+                      "ApiPermission.thelambdalithstackLambdalithAPI338AC9DF.ANY..": {
+                        "id": "ApiPermission.thelambdalithstackLambdalithAPI338AC9DF.ANY..",
+                        "path": "the-lambda-lith-stack/LambdalithAPI/Default/ANY/ApiPermission.thelambdalithstackLambdalithAPI338AC9DF.ANY..",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                          "aws:cdk:cloudformation:props": {
+                            "action": "lambda:InvokeFunction",
+                            "functionName": {
+                              "Fn::GetAtt": [
+                                "lambdalithHandlerA7E51B4B",
+                                "Arn"
+                              ]
+                            },
+                            "principal": "apigateway.amazonaws.com",
+                            "sourceArn": {
+                              "Fn::Join": [
+                                "",
+                                [
+                                  "arn:",
+                                  {
+                                    "Ref": "AWS::Partition"
+                                  },
+                                  ":execute-api:",
+                                  {
+                                    "Ref": "AWS::Region"
+                                  },
+                                  ":",
+                                  {
+                                    "Ref": "AWS::AccountId"
+                                  },
+                                  ":",
+                                  {
+                                    "Ref": "LambdalithAPI8485C28D"
+                                  },
+                                  "/",
+                                  {
+                                    "Ref": "LambdalithAPIDeploymentStageprod8B685305"
+                                  },
+                                  "/*/"
+                                ]
+                              ]
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-lambda.CfnPermission",
+                          "version": "1.142.0"
+                        }
+                      },
+                      "ApiPermission.Test.thelambdalithstackLambdalithAPI338AC9DF.ANY..": {
+                        "id": "ApiPermission.Test.thelambdalithstackLambdalithAPI338AC9DF.ANY..",
+                        "path": "the-lambda-lith-stack/LambdalithAPI/Default/ANY/ApiPermission.Test.thelambdalithstackLambdalithAPI338AC9DF.ANY..",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                          "aws:cdk:cloudformation:props": {
+                            "action": "lambda:InvokeFunction",
+                            "functionName": {
+                              "Fn::GetAtt": [
+                                "lambdalithHandlerA7E51B4B",
+                                "Arn"
+                              ]
+                            },
+                            "principal": "apigateway.amazonaws.com",
+                            "sourceArn": {
+                              "Fn::Join": [
+                                "",
+                                [
+                                  "arn:",
+                                  {
+                                    "Ref": "AWS::Partition"
+                                  },
+                                  ":execute-api:",
+                                  {
+                                    "Ref": "AWS::Region"
+                                  },
+                                  ":",
+                                  {
+                                    "Ref": "AWS::AccountId"
+                                  },
+                                  ":",
+                                  {
+                                    "Ref": "LambdalithAPI8485C28D"
+                                  },
+                                  "/test-invoke-stage/*/"
+                                ]
+                              ]
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-lambda.CfnPermission",
+                          "version": "1.142.0"
+                        }
+                      },
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "the-lambda-lith-stack/LambdalithAPI/Default/ANY/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
+                          "aws:cdk:cloudformation:props": {
+                            "httpMethod": "ANY",
+                            "resourceId": {
+                              "Fn::GetAtt": [
+                                "LambdalithAPI8485C28D",
+                                "RootResourceId"
+                              ]
+                            },
+                            "restApiId": {
+                              "Ref": "LambdalithAPI8485C28D"
+                            },
+                            "authorizationType": "NONE",
+                            "integration": {
+                              "type": "AWS_PROXY",
+                              "uri": {
+                                "Fn::Join": [
+                                  "",
+                                  [
+                                    "arn:",
+                                    {
+                                      "Ref": "AWS::Partition"
+                                    },
+                                    ":apigateway:",
+                                    {
+                                      "Ref": "AWS::Region"
+                                    },
+                                    ":lambda:path/2015-03-31/functions/",
+                                    {
+                                      "Fn::GetAtt": [
+                                        "lambdalithHandlerA7E51B4B",
+                                        "Arn"
+                                      ]
+                                    },
+                                    "/invocations"
+                                  ]
+                                ]
+                              },
+                              "integrationHttpMethod": "POST"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-apigateway.CfnMethod",
+                          "version": "1.142.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-apigateway.Method",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-apigateway.ResourceBase",
+                  "version": "1.142.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/aws-apigateway.LambdaRestApi",
+              "version": "1.142.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "@aws-cdk/core.Stack",
+          "version": "1.142.0"
+        }
+      },
+      "the-fat-lambda-stack": {
+        "id": "the-fat-lambda-stack",
+        "path": "the-fat-lambda-stack",
+        "children": {
+          "addLambdaHandler": {
+            "id": "addLambdaHandler",
+            "path": "the-fat-lambda-stack/addLambdaHandler",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "the-fat-lambda-stack/addLambdaHandler/ServiceRole",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "the-fat-lambda-stack/addLambdaHandler/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-iam.CfnRole",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-iam.Role",
+                  "version": "1.142.0"
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "the-fat-lambda-stack/addLambdaHandler/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "the-fat-lambda-stack/addLambdaHandler/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/core.AssetStaging",
+                      "version": "1.142.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "the-fat-lambda-stack/addLambdaHandler/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-s3.BucketBase",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-s3-assets.Asset",
+                  "version": "1.142.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "the-fat-lambda-stack/addLambdaHandler/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": {
+                        "Ref": "AssetParametersacc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96S3Bucket13A473DB"
+                      },
+                      "s3Key": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            {
+                              "Fn::Select": [
+                                0,
+                                {
+                                  "Fn::Split": [
+                                    "||",
+                                    {
+                                      "Ref": "AssetParametersacc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96S3VersionKeyCEFEC6BC"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Fn::Select": [
+                                1,
+                                {
+                                  "Fn::Split": [
+                                    "||",
+                                    {
+                                      "Ref": "AssetParametersacc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96S3VersionKeyCEFEC6BC"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        ]
+                      }
+                    },
+                    "role": {
+                      "Fn::GetAtt": [
+                        "addLambdaHandlerServiceRole37B65F50",
+                        "Arn"
+                      ]
+                    },
+                    "handler": "fatlambda.add",
+                    "runtime": "python3.8"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-lambda.CfnFunction",
+                  "version": "1.142.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/aws-lambda.Function",
+              "version": "1.142.0"
+            }
+          },
+          "AssetParameters": {
+            "id": "AssetParameters",
+            "path": "the-fat-lambda-stack/AssetParameters",
+            "children": {
+              "acc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96": {
+                "id": "acc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96",
+                "path": "the-fat-lambda-stack/AssetParameters/acc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96",
+                "children": {
+                  "S3Bucket": {
+                    "id": "S3Bucket",
+                    "path": "the-fat-lambda-stack/AssetParameters/acc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96/S3Bucket",
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/core.CfnParameter",
+                      "version": "1.142.0"
+                    }
+                  },
+                  "S3VersionKey": {
+                    "id": "S3VersionKey",
+                    "path": "the-fat-lambda-stack/AssetParameters/acc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96/S3VersionKey",
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/core.CfnParameter",
+                      "version": "1.142.0"
+                    }
+                  },
+                  "ArtifactHash": {
+                    "id": "ArtifactHash",
+                    "path": "the-fat-lambda-stack/AssetParameters/acc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96/ArtifactHash",
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/core.CfnParameter",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/core.Construct",
+                  "version": "1.142.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/core.Construct",
+              "version": "1.142.0"
+            }
+          },
+          "subtractLambdaHandler": {
+            "id": "subtractLambdaHandler",
+            "path": "the-fat-lambda-stack/subtractLambdaHandler",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "the-fat-lambda-stack/subtractLambdaHandler/ServiceRole",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "the-fat-lambda-stack/subtractLambdaHandler/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-iam.CfnRole",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-iam.Role",
+                  "version": "1.142.0"
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "the-fat-lambda-stack/subtractLambdaHandler/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "the-fat-lambda-stack/subtractLambdaHandler/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/core.AssetStaging",
+                      "version": "1.142.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "the-fat-lambda-stack/subtractLambdaHandler/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-s3.BucketBase",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-s3-assets.Asset",
+                  "version": "1.142.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "the-fat-lambda-stack/subtractLambdaHandler/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": {
+                        "Ref": "AssetParametersacc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96S3Bucket13A473DB"
+                      },
+                      "s3Key": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            {
+                              "Fn::Select": [
+                                0,
+                                {
+                                  "Fn::Split": [
+                                    "||",
+                                    {
+                                      "Ref": "AssetParametersacc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96S3VersionKeyCEFEC6BC"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Fn::Select": [
+                                1,
+                                {
+                                  "Fn::Split": [
+                                    "||",
+                                    {
+                                      "Ref": "AssetParametersacc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96S3VersionKeyCEFEC6BC"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        ]
+                      }
+                    },
+                    "role": {
+                      "Fn::GetAtt": [
+                        "subtractLambdaHandlerServiceRole4A6E4302",
+                        "Arn"
+                      ]
+                    },
+                    "handler": "fatlambda.subtract",
+                    "runtime": "python3.8"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-lambda.CfnFunction",
+                  "version": "1.142.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/aws-lambda.Function",
+              "version": "1.142.0"
+            }
+          },
+          "multiplyLambdaHandler": {
+            "id": "multiplyLambdaHandler",
+            "path": "the-fat-lambda-stack/multiplyLambdaHandler",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "the-fat-lambda-stack/multiplyLambdaHandler/ServiceRole",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "the-fat-lambda-stack/multiplyLambdaHandler/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-iam.CfnRole",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-iam.Role",
+                  "version": "1.142.0"
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "the-fat-lambda-stack/multiplyLambdaHandler/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "the-fat-lambda-stack/multiplyLambdaHandler/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/core.AssetStaging",
+                      "version": "1.142.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "the-fat-lambda-stack/multiplyLambdaHandler/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-s3.BucketBase",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-s3-assets.Asset",
+                  "version": "1.142.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "the-fat-lambda-stack/multiplyLambdaHandler/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": {
+                        "Ref": "AssetParametersacc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96S3Bucket13A473DB"
+                      },
+                      "s3Key": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            {
+                              "Fn::Select": [
+                                0,
+                                {
+                                  "Fn::Split": [
+                                    "||",
+                                    {
+                                      "Ref": "AssetParametersacc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96S3VersionKeyCEFEC6BC"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Fn::Select": [
+                                1,
+                                {
+                                  "Fn::Split": [
+                                    "||",
+                                    {
+                                      "Ref": "AssetParametersacc481b0302028929a2b31371681f0e35e5e882aff680190555deaf3c7b5ba96S3VersionKeyCEFEC6BC"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        ]
+                      }
+                    },
+                    "role": {
+                      "Fn::GetAtt": [
+                        "multiplyLambdaHandlerServiceRole902757A2",
+                        "Arn"
+                      ]
+                    },
+                    "handler": "fatlambda.multiply",
+                    "runtime": "python3.8"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-lambda.CfnFunction",
+                  "version": "1.142.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/aws-lambda.Function",
+              "version": "1.142.0"
+            }
+          },
+          "fatLambdaAPI": {
+            "id": "fatLambdaAPI",
+            "path": "the-fat-lambda-stack/fatLambdaAPI",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "the-fat-lambda-stack/fatLambdaAPI/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::ApiGateway::RestApi",
+                  "aws:cdk:cloudformation:props": {
+                    "name": "fatLambdaAPI"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-apigateway.CfnRestApi",
+                  "version": "1.142.0"
+                }
+              },
+              "CloudWatchRole": {
+                "id": "CloudWatchRole",
+                "path": "the-fat-lambda-stack/fatLambdaAPI/CloudWatchRole",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "the-fat-lambda-stack/fatLambdaAPI/CloudWatchRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "apigateway.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-iam.CfnRole",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-iam.Role",
+                  "version": "1.142.0"
+                }
+              },
+              "Account": {
+                "id": "Account",
+                "path": "the-fat-lambda-stack/fatLambdaAPI/Account",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::ApiGateway::Account",
+                  "aws:cdk:cloudformation:props": {
+                    "cloudWatchRoleArn": {
+                      "Fn::GetAtt": [
+                        "fatLambdaAPICloudWatchRole1BD7739C",
+                        "Arn"
+                      ]
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-apigateway.CfnAccount",
+                  "version": "1.142.0"
+                }
+              },
+              "Deployment": {
+                "id": "Deployment",
+                "path": "the-fat-lambda-stack/fatLambdaAPI/Deployment",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "the-fat-lambda-stack/fatLambdaAPI/Deployment/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::ApiGateway::Deployment",
+                      "aws:cdk:cloudformation:props": {
+                        "restApiId": {
+                          "Ref": "fatLambdaAPIDE58F80F"
+                        },
+                        "description": "Automatically created by the RestApi construct"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-apigateway.CfnDeployment",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-apigateway.Deployment",
+                  "version": "1.142.0"
+                }
+              },
+              "DeploymentStage.prod": {
+                "id": "DeploymentStage.prod",
+                "path": "the-fat-lambda-stack/fatLambdaAPI/DeploymentStage.prod",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "the-fat-lambda-stack/fatLambdaAPI/DeploymentStage.prod/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::ApiGateway::Stage",
+                      "aws:cdk:cloudformation:props": {
+                        "restApiId": {
+                          "Ref": "fatLambdaAPIDE58F80F"
+                        },
+                        "deploymentId": {
+                          "Ref": "fatLambdaAPIDeploymentAB28B6F2f72ae8ad1f9c25276559c83c584ebaa9"
+                        },
+                        "stageName": "prod"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-apigateway.CfnStage",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-apigateway.Stage",
+                  "version": "1.142.0"
+                }
+              },
+              "Endpoint": {
+                "id": "Endpoint",
+                "path": "the-fat-lambda-stack/fatLambdaAPI/Endpoint",
+                "constructInfo": {
+                  "fqn": "@aws-cdk/core.CfnOutput",
+                  "version": "1.142.0"
+                }
+              },
+              "Default": {
+                "id": "Default",
+                "path": "the-fat-lambda-stack/fatLambdaAPI/Default",
+                "children": {
+                  "add": {
+                    "id": "add",
+                    "path": "the-fat-lambda-stack/fatLambdaAPI/Default/add",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "the-fat-lambda-stack/fatLambdaAPI/Default/add/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::ApiGateway::Resource",
+                          "aws:cdk:cloudformation:props": {
+                            "parentId": {
+                              "Fn::GetAtt": [
+                                "fatLambdaAPIDE58F80F",
+                                "RootResourceId"
+                              ]
+                            },
+                            "pathPart": "add",
+                            "restApiId": {
+                              "Ref": "fatLambdaAPIDE58F80F"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-apigateway.CfnResource",
+                          "version": "1.142.0"
+                        }
+                      },
+                      "GET": {
+                        "id": "GET",
+                        "path": "the-fat-lambda-stack/fatLambdaAPI/Default/add/GET",
+                        "children": {
+                          "ApiPermission.thefatlambdastackfatLambdaAPI36EE7B78.GET..add": {
+                            "id": "ApiPermission.thefatlambdastackfatLambdaAPI36EE7B78.GET..add",
+                            "path": "the-fat-lambda-stack/fatLambdaAPI/Default/add/GET/ApiPermission.thefatlambdastackfatLambdaAPI36EE7B78.GET..add",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "addLambdaHandler9017B0E5",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":execute-api:",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "fatLambdaAPIDE58F80F"
+                                      },
+                                      "/",
+                                      {
+                                        "Ref": "fatLambdaAPIDeploymentStageprod0C322274"
+                                      },
+                                      "/GET/add"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "@aws-cdk/aws-lambda.CfnPermission",
+                              "version": "1.142.0"
+                            }
+                          },
+                          "ApiPermission.Test.thefatlambdastackfatLambdaAPI36EE7B78.GET..add": {
+                            "id": "ApiPermission.Test.thefatlambdastackfatLambdaAPI36EE7B78.GET..add",
+                            "path": "the-fat-lambda-stack/fatLambdaAPI/Default/add/GET/ApiPermission.Test.thefatlambdastackfatLambdaAPI36EE7B78.GET..add",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "addLambdaHandler9017B0E5",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":execute-api:",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "fatLambdaAPIDE58F80F"
+                                      },
+                                      "/test-invoke-stage/GET/add"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "@aws-cdk/aws-lambda.CfnPermission",
+                              "version": "1.142.0"
+                            }
+                          },
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "the-fat-lambda-stack/fatLambdaAPI/Default/add/GET/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
+                              "aws:cdk:cloudformation:props": {
+                                "httpMethod": "GET",
+                                "resourceId": {
+                                  "Ref": "fatLambdaAPIadd5163AE8B"
+                                },
+                                "restApiId": {
+                                  "Ref": "fatLambdaAPIDE58F80F"
+                                },
+                                "authorizationType": "NONE",
+                                "integration": {
+                                  "type": "AWS_PROXY",
+                                  "uri": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":apigateway:",
+                                        {
+                                          "Ref": "AWS::Region"
+                                        },
+                                        ":lambda:path/2015-03-31/functions/",
+                                        {
+                                          "Fn::GetAtt": [
+                                            "addLambdaHandler9017B0E5",
+                                            "Arn"
+                                          ]
+                                        },
+                                        "/invocations"
+                                      ]
+                                    ]
+                                  },
+                                  "integrationHttpMethod": "POST"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "@aws-cdk/aws-apigateway.CfnMethod",
+                              "version": "1.142.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-apigateway.Method",
+                          "version": "1.142.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-apigateway.Resource",
+                      "version": "1.142.0"
+                    }
+                  },
+                  "subtract": {
+                    "id": "subtract",
+                    "path": "the-fat-lambda-stack/fatLambdaAPI/Default/subtract",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "the-fat-lambda-stack/fatLambdaAPI/Default/subtract/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::ApiGateway::Resource",
+                          "aws:cdk:cloudformation:props": {
+                            "parentId": {
+                              "Fn::GetAtt": [
+                                "fatLambdaAPIDE58F80F",
+                                "RootResourceId"
+                              ]
+                            },
+                            "pathPart": "subtract",
+                            "restApiId": {
+                              "Ref": "fatLambdaAPIDE58F80F"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-apigateway.CfnResource",
+                          "version": "1.142.0"
+                        }
+                      },
+                      "GET": {
+                        "id": "GET",
+                        "path": "the-fat-lambda-stack/fatLambdaAPI/Default/subtract/GET",
+                        "children": {
+                          "ApiPermission.thefatlambdastackfatLambdaAPI36EE7B78.GET..subtract": {
+                            "id": "ApiPermission.thefatlambdastackfatLambdaAPI36EE7B78.GET..subtract",
+                            "path": "the-fat-lambda-stack/fatLambdaAPI/Default/subtract/GET/ApiPermission.thefatlambdastackfatLambdaAPI36EE7B78.GET..subtract",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "subtractLambdaHandler5C3056BE",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":execute-api:",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "fatLambdaAPIDE58F80F"
+                                      },
+                                      "/",
+                                      {
+                                        "Ref": "fatLambdaAPIDeploymentStageprod0C322274"
+                                      },
+                                      "/GET/subtract"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "@aws-cdk/aws-lambda.CfnPermission",
+                              "version": "1.142.0"
+                            }
+                          },
+                          "ApiPermission.Test.thefatlambdastackfatLambdaAPI36EE7B78.GET..subtract": {
+                            "id": "ApiPermission.Test.thefatlambdastackfatLambdaAPI36EE7B78.GET..subtract",
+                            "path": "the-fat-lambda-stack/fatLambdaAPI/Default/subtract/GET/ApiPermission.Test.thefatlambdastackfatLambdaAPI36EE7B78.GET..subtract",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "subtractLambdaHandler5C3056BE",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":execute-api:",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "fatLambdaAPIDE58F80F"
+                                      },
+                                      "/test-invoke-stage/GET/subtract"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "@aws-cdk/aws-lambda.CfnPermission",
+                              "version": "1.142.0"
+                            }
+                          },
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "the-fat-lambda-stack/fatLambdaAPI/Default/subtract/GET/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
+                              "aws:cdk:cloudformation:props": {
+                                "httpMethod": "GET",
+                                "resourceId": {
+                                  "Ref": "fatLambdaAPIsubtract252EA067"
+                                },
+                                "restApiId": {
+                                  "Ref": "fatLambdaAPIDE58F80F"
+                                },
+                                "authorizationType": "NONE",
+                                "integration": {
+                                  "type": "AWS_PROXY",
+                                  "uri": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":apigateway:",
+                                        {
+                                          "Ref": "AWS::Region"
+                                        },
+                                        ":lambda:path/2015-03-31/functions/",
+                                        {
+                                          "Fn::GetAtt": [
+                                            "subtractLambdaHandler5C3056BE",
+                                            "Arn"
+                                          ]
+                                        },
+                                        "/invocations"
+                                      ]
+                                    ]
+                                  },
+                                  "integrationHttpMethod": "POST"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "@aws-cdk/aws-apigateway.CfnMethod",
+                              "version": "1.142.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-apigateway.Method",
+                          "version": "1.142.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-apigateway.Resource",
+                      "version": "1.142.0"
+                    }
+                  },
+                  "multiply": {
+                    "id": "multiply",
+                    "path": "the-fat-lambda-stack/fatLambdaAPI/Default/multiply",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "the-fat-lambda-stack/fatLambdaAPI/Default/multiply/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::ApiGateway::Resource",
+                          "aws:cdk:cloudformation:props": {
+                            "parentId": {
+                              "Fn::GetAtt": [
+                                "fatLambdaAPIDE58F80F",
+                                "RootResourceId"
+                              ]
+                            },
+                            "pathPart": "multiply",
+                            "restApiId": {
+                              "Ref": "fatLambdaAPIDE58F80F"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-apigateway.CfnResource",
+                          "version": "1.142.0"
+                        }
+                      },
+                      "GET": {
+                        "id": "GET",
+                        "path": "the-fat-lambda-stack/fatLambdaAPI/Default/multiply/GET",
+                        "children": {
+                          "ApiPermission.thefatlambdastackfatLambdaAPI36EE7B78.GET..multiply": {
+                            "id": "ApiPermission.thefatlambdastackfatLambdaAPI36EE7B78.GET..multiply",
+                            "path": "the-fat-lambda-stack/fatLambdaAPI/Default/multiply/GET/ApiPermission.thefatlambdastackfatLambdaAPI36EE7B78.GET..multiply",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "multiplyLambdaHandler7068AFA9",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":execute-api:",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "fatLambdaAPIDE58F80F"
+                                      },
+                                      "/",
+                                      {
+                                        "Ref": "fatLambdaAPIDeploymentStageprod0C322274"
+                                      },
+                                      "/GET/multiply"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "@aws-cdk/aws-lambda.CfnPermission",
+                              "version": "1.142.0"
+                            }
+                          },
+                          "ApiPermission.Test.thefatlambdastackfatLambdaAPI36EE7B78.GET..multiply": {
+                            "id": "ApiPermission.Test.thefatlambdastackfatLambdaAPI36EE7B78.GET..multiply",
+                            "path": "the-fat-lambda-stack/fatLambdaAPI/Default/multiply/GET/ApiPermission.Test.thefatlambdastackfatLambdaAPI36EE7B78.GET..multiply",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "multiplyLambdaHandler7068AFA9",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":execute-api:",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "fatLambdaAPIDE58F80F"
+                                      },
+                                      "/test-invoke-stage/GET/multiply"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "@aws-cdk/aws-lambda.CfnPermission",
+                              "version": "1.142.0"
+                            }
+                          },
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "the-fat-lambda-stack/fatLambdaAPI/Default/multiply/GET/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
+                              "aws:cdk:cloudformation:props": {
+                                "httpMethod": "GET",
+                                "resourceId": {
+                                  "Ref": "fatLambdaAPImultiplyDDE1F047"
+                                },
+                                "restApiId": {
+                                  "Ref": "fatLambdaAPIDE58F80F"
+                                },
+                                "authorizationType": "NONE",
+                                "integration": {
+                                  "type": "AWS_PROXY",
+                                  "uri": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":apigateway:",
+                                        {
+                                          "Ref": "AWS::Region"
+                                        },
+                                        ":lambda:path/2015-03-31/functions/",
+                                        {
+                                          "Fn::GetAtt": [
+                                            "multiplyLambdaHandler7068AFA9",
+                                            "Arn"
+                                          ]
+                                        },
+                                        "/invocations"
+                                      ]
+                                    ]
+                                  },
+                                  "integrationHttpMethod": "POST"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "@aws-cdk/aws-apigateway.CfnMethod",
+                              "version": "1.142.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-apigateway.Method",
+                          "version": "1.142.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-apigateway.Resource",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-apigateway.ResourceBase",
+                  "version": "1.142.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/aws-apigateway.LambdaRestApi",
+              "version": "1.142.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "@aws-cdk/core.Stack",
+          "version": "1.142.0"
+        }
+      },
+      "the-single-purpose-function-stack": {
+        "id": "the-single-purpose-function-stack",
+        "path": "the-single-purpose-function-stack",
+        "children": {
+          "addLambdaHandler": {
+            "id": "addLambdaHandler",
+            "path": "the-single-purpose-function-stack/addLambdaHandler",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "the-single-purpose-function-stack/addLambdaHandler/ServiceRole",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "the-single-purpose-function-stack/addLambdaHandler/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-iam.CfnRole",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-iam.Role",
+                  "version": "1.142.0"
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "the-single-purpose-function-stack/addLambdaHandler/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "the-single-purpose-function-stack/addLambdaHandler/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/core.AssetStaging",
+                      "version": "1.142.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "the-single-purpose-function-stack/addLambdaHandler/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-s3.BucketBase",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-s3-assets.Asset",
+                  "version": "1.142.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "the-single-purpose-function-stack/addLambdaHandler/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": {
+                        "Ref": "AssetParameters1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0S3Bucket5EA66AEF"
+                      },
+                      "s3Key": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            {
+                              "Fn::Select": [
+                                0,
+                                {
+                                  "Fn::Split": [
+                                    "||",
+                                    {
+                                      "Ref": "AssetParameters1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0S3VersionKeyD171B821"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Fn::Select": [
+                                1,
+                                {
+                                  "Fn::Split": [
+                                    "||",
+                                    {
+                                      "Ref": "AssetParameters1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0S3VersionKeyD171B821"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        ]
+                      }
+                    },
+                    "role": {
+                      "Fn::GetAtt": [
+                        "addLambdaHandlerServiceRole37B65F50",
+                        "Arn"
+                      ]
+                    },
+                    "handler": "add.handler",
+                    "runtime": "python3.8"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-lambda.CfnFunction",
+                  "version": "1.142.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/aws-lambda.Function",
+              "version": "1.142.0"
+            }
+          },
+          "AssetParameters": {
+            "id": "AssetParameters",
+            "path": "the-single-purpose-function-stack/AssetParameters",
+            "children": {
+              "1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0": {
+                "id": "1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0",
+                "path": "the-single-purpose-function-stack/AssetParameters/1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0",
+                "children": {
+                  "S3Bucket": {
+                    "id": "S3Bucket",
+                    "path": "the-single-purpose-function-stack/AssetParameters/1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0/S3Bucket",
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/core.CfnParameter",
+                      "version": "1.142.0"
+                    }
+                  },
+                  "S3VersionKey": {
+                    "id": "S3VersionKey",
+                    "path": "the-single-purpose-function-stack/AssetParameters/1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0/S3VersionKey",
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/core.CfnParameter",
+                      "version": "1.142.0"
+                    }
+                  },
+                  "ArtifactHash": {
+                    "id": "ArtifactHash",
+                    "path": "the-single-purpose-function-stack/AssetParameters/1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0/ArtifactHash",
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/core.CfnParameter",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/core.Construct",
+                  "version": "1.142.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/core.Construct",
+              "version": "1.142.0"
+            }
+          },
+          "subtractLambdaHandler": {
+            "id": "subtractLambdaHandler",
+            "path": "the-single-purpose-function-stack/subtractLambdaHandler",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "the-single-purpose-function-stack/subtractLambdaHandler/ServiceRole",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "the-single-purpose-function-stack/subtractLambdaHandler/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-iam.CfnRole",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-iam.Role",
+                  "version": "1.142.0"
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "the-single-purpose-function-stack/subtractLambdaHandler/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "the-single-purpose-function-stack/subtractLambdaHandler/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/core.AssetStaging",
+                      "version": "1.142.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "the-single-purpose-function-stack/subtractLambdaHandler/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-s3.BucketBase",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-s3-assets.Asset",
+                  "version": "1.142.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "the-single-purpose-function-stack/subtractLambdaHandler/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": {
+                        "Ref": "AssetParameters1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0S3Bucket5EA66AEF"
+                      },
+                      "s3Key": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            {
+                              "Fn::Select": [
+                                0,
+                                {
+                                  "Fn::Split": [
+                                    "||",
+                                    {
+                                      "Ref": "AssetParameters1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0S3VersionKeyD171B821"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Fn::Select": [
+                                1,
+                                {
+                                  "Fn::Split": [
+                                    "||",
+                                    {
+                                      "Ref": "AssetParameters1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0S3VersionKeyD171B821"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        ]
+                      }
+                    },
+                    "role": {
+                      "Fn::GetAtt": [
+                        "subtractLambdaHandlerServiceRole4A6E4302",
+                        "Arn"
+                      ]
+                    },
+                    "handler": "subtract.handler",
+                    "runtime": "python3.8"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-lambda.CfnFunction",
+                  "version": "1.142.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/aws-lambda.Function",
+              "version": "1.142.0"
+            }
+          },
+          "multiplyLambdaHandler": {
+            "id": "multiplyLambdaHandler",
+            "path": "the-single-purpose-function-stack/multiplyLambdaHandler",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "the-single-purpose-function-stack/multiplyLambdaHandler/ServiceRole",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "the-single-purpose-function-stack/multiplyLambdaHandler/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-iam.CfnRole",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-iam.Role",
+                  "version": "1.142.0"
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "the-single-purpose-function-stack/multiplyLambdaHandler/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "the-single-purpose-function-stack/multiplyLambdaHandler/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/core.AssetStaging",
+                      "version": "1.142.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "the-single-purpose-function-stack/multiplyLambdaHandler/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-s3.BucketBase",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-s3-assets.Asset",
+                  "version": "1.142.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "the-single-purpose-function-stack/multiplyLambdaHandler/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": {
+                        "Ref": "AssetParameters1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0S3Bucket5EA66AEF"
+                      },
+                      "s3Key": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            {
+                              "Fn::Select": [
+                                0,
+                                {
+                                  "Fn::Split": [
+                                    "||",
+                                    {
+                                      "Ref": "AssetParameters1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0S3VersionKeyD171B821"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Fn::Select": [
+                                1,
+                                {
+                                  "Fn::Split": [
+                                    "||",
+                                    {
+                                      "Ref": "AssetParameters1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0S3VersionKeyD171B821"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        ]
+                      }
+                    },
+                    "role": {
+                      "Fn::GetAtt": [
+                        "multiplyLambdaHandlerServiceRole902757A2",
+                        "Arn"
+                      ]
+                    },
+                    "handler": "multiply.handler",
+                    "runtime": "python3.8"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-lambda.CfnFunction",
+                  "version": "1.142.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/aws-lambda.Function",
+              "version": "1.142.0"
+            }
+          },
+          "singlePurposeFunctionAPI": {
+            "id": "singlePurposeFunctionAPI",
+            "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::ApiGateway::RestApi",
+                  "aws:cdk:cloudformation:props": {
+                    "name": "singlePurposeFunctionAPI"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-apigateway.CfnRestApi",
+                  "version": "1.142.0"
+                }
+              },
+              "CloudWatchRole": {
+                "id": "CloudWatchRole",
+                "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/CloudWatchRole",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/CloudWatchRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "apigateway.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-iam.CfnRole",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-iam.Role",
+                  "version": "1.142.0"
+                }
+              },
+              "Account": {
+                "id": "Account",
+                "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Account",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::ApiGateway::Account",
+                  "aws:cdk:cloudformation:props": {
+                    "cloudWatchRoleArn": {
+                      "Fn::GetAtt": [
+                        "singlePurposeFunctionAPICloudWatchRoleD608303E",
+                        "Arn"
+                      ]
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-apigateway.CfnAccount",
+                  "version": "1.142.0"
+                }
+              },
+              "Deployment": {
+                "id": "Deployment",
+                "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Deployment",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Deployment/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::ApiGateway::Deployment",
+                      "aws:cdk:cloudformation:props": {
+                        "restApiId": {
+                          "Ref": "singlePurposeFunctionAPIFCBB8F61"
+                        },
+                        "description": "Automatically created by the RestApi construct"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-apigateway.CfnDeployment",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-apigateway.Deployment",
+                  "version": "1.142.0"
+                }
+              },
+              "DeploymentStage.prod": {
+                "id": "DeploymentStage.prod",
+                "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/DeploymentStage.prod",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/DeploymentStage.prod/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::ApiGateway::Stage",
+                      "aws:cdk:cloudformation:props": {
+                        "restApiId": {
+                          "Ref": "singlePurposeFunctionAPIFCBB8F61"
+                        },
+                        "deploymentId": {
+                          "Ref": "singlePurposeFunctionAPIDeployment9D6988510afed3a2df5c9d37c891669a47fffec5"
+                        },
+                        "stageName": "prod"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-apigateway.CfnStage",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-apigateway.Stage",
+                  "version": "1.142.0"
+                }
+              },
+              "Endpoint": {
+                "id": "Endpoint",
+                "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Endpoint",
+                "constructInfo": {
+                  "fqn": "@aws-cdk/core.CfnOutput",
+                  "version": "1.142.0"
+                }
+              },
+              "Default": {
+                "id": "Default",
+                "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Default",
+                "children": {
+                  "add": {
+                    "id": "add",
+                    "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Default/add",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Default/add/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::ApiGateway::Resource",
+                          "aws:cdk:cloudformation:props": {
+                            "parentId": {
+                              "Fn::GetAtt": [
+                                "singlePurposeFunctionAPIFCBB8F61",
+                                "RootResourceId"
+                              ]
+                            },
+                            "pathPart": "add",
+                            "restApiId": {
+                              "Ref": "singlePurposeFunctionAPIFCBB8F61"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-apigateway.CfnResource",
+                          "version": "1.142.0"
+                        }
+                      },
+                      "GET": {
+                        "id": "GET",
+                        "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Default/add/GET",
+                        "children": {
+                          "ApiPermission.thesinglepurposefunctionstacksinglePurposeFunctionAPI3424B195.GET..add": {
+                            "id": "ApiPermission.thesinglepurposefunctionstacksinglePurposeFunctionAPI3424B195.GET..add",
+                            "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Default/add/GET/ApiPermission.thesinglepurposefunctionstacksinglePurposeFunctionAPI3424B195.GET..add",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "addLambdaHandler9017B0E5",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":execute-api:",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "singlePurposeFunctionAPIFCBB8F61"
+                                      },
+                                      "/",
+                                      {
+                                        "Ref": "singlePurposeFunctionAPIDeploymentStageprod28E44715"
+                                      },
+                                      "/GET/add"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "@aws-cdk/aws-lambda.CfnPermission",
+                              "version": "1.142.0"
+                            }
+                          },
+                          "ApiPermission.Test.thesinglepurposefunctionstacksinglePurposeFunctionAPI3424B195.GET..add": {
+                            "id": "ApiPermission.Test.thesinglepurposefunctionstacksinglePurposeFunctionAPI3424B195.GET..add",
+                            "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Default/add/GET/ApiPermission.Test.thesinglepurposefunctionstacksinglePurposeFunctionAPI3424B195.GET..add",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "addLambdaHandler9017B0E5",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":execute-api:",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "singlePurposeFunctionAPIFCBB8F61"
+                                      },
+                                      "/test-invoke-stage/GET/add"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "@aws-cdk/aws-lambda.CfnPermission",
+                              "version": "1.142.0"
+                            }
+                          },
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Default/add/GET/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
+                              "aws:cdk:cloudformation:props": {
+                                "httpMethod": "GET",
+                                "resourceId": {
+                                  "Ref": "singlePurposeFunctionAPIaddFA413A45"
+                                },
+                                "restApiId": {
+                                  "Ref": "singlePurposeFunctionAPIFCBB8F61"
+                                },
+                                "authorizationType": "NONE",
+                                "integration": {
+                                  "type": "AWS_PROXY",
+                                  "uri": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":apigateway:",
+                                        {
+                                          "Ref": "AWS::Region"
+                                        },
+                                        ":lambda:path/2015-03-31/functions/",
+                                        {
+                                          "Fn::GetAtt": [
+                                            "addLambdaHandler9017B0E5",
+                                            "Arn"
+                                          ]
+                                        },
+                                        "/invocations"
+                                      ]
+                                    ]
+                                  },
+                                  "integrationHttpMethod": "POST"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "@aws-cdk/aws-apigateway.CfnMethod",
+                              "version": "1.142.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-apigateway.Method",
+                          "version": "1.142.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-apigateway.Resource",
+                      "version": "1.142.0"
+                    }
+                  },
+                  "subtract": {
+                    "id": "subtract",
+                    "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Default/subtract",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Default/subtract/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::ApiGateway::Resource",
+                          "aws:cdk:cloudformation:props": {
+                            "parentId": {
+                              "Fn::GetAtt": [
+                                "singlePurposeFunctionAPIFCBB8F61",
+                                "RootResourceId"
+                              ]
+                            },
+                            "pathPart": "subtract",
+                            "restApiId": {
+                              "Ref": "singlePurposeFunctionAPIFCBB8F61"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-apigateway.CfnResource",
+                          "version": "1.142.0"
+                        }
+                      },
+                      "GET": {
+                        "id": "GET",
+                        "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Default/subtract/GET",
+                        "children": {
+                          "ApiPermission.thesinglepurposefunctionstacksinglePurposeFunctionAPI3424B195.GET..subtract": {
+                            "id": "ApiPermission.thesinglepurposefunctionstacksinglePurposeFunctionAPI3424B195.GET..subtract",
+                            "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Default/subtract/GET/ApiPermission.thesinglepurposefunctionstacksinglePurposeFunctionAPI3424B195.GET..subtract",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "subtractLambdaHandler5C3056BE",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":execute-api:",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "singlePurposeFunctionAPIFCBB8F61"
+                                      },
+                                      "/",
+                                      {
+                                        "Ref": "singlePurposeFunctionAPIDeploymentStageprod28E44715"
+                                      },
+                                      "/GET/subtract"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "@aws-cdk/aws-lambda.CfnPermission",
+                              "version": "1.142.0"
+                            }
+                          },
+                          "ApiPermission.Test.thesinglepurposefunctionstacksinglePurposeFunctionAPI3424B195.GET..subtract": {
+                            "id": "ApiPermission.Test.thesinglepurposefunctionstacksinglePurposeFunctionAPI3424B195.GET..subtract",
+                            "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Default/subtract/GET/ApiPermission.Test.thesinglepurposefunctionstacksinglePurposeFunctionAPI3424B195.GET..subtract",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "subtractLambdaHandler5C3056BE",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":execute-api:",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "singlePurposeFunctionAPIFCBB8F61"
+                                      },
+                                      "/test-invoke-stage/GET/subtract"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "@aws-cdk/aws-lambda.CfnPermission",
+                              "version": "1.142.0"
+                            }
+                          },
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Default/subtract/GET/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
+                              "aws:cdk:cloudformation:props": {
+                                "httpMethod": "GET",
+                                "resourceId": {
+                                  "Ref": "singlePurposeFunctionAPIsubtract76C9781F"
+                                },
+                                "restApiId": {
+                                  "Ref": "singlePurposeFunctionAPIFCBB8F61"
+                                },
+                                "authorizationType": "NONE",
+                                "integration": {
+                                  "type": "AWS_PROXY",
+                                  "uri": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":apigateway:",
+                                        {
+                                          "Ref": "AWS::Region"
+                                        },
+                                        ":lambda:path/2015-03-31/functions/",
+                                        {
+                                          "Fn::GetAtt": [
+                                            "subtractLambdaHandler5C3056BE",
+                                            "Arn"
+                                          ]
+                                        },
+                                        "/invocations"
+                                      ]
+                                    ]
+                                  },
+                                  "integrationHttpMethod": "POST"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "@aws-cdk/aws-apigateway.CfnMethod",
+                              "version": "1.142.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-apigateway.Method",
+                          "version": "1.142.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-apigateway.Resource",
+                      "version": "1.142.0"
+                    }
+                  },
+                  "multiply": {
+                    "id": "multiply",
+                    "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Default/multiply",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Default/multiply/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::ApiGateway::Resource",
+                          "aws:cdk:cloudformation:props": {
+                            "parentId": {
+                              "Fn::GetAtt": [
+                                "singlePurposeFunctionAPIFCBB8F61",
+                                "RootResourceId"
+                              ]
+                            },
+                            "pathPart": "multiply",
+                            "restApiId": {
+                              "Ref": "singlePurposeFunctionAPIFCBB8F61"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-apigateway.CfnResource",
+                          "version": "1.142.0"
+                        }
+                      },
+                      "GET": {
+                        "id": "GET",
+                        "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Default/multiply/GET",
+                        "children": {
+                          "ApiPermission.thesinglepurposefunctionstacksinglePurposeFunctionAPI3424B195.GET..multiply": {
+                            "id": "ApiPermission.thesinglepurposefunctionstacksinglePurposeFunctionAPI3424B195.GET..multiply",
+                            "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Default/multiply/GET/ApiPermission.thesinglepurposefunctionstacksinglePurposeFunctionAPI3424B195.GET..multiply",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "multiplyLambdaHandler7068AFA9",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":execute-api:",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "singlePurposeFunctionAPIFCBB8F61"
+                                      },
+                                      "/",
+                                      {
+                                        "Ref": "singlePurposeFunctionAPIDeploymentStageprod28E44715"
+                                      },
+                                      "/GET/multiply"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "@aws-cdk/aws-lambda.CfnPermission",
+                              "version": "1.142.0"
+                            }
+                          },
+                          "ApiPermission.Test.thesinglepurposefunctionstacksinglePurposeFunctionAPI3424B195.GET..multiply": {
+                            "id": "ApiPermission.Test.thesinglepurposefunctionstacksinglePurposeFunctionAPI3424B195.GET..multiply",
+                            "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Default/multiply/GET/ApiPermission.Test.thesinglepurposefunctionstacksinglePurposeFunctionAPI3424B195.GET..multiply",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "multiplyLambdaHandler7068AFA9",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":execute-api:",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "singlePurposeFunctionAPIFCBB8F61"
+                                      },
+                                      "/test-invoke-stage/GET/multiply"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "@aws-cdk/aws-lambda.CfnPermission",
+                              "version": "1.142.0"
+                            }
+                          },
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "the-single-purpose-function-stack/singlePurposeFunctionAPI/Default/multiply/GET/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
+                              "aws:cdk:cloudformation:props": {
+                                "httpMethod": "GET",
+                                "resourceId": {
+                                  "Ref": "singlePurposeFunctionAPImultiply7242F0E4"
+                                },
+                                "restApiId": {
+                                  "Ref": "singlePurposeFunctionAPIFCBB8F61"
+                                },
+                                "authorizationType": "NONE",
+                                "integration": {
+                                  "type": "AWS_PROXY",
+                                  "uri": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":apigateway:",
+                                        {
+                                          "Ref": "AWS::Region"
+                                        },
+                                        ":lambda:path/2015-03-31/functions/",
+                                        {
+                                          "Fn::GetAtt": [
+                                            "multiplyLambdaHandler7068AFA9",
+                                            "Arn"
+                                          ]
+                                        },
+                                        "/invocations"
+                                      ]
+                                    ]
+                                  },
+                                  "integrationHttpMethod": "POST"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "@aws-cdk/aws-apigateway.CfnMethod",
+                              "version": "1.142.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-apigateway.Method",
+                          "version": "1.142.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-apigateway.Resource",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-apigateway.ResourceBase",
+                  "version": "1.142.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/aws-apigateway.LambdaRestApi",
+              "version": "1.142.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "@aws-cdk/core.Stack",
+          "version": "1.142.0"
+        }
       }
     },
     "constructInfo": {
