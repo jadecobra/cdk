@@ -13586,3 +13586,8 @@
 2022-02-20 07:28:40.261727::Time taken to synthesize stack: WebApplicationFirewall::  2.7612 seconds
 2022-02-20 07:28:58.590218::Time taken to synthesize stack: RdsProxy::  3.1696 seconds
 2022-02-20 07:29:36.108935::Time taken to synthesize stack: RdsProxy::  3.5014 seconds
+2022-02-20 07:30:58.096512::Time taken to synthesize stack: RdsProxy::  3.6118 seconds
+2022-02-20 07:31:23.167429::Time taken to synthesize stack: RdsProxy::  3.3992 seconds
+2022-02-20 07:32:10.802096::Time taken to synthesize stack: RdsProxy::  3.8005 seconds
+2022-02-20 07:32:19.311751::Time taken to synthesize stack: RdsProxy::  3.0288 seconds
+2022-02-20 07:32:45.688494::Time taken to synthesize stack: RdsProxy::  3.4706 seconds

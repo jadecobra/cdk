@@ -18091,7 +18091,7 @@
                         "RDS_SECRET_NAME": "RdsProxy-rds-credentials"
                       }
                     },
-                    "handler": "rdsLambda.handler",
+                    "handler": "rds.handler",
                     "runtime": "nodejs12.x",
                     "vpcConfig": {
                       "subnetIds": [

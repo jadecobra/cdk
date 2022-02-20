@@ -812,7 +812,7 @@
             "RDS_SECRET_NAME": "RdsProxy-rds-credentials"
           }
         },
-        "Handler": "rdsLambda.handler",
+        "Handler": "rds.handler",
         "Runtime": "nodejs12.x",
         "VpcConfig": {
           "SecurityGroupIds": [

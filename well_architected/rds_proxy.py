@@ -12,6 +12,10 @@ from aws_cdk import (
 
 class TheRdsProxyStack(cdk.Stack):
 
+    @staticmethod
+    def rds_port():
+        return ec2.Port.tcp(3306)
+
     def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
@@ -20,8 +24,9 @@ class TheRdsProxyStack(cdk.Stack):
         lambda_to_proxy_group = ec2.SecurityGroup(self, 'Lambda to RDS Proxy Connection', vpc=vpc)
 
         db_connection_group = ec2.SecurityGroup(self, 'Proxy to DB Connection', vpc=vpc)
-        db_connection_group.connections.allow_from(db_connection_group, ec2.Port.tcp(3306), 'allow db connection')
-        db_connection_group.connections.allow_from(lambda_to_proxy_group, ec2.Port.tcp(3306), 'allow lambda connection')
+
+        db_connection_group.connections.allow_from(db_connection_group, self.rds_port(), 'allow db connection')
+        db_connection_group.connections.allow_from(lambda_to_proxy_group, self.rds_port(), 'allow lambda connection')
 
         db_credentials_secret = secrets.Secret(
             self, 'DBCredentialsSecret',
@@ -57,7 +62,7 @@ class TheRdsProxyStack(cdk.Stack):
 
         # Create an RDS proxy
         proxy = rds_instance.add_proxy(
-            id+'-proxy',
+            f'{id}-proxy',
             secrets=[db_credentials_secret],
             debug_logging=True,
             vpc=vpc,
@@ -72,12 +77,12 @@ class TheRdsProxyStack(cdk.Stack):
             self, 'rdsProxyHandler',
             runtime=_lambda.Runtime.NODEJS_12_X,
             code=_lambda.Code.from_asset('lambda_functions/rds'),
-            handler='rdsLambda.handler',
+            handler='rds.handler',
             vpc=vpc,
             security_groups=[lambda_to_proxy_group],
             environment={
                 "PROXY_ENDPOINT": proxy.endpoint,
-                "RDS_SECRET_NAME": id+'-rds-credentials'
+                "RDS_SECRET_NAME": f'{id}-rds-credentials'
             }
         )
 
