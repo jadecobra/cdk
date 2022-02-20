@@ -9,7 +9,7 @@ class LambdaFunctionConstruct(WellArchitectedFrameworkConstruct):
     def __init__(self, scope: Construct, id: str,
         function_name=None, environment_variables=None,
         error_topic:ITopic=None, layers:list[str]=None,
-        duration=60,
+        duration=60, vpc=None,
         **kwargs) -> None:
         super().__init__(scope, id, error_topic=error_topic, **kwargs)
         self.lambda_function = Function(
@@ -20,6 +20,7 @@ class LambdaFunctionConstruct(WellArchitectedFrameworkConstruct):
             timeout=Duration.seconds(duration),
             tracing=Tracing.ACTIVE,
             layers=self.create_layers(layers),
+            vpc=vpc,
             environment=environment_variables,
         )
         self.create_2_percent_error_alarm()
@@ -137,7 +138,7 @@ class LambdaFunctionStack(Stack):
 def create_python_lambda_function(
         stack,
         function_name=None, environment_variables=None,
-        duration=60, error_topic=None,
+        duration=60, error_topic=None, vpc=None,
     ):
     return LambdaFunctionConstruct(
         stack, function_name,
@@ -145,4 +146,5 @@ def create_python_lambda_function(
         environment_variables=environment_variables,
         duration=duration,
         error_topic=error_topic,
+        vpc=vpc,
     ).lambda_function

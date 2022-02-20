@@ -8,6 +8,7 @@ from aws_cdk import (
     aws_ssm as ssm,
     core as cdk
 )
+import lambda_function
 
 
 class TheRdsProxyStack(cdk.Stack):
@@ -30,13 +31,10 @@ class TheRdsProxyStack(cdk.Stack):
             vpc=vpc,
         )
 
-        rds_lambda = _lambda.Function(
-            self, 'rdsProxyHandler',
-            runtime=_lambda.Runtime.NODEJS_12_X,
-            code=_lambda.Code.from_asset('lambda_functions/rds'),
-            handler='rds.handler',
+        rds_lambda = lambda_function.create_python_lambda_function(
+            self, function_name='rds',
             vpc=vpc,
-            environment={
+            environment_variables={
                 "PROXY_ENDPOINT": rds_proxy.endpoint,
                 "RDS_SECRET_NAME": f'{id}-rds-credentials'
             }
@@ -50,13 +48,15 @@ class TheRdsProxyStack(cdk.Stack):
         ):
             rds_instance.connections.allow_from(security_group, ec2.Port.tcp(3306), description=description)
 
-        # defines an API Gateway Http API resource backed by our "dynamoLambda" function.
         api = api_gw.HttpApi(
             self, 'Endpoint',
-            default_integration=integrations.HttpLambdaIntegration('LambdaIntegration', handler=rds_lambda)
+            default_integration=integrations.HttpLambdaIntegration(
+                'LambdaIntegration', handler=rds_lambda
+            )
         )
 
         cdk.CfnOutput(self, 'HTTP API Url', value=api.url);
+
 
     def create_credentials_secret(self, id):
         return secrets.Secret(

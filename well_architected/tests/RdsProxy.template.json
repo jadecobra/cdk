@@ -501,7 +501,7 @@
         "ToPort": 3306
       }
     },
-    "DBInstanceSecurityGroupfromRdsProxyrdsProxyHandlerSecurityGroup2D1BEBB53306DFFB15B5": {
+    "DBInstanceSecurityGroupfromRdsProxyrdsSecurityGroup612B5BD233067BAE4BA5": {
       "Type": "AWS::EC2::SecurityGroupIngress",
       "Properties": {
         "IpProtocol": "tcp",
@@ -515,7 +515,7 @@
         },
         "SourceSecurityGroupId": {
           "Fn::GetAtt": [
-            "rdsProxyHandlerSecurityGroup6C514F99",
+            "rdsSecurityGroup68A57640",
             "GroupId"
           ]
         },
@@ -685,7 +685,57 @@
         ]
       }
     },
-    "rdsProxyHandlerServiceRoleD70E0A19": {
+    "rdsErrorTopic9DEB559C": {
+      "Type": "AWS::SNS::Topic",
+      "Properties": {
+        "DisplayName": "ErrorTopic"
+      }
+    },
+    "rdsawsxraysdkLambdaLayer270D45E6": {
+      "Type": "AWS::Lambda::LayerVersion",
+      "Properties": {
+        "Content": {
+          "S3Bucket": {
+            "Ref": "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3BucketC7A2EC7F"
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3VersionKeyF23940AD"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3VersionKeyF23940AD"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        },
+        "Description": "AWS XRay SDK Lambda Layer"
+      }
+    },
+    "rdsServiceRole5D510015": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -728,11 +778,19 @@
         ]
       }
     },
-    "rdsProxyHandlerServiceRoleDefaultPolicyEFCE83C1": {
+    "rdsServiceRoleDefaultPolicy8EE3CC79": {
       "Type": "AWS::IAM::Policy",
       "Properties": {
         "PolicyDocument": {
           "Statement": [
+            {
+              "Action": [
+                "xray:PutTraceSegments",
+                "xray:PutTelemetryRecords"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            },
             {
               "Action": [
                 "secretsmanager:GetSecretValue",
@@ -746,18 +804,18 @@
           ],
           "Version": "2012-10-17"
         },
-        "PolicyName": "rdsProxyHandlerServiceRoleDefaultPolicyEFCE83C1",
+        "PolicyName": "rdsServiceRoleDefaultPolicy8EE3CC79",
         "Roles": [
           {
-            "Ref": "rdsProxyHandlerServiceRoleD70E0A19"
+            "Ref": "rdsServiceRole5D510015"
           }
         ]
       }
     },
-    "rdsProxyHandlerSecurityGroup6C514F99": {
+    "rdsSecurityGroup68A57640": {
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
-        "GroupDescription": "Automatic security group for Lambda Function RdsProxyrdsProxyHandler185B36A0",
+        "GroupDescription": "Automatic security group for Lambda Function RdsProxyrds0E25E2F7",
         "SecurityGroupEgress": [
           {
             "CidrIp": "0.0.0.0/0",
@@ -770,7 +828,7 @@
         }
       }
     },
-    "rdsProxyHandlerDA266FA9": {
+    "rds169785B9": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
@@ -813,7 +871,7 @@
         },
         "Role": {
           "Fn::GetAtt": [
-            "rdsProxyHandlerServiceRoleD70E0A19",
+            "rdsServiceRole5D510015",
             "Arn"
           ]
         },
@@ -829,12 +887,21 @@
           }
         },
         "Handler": "rds.handler",
-        "Runtime": "nodejs12.x",
+        "Layers": [
+          {
+            "Ref": "rdsawsxraysdkLambdaLayer270D45E6"
+          }
+        ],
+        "Runtime": "python3.8",
+        "Timeout": 60,
+        "TracingConfig": {
+          "Mode": "Active"
+        },
         "VpcConfig": {
           "SecurityGroupIds": [
             {
               "Fn::GetAtt": [
-                "rdsProxyHandlerSecurityGroup6C514F99",
+                "rdsSecurityGroup68A57640",
                 "GroupId"
               ]
             }
@@ -850,9 +917,213 @@
         }
       },
       "DependsOn": [
-        "rdsProxyHandlerServiceRoleDefaultPolicyEFCE83C1",
-        "rdsProxyHandlerServiceRoleD70E0A19"
+        "rdsServiceRoleDefaultPolicy8EE3CC79",
+        "rdsServiceRole5D510015"
       ]
+    },
+    "rdsLambdainvocationErrors2B1E933C4": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": 6,
+        "AlarmActions": [
+          {
+            "Ref": "rdsErrorTopic9DEB559C"
+          }
+        ],
+        "DatapointsToAlarm": 1,
+        "Metrics": [
+          {
+            "Expression": "(errors / invocations) * 100",
+            "Id": "expr_1",
+            "Label": "% of invocations that errored, last 5 mins"
+          },
+          {
+            "Id": "invocations",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "FunctionName",
+                    "Value": {
+                      "Ref": "rds169785B9"
+                    }
+                  }
+                ],
+                "MetricName": "Invocations",
+                "Namespace": "AWS/Lambda"
+              },
+              "Period": 300,
+              "Stat": "Sum"
+            },
+            "ReturnData": false
+          },
+          {
+            "Id": "errors",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "FunctionName",
+                    "Value": {
+                      "Ref": "rds169785B9"
+                    }
+                  }
+                ],
+                "MetricName": "Errors",
+                "Namespace": "AWS/Lambda"
+              },
+              "Period": 300,
+              "Stat": "Sum"
+            },
+            "ReturnData": false
+          }
+        ],
+        "Threshold": 2,
+        "TreatMissingData": "notBreaching"
+      }
+    },
+    "rdsLambdap99LongDuration1s71246B50": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": 6,
+        "AlarmActions": [
+          {
+            "Ref": "rdsErrorTopic9DEB559C"
+          }
+        ],
+        "DatapointsToAlarm": 1,
+        "Dimensions": [
+          {
+            "Name": "FunctionName",
+            "Value": {
+              "Ref": "rds169785B9"
+            }
+          }
+        ],
+        "ExtendedStatistic": "p99",
+        "MetricName": "Duration",
+        "Namespace": "AWS/Lambda",
+        "Period": 300,
+        "Threshold": 1000,
+        "TreatMissingData": "notBreaching"
+      }
+    },
+    "rdsLambdaThrottledinvocations23FAB5E5C": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": 6,
+        "AlarmActions": [
+          {
+            "Ref": "rdsErrorTopic9DEB559C"
+          }
+        ],
+        "DatapointsToAlarm": 1,
+        "Metrics": [
+          {
+            "Expression": "(throttles * 100) / (invocations + throttles)",
+            "Id": "expr_1",
+            "Label": "throttled requests % in last 30 mins"
+          },
+          {
+            "Id": "invocations",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "FunctionName",
+                    "Value": {
+                      "Ref": "rds169785B9"
+                    }
+                  }
+                ],
+                "MetricName": "Invocations",
+                "Namespace": "AWS/Lambda"
+              },
+              "Period": 300,
+              "Stat": "Sum"
+            },
+            "ReturnData": false
+          },
+          {
+            "Id": "throttles",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "FunctionName",
+                    "Value": {
+                      "Ref": "rds169785B9"
+                    }
+                  }
+                ],
+                "MetricName": "Throttles",
+                "Namespace": "AWS/Lambda"
+              },
+              "Period": 300,
+              "Stat": "Sum"
+            },
+            "ReturnData": false
+          }
+        ],
+        "Threshold": 2,
+        "TreatMissingData": "notBreaching"
+      }
+    },
+    "rdsCloudWatchDashBoard074EBA8E": {
+      "Type": "AWS::CloudWatch::Dashboard",
+      "Properties": {
+        "DashboardBody": {
+          "Fn::Join": [
+            "",
+            [
+              "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Error %\",\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+              {
+                "Ref": "rds169785B9"
+              },
+              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
+              {
+                "Ref": "rds169785B9"
+              },
+              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+              {
+                "Ref": "rds169785B9"
+              },
+              "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+              {
+                "Ref": "rds169785B9"
+              },
+              "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+              {
+                "Ref": "rds169785B9"
+              },
+              "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Throttle %\",\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+              {
+                "Ref": "rds169785B9"
+              },
+              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
+              {
+                "Ref": "rds169785B9"
+              },
+              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
+            ]
+          ]
+        }
+      }
     },
     "EndpointEEF1FD8F": {
       "Type": "AWS::ApiGatewayV2::Api",
@@ -867,7 +1138,7 @@
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "rdsProxyHandlerDA266FA9",
+            "rds169785B9",
             "Arn"
           ]
         },
@@ -907,7 +1178,7 @@
         "IntegrationType": "AWS_PROXY",
         "IntegrationUri": {
           "Fn::GetAtt": [
-            "rdsProxyHandlerDA266FA9",
+            "rds169785B9",
             "Arn"
           ]
         },
@@ -947,6 +1218,18 @@
     }
   },
   "Parameters": {
+    "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3BucketC7A2EC7F": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81\""
+    },
+    "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3VersionKeyF23940AD": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81\""
+    },
+    "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81ArtifactHashA3AAFFE1": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81\""
+    },
     "AssetParameters6c69f421eddea7103620a033e97ec6707564015818ed8697f42b5eda56d6dbdbS3BucketE0DD5E5D": {
       "Type": "String",
       "Description": "S3 bucket for asset \"6c69f421eddea7103620a033e97ec6707564015818ed8697f42b5eda56d6dbdb\""
