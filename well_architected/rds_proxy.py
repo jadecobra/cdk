@@ -18,25 +18,24 @@ class TheRdsProxyStack(cdk.Stack):
         vpc = ec2.Vpc(self, 'Vpc', max_azs=2)
         db_credentials_secret = self.create_credentials_secret(id)
         self.create_parameter_store_for_db_credentials(db_credentials_secret.secret_arn)
-        # ssm.StringParameter(
-        #     self, 'DBCredentialsArn',
-        #     parameter_name='rds-credentials-arn',
-        #     string_value=db_credentials_secret.secret_arn
-        # )
 
-        rds_instance = rds.DatabaseInstance(
-            self, 'DBInstance',
-            engine=rds.DatabaseInstanceEngine.mysql(
-                version=rds.MysqlEngineVersion.VER_5_7_30
-            ),
-            credentials=rds.Credentials.from_secret(db_credentials_secret),
-            instance_type=ec2.InstanceType.of(
-                ec2.InstanceClass.BURSTABLE2,
-                ec2.InstanceSize.SMALL
-            ),
-            vpc=vpc,
-            removal_policy=cdk.RemovalPolicy.DESTROY,
-            deletion_protection=False,
+        # rds_instance = rds.DatabaseInstance(
+        #     self, 'DBInstance',
+        #     engine=rds.DatabaseInstanceEngine.mysql(
+        #         version=rds.MysqlEngineVersion.VER_5_7_30
+        #     ),
+        #     credentials=rds.Credentials.from_secret(db_credentials_secret),
+        #     instance_type=ec2.InstanceType.of(
+        #         ec2.InstanceClass.BURSTABLE2,
+        #         ec2.InstanceSize.SMALL
+        #     ),
+        #     vpc=vpc,
+        #     removal_policy=cdk.RemovalPolicy.DESTROY,
+        #     deletion_protection=False,
+        # )
+        rds_instance = self.create_rds_instance(
+            credentials_secret=db_credentials_secret,
+            vpc=vpc
         )
 
         # Create an RDS proxy
@@ -96,4 +95,20 @@ class TheRdsProxyStack(cdk.Stack):
             self, 'DBCredentialsArn',
             parameter_name='rds-credentials-arn',
             string_value=db_credentials_arn
+        )
+
+    def create_rds_instance(self, credentials_secret=None, vpc=None):
+        return rds.DatabaseInstance(
+            self, 'DBInstance',
+            engine=rds.DatabaseInstanceEngine.mysql(
+                version=rds.MysqlEngineVersion.VER_5_7_30
+            ),
+            credentials=rds.Credentials.from_secret(credentials_secret),
+            instance_type=ec2.InstanceType.of(
+                ec2.InstanceClass.BURSTABLE2,
+                ec2.InstanceSize.SMALL
+            ),
+            vpc=vpc,
+            removal_policy=cdk.RemovalPolicy.DESTROY,
+            deletion_protection=False,
         )
