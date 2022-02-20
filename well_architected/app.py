@@ -19,7 +19,7 @@ import event_bridge_etl
 import lambda_trilogy.lambda_lith
 import lambda_trilogy.fat_lambda
 import lambda_trilogy.single_purpose_lambda
-# from the_rds_proxy.the_rds_proxy_stack import TheRdsProxyStack
+import rds_proxy
 
 
 class WellArchitected(cdk.App):
@@ -51,6 +51,7 @@ class WellArchitected(cdk.App):
         lambda_trilogy.lambda_lith.LambdaLith(self, "LambdaLith")
         lambda_trilogy.fat_lambda.TheFatLambdaStack(self, "FatLambda")
         lambda_trilogy.single_purpose_lambda.TheSinglePurposeFunctionStack(self, "SinglePurposeLambda")
+        rds_proxy.TheRdsProxyStack(self, "RdsProxy")
 
     def create_http_api(self):
         self.http_api = LambdaHttpApiGateway(

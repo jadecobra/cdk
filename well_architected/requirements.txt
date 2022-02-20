@@ -29,6 +29,7 @@ aws-cdk.aws-kms
 aws-cdk.aws-lambda
 aws-cdk.aws-logs
 aws-cdk.aws-route53
+aws-cdk.aws-rds
 aws-cdk.aws-s3
 aws-cdk.aws-s3-assets
 aws-cdk.aws-servicediscovery
