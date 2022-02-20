@@ -13629,3 +13629,6 @@
 2022-02-20 07:56:22.747181::Time taken to synthesize stack: RdsProxy::  3.2095 seconds
 2022-02-20 07:59:16.448727::Time taken to synthesize stack: RdsProxy::  3.5121 seconds
 2022-02-20 07:59:41.711533::Time taken to synthesize stack: RdsProxy::  3.1762 seconds
+2022-02-20 08:01:27.305857::Time taken to synthesize stack: RdsProxy::  3.5986 seconds
+2022-02-20 08:03:36.178462::Time taken to synthesize stack: RdsProxy::  3.6714 seconds
+2022-02-20 08:04:30.347470::Time taken to synthesize stack: RdsProxy::  3.4892 seconds

@@ -18,37 +18,17 @@ class TheRdsProxyStack(cdk.Stack):
         vpc = ec2.Vpc(self, 'Vpc', max_azs=2)
         db_credentials_secret = self.create_credentials_secret(id)
         self.create_parameter_store_for_db_credentials(db_credentials_secret.secret_arn)
-
-        # rds_instance = rds.DatabaseInstance(
-        #     self, 'DBInstance',
-        #     engine=rds.DatabaseInstanceEngine.mysql(
-        #         version=rds.MysqlEngineVersion.VER_5_7_30
-        #     ),
-        #     credentials=rds.Credentials.from_secret(db_credentials_secret),
-        #     instance_type=ec2.InstanceType.of(
-        #         ec2.InstanceClass.BURSTABLE2,
-        #         ec2.InstanceSize.SMALL
-        #     ),
-        #     vpc=vpc,
-        #     removal_policy=cdk.RemovalPolicy.DESTROY,
-        #     deletion_protection=False,
-        # )
         rds_instance = self.create_rds_instance(
             credentials_secret=db_credentials_secret,
             vpc=vpc
         )
 
-        # Create an RDS proxy
-        proxy = rds_instance.add_proxy(
+        rds_proxy = rds_instance.add_proxy(
             f'{id}-proxy',
             secrets=[db_credentials_secret],
             debug_logging=True,
             vpc=vpc,
         )
-
-        # Workaround for bug where TargetGroupName is not set but required
-        target_group = proxy.node.find_child('ProxyTargetGroup')
-        target_group.add_property_override('TargetGroupName', 'default')
 
         rds_lambda = _lambda.Function(
             self, 'rdsProxyHandler',
@@ -57,7 +37,7 @@ class TheRdsProxyStack(cdk.Stack):
             handler='rds.handler',
             vpc=vpc,
             environment={
-                "PROXY_ENDPOINT": proxy.endpoint,
+                "PROXY_ENDPOINT": rds_proxy.endpoint,
                 "RDS_SECRET_NAME": f'{id}-rds-credentials'
             }
         )
@@ -65,7 +45,7 @@ class TheRdsProxyStack(cdk.Stack):
         db_credentials_secret.grant_read(rds_lambda)
 
         for security_group, description in (
-            (proxy, 'allow db connection'),
+            (rds_proxy, 'allow db connection'),
             (rds_lambda, 'allow lambda connection'),
         ):
             rds_instance.connections.allow_from(security_group, ec2.Port.tcp(3306), description=description)
