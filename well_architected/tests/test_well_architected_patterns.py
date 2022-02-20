@@ -5,22 +5,22 @@ class TestWellArchitectedPatterns(TestTemplates):
     @staticmethod
     def patterns():
         return (
-            # 'DynamoDBFlow',
-            # 'DynamoDBTable',
-            # 'EventBridgeCircuitBreaker',
-            # 'EventBridgeEtl',
+            'DynamoDBFlow',
+            'DynamoDBTable',
+            'EventBridgeCircuitBreaker',
+            'EventBridgeEtl',
             'FatLambda',
-            # 'HitCounter',
-            # 'HttpFlow',
-            # 'LambdaHttpApiGateway',
+            'HitCounter',
+            'HttpFlow',
+            'LambdaHttpApiGateway',
             'LambdaLith',
-            # 'LambdaRestAPIGateway',
+            'LambdaRestAPIGateway',
             'SinglePurposeLambda',
-            # 'SnsFlow',
-            # 'SnsRestApi',
-            # 'SNSTopic',
-            # 'SqsFlow',
-            # 'WebApplicationFirewall',
+            'SnsFlow',
+            'SnsRestApi',
+            'SNSTopic',
+            'SqsFlow',
+            'WebApplicationFirewall',
         )
 
     def test_well_architected_cdk_patterns(self):

@@ -16,10 +16,10 @@ import aws_cdk.aws_dynamodb as aws_dynamodb
 
 import event_bridge_circuit_breaker
 import event_bridge_etl
-
-from lambda_trilogy.lambda_lith import LambdaLith
-from lambda_trilogy.fat_lambda import TheFatLambdaStack
-from lambda_trilogy.single_purpose_lambda import TheSinglePurposeFunctionStack
+import lambda_trilogy.lambda_lith
+import lambda_trilogy.fat_lambda
+import lambda_trilogy.single_purpose_lambda
+# from the_rds_proxy.the_rds_proxy_stack import TheRdsProxyStack
 
 
 class WellArchitected(cdk.App):
@@ -48,9 +48,9 @@ class WellArchitected(cdk.App):
             self, 'EventBridgeCircuitBreaker'
         )
         event_bridge_etl.EventbridgeEtl(self, 'EventBridgeEtl')
-        LambdaLith(self, "LambdaLith")
-        TheFatLambdaStack(self, "FatLambda")
-        TheSinglePurposeFunctionStack(self, "SinglePurposeLambda")
+        lambda_trilogy.lambda_lith.LambdaLith(self, "LambdaLith")
+        lambda_trilogy.fat_lambda.TheFatLambdaStack(self, "FatLambda")
+        lambda_trilogy.single_purpose_lambda.TheSinglePurposeFunctionStack(self, "SinglePurposeLambda")
 
     def create_http_api(self):
         self.http_api = LambdaHttpApiGateway(
