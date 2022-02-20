@@ -38,7 +38,9 @@ class WellArchitected(cdk.App):
         self.create_rest_api()
         self.create_http_api()
 
-        self.xray_sns_topic = SnsTopic(self, 'XRayTracerSnsFanOutTopic', display_name='The XRay Tracer Fan Out Topic').topic
+        self.xray_sns_topic = SnsTopic(
+            self, 'XRayTracerSnsFanOutTopic', display_name='The XRay Tracer Fan Out Topic'
+        ).topic
         SnsRestApi(self, 'SnsRestApi', sns_topic=self.xray_sns_topic)
         HttpFlow(self, 'HttpFlow', sns_topic=self.xray_sns_topic)
         DynamoDBFlow(self, 'DynamoDBFlow', sns_topic=self.xray_sns_topic)

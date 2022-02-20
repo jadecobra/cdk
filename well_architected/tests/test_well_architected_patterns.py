@@ -15,6 +15,7 @@ class TestWellArchitectedPatterns(TestTemplates):
             'LambdaHttpApiGateway',
             'LambdaLith',
             'LambdaRestAPIGateway',
+            'RdsProxy',
             'SinglePurposeLambda',
             'SnsFlow',
             'SnsRestApi',
