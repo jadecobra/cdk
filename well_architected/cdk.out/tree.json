@@ -17385,171 +17385,6 @@
               "version": "1.142.0"
             }
           },
-          "Lambda to RDS Proxy Connection": {
-            "id": "Lambda to RDS Proxy Connection",
-            "path": "RdsProxy/Lambda to RDS Proxy Connection",
-            "children": {
-              "Resource": {
-                "id": "Resource",
-                "path": "RdsProxy/Lambda to RDS Proxy Connection/Resource",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::EC2::SecurityGroup",
-                  "aws:cdk:cloudformation:props": {
-                    "groupDescription": "RdsProxy/Lambda to RDS Proxy Connection",
-                    "securityGroupEgress": [
-                      {
-                        "cidrIp": "0.0.0.0/0",
-                        "description": "Allow all outbound traffic by default",
-                        "ipProtocol": "-1"
-                      }
-                    ],
-                    "vpcId": {
-                      "Ref": "Vpc8378EB38"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-ec2.CfnSecurityGroup",
-                  "version": "1.142.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/aws-ec2.SecurityGroup",
-              "version": "1.142.0"
-            }
-          },
-          "Proxy to DB Connection": {
-            "id": "Proxy to DB Connection",
-            "path": "RdsProxy/Proxy to DB Connection",
-            "children": {
-              "Resource": {
-                "id": "Resource",
-                "path": "RdsProxy/Proxy to DB Connection/Resource",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::EC2::SecurityGroup",
-                  "aws:cdk:cloudformation:props": {
-                    "groupDescription": "RdsProxy/Proxy to DB Connection",
-                    "securityGroupEgress": [
-                      {
-                        "cidrIp": "0.0.0.0/0",
-                        "description": "Allow all outbound traffic by default",
-                        "ipProtocol": "-1"
-                      }
-                    ],
-                    "vpcId": {
-                      "Ref": "Vpc8378EB38"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-ec2.CfnSecurityGroup",
-                  "version": "1.142.0"
-                }
-              },
-              "from RdsProxyProxytoDBConnection39AA5B48:3306": {
-                "id": "from RdsProxyProxytoDBConnection39AA5B48:3306",
-                "path": "RdsProxy/Proxy to DB Connection/from RdsProxyProxytoDBConnection39AA5B48:3306",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::EC2::SecurityGroupIngress",
-                  "aws:cdk:cloudformation:props": {
-                    "ipProtocol": "tcp",
-                    "description": "allow db connection",
-                    "fromPort": 3306,
-                    "groupId": {
-                      "Fn::GetAtt": [
-                        "ProxytoDBConnectionC580BD64",
-                        "GroupId"
-                      ]
-                    },
-                    "sourceSecurityGroupId": {
-                      "Fn::GetAtt": [
-                        "ProxytoDBConnectionC580BD64",
-                        "GroupId"
-                      ]
-                    },
-                    "toPort": 3306
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-ec2.CfnSecurityGroupIngress",
-                  "version": "1.142.0"
-                }
-              },
-              "from RdsProxyLambdatoRDSProxyConnection69B72E22:3306": {
-                "id": "from RdsProxyLambdatoRDSProxyConnection69B72E22:3306",
-                "path": "RdsProxy/Proxy to DB Connection/from RdsProxyLambdatoRDSProxyConnection69B72E22:3306",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::EC2::SecurityGroupIngress",
-                  "aws:cdk:cloudformation:props": {
-                    "ipProtocol": "tcp",
-                    "description": "allow lambda connection",
-                    "fromPort": 3306,
-                    "groupId": {
-                      "Fn::GetAtt": [
-                        "ProxytoDBConnectionC580BD64",
-                        "GroupId"
-                      ]
-                    },
-                    "sourceSecurityGroupId": {
-                      "Fn::GetAtt": [
-                        "LambdatoRDSProxyConnectionB1057E7D",
-                        "GroupId"
-                      ]
-                    },
-                    "toPort": 3306
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-ec2.CfnSecurityGroupIngress",
-                  "version": "1.142.0"
-                }
-              },
-              "from RdsProxyProxytoDBConnection39AA5B48:{IndirectPort}": {
-                "id": "from RdsProxyProxytoDBConnection39AA5B48:{IndirectPort}",
-                "path": "RdsProxy/Proxy to DB Connection/from RdsProxyProxytoDBConnection39AA5B48:{IndirectPort}",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::EC2::SecurityGroupIngress",
-                  "aws:cdk:cloudformation:props": {
-                    "ipProtocol": "tcp",
-                    "description": "Allow connections to the database Instance from the Proxy",
-                    "fromPort": {
-                      "Fn::GetAtt": [
-                        "DBInstance46641A50",
-                        "Endpoint.Port"
-                      ]
-                    },
-                    "groupId": {
-                      "Fn::GetAtt": [
-                        "ProxytoDBConnectionC580BD64",
-                        "GroupId"
-                      ]
-                    },
-                    "sourceSecurityGroupId": {
-                      "Fn::GetAtt": [
-                        "ProxytoDBConnectionC580BD64",
-                        "GroupId"
-                      ]
-                    },
-                    "toPort": {
-                      "Fn::GetAtt": [
-                        "DBInstance46641A50",
-                        "Endpoint.Port"
-                      ]
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-ec2.CfnSecurityGroupIngress",
-                  "version": "1.142.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/aws-ec2.SecurityGroup",
-              "version": "1.142.0"
-            }
-          },
           "DBCredentialsSecret": {
             "id": "DBCredentialsSecret",
             "path": "RdsProxy/DBCredentialsSecret",
@@ -17674,6 +17509,137 @@
                   "version": "1.142.0"
                 }
               },
+              "SecurityGroup": {
+                "id": "SecurityGroup",
+                "path": "RdsProxy/DBInstance/SecurityGroup",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "RdsProxy/DBInstance/SecurityGroup/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::SecurityGroup",
+                      "aws:cdk:cloudformation:props": {
+                        "groupDescription": "Security group for DBInstance database",
+                        "securityGroupEgress": [
+                          {
+                            "cidrIp": "0.0.0.0/0",
+                            "description": "Allow all outbound traffic by default",
+                            "ipProtocol": "-1"
+                          }
+                        ],
+                        "vpcId": {
+                          "Ref": "Vpc8378EB38"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-ec2.CfnSecurityGroup",
+                      "version": "1.142.0"
+                    }
+                  },
+                  "from RdsProxyDBInstanceRdsProxyproxyProxySecurityGroupEB245284:{IndirectPort}": {
+                    "id": "from RdsProxyDBInstanceRdsProxyproxyProxySecurityGroupEB245284:{IndirectPort}",
+                    "path": "RdsProxy/DBInstance/SecurityGroup/from RdsProxyDBInstanceRdsProxyproxyProxySecurityGroupEB245284:{IndirectPort}",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::SecurityGroupIngress",
+                      "aws:cdk:cloudformation:props": {
+                        "ipProtocol": "tcp",
+                        "description": "Allow connections to the database Instance from the Proxy",
+                        "fromPort": {
+                          "Fn::GetAtt": [
+                            "DBInstance46641A50",
+                            "Endpoint.Port"
+                          ]
+                        },
+                        "groupId": {
+                          "Fn::GetAtt": [
+                            "DBInstanceSecurityGroup8BE42C36",
+                            "GroupId"
+                          ]
+                        },
+                        "sourceSecurityGroupId": {
+                          "Fn::GetAtt": [
+                            "DBInstanceRdsProxyproxyProxySecurityGroupCC1FF042",
+                            "GroupId"
+                          ]
+                        },
+                        "toPort": {
+                          "Fn::GetAtt": [
+                            "DBInstance46641A50",
+                            "Endpoint.Port"
+                          ]
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-ec2.CfnSecurityGroupIngress",
+                      "version": "1.142.0"
+                    }
+                  },
+                  "from RdsProxyDBInstanceRdsProxyproxyProxySecurityGroupEB245284:3306": {
+                    "id": "from RdsProxyDBInstanceRdsProxyproxyProxySecurityGroupEB245284:3306",
+                    "path": "RdsProxy/DBInstance/SecurityGroup/from RdsProxyDBInstanceRdsProxyproxyProxySecurityGroupEB245284:3306",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::SecurityGroupIngress",
+                      "aws:cdk:cloudformation:props": {
+                        "ipProtocol": "tcp",
+                        "description": "allow db connection",
+                        "fromPort": 3306,
+                        "groupId": {
+                          "Fn::GetAtt": [
+                            "DBInstanceSecurityGroup8BE42C36",
+                            "GroupId"
+                          ]
+                        },
+                        "sourceSecurityGroupId": {
+                          "Fn::GetAtt": [
+                            "DBInstanceRdsProxyproxyProxySecurityGroupCC1FF042",
+                            "GroupId"
+                          ]
+                        },
+                        "toPort": 3306
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-ec2.CfnSecurityGroupIngress",
+                      "version": "1.142.0"
+                    }
+                  },
+                  "from RdsProxyrdsProxyHandlerSecurityGroup2D1BEBB5:3306": {
+                    "id": "from RdsProxyrdsProxyHandlerSecurityGroup2D1BEBB5:3306",
+                    "path": "RdsProxy/DBInstance/SecurityGroup/from RdsProxyrdsProxyHandlerSecurityGroup2D1BEBB5:3306",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::SecurityGroupIngress",
+                      "aws:cdk:cloudformation:props": {
+                        "ipProtocol": "tcp",
+                        "description": "allow lambda connection",
+                        "fromPort": 3306,
+                        "groupId": {
+                          "Fn::GetAtt": [
+                            "DBInstanceSecurityGroup8BE42C36",
+                            "GroupId"
+                          ]
+                        },
+                        "sourceSecurityGroupId": {
+                          "Fn::GetAtt": [
+                            "rdsProxyHandlerSecurityGroup6C514F99",
+                            "GroupId"
+                          ]
+                        },
+                        "toPort": 3306
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-ec2.CfnSecurityGroupIngress",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-ec2.SecurityGroup",
+                  "version": "1.142.0"
+                }
+              },
               "Resource": {
                 "id": "Resource",
                 "path": "RdsProxy/DBInstance/Resource",
@@ -17717,7 +17683,7 @@
                     "vpcSecurityGroups": [
                       {
                         "Fn::GetAtt": [
-                          "ProxytoDBConnectionC580BD64",
+                          "DBInstanceSecurityGroup8BE42C36",
                           "GroupId"
                         ]
                       }
@@ -17812,6 +17778,40 @@
                       "version": "1.142.0"
                     }
                   },
+                  "ProxySecurityGroup": {
+                    "id": "ProxySecurityGroup",
+                    "path": "RdsProxy/DBInstance/RdsProxy-proxy/ProxySecurityGroup",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "RdsProxy/DBInstance/RdsProxy-proxy/ProxySecurityGroup/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::EC2::SecurityGroup",
+                          "aws:cdk:cloudformation:props": {
+                            "groupDescription": "SecurityGroup for Database Proxy",
+                            "securityGroupEgress": [
+                              {
+                                "cidrIp": "0.0.0.0/0",
+                                "description": "Allow all outbound traffic by default",
+                                "ipProtocol": "-1"
+                              }
+                            ],
+                            "vpcId": {
+                              "Ref": "Vpc8378EB38"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-ec2.CfnSecurityGroup",
+                          "version": "1.142.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-ec2.SecurityGroup",
+                      "version": "1.142.0"
+                    }
+                  },
                   "Resource": {
                     "id": "Resource",
                     "path": "RdsProxy/DBInstance/RdsProxy-proxy/Resource",
@@ -17848,7 +17848,7 @@
                         "vpcSecurityGroupIds": [
                           {
                             "Fn::GetAtt": [
-                              "ProxytoDBConnectionC580BD64",
+                              "DBInstanceRdsProxyproxyProxySecurityGroupCC1FF042",
                               "GroupId"
                             ]
                           }
@@ -18030,6 +18030,40 @@
                   "version": "1.142.0"
                 }
               },
+              "SecurityGroup": {
+                "id": "SecurityGroup",
+                "path": "RdsProxy/rdsProxyHandler/SecurityGroup",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "RdsProxy/rdsProxyHandler/SecurityGroup/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::SecurityGroup",
+                      "aws:cdk:cloudformation:props": {
+                        "groupDescription": "Automatic security group for Lambda Function RdsProxyrdsProxyHandler185B36A0",
+                        "securityGroupEgress": [
+                          {
+                            "cidrIp": "0.0.0.0/0",
+                            "description": "Allow all outbound traffic by default",
+                            "ipProtocol": "-1"
+                          }
+                        ],
+                        "vpcId": {
+                          "Ref": "Vpc8378EB38"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-ec2.CfnSecurityGroup",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-ec2.SecurityGroup",
+                  "version": "1.142.0"
+                }
+              },
               "Resource": {
                 "id": "Resource",
                 "path": "RdsProxy/rdsProxyHandler/Resource",
@@ -18105,7 +18139,7 @@
                       "securityGroupIds": [
                         {
                           "Fn::GetAtt": [
-                            "LambdatoRDSProxyConnectionB1057E7D",
+                            "rdsProxyHandlerSecurityGroup6C514F99",
                             "GroupId"
                           ]
                         }

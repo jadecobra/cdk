@@ -12,25 +12,17 @@ from aws_cdk import (
 
 class TheRdsProxyStack(cdk.Stack):
 
-    @staticmethod
-    def rds_port():
-        return ec2.Port.tcp(3306)
-
     def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         vpc = ec2.Vpc(self, 'Vpc', max_azs=2)
 
-        lambda_to_proxy_group = ec2.SecurityGroup(self, 'Lambda to RDS Proxy Connection', vpc=vpc)
-
-        db_connection_group = ec2.SecurityGroup(self, 'Proxy to DB Connection', vpc=vpc)
-
-        db_connection_group.connections.allow_from(db_connection_group, self.rds_port(), 'allow db connection')
-        db_connection_group.connections.allow_from(lambda_to_proxy_group, self.rds_port(), 'allow lambda connection')
+        # lambda_to_proxy_group = ec2.SecurityGroup(self, 'Lambda to RDS Proxy Connection', vpc=vpc)
+        # db_connection_group = ec2.SecurityGroup(self, 'Proxy to DB Connection', vpc=vpc)
 
         db_credentials_secret = secrets.Secret(
             self, 'DBCredentialsSecret',
-            secret_name=id+'-rds-credentials',
+            secret_name=f'{id}-rds-credentials',
             generate_secret_string=secrets.SecretStringGenerator(
                 secret_string_template="{\"username\":\"syscdk\"}",
                 exclude_punctuation=True,
@@ -45,19 +37,19 @@ class TheRdsProxyStack(cdk.Stack):
             string_value=db_credentials_secret.secret_arn
         )
 
-        # MySQL DB Instance (delete protection turned off because pattern is for learning.)
-        # re-enable delete protection for a real implementation
         rds_instance = rds.DatabaseInstance(
             self, 'DBInstance',
             engine=rds.DatabaseInstanceEngine.mysql(
-                version=rds.MysqlEngineVersion.VER_5_7_30),
+                version=rds.MysqlEngineVersion.VER_5_7_30
+            ),
             credentials=rds.Credentials.from_secret(db_credentials_secret),
-            instance_type=
-            ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE2, ec2.InstanceSize.SMALL),
+            instance_type=ec2.InstanceType.of(
+                ec2.InstanceClass.BURSTABLE2,
+                ec2.InstanceSize.SMALL
+            ),
             vpc=vpc,
             removal_policy=cdk.RemovalPolicy.DESTROY,
             deletion_protection=False,
-            security_groups=[db_connection_group]
         )
 
         # Create an RDS proxy
@@ -66,7 +58,6 @@ class TheRdsProxyStack(cdk.Stack):
             secrets=[db_credentials_secret],
             debug_logging=True,
             vpc=vpc,
-            security_groups=[db_connection_group]
         )
 
         # Workaround for bug where TargetGroupName is not set but required
@@ -79,7 +70,6 @@ class TheRdsProxyStack(cdk.Stack):
             code=_lambda.Code.from_asset('lambda_functions/rds'),
             handler='rds.handler',
             vpc=vpc,
-            security_groups=[lambda_to_proxy_group],
             environment={
                 "PROXY_ENDPOINT": proxy.endpoint,
                 "RDS_SECRET_NAME": f'{id}-rds-credentials'
@@ -87,6 +77,12 @@ class TheRdsProxyStack(cdk.Stack):
         )
 
         db_credentials_secret.grant_read(rds_lambda)
+
+        for security_group, description in (
+            (proxy, 'allow db connection'),
+            (rds_lambda, 'allow lambda connection'),
+        ):
+            rds_instance.connections.allow_from(security_group, ec2.Port.tcp(3306), description=description)
 
         # defines an API Gateway Http API resource backed by our "dynamoLambda" function.
         api = api_gw.HttpApi(
