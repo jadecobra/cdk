@@ -16,24 +16,13 @@ class TheRdsProxyStack(cdk.Stack):
         super().__init__(scope, id, **kwargs)
 
         vpc = ec2.Vpc(self, 'Vpc', max_azs=2)
-
-        # db_credentials_secret = secrets.Secret(
-        #     self, 'DBCredentialsSecret',
-        #     secret_name=f'{id}-rds-credentials',
-        #     generate_secret_string=secrets.SecretStringGenerator(
-        #         secret_string_template="{\"username\":\"syscdk\"}",
-        #         exclude_punctuation=True,
-        #         include_space=False,
-        #         generate_string_key="password"
-        #     )
-        # )
         db_credentials_secret = self.create_credentials_secret(id)
-
-        ssm.StringParameter(
-            self, 'DBCredentialsArn',
-            parameter_name='rds-credentials-arn',
-            string_value=db_credentials_secret.secret_arn
-        )
+        self.create_parameter_store_for_db_credentials(db_credentials_secret.secret_arn)
+        # ssm.StringParameter(
+        #     self, 'DBCredentialsArn',
+        #     parameter_name='rds-credentials-arn',
+        #     string_value=db_credentials_secret.secret_arn
+        # )
 
         rds_instance = rds.DatabaseInstance(
             self, 'DBInstance',
@@ -100,4 +89,11 @@ class TheRdsProxyStack(cdk.Stack):
                 include_space=False,
                 generate_string_key="password"
             )
+        )
+
+    def create_parameter_store_for_db_credentials(self, db_credentials_arn):
+        return ssm.StringParameter(
+            self, 'DBCredentialsArn',
+            parameter_name='rds-credentials-arn',
+            string_value=db_credentials_arn
         )
