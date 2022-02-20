@@ -15,16 +15,13 @@ class TheRdsProxyStack(cdk.Stack):
     def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        # RDS needs to be setup in a VPC
         vpc = ec2.Vpc(self, 'Vpc', max_azs=2)
 
-        # We need this security group to add an ingress rule and allow our lambda to query the proxy
         lambda_to_proxy_group = ec2.SecurityGroup(self, 'Lambda to RDS Proxy Connection', vpc=vpc)
 
-        # We need this security group to allow our proxy to query our MySQL Instance
         db_connection_group = ec2.SecurityGroup(self, 'Proxy to DB Connection', vpc=vpc)
-        db_connection_group.add_ingress_rule(db_connection_group,ec2.Port.tcp(3306), 'allow db connection')
-        db_connection_group.add_ingress_rule(lambda_to_proxy_group, ec2.Port.tcp(3306), 'allow lambda connection')
+        db_connection_group.connections.allow_from(db_connection_group, ec2.Port.tcp(3306), 'allow db connection')
+        db_connection_group.connections.allow_from(lambda_to_proxy_group, ec2.Port.tcp(3306), 'allow lambda connection')
 
         db_credentials_secret = secrets.Secret(
             self, 'DBCredentialsSecret',
