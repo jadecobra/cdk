@@ -17,19 +17,17 @@ class TheRdsProxyStack(cdk.Stack):
 
         vpc = ec2.Vpc(self, 'Vpc', max_azs=2)
 
-        # lambda_to_proxy_group = ec2.SecurityGroup(self, 'Lambda to RDS Proxy Connection', vpc=vpc)
-        # db_connection_group = ec2.SecurityGroup(self, 'Proxy to DB Connection', vpc=vpc)
-
-        db_credentials_secret = secrets.Secret(
-            self, 'DBCredentialsSecret',
-            secret_name=f'{id}-rds-credentials',
-            generate_secret_string=secrets.SecretStringGenerator(
-                secret_string_template="{\"username\":\"syscdk\"}",
-                exclude_punctuation=True,
-                include_space=False,
-                generate_string_key="password"
-            )
-        )
+        # db_credentials_secret = secrets.Secret(
+        #     self, 'DBCredentialsSecret',
+        #     secret_name=f'{id}-rds-credentials',
+        #     generate_secret_string=secrets.SecretStringGenerator(
+        #         secret_string_template="{\"username\":\"syscdk\"}",
+        #         exclude_punctuation=True,
+        #         include_space=False,
+        #         generate_string_key="password"
+        #     )
+        # )
+        db_credentials_secret = self.create_credentials_secret(id)
 
         ssm.StringParameter(
             self, 'DBCredentialsArn',
@@ -91,3 +89,15 @@ class TheRdsProxyStack(cdk.Stack):
         )
 
         cdk.CfnOutput(self, 'HTTP API Url', value=api.url);
+
+    def create_credentials_secret(self, id):
+        return secrets.Secret(
+            self, 'DBCredentialsSecret',
+            secret_name=f'{id}-rds-credentials',
+            generate_secret_string=secrets.SecretStringGenerator(
+                secret_string_template="{\"username\":\"syscdk\"}",
+                exclude_punctuation=True,
+                include_space=False,
+                generate_string_key="password"
+            )
+        )
