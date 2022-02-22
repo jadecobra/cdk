@@ -833,7 +833,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": {
-            "Ref": "AssetParameters6c69f421eddea7103620a033e97ec6707564015818ed8697f42b5eda56d6dbdbS3BucketE0DD5E5D"
+            "Ref": "AssetParametersdf9d4306122f9e7e0d4570de124540cd9611947ed1339b5f89a450d1be3eca8aS3Bucket0CAC7EA4"
           },
           "S3Key": {
             "Fn::Join": [
@@ -846,7 +846,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters6c69f421eddea7103620a033e97ec6707564015818ed8697f42b5eda56d6dbdbS3VersionKeyEE69A8DA"
+                          "Ref": "AssetParametersdf9d4306122f9e7e0d4570de124540cd9611947ed1339b5f89a450d1be3eca8aS3VersionKey86080CCE"
                         }
                       ]
                     }
@@ -859,7 +859,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters6c69f421eddea7103620a033e97ec6707564015818ed8697f42b5eda56d6dbdbS3VersionKeyEE69A8DA"
+                          "Ref": "AssetParametersdf9d4306122f9e7e0d4570de124540cd9611947ed1339b5f89a450d1be3eca8aS3VersionKey86080CCE"
                         }
                       ]
                     }
@@ -883,7 +883,7 @@
                 "Endpoint"
               ]
             },
-            "RDS_SECRET_NAME": "RdsProxy-rds-credentials"
+            "RDS_SECRET_NAME": "RdsProxy-rds-credentialsDB_NAME"
           }
         },
         "Handler": "rds.handler",
@@ -1230,17 +1230,17 @@
       "Type": "String",
       "Description": "Artifact hash for asset \"d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81\""
     },
-    "AssetParameters6c69f421eddea7103620a033e97ec6707564015818ed8697f42b5eda56d6dbdbS3BucketE0DD5E5D": {
+    "AssetParametersdf9d4306122f9e7e0d4570de124540cd9611947ed1339b5f89a450d1be3eca8aS3Bucket0CAC7EA4": {
       "Type": "String",
-      "Description": "S3 bucket for asset \"6c69f421eddea7103620a033e97ec6707564015818ed8697f42b5eda56d6dbdb\""
+      "Description": "S3 bucket for asset \"df9d4306122f9e7e0d4570de124540cd9611947ed1339b5f89a450d1be3eca8a\""
     },
-    "AssetParameters6c69f421eddea7103620a033e97ec6707564015818ed8697f42b5eda56d6dbdbS3VersionKeyEE69A8DA": {
+    "AssetParametersdf9d4306122f9e7e0d4570de124540cd9611947ed1339b5f89a450d1be3eca8aS3VersionKey86080CCE": {
       "Type": "String",
-      "Description": "S3 key for asset version \"6c69f421eddea7103620a033e97ec6707564015818ed8697f42b5eda56d6dbdb\""
+      "Description": "S3 key for asset version \"df9d4306122f9e7e0d4570de124540cd9611947ed1339b5f89a450d1be3eca8a\""
     },
-    "AssetParameters6c69f421eddea7103620a033e97ec6707564015818ed8697f42b5eda56d6dbdbArtifactHash64F8B30C": {
+    "AssetParametersdf9d4306122f9e7e0d4570de124540cd9611947ed1339b5f89a450d1be3eca8aArtifactHash188B92C4": {
       "Type": "String",
-      "Description": "Artifact hash for asset \"6c69f421eddea7103620a033e97ec6707564015818ed8697f42b5eda56d6dbdb\""
+      "Description": "Artifact hash for asset \"df9d4306122f9e7e0d4570de124540cd9611947ed1339b5f89a450d1be3eca8a\""
     }
   },
   "Outputs": {

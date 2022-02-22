@@ -36,7 +36,7 @@ class TheRdsProxyStack(cdk.Stack):
             vpc=vpc,
             environment_variables={
                 "PROXY_ENDPOINT": rds_proxy.endpoint,
-                "RDS_SECRET_NAME": f'{id}-rds-credentials'
+                "RDS_SECRET_NAME": f'{id}-rds-credentials',
             }
         )
 

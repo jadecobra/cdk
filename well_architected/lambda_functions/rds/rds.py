@@ -1,104 +1,79 @@
-"use strict";
-const AWS = require('aws-sdk');
-AWS.config.update({ region: 'us-east-1' });
-var client = new AWS.SecretsManager({
-    region: 'us-east-1'
-});
-var mysql = require('mysql');
-const fs = require('fs');
+import boto3
+import pymysql
+import os
+import json
+import logging
+import sys
 
-exports.handler = async function (event) {
-    console.log("request:", JSON.stringify(event, undefined, 2));
-    console.log(`Getting secret for ${process.env.RDS_SECRET_NAME}`);
-    // All requests get routed to this function, when opened via browser it looks for a favicon.
-    if (event.rawPath === '/favicon.ico') {
-        return sendRes(404, 'no favicon here');
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+
+secrets_manager = boto3.client('secretsmanager')
+
+def response(status=200, body=None):
+    return {
+        'statusCode': status,
+        'headers': {"Content-Type": "text/html"},
+        'body': json.dumps(body) if isinstance(body, dict) else body
     }
-    // retrieve the username and password for MySQL from secrets manager
-    const secret = await client.getSecretValue({ SecretId: process.env.RDS_SECRET_NAME }).promise();
-    let { username, password } = JSON.parse(secret.SecretString);
-    process.env.PROXY_ENDPOINT;
-    // Important to note that the ssl cert is not the standard RDS cert.
-    // https://www.amazontrust.com/repository/AmazonRootCA1.pem
-    var connection = mysql.createConnection({
-        host: process.env.PROXY_ENDPOINT,
-        user: username,
-        password: password,
-        ssl: {
-            ca: fs.readFileSync(__dirname + '/AmazonRootCA1.pem')
-        }
-    });
-    // This may be our first time running this function, setup a MySQL Database
-    await new Promise((resolve, reject) => {
-        connection.query('CREATE DATABASE IF NOT EXISTS cdkpatterns', function (error, results, fields) {
-            if (error)
-                throw error;
-            // connected!
-            resolve('CREATE DATABASES query returned ' + JSON.stringify(results));
-        });
-    }).catch((error) => {
-        return JSON.stringify(error);
-    });
-    connection.destroy();
-    // re-establish a connection to our created cdkpatterns DB
-    connection = mysql.createConnection({
-        host: process.env.PROXY_ENDPOINT,
-        user: username,
-        password: password,
-        database: 'cdkpatterns',
-        ssl: {
-            ca: fs.readFileSync(__dirname + '/AmazonRootCA1.pem')
-        }
-    });
-    // If this is our first execution, create our rds_proxy table inside cdkpatterns
-    await new Promise((resolve, reject) => {
-        connection.query('CREATE TABLE IF NOT EXISTS rds_proxy (id INT AUTO_INCREMENT PRIMARY KEY, url VARCHAR(20))', function (error, results, fields) {
-            if (error)
-                throw error;
-            // connected!
-            resolve('CREATE Table query returned ' + JSON.stringify(results));
-        });
-    }).catch((error) => {
-        return JSON.stringify(error);
-    });
-    // Insert a new record with an auto generated ID and the url you hit on the API Gateway
-    await new Promise((resolve, reject) => {
-        connection.query(`INSERT INTO rds_proxy(url) VALUES ('${event.rawPath}')`, function (error, results, fields) {
-            if (error)
-                throw error;
-            // connected!
-            resolve('INSERT query returned ' + JSON.stringify(results));
-        });
-    }).catch((error) => {
-        return JSON.stringify(error);
-    });
-    // Query for all records in the DB and build up an HTML Table of results
-    let queryResult = await new Promise((resolve, reject) => {
-        connection.query(`SELECT * FROM rds_proxy`, function (error, results, fields) {
-            if (error)
-                throw error;
-            // connected!
-            let tableString = "<table><tr><th>ID</th><th>URL</th></tr>";
-            for (let value of results) {
-                tableString += `<tr><td>${value.id}</td><td>${value.url}</td></tr>`;
-            }
-            tableString += "</table>";
-            resolve('All Current Data in rds_proxy Table (url is whatever url you hit on the HTTP API, try another random url like /hello) ' + tableString);
-        });
-    }).catch((error) => {
-        return JSON.stringify(error);
-    });
-    connection.destroy();
-    // return response back to upstream caller
-    return sendRes(200, `You have connected with the RDS Proxy! <br /><br /> ${queryResult}`);
-};
-const sendRes = (status, body) => {
-    var response = {
-        statusCode: status,
-        headers: {
-            "Content-Type": "text/html"
-        },
-        body: body
-    };
-    return response;
-};
+
+def execute_sql(connection=None, query=None):
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        connection.commit()
+    connection.commit()
+
+def get_username_and_password(rds_secret_name):
+    print(f'Getting secret for {rds_secret_name}')
+    secret = secrets_manager.get_secret_value(
+        SecretId=rds_secret_name
+    )
+    return secret.get('SecretString')
+
+def create_connection(username=None, password=None):
+    try:
+        return pymysql.connect(
+            host=os.environ['PROXY_ENDPOINT'],
+            user=username,
+            passwd=password,
+        )
+    except pymysql.MySQLError as error:
+        logger.error("ERROR: Unexpected error: Could not connect to MySQL instance.")
+        logger.error(error)
+        sys.exit()
+
+def setup_database(connection=None, event=None):
+    for query in (
+        'CREATE DATABASE IF NOT EXISTS cdkpatterns',
+        'CREATE TABLE IF NOT EXISTS rds_proxy (id INT AUTO_INCREMENT PRIMARY KEY, url VARCHAR(20))',
+        f'INSERT INTO rds_proxy(url) VALUES (\'{event["rawPath"]}\')'
+    ):
+        execute_sql(connection=connection, query=query)
+
+def get_url_queries(connection):
+    with connection.cursor() as cursor:
+        cursor.execute('SELECT * FROM rds_proxy')
+        connection.commit()
+        url_queries = "<table><tr><th>ID</th><th>URL</th></tr>"
+        for row in cursor:
+            url_queries += f'<tr><td>{row["id"]}</td><td>{row["url"]}</td></tr>'
+            url_queries += "</table>";
+            print(f'All Current Data in rds_proxy Table (url is whatever url you hit on the HTTP API, try another random url like /hello) {url_queries}')
+    connection.commit();
+    return url_queries
+
+def handler(event, context):
+    print(f'request: {event}')
+    if event['rawPath'] == '/favicon.ico':
+        return response(404, 'no favicon here')
+
+    connection = create_connection(
+        get_username_and_password(
+            os.environ['RDS_SECRET_NAME']
+        )
+    )
+
+    setup_database(connection=connection, event=event)
+    url_queries = get_url_queries(connection)
+
+    return response(f'You have connected with the RDS Proxy! <br /><br /> {url_queries}')
