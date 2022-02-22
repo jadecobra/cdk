@@ -18196,7 +18196,7 @@
                       "aws:cdk:cloudformation:props": {
                         "code": {
                           "s3Bucket": {
-                            "Ref": "AssetParametersdf9d4306122f9e7e0d4570de124540cd9611947ed1339b5f89a450d1be3eca8aS3Bucket0CAC7EA4"
+                            "Ref": "AssetParametersebaa5a516646dd617a8353badc62cc055feb3f47d2a0d37dc0088aa767713044S3BucketEEF47B94"
                           },
                           "s3Key": {
                             "Fn::Join": [
@@ -18209,7 +18209,7 @@
                                       "Fn::Split": [
                                         "||",
                                         {
-                                          "Ref": "AssetParametersdf9d4306122f9e7e0d4570de124540cd9611947ed1339b5f89a450d1be3eca8aS3VersionKey86080CCE"
+                                          "Ref": "AssetParametersebaa5a516646dd617a8353badc62cc055feb3f47d2a0d37dc0088aa767713044S3VersionKey4E0C7E23"
                                         }
                                       ]
                                     }
@@ -18222,7 +18222,7 @@
                                       "Fn::Split": [
                                         "||",
                                         {
-                                          "Ref": "AssetParametersdf9d4306122f9e7e0d4570de124540cd9611947ed1339b5f89a450d1be3eca8aS3VersionKey86080CCE"
+                                          "Ref": "AssetParametersebaa5a516646dd617a8353badc62cc055feb3f47d2a0d37dc0088aa767713044S3VersionKey4E0C7E23"
                                         }
                                       ]
                                     }
@@ -18246,7 +18246,7 @@
                                 "Endpoint"
                               ]
                             },
-                            "RDS_SECRET_NAME": "RdsProxy-rds-credentialsDB_NAME"
+                            "RDS_SECRET_NAME": "RdsProxy-rds-credentials"
                           }
                         },
                         "handler": "rds.handler",
@@ -18611,13 +18611,13 @@
                   "version": "1.142.0"
                 }
               },
-              "df9d4306122f9e7e0d4570de124540cd9611947ed1339b5f89a450d1be3eca8a": {
-                "id": "df9d4306122f9e7e0d4570de124540cd9611947ed1339b5f89a450d1be3eca8a",
-                "path": "RdsProxy/AssetParameters/df9d4306122f9e7e0d4570de124540cd9611947ed1339b5f89a450d1be3eca8a",
+              "ebaa5a516646dd617a8353badc62cc055feb3f47d2a0d37dc0088aa767713044": {
+                "id": "ebaa5a516646dd617a8353badc62cc055feb3f47d2a0d37dc0088aa767713044",
+                "path": "RdsProxy/AssetParameters/ebaa5a516646dd617a8353badc62cc055feb3f47d2a0d37dc0088aa767713044",
                 "children": {
                   "S3Bucket": {
                     "id": "S3Bucket",
-                    "path": "RdsProxy/AssetParameters/df9d4306122f9e7e0d4570de124540cd9611947ed1339b5f89a450d1be3eca8a/S3Bucket",
+                    "path": "RdsProxy/AssetParameters/ebaa5a516646dd617a8353badc62cc055feb3f47d2a0d37dc0088aa767713044/S3Bucket",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -18625,7 +18625,7 @@
                   },
                   "S3VersionKey": {
                     "id": "S3VersionKey",
-                    "path": "RdsProxy/AssetParameters/df9d4306122f9e7e0d4570de124540cd9611947ed1339b5f89a450d1be3eca8a/S3VersionKey",
+                    "path": "RdsProxy/AssetParameters/ebaa5a516646dd617a8353badc62cc055feb3f47d2a0d37dc0088aa767713044/S3VersionKey",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -18633,7 +18633,7 @@
                   },
                   "ArtifactHash": {
                     "id": "ArtifactHash",
-                    "path": "RdsProxy/AssetParameters/df9d4306122f9e7e0d4570de124540cd9611947ed1339b5f89a450d1be3eca8a/ArtifactHash",
+                    "path": "RdsProxy/AssetParameters/ebaa5a516646dd617a8353badc62cc055feb3f47d2a0d37dc0088aa767713044/ArtifactHash",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
