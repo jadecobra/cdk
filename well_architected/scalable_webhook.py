@@ -6,6 +6,7 @@ from aws_cdk import (
     aws_sqs as sqs,
     core as cdk
 )
+import lambda_function
 
 
 class ScalableWebhook(cdk.Stack):
@@ -51,6 +52,11 @@ class ScalableWebhook(cdk.Stack):
         )
 
     def create_lambda_function(self, environment_variables=None, function_name=None, concurrent_executions=None):
+        return lambda_function.create_python_lambda_function(
+            self, function_name=function_name,
+            environment_variables=environment_variables,
+            concurrent_executions=concurrent_executions
+        )
         return aws_lambda.Function(
             self, function_name,
             runtime=aws_lambda.Runtime.NODEJS_12_X,

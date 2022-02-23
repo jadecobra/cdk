@@ -9,18 +9,20 @@ class LambdaFunctionConstruct(WellArchitectedFrameworkConstruct):
     def __init__(self, scope: Construct, id: str,
         function_name=None, environment_variables=None,
         error_topic:ITopic=None, layers:list[str]=None,
+        concurrent_executions=None,
         duration=60, vpc=None,
         **kwargs) -> None:
         super().__init__(scope, id, error_topic=error_topic, **kwargs)
         self.lambda_function = Function(
-            self, id,
-            runtime=Runtime.PYTHON_3_8,
+            self, id, # can we use id as function_name
+            runtime=Runtime.PYTHON_3_8, # update to 3_9
             handler=f'{function_name}.handler',
             code=Code.from_asset(f"lambda_functions/{function_name}"),
             timeout=Duration.seconds(duration),
             tracing=Tracing.ACTIVE,
             layers=self.create_layers(layers),
             vpc=vpc,
+            reserved_concurrent_executions=concurrent_executions,
             environment=environment_variables,
         )
         self.create_2_percent_error_alarm()
@@ -139,6 +141,7 @@ def create_python_lambda_function(
         stack,
         function_name=None, environment_variables=None,
         duration=60, error_topic=None, vpc=None,
+        concurrent_executions=None,
     ):
     return LambdaFunctionConstruct(
         stack, function_name,
@@ -147,4 +150,5 @@ def create_python_lambda_function(
         duration=duration,
         error_topic=error_topic,
         vpc=vpc,
+        concurrent_executions=concurrent_executions,
     ).lambda_function
