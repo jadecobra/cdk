@@ -25,21 +25,19 @@ class ScalableWebhook(cdk.Stack):
         queue = sqs.Queue(self, 'RDSPublishQueue', visibility_timeout=cdk.Duration.seconds(300))
 
         # defines an AWS  Lambda resource to publish to our sqs_queue
-        publisher = aws_lambda.Function(
-            self, "SQSPublishLambdaHandler",
-            runtime=aws_lambda.Runtime.NODEJS_12_X,
-            handler="lambda.handler",
-            code=aws_lambda.Code.from_asset("lambda_functions/publish"),
-            environment={
-                'queueURL': queue.queue_url
-            }
-        )
-        publisher = aws_lambda.Function(
-            self, "SQSPublishLambdaHandler",
-            runtime=aws_lambda.Runtime.NODEJS_12_X,
-            handler="lambda.handler",
-            code=aws_lambda.Code.from_asset("lambda_functions/publish"),
-            environment={
+        # publisher = aws_lambda.Function(
+        #     self, "SQSPublishLambdaHandler",
+        #     runtime=aws_lambda.Runtime.NODEJS_12_X,
+        #     handler="lambda.handler",
+        #     code=aws_lambda.Code.from_asset("lambda_functions/publish"),
+        #     environment={
+        #         'queueURL': queue.queue_url
+        #     }
+        # )
+        publisher = self.create_lambda_function(
+            stack_name="SQSPublishLambdaHandler",
+            function_name='publish',
+            environment_variables={
                 'queueURL': queue.queue_url
             }
         )
