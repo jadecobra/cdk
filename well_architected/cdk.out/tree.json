@@ -18911,17 +18911,17 @@
               "version": "1.142.0"
             }
           },
-          "SQSPublishLambdaHandler": {
-            "id": "SQSPublishLambdaHandler",
-            "path": "ScalableWebhook/SQSPublishLambdaHandler",
+          "publish": {
+            "id": "publish",
+            "path": "ScalableWebhook/publish",
             "children": {
               "ServiceRole": {
                 "id": "ServiceRole",
-                "path": "ScalableWebhook/SQSPublishLambdaHandler/ServiceRole",
+                "path": "ScalableWebhook/publish/ServiceRole",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "ScalableWebhook/SQSPublishLambdaHandler/ServiceRole/Resource",
+                    "path": "ScalableWebhook/publish/ServiceRole/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                       "aws:cdk:cloudformation:props": {
@@ -18960,11 +18960,11 @@
                   },
                   "DefaultPolicy": {
                     "id": "DefaultPolicy",
-                    "path": "ScalableWebhook/SQSPublishLambdaHandler/ServiceRole/DefaultPolicy",
+                    "path": "ScalableWebhook/publish/ServiceRole/DefaultPolicy",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "ScalableWebhook/SQSPublishLambdaHandler/ServiceRole/DefaultPolicy/Resource",
+                        "path": "ScalableWebhook/publish/ServiceRole/DefaultPolicy/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
                           "aws:cdk:cloudformation:props": {
@@ -18987,10 +18987,10 @@
                               ],
                               "Version": "2012-10-17"
                             },
-                            "policyName": "SQSPublishLambdaHandlerServiceRoleDefaultPolicy986E25F0",
+                            "policyName": "publishServiceRoleDefaultPolicy1754110B",
                             "roles": [
                               {
-                                "Ref": "SQSPublishLambdaHandlerServiceRole4F9A1044"
+                                "Ref": "publishServiceRoleD6DF777D"
                               }
                             ]
                           }
@@ -19014,11 +19014,11 @@
               },
               "Code": {
                 "id": "Code",
-                "path": "ScalableWebhook/SQSPublishLambdaHandler/Code",
+                "path": "ScalableWebhook/publish/Code",
                 "children": {
                   "Stage": {
                     "id": "Stage",
-                    "path": "ScalableWebhook/SQSPublishLambdaHandler/Code/Stage",
+                    "path": "ScalableWebhook/publish/Code/Stage",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.AssetStaging",
                       "version": "1.142.0"
@@ -19026,7 +19026,7 @@
                   },
                   "AssetBucket": {
                     "id": "AssetBucket",
-                    "path": "ScalableWebhook/SQSPublishLambdaHandler/Code/AssetBucket",
+                    "path": "ScalableWebhook/publish/Code/AssetBucket",
                     "constructInfo": {
                       "fqn": "@aws-cdk/aws-s3.BucketBase",
                       "version": "1.142.0"
@@ -19040,7 +19040,7 @@
               },
               "Resource": {
                 "id": "Resource",
-                "path": "ScalableWebhook/SQSPublishLambdaHandler/Resource",
+                "path": "ScalableWebhook/publish/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
                   "aws:cdk:cloudformation:props": {
@@ -19084,7 +19084,7 @@
                     },
                     "role": {
                       "Fn::GetAtt": [
-                        "SQSPublishLambdaHandlerServiceRole4F9A1044",
+                        "publishServiceRoleD6DF777D",
                         "Arn"
                       ]
                     },
@@ -19188,17 +19188,17 @@
               "version": "1.142.0"
             }
           },
-          "SQSSubscribeLambdaHandler": {
-            "id": "SQSSubscribeLambdaHandler",
-            "path": "ScalableWebhook/SQSSubscribeLambdaHandler",
+          "subscribe": {
+            "id": "subscribe",
+            "path": "ScalableWebhook/subscribe",
             "children": {
               "ServiceRole": {
                 "id": "ServiceRole",
-                "path": "ScalableWebhook/SQSSubscribeLambdaHandler/ServiceRole",
+                "path": "ScalableWebhook/subscribe/ServiceRole",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "ScalableWebhook/SQSSubscribeLambdaHandler/ServiceRole/Resource",
+                    "path": "ScalableWebhook/subscribe/ServiceRole/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                       "aws:cdk:cloudformation:props": {
@@ -19237,11 +19237,11 @@
                   },
                   "DefaultPolicy": {
                     "id": "DefaultPolicy",
-                    "path": "ScalableWebhook/SQSSubscribeLambdaHandler/ServiceRole/DefaultPolicy",
+                    "path": "ScalableWebhook/subscribe/ServiceRole/DefaultPolicy",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "ScalableWebhook/SQSSubscribeLambdaHandler/ServiceRole/DefaultPolicy/Resource",
+                        "path": "ScalableWebhook/subscribe/ServiceRole/DefaultPolicy/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
                           "aws:cdk:cloudformation:props": {
@@ -19293,10 +19293,10 @@
                               ],
                               "Version": "2012-10-17"
                             },
-                            "policyName": "SQSSubscribeLambdaHandlerServiceRoleDefaultPolicy828D90B1",
+                            "policyName": "subscribeServiceRoleDefaultPolicy435421A6",
                             "roles": [
                               {
-                                "Ref": "SQSSubscribeLambdaHandlerServiceRoleB6261F09"
+                                "Ref": "subscribeServiceRole00146D2E"
                               }
                             ]
                           }
@@ -19320,11 +19320,11 @@
               },
               "Code": {
                 "id": "Code",
-                "path": "ScalableWebhook/SQSSubscribeLambdaHandler/Code",
+                "path": "ScalableWebhook/subscribe/Code",
                 "children": {
                   "Stage": {
                     "id": "Stage",
-                    "path": "ScalableWebhook/SQSSubscribeLambdaHandler/Code/Stage",
+                    "path": "ScalableWebhook/subscribe/Code/Stage",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.AssetStaging",
                       "version": "1.142.0"
@@ -19332,7 +19332,7 @@
                   },
                   "AssetBucket": {
                     "id": "AssetBucket",
-                    "path": "ScalableWebhook/SQSSubscribeLambdaHandler/Code/AssetBucket",
+                    "path": "ScalableWebhook/subscribe/Code/AssetBucket",
                     "constructInfo": {
                       "fqn": "@aws-cdk/aws-s3.BucketBase",
                       "version": "1.142.0"
@@ -19346,7 +19346,7 @@
               },
               "Resource": {
                 "id": "Resource",
-                "path": "ScalableWebhook/SQSSubscribeLambdaHandler/Resource",
+                "path": "ScalableWebhook/subscribe/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
                   "aws:cdk:cloudformation:props": {
@@ -19390,7 +19390,7 @@
                     },
                     "role": {
                       "Fn::GetAtt": [
-                        "SQSSubscribeLambdaHandlerServiceRoleB6261F09",
+                        "subscribeServiceRole00146D2E",
                         "Arn"
                       ]
                     },
@@ -19416,16 +19416,16 @@
               },
               "SqsEventSource:ScalableWebhookRDSPublishQueue061A3586": {
                 "id": "SqsEventSource:ScalableWebhookRDSPublishQueue061A3586",
-                "path": "ScalableWebhook/SQSSubscribeLambdaHandler/SqsEventSource:ScalableWebhookRDSPublishQueue061A3586",
+                "path": "ScalableWebhook/subscribe/SqsEventSource:ScalableWebhookRDSPublishQueue061A3586",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "ScalableWebhook/SQSSubscribeLambdaHandler/SqsEventSource:ScalableWebhookRDSPublishQueue061A3586/Resource",
+                    "path": "ScalableWebhook/subscribe/SqsEventSource:ScalableWebhookRDSPublishQueue061A3586/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::Lambda::EventSourceMapping",
                       "aws:cdk:cloudformation:props": {
                         "functionName": {
-                          "Ref": "SQSSubscribeLambdaHandlerBBB58615"
+                          "Ref": "subscribeC7142A6D"
                         },
                         "eventSourceArn": {
                           "Fn::GetAtt": [
@@ -19579,7 +19579,7 @@
                           "Ref": "EndpointEEF1FD8F"
                         },
                         "deploymentId": {
-                          "Ref": "EndpointDeployment318525DAacb68e117f9a0f43deb6d421a2af8776"
+                          "Ref": "EndpointDeployment318525DAebbec115bab0a0b0ce4d19eb610b7feb"
                         },
                         "stageName": "prod"
                       }
@@ -19647,7 +19647,7 @@
                                 "action": "lambda:InvokeFunction",
                                 "functionName": {
                                   "Fn::GetAtt": [
-                                    "SQSPublishLambdaHandler51EE31BE",
+                                    "publish98FFDE07",
                                     "Arn"
                                   ]
                                 },
@@ -19696,7 +19696,7 @@
                                 "action": "lambda:InvokeFunction",
                                 "functionName": {
                                   "Fn::GetAtt": [
-                                    "SQSPublishLambdaHandler51EE31BE",
+                                    "publish98FFDE07",
                                     "Arn"
                                   ]
                                 },
@@ -19763,7 +19763,7 @@
                                         ":lambda:path/2015-03-31/functions/",
                                         {
                                           "Fn::GetAtt": [
-                                            "SQSPublishLambdaHandler51EE31BE",
+                                            "publish98FFDE07",
                                             "Arn"
                                           ]
                                         },
@@ -19805,7 +19805,7 @@
                             "action": "lambda:InvokeFunction",
                             "functionName": {
                               "Fn::GetAtt": [
-                                "SQSPublishLambdaHandler51EE31BE",
+                                "publish98FFDE07",
                                 "Arn"
                               ]
                             },
@@ -19854,7 +19854,7 @@
                             "action": "lambda:InvokeFunction",
                             "functionName": {
                               "Fn::GetAtt": [
-                                "SQSPublishLambdaHandler51EE31BE",
+                                "publish98FFDE07",
                                 "Arn"
                               ]
                             },
@@ -19924,7 +19924,7 @@
                                     ":lambda:path/2015-03-31/functions/",
                                     {
                                       "Fn::GetAtt": [
-                                        "SQSPublishLambdaHandler51EE31BE",
+                                        "publish98FFDE07",
                                         "Arn"
                                       ]
                                     },

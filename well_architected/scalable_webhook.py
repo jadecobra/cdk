@@ -26,7 +26,6 @@ class ScalableWebhook(cdk.Stack):
         )
 
         publisher = self.create_lambda_function(
-            stack_name="SQSPublishLambdaHandler",
             function_name='publish',
             environment_variables={
                 'queueURL': queue.queue_url
@@ -35,7 +34,6 @@ class ScalableWebhook(cdk.Stack):
         queue.grant_send_messages(publisher)
 
         subscriber = self.create_lambda_function(
-            stack_name="SQSSubscribeLambdaHandler",
             function_name='subscribe',
             environment_variables={
                 'queueURL': queue.queue_url,
