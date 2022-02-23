@@ -1,0 +1,716 @@
+{
+  "Resources": {
+    "Messages804FA4EB": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "KeySchema": [
+          {
+            "AttributeName": "id",
+            "KeyType": "HASH"
+          }
+        ],
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "id",
+            "AttributeType": "S"
+          }
+        ],
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 5,
+          "WriteCapacityUnits": 5
+        }
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain"
+    },
+    "RDSPublishQueue2BEA1A7F": {
+      "Type": "AWS::SQS::Queue",
+      "Properties": {
+        "VisibilityTimeout": 300
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete"
+    },
+    "SQSPublishLambdaHandlerServiceRole4F9A1044": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    "SQSPublishLambdaHandlerServiceRoleDefaultPolicy986E25F0": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "sqs:SendMessage",
+                "sqs:GetQueueAttributes",
+                "sqs:GetQueueUrl"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "RDSPublishQueue2BEA1A7F",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "SQSPublishLambdaHandlerServiceRoleDefaultPolicy986E25F0",
+        "Roles": [
+          {
+            "Ref": "SQSPublishLambdaHandlerServiceRole4F9A1044"
+          }
+        ]
+      }
+    },
+    "SQSPublishLambdaHandler51EE31BE": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "AssetParameterse5f7b0a7d4cc8bcbcac30cc412edc814a571a0531433bcfa8a8b8b6c9d257f26S3BucketC1954297"
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParameterse5f7b0a7d4cc8bcbcac30cc412edc814a571a0531433bcfa8a8b8b6c9d257f26S3VersionKeyC85DD7EF"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParameterse5f7b0a7d4cc8bcbcac30cc412edc814a571a0531433bcfa8a8b8b6c9d257f26S3VersionKeyC85DD7EF"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "SQSPublishLambdaHandlerServiceRole4F9A1044",
+            "Arn"
+          ]
+        },
+        "Environment": {
+          "Variables": {
+            "queueURL": {
+              "Ref": "RDSPublishQueue2BEA1A7F"
+            }
+          }
+        },
+        "Handler": "lambda.handler",
+        "Runtime": "nodejs12.x"
+      },
+      "DependsOn": [
+        "SQSPublishLambdaHandlerServiceRoleDefaultPolicy986E25F0",
+        "SQSPublishLambdaHandlerServiceRole4F9A1044"
+      ]
+    },
+    "SQSSubscribeLambdaHandlerServiceRoleB6261F09": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    "SQSSubscribeLambdaHandlerServiceRoleDefaultPolicy828D90B1": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "sqs:ReceiveMessage",
+                "sqs:ChangeMessageVisibility",
+                "sqs:GetQueueUrl",
+                "sqs:DeleteMessage",
+                "sqs:GetQueueAttributes"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "RDSPublishQueue2BEA1A7F",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Action": [
+                "dynamodb:BatchGetItem",
+                "dynamodb:GetRecords",
+                "dynamodb:GetShardIterator",
+                "dynamodb:Query",
+                "dynamodb:GetItem",
+                "dynamodb:Scan",
+                "dynamodb:ConditionCheckItem",
+                "dynamodb:BatchWriteItem",
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem",
+                "dynamodb:DeleteItem"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "Messages804FA4EB",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Ref": "AWS::NoValue"
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "SQSSubscribeLambdaHandlerServiceRoleDefaultPolicy828D90B1",
+        "Roles": [
+          {
+            "Ref": "SQSSubscribeLambdaHandlerServiceRoleB6261F09"
+          }
+        ]
+      }
+    },
+    "SQSSubscribeLambdaHandlerBBB58615": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "AssetParametersa435369f51c4ccebf9e8122595370ec29d4972a380393249d07182d1b560c611S3Bucket60E450A5"
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersa435369f51c4ccebf9e8122595370ec29d4972a380393249d07182d1b560c611S3VersionKeyA63FA7AE"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersa435369f51c4ccebf9e8122595370ec29d4972a380393249d07182d1b560c611S3VersionKeyA63FA7AE"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "SQSSubscribeLambdaHandlerServiceRoleB6261F09",
+            "Arn"
+          ]
+        },
+        "Environment": {
+          "Variables": {
+            "queueURL": {
+              "Ref": "RDSPublishQueue2BEA1A7F"
+            },
+            "tableName": {
+              "Ref": "Messages804FA4EB"
+            }
+          }
+        },
+        "Handler": "lambda.handler",
+        "ReservedConcurrentExecutions": 2,
+        "Runtime": "nodejs12.x"
+      },
+      "DependsOn": [
+        "SQSSubscribeLambdaHandlerServiceRoleDefaultPolicy828D90B1",
+        "SQSSubscribeLambdaHandlerServiceRoleB6261F09"
+      ]
+    },
+    "SQSSubscribeLambdaHandlerSqsEventSourceScalableWebhookRDSPublishQueue061A35860A07B016": {
+      "Type": "AWS::Lambda::EventSourceMapping",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "SQSSubscribeLambdaHandlerBBB58615"
+        },
+        "EventSourceArn": {
+          "Fn::GetAtt": [
+            "RDSPublishQueue2BEA1A7F",
+            "Arn"
+          ]
+        }
+      }
+    },
+    "EndpointEEF1FD8F": {
+      "Type": "AWS::ApiGateway::RestApi",
+      "Properties": {
+        "Name": "Endpoint"
+      }
+    },
+    "EndpointCloudWatchRoleC3C64E0F": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "apigateway.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    "EndpointAccountB8304247": {
+      "Type": "AWS::ApiGateway::Account",
+      "Properties": {
+        "CloudWatchRoleArn": {
+          "Fn::GetAtt": [
+            "EndpointCloudWatchRoleC3C64E0F",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "EndpointEEF1FD8F"
+      ]
+    },
+    "EndpointDeployment318525DAacb68e117f9a0f43deb6d421a2af8776": {
+      "Type": "AWS::ApiGateway::Deployment",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "EndpointEEF1FD8F"
+        },
+        "Description": "Automatically created by the RestApi construct"
+      },
+      "DependsOn": [
+        "EndpointproxyANYC09721C5",
+        "Endpointproxy39E2174E",
+        "EndpointANY485C938B"
+      ]
+    },
+    "EndpointDeploymentStageprodB78BEEA0": {
+      "Type": "AWS::ApiGateway::Stage",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "EndpointEEF1FD8F"
+        },
+        "DeploymentId": {
+          "Ref": "EndpointDeployment318525DAacb68e117f9a0f43deb6d421a2af8776"
+        },
+        "StageName": "prod"
+      },
+      "DependsOn": [
+        "EndpointAccountB8304247"
+      ]
+    },
+    "Endpointproxy39E2174E": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "EndpointEEF1FD8F",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "{proxy+}",
+        "RestApiId": {
+          "Ref": "EndpointEEF1FD8F"
+        }
+      }
+    },
+    "EndpointproxyANYApiPermissionScalableWebhookEndpointD5C0B7EBANYproxy94B27A8C": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "SQSPublishLambdaHandler51EE31BE",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "EndpointEEF1FD8F"
+              },
+              "/",
+              {
+                "Ref": "EndpointDeploymentStageprodB78BEEA0"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "EndpointproxyANYApiPermissionTestScalableWebhookEndpointD5C0B7EBANYproxyE217A1B4": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "SQSPublishLambdaHandler51EE31BE",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "EndpointEEF1FD8F"
+              },
+              "/test-invoke-stage/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "EndpointproxyANYC09721C5": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "ANY",
+        "ResourceId": {
+          "Ref": "Endpointproxy39E2174E"
+        },
+        "RestApiId": {
+          "Ref": "EndpointEEF1FD8F"
+        },
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "SQSPublishLambdaHandler51EE31BE",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        }
+      }
+    },
+    "EndpointANYApiPermissionScalableWebhookEndpointD5C0B7EBANY2FBB004A": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "SQSPublishLambdaHandler51EE31BE",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "EndpointEEF1FD8F"
+              },
+              "/",
+              {
+                "Ref": "EndpointDeploymentStageprodB78BEEA0"
+              },
+              "/*/"
+            ]
+          ]
+        }
+      }
+    },
+    "EndpointANYApiPermissionTestScalableWebhookEndpointD5C0B7EBANYA5965357": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "SQSPublishLambdaHandler51EE31BE",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "EndpointEEF1FD8F"
+              },
+              "/test-invoke-stage/*/"
+            ]
+          ]
+        }
+      }
+    },
+    "EndpointANY485C938B": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "ANY",
+        "ResourceId": {
+          "Fn::GetAtt": [
+            "EndpointEEF1FD8F",
+            "RootResourceId"
+          ]
+        },
+        "RestApiId": {
+          "Ref": "EndpointEEF1FD8F"
+        },
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "SQSPublishLambdaHandler51EE31BE",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        }
+      }
+    }
+  },
+  "Parameters": {
+    "AssetParameterse5f7b0a7d4cc8bcbcac30cc412edc814a571a0531433bcfa8a8b8b6c9d257f26S3BucketC1954297": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"e5f7b0a7d4cc8bcbcac30cc412edc814a571a0531433bcfa8a8b8b6c9d257f26\""
+    },
+    "AssetParameterse5f7b0a7d4cc8bcbcac30cc412edc814a571a0531433bcfa8a8b8b6c9d257f26S3VersionKeyC85DD7EF": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"e5f7b0a7d4cc8bcbcac30cc412edc814a571a0531433bcfa8a8b8b6c9d257f26\""
+    },
+    "AssetParameterse5f7b0a7d4cc8bcbcac30cc412edc814a571a0531433bcfa8a8b8b6c9d257f26ArtifactHashFE70AD89": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"e5f7b0a7d4cc8bcbcac30cc412edc814a571a0531433bcfa8a8b8b6c9d257f26\""
+    },
+    "AssetParametersa435369f51c4ccebf9e8122595370ec29d4972a380393249d07182d1b560c611S3Bucket60E450A5": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"a435369f51c4ccebf9e8122595370ec29d4972a380393249d07182d1b560c611\""
+    },
+    "AssetParametersa435369f51c4ccebf9e8122595370ec29d4972a380393249d07182d1b560c611S3VersionKeyA63FA7AE": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"a435369f51c4ccebf9e8122595370ec29d4972a380393249d07182d1b560c611\""
+    },
+    "AssetParametersa435369f51c4ccebf9e8122595370ec29d4972a380393249d07182d1b560c611ArtifactHash13A2D078": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"a435369f51c4ccebf9e8122595370ec29d4972a380393249d07182d1b560c611\""
+    }
+  },
+  "Outputs": {
+    "Endpoint8024A810": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Ref": "EndpointEEF1FD8F"
+            },
+            ".execute-api.",
+            {
+              "Ref": "AWS::Region"
+            },
+            ".",
+            {
+              "Ref": "AWS::URLSuffix"
+            },
+            "/",
+            {
+              "Ref": "EndpointDeploymentStageprodB78BEEA0"
+            },
+            "/"
+          ]
+        ]
+      }
+    }
+  }
+}
