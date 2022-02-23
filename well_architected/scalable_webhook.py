@@ -26,16 +26,16 @@ class ScalableWebhook(cdk.Stack):
             visibility_timeout=cdk.Duration.seconds(300)
         )
 
-        publisher = self.create_lambda_function(
-            function_name='publisher',
+        publisher = lambda_function.create_python_lambda_function(
+            self, function_name='publisher',
             environment_variables={
                 'queueURL': queue.queue_url
             }
         )
         queue.grant_send_messages(publisher)
 
-        subscriber = self.create_lambda_function(
-            function_name='subscriber',
+        subscriber = lambda_function.create_python_lambda_function(
+            self, function_name='subscriber',
             environment_variables={
                 'queueURL': queue.queue_url,
                 'tableName': database.table_name
@@ -49,19 +49,4 @@ class ScalableWebhook(cdk.Stack):
         api_gw.LambdaRestApi(
             self, 'Endpoint',
             handler=publisher
-        )
-
-    def create_lambda_function(self, environment_variables=None, function_name=None, concurrent_executions=None):
-        return lambda_function.create_python_lambda_function(
-            self, function_name=function_name,
-            environment_variables=environment_variables,
-            concurrent_executions=concurrent_executions
-        )
-        return aws_lambda.Function(
-            self, function_name,
-            runtime=aws_lambda.Runtime.NODEJS_12_X,
-            handler="lambda.handler",
-            code=aws_lambda.Code.from_asset(f"lambda_functions/{function_name}"),
-            reserved_concurrent_executions=concurrent_executions,
-            environment=environment_variables
         )
