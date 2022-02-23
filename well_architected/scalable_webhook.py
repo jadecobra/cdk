@@ -50,7 +50,7 @@ class ScalableWebhook(cdk.Stack):
             handler=publisher
         )
 
-    def create_lambda_function(self, stack_name=None, environment_variables=None, function_name=None, concurrent_executions=None):
+    def create_lambda_function(self, environment_variables=None, function_name=None, concurrent_executions=None):
         return aws_lambda.Function(
             self, function_name,
             runtime=aws_lambda.Runtime.NODEJS_12_X,
