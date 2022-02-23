@@ -20,6 +20,7 @@ import lambda_trilogy.lambda_lith
 import lambda_trilogy.fat_lambda
 import lambda_trilogy.single_purpose_lambda
 import rds_proxy
+import scalable_webhook
 
 
 class WellArchitected(cdk.App):
@@ -54,6 +55,7 @@ class WellArchitected(cdk.App):
         lambda_trilogy.fat_lambda.TheFatLambdaStack(self, "FatLambda")
         lambda_trilogy.single_purpose_lambda.TheSinglePurposeFunctionStack(self, "SinglePurposeLambda")
         rds_proxy.TheRdsProxyStack(self, "RdsProxy")
+        scalable_webhook.ScalableWebhook(self, "ScalableWebhook")
 
     def create_http_api(self):
         self.http_api = LambdaHttpApiGateway(
