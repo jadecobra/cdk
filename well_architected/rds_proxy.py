@@ -11,7 +11,7 @@ from aws_cdk import (
 import lambda_function
 
 
-class TheRdsProxyStack(cdk.Stack):
+class RdsProxy(cdk.Stack):
 
     def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
