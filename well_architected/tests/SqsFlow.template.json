@@ -187,7 +187,7 @@
             "Ref": "sqsawsxraysdkLambdaLayer3F894DB7"
           }
         ],
-        "Runtime": "python3.8",
+        "Runtime": "python3.9",
         "Timeout": 60,
         "TracingConfig": {
           "Mode": "Active"
@@ -607,7 +607,7 @@
             "Ref": "sqssubscribeawsxraysdkLambdaLayerA04517E9"
           }
         ],
-        "Runtime": "python3.8",
+        "Runtime": "python3.9",
         "Timeout": 60,
         "TracingConfig": {
           "Mode": "Active"

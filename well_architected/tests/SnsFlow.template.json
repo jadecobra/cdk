@@ -178,7 +178,7 @@
             "Ref": "snspublishawsxraysdkLambdaLayer2E8A5647"
           }
         ],
-        "Runtime": "python3.8",
+        "Runtime": "python3.9",
         "Timeout": 60,
         "TracingConfig": {
           "Mode": "Active"
@@ -595,7 +595,7 @@
             "Ref": "snssubscribeawsxraysdkLambdaLayerFB9F9B45"
           }
         ],
-        "Runtime": "python3.8",
+        "Runtime": "python3.9",
         "Timeout": 60,
         "TracingConfig": {
           "Mode": "Active"

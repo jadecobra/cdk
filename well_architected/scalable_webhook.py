@@ -32,7 +32,6 @@ class ScalableWebhook(cdk.Stack):
                 'queueURL': queue.queue_url
             }
         )
-        queue.grant_send_messages(publisher)
 
         subscriber = lambda_function.create_python_lambda_function(
             self, function_name='subscriber',
@@ -42,7 +41,10 @@ class ScalableWebhook(cdk.Stack):
             },
             concurrent_executions=2
         )
+
+        queue.grant_send_messages(publisher)
         queue.grant_consume_messages(subscriber)
+
         subscriber.add_event_source(lambda_event.SqsEventSource(queue))
         database.grant_read_write_data(subscriber)
 

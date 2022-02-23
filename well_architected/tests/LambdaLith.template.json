@@ -158,7 +158,7 @@
             "Ref": "lambdalithawsxraysdkLambdaLayer2F0CD194"
           }
         ],
-        "Runtime": "python3.8",
+        "Runtime": "python3.9",
         "Timeout": 60,
         "TracingConfig": {
           "Mode": "Active"

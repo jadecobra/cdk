@@ -15,7 +15,7 @@ class LambdaFunctionConstruct(WellArchitectedFrameworkConstruct):
         super().__init__(scope, id, error_topic=error_topic, **kwargs)
         self.lambda_function = Function(
             self, id, # can we use id as function_name
-            runtime=Runtime.PYTHON_3_8, # update to 3_9
+            runtime=Runtime.PYTHON_3_9,
             handler=f'{function_name}.handler',
             code=Code.from_asset(f"lambda_functions/{function_name}"),
             timeout=Duration.seconds(duration),
@@ -62,7 +62,7 @@ class LambdaFunctionConstruct(WellArchitectedFrameworkConstruct):
         )
 
     def create_lambda_throttled_percentage_metric(self):
-        # note: throttled requests are not counted in total num of invocations
+        # note: throttled requests are not counted in total number of invocations
         return self.create_cloudwatch_math_expression(
             label="throttled requests % in last 30 mins",
             expression="(throttles * 100) / (invocations + throttles)",

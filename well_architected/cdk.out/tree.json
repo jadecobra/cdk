@@ -652,7 +652,7 @@
                             "Ref": "hitcounterawsxraysdkLambdaLayerC2C52DF3"
                           }
                         ],
-                        "runtime": "python3.8",
+                        "runtime": "python3.9",
                         "timeout": 60,
                         "tracingConfig": {
                           "mode": "Active"
@@ -3313,7 +3313,7 @@
                             "Ref": "httpawsxraysdkLambdaLayer26FEA83F"
                           }
                         ],
-                        "runtime": "python3.8",
+                        "runtime": "python3.9",
                         "timeout": 60,
                         "tracingConfig": {
                           "mode": "Active"
@@ -4359,7 +4359,7 @@
                             "Ref": "hitcounterawsxraysdkLambdaLayerC2C52DF3"
                           }
                         ],
-                        "runtime": "python3.8",
+                        "runtime": "python3.9",
                         "timeout": 60,
                         "tracingConfig": {
                           "mode": "Active"
@@ -5135,7 +5135,7 @@
                             "Ref": "snspublishawsxraysdkLambdaLayer2E8A5647"
                           }
                         ],
-                        "runtime": "python3.8",
+                        "runtime": "python3.9",
                         "timeout": 60,
                         "tracingConfig": {
                           "mode": "Active"
@@ -5910,7 +5910,7 @@
                             "Ref": "snssubscribeawsxraysdkLambdaLayerFB9F9B45"
                           }
                         ],
-                        "runtime": "python3.8",
+                        "runtime": "python3.9",
                         "timeout": 60,
                         "tracingConfig": {
                           "mode": "Active"
@@ -6623,7 +6623,7 @@
                             "Ref": "sqsawsxraysdkLambdaLayer3F894DB7"
                           }
                         ],
-                        "runtime": "python3.8",
+                        "runtime": "python3.9",
                         "timeout": 60,
                         "tracingConfig": {
                           "mode": "Active"
@@ -7401,7 +7401,7 @@
                             "Ref": "sqssubscribeawsxraysdkLambdaLayerA04517E9"
                           }
                         ],
-                        "runtime": "python3.8",
+                        "runtime": "python3.9",
                         "timeout": 60,
                         "tracingConfig": {
                           "mode": "Active"
@@ -8366,7 +8366,7 @@
                             "Ref": "webserviceawsxraysdkLambdaLayer9B4551BE"
                           }
                         ],
-                        "runtime": "python3.8",
+                        "runtime": "python3.9",
                         "timeout": 20,
                         "tracingConfig": {
                           "mode": "Active"
@@ -9085,7 +9085,7 @@
                             "Ref": "errorawsxraysdkLambdaLayer7963DA8A"
                           }
                         ],
-                        "runtime": "python3.8",
+                        "runtime": "python3.9",
                         "timeout": 3,
                         "tracingConfig": {
                           "mode": "Active"
@@ -13214,7 +13214,7 @@
                             "Ref": "lambdalithawsxraysdkLambdaLayer2F0CD194"
                           }
                         ],
-                        "runtime": "python3.8",
+                        "runtime": "python3.9",
                         "timeout": 60,
                         "tracingConfig": {
                           "mode": "Active"
@@ -18255,7 +18255,7 @@
                             "Ref": "rdsawsxraysdkLambdaLayer270D45E6"
                           }
                         ],
-                        "runtime": "python3.8",
+                        "runtime": "python3.9",
                         "timeout": 60,
                         "tracingConfig": {
                           "mode": "Active"
@@ -19225,7 +19225,7 @@
                             "Ref": "publisherawsxraysdkLambdaLayer1947B0ED"
                           }
                         ],
-                        "runtime": "python3.8",
+                        "runtime": "python3.9",
                         "timeout": 60,
                         "tracingConfig": {
                           "mode": "Active"
@@ -19984,7 +19984,7 @@
                           }
                         ],
                         "reservedConcurrentExecutions": 2,
-                        "runtime": "python3.8",
+                        "runtime": "python3.9",
                         "timeout": 60,
                         "tracingConfig": {
                           "mode": "Active"

@@ -183,7 +183,7 @@
             "Ref": "hitcounterawsxraysdkLambdaLayerC2C52DF3"
           }
         ],
-        "Runtime": "python3.8",
+        "Runtime": "python3.9",
         "Timeout": 60,
         "TracingConfig": {
           "Mode": "Active"

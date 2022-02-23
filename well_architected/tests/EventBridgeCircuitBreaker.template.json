@@ -400,7 +400,7 @@
             "Ref": "webserviceawsxraysdkLambdaLayer9B4551BE"
           }
         ],
-        "Runtime": "python3.8",
+        "Runtime": "python3.9",
         "Timeout": 20,
         "TracingConfig": {
           "Mode": "Active"
@@ -805,7 +805,7 @@
             "Ref": "errorawsxraysdkLambdaLayer7963DA8A"
           }
         ],
-        "Runtime": "python3.8",
+        "Runtime": "python3.9",
         "Timeout": 3,
         "TracingConfig": {
           "Mode": "Active"
