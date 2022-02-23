@@ -44,16 +44,25 @@ class ScalableWebhook(cdk.Stack):
         queue.grant_send_messages(publisher)
 
         # defines an AWS  Lambda resource to pull from our sqs_queue
-        subscriber = aws_lambda.Function(
-            self, "SQSSubscribeLambdaHandler",
-            runtime=aws_lambda.Runtime.NODEJS_12_X,
-            handler="lambda.handler",
-            code=aws_lambda.Code.from_asset("lambda_functions/subscribe"),
-            environment={
+        # subscriber = aws_lambda.Function(
+        #     self, "SQSSubscribeLambdaHandler",
+        #     runtime=aws_lambda.Runtime.NODEJS_12_X,
+        #     handler="lambda.handler",
+        #     code=aws_lambda.Code.from_asset("lambda_functions/subscribe"),
+        #     environment={
+        #         'queueURL': queue.queue_url,
+        #         'tableName': table.table_name
+        #     },
+        #     reserved_concurrent_executions=2
+        # )
+        subscriber = self.create_lambda_function(
+            stack_name="SQSSubscribeLambdaHandler",
+            function_name='subscribe',
+            environment_variables={
                 'queueURL': queue.queue_url,
                 'tableName': table.table_name
             },
-            reserved_concurrent_executions=2
+            concurrent_executions=2
         )
         queue.grant_consume_messages(subscriber)
         subscriber.add_event_source(lambda_event.SqsEventSource(queue))
@@ -64,11 +73,12 @@ class ScalableWebhook(cdk.Stack):
             handler=publisher
         )
 
-    def create_lambda_function(self, stack_name=None, environment_variables=None, function_name=None):
+    def create_lambda_function(self, stack_name=None, environment_variables=None, function_name=None, concurrent_executions=None):
         return aws_lambda.Function(
             self, stack_name,
             runtime=aws_lambda.Runtime.NODEJS_12_X,
             handler="lambda.handler",
             code=aws_lambda.Code.from_asset(f"lambda_functions/{function_name}"),
+            reserved_concurrent_executions=concurrent_executions,
             environment=environment_variables
         )
