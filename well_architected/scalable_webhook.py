@@ -26,7 +26,7 @@ class ScalableWebhook(cdk.Stack):
         )
 
         publisher = self.create_lambda_function(
-            function_name='publish',
+            function_name='publisher',
             environment_variables={
                 'queueURL': queue.queue_url
             }
@@ -34,7 +34,7 @@ class ScalableWebhook(cdk.Stack):
         queue.grant_send_messages(publisher)
 
         subscriber = self.create_lambda_function(
-            function_name='subscribe',
+            function_name='subscriber',
             environment_variables={
                 'queueURL': queue.queue_url,
                 'tableName': database.table_name

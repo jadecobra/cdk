@@ -31,7 +31,7 @@
       "UpdateReplacePolicy": "Delete",
       "DeletionPolicy": "Delete"
     },
-    "publishServiceRoleD6DF777D": {
+    "publisherServiceRoleBC629118": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -62,7 +62,7 @@
         ]
       }
     },
-    "publishServiceRoleDefaultPolicy1754110B": {
+    "publisherServiceRoleDefaultPolicy94323A13": {
       "Type": "AWS::IAM::Policy",
       "Properties": {
         "PolicyDocument": {
@@ -84,20 +84,20 @@
           ],
           "Version": "2012-10-17"
         },
-        "PolicyName": "publishServiceRoleDefaultPolicy1754110B",
+        "PolicyName": "publisherServiceRoleDefaultPolicy94323A13",
         "Roles": [
           {
-            "Ref": "publishServiceRoleD6DF777D"
+            "Ref": "publisherServiceRoleBC629118"
           }
         ]
       }
     },
-    "publish98FFDE07": {
+    "publisher78DBEDD9": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": {
-            "Ref": "AssetParameterse5f7b0a7d4cc8bcbcac30cc412edc814a571a0531433bcfa8a8b8b6c9d257f26S3BucketC1954297"
+            "Ref": "AssetParameterse252854480c5becf9305270670f4d0bcf5066e71bbd11d462802bdfc8b94e045S3BucketD89628A3"
           },
           "S3Key": {
             "Fn::Join": [
@@ -110,7 +110,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameterse5f7b0a7d4cc8bcbcac30cc412edc814a571a0531433bcfa8a8b8b6c9d257f26S3VersionKeyC85DD7EF"
+                          "Ref": "AssetParameterse252854480c5becf9305270670f4d0bcf5066e71bbd11d462802bdfc8b94e045S3VersionKeyDA7E3BAB"
                         }
                       ]
                     }
@@ -123,7 +123,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameterse5f7b0a7d4cc8bcbcac30cc412edc814a571a0531433bcfa8a8b8b6c9d257f26S3VersionKeyC85DD7EF"
+                          "Ref": "AssetParameterse252854480c5becf9305270670f4d0bcf5066e71bbd11d462802bdfc8b94e045S3VersionKeyDA7E3BAB"
                         }
                       ]
                     }
@@ -135,7 +135,7 @@
         },
         "Role": {
           "Fn::GetAtt": [
-            "publishServiceRoleD6DF777D",
+            "publisherServiceRoleBC629118",
             "Arn"
           ]
         },
@@ -150,11 +150,11 @@
         "Runtime": "nodejs12.x"
       },
       "DependsOn": [
-        "publishServiceRoleDefaultPolicy1754110B",
-        "publishServiceRoleD6DF777D"
+        "publisherServiceRoleDefaultPolicy94323A13",
+        "publisherServiceRoleBC629118"
       ]
     },
-    "subscribeServiceRole00146D2E": {
+    "subscriberServiceRole45799588": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -185,7 +185,7 @@
         ]
       }
     },
-    "subscribeServiceRoleDefaultPolicy435421A6": {
+    "subscriberServiceRoleDefaultPolicy3FDA5789": {
       "Type": "AWS::IAM::Policy",
       "Properties": {
         "PolicyDocument": {
@@ -236,20 +236,20 @@
           ],
           "Version": "2012-10-17"
         },
-        "PolicyName": "subscribeServiceRoleDefaultPolicy435421A6",
+        "PolicyName": "subscriberServiceRoleDefaultPolicy3FDA5789",
         "Roles": [
           {
-            "Ref": "subscribeServiceRole00146D2E"
+            "Ref": "subscriberServiceRole45799588"
           }
         ]
       }
     },
-    "subscribeC7142A6D": {
+    "subscriberEB417E4C": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": {
-            "Ref": "AssetParametersa435369f51c4ccebf9e8122595370ec29d4972a380393249d07182d1b560c611S3Bucket60E450A5"
+            "Ref": "AssetParameters3e865d93112c296658a718620190afade0a186fcc70bb654211fe0492e6cf706S3Bucket60DEE5CE"
           },
           "S3Key": {
             "Fn::Join": [
@@ -262,7 +262,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParametersa435369f51c4ccebf9e8122595370ec29d4972a380393249d07182d1b560c611S3VersionKeyA63FA7AE"
+                          "Ref": "AssetParameters3e865d93112c296658a718620190afade0a186fcc70bb654211fe0492e6cf706S3VersionKeyA3388A2C"
                         }
                       ]
                     }
@@ -275,7 +275,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParametersa435369f51c4ccebf9e8122595370ec29d4972a380393249d07182d1b560c611S3VersionKeyA63FA7AE"
+                          "Ref": "AssetParameters3e865d93112c296658a718620190afade0a186fcc70bb654211fe0492e6cf706S3VersionKeyA3388A2C"
                         }
                       ]
                     }
@@ -287,7 +287,7 @@
         },
         "Role": {
           "Fn::GetAtt": [
-            "subscribeServiceRole00146D2E",
+            "subscriberServiceRole45799588",
             "Arn"
           ]
         },
@@ -306,15 +306,15 @@
         "Runtime": "nodejs12.x"
       },
       "DependsOn": [
-        "subscribeServiceRoleDefaultPolicy435421A6",
-        "subscribeServiceRole00146D2E"
+        "subscriberServiceRoleDefaultPolicy3FDA5789",
+        "subscriberServiceRole45799588"
       ]
     },
-    "subscribeSqsEventSourceScalableWebhookRDSPublishQueue061A3586E8F9C3BE": {
+    "subscriberSqsEventSourceScalableWebhookRDSPublishQueue061A35866A434D8F": {
       "Type": "AWS::Lambda::EventSourceMapping",
       "Properties": {
         "FunctionName": {
-          "Ref": "subscribeC7142A6D"
+          "Ref": "subscriberEB417E4C"
         },
         "EventSourceArn": {
           "Fn::GetAtt": [
@@ -375,7 +375,7 @@
         "EndpointEEF1FD8F"
       ]
     },
-    "EndpointDeployment318525DAebbec115bab0a0b0ce4d19eb610b7feb": {
+    "EndpointDeployment318525DA5b8fc009830529dfce64bfa8085f8c5e": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -396,7 +396,7 @@
           "Ref": "EndpointEEF1FD8F"
         },
         "DeploymentId": {
-          "Ref": "EndpointDeployment318525DAebbec115bab0a0b0ce4d19eb610b7feb"
+          "Ref": "EndpointDeployment318525DA5b8fc009830529dfce64bfa8085f8c5e"
         },
         "StageName": "prod"
       },
@@ -425,7 +425,7 @@
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "publish98FFDE07",
+            "publisher78DBEDD9",
             "Arn"
           ]
         },
@@ -466,7 +466,7 @@
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "publish98FFDE07",
+            "publisher78DBEDD9",
             "Arn"
           ]
         },
@@ -526,7 +526,7 @@
                 ":lambda:path/2015-03-31/functions/",
                 {
                   "Fn::GetAtt": [
-                    "publish98FFDE07",
+                    "publisher78DBEDD9",
                     "Arn"
                   ]
                 },
@@ -543,7 +543,7 @@
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "publish98FFDE07",
+            "publisher78DBEDD9",
             "Arn"
           ]
         },
@@ -584,7 +584,7 @@
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "publish98FFDE07",
+            "publisher78DBEDD9",
             "Arn"
           ]
         },
@@ -647,7 +647,7 @@
                 ":lambda:path/2015-03-31/functions/",
                 {
                   "Fn::GetAtt": [
-                    "publish98FFDE07",
+                    "publisher78DBEDD9",
                     "Arn"
                   ]
                 },
@@ -660,29 +660,29 @@
     }
   },
   "Parameters": {
-    "AssetParameterse5f7b0a7d4cc8bcbcac30cc412edc814a571a0531433bcfa8a8b8b6c9d257f26S3BucketC1954297": {
+    "AssetParameterse252854480c5becf9305270670f4d0bcf5066e71bbd11d462802bdfc8b94e045S3BucketD89628A3": {
       "Type": "String",
-      "Description": "S3 bucket for asset \"e5f7b0a7d4cc8bcbcac30cc412edc814a571a0531433bcfa8a8b8b6c9d257f26\""
+      "Description": "S3 bucket for asset \"e252854480c5becf9305270670f4d0bcf5066e71bbd11d462802bdfc8b94e045\""
     },
-    "AssetParameterse5f7b0a7d4cc8bcbcac30cc412edc814a571a0531433bcfa8a8b8b6c9d257f26S3VersionKeyC85DD7EF": {
+    "AssetParameterse252854480c5becf9305270670f4d0bcf5066e71bbd11d462802bdfc8b94e045S3VersionKeyDA7E3BAB": {
       "Type": "String",
-      "Description": "S3 key for asset version \"e5f7b0a7d4cc8bcbcac30cc412edc814a571a0531433bcfa8a8b8b6c9d257f26\""
+      "Description": "S3 key for asset version \"e252854480c5becf9305270670f4d0bcf5066e71bbd11d462802bdfc8b94e045\""
     },
-    "AssetParameterse5f7b0a7d4cc8bcbcac30cc412edc814a571a0531433bcfa8a8b8b6c9d257f26ArtifactHashFE70AD89": {
+    "AssetParameterse252854480c5becf9305270670f4d0bcf5066e71bbd11d462802bdfc8b94e045ArtifactHashAB0FF2DD": {
       "Type": "String",
-      "Description": "Artifact hash for asset \"e5f7b0a7d4cc8bcbcac30cc412edc814a571a0531433bcfa8a8b8b6c9d257f26\""
+      "Description": "Artifact hash for asset \"e252854480c5becf9305270670f4d0bcf5066e71bbd11d462802bdfc8b94e045\""
     },
-    "AssetParametersa435369f51c4ccebf9e8122595370ec29d4972a380393249d07182d1b560c611S3Bucket60E450A5": {
+    "AssetParameters3e865d93112c296658a718620190afade0a186fcc70bb654211fe0492e6cf706S3Bucket60DEE5CE": {
       "Type": "String",
-      "Description": "S3 bucket for asset \"a435369f51c4ccebf9e8122595370ec29d4972a380393249d07182d1b560c611\""
+      "Description": "S3 bucket for asset \"3e865d93112c296658a718620190afade0a186fcc70bb654211fe0492e6cf706\""
     },
-    "AssetParametersa435369f51c4ccebf9e8122595370ec29d4972a380393249d07182d1b560c611S3VersionKeyA63FA7AE": {
+    "AssetParameters3e865d93112c296658a718620190afade0a186fcc70bb654211fe0492e6cf706S3VersionKeyA3388A2C": {
       "Type": "String",
-      "Description": "S3 key for asset version \"a435369f51c4ccebf9e8122595370ec29d4972a380393249d07182d1b560c611\""
+      "Description": "S3 key for asset version \"3e865d93112c296658a718620190afade0a186fcc70bb654211fe0492e6cf706\""
     },
-    "AssetParametersa435369f51c4ccebf9e8122595370ec29d4972a380393249d07182d1b560c611ArtifactHash13A2D078": {
+    "AssetParameters3e865d93112c296658a718620190afade0a186fcc70bb654211fe0492e6cf706ArtifactHashE582644A": {
       "Type": "String",
-      "Description": "Artifact hash for asset \"a435369f51c4ccebf9e8122595370ec29d4972a380393249d07182d1b560c611\""
+      "Description": "Artifact hash for asset \"3e865d93112c296658a718620190afade0a186fcc70bb654211fe0492e6cf706\""
     }
   },
   "Outputs": {
