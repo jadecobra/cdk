@@ -18196,7 +18196,7 @@
                       "aws:cdk:cloudformation:props": {
                         "code": {
                           "s3Bucket": {
-                            "Ref": "AssetParametersebaa5a516646dd617a8353badc62cc055feb3f47d2a0d37dc0088aa767713044S3BucketEEF47B94"
+                            "Ref": "AssetParametersef6ac2b9601673d31e1e2071a9a1b3f9ab84564c0a952916e86b3444e0efe8d0S3Bucket90873A8D"
                           },
                           "s3Key": {
                             "Fn::Join": [
@@ -18209,7 +18209,7 @@
                                       "Fn::Split": [
                                         "||",
                                         {
-                                          "Ref": "AssetParametersebaa5a516646dd617a8353badc62cc055feb3f47d2a0d37dc0088aa767713044S3VersionKey4E0C7E23"
+                                          "Ref": "AssetParametersef6ac2b9601673d31e1e2071a9a1b3f9ab84564c0a952916e86b3444e0efe8d0S3VersionKeyBB5EBAE6"
                                         }
                                       ]
                                     }
@@ -18222,7 +18222,7 @@
                                       "Fn::Split": [
                                         "||",
                                         {
-                                          "Ref": "AssetParametersebaa5a516646dd617a8353badc62cc055feb3f47d2a0d37dc0088aa767713044S3VersionKey4E0C7E23"
+                                          "Ref": "AssetParametersef6ac2b9601673d31e1e2071a9a1b3f9ab84564c0a952916e86b3444e0efe8d0S3VersionKeyBB5EBAE6"
                                         }
                                       ]
                                     }
@@ -18611,13 +18611,13 @@
                   "version": "1.142.0"
                 }
               },
-              "ebaa5a516646dd617a8353badc62cc055feb3f47d2a0d37dc0088aa767713044": {
-                "id": "ebaa5a516646dd617a8353badc62cc055feb3f47d2a0d37dc0088aa767713044",
-                "path": "RdsProxy/AssetParameters/ebaa5a516646dd617a8353badc62cc055feb3f47d2a0d37dc0088aa767713044",
+              "ef6ac2b9601673d31e1e2071a9a1b3f9ab84564c0a952916e86b3444e0efe8d0": {
+                "id": "ef6ac2b9601673d31e1e2071a9a1b3f9ab84564c0a952916e86b3444e0efe8d0",
+                "path": "RdsProxy/AssetParameters/ef6ac2b9601673d31e1e2071a9a1b3f9ab84564c0a952916e86b3444e0efe8d0",
                 "children": {
                   "S3Bucket": {
                     "id": "S3Bucket",
-                    "path": "RdsProxy/AssetParameters/ebaa5a516646dd617a8353badc62cc055feb3f47d2a0d37dc0088aa767713044/S3Bucket",
+                    "path": "RdsProxy/AssetParameters/ef6ac2b9601673d31e1e2071a9a1b3f9ab84564c0a952916e86b3444e0efe8d0/S3Bucket",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -18625,7 +18625,7 @@
                   },
                   "S3VersionKey": {
                     "id": "S3VersionKey",
-                    "path": "RdsProxy/AssetParameters/ebaa5a516646dd617a8353badc62cc055feb3f47d2a0d37dc0088aa767713044/S3VersionKey",
+                    "path": "RdsProxy/AssetParameters/ef6ac2b9601673d31e1e2071a9a1b3f9ab84564c0a952916e86b3444e0efe8d0/S3VersionKey",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"
@@ -18633,7 +18633,7 @@
                   },
                   "ArtifactHash": {
                     "id": "ArtifactHash",
-                    "path": "RdsProxy/AssetParameters/ebaa5a516646dd617a8353badc62cc055feb3f47d2a0d37dc0088aa767713044/ArtifactHash",
+                    "path": "RdsProxy/AssetParameters/ef6ac2b9601673d31e1e2071a9a1b3f9ab84564c0a952916e86b3444e0efe8d0/ArtifactHash",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.CfnParameter",
                       "version": "1.142.0"

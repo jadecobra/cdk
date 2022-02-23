@@ -22,37 +22,55 @@ class ScalableWebhook(cdk.Stack):
         )
 
         # Queue Setup
-        sqs_queue = sqs.Queue(self, 'RDSPublishQueue', visibility_timeout=cdk.Duration.seconds(300))
+        queue = sqs.Queue(self, 'RDSPublishQueue', visibility_timeout=cdk.Duration.seconds(300))
 
         # defines an AWS  Lambda resource to publish to our sqs_queue
-        sqs_publishaws_lambda = aws_lambda.Function(
+        publisher = aws_lambda.Function(
             self, "SQSPublishLambdaHandler",
             runtime=aws_lambda.Runtime.NODEJS_12_X,
             handler="lambda.handler",
             code=aws_lambda.Code.from_asset("lambda_functions/publish"),
             environment={
-                'queueURL': sqs_queue.queue_url
+                'queueURL': queue.queue_url
             }
         )
-        sqs_queue.grant_send_messages(sqs_publishaws_lambda)
+        publisher = aws_lambda.Function(
+            self, "SQSPublishLambdaHandler",
+            runtime=aws_lambda.Runtime.NODEJS_12_X,
+            handler="lambda.handler",
+            code=aws_lambda.Code.from_asset("lambda_functions/publish"),
+            environment={
+                'queueURL': queue.queue_url
+            }
+        )
+        queue.grant_send_messages(publisher)
 
         # defines an AWS  Lambda resource to pull from our sqs_queue
-        sqs_subscribeaws_lambda = aws_lambda.Function(
+        subscriber = aws_lambda.Function(
             self, "SQSSubscribeLambdaHandler",
             runtime=aws_lambda.Runtime.NODEJS_12_X,
             handler="lambda.handler",
             code=aws_lambda.Code.from_asset("lambda_functions/subscribe"),
             environment={
-                'queueURL': sqs_queue.queue_url,
+                'queueURL': queue.queue_url,
                 'tableName': table.table_name
             },
             reserved_concurrent_executions=2
         )
-        sqs_queue.grant_consume_messages(sqs_subscribeaws_lambda)
-        sqs_subscribeaws_lambda.add_event_source(lambda_event.SqsEventSource(sqs_queue))
-        table.grant_read_write_data(sqs_subscribeaws_lambda)
+        queue.grant_consume_messages(subscriber)
+        subscriber.add_event_source(lambda_event.SqsEventSource(queue))
+        table.grant_read_write_data(subscriber)
 
         api_gw.LambdaRestApi(
             self, 'Endpoint',
-            handler=sqs_publishaws_lambda
+            handler=publisher
+        )
+
+    def create_lambda_function(self, stack_name=None, environment_variables=None, function_name=None):
+        return aws_lambda.Function(
+            self, stack_name,
+            runtime=aws_lambda.Runtime.NODEJS_12_X,
+            handler="lambda.handler",
+            code=aws_lambda.Code.from_asset(f"lambda_functions/{function_name}"),
+            environment=environment_variables
         )
