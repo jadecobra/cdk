@@ -8,6 +8,8 @@ from aws_cdk import (
 import subprocess
 import os
 
+import dynamodb_table
+
 
 class LambdaCircuitBreaker(cdk.Stack):
 
@@ -15,11 +17,17 @@ class LambdaCircuitBreaker(cdk.Stack):
         super().__init__(scope, id, **kwargs)
 
         # DynamoDB Table
-        table = dynamo_db.Table(
+        # table = dynamo_db.Table(
+        #     self, "CircuitBreakerTable",
+        #     partition_key=dynamo_db.Attribute(name="id", type=dynamo_db.AttributeType.STRING),
+        #     removal_policy=cdk.RemovalPolicy.DESTROY
+        # )
+        table = dynamodb_table.DynamoDBTableConstruct(
             self, "CircuitBreakerTable",
-            partition_key=dynamo_db.Attribute(name="id", type=dynamo_db.AttributeType.STRING),
-            removal_policy=cdk.RemovalPolicy.DESTROY
-        )
+            partition_key=dynamo_db.Attribute(
+                name="id", type=dynamo_db.AttributeType.STRING
+            ),
+        ).dynamodb_table
 
         # install node dependencies for lambdas
         # lambda_folder = os.path.dirname(os.path.realpath(__file__)) + "/lambda_functions"
