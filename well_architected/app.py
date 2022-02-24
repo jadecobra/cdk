@@ -21,6 +21,7 @@ import lambda_trilogy.fat_lambda
 import lambda_trilogy.single_purpose_lambda
 import rds_proxy
 import scalable_webhook
+import lambda_circuit_breaker
 
 
 class WellArchitected(cdk.App):
@@ -56,6 +57,7 @@ class WellArchitected(cdk.App):
         lambda_trilogy.single_purpose_lambda.TheSinglePurposeFunctionStack(self, "SinglePurposeLambda")
         rds_proxy.RdsProxy(self, "RdsProxy")
         scalable_webhook.ScalableWebhook(self, "ScalableWebhook")
+        lambda_circuit_breaker.LambdaCircuitBreaker(self, "LambdaCircuitBreaker")
 
     def create_http_api(self):
         self.http_api = LambdaHttpApiGateway(

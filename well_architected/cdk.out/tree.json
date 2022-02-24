@@ -20828,6 +20828,498 @@
           "fqn": "@aws-cdk/core.Stack",
           "version": "1.142.0"
         }
+      },
+      "LambdaCircuitBreaker": {
+        "id": "LambdaCircuitBreaker",
+        "path": "LambdaCircuitBreaker",
+        "children": {
+          "CircuitBreakerTable": {
+            "id": "CircuitBreakerTable",
+            "path": "LambdaCircuitBreaker/CircuitBreakerTable",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "LambdaCircuitBreaker/CircuitBreakerTable/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::DynamoDB::Table",
+                  "aws:cdk:cloudformation:props": {
+                    "keySchema": [
+                      {
+                        "attributeName": "id",
+                        "keyType": "HASH"
+                      }
+                    ],
+                    "attributeDefinitions": [
+                      {
+                        "attributeName": "id",
+                        "attributeType": "S"
+                      }
+                    ],
+                    "provisionedThroughput": {
+                      "readCapacityUnits": 5,
+                      "writeCapacityUnits": 5
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-dynamodb.CfnTable",
+                  "version": "1.142.0"
+                }
+              },
+              "ScalingRole": {
+                "id": "ScalingRole",
+                "path": "LambdaCircuitBreaker/CircuitBreakerTable/ScalingRole",
+                "constructInfo": {
+                  "fqn": "@aws-cdk/core.Resource",
+                  "version": "1.142.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/aws-dynamodb.Table",
+              "version": "1.142.0"
+            }
+          },
+          "UnreliableLambdaHandler": {
+            "id": "UnreliableLambdaHandler",
+            "path": "LambdaCircuitBreaker/UnreliableLambdaHandler",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "LambdaCircuitBreaker/UnreliableLambdaHandler/ServiceRole",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "LambdaCircuitBreaker/UnreliableLambdaHandler/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-iam.CfnRole",
+                      "version": "1.142.0"
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "LambdaCircuitBreaker/UnreliableLambdaHandler/ServiceRole/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "LambdaCircuitBreaker/UnreliableLambdaHandler/ServiceRole/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": [
+                                    "dynamodb:BatchGetItem",
+                                    "dynamodb:GetRecords",
+                                    "dynamodb:GetShardIterator",
+                                    "dynamodb:Query",
+                                    "dynamodb:GetItem",
+                                    "dynamodb:Scan",
+                                    "dynamodb:ConditionCheckItem",
+                                    "dynamodb:BatchWriteItem",
+                                    "dynamodb:PutItem",
+                                    "dynamodb:UpdateItem",
+                                    "dynamodb:DeleteItem"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "CircuitBreakerTable02DAD2B8",
+                                        "Arn"
+                                      ]
+                                    },
+                                    {
+                                      "Ref": "AWS::NoValue"
+                                    }
+                                  ]
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "UnreliableLambdaHandlerServiceRoleDefaultPolicyC00E31E2",
+                            "roles": [
+                              {
+                                "Ref": "UnreliableLambdaHandlerServiceRole955A5CFD"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-iam.CfnPolicy",
+                          "version": "1.142.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-iam.Policy",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-iam.Role",
+                  "version": "1.142.0"
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "LambdaCircuitBreaker/UnreliableLambdaHandler/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "LambdaCircuitBreaker/UnreliableLambdaHandler/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/core.AssetStaging",
+                      "version": "1.142.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "LambdaCircuitBreaker/UnreliableLambdaHandler/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-s3.BucketBase",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-s3-assets.Asset",
+                  "version": "1.142.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "LambdaCircuitBreaker/UnreliableLambdaHandler/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": {
+                        "Ref": "AssetParametersca0aa3ea3f4b245beda72154521823c06475c8b0c60ba16e9969a40a20ce11a5S3Bucket74D892AF"
+                      },
+                      "s3Key": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            {
+                              "Fn::Select": [
+                                0,
+                                {
+                                  "Fn::Split": [
+                                    "||",
+                                    {
+                                      "Ref": "AssetParametersca0aa3ea3f4b245beda72154521823c06475c8b0c60ba16e9969a40a20ce11a5S3VersionKey5D03BD0F"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Fn::Select": [
+                                1,
+                                {
+                                  "Fn::Split": [
+                                    "||",
+                                    {
+                                      "Ref": "AssetParametersca0aa3ea3f4b245beda72154521823c06475c8b0c60ba16e9969a40a20ce11a5S3VersionKey5D03BD0F"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        ]
+                      }
+                    },
+                    "role": {
+                      "Fn::GetAtt": [
+                        "UnreliableLambdaHandlerServiceRole955A5CFD",
+                        "Arn"
+                      ]
+                    },
+                    "environment": {
+                      "variables": {
+                        "CIRCUITBREAKER_TABLE": {
+                          "Ref": "CircuitBreakerTable02DAD2B8"
+                        }
+                      }
+                    },
+                    "handler": "unreliable.handler",
+                    "runtime": "nodejs12.x"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-lambda.CfnFunction",
+                  "version": "1.142.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/aws-lambda.Function",
+              "version": "1.142.0"
+            }
+          },
+          "AssetParameters": {
+            "id": "AssetParameters",
+            "path": "LambdaCircuitBreaker/AssetParameters",
+            "children": {
+              "ca0aa3ea3f4b245beda72154521823c06475c8b0c60ba16e9969a40a20ce11a5": {
+                "id": "ca0aa3ea3f4b245beda72154521823c06475c8b0c60ba16e9969a40a20ce11a5",
+                "path": "LambdaCircuitBreaker/AssetParameters/ca0aa3ea3f4b245beda72154521823c06475c8b0c60ba16e9969a40a20ce11a5",
+                "children": {
+                  "S3Bucket": {
+                    "id": "S3Bucket",
+                    "path": "LambdaCircuitBreaker/AssetParameters/ca0aa3ea3f4b245beda72154521823c06475c8b0c60ba16e9969a40a20ce11a5/S3Bucket",
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/core.CfnParameter",
+                      "version": "1.142.0"
+                    }
+                  },
+                  "S3VersionKey": {
+                    "id": "S3VersionKey",
+                    "path": "LambdaCircuitBreaker/AssetParameters/ca0aa3ea3f4b245beda72154521823c06475c8b0c60ba16e9969a40a20ce11a5/S3VersionKey",
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/core.CfnParameter",
+                      "version": "1.142.0"
+                    }
+                  },
+                  "ArtifactHash": {
+                    "id": "ArtifactHash",
+                    "path": "LambdaCircuitBreaker/AssetParameters/ca0aa3ea3f4b245beda72154521823c06475c8b0c60ba16e9969a40a20ce11a5/ArtifactHash",
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/core.CfnParameter",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/core.Construct",
+                  "version": "1.142.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/core.Construct",
+              "version": "1.142.0"
+            }
+          },
+          "CircuitBreakerGateway": {
+            "id": "CircuitBreakerGateway",
+            "path": "LambdaCircuitBreaker/CircuitBreakerGateway",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "LambdaCircuitBreaker/CircuitBreakerGateway/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::ApiGatewayV2::Api",
+                  "aws:cdk:cloudformation:props": {
+                    "name": "CircuitBreakerGateway",
+                    "protocolType": "HTTP"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-apigatewayv2.CfnApi",
+                  "version": "1.142.0"
+                }
+              },
+              "DefaultRoute": {
+                "id": "DefaultRoute",
+                "path": "LambdaCircuitBreaker/CircuitBreakerGateway/DefaultRoute",
+                "children": {
+                  "HttpLambdaIntegration-Permission": {
+                    "id": "HttpLambdaIntegration-Permission",
+                    "path": "LambdaCircuitBreaker/CircuitBreakerGateway/DefaultRoute/HttpLambdaIntegration-Permission",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                      "aws:cdk:cloudformation:props": {
+                        "action": "lambda:InvokeFunction",
+                        "functionName": {
+                          "Fn::GetAtt": [
+                            "UnreliableLambdaHandlerD4A4DED9",
+                            "Arn"
+                          ]
+                        },
+                        "principal": "apigateway.amazonaws.com",
+                        "sourceArn": {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":execute-api:",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              ":",
+                              {
+                                "Ref": "AWS::AccountId"
+                              },
+                              ":",
+                              {
+                                "Ref": "CircuitBreakerGateway122B123C"
+                              },
+                              "/*/*"
+                            ]
+                          ]
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-lambda.CfnPermission",
+                      "version": "1.142.0"
+                    }
+                  },
+                  "HttpLambdaIntegration": {
+                    "id": "HttpLambdaIntegration",
+                    "path": "LambdaCircuitBreaker/CircuitBreakerGateway/DefaultRoute/HttpLambdaIntegration",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "LambdaCircuitBreaker/CircuitBreakerGateway/DefaultRoute/HttpLambdaIntegration/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::ApiGatewayV2::Integration",
+                          "aws:cdk:cloudformation:props": {
+                            "apiId": {
+                              "Ref": "CircuitBreakerGateway122B123C"
+                            },
+                            "integrationType": "AWS_PROXY",
+                            "integrationUri": {
+                              "Fn::GetAtt": [
+                                "UnreliableLambdaHandlerD4A4DED9",
+                                "Arn"
+                              ]
+                            },
+                            "payloadFormatVersion": "2.0"
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-apigatewayv2.CfnIntegration",
+                          "version": "1.142.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-apigatewayv2.HttpIntegration",
+                      "version": "1.142.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "LambdaCircuitBreaker/CircuitBreakerGateway/DefaultRoute/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::ApiGatewayV2::Route",
+                      "aws:cdk:cloudformation:props": {
+                        "apiId": {
+                          "Ref": "CircuitBreakerGateway122B123C"
+                        },
+                        "routeKey": "$default",
+                        "authorizationType": "NONE",
+                        "target": {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "integrations/",
+                              {
+                                "Ref": "CircuitBreakerGatewayDefaultRouteHttpLambdaIntegrationAAA423E8"
+                              }
+                            ]
+                          ]
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-apigatewayv2.CfnRoute",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-apigatewayv2.HttpRoute",
+                  "version": "1.142.0"
+                }
+              },
+              "DefaultStage": {
+                "id": "DefaultStage",
+                "path": "LambdaCircuitBreaker/CircuitBreakerGateway/DefaultStage",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "LambdaCircuitBreaker/CircuitBreakerGateway/DefaultStage/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::ApiGatewayV2::Stage",
+                      "aws:cdk:cloudformation:props": {
+                        "apiId": {
+                          "Ref": "CircuitBreakerGateway122B123C"
+                        },
+                        "stageName": "$default",
+                        "autoDeploy": true
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-apigatewayv2.CfnStage",
+                      "version": "1.142.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-apigatewayv2.HttpStage",
+                  "version": "1.142.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/aws-apigatewayv2.HttpApi",
+              "version": "1.142.0"
+            }
+          },
+          "HTTP API Url": {
+            "id": "HTTP API Url",
+            "path": "LambdaCircuitBreaker/HTTP API Url",
+            "constructInfo": {
+              "fqn": "@aws-cdk/core.CfnOutput",
+              "version": "1.142.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "@aws-cdk/core.Stack",
+          "version": "1.142.0"
+        }
       }
     },
     "constructInfo": {
