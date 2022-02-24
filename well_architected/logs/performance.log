@@ -14520,3 +14520,16 @@
 2022-02-24 04:21:35.655687::Time taken to synthesize stack: LambdaCircuitBreaker::  3.6525 seconds
 2022-02-24 04:23:09.624105::Time taken to synthesize stack: LambdaCircuitBreaker::  4.1469 seconds
 2022-02-24 04:23:17.423571::Time taken to synthesize stack: LambdaCircuitBreaker::  4.0477 seconds
+2022-02-24 04:24:46.323705::Time taken to synthesize stack: LambdaCircuitBreaker::  4.1862 seconds
+2022-02-24 04:24:49.599516::Time taken to synthesize stack: LambdaHttpApiGateway::  3.2686 seconds
+2022-02-24 04:24:52.693263::Time taken to synthesize stack: LambdaLith::  3.0900 seconds
+2022-02-24 04:24:55.823562::Time taken to synthesize stack: LambdaRestAPIGateway::  3.1244 seconds
+2022-02-24 04:24:58.868090::Time taken to synthesize stack: RdsProxy::  3.0412 seconds
+2022-02-24 04:25:01.767836::Time taken to synthesize stack: ScalableWebhook::  2.8950 seconds
+2022-02-24 04:25:04.660078::Time taken to synthesize stack: SinglePurposeLambda::  2.8878 seconds
+2022-02-24 04:25:07.484585::Time taken to synthesize stack: SnsFlow::  2.8189 seconds
+2022-02-24 04:25:10.587642::Time taken to synthesize stack: SnsRestApi::  3.0992 seconds
+2022-02-24 04:25:13.779193::Time taken to synthesize stack: SNSTopic::  3.1853 seconds
+2022-02-24 04:25:16.613042::Time taken to synthesize stack: SqsFlow::  2.8298 seconds
+2022-02-24 04:25:19.521770::Time taken to synthesize stack: WebApplicationFirewall::  2.9034 seconds
+2022-02-24 04:25:22.384446::Time taken to synthesize stack: XRayTracerSnsFanOutTopic::  2.8592 seconds
