@@ -27,6 +27,7 @@ aws-cdk.aws-iam
 aws-cdk.aws-kinesis
 aws-cdk.aws-kms
 aws-cdk.aws-lambda
+aws-cdk.aws-lambda-destinations
 aws-cdk.aws-logs
 aws-cdk.aws-route53
 aws-cdk.aws-rds
