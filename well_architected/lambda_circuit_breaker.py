@@ -9,6 +9,7 @@ import subprocess
 import os
 
 import dynamodb_table
+import http_api
 
 
 class LambdaCircuitBreaker(cdk.Stack):
@@ -16,12 +17,6 @@ class LambdaCircuitBreaker(cdk.Stack):
     def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        # DynamoDB Table
-        # table = dynamo_db.Table(
-        #     self, "CircuitBreakerTable",
-        #     partition_key=dynamo_db.Attribute(name="id", type=dynamo_db.AttributeType.STRING),
-        #     removal_policy=cdk.RemovalPolicy.DESTROY
-        # )
         table = dynamodb_table.DynamoDBTableConstruct(
             self, "CircuitBreakerTable",
             partition_key=dynamo_db.Attribute(
