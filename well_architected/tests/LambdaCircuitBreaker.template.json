@@ -1,0 +1,292 @@
+{
+  "Resources": {
+    "CircuitBreakerTable02DAD2B8": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "KeySchema": [
+          {
+            "AttributeName": "id",
+            "KeyType": "HASH"
+          }
+        ],
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "id",
+            "AttributeType": "S"
+          }
+        ],
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 5,
+          "WriteCapacityUnits": 5
+        }
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete"
+    },
+    "UnreliableLambdaHandlerServiceRole955A5CFD": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    "UnreliableLambdaHandlerServiceRoleDefaultPolicyC00E31E2": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "dynamodb:BatchGetItem",
+                "dynamodb:GetRecords",
+                "dynamodb:GetShardIterator",
+                "dynamodb:Query",
+                "dynamodb:GetItem",
+                "dynamodb:Scan",
+                "dynamodb:ConditionCheckItem",
+                "dynamodb:BatchWriteItem",
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem",
+                "dynamodb:DeleteItem"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "CircuitBreakerTable02DAD2B8",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Ref": "AWS::NoValue"
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "UnreliableLambdaHandlerServiceRoleDefaultPolicyC00E31E2",
+        "Roles": [
+          {
+            "Ref": "UnreliableLambdaHandlerServiceRole955A5CFD"
+          }
+        ]
+      }
+    },
+    "UnreliableLambdaHandlerD4A4DED9": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "AssetParametersca0aa3ea3f4b245beda72154521823c06475c8b0c60ba16e9969a40a20ce11a5S3Bucket74D892AF"
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersca0aa3ea3f4b245beda72154521823c06475c8b0c60ba16e9969a40a20ce11a5S3VersionKey5D03BD0F"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersca0aa3ea3f4b245beda72154521823c06475c8b0c60ba16e9969a40a20ce11a5S3VersionKey5D03BD0F"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "UnreliableLambdaHandlerServiceRole955A5CFD",
+            "Arn"
+          ]
+        },
+        "Environment": {
+          "Variables": {
+            "CIRCUITBREAKER_TABLE": {
+              "Ref": "CircuitBreakerTable02DAD2B8"
+            }
+          }
+        },
+        "Handler": "unreliable.handler",
+        "Runtime": "nodejs12.x"
+      },
+      "DependsOn": [
+        "UnreliableLambdaHandlerServiceRoleDefaultPolicyC00E31E2",
+        "UnreliableLambdaHandlerServiceRole955A5CFD"
+      ]
+    },
+    "CircuitBreakerGateway122B123C": {
+      "Type": "AWS::ApiGatewayV2::Api",
+      "Properties": {
+        "Name": "CircuitBreakerGateway",
+        "ProtocolType": "HTTP"
+      }
+    },
+    "CircuitBreakerGatewayDefaultRouteHttpLambdaIntegrationPermission15AC6390": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "UnreliableLambdaHandlerD4A4DED9",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "CircuitBreakerGateway122B123C"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "CircuitBreakerGatewayDefaultRouteHttpLambdaIntegrationAAA423E8": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "CircuitBreakerGateway122B123C"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "UnreliableLambdaHandlerD4A4DED9",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0"
+      }
+    },
+    "CircuitBreakerGatewayDefaultRouteCB8326BD": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "CircuitBreakerGateway122B123C"
+        },
+        "RouteKey": "$default",
+        "AuthorizationType": "NONE",
+        "Target": {
+          "Fn::Join": [
+            "",
+            [
+              "integrations/",
+              {
+                "Ref": "CircuitBreakerGatewayDefaultRouteHttpLambdaIntegrationAAA423E8"
+              }
+            ]
+          ]
+        }
+      }
+    },
+    "CircuitBreakerGatewayDefaultStageC51956FB": {
+      "Type": "AWS::ApiGatewayV2::Stage",
+      "Properties": {
+        "ApiId": {
+          "Ref": "CircuitBreakerGateway122B123C"
+        },
+        "StageName": "$default",
+        "AutoDeploy": true
+      }
+    }
+  },
+  "Parameters": {
+    "AssetParametersca0aa3ea3f4b245beda72154521823c06475c8b0c60ba16e9969a40a20ce11a5S3Bucket74D892AF": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"ca0aa3ea3f4b245beda72154521823c06475c8b0c60ba16e9969a40a20ce11a5\""
+    },
+    "AssetParametersca0aa3ea3f4b245beda72154521823c06475c8b0c60ba16e9969a40a20ce11a5S3VersionKey5D03BD0F": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"ca0aa3ea3f4b245beda72154521823c06475c8b0c60ba16e9969a40a20ce11a5\""
+    },
+    "AssetParametersca0aa3ea3f4b245beda72154521823c06475c8b0c60ba16e9969a40a20ce11a5ArtifactHash24291B62": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"ca0aa3ea3f4b245beda72154521823c06475c8b0c60ba16e9969a40a20ce11a5\""
+    }
+  },
+  "Outputs": {
+    "HTTPAPIUrl": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Ref": "CircuitBreakerGateway122B123C"
+            },
+            ".execute-api.",
+            {
+              "Ref": "AWS::Region"
+            },
+            ".",
+            {
+              "Ref": "AWS::URLSuffix"
+            },
+            "/"
+          ]
+        ]
+      }
+    }
+  }
+}
