@@ -35,7 +35,7 @@ class DestinedLambda(cdk.Stack):
             self, "destinedLambda",
             runtime=aws_lambda.Runtime.NODEJS_12_X,
             handler="destinedLambda.handler",
-            code=aws_lambda.Code.from_asset("lambda_functions"),
+            code=aws_lambda.Code.from_asset("lambda_functions/destined_lambda"),
             retry_attempts=0,
             on_success=aws_lambda_destinations.EventBridgeDestination(event_bus=bus),
             on_failure=aws_lambda_destinations.EventBridgeDestination(event_bus=bus)
@@ -133,26 +133,28 @@ class DestinedLambda(cdk.Stack):
         schema_type = api_gw.JsonSchemaType
 
         # Because this isn't a proxy integration, we need to define our response model
-        response_model = gateway.add_model('ResponseModel',
-                                           content_type='application/json',
-                                           model_name='ResponseModel',
-                                           schema=schema(schema=api_gw.JsonSchemaVersion.DRAFT4,
-                                                         title='pollResponse',
-                                                         type=schema_type.OBJECT,
-                                                         properties={
-                                                             'message': schema(type=schema_type.STRING)
-                                                         }))
+        response_model = gateway.add_model(
+            'ResponseModel',
+            content_type='application/json',
+            model_name='ResponseModel',
+            schema=schema(schema=api_gw.JsonSchemaVersion.DRAFT4,
+                            title='pollResponse',
+                            type=schema_type.OBJECT,
+                            properties={
+                                'message': schema(type=schema_type.STRING)
+                            }))
 
-        error_response_model = gateway.add_model('ErrorResponseModel',
-                                                 content_type='application/json',
-                                                 model_name='ErrorResponseModel',
-                                                 schema=schema(schema=api_gw.JsonSchemaVersion.DRAFT4,
-                                                               title='errorResponse',
-                                                               type=schema_type.OBJECT,
-                                                               properties={
-                                                                   'state': schema(type=schema_type.STRING),
-                                                                   'message': schema(type=schema_type.STRING)
-                                                               }))
+        error_response_model = gateway.add_model(
+            'ErrorResponseModel',
+            content_type='application/json',
+            model_name='ErrorResponseModel',
+            schema=schema(schema=api_gw.JsonSchemaVersion.DRAFT4,
+                        title='errorResponse',
+                        type=schema_type.OBJECT,
+                        properties={
+                            'state': schema(type=schema_type.STRING),
+                            'message': schema(type=schema_type.STRING)
+                        }))
 
         request_template = "Action=Publish&" + \
                            "TargetArn=$util.urlEncode('" + topic.topic_arn + "')&" + \
@@ -200,29 +202,33 @@ class DestinedLambda(cdk.Stack):
 
         # Add an SendEvent endpoint onto the gateway
         gateway.root.add_resource('SendEvent') \
-            .add_method('GET', api_gw.Integration(type=api_gw.IntegrationType.AWS,
-                                                  integration_http_method='POST',
-                                                  uri='arn:aws:apigateway:us-east-1:sns:path//',
-                                                  options=integration_options
-                                                  ),
-                        method_responses=[
-                            api_gw.MethodResponse(status_code='200',
-                                                  response_parameters={
-                                                      'method.response.header.Content-Type': True,
-                                                      'method.response.header.Access-Control-Allow-Origin': True,
-                                                      'method.response.header.Access-Control-Allow-Credentials': True
-                                                  },
-                                                  response_models={
-                                                      'application/json': response_model
-                                                  }),
-                            api_gw.MethodResponse(status_code='400',
-                                                  response_parameters={
-                                                      'method.response.header.Content-Type': True,
-                                                      'method.response.header.Access-Control-Allow-Origin': True,
-                                                      'method.response.header.Access-Control-Allow-Credentials': True
-                                                  },
-                                                  response_models={
-                                                      'application/json': error_response_model
-                                                  }),
-                        ]
-                        )
+            .add_method(
+                'GET', api_gw.Integration(
+                    type=api_gw.IntegrationType.AWS,
+                    integration_http_method='POST',
+                    uri='arn:aws:apigateway:us-east-1:sns:path//',
+                    options=integration_options
+                ),
+                method_responses=[
+                    api_gw.MethodResponse(
+                        status_code='200',
+                        response_parameters={
+                            'method.response.header.Content-Type': True,
+                            'method.response.header.Access-Control-Allow-Origin': True,
+                            'method.response.header.Access-Control-Allow-Credentials': True
+                        },
+                        response_models={
+                            'application/json': response_model
+                        }),
+                    api_gw.MethodResponse(
+                        status_code='400',
+                        response_parameters={
+                            'method.response.header.Content-Type': True,
+                            'method.response.header.Access-Control-Allow-Origin': True,
+                            'method.response.header.Access-Control-Allow-Credentials': True
+                        },
+                        response_models={
+                            'application/json': error_response_model
+                        }),
+                ]
+        )
