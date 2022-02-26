@@ -5,6 +5,7 @@ class TestWellArchitectedPatterns(TestTemplates):
     @staticmethod
     def patterns():
         return (
+            'BigFan',
             'DestinedLambda',
             'DynamoDBFlow',
             'DynamoDBTable',

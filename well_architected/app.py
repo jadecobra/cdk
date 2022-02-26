@@ -23,6 +23,7 @@ import rds_proxy
 import scalable_webhook
 import lambda_circuit_breaker
 import destined_lambda
+import big_fan
 
 
 class WellArchitected(cdk.App):
@@ -60,6 +61,7 @@ class WellArchitected(cdk.App):
         scalable_webhook.ScalableWebhook(self, "ScalableWebhook")
         lambda_circuit_breaker.LambdaCircuitBreaker(self, "LambdaCircuitBreaker")
         destined_lambda.DestinedLambda(self, "DestinedLambda")
+        big_fan.BigFan(self, "BigFan")
 
     def create_http_api(self):
         self.http_api = LambdaHttpApiGateway(
