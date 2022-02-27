@@ -28,7 +28,6 @@ class BigFan(cdk.Stack):
                 raw_message_delivery=True,
                 filter_policy={
                     'status': sns.SubscriptionFilter.string_filter(
-                        # **filter_list,
                         **{filter_name: ['created']}
                     )
                 }
@@ -59,18 +58,15 @@ class BigFan(cdk.Stack):
         )
         logging_lambda_function = self.create_lambda_function("big_fan_logger")
 
-        for sqs_queue in (
-            self.create_sqs_queue_with_subscription(
-                queue_name='BigFanTopicStatusCreatedSubscriberQueue',
-                sns_topic=topic,
-                filter_name='allowlist'
-            ),
-            self.create_sqs_queue_with_subscription(
-                queue_name='BigFanTopicAnyOtherStatusSubscriberQueue',
-                sns_topic=topic,
-                filter_name='denylist'
-            )
+        for queue_name, filter_name in (
+            ('BigFanTopicStatusCreatedSubscriberQueue', 'allowlist'),
+            ('BigFanTopicAnyOtherStatusSubscriberQueue', 'denylist'),
         ):
+            sqs_queue = self.create_sqs_queue_with_subscription(
+                queue_name=queue_name,
+                sns_topic=topic,
+                filter_name=filter_name
+            )
             self.connect_lambda_function_with_sqs_queue(
                 lambda_function=logging_lambda_function,
                 sqs_queue=sqs_queue
