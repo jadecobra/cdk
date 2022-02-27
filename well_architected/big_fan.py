@@ -35,22 +35,22 @@ class BigFan(cdk.Stack):
         )
         return sqs_queue
 
+    @staticmethod
+    def connect_lambda_function_with_sqs_queue(lambda_function=None, sqs_queue=None):
+        if sqs_queue is not None or lambda_function is not None:
+            sqs_queue.grant_consume_messages(lambda_function)
+            lambda_function.add_event_source(aws_lambda_event_sources.SqsEventSource(sqs_queue))
+
     def create_lambda_function(
         self, stack_name=None, function_name=None, handler_name=None,
         sqs_queue: sqs.Queue=None,
     ):
-        function = aws_lambda.Function(
+        return aws_lambda.Function(
             self, stack_name,
             runtime=aws_lambda.Runtime.PYTHON_3_8,
             handler=f"{handler_name}.handler",
             code=aws_lambda.Code.from_asset(f"lambda_functions/{function_name}")
         )
-        if sqs_queue is not None:
-            sqs_queue.grant_consume_messages(function)
-            function.add_event_source(
-                aws_lambda_event_sources.SqsEventSource(sqs_queue)
-            )
-        return function
 
     def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
@@ -72,18 +72,24 @@ class BigFan(cdk.Stack):
             denylist=['created']
         )
 
-        self.create_lambda_function(
-            stack_name="SQSCreatedStatusSubscribeLambdaHandler",
-            handler_name="createdStatus",
+        created = self.create_lambda_function(
+            stack_name="big_fan_logger",
+            handler_name="big_fan_logger",
             function_name="big_fan_logger",
             sqs_queue=created_status_queue
         )
+        self.connect_lambda_function_with_sqs_queue(
+            lambda_function=created, sqs_queue=created_status_queue
+        )
 
-        self.create_lambda_function(
-            stack_name="SQSAnyOtherStatusSubscribeLambdaHandler",
-            handler_name="anyOtherStatus",
+        not_created = self.create_lambda_function(
+            stack_name="not_created",
+            handler_name="big_fan_logger",
             function_name="big_fan_logger",
             sqs_queue=other_status_queue,
+        )
+        self.connect_lambda_function_with_sqs_queue(
+            lambda_function=not_created, sqs_queue=other_status_queue
         )
 
         ###
@@ -92,12 +98,15 @@ class BigFan(cdk.Stack):
         # this url is used to post the payload to sns without a lambda inbetween
         ###
 
-        gateway = api_gw.RestApi(self, 'theBigFanAPI',
-                                 deploy_options=api_gw.StageOptions(metrics_enabled=True,
-                                                                    logging_level=api_gw.MethodLoggingLevel.INFO,
-                                                                    data_trace_enabled=True,
-                                                                    stage_name='prod'
-                                                                    ))
+        gateway = api_gw.RestApi(
+            self, 'theBigFanAPI',
+            deploy_options=api_gw.StageOptions(
+                metrics_enabled=True,
+                logging_level=api_gw.MethodLoggingLevel.INFO,
+                data_trace_enabled=True,
+                stage_name='prod'
+            )
+        )
 
         # Give our gateway permissions to interact with SNS
         api_gw_sns_role = iam.Role(self, 'DefaultLambdaHanderRole',

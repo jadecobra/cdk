@@ -23161,17 +23161,17 @@
               "version": "1.145.0"
             }
           },
-          "SQSCreatedStatusSubscribeLambdaHandler": {
-            "id": "SQSCreatedStatusSubscribeLambdaHandler",
-            "path": "BigFan/SQSCreatedStatusSubscribeLambdaHandler",
+          "big_fan_logger": {
+            "id": "big_fan_logger",
+            "path": "BigFan/big_fan_logger",
             "children": {
               "ServiceRole": {
                 "id": "ServiceRole",
-                "path": "BigFan/SQSCreatedStatusSubscribeLambdaHandler/ServiceRole",
+                "path": "BigFan/big_fan_logger/ServiceRole",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "BigFan/SQSCreatedStatusSubscribeLambdaHandler/ServiceRole/Resource",
+                    "path": "BigFan/big_fan_logger/ServiceRole/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                       "aws:cdk:cloudformation:props": {
@@ -23210,11 +23210,11 @@
                   },
                   "DefaultPolicy": {
                     "id": "DefaultPolicy",
-                    "path": "BigFan/SQSCreatedStatusSubscribeLambdaHandler/ServiceRole/DefaultPolicy",
+                    "path": "BigFan/big_fan_logger/ServiceRole/DefaultPolicy",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "BigFan/SQSCreatedStatusSubscribeLambdaHandler/ServiceRole/DefaultPolicy/Resource",
+                        "path": "BigFan/big_fan_logger/ServiceRole/DefaultPolicy/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
                           "aws:cdk:cloudformation:props": {
@@ -23239,10 +23239,10 @@
                               ],
                               "Version": "2012-10-17"
                             },
-                            "policyName": "SQSCreatedStatusSubscribeLambdaHandlerServiceRoleDefaultPolicyF668D64A",
+                            "policyName": "bigfanloggerServiceRoleDefaultPolicy30A8348C",
                             "roles": [
                               {
-                                "Ref": "SQSCreatedStatusSubscribeLambdaHandlerServiceRole36576A8A"
+                                "Ref": "bigfanloggerServiceRole6A229245"
                               }
                             ]
                           }
@@ -23266,11 +23266,11 @@
               },
               "Code": {
                 "id": "Code",
-                "path": "BigFan/SQSCreatedStatusSubscribeLambdaHandler/Code",
+                "path": "BigFan/big_fan_logger/Code",
                 "children": {
                   "Stage": {
                     "id": "Stage",
-                    "path": "BigFan/SQSCreatedStatusSubscribeLambdaHandler/Code/Stage",
+                    "path": "BigFan/big_fan_logger/Code/Stage",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.AssetStaging",
                       "version": "1.145.0"
@@ -23278,7 +23278,7 @@
                   },
                   "AssetBucket": {
                     "id": "AssetBucket",
-                    "path": "BigFan/SQSCreatedStatusSubscribeLambdaHandler/Code/AssetBucket",
+                    "path": "BigFan/big_fan_logger/Code/AssetBucket",
                     "constructInfo": {
                       "fqn": "@aws-cdk/aws-s3.BucketBase",
                       "version": "1.145.0"
@@ -23292,7 +23292,7 @@
               },
               "Resource": {
                 "id": "Resource",
-                "path": "BigFan/SQSCreatedStatusSubscribeLambdaHandler/Resource",
+                "path": "BigFan/big_fan_logger/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
                   "aws:cdk:cloudformation:props": {
@@ -23336,11 +23336,11 @@
                     },
                     "role": {
                       "Fn::GetAtt": [
-                        "SQSCreatedStatusSubscribeLambdaHandlerServiceRole36576A8A",
+                        "bigfanloggerServiceRole6A229245",
                         "Arn"
                       ]
                     },
-                    "handler": "createdStatus.handler",
+                    "handler": "big_fan_logger.handler",
                     "runtime": "python3.8"
                   }
                 },
@@ -23351,16 +23351,16 @@
               },
               "SqsEventSource:BigFanBigFanTopicStatusCreatedSubscriberQueue1816A88D": {
                 "id": "SqsEventSource:BigFanBigFanTopicStatusCreatedSubscriberQueue1816A88D",
-                "path": "BigFan/SQSCreatedStatusSubscribeLambdaHandler/SqsEventSource:BigFanBigFanTopicStatusCreatedSubscriberQueue1816A88D",
+                "path": "BigFan/big_fan_logger/SqsEventSource:BigFanBigFanTopicStatusCreatedSubscriberQueue1816A88D",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "BigFan/SQSCreatedStatusSubscribeLambdaHandler/SqsEventSource:BigFanBigFanTopicStatusCreatedSubscriberQueue1816A88D/Resource",
+                    "path": "BigFan/big_fan_logger/SqsEventSource:BigFanBigFanTopicStatusCreatedSubscriberQueue1816A88D/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::Lambda::EventSourceMapping",
                       "aws:cdk:cloudformation:props": {
                         "functionName": {
-                          "Ref": "SQSCreatedStatusSubscribeLambdaHandler0467DB95"
+                          "Ref": "bigfanloggerD0BC1165"
                         },
                         "eventSourceArn": {
                           "Fn::GetAtt": [
@@ -23431,17 +23431,17 @@
               "version": "1.145.0"
             }
           },
-          "SQSAnyOtherStatusSubscribeLambdaHandler": {
-            "id": "SQSAnyOtherStatusSubscribeLambdaHandler",
-            "path": "BigFan/SQSAnyOtherStatusSubscribeLambdaHandler",
+          "not_created": {
+            "id": "not_created",
+            "path": "BigFan/not_created",
             "children": {
               "ServiceRole": {
                 "id": "ServiceRole",
-                "path": "BigFan/SQSAnyOtherStatusSubscribeLambdaHandler/ServiceRole",
+                "path": "BigFan/not_created/ServiceRole",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "BigFan/SQSAnyOtherStatusSubscribeLambdaHandler/ServiceRole/Resource",
+                    "path": "BigFan/not_created/ServiceRole/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                       "aws:cdk:cloudformation:props": {
@@ -23480,11 +23480,11 @@
                   },
                   "DefaultPolicy": {
                     "id": "DefaultPolicy",
-                    "path": "BigFan/SQSAnyOtherStatusSubscribeLambdaHandler/ServiceRole/DefaultPolicy",
+                    "path": "BigFan/not_created/ServiceRole/DefaultPolicy",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "BigFan/SQSAnyOtherStatusSubscribeLambdaHandler/ServiceRole/DefaultPolicy/Resource",
+                        "path": "BigFan/not_created/ServiceRole/DefaultPolicy/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
                           "aws:cdk:cloudformation:props": {
@@ -23509,10 +23509,10 @@
                               ],
                               "Version": "2012-10-17"
                             },
-                            "policyName": "SQSAnyOtherStatusSubscribeLambdaHandlerServiceRoleDefaultPolicy7E448E8B",
+                            "policyName": "notcreatedServiceRoleDefaultPolicyA2A44320",
                             "roles": [
                               {
-                                "Ref": "SQSAnyOtherStatusSubscribeLambdaHandlerServiceRole395E81EB"
+                                "Ref": "notcreatedServiceRole0DDDB05D"
                               }
                             ]
                           }
@@ -23536,11 +23536,11 @@
               },
               "Code": {
                 "id": "Code",
-                "path": "BigFan/SQSAnyOtherStatusSubscribeLambdaHandler/Code",
+                "path": "BigFan/not_created/Code",
                 "children": {
                   "Stage": {
                     "id": "Stage",
-                    "path": "BigFan/SQSAnyOtherStatusSubscribeLambdaHandler/Code/Stage",
+                    "path": "BigFan/not_created/Code/Stage",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.AssetStaging",
                       "version": "1.145.0"
@@ -23548,7 +23548,7 @@
                   },
                   "AssetBucket": {
                     "id": "AssetBucket",
-                    "path": "BigFan/SQSAnyOtherStatusSubscribeLambdaHandler/Code/AssetBucket",
+                    "path": "BigFan/not_created/Code/AssetBucket",
                     "constructInfo": {
                       "fqn": "@aws-cdk/aws-s3.BucketBase",
                       "version": "1.145.0"
@@ -23562,7 +23562,7 @@
               },
               "Resource": {
                 "id": "Resource",
-                "path": "BigFan/SQSAnyOtherStatusSubscribeLambdaHandler/Resource",
+                "path": "BigFan/not_created/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
                   "aws:cdk:cloudformation:props": {
@@ -23606,11 +23606,11 @@
                     },
                     "role": {
                       "Fn::GetAtt": [
-                        "SQSAnyOtherStatusSubscribeLambdaHandlerServiceRole395E81EB",
+                        "notcreatedServiceRole0DDDB05D",
                         "Arn"
                       ]
                     },
-                    "handler": "anyOtherStatus.handler",
+                    "handler": "big_fan_logger.handler",
                     "runtime": "python3.8"
                   }
                 },
@@ -23621,16 +23621,16 @@
               },
               "SqsEventSource:BigFanBigFanTopicAnyOtherStatusSubscriberQueue36171107": {
                 "id": "SqsEventSource:BigFanBigFanTopicAnyOtherStatusSubscriberQueue36171107",
-                "path": "BigFan/SQSAnyOtherStatusSubscribeLambdaHandler/SqsEventSource:BigFanBigFanTopicAnyOtherStatusSubscriberQueue36171107",
+                "path": "BigFan/not_created/SqsEventSource:BigFanBigFanTopicAnyOtherStatusSubscriberQueue36171107",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "BigFan/SQSAnyOtherStatusSubscribeLambdaHandler/SqsEventSource:BigFanBigFanTopicAnyOtherStatusSubscriberQueue36171107/Resource",
+                    "path": "BigFan/not_created/SqsEventSource:BigFanBigFanTopicAnyOtherStatusSubscriberQueue36171107/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::Lambda::EventSourceMapping",
                       "aws:cdk:cloudformation:props": {
                         "functionName": {
-                          "Ref": "SQSAnyOtherStatusSubscribeLambdaHandler4037E293"
+                          "Ref": "notcreatedACD8F388"
                         },
                         "eventSourceArn": {
                           "Fn::GetAtt": [
