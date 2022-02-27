@@ -1,6 +1,6 @@
 from aws_cdk import (
-    aws_lambda as _lambda,
-    aws_lambda_event_sources as _event,
+    aws_lambda,
+    aws_lambda_event_sources,
     aws_apigateway as api_gw,
     aws_iam as iam,
     aws_sns as sns,
@@ -35,6 +35,23 @@ class BigFan(cdk.Stack):
         )
         return sqs_queue
 
+    def create_lambda_function(
+        self, stack_name=None, function_name=None, handler_name=None,
+        sqs_queue: sqs.Queue=None,
+    ):
+        function = aws_lambda.Function(
+            self, stack_name,
+            runtime=aws_lambda.Runtime.PYTHON_3_8,
+            handler=f"{handler_name}.handler",
+            code=aws_lambda.Code.from_asset(f"lambda_functions/{function_name}")
+        )
+        if sqs_queue is not None:
+            sqs_queue.grant_consume_messages(function)
+            function.add_event_source(
+                aws_lambda_event_sources.SqsEventSource(sqs_queue)
+            )
+        return function
+
     def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
@@ -55,30 +72,19 @@ class BigFan(cdk.Stack):
             denylist=['created']
         )
 
-
-        ###
-        # Creation of Lambdas that subscribe to above SQS queues
-        ###
-
-        # Created status queue lambda
-        sqs_created_status_subscriber = _lambda.Function(
-            self, "SQSCreatedStatusSubscribeLambdaHandler",
-            runtime=_lambda.Runtime.PYTHON_3_8,
-            handler="createdStatus.handler",
-            code=_lambda.Code.from_asset("lambda_functions/big_fan_logger")
+        self.create_lambda_function(
+            stack_name="SQSCreatedStatusSubscribeLambdaHandler",
+            handler_name="createdStatus",
+            function_name="big_fan_logger",
+            sqs_queue=created_status_queue
         )
-        created_status_queue.grant_consume_messages(sqs_created_status_subscriber)
-        sqs_created_status_subscriber.add_event_source(_event.SqsEventSource(created_status_queue))
 
-        # Any other status queue lambda
-        sqs_other_status_subscriber = _lambda.Function(
-            self, "SQSAnyOtherStatusSubscribeLambdaHandler",
-            runtime=_lambda.Runtime.PYTHON_3_8,
-            handler="anyOtherStatus.handler",
-            code=_lambda.Code.from_asset("lambda_functions/big_fan_logger")
+        self.create_lambda_function(
+            stack_name="SQSAnyOtherStatusSubscribeLambdaHandler",
+            handler_name="anyOtherStatus",
+            function_name="big_fan_logger",
+            sqs_queue=other_status_queue,
         )
-        other_status_queue.grant_consume_messages(sqs_other_status_subscriber)
-        sqs_other_status_subscriber.add_event_source(_event.SqsEventSource(other_status_queue))
 
         ###
         # API Gateway Creation
