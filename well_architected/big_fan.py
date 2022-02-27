@@ -20,6 +20,19 @@ class BigFan(cdk.Stack):
             queue_name=queue_name
         )
 
+    def add_subscription_to_topic(self, sns_topic=None, sqs_queue=None, **filter_list):
+        sns_topic.add_subscription(
+            subscriptions.SqsSubscription(
+                sqs_queue,
+                raw_message_delivery=True,
+                filter_policy={
+                    'status': sns.SubscriptionFilter.string_filter(
+                        **filter_list
+                    )
+                }
+            )
+        )
+
     def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
@@ -29,24 +42,31 @@ class BigFan(cdk.Stack):
         )
 
         created_status_queue = self.create_sqs_queue('BigFanTopicStatusCreatedSubscriberQueue')
+        # created_filter = sns.SubscriptionFilter.string_filter(allowlist=['created'])
+        # topic.add_subscription(subscriptions.SqsSubscription(
+        #     created_status_queue,
+        #     raw_message_delivery=True,
+        #     filter_policy={'status': created_filter})
+        # )
+        self.add_subscription_to_topic(
+            sns_topic=topic,
+            sqs_queue=created_status_queue,
+            allowlist=['created']
+        )
+
         other_status_queue = self.create_sqs_queue('BigFanTopicAnyOtherStatusSubscriberQueue')
-
-
-        created_filter = sns.SubscriptionFilter.string_filter(allowlist=['created'])
-        topic.add_subscription(subscriptions.SqsSubscription(
-            created_status_queue,
-            raw_message_delivery=True,
-            filter_policy={'status': created_filter})
-        )
-
-
-        # Only send messages to our other_status_queue that do not have a status of created
         other_filter = sns.SubscriptionFilter.string_filter(denylist=['created'])
-        topic.add_subscription(subscriptions.SqsSubscription(
-            other_status_queue,
-            raw_message_delivery=True,
-            filter_policy={'status': other_filter})
+        # topic.add_subscription(subscriptions.SqsSubscription(
+        #     other_status_queue,
+        #     raw_message_delivery=True,
+        #     filter_policy={'status': other_filter})
+        # )
+        self.add_subscription_to_topic(
+            sns_topic=topic,
+            sqs_queue=other_status_queue,
+            denylist=['created']
         )
+
 
         ###
         # Creation of Lambdas that subscribe to above SQS queues
