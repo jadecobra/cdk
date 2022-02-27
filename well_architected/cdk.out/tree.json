@@ -23235,6 +23235,22 @@
                                       "Arn"
                                     ]
                                   }
+                                },
+                                {
+                                  "Action": [
+                                    "sqs:ReceiveMessage",
+                                    "sqs:ChangeMessageVisibility",
+                                    "sqs:GetQueueUrl",
+                                    "sqs:DeleteMessage",
+                                    "sqs:GetQueueAttributes"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "BigFanTopicAnyOtherStatusSubscriberQueue51F6CD76",
+                                      "Arn"
+                                    ]
+                                  }
                                 }
                               ],
                               "Version": "2012-10-17"
@@ -23380,6 +23396,38 @@
                   "fqn": "@aws-cdk/aws-lambda.EventSourceMapping",
                   "version": "1.145.0"
                 }
+              },
+              "SqsEventSource:BigFanBigFanTopicAnyOtherStatusSubscriberQueue36171107": {
+                "id": "SqsEventSource:BigFanBigFanTopicAnyOtherStatusSubscriberQueue36171107",
+                "path": "BigFan/big_fan_logger/SqsEventSource:BigFanBigFanTopicAnyOtherStatusSubscriberQueue36171107",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "BigFan/big_fan_logger/SqsEventSource:BigFanBigFanTopicAnyOtherStatusSubscriberQueue36171107/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::Lambda::EventSourceMapping",
+                      "aws:cdk:cloudformation:props": {
+                        "functionName": {
+                          "Ref": "bigfanloggerD0BC1165"
+                        },
+                        "eventSourceArn": {
+                          "Fn::GetAtt": [
+                            "BigFanTopicAnyOtherStatusSubscriberQueue51F6CD76",
+                            "Arn"
+                          ]
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-lambda.CfnEventSourceMapping",
+                      "version": "1.145.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-lambda.EventSourceMapping",
+                  "version": "1.145.0"
+                }
               }
             },
             "constructInfo": {
@@ -23428,232 +23476,6 @@
             },
             "constructInfo": {
               "fqn": "@aws-cdk/core.Construct",
-              "version": "1.145.0"
-            }
-          },
-          "not_created": {
-            "id": "not_created",
-            "path": "BigFan/not_created",
-            "children": {
-              "ServiceRole": {
-                "id": "ServiceRole",
-                "path": "BigFan/not_created/ServiceRole",
-                "children": {
-                  "Resource": {
-                    "id": "Resource",
-                    "path": "BigFan/not_created/ServiceRole/Resource",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
-                      "aws:cdk:cloudformation:props": {
-                        "assumeRolePolicyDocument": {
-                          "Statement": [
-                            {
-                              "Action": "sts:AssumeRole",
-                              "Effect": "Allow",
-                              "Principal": {
-                                "Service": "lambda.amazonaws.com"
-                              }
-                            }
-                          ],
-                          "Version": "2012-10-17"
-                        },
-                        "managedPolicyArns": [
-                          {
-                            "Fn::Join": [
-                              "",
-                              [
-                                "arn:",
-                                {
-                                  "Ref": "AWS::Partition"
-                                },
-                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-                              ]
-                            ]
-                          }
-                        ]
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "@aws-cdk/aws-iam.CfnRole",
-                      "version": "1.145.0"
-                    }
-                  },
-                  "DefaultPolicy": {
-                    "id": "DefaultPolicy",
-                    "path": "BigFan/not_created/ServiceRole/DefaultPolicy",
-                    "children": {
-                      "Resource": {
-                        "id": "Resource",
-                        "path": "BigFan/not_created/ServiceRole/DefaultPolicy/Resource",
-                        "attributes": {
-                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
-                          "aws:cdk:cloudformation:props": {
-                            "policyDocument": {
-                              "Statement": [
-                                {
-                                  "Action": [
-                                    "sqs:ReceiveMessage",
-                                    "sqs:ChangeMessageVisibility",
-                                    "sqs:GetQueueUrl",
-                                    "sqs:DeleteMessage",
-                                    "sqs:GetQueueAttributes"
-                                  ],
-                                  "Effect": "Allow",
-                                  "Resource": {
-                                    "Fn::GetAtt": [
-                                      "BigFanTopicAnyOtherStatusSubscriberQueue51F6CD76",
-                                      "Arn"
-                                    ]
-                                  }
-                                }
-                              ],
-                              "Version": "2012-10-17"
-                            },
-                            "policyName": "notcreatedServiceRoleDefaultPolicyA2A44320",
-                            "roles": [
-                              {
-                                "Ref": "notcreatedServiceRole0DDDB05D"
-                              }
-                            ]
-                          }
-                        },
-                        "constructInfo": {
-                          "fqn": "@aws-cdk/aws-iam.CfnPolicy",
-                          "version": "1.145.0"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "@aws-cdk/aws-iam.Policy",
-                      "version": "1.145.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-iam.Role",
-                  "version": "1.145.0"
-                }
-              },
-              "Code": {
-                "id": "Code",
-                "path": "BigFan/not_created/Code",
-                "children": {
-                  "Stage": {
-                    "id": "Stage",
-                    "path": "BigFan/not_created/Code/Stage",
-                    "constructInfo": {
-                      "fqn": "@aws-cdk/core.AssetStaging",
-                      "version": "1.145.0"
-                    }
-                  },
-                  "AssetBucket": {
-                    "id": "AssetBucket",
-                    "path": "BigFan/not_created/Code/AssetBucket",
-                    "constructInfo": {
-                      "fqn": "@aws-cdk/aws-s3.BucketBase",
-                      "version": "1.145.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-s3-assets.Asset",
-                  "version": "1.145.0"
-                }
-              },
-              "Resource": {
-                "id": "Resource",
-                "path": "BigFan/not_created/Resource",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
-                  "aws:cdk:cloudformation:props": {
-                    "code": {
-                      "s3Bucket": {
-                        "Ref": "AssetParameters318555b1526b9faa6fd9ad69d475f488ad971920bc6fa1388e2ab4e8339959eaS3Bucket8B123BB6"
-                      },
-                      "s3Key": {
-                        "Fn::Join": [
-                          "",
-                          [
-                            {
-                              "Fn::Select": [
-                                0,
-                                {
-                                  "Fn::Split": [
-                                    "||",
-                                    {
-                                      "Ref": "AssetParameters318555b1526b9faa6fd9ad69d475f488ad971920bc6fa1388e2ab4e8339959eaS3VersionKey147ECCFD"
-                                    }
-                                  ]
-                                }
-                              ]
-                            },
-                            {
-                              "Fn::Select": [
-                                1,
-                                {
-                                  "Fn::Split": [
-                                    "||",
-                                    {
-                                      "Ref": "AssetParameters318555b1526b9faa6fd9ad69d475f488ad971920bc6fa1388e2ab4e8339959eaS3VersionKey147ECCFD"
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        ]
-                      }
-                    },
-                    "role": {
-                      "Fn::GetAtt": [
-                        "notcreatedServiceRole0DDDB05D",
-                        "Arn"
-                      ]
-                    },
-                    "handler": "big_fan_logger.handler",
-                    "runtime": "python3.8"
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-lambda.CfnFunction",
-                  "version": "1.145.0"
-                }
-              },
-              "SqsEventSource:BigFanBigFanTopicAnyOtherStatusSubscriberQueue36171107": {
-                "id": "SqsEventSource:BigFanBigFanTopicAnyOtherStatusSubscriberQueue36171107",
-                "path": "BigFan/not_created/SqsEventSource:BigFanBigFanTopicAnyOtherStatusSubscriberQueue36171107",
-                "children": {
-                  "Resource": {
-                    "id": "Resource",
-                    "path": "BigFan/not_created/SqsEventSource:BigFanBigFanTopicAnyOtherStatusSubscriberQueue36171107/Resource",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::Lambda::EventSourceMapping",
-                      "aws:cdk:cloudformation:props": {
-                        "functionName": {
-                          "Ref": "notcreatedACD8F388"
-                        },
-                        "eventSourceArn": {
-                          "Fn::GetAtt": [
-                            "BigFanTopicAnyOtherStatusSubscriberQueue51F6CD76",
-                            "Arn"
-                          ]
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "@aws-cdk/aws-lambda.CfnEventSourceMapping",
-                      "version": "1.145.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-lambda.EventSourceMapping",
-                  "version": "1.145.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/aws-lambda.Function",
               "version": "1.145.0"
             }
           },

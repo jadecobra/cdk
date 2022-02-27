@@ -41,14 +41,11 @@ class BigFan(cdk.Stack):
             sqs_queue.grant_consume_messages(lambda_function)
             lambda_function.add_event_source(aws_lambda_event_sources.SqsEventSource(sqs_queue))
 
-    def create_lambda_function(
-        self, stack_name=None, function_name=None, handler_name=None,
-        sqs_queue: sqs.Queue=None,
-    ):
+    def create_lambda_function(self, function_name):
         return aws_lambda.Function(
-            self, stack_name,
+            self, function_name,
             runtime=aws_lambda.Runtime.PYTHON_3_8,
-            handler=f"{handler_name}.handler",
+            handler=f"{function_name}.handler",
             code=aws_lambda.Code.from_asset(f"lambda_functions/{function_name}")
         )
 
@@ -72,18 +69,12 @@ class BigFan(cdk.Stack):
             denylist=['created']
         )
 
-        logging_lambda_function = self.create_lambda_function(
-            stack_name="big_fan_logger",
-            handler_name="big_fan_logger",
-            function_name="big_fan_logger",
-            sqs_queue=created_status_queue
-        )
-        self.connect_lambda_function_with_sqs_queue(
-            lambda_function=logging_lambda_function, sqs_queue=created_status_queue
-        )
-        self.connect_lambda_function_with_sqs_queue(
-            lambda_function=logging_lambda_function, sqs_queue=other_status_queue
-        )
+        logging_lambda_function = self.create_lambda_function("big_fan_logger")
+        for sqs_queue in (created_status_queue, other_status_queue):
+            self.connect_lambda_function_with_sqs_queue(
+                lambda_function=logging_lambda_function,
+                sqs_queue=sqs_queue
+            )
 
         ###
         # API Gateway Creation
