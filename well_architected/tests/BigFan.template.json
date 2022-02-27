@@ -1,0 +1,626 @@
+{
+  "Resources": {
+    "theBigFanTopicF96567DE": {
+      "Type": "AWS::SNS::Topic",
+      "Properties": {
+        "DisplayName": "The Big Fan CDK Pattern Topic"
+      }
+    },
+    "bigfanloggerServiceRole6A229245": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    "bigfanloggerServiceRoleDefaultPolicy30A8348C": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "sqs:ReceiveMessage",
+                "sqs:ChangeMessageVisibility",
+                "sqs:GetQueueUrl",
+                "sqs:DeleteMessage",
+                "sqs:GetQueueAttributes"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "BigFanTopicStatusCreatedSubscriberQueue589E974E",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Action": [
+                "sqs:ReceiveMessage",
+                "sqs:ChangeMessageVisibility",
+                "sqs:GetQueueUrl",
+                "sqs:DeleteMessage",
+                "sqs:GetQueueAttributes"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "BigFanTopicAnyOtherStatusSubscriberQueue51F6CD76",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "bigfanloggerServiceRoleDefaultPolicy30A8348C",
+        "Roles": [
+          {
+            "Ref": "bigfanloggerServiceRole6A229245"
+          }
+        ]
+      }
+    },
+    "bigfanloggerD0BC1165": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "AssetParameters318555b1526b9faa6fd9ad69d475f488ad971920bc6fa1388e2ab4e8339959eaS3Bucket8B123BB6"
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParameters318555b1526b9faa6fd9ad69d475f488ad971920bc6fa1388e2ab4e8339959eaS3VersionKey147ECCFD"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParameters318555b1526b9faa6fd9ad69d475f488ad971920bc6fa1388e2ab4e8339959eaS3VersionKey147ECCFD"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "bigfanloggerServiceRole6A229245",
+            "Arn"
+          ]
+        },
+        "Handler": "big_fan_logger.handler",
+        "Runtime": "python3.8"
+      },
+      "DependsOn": [
+        "bigfanloggerServiceRoleDefaultPolicy30A8348C",
+        "bigfanloggerServiceRole6A229245"
+      ]
+    },
+    "bigfanloggerSqsEventSourceBigFanBigFanTopicStatusCreatedSubscriberQueue1816A88D624C00AE": {
+      "Type": "AWS::Lambda::EventSourceMapping",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "bigfanloggerD0BC1165"
+        },
+        "EventSourceArn": {
+          "Fn::GetAtt": [
+            "BigFanTopicStatusCreatedSubscriberQueue589E974E",
+            "Arn"
+          ]
+        }
+      }
+    },
+    "bigfanloggerSqsEventSourceBigFanBigFanTopicAnyOtherStatusSubscriberQueue36171107F2E3F2EE": {
+      "Type": "AWS::Lambda::EventSourceMapping",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "bigfanloggerD0BC1165"
+        },
+        "EventSourceArn": {
+          "Fn::GetAtt": [
+            "BigFanTopicAnyOtherStatusSubscriberQueue51F6CD76",
+            "Arn"
+          ]
+        }
+      }
+    },
+    "BigFanTopicStatusCreatedSubscriberQueue589E974E": {
+      "Type": "AWS::SQS::Queue",
+      "Properties": {
+        "QueueName": "BigFanTopicStatusCreatedSubscriberQueue",
+        "VisibilityTimeout": 300
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete"
+    },
+    "BigFanTopicStatusCreatedSubscriberQueuePolicy92D53255": {
+      "Type": "AWS::SQS::QueuePolicy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sqs:SendMessage",
+              "Condition": {
+                "ArnEquals": {
+                  "aws:SourceArn": {
+                    "Ref": "theBigFanTopicF96567DE"
+                  }
+                }
+              },
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "sns.amazonaws.com"
+              },
+              "Resource": {
+                "Fn::GetAtt": [
+                  "BigFanTopicStatusCreatedSubscriberQueue589E974E",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Queues": [
+          {
+            "Ref": "BigFanTopicStatusCreatedSubscriberQueue589E974E"
+          }
+        ]
+      }
+    },
+    "BigFanTopicStatusCreatedSubscriberQueueBigFantheBigFanTopicAC7D4F889D321522": {
+      "Type": "AWS::SNS::Subscription",
+      "Properties": {
+        "Protocol": "sqs",
+        "TopicArn": {
+          "Ref": "theBigFanTopicF96567DE"
+        },
+        "Endpoint": {
+          "Fn::GetAtt": [
+            "BigFanTopicStatusCreatedSubscriberQueue589E974E",
+            "Arn"
+          ]
+        },
+        "FilterPolicy": {
+          "status": [
+            "created"
+          ]
+        },
+        "RawMessageDelivery": true
+      }
+    },
+    "BigFanTopicAnyOtherStatusSubscriberQueue51F6CD76": {
+      "Type": "AWS::SQS::Queue",
+      "Properties": {
+        "QueueName": "BigFanTopicAnyOtherStatusSubscriberQueue",
+        "VisibilityTimeout": 300
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete"
+    },
+    "BigFanTopicAnyOtherStatusSubscriberQueuePolicy38415694": {
+      "Type": "AWS::SQS::QueuePolicy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sqs:SendMessage",
+              "Condition": {
+                "ArnEquals": {
+                  "aws:SourceArn": {
+                    "Ref": "theBigFanTopicF96567DE"
+                  }
+                }
+              },
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "sns.amazonaws.com"
+              },
+              "Resource": {
+                "Fn::GetAtt": [
+                  "BigFanTopicAnyOtherStatusSubscriberQueue51F6CD76",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Queues": [
+          {
+            "Ref": "BigFanTopicAnyOtherStatusSubscriberQueue51F6CD76"
+          }
+        ]
+      }
+    },
+    "BigFanTopicAnyOtherStatusSubscriberQueueBigFantheBigFanTopicAC7D4F88C90FD7FA": {
+      "Type": "AWS::SNS::Subscription",
+      "Properties": {
+        "Protocol": "sqs",
+        "TopicArn": {
+          "Ref": "theBigFanTopicF96567DE"
+        },
+        "Endpoint": {
+          "Fn::GetAtt": [
+            "BigFanTopicAnyOtherStatusSubscriberQueue51F6CD76",
+            "Arn"
+          ]
+        },
+        "FilterPolicy": {
+          "status": [
+            {
+              "anything-but": [
+                "created"
+              ]
+            }
+          ]
+        },
+        "RawMessageDelivery": true
+      }
+    },
+    "theBigFanAPI6E21715A": {
+      "Type": "AWS::ApiGateway::RestApi",
+      "Properties": {
+        "Name": "theBigFanAPI"
+      }
+    },
+    "theBigFanAPICloudWatchRoleD603B41E": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "apigateway.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    "theBigFanAPIAccountBD0B8261": {
+      "Type": "AWS::ApiGateway::Account",
+      "Properties": {
+        "CloudWatchRoleArn": {
+          "Fn::GetAtt": [
+            "theBigFanAPICloudWatchRoleD603B41E",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "theBigFanAPI6E21715A"
+      ]
+    },
+    "theBigFanAPIDeployment0A3D40CC54fe2b5837d44dc25f2296a5b332128a": {
+      "Type": "AWS::ApiGateway::Deployment",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "theBigFanAPI6E21715A"
+        },
+        "Description": "Automatically created by the RestApi construct"
+      },
+      "DependsOn": [
+        "theBigFanAPISendEventPOSTBC493093",
+        "theBigFanAPISendEventD29495C2",
+        "theBigFanAPIErrorResponseModel11E9FBC4",
+        "theBigFanAPIResponseModelD06A5A7F"
+      ]
+    },
+    "theBigFanAPIDeploymentStageprod1F15C9DC": {
+      "Type": "AWS::ApiGateway::Stage",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "theBigFanAPI6E21715A"
+        },
+        "DeploymentId": {
+          "Ref": "theBigFanAPIDeployment0A3D40CC54fe2b5837d44dc25f2296a5b332128a"
+        },
+        "MethodSettings": [
+          {
+            "DataTraceEnabled": true,
+            "HttpMethod": "*",
+            "LoggingLevel": "INFO",
+            "MetricsEnabled": true,
+            "ResourcePath": "/*"
+          }
+        ],
+        "StageName": "prod"
+      },
+      "DependsOn": [
+        "theBigFanAPIAccountBD0B8261"
+      ]
+    },
+    "theBigFanAPISendEventD29495C2": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "theBigFanAPI6E21715A",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "SendEvent",
+        "RestApiId": {
+          "Ref": "theBigFanAPI6E21715A"
+        }
+      }
+    },
+    "theBigFanAPISendEventPOSTBC493093": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
+        "ResourceId": {
+          "Ref": "theBigFanAPISendEventD29495C2"
+        },
+        "RestApiId": {
+          "Ref": "theBigFanAPI6E21715A"
+        },
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "Credentials": {
+            "Fn::GetAtt": [
+              "DefaultLambdaHanderRoleA44A3BA8",
+              "Arn"
+            ]
+          },
+          "IntegrationHttpMethod": "POST",
+          "IntegrationResponses": [
+            {
+              "ResponseTemplates": {
+                "application/json": "{\"message\": \"message added to topic\"}"
+              },
+              "StatusCode": "200"
+            },
+            {
+              "ResponseParameters": {
+                "method.response.header.Content-Type": "'application/json'",
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Credentials": "'true'"
+              },
+              "ResponseTemplates": {
+                "application/json": "{\"state\":\"error\",\"message\":\"$util.escapeJavaScript($input.path('$.errorMessage'))\"}"
+              },
+              "SelectionPattern": "^\\[Error\\].*",
+              "StatusCode": "400"
+            }
+          ],
+          "PassthroughBehavior": "NEVER",
+          "RequestParameters": {
+            "integration.request.header.Content-Type": "'application/x-www-form-urlencoded'"
+          },
+          "RequestTemplates": {
+            "application/json": {
+              "Fn::Join": [
+                "",
+                [
+                  "Action=Publish&TargetArn=$util.urlEncode('",
+                  {
+                    "Ref": "theBigFanTopicF96567DE"
+                  },
+                  "')&Message=$util.urlEncode($input.path('$.message'))&Version=2010-03-31&MessageAttributes.entry.1.Name=status&MessageAttributes.entry.1.Value.DataType=String&MessageAttributes.entry.1.Value.StringValue=$util.urlEncode($input.path('$.status'))"
+                ]
+              ]
+            }
+          },
+          "Type": "AWS",
+          "Uri": "arn:aws:apigateway:us-east-1:sns:path//"
+        },
+        "MethodResponses": [
+          {
+            "ResponseModels": {
+              "application/json": {
+                "Ref": "theBigFanAPIResponseModelD06A5A7F"
+              }
+            },
+            "ResponseParameters": {
+              "method.response.header.Content-Type": true,
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Credentials": true
+            },
+            "StatusCode": "200"
+          },
+          {
+            "ResponseModels": {
+              "application/json": {
+                "Ref": "theBigFanAPIErrorResponseModel11E9FBC4"
+              }
+            },
+            "ResponseParameters": {
+              "method.response.header.Content-Type": true,
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Credentials": true
+            },
+            "StatusCode": "400"
+          }
+        ]
+      }
+    },
+    "theBigFanAPIResponseModelD06A5A7F": {
+      "Type": "AWS::ApiGateway::Model",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "theBigFanAPI6E21715A"
+        },
+        "ContentType": "application/json",
+        "Name": "ResponseModel",
+        "Schema": {
+          "properties": {
+            "message": {
+              "type": "string"
+            }
+          },
+          "$schema": "http://json-schema.org/draft-04/schema#",
+          "title": "pollResponse",
+          "type": "object"
+        }
+      }
+    },
+    "theBigFanAPIErrorResponseModel11E9FBC4": {
+      "Type": "AWS::ApiGateway::Model",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "theBigFanAPI6E21715A"
+        },
+        "ContentType": "application/json",
+        "Name": "ErrorResponseModel",
+        "Schema": {
+          "properties": {
+            "state": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "$schema": "http://json-schema.org/draft-04/schema#",
+          "title": "errorResponse",
+          "type": "object"
+        }
+      }
+    },
+    "DefaultLambdaHanderRoleA44A3BA8": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "apigateway.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      }
+    },
+    "DefaultLambdaHanderRoleDefaultPolicy40E2D129": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sns:Publish",
+              "Effect": "Allow",
+              "Resource": {
+                "Ref": "theBigFanTopicF96567DE"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "DefaultLambdaHanderRoleDefaultPolicy40E2D129",
+        "Roles": [
+          {
+            "Ref": "DefaultLambdaHanderRoleA44A3BA8"
+          }
+        ]
+      }
+    }
+  },
+  "Parameters": {
+    "AssetParameters318555b1526b9faa6fd9ad69d475f488ad971920bc6fa1388e2ab4e8339959eaS3Bucket8B123BB6": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"318555b1526b9faa6fd9ad69d475f488ad971920bc6fa1388e2ab4e8339959ea\""
+    },
+    "AssetParameters318555b1526b9faa6fd9ad69d475f488ad971920bc6fa1388e2ab4e8339959eaS3VersionKey147ECCFD": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"318555b1526b9faa6fd9ad69d475f488ad971920bc6fa1388e2ab4e8339959ea\""
+    },
+    "AssetParameters318555b1526b9faa6fd9ad69d475f488ad971920bc6fa1388e2ab4e8339959eaArtifactHashF79BE4EF": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"318555b1526b9faa6fd9ad69d475f488ad971920bc6fa1388e2ab4e8339959ea\""
+    }
+  },
+  "Outputs": {
+    "theBigFanAPIEndpointFC762F6E": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Ref": "theBigFanAPI6E21715A"
+            },
+            ".execute-api.",
+            {
+              "Ref": "AWS::Region"
+            },
+            ".",
+            {
+              "Ref": "AWS::URLSuffix"
+            },
+            "/",
+            {
+              "Ref": "theBigFanAPIDeploymentStageprod1F15C9DC"
+            },
+            "/"
+          ]
+        ]
+      }
+    }
+  }
+}
