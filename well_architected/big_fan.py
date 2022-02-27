@@ -13,47 +13,35 @@ import json
 
 class BigFan(cdk.Stack):
 
+    def create_sqs_queue(self, queue_name):
+        return sqs.Queue(
+            self, queue_name,
+            visibility_timeout=cdk.Duration.seconds(300),
+            queue_name=queue_name
+        )
+
     def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        ###
-        # SNS Topic Creation
-        # Our API Gateway posts messages directly to this
-        ###
         topic = sns.Topic(
             self, 'theBigFanTopic',
             display_name='The Big Fan CDK Pattern Topic'
         )
 
-        ###
-        # SQS Subscribers creation for our SNS Topic
-        # 2 subscribers, one for messages with a status of created one for any other message
-        ###
+        created_status_queue = self.create_sqs_queue('BigFanTopicStatusCreatedSubscriberQueue')
+        other_status_queue = self.create_sqs_queue('BigFanTopicAnyOtherStatusSubscriberQueue')
 
-        # Status:created SNS Subscriber Queue
-        created_status_queue = sqs.Queue(
-            self, 'BigFanTopicStatusCreatedSubscriberQueue',
-            visibility_timeout=cdk.Duration.seconds(300),
-            queue_name='BigFanTopicStatusCreatedSubscriberQueue'
-        )
 
-        # Only send messages to our created_status_queue with a status of created
-        created_filter = sns.SubscriptionFilter.string_filter(whitelist=['created'])
+        created_filter = sns.SubscriptionFilter.string_filter(allowlist=['created'])
         topic.add_subscription(subscriptions.SqsSubscription(
             created_status_queue,
             raw_message_delivery=True,
             filter_policy={'status': created_filter})
         )
 
-        # Any other status SNS Subscriber Queue
-        other_status_queue = sqs.Queue(
-            self, 'BigFanTopicAnyOtherStatusSubscriberQueue',
-            visibility_timeout=cdk.Duration.seconds(300),
-            queue_name='BigFanTopicAnyOtherStatusSubscriberQueue'
-        )
 
         # Only send messages to our other_status_queue that do not have a status of created
-        other_filter = sns.SubscriptionFilter.string_filter(blacklist=['created'])
+        other_filter = sns.SubscriptionFilter.string_filter(denylist=['created'])
         topic.add_subscription(subscriptions.SqsSubscription(
             other_status_queue,
             raw_message_delivery=True,
