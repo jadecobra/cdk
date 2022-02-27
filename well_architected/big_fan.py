@@ -1,3 +1,4 @@
+from pickle import STACK_GLOBAL
 from aws_cdk import (
     aws_lambda,
     aws_lambda_event_sources,
@@ -97,14 +98,10 @@ class BigFan(cdk.Stack):
             "MessageAttributes.entry.1.Value.DataType=String&" + \
             "MessageAttributes.entry.1.Value.StringValue=$util.urlEncode($input.path('$.status'))"
 
-        # This is the VTL to transform the error response
-        error_template_string = json.dumps(
-            {
-                "state": 'error',
-                "message": "$util.escapeJavaScript($input.path('$.errorMessage'))"
-            },
-            separators=(',', ':')
-        )
+        error_template_string = {
+            "state": 'error',
+            "message": "$util.escapeJavaScript($input.path('$.errorMessage'))"
+        }
 
         # This is how our gateway chooses what response to send based on selection_pattern
         integration_options = api_gw.IntegrationOptions(
@@ -119,16 +116,24 @@ class BigFan(cdk.Stack):
             integration_responses=[
                 api_gw.IntegrationResponse(
                     status_code='200',
-                    response_templates={
-                        "application/json": json.dumps(
-                            {"message": 'message added to topic'})
-                    }),
+                    response_templates=self.create_response_template(
+                        json.dumps(
+                            {"message": 'message added to topic'}
+                        )
+                    )
+                ),
                 api_gw.IntegrationResponse(
                     selection_pattern="^\[Error\].*",
                     status_code='400',
-                    response_templates={
-                        "application/json": error_template_string
-                    },
+                    response_templates=self.create_response_template(
+                        json.dumps(
+                            {
+                                "state": 'error',
+                                "message": "$util.escapeJavaScript($input.path('$.errorMessage'))"
+                            },
+                            separators=(',', ':')
+                        )
+                    ),
                     response_parameters={
                         'method.response.header.Content-Type': "'application/json'",
                         'method.response.header.Access-Control-Allow-Origin': "'*'",
@@ -162,6 +167,10 @@ class BigFan(cdk.Stack):
         )
 
     @staticmethod
+    def create_response_template(template):
+        return {'application/json': template}
+
+    @staticmethod
     def create_method_response(status_code=None, response_model=None):
         return api_gw.MethodResponse(
             status_code=str(status_code),
@@ -174,7 +183,6 @@ class BigFan(cdk.Stack):
                 'application/json': response_model
             }
         )
-
 
     def create_sqs_queue(self, queue_name):
         return sqs.Queue(
