@@ -60,34 +60,15 @@ class BigFan(cdk.Stack):
         )
         topic.grant_publish(api_gateway_service_role_for_sns)
 
-
-
-        response_model = self.create_api_response_model(
-            api=api,
-            model_name='ResponseModel',
-            title='pollResponse',
-            properties={
-                'message': api_gw.JsonSchema(type=api_gw.JsonSchemaType.STRING)
-            }
-        )
-
-        error_response_model = self.create_api_response_model(
-            api=api,
-            model_name='ErrorResponseModel',
-            title='errorResponse',
-            properties={
-                'state': api_gw.JsonSchema(type=api_gw.JsonSchemaType.STRING),
-                'message': api_gw.JsonSchema(type=api_gw.JsonSchemaType.STRING)
-            }
-        )
-
-        request_template = "Action=Publish&" + \
-            "TargetArn=$util.urlEncode('" + topic.topic_arn + "')&" + \
-            "Message=$util.urlEncode($input.path('$.message'))&" + \
-            "Version=2010-03-31&" + \
-            "MessageAttributes.entry.1.Name=status&" + \
-            "MessageAttributes.entry.1.Value.DataType=String&" + \
+        request_template = (
+            "Action=Publish&"
+            "TargetArn=$util.urlEncode('" + topic.topic_arn + "')&"
+            "Message=$util.urlEncode($input.path('$.message'))&"
+            "Version=2010-03-31&"
+            "MessageAttributes.entry.1.Name=status&"
+            "MessageAttributes.entry.1.Value.DataType=String&"
             "MessageAttributes.entry.1.Value.StringValue=$util.urlEncode($input.path('$.status'))"
+        )
 
         # This is how our gateway chooses what response to send based on selection_pattern
         integration_options = api_gw.IntegrationOptions(
@@ -141,11 +122,26 @@ class BigFan(cdk.Stack):
             method_responses=[
                 self.create_method_response(
                     status_code=200,
-                    response_model=response_model
+                    response_model=self.create_api_response_model(
+                        api=api,
+                        model_name='ResponseModel',
+                        title='pollResponse',
+                        properties={
+                            'message': self.json_schema_string()
+                        }
+                    )
                 ),
                 self.create_method_response(
                     status_code=400,
-                    response_model=error_response_model
+                    response_model=self.create_api_response_model(
+                        api=api,
+                        model_name='ErrorResponseModel',
+                        title='errorResponse',
+                        properties={
+                            'state': self.json_schema_string(),
+                            'message': self.json_schema_string()
+                        }
+                    )
                 )
             ]
         )
