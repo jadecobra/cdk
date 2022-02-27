@@ -13,42 +13,6 @@ import json
 
 class BigFan(cdk.Stack):
 
-    def create_sqs_queue(self, queue_name):
-        return sqs.Queue(
-            self, queue_name,
-            visibility_timeout=cdk.Duration.seconds(300),
-            queue_name=queue_name
-        )
-
-    def create_sqs_queue_with_subscription(self, queue_name=None, sns_topic=None, filter_name=None):
-        sqs_queue = self.create_sqs_queue(queue_name)
-        sns_topic.add_subscription(
-            subscriptions.SqsSubscription(
-                sqs_queue,
-                raw_message_delivery=True,
-                filter_policy={
-                    'status': sns.SubscriptionFilter.string_filter(
-                        **{filter_name: ['created']}
-                    )
-                }
-            )
-        )
-        return sqs_queue
-
-    @staticmethod
-    def connect_lambda_function_with_sqs_queue(lambda_function=None, sqs_queue=None):
-        if sqs_queue is not None or lambda_function is not None:
-            sqs_queue.grant_consume_messages(lambda_function)
-            lambda_function.add_event_source(aws_lambda_event_sources.SqsEventSource(sqs_queue))
-
-    def create_lambda_function(self, function_name):
-        return aws_lambda.Function(
-            self, function_name,
-            runtime=aws_lambda.Runtime.PYTHON_3_8,
-            handler=f"{function_name}.handler",
-            code=aws_lambda.Code.from_asset(f"lambda_functions/{function_name}")
-        )
-
     def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
@@ -194,3 +158,39 @@ class BigFan(cdk.Stack):
                                                   }),
                         ]
                         )
+
+    def create_sqs_queue(self, queue_name):
+        return sqs.Queue(
+            self, queue_name,
+            visibility_timeout=cdk.Duration.seconds(300),
+            queue_name=queue_name
+        )
+
+    def create_sqs_queue_with_subscription(self, queue_name=None, sns_topic=None, filter_name=None):
+        sqs_queue = self.create_sqs_queue(queue_name)
+        sns_topic.add_subscription(
+            subscriptions.SqsSubscription(
+                sqs_queue,
+                raw_message_delivery=True,
+                filter_policy={
+                    'status': sns.SubscriptionFilter.string_filter(
+                        **{filter_name: ['created']}
+                    )
+                }
+            )
+        )
+        return sqs_queue
+
+    @staticmethod
+    def connect_lambda_function_with_sqs_queue(lambda_function=None, sqs_queue=None):
+        if sqs_queue is not None or lambda_function is not None:
+            sqs_queue.grant_consume_messages(lambda_function)
+            lambda_function.add_event_source(aws_lambda_event_sources.SqsEventSource(sqs_queue))
+
+    def create_lambda_function(self, function_name):
+        return aws_lambda.Function(
+            self, function_name,
+            runtime=aws_lambda.Runtime.PYTHON_3_8,
+            handler=f"{function_name}.handler",
+            code=aws_lambda.Code.from_asset(f"lambda_functions/{function_name}")
+        )
