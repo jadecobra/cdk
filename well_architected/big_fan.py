@@ -20,7 +20,8 @@ class BigFan(cdk.Stack):
             queue_name=queue_name
         )
 
-    def add_subscription_to_topic(self, sns_topic=None, sqs_queue=None, **filter_list):
+    def create_sqs_queue_with_subscription(self, queue_name=None, sns_topic=None, **filter_list):
+        sqs_queue = self.create_sqs_queue(queue_name)
         sns_topic.add_subscription(
             subscriptions.SqsSubscription(
                 sqs_queue,
@@ -31,14 +32,6 @@ class BigFan(cdk.Stack):
                     )
                 }
             )
-        )
-
-    def create_sqs_queue_with_subscription(self, queue_name=None, sns_topic=None, **filter_list):
-        sqs_queue = self.create_sqs_queue(queue_name)
-        self.add_subscription_to_topic(
-            sns_topic=sns_topic,
-            sqs_queue=sqs_queue,
-            **filter_list
         )
         return sqs_queue
 
