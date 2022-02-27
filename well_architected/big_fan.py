@@ -2,7 +2,7 @@ from pickle import STACK_GLOBAL
 from aws_cdk import (
     aws_lambda,
     aws_lambda_event_sources,
-    aws_apigateway as api_gw,
+    aws_apigateway as api_gateway,
     aws_iam as iam,
     aws_sns as sns,
     aws_sns_subscriptions as subscriptions,
@@ -37,17 +37,11 @@ class BigFan(cdk.Stack):
                 sqs_queue=sqs_queue
             )
 
-        ###
-        # API Gateway Creation
-        # This is complicated because it transforms the incoming json payload into a query string url
-        # this url is used to post the payload to sns without a lambda inbetween
-        ###
-
-        api = api_gw.RestApi(
+        api = api_gateway.RestApi(
             self, 'theBigFanAPI',
-            deploy_options=api_gw.StageOptions(
+            deploy_options=api_gateway.StageOptions(
                 metrics_enabled=True,
-                logging_level=api_gw.MethodLoggingLevel.INFO,
+                logging_level=api_gateway.MethodLoggingLevel.INFO,
                 data_trace_enabled=True,
                 stage_name='prod'
             )
@@ -71,15 +65,15 @@ class BigFan(cdk.Stack):
         )
 
         # This is how our gateway chooses what response to send based on selection_pattern
-        integration_options = api_gw.IntegrationOptions(
+        integration_options = api_gateway.IntegrationOptions(
             credentials_role=api_gateway_service_role_for_sns,
             request_parameters={
                 'integration.request.header.Content-Type': "'application/x-www-form-urlencoded'"
             },
             request_templates=self.create_json_template(request_template),
-            passthrough_behavior=api_gw.PassthroughBehavior.NEVER,
+            passthrough_behavior=api_gateway.PassthroughBehavior.NEVER,
             integration_responses=[
-                api_gw.IntegrationResponse(
+                api_gateway.IntegrationResponse(
                     status_code='200',
                     response_templates=self.create_json_template(
                         json.dumps(
@@ -87,7 +81,7 @@ class BigFan(cdk.Stack):
                         )
                     )
                 ),
-                api_gw.IntegrationResponse(
+                api_gateway.IntegrationResponse(
                     selection_pattern="^\[Error\].*",
                     status_code='400',
                     response_templates=self.create_json_template(
@@ -113,8 +107,8 @@ class BigFan(cdk.Stack):
             'SendEvent'
         ).add_method(
             'POST',
-            api_gw.Integration(
-                type=api_gw.IntegrationType.AWS,
+            api_gateway.Integration(
+                type=api_gateway.IntegrationType.AWS,
                 integration_http_method='POST',
                 uri='arn:aws:apigateway:us-east-1:sns:path//',
                 options=integration_options
@@ -148,7 +142,7 @@ class BigFan(cdk.Stack):
 
     @staticmethod
     def json_schema_string():
-        return api_gw.JsonSchema(type=api_gw.JsonSchemaType.STRING)
+        return api_gateway.JsonSchema(type=api_gateway.JsonSchemaType.STRING)
 
     @staticmethod
     def create_api_response_model(api=None, model_name=None, title=None, properties=None):
@@ -156,10 +150,10 @@ class BigFan(cdk.Stack):
             model_name,
             content_type='application/json',
             model_name=model_name,
-            schema=api_gw.JsonSchema(
-                schema=api_gw.JsonSchemaVersion.DRAFT4,
+            schema=api_gateway.JsonSchema(
+                schema=api_gateway.JsonSchemaVersion.DRAFT4,
                 title=title,
-                type=api_gw.JsonSchemaType.OBJECT,
+                type=api_gateway.JsonSchemaType.OBJECT,
                 properties=properties
             )
         )
@@ -169,7 +163,7 @@ class BigFan(cdk.Stack):
         return {'application/json': template}
 
     def create_method_response(self, status_code=None, response_model=None):
-        return api_gw.MethodResponse(
+        return api_gateway.MethodResponse(
             status_code=str(status_code),
             response_parameters={
                 'method.response.header.Content-Type': True,
