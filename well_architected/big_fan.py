@@ -56,7 +56,7 @@ class BigFan(cdk.Stack):
 
         request_template = (
             "Action=Publish&"
-            "TargetArn=$util.urlEncode('" + topic.topic_arn + "')&"
+            f"TargetArn=$util.urlEncode('{topic.topic_arn}')&"
             "Message=$util.urlEncode($input.path('$.message'))&"
             "Version=2010-03-31&"
             "MessageAttributes.entry.1.Name=status&"
