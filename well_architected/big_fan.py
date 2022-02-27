@@ -33,6 +33,15 @@ class BigFan(cdk.Stack):
             )
         )
 
+    def create_sqs_queue_with_subscription(self, queue_name=None, sns_topic=None, **filter_list):
+        sqs_queue = self.create_sqs_queue(queue_name)
+        self.add_subscription_to_topic(
+            sns_topic=sns_topic,
+            sqs_queue=sqs_queue,
+            **filter_list
+        )
+        return sqs_queue
+
     def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
@@ -41,26 +50,19 @@ class BigFan(cdk.Stack):
             display_name='The Big Fan CDK Pattern Topic'
         )
 
-        created_status_queue = self.create_sqs_queue('BigFanTopicStatusCreatedSubscriberQueue')
-        # created_filter = sns.SubscriptionFilter.string_filter(allowlist=['created'])
-        # topic.add_subscription(subscriptions.SqsSubscription(
-        #     created_status_queue,
-        #     raw_message_delivery=True,
-        #     filter_policy={'status': created_filter})
+        # created_status_queue = self.create_sqs_queue('BigFanTopicStatusCreatedSubscriberQueue')
+        # self.add_subscription_to_topic(
+        #     sns_topic=topic,
+        #     sqs_queue=created_status_queue,
+        #     allowlist=['created']
         # )
-        self.add_subscription_to_topic(
+        created_status_queue = self.create_sqs_queue_with_subscription(
+            queue_name='BigFanTopicStatusCreatedSubscriberQueue',
             sns_topic=topic,
-            sqs_queue=created_status_queue,
-            allowlist=['created']
+            allowlist=['created'],
         )
 
         other_status_queue = self.create_sqs_queue('BigFanTopicAnyOtherStatusSubscriberQueue')
-        other_filter = sns.SubscriptionFilter.string_filter(denylist=['created'])
-        # topic.add_subscription(subscriptions.SqsSubscription(
-        #     other_status_queue,
-        #     raw_message_delivery=True,
-        #     filter_policy={'status': other_filter})
-        # )
         self.add_subscription_to_topic(
             sns_topic=topic,
             sqs_queue=other_status_queue,
