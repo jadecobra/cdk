@@ -22923,244 +22923,6 @@
               "version": "1.145.0"
             }
           },
-          "BigFanTopicStatusCreatedSubscriberQueue": {
-            "id": "BigFanTopicStatusCreatedSubscriberQueue",
-            "path": "BigFan/BigFanTopicStatusCreatedSubscriberQueue",
-            "children": {
-              "Resource": {
-                "id": "Resource",
-                "path": "BigFan/BigFanTopicStatusCreatedSubscriberQueue/Resource",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::SQS::Queue",
-                  "aws:cdk:cloudformation:props": {
-                    "queueName": "BigFanTopicStatusCreatedSubscriberQueue",
-                    "visibilityTimeout": 300
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-sqs.CfnQueue",
-                  "version": "1.145.0"
-                }
-              },
-              "Policy": {
-                "id": "Policy",
-                "path": "BigFan/BigFanTopicStatusCreatedSubscriberQueue/Policy",
-                "children": {
-                  "Resource": {
-                    "id": "Resource",
-                    "path": "BigFan/BigFanTopicStatusCreatedSubscriberQueue/Policy/Resource",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::SQS::QueuePolicy",
-                      "aws:cdk:cloudformation:props": {
-                        "policyDocument": {
-                          "Statement": [
-                            {
-                              "Action": "sqs:SendMessage",
-                              "Condition": {
-                                "ArnEquals": {
-                                  "aws:SourceArn": {
-                                    "Ref": "theBigFanTopicF96567DE"
-                                  }
-                                }
-                              },
-                              "Effect": "Allow",
-                              "Principal": {
-                                "Service": "sns.amazonaws.com"
-                              },
-                              "Resource": {
-                                "Fn::GetAtt": [
-                                  "BigFanTopicStatusCreatedSubscriberQueue589E974E",
-                                  "Arn"
-                                ]
-                              }
-                            }
-                          ],
-                          "Version": "2012-10-17"
-                        },
-                        "queues": [
-                          {
-                            "Ref": "BigFanTopicStatusCreatedSubscriberQueue589E974E"
-                          }
-                        ]
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "@aws-cdk/aws-sqs.CfnQueuePolicy",
-                      "version": "1.145.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-sqs.QueuePolicy",
-                  "version": "1.145.0"
-                }
-              },
-              "BigFantheBigFanTopicAC7D4F88": {
-                "id": "BigFantheBigFanTopicAC7D4F88",
-                "path": "BigFan/BigFanTopicStatusCreatedSubscriberQueue/BigFantheBigFanTopicAC7D4F88",
-                "children": {
-                  "Resource": {
-                    "id": "Resource",
-                    "path": "BigFan/BigFanTopicStatusCreatedSubscriberQueue/BigFantheBigFanTopicAC7D4F88/Resource",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::SNS::Subscription",
-                      "aws:cdk:cloudformation:props": {
-                        "protocol": "sqs",
-                        "topicArn": {
-                          "Ref": "theBigFanTopicF96567DE"
-                        },
-                        "endpoint": {
-                          "Fn::GetAtt": [
-                            "BigFanTopicStatusCreatedSubscriberQueue589E974E",
-                            "Arn"
-                          ]
-                        },
-                        "filterPolicy": {
-                          "status": [
-                            "created"
-                          ]
-                        },
-                        "rawMessageDelivery": true
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "@aws-cdk/aws-sns.CfnSubscription",
-                      "version": "1.145.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-sns.Subscription",
-                  "version": "1.145.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/aws-sqs.Queue",
-              "version": "1.145.0"
-            }
-          },
-          "BigFanTopicAnyOtherStatusSubscriberQueue": {
-            "id": "BigFanTopicAnyOtherStatusSubscriberQueue",
-            "path": "BigFan/BigFanTopicAnyOtherStatusSubscriberQueue",
-            "children": {
-              "Resource": {
-                "id": "Resource",
-                "path": "BigFan/BigFanTopicAnyOtherStatusSubscriberQueue/Resource",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::SQS::Queue",
-                  "aws:cdk:cloudformation:props": {
-                    "queueName": "BigFanTopicAnyOtherStatusSubscriberQueue",
-                    "visibilityTimeout": 300
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-sqs.CfnQueue",
-                  "version": "1.145.0"
-                }
-              },
-              "Policy": {
-                "id": "Policy",
-                "path": "BigFan/BigFanTopicAnyOtherStatusSubscriberQueue/Policy",
-                "children": {
-                  "Resource": {
-                    "id": "Resource",
-                    "path": "BigFan/BigFanTopicAnyOtherStatusSubscriberQueue/Policy/Resource",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::SQS::QueuePolicy",
-                      "aws:cdk:cloudformation:props": {
-                        "policyDocument": {
-                          "Statement": [
-                            {
-                              "Action": "sqs:SendMessage",
-                              "Condition": {
-                                "ArnEquals": {
-                                  "aws:SourceArn": {
-                                    "Ref": "theBigFanTopicF96567DE"
-                                  }
-                                }
-                              },
-                              "Effect": "Allow",
-                              "Principal": {
-                                "Service": "sns.amazonaws.com"
-                              },
-                              "Resource": {
-                                "Fn::GetAtt": [
-                                  "BigFanTopicAnyOtherStatusSubscriberQueue51F6CD76",
-                                  "Arn"
-                                ]
-                              }
-                            }
-                          ],
-                          "Version": "2012-10-17"
-                        },
-                        "queues": [
-                          {
-                            "Ref": "BigFanTopicAnyOtherStatusSubscriberQueue51F6CD76"
-                          }
-                        ]
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "@aws-cdk/aws-sqs.CfnQueuePolicy",
-                      "version": "1.145.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-sqs.QueuePolicy",
-                  "version": "1.145.0"
-                }
-              },
-              "BigFantheBigFanTopicAC7D4F88": {
-                "id": "BigFantheBigFanTopicAC7D4F88",
-                "path": "BigFan/BigFanTopicAnyOtherStatusSubscriberQueue/BigFantheBigFanTopicAC7D4F88",
-                "children": {
-                  "Resource": {
-                    "id": "Resource",
-                    "path": "BigFan/BigFanTopicAnyOtherStatusSubscriberQueue/BigFantheBigFanTopicAC7D4F88/Resource",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::SNS::Subscription",
-                      "aws:cdk:cloudformation:props": {
-                        "protocol": "sqs",
-                        "topicArn": {
-                          "Ref": "theBigFanTopicF96567DE"
-                        },
-                        "endpoint": {
-                          "Fn::GetAtt": [
-                            "BigFanTopicAnyOtherStatusSubscriberQueue51F6CD76",
-                            "Arn"
-                          ]
-                        },
-                        "filterPolicy": {
-                          "status": [
-                            {
-                              "anything-but": [
-                                "created"
-                              ]
-                            }
-                          ]
-                        },
-                        "rawMessageDelivery": true
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "@aws-cdk/aws-sns.CfnSubscription",
-                      "version": "1.145.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-sns.Subscription",
-                  "version": "1.145.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/aws-sqs.Queue",
-              "version": "1.145.0"
-            }
-          },
           "big_fan_logger": {
             "id": "big_fan_logger",
             "path": "BigFan/big_fan_logger",
@@ -23476,6 +23238,244 @@
             },
             "constructInfo": {
               "fqn": "@aws-cdk/core.Construct",
+              "version": "1.145.0"
+            }
+          },
+          "BigFanTopicStatusCreatedSubscriberQueue": {
+            "id": "BigFanTopicStatusCreatedSubscriberQueue",
+            "path": "BigFan/BigFanTopicStatusCreatedSubscriberQueue",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "BigFan/BigFanTopicStatusCreatedSubscriberQueue/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::SQS::Queue",
+                  "aws:cdk:cloudformation:props": {
+                    "queueName": "BigFanTopicStatusCreatedSubscriberQueue",
+                    "visibilityTimeout": 300
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-sqs.CfnQueue",
+                  "version": "1.145.0"
+                }
+              },
+              "Policy": {
+                "id": "Policy",
+                "path": "BigFan/BigFanTopicStatusCreatedSubscriberQueue/Policy",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "BigFan/BigFanTopicStatusCreatedSubscriberQueue/Policy/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::SQS::QueuePolicy",
+                      "aws:cdk:cloudformation:props": {
+                        "policyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sqs:SendMessage",
+                              "Condition": {
+                                "ArnEquals": {
+                                  "aws:SourceArn": {
+                                    "Ref": "theBigFanTopicF96567DE"
+                                  }
+                                }
+                              },
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "sns.amazonaws.com"
+                              },
+                              "Resource": {
+                                "Fn::GetAtt": [
+                                  "BigFanTopicStatusCreatedSubscriberQueue589E974E",
+                                  "Arn"
+                                ]
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "queues": [
+                          {
+                            "Ref": "BigFanTopicStatusCreatedSubscriberQueue589E974E"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-sqs.CfnQueuePolicy",
+                      "version": "1.145.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-sqs.QueuePolicy",
+                  "version": "1.145.0"
+                }
+              },
+              "BigFantheBigFanTopicAC7D4F88": {
+                "id": "BigFantheBigFanTopicAC7D4F88",
+                "path": "BigFan/BigFanTopicStatusCreatedSubscriberQueue/BigFantheBigFanTopicAC7D4F88",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "BigFan/BigFanTopicStatusCreatedSubscriberQueue/BigFantheBigFanTopicAC7D4F88/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::SNS::Subscription",
+                      "aws:cdk:cloudformation:props": {
+                        "protocol": "sqs",
+                        "topicArn": {
+                          "Ref": "theBigFanTopicF96567DE"
+                        },
+                        "endpoint": {
+                          "Fn::GetAtt": [
+                            "BigFanTopicStatusCreatedSubscriberQueue589E974E",
+                            "Arn"
+                          ]
+                        },
+                        "filterPolicy": {
+                          "status": [
+                            "created"
+                          ]
+                        },
+                        "rawMessageDelivery": true
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-sns.CfnSubscription",
+                      "version": "1.145.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-sns.Subscription",
+                  "version": "1.145.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/aws-sqs.Queue",
+              "version": "1.145.0"
+            }
+          },
+          "BigFanTopicAnyOtherStatusSubscriberQueue": {
+            "id": "BigFanTopicAnyOtherStatusSubscriberQueue",
+            "path": "BigFan/BigFanTopicAnyOtherStatusSubscriberQueue",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "BigFan/BigFanTopicAnyOtherStatusSubscriberQueue/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::SQS::Queue",
+                  "aws:cdk:cloudformation:props": {
+                    "queueName": "BigFanTopicAnyOtherStatusSubscriberQueue",
+                    "visibilityTimeout": 300
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-sqs.CfnQueue",
+                  "version": "1.145.0"
+                }
+              },
+              "Policy": {
+                "id": "Policy",
+                "path": "BigFan/BigFanTopicAnyOtherStatusSubscriberQueue/Policy",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "BigFan/BigFanTopicAnyOtherStatusSubscriberQueue/Policy/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::SQS::QueuePolicy",
+                      "aws:cdk:cloudformation:props": {
+                        "policyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sqs:SendMessage",
+                              "Condition": {
+                                "ArnEquals": {
+                                  "aws:SourceArn": {
+                                    "Ref": "theBigFanTopicF96567DE"
+                                  }
+                                }
+                              },
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "sns.amazonaws.com"
+                              },
+                              "Resource": {
+                                "Fn::GetAtt": [
+                                  "BigFanTopicAnyOtherStatusSubscriberQueue51F6CD76",
+                                  "Arn"
+                                ]
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "queues": [
+                          {
+                            "Ref": "BigFanTopicAnyOtherStatusSubscriberQueue51F6CD76"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-sqs.CfnQueuePolicy",
+                      "version": "1.145.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-sqs.QueuePolicy",
+                  "version": "1.145.0"
+                }
+              },
+              "BigFantheBigFanTopicAC7D4F88": {
+                "id": "BigFantheBigFanTopicAC7D4F88",
+                "path": "BigFan/BigFanTopicAnyOtherStatusSubscriberQueue/BigFantheBigFanTopicAC7D4F88",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "BigFan/BigFanTopicAnyOtherStatusSubscriberQueue/BigFantheBigFanTopicAC7D4F88/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::SNS::Subscription",
+                      "aws:cdk:cloudformation:props": {
+                        "protocol": "sqs",
+                        "topicArn": {
+                          "Ref": "theBigFanTopicF96567DE"
+                        },
+                        "endpoint": {
+                          "Fn::GetAtt": [
+                            "BigFanTopicAnyOtherStatusSubscriberQueue51F6CD76",
+                            "Arn"
+                          ]
+                        },
+                        "filterPolicy": {
+                          "status": [
+                            {
+                              "anything-but": [
+                                "created"
+                              ]
+                            }
+                          ]
+                        },
+                        "rawMessageDelivery": true
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-sns.CfnSubscription",
+                      "version": "1.145.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-sns.Subscription",
+                  "version": "1.145.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/aws-sqs.Queue",
               "version": "1.145.0"
             }
           },

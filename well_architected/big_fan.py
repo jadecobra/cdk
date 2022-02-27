@@ -20,7 +20,7 @@ class BigFan(cdk.Stack):
             queue_name=queue_name
         )
 
-    def create_sqs_queue_with_subscription(self, queue_name=None, sns_topic=None, **filter_list):
+    def create_sqs_queue_with_subscription(self, queue_name=None, sns_topic=None, filter_name=None):
         sqs_queue = self.create_sqs_queue(queue_name)
         sns_topic.add_subscription(
             subscriptions.SqsSubscription(
@@ -28,7 +28,8 @@ class BigFan(cdk.Stack):
                 raw_message_delivery=True,
                 filter_policy={
                     'status': sns.SubscriptionFilter.string_filter(
-                        **filter_list
+                        # **filter_list,
+                        **{filter_name: ['created']}
                     )
                 }
             )
@@ -56,21 +57,20 @@ class BigFan(cdk.Stack):
             self, 'theBigFanTopic',
             display_name='The Big Fan CDK Pattern Topic'
         )
-
-        created_status_queue = self.create_sqs_queue_with_subscription(
-            queue_name='BigFanTopicStatusCreatedSubscriberQueue',
-            sns_topic=topic,
-            allowlist=['created'],
-        )
-
-        other_status_queue = self.create_sqs_queue_with_subscription(
-            queue_name='BigFanTopicAnyOtherStatusSubscriberQueue',
-            sns_topic=topic,
-            denylist=['created']
-        )
-
         logging_lambda_function = self.create_lambda_function("big_fan_logger")
-        for sqs_queue in (created_status_queue, other_status_queue):
+
+        for sqs_queue in (
+            self.create_sqs_queue_with_subscription(
+                queue_name='BigFanTopicStatusCreatedSubscriberQueue',
+                sns_topic=topic,
+                filter_name='allowlist'
+            ),
+            self.create_sqs_queue_with_subscription(
+                queue_name='BigFanTopicAnyOtherStatusSubscriberQueue',
+                sns_topic=topic,
+                filter_name='denylist'
+            )
+        ):
             self.connect_lambda_function_with_sqs_queue(
                 lambda_function=logging_lambda_function,
                 sqs_queue=sqs_queue
