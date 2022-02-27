@@ -72,24 +72,17 @@ class BigFan(cdk.Stack):
             denylist=['created']
         )
 
-        created = self.create_lambda_function(
+        logging_lambda_function = self.create_lambda_function(
             stack_name="big_fan_logger",
             handler_name="big_fan_logger",
             function_name="big_fan_logger",
             sqs_queue=created_status_queue
         )
         self.connect_lambda_function_with_sqs_queue(
-            lambda_function=created, sqs_queue=created_status_queue
-        )
-
-        not_created = self.create_lambda_function(
-            stack_name="not_created",
-            handler_name="big_fan_logger",
-            function_name="big_fan_logger",
-            sqs_queue=other_status_queue,
+            lambda_function=logging_lambda_function, sqs_queue=created_status_queue
         )
         self.connect_lambda_function_with_sqs_queue(
-            lambda_function=not_created, sqs_queue=other_status_queue
+            lambda_function=logging_lambda_function, sqs_queue=other_status_queue
         )
 
         ###
