@@ -43,7 +43,7 @@ class BigFan(cdk.Stack):
         # this url is used to post the payload to sns without a lambda inbetween
         ###
 
-        gateway = api_gw.RestApi(
+        api = api_gw.RestApi(
             self, 'theBigFanAPI',
             deploy_options=api_gw.StageOptions(
                 metrics_enabled=True,
@@ -60,34 +60,25 @@ class BigFan(cdk.Stack):
         )
         topic.grant_publish(api_gateway_service_role_for_sns)
 
-        # shortening the lines of later code
-        schema = api_gw.JsonSchema
-        schema_type = api_gw.JsonSchemaType
 
-        # Because this isn't a proxy integration, we need to define our response model
-        response_model = gateway.add_model(
-            'ResponseModel',
-            content_type='application/json',
+
+        response_model = self.create_api_response_model(
+            api=api,
             model_name='ResponseModel',
-            schema=schema(schema=api_gw.JsonSchemaVersion.DRAFT4,
             title='pollResponse',
-            type=schema_type.OBJECT,
             properties={
-                'message': schema(type=schema_type.STRING)
-            })
+                'message': api_gw.JsonSchema(type=api_gw.JsonSchemaType.STRING)
+            }
         )
 
-        error_response_model = gateway.add_model(
-            'ErrorResponseModel',
-            content_type='application/json',
+        error_response_model = self.create_api_response_model(
+            api=api,
             model_name='ErrorResponseModel',
-            schema=schema(schema=api_gw.JsonSchemaVersion.DRAFT4,
             title='errorResponse',
-            type=schema_type.OBJECT,
             properties={
-                'state': schema(type=schema_type.STRING),
-                'message': schema(type=schema_type.STRING)
-            })
+                'state': api_gw.JsonSchema(type=api_gw.JsonSchemaType.STRING),
+                'message': api_gw.JsonSchema(type=api_gw.JsonSchemaType.STRING)
+            }
         )
 
         request_template = "Action=Publish&" + \
@@ -98,25 +89,18 @@ class BigFan(cdk.Stack):
             "MessageAttributes.entry.1.Value.DataType=String&" + \
             "MessageAttributes.entry.1.Value.StringValue=$util.urlEncode($input.path('$.status'))"
 
-        error_template_string = {
-            "state": 'error',
-            "message": "$util.escapeJavaScript($input.path('$.errorMessage'))"
-        }
-
         # This is how our gateway chooses what response to send based on selection_pattern
         integration_options = api_gw.IntegrationOptions(
             credentials_role=api_gateway_service_role_for_sns,
             request_parameters={
                 'integration.request.header.Content-Type': "'application/x-www-form-urlencoded'"
             },
-            request_templates={
-                "application/json": request_template
-            },
+            request_templates=self.create_json_template(request_template),
             passthrough_behavior=api_gw.PassthroughBehavior.NEVER,
             integration_responses=[
                 api_gw.IntegrationResponse(
                     status_code='200',
-                    response_templates=self.create_response_template(
+                    response_templates=self.create_json_template(
                         json.dumps(
                             {"message": 'message added to topic'}
                         )
@@ -125,7 +109,7 @@ class BigFan(cdk.Stack):
                 api_gw.IntegrationResponse(
                     selection_pattern="^\[Error\].*",
                     status_code='400',
-                    response_templates=self.create_response_template(
+                    response_templates=self.create_json_template(
                         json.dumps(
                             {
                                 "state": 'error',
@@ -144,7 +128,7 @@ class BigFan(cdk.Stack):
         )
 
         # Add an SendEvent endpoint onto the gateway
-        gateway.root.add_resource(
+        api.root.add_resource(
             'SendEvent'
         ).add_method(
             'POST',
@@ -167,11 +151,28 @@ class BigFan(cdk.Stack):
         )
 
     @staticmethod
-    def create_response_template(template):
-        return {'application/json': template}
+    def json_schema_string():
+        return api_gw.JsonSchema(type=api_gw.JsonSchemaType.STRING)
 
     @staticmethod
-    def create_method_response(status_code=None, response_model=None):
+    def create_api_response_model(api=None, model_name=None, title=None, properties=None):
+        return api.add_model(
+            model_name,
+            content_type='application/json',
+            model_name=model_name,
+            schema=api_gw.JsonSchema(
+                schema=api_gw.JsonSchemaVersion.DRAFT4,
+                title=title,
+                type=api_gw.JsonSchemaType.OBJECT,
+                properties=properties
+            )
+        )
+
+    @staticmethod
+    def create_json_template(template):
+        return {'application/json': template}
+
+    def create_method_response(self, status_code=None, response_model=None):
         return api_gw.MethodResponse(
             status_code=str(status_code),
             response_parameters={
@@ -179,9 +180,7 @@ class BigFan(cdk.Stack):
                 'method.response.header.Access-Control-Allow-Origin': True,
                 'method.response.header.Access-Control-Allow-Credentials': True
             },
-            response_models={
-                'application/json': response_model
-            }
+            response_models=self.create_json_template(response_model)
         )
 
     def create_sqs_queue(self, queue_name):
