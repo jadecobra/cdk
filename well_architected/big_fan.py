@@ -39,38 +39,89 @@ class BigFan(cdk.Stack):
 
         api = api_gateway.RestApi(
             self, 'theBigFanAPI',
-            deploy_options=api_gateway.StageOptions(
-                metrics_enabled=True,
-                logging_level=api_gateway.MethodLoggingLevel.INFO,
-                data_trace_enabled=True,
-                stage_name='prod'
-            )
+            deploy_options=self.deploy_options()
         )
 
-        # Give our gateway permissions to interact with SNS
         api_gateway_service_role_for_sns = iam.Role(
             self, 'DefaultLambdaHanderRole',
             assumed_by=iam.ServicePrincipal('apigateway.amazonaws.com')
         )
+
         topic.grant_publish(api_gateway_service_role_for_sns)
 
-        request_template = (
-            "Action=Publish&"
-            f"TargetArn=$util.urlEncode('{topic.topic_arn}')&"
-            "Message=$util.urlEncode($input.path('$.message'))&"
-            "Version=2010-03-31&"
-            "MessageAttributes.entry.1.Name=status&"
-            "MessageAttributes.entry.1.Value.DataType=String&"
-            "MessageAttributes.entry.1.Value.StringValue=$util.urlEncode($input.path('$.status'))"
+        self.add_resource_method(
+            api=api,
+            iam_role=api_gateway_service_role_for_sns,
+            topic_arn=topic.topic_arn
         )
 
-        # This is how our gateway chooses what response to send based on selection_pattern
-        integration_options = api_gateway.IntegrationOptions(
-            credentials_role=api_gateway_service_role_for_sns,
+    @staticmethod
+    def deploy_options():
+        return api_gateway.StageOptions(
+            metrics_enabled=True,
+            logging_level=api_gateway.MethodLoggingLevel.INFO,
+            data_trace_enabled=True,
+            stage_name='prod'
+        )
+
+    def add_resource_method(self, api=None, iam_role=None, topic_arn=None):
+        api.root.add_resource(
+            'SendEvent'
+        ).add_method(
+            'POST',
+            api_gateway.Integration(
+                type=api_gateway.IntegrationType.AWS,
+                integration_http_method='POST',
+                uri='arn:aws:apigateway:us-east-1:sns:path//',
+                options=self.integration_options(
+                    iam_role=iam_role,
+                    topic_arn=topic_arn,
+                )
+            ),
+            method_responses=[
+                self.create_method_response(
+                    status_code=200,
+                    response_model=self.create_api_response_model(
+                        api=api,
+                        model_name='ResponseModel',
+                        title='pollResponse',
+                        properties={
+                            'message': self.json_schema_string()
+                        }
+                    )
+                ),
+                self.create_method_response(
+                    status_code=400,
+                    response_model=self.create_api_response_model(
+                        api=api,
+                        model_name='ErrorResponseModel',
+                        title='errorResponse',
+                        properties={
+                            'state': self.json_schema_string(),
+                            'message': self.json_schema_string()
+                        }
+                    )
+                )
+            ]
+        )
+
+    def integration_options(self, iam_role=None, topic_arn=None):
+        return api_gateway.IntegrationOptions(
+            credentials_role=iam_role,
             request_parameters={
                 'integration.request.header.Content-Type': "'application/x-www-form-urlencoded'"
             },
-            request_templates=self.create_json_template(request_template),
+            request_templates=self.create_json_template(
+                (
+                    "Action=Publish&"
+                    f"TargetArn=$util.urlEncode('{topic_arn}')&"
+                    "Message=$util.urlEncode($input.path('$.message'))&"
+                    "Version=2010-03-31&"
+                    "MessageAttributes.entry.1.Name=status&"
+                    "MessageAttributes.entry.1.Value.DataType=String&"
+                    "MessageAttributes.entry.1.Value.StringValue=$util.urlEncode($input.path('$.status'))"
+                )
+            ),
             passthrough_behavior=api_gateway.PassthroughBehavior.NEVER,
             integration_responses=[
                 api_gateway.IntegrationResponse(
@@ -98,44 +149,6 @@ class BigFan(cdk.Stack):
                         'method.response.header.Access-Control-Allow-Origin': "'*'",
                         'method.response.header.Access-Control-Allow-Credentials': "'true'"
                     }
-                )
-            ]
-        )
-
-        # Add an SendEvent endpoint onto the gateway
-        api.root.add_resource(
-            'SendEvent'
-        ).add_method(
-            'POST',
-            api_gateway.Integration(
-                type=api_gateway.IntegrationType.AWS,
-                integration_http_method='POST',
-                uri='arn:aws:apigateway:us-east-1:sns:path//',
-                options=integration_options
-            ),
-            method_responses=[
-                self.create_method_response(
-                    status_code=200,
-                    response_model=self.create_api_response_model(
-                        api=api,
-                        model_name='ResponseModel',
-                        title='pollResponse',
-                        properties={
-                            'message': self.json_schema_string()
-                        }
-                    )
-                ),
-                self.create_method_response(
-                    status_code=400,
-                    response_model=self.create_api_response_model(
-                        api=api,
-                        model_name='ErrorResponseModel',
-                        title='errorResponse',
-                        properties={
-                            'state': self.json_schema_string(),
-                            'message': self.json_schema_string()
-                        }
-                    )
                 )
             ]
         )
