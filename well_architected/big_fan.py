@@ -50,22 +50,15 @@ class BigFan(cdk.Stack):
             display_name='The Big Fan CDK Pattern Topic'
         )
 
-        # created_status_queue = self.create_sqs_queue('BigFanTopicStatusCreatedSubscriberQueue')
-        # self.add_subscription_to_topic(
-        #     sns_topic=topic,
-        #     sqs_queue=created_status_queue,
-        #     allowlist=['created']
-        # )
         created_status_queue = self.create_sqs_queue_with_subscription(
             queue_name='BigFanTopicStatusCreatedSubscriberQueue',
             sns_topic=topic,
             allowlist=['created'],
         )
 
-        other_status_queue = self.create_sqs_queue('BigFanTopicAnyOtherStatusSubscriberQueue')
-        self.add_subscription_to_topic(
+        other_status_queue = self.create_sqs_queue_with_subscription(
+            queue_name='BigFanTopicAnyOtherStatusSubscriberQueue',
             sns_topic=topic,
-            sqs_queue=other_status_queue,
             denylist=['created']
         )
 
