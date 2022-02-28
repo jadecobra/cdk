@@ -6,14 +6,14 @@ from aws_cdk import (
     aws_iam as iam,
     core as cdk
 )
-
+import lambda_function
 
 class EventBridgeAtm(cdk.Stack):
 
     def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        self.create_lambda_function(
+        self.create_lambda_function_with_event_bridge_rule(
             handler_name="approved_transaction_handler",
             function_name="atm_consumer",
             event_bridge_rule=self.create_event_bridge_rule(
@@ -25,7 +25,7 @@ class EventBridgeAtm(cdk.Stack):
             ),
         )
 
-        self.create_lambda_function(
+        self.create_lambda_function_with_event_bridge_rule(
             handler_name="ny_prefix_transaction_handler",
             function_name="atm_consumer",
             event_bridge_rule=self.create_event_bridge_rule(
@@ -36,7 +36,7 @@ class EventBridgeAtm(cdk.Stack):
             ),
         )
 
-        self.create_lambda_function(
+        self.create_lambda_function_with_event_bridge_rule(
             handler_name="not_approved_transaction_handler",
             function_name="atm_consumer",
             event_bridge_rule=self.create_event_bridge_rule(
@@ -47,7 +47,7 @@ class EventBridgeAtm(cdk.Stack):
             ),
         )
 
-        atm_producer_lambda = self.create_lambda_function(
+        atm_producer_lambda = self.create_lambda_function_with_event_bridge_rule(
             function_name="atm_producer"
         )
 
@@ -75,21 +75,26 @@ class EventBridgeAtm(cdk.Stack):
             )
         )
 
-    def create_lambda_function(
-        self, stack_name=None, handler_name=None, function_name=None,
+    def create_lambda_function_with_event_bridge_rule(
+        self, handler_name=None, function_name=None,
         event_bridge_rule:events.Rule=None
     ):
         handler_name = 'handler' if not handler_name else handler_name
-        lambda_function = aws_lambda.Function(
+        function = aws_lambda.Function(
             self, handler_name,
             runtime=aws_lambda.Runtime.PYTHON_3_9,
             handler=f"{function_name}.{handler_name}",
             code=aws_lambda.Code.from_asset(f"lambda_functions/{function_name}")
         )
+        # function = lambda_function.create_python_lambda_function(
+        #     self, construct_id=handler_name,
+        #     handler_name=handler_name,
+        #     function_name=function_name,
+        # )
         if event_bridge_rule:
             event_bridge_rule.add_target(
                 targets.LambdaFunction(
-                    handler=lambda_function
+                    handler=function
                 )
             )
-        return lambda_function
+        return function

@@ -7,16 +7,18 @@ import utilities
 class LambdaFunctionConstruct(WellArchitectedFrameworkConstruct):
 
     def __init__(self, scope: Construct, id: str,
-        function_name=None, environment_variables=None,
+        function_name=None, handler_name=None,
+        environment_variables=None,
         error_topic:ITopic=None, layers:list[str]=None,
         concurrent_executions=None,
         duration=60, vpc=None,
         **kwargs) -> None:
         super().__init__(scope, id, error_topic=error_topic, **kwargs)
+        handler_name = 'handler' if handler_name is None else handler_name
         self.lambda_function = Function(
             self, id, # can we use id as function_name
             runtime=Runtime.PYTHON_3_9,
-            handler=f'{function_name}.handler',
+            handler=f'{function_name}.{handler_name}',
             code=Code.from_asset(f"lambda_functions/{function_name}"),
             timeout=Duration.seconds(duration),
             tracing=Tracing.ACTIVE,
@@ -129,23 +131,27 @@ class LambdaFunctionStack(Stack):
 
     def __init__(self, scope: Construct, id: str,
         function_name=None, environment_variables=None, error_topic:ITopic=None,
+        handler_name=None,
         **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
         self.lambda_function = create_python_lambda_function(
             self, function_name=function_name,
             environment_variables=environment_variables,
             error_topic=error_topic,
+            handler_name=handler_name,
         )
 
 def create_python_lambda_function(
         stack,
-        function_name=None, environment_variables=None,
+        function_name=None, handler_name=None,
+        environment_variables=None,
         duration=60, error_topic=None, vpc=None,
         concurrent_executions=None,
     ):
     return LambdaFunctionConstruct(
         stack, function_name,
         function_name=function_name,
+        handler_name=handler_name,
         environment_variables=environment_variables,
         duration=duration,
         error_topic=error_topic,
