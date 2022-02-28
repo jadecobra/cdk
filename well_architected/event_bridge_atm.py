@@ -70,11 +70,10 @@ class EventBridgeAtm(cdk.Stack):
         not_approved_transaction_rule.add_target(targets.LambdaFunction(handler=not_approved_transaction_lambda_function))
 
 
-        atm_producer_lambda = aws_lambda.Function(
-            self, "atmProducerLambda",
-            runtime=aws_lambda.Runtime.PYTHON_3_9,
-            handler="handler.lambdaHandler",
-            code=aws_lambda.Code.from_asset("lambda_functions/atm_producer")
+        atm_producer_lambda = self.create_lambda_function(
+            stack_name="atmProducerLambda",
+            handler_name="lambdaHandler",
+            function_name="atm_producer"
         )
 
         atm_producer_lambda.add_to_role_policy(
