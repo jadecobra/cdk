@@ -14,16 +14,17 @@ from xray_tracer.http_flow import HttpFlow
 import aws_cdk.core as cdk
 import aws_cdk.aws_dynamodb as aws_dynamodb
 
+import big_fan
+import destined_lambda
+import event_bridge_atm
 import event_bridge_circuit_breaker
 import event_bridge_etl
+import lambda_circuit_breaker
 import lambda_trilogy.lambda_lith
 import lambda_trilogy.fat_lambda
 import lambda_trilogy.single_purpose_lambda
 import rds_proxy
 import scalable_webhook
-import lambda_circuit_breaker
-import destined_lambda
-import big_fan
 
 
 class WellArchitected(cdk.App):
@@ -53,15 +54,21 @@ class WellArchitected(cdk.App):
         event_bridge_circuit_breaker.EventBridgeCircuitBreaker(
             self, 'EventBridgeCircuitBreaker'
         )
+
+        big_fan.BigFan(self, "BigFan")
+
+        destined_lambda.DestinedLambda(self, "DestinedLambda")
+
+        event_bridge_atm.EventBridgeAtm(self, "EventBridgeAtm")
         event_bridge_etl.EventbridgeEtl(self, 'EventBridgeEtl')
+
         lambda_trilogy.lambda_lith.LambdaLith(self, "LambdaLith")
         lambda_trilogy.fat_lambda.TheFatLambdaStack(self, "FatLambda")
         lambda_trilogy.single_purpose_lambda.TheSinglePurposeFunctionStack(self, "SinglePurposeLambda")
+        lambda_circuit_breaker.LambdaCircuitBreaker(self, "LambdaCircuitBreaker")
+
         rds_proxy.RdsProxy(self, "RdsProxy")
         scalable_webhook.ScalableWebhook(self, "ScalableWebhook")
-        lambda_circuit_breaker.LambdaCircuitBreaker(self, "LambdaCircuitBreaker")
-        destined_lambda.DestinedLambda(self, "DestinedLambda")
-        big_fan.BigFan(self, "BigFan")
 
     def create_http_api(self):
         self.http_api = LambdaHttpApiGateway(
