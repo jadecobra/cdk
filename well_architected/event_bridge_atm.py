@@ -18,14 +18,14 @@ class EventBridgeAtm(cdk.Stack):
         #
         # Approved Transaction Consumer
         #
-        atm_consumer1_lambda = aws_lambda.Function(
+        approved_transaction_lambda_function = aws_lambda.Function(
             self, "atm_consumer1Lambda",
             runtime=aws_lambda.Runtime.NODEJS_12_X,
             handler="handler.case_1_handler",
             code=aws_lambda.Code.from_asset("lambda_functions/atm_consumer")
         )
 
-        atm_consumer1_rule = events.Rule(
+        approved_transaction_rule = events.Rule(
             self, 'atm_consumer1LambdaRule',
             description='Approved Transactions',
             event_pattern=events.EventPattern(
@@ -37,18 +37,14 @@ class EventBridgeAtm(cdk.Stack):
             )
         )
 
-
-        #
-        # NY Prefix Consumer
-        #
-        atm_consumer2_lambda = aws_lambda.Function(
+        ny_prefix_transaction_lambda_function = aws_lambda.Function(
             self, "atm_consumer2Lambda",
             runtime=aws_lambda.Runtime.NODEJS_12_X,
             handler="handler.case_2_handler",
             code=aws_lambda.Code.from_asset("lambda_functions/atm_consumer")
         )
 
-        atm_consumer2_rule = events.Rule(
+        ny_prefix_transaction_rule = events.Rule(
             self, 'atm_consumer2LambdaRule',
             event_pattern=events.EventPattern(
                 source=['custom.myATMapp'],
@@ -59,19 +55,14 @@ class EventBridgeAtm(cdk.Stack):
             )
         )
 
-
-
-        #
-        # Not Approved Consumer
-        #
-        atm_consumer3_lambda = aws_lambda.Function(
+        not_approved_transaction_lambda_function = aws_lambda.Function(
             self, "atm_consumer3Lambda",
             runtime=aws_lambda.Runtime.NODEJS_12_X,
             handler="handler.case_3_handler",
             code=aws_lambda.Code.from_asset("lambda_functions/atm_consumer")
         )
 
-        atm_consumer3_rule = events.Rule(
+        not_approved_transaction_rule = events.Rule(
             self, 'atm_consumer3LambdaRule',
             event_pattern=events.EventPattern(
                 source=['custom.myATMapp'],
@@ -82,9 +73,9 @@ class EventBridgeAtm(cdk.Stack):
             )
         )
 
-        atm_consumer1_rule.add_target(targets.LambdaFunction(handler=atm_consumer1_lambda))
-        atm_consumer2_rule.add_target(targets.LambdaFunction(handler=atm_consumer2_lambda))
-        atm_consumer3_rule.add_target(targets.LambdaFunction(handler=atm_consumer3_lambda))
+        approved_transaction_rule.add_target(targets.LambdaFunction(handler=approved_transaction_lambda_function))
+        ny_prefix_transaction_rule.add_target(targets.LambdaFunction(handler=ny_prefix_transaction_lambda_function))
+        not_approved_transaction_rule.add_target(targets.LambdaFunction(handler=not_approved_transaction_lambda_function))
 
 
         atm_producer_lambda = aws_lambda.Function(
