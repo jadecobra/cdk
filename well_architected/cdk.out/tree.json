@@ -12610,7 +12610,7 @@
                         "id": "Target0",
                         "arn": {
                           "Fn::GetAtt": [
-                            "approvedtransactionhandler6C205DA8",
+                            "approvedtransactionhandler95833F29",
                             "Arn"
                           ]
                         }
@@ -12623,16 +12623,16 @@
                   "version": "1.145.0"
                 }
               },
-              "AllowEventRuleEventBridgeAtmapprovedtransactionhandler89C399BB": {
-                "id": "AllowEventRuleEventBridgeAtmapprovedtransactionhandler89C399BB",
-                "path": "EventBridgeAtm/approved_transactions_rule/AllowEventRuleEventBridgeAtmapprovedtransactionhandler89C399BB",
+              "AllowEventRuleEventBridgeAtmapprovedtransactionhandler50CC5F0E": {
+                "id": "AllowEventRuleEventBridgeAtmapprovedtransactionhandler50CC5F0E",
+                "path": "EventBridgeAtm/approved_transactions_rule/AllowEventRuleEventBridgeAtmapprovedtransactionhandler50CC5F0E",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                   "aws:cdk:cloudformation:props": {
                     "action": "lambda:InvokeFunction",
                     "functionName": {
                       "Fn::GetAtt": [
-                        "approvedtransactionhandler6C205DA8",
+                        "approvedtransactionhandler95833F29",
                         "Arn"
                       ]
                     },
@@ -12660,143 +12660,592 @@
             "id": "approved_transaction_handler",
             "path": "EventBridgeAtm/approved_transaction_handler",
             "children": {
-              "ServiceRole": {
-                "id": "ServiceRole",
-                "path": "EventBridgeAtm/approved_transaction_handler/ServiceRole",
+              "ErrorTopic": {
+                "id": "ErrorTopic",
+                "path": "EventBridgeAtm/approved_transaction_handler/ErrorTopic",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "EventBridgeAtm/approved_transaction_handler/ServiceRole/Resource",
+                    "path": "EventBridgeAtm/approved_transaction_handler/ErrorTopic/Resource",
                     "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:type": "AWS::SNS::Topic",
                       "aws:cdk:cloudformation:props": {
-                        "assumeRolePolicyDocument": {
-                          "Statement": [
-                            {
-                              "Action": "sts:AssumeRole",
-                              "Effect": "Allow",
-                              "Principal": {
-                                "Service": "lambda.amazonaws.com"
-                              }
-                            }
-                          ],
-                          "Version": "2012-10-17"
-                        },
-                        "managedPolicyArns": [
-                          {
-                            "Fn::Join": [
-                              "",
-                              [
-                                "arn:",
-                                {
-                                  "Ref": "AWS::Partition"
-                                },
-                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-                              ]
-                            ]
-                          }
-                        ]
+                        "displayName": "ErrorTopic"
                       }
                     },
                     "constructInfo": {
-                      "fqn": "@aws-cdk/aws-iam.CfnRole",
+                      "fqn": "@aws-cdk/aws-sns.CfnTopic",
                       "version": "1.145.0"
                     }
                   }
                 },
                 "constructInfo": {
-                  "fqn": "@aws-cdk/aws-iam.Role",
+                  "fqn": "@aws-cdk/aws-sns.Topic",
                   "version": "1.145.0"
                 }
               },
-              "Code": {
-                "id": "Code",
-                "path": "EventBridgeAtm/approved_transaction_handler/Code",
+              "aws-xray-sdkLambdaLayer": {
+                "id": "aws-xray-sdkLambdaLayer",
+                "path": "EventBridgeAtm/approved_transaction_handler/aws-xray-sdkLambdaLayer",
                 "children": {
-                  "Stage": {
-                    "id": "Stage",
-                    "path": "EventBridgeAtm/approved_transaction_handler/Code/Stage",
+                  "Code": {
+                    "id": "Code",
+                    "path": "EventBridgeAtm/approved_transaction_handler/aws-xray-sdkLambdaLayer/Code",
+                    "children": {
+                      "Stage": {
+                        "id": "Stage",
+                        "path": "EventBridgeAtm/approved_transaction_handler/aws-xray-sdkLambdaLayer/Code/Stage",
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/core.AssetStaging",
+                          "version": "1.145.0"
+                        }
+                      },
+                      "AssetBucket": {
+                        "id": "AssetBucket",
+                        "path": "EventBridgeAtm/approved_transaction_handler/aws-xray-sdkLambdaLayer/Code/AssetBucket",
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-s3.BucketBase",
+                          "version": "1.145.0"
+                        }
+                      }
+                    },
                     "constructInfo": {
-                      "fqn": "@aws-cdk/core.AssetStaging",
+                      "fqn": "@aws-cdk/aws-s3-assets.Asset",
                       "version": "1.145.0"
                     }
                   },
-                  "AssetBucket": {
-                    "id": "AssetBucket",
-                    "path": "EventBridgeAtm/approved_transaction_handler/Code/AssetBucket",
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "EventBridgeAtm/approved_transaction_handler/aws-xray-sdkLambdaLayer/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::Lambda::LayerVersion",
+                      "aws:cdk:cloudformation:props": {
+                        "content": {
+                          "s3Bucket": {
+                            "Ref": "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3BucketC7A2EC7F"
+                          },
+                          "s3Key": {
+                            "Fn::Join": [
+                              "",
+                              [
+                                {
+                                  "Fn::Select": [
+                                    0,
+                                    {
+                                      "Fn::Split": [
+                                        "||",
+                                        {
+                                          "Ref": "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3VersionKeyF23940AD"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Fn::Select": [
+                                    1,
+                                    {
+                                      "Fn::Split": [
+                                        "||",
+                                        {
+                                          "Ref": "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3VersionKeyF23940AD"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            ]
+                          }
+                        },
+                        "description": "AWS XRay SDK Lambda Layer"
+                      }
+                    },
                     "constructInfo": {
-                      "fqn": "@aws-cdk/aws-s3.BucketBase",
+                      "fqn": "@aws-cdk/aws-lambda.CfnLayerVersion",
                       "version": "1.145.0"
                     }
                   }
                 },
                 "constructInfo": {
-                  "fqn": "@aws-cdk/aws-s3-assets.Asset",
+                  "fqn": "@aws-cdk/aws-lambda.LayerVersion",
                   "version": "1.145.0"
                 }
               },
-              "Resource": {
-                "id": "Resource",
-                "path": "EventBridgeAtm/approved_transaction_handler/Resource",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
-                  "aws:cdk:cloudformation:props": {
-                    "code": {
-                      "s3Bucket": {
-                        "Ref": "AssetParametersd9eec48ad1f02b781f39b31c6abdece99e300e5e7787381797def6df90750b38S3Bucket9DD51BFA"
-                      },
-                      "s3Key": {
-                        "Fn::Join": [
-                          "",
-                          [
-                            {
-                              "Fn::Select": [
-                                0,
+              "approved_transaction_handler": {
+                "id": "approved_transaction_handler",
+                "path": "EventBridgeAtm/approved_transaction_handler/approved_transaction_handler",
+                "children": {
+                  "ServiceRole": {
+                    "id": "ServiceRole",
+                    "path": "EventBridgeAtm/approved_transaction_handler/approved_transaction_handler/ServiceRole",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "EventBridgeAtm/approved_transaction_handler/approved_transaction_handler/ServiceRole/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                          "aws:cdk:cloudformation:props": {
+                            "assumeRolePolicyDocument": {
+                              "Statement": [
                                 {
-                                  "Fn::Split": [
-                                    "||",
-                                    {
-                                      "Ref": "AssetParametersd9eec48ad1f02b781f39b31c6abdece99e300e5e7787381797def6df90750b38S3VersionKey5003C700"
-                                    }
-                                  ]
+                                  "Action": "sts:AssumeRole",
+                                  "Effect": "Allow",
+                                  "Principal": {
+                                    "Service": "lambda.amazonaws.com"
+                                  }
                                 }
-                              ]
+                              ],
+                              "Version": "2012-10-17"
                             },
-                            {
-                              "Fn::Select": [
-                                1,
-                                {
-                                  "Fn::Split": [
-                                    "||",
+                            "managedPolicyArns": [
+                              {
+                                "Fn::Join": [
+                                  "",
+                                  [
+                                    "arn:",
                                     {
-                                      "Ref": "AssetParametersd9eec48ad1f02b781f39b31c6abdece99e300e5e7787381797def6df90750b38S3VersionKey5003C700"
-                                    }
+                                      "Ref": "AWS::Partition"
+                                    },
+                                    ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
                                   ]
-                                }
-                              ]
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-iam.CfnRole",
+                          "version": "1.145.0"
+                        }
+                      },
+                      "DefaultPolicy": {
+                        "id": "DefaultPolicy",
+                        "path": "EventBridgeAtm/approved_transaction_handler/approved_transaction_handler/ServiceRole/DefaultPolicy",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "EventBridgeAtm/approved_transaction_handler/approved_transaction_handler/ServiceRole/DefaultPolicy/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                              "aws:cdk:cloudformation:props": {
+                                "policyDocument": {
+                                  "Statement": [
+                                    {
+                                      "Action": [
+                                        "xray:PutTraceSegments",
+                                        "xray:PutTelemetryRecords"
+                                      ],
+                                      "Effect": "Allow",
+                                      "Resource": "*"
+                                    }
+                                  ],
+                                  "Version": "2012-10-17"
+                                },
+                                "policyName": "approvedtransactionhandlerServiceRoleDefaultPolicy410838F1",
+                                "roles": [
+                                  {
+                                    "Ref": "approvedtransactionhandlerServiceRole9E758E01"
+                                  }
+                                ]
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "@aws-cdk/aws-iam.CfnPolicy",
+                              "version": "1.145.0"
                             }
-                          ]
-                        ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-iam.Policy",
+                          "version": "1.145.0"
+                        }
                       }
                     },
-                    "role": {
-                      "Fn::GetAtt": [
-                        "approvedtransactionhandlerServiceRole66BFD390",
-                        "Arn"
-                      ]
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-iam.Role",
+                      "version": "1.145.0"
+                    }
+                  },
+                  "Code": {
+                    "id": "Code",
+                    "path": "EventBridgeAtm/approved_transaction_handler/approved_transaction_handler/Code",
+                    "children": {
+                      "Stage": {
+                        "id": "Stage",
+                        "path": "EventBridgeAtm/approved_transaction_handler/approved_transaction_handler/Code/Stage",
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/core.AssetStaging",
+                          "version": "1.145.0"
+                        }
+                      },
+                      "AssetBucket": {
+                        "id": "AssetBucket",
+                        "path": "EventBridgeAtm/approved_transaction_handler/approved_transaction_handler/Code/AssetBucket",
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-s3.BucketBase",
+                          "version": "1.145.0"
+                        }
+                      }
                     },
-                    "handler": "atm_consumer.approved_transaction_handler",
-                    "runtime": "python3.9"
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-s3-assets.Asset",
+                      "version": "1.145.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "EventBridgeAtm/approved_transaction_handler/approved_transaction_handler/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                      "aws:cdk:cloudformation:props": {
+                        "code": {
+                          "s3Bucket": {
+                            "Ref": "AssetParametersd9eec48ad1f02b781f39b31c6abdece99e300e5e7787381797def6df90750b38S3Bucket9DD51BFA"
+                          },
+                          "s3Key": {
+                            "Fn::Join": [
+                              "",
+                              [
+                                {
+                                  "Fn::Select": [
+                                    0,
+                                    {
+                                      "Fn::Split": [
+                                        "||",
+                                        {
+                                          "Ref": "AssetParametersd9eec48ad1f02b781f39b31c6abdece99e300e5e7787381797def6df90750b38S3VersionKey5003C700"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Fn::Select": [
+                                    1,
+                                    {
+                                      "Fn::Split": [
+                                        "||",
+                                        {
+                                          "Ref": "AssetParametersd9eec48ad1f02b781f39b31c6abdece99e300e5e7787381797def6df90750b38S3VersionKey5003C700"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            ]
+                          }
+                        },
+                        "role": {
+                          "Fn::GetAtt": [
+                            "approvedtransactionhandlerServiceRole9E758E01",
+                            "Arn"
+                          ]
+                        },
+                        "handler": "atm_consumer.approved_transaction_handler",
+                        "layers": [
+                          {
+                            "Ref": "approvedtransactionhandlerawsxraysdkLambdaLayer140A1655"
+                          }
+                        ],
+                        "runtime": "python3.9",
+                        "timeout": 60,
+                        "tracingConfig": {
+                          "mode": "Active"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-lambda.CfnFunction",
+                      "version": "1.145.0"
+                    }
                   }
                 },
                 "constructInfo": {
-                  "fqn": "@aws-cdk/aws-lambda.CfnFunction",
+                  "fqn": "@aws-cdk/aws-lambda.Function",
+                  "version": "1.145.0"
+                }
+              },
+              "Lambda invocation Errors > 2%": {
+                "id": "Lambda invocation Errors > 2%",
+                "path": "EventBridgeAtm/approved_transaction_handler/Lambda invocation Errors > 2%",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "EventBridgeAtm/approved_transaction_handler/Lambda invocation Errors > 2%/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                      "aws:cdk:cloudformation:props": {
+                        "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                        "evaluationPeriods": 6,
+                        "alarmActions": [
+                          {
+                            "Ref": "approvedtransactionhandlerErrorTopic5F4BCB15"
+                          }
+                        ],
+                        "datapointsToAlarm": 1,
+                        "metrics": [
+                          {
+                            "expression": "(errors / invocations) * 100",
+                            "id": "expr_1",
+                            "label": "% of invocations that errored, last 5 mins"
+                          },
+                          {
+                            "metricStat": {
+                              "metric": {
+                                "metricName": "Invocations",
+                                "namespace": "AWS/Lambda",
+                                "dimensions": [
+                                  {
+                                    "name": "FunctionName",
+                                    "value": {
+                                      "Ref": "approvedtransactionhandler95833F29"
+                                    }
+                                  }
+                                ]
+                              },
+                              "period": 300,
+                              "stat": "Sum"
+                            },
+                            "id": "invocations",
+                            "returnData": false
+                          },
+                          {
+                            "metricStat": {
+                              "metric": {
+                                "metricName": "Errors",
+                                "namespace": "AWS/Lambda",
+                                "dimensions": [
+                                  {
+                                    "name": "FunctionName",
+                                    "value": {
+                                      "Ref": "approvedtransactionhandler95833F29"
+                                    }
+                                  }
+                                ]
+                              },
+                              "period": 300,
+                              "stat": "Sum"
+                            },
+                            "id": "errors",
+                            "returnData": false
+                          }
+                        ],
+                        "threshold": 2,
+                        "treatMissingData": "notBreaching"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
+                      "version": "1.145.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
+                  "version": "1.145.0"
+                }
+              },
+              "Lambda p99 Long Duration (>1s)": {
+                "id": "Lambda p99 Long Duration (>1s)",
+                "path": "EventBridgeAtm/approved_transaction_handler/Lambda p99 Long Duration (>1s)",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "EventBridgeAtm/approved_transaction_handler/Lambda p99 Long Duration (>1s)/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                      "aws:cdk:cloudformation:props": {
+                        "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                        "evaluationPeriods": 6,
+                        "alarmActions": [
+                          {
+                            "Ref": "approvedtransactionhandlerErrorTopic5F4BCB15"
+                          }
+                        ],
+                        "datapointsToAlarm": 1,
+                        "dimensions": [
+                          {
+                            "name": "FunctionName",
+                            "value": {
+                              "Ref": "approvedtransactionhandler95833F29"
+                            }
+                          }
+                        ],
+                        "extendedStatistic": "p99",
+                        "metricName": "Duration",
+                        "namespace": "AWS/Lambda",
+                        "period": 300,
+                        "threshold": 1000,
+                        "treatMissingData": "notBreaching"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
+                      "version": "1.145.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
+                  "version": "1.145.0"
+                }
+              },
+              "Lambda Throttled invocations >2%": {
+                "id": "Lambda Throttled invocations >2%",
+                "path": "EventBridgeAtm/approved_transaction_handler/Lambda Throttled invocations >2%",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "EventBridgeAtm/approved_transaction_handler/Lambda Throttled invocations >2%/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                      "aws:cdk:cloudformation:props": {
+                        "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                        "evaluationPeriods": 6,
+                        "alarmActions": [
+                          {
+                            "Ref": "approvedtransactionhandlerErrorTopic5F4BCB15"
+                          }
+                        ],
+                        "datapointsToAlarm": 1,
+                        "metrics": [
+                          {
+                            "expression": "(throttles * 100) / (invocations + throttles)",
+                            "id": "expr_1",
+                            "label": "throttled requests % in last 30 mins"
+                          },
+                          {
+                            "metricStat": {
+                              "metric": {
+                                "metricName": "Invocations",
+                                "namespace": "AWS/Lambda",
+                                "dimensions": [
+                                  {
+                                    "name": "FunctionName",
+                                    "value": {
+                                      "Ref": "approvedtransactionhandler95833F29"
+                                    }
+                                  }
+                                ]
+                              },
+                              "period": 300,
+                              "stat": "Sum"
+                            },
+                            "id": "invocations",
+                            "returnData": false
+                          },
+                          {
+                            "metricStat": {
+                              "metric": {
+                                "metricName": "Throttles",
+                                "namespace": "AWS/Lambda",
+                                "dimensions": [
+                                  {
+                                    "name": "FunctionName",
+                                    "value": {
+                                      "Ref": "approvedtransactionhandler95833F29"
+                                    }
+                                  }
+                                ]
+                              },
+                              "period": 300,
+                              "stat": "Sum"
+                            },
+                            "id": "throttles",
+                            "returnData": false
+                          }
+                        ],
+                        "threshold": 2,
+                        "treatMissingData": "notBreaching"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
+                      "version": "1.145.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
+                  "version": "1.145.0"
+                }
+              },
+              "CloudWatchDashBoard": {
+                "id": "CloudWatchDashBoard",
+                "path": "EventBridgeAtm/approved_transaction_handler/CloudWatchDashBoard",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "EventBridgeAtm/approved_transaction_handler/CloudWatchDashBoard/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::CloudWatch::Dashboard",
+                      "aws:cdk:cloudformation:props": {
+                        "dashboardBody": {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Error %\",\"region\":\"",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+                              {
+                                "Ref": "approvedtransactionhandler95833F29"
+                              },
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
+                              {
+                                "Ref": "approvedtransactionhandler95833F29"
+                              },
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+                              {
+                                "Ref": "approvedtransactionhandler95833F29"
+                              },
+                              "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+                              {
+                                "Ref": "approvedtransactionhandler95833F29"
+                              },
+                              "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+                              {
+                                "Ref": "approvedtransactionhandler95833F29"
+                              },
+                              "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Throttle %\",\"region\":\"",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+                              {
+                                "Ref": "approvedtransactionhandler95833F29"
+                              },
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
+                              {
+                                "Ref": "approvedtransactionhandler95833F29"
+                              },
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
+                            ]
+                          ]
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-cloudwatch.CfnDashboard",
+                      "version": "1.145.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-cloudwatch.Dashboard",
                   "version": "1.145.0"
                 }
               }
             },
             "constructInfo": {
-              "fqn": "@aws-cdk/aws-lambda.Function",
+              "fqn": "@aws-cdk/core.Construct",
               "version": "1.145.0"
             }
           },
@@ -12804,6 +13253,40 @@
             "id": "AssetParameters",
             "path": "EventBridgeAtm/AssetParameters",
             "children": {
+              "d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81": {
+                "id": "d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81",
+                "path": "EventBridgeAtm/AssetParameters/d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81",
+                "children": {
+                  "S3Bucket": {
+                    "id": "S3Bucket",
+                    "path": "EventBridgeAtm/AssetParameters/d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81/S3Bucket",
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/core.CfnParameter",
+                      "version": "1.145.0"
+                    }
+                  },
+                  "S3VersionKey": {
+                    "id": "S3VersionKey",
+                    "path": "EventBridgeAtm/AssetParameters/d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81/S3VersionKey",
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/core.CfnParameter",
+                      "version": "1.145.0"
+                    }
+                  },
+                  "ArtifactHash": {
+                    "id": "ArtifactHash",
+                    "path": "EventBridgeAtm/AssetParameters/d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81/ArtifactHash",
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/core.CfnParameter",
+                      "version": "1.145.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/core.Construct",
+                  "version": "1.145.0"
+                }
+              },
               "d9eec48ad1f02b781f39b31c6abdece99e300e5e7787381797def6df90750b38": {
                 "id": "d9eec48ad1f02b781f39b31c6abdece99e300e5e7787381797def6df90750b38",
                 "path": "EventBridgeAtm/AssetParameters/d9eec48ad1f02b781f39b31c6abdece99e300e5e7787381797def6df90750b38",
@@ -12909,7 +13392,7 @@
                         "id": "Target0",
                         "arn": {
                           "Fn::GetAtt": [
-                            "nyprefixtransactionhandler901504D5",
+                            "nyprefixtransactionhandler6DE7B76B",
                             "Arn"
                           ]
                         }
@@ -12922,16 +13405,16 @@
                   "version": "1.145.0"
                 }
               },
-              "AllowEventRuleEventBridgeAtmnyprefixtransactionhandler13E8D378": {
-                "id": "AllowEventRuleEventBridgeAtmnyprefixtransactionhandler13E8D378",
-                "path": "EventBridgeAtm/ny_prefix_transactions_rule/AllowEventRuleEventBridgeAtmnyprefixtransactionhandler13E8D378",
+              "AllowEventRuleEventBridgeAtmnyprefixtransactionhandler8918C09D": {
+                "id": "AllowEventRuleEventBridgeAtmnyprefixtransactionhandler8918C09D",
+                "path": "EventBridgeAtm/ny_prefix_transactions_rule/AllowEventRuleEventBridgeAtmnyprefixtransactionhandler8918C09D",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                   "aws:cdk:cloudformation:props": {
                     "action": "lambda:InvokeFunction",
                     "functionName": {
                       "Fn::GetAtt": [
-                        "nyprefixtransactionhandler901504D5",
+                        "nyprefixtransactionhandler6DE7B76B",
                         "Arn"
                       ]
                     },
@@ -12959,143 +13442,592 @@
             "id": "ny_prefix_transaction_handler",
             "path": "EventBridgeAtm/ny_prefix_transaction_handler",
             "children": {
-              "ServiceRole": {
-                "id": "ServiceRole",
-                "path": "EventBridgeAtm/ny_prefix_transaction_handler/ServiceRole",
+              "ErrorTopic": {
+                "id": "ErrorTopic",
+                "path": "EventBridgeAtm/ny_prefix_transaction_handler/ErrorTopic",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "EventBridgeAtm/ny_prefix_transaction_handler/ServiceRole/Resource",
+                    "path": "EventBridgeAtm/ny_prefix_transaction_handler/ErrorTopic/Resource",
                     "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:type": "AWS::SNS::Topic",
                       "aws:cdk:cloudformation:props": {
-                        "assumeRolePolicyDocument": {
-                          "Statement": [
-                            {
-                              "Action": "sts:AssumeRole",
-                              "Effect": "Allow",
-                              "Principal": {
-                                "Service": "lambda.amazonaws.com"
-                              }
-                            }
-                          ],
-                          "Version": "2012-10-17"
-                        },
-                        "managedPolicyArns": [
-                          {
-                            "Fn::Join": [
-                              "",
-                              [
-                                "arn:",
-                                {
-                                  "Ref": "AWS::Partition"
-                                },
-                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-                              ]
-                            ]
-                          }
-                        ]
+                        "displayName": "ErrorTopic"
                       }
                     },
                     "constructInfo": {
-                      "fqn": "@aws-cdk/aws-iam.CfnRole",
+                      "fqn": "@aws-cdk/aws-sns.CfnTopic",
                       "version": "1.145.0"
                     }
                   }
                 },
                 "constructInfo": {
-                  "fqn": "@aws-cdk/aws-iam.Role",
+                  "fqn": "@aws-cdk/aws-sns.Topic",
                   "version": "1.145.0"
                 }
               },
-              "Code": {
-                "id": "Code",
-                "path": "EventBridgeAtm/ny_prefix_transaction_handler/Code",
+              "aws-xray-sdkLambdaLayer": {
+                "id": "aws-xray-sdkLambdaLayer",
+                "path": "EventBridgeAtm/ny_prefix_transaction_handler/aws-xray-sdkLambdaLayer",
                 "children": {
-                  "Stage": {
-                    "id": "Stage",
-                    "path": "EventBridgeAtm/ny_prefix_transaction_handler/Code/Stage",
+                  "Code": {
+                    "id": "Code",
+                    "path": "EventBridgeAtm/ny_prefix_transaction_handler/aws-xray-sdkLambdaLayer/Code",
+                    "children": {
+                      "Stage": {
+                        "id": "Stage",
+                        "path": "EventBridgeAtm/ny_prefix_transaction_handler/aws-xray-sdkLambdaLayer/Code/Stage",
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/core.AssetStaging",
+                          "version": "1.145.0"
+                        }
+                      },
+                      "AssetBucket": {
+                        "id": "AssetBucket",
+                        "path": "EventBridgeAtm/ny_prefix_transaction_handler/aws-xray-sdkLambdaLayer/Code/AssetBucket",
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-s3.BucketBase",
+                          "version": "1.145.0"
+                        }
+                      }
+                    },
                     "constructInfo": {
-                      "fqn": "@aws-cdk/core.AssetStaging",
+                      "fqn": "@aws-cdk/aws-s3-assets.Asset",
                       "version": "1.145.0"
                     }
                   },
-                  "AssetBucket": {
-                    "id": "AssetBucket",
-                    "path": "EventBridgeAtm/ny_prefix_transaction_handler/Code/AssetBucket",
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "EventBridgeAtm/ny_prefix_transaction_handler/aws-xray-sdkLambdaLayer/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::Lambda::LayerVersion",
+                      "aws:cdk:cloudformation:props": {
+                        "content": {
+                          "s3Bucket": {
+                            "Ref": "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3BucketC7A2EC7F"
+                          },
+                          "s3Key": {
+                            "Fn::Join": [
+                              "",
+                              [
+                                {
+                                  "Fn::Select": [
+                                    0,
+                                    {
+                                      "Fn::Split": [
+                                        "||",
+                                        {
+                                          "Ref": "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3VersionKeyF23940AD"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Fn::Select": [
+                                    1,
+                                    {
+                                      "Fn::Split": [
+                                        "||",
+                                        {
+                                          "Ref": "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3VersionKeyF23940AD"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            ]
+                          }
+                        },
+                        "description": "AWS XRay SDK Lambda Layer"
+                      }
+                    },
                     "constructInfo": {
-                      "fqn": "@aws-cdk/aws-s3.BucketBase",
+                      "fqn": "@aws-cdk/aws-lambda.CfnLayerVersion",
                       "version": "1.145.0"
                     }
                   }
                 },
                 "constructInfo": {
-                  "fqn": "@aws-cdk/aws-s3-assets.Asset",
+                  "fqn": "@aws-cdk/aws-lambda.LayerVersion",
                   "version": "1.145.0"
                 }
               },
-              "Resource": {
-                "id": "Resource",
-                "path": "EventBridgeAtm/ny_prefix_transaction_handler/Resource",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
-                  "aws:cdk:cloudformation:props": {
-                    "code": {
-                      "s3Bucket": {
-                        "Ref": "AssetParametersd9eec48ad1f02b781f39b31c6abdece99e300e5e7787381797def6df90750b38S3Bucket9DD51BFA"
-                      },
-                      "s3Key": {
-                        "Fn::Join": [
-                          "",
-                          [
-                            {
-                              "Fn::Select": [
-                                0,
+              "ny_prefix_transaction_handler": {
+                "id": "ny_prefix_transaction_handler",
+                "path": "EventBridgeAtm/ny_prefix_transaction_handler/ny_prefix_transaction_handler",
+                "children": {
+                  "ServiceRole": {
+                    "id": "ServiceRole",
+                    "path": "EventBridgeAtm/ny_prefix_transaction_handler/ny_prefix_transaction_handler/ServiceRole",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "EventBridgeAtm/ny_prefix_transaction_handler/ny_prefix_transaction_handler/ServiceRole/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                          "aws:cdk:cloudformation:props": {
+                            "assumeRolePolicyDocument": {
+                              "Statement": [
                                 {
-                                  "Fn::Split": [
-                                    "||",
-                                    {
-                                      "Ref": "AssetParametersd9eec48ad1f02b781f39b31c6abdece99e300e5e7787381797def6df90750b38S3VersionKey5003C700"
-                                    }
-                                  ]
+                                  "Action": "sts:AssumeRole",
+                                  "Effect": "Allow",
+                                  "Principal": {
+                                    "Service": "lambda.amazonaws.com"
+                                  }
                                 }
-                              ]
+                              ],
+                              "Version": "2012-10-17"
                             },
-                            {
-                              "Fn::Select": [
-                                1,
-                                {
-                                  "Fn::Split": [
-                                    "||",
+                            "managedPolicyArns": [
+                              {
+                                "Fn::Join": [
+                                  "",
+                                  [
+                                    "arn:",
                                     {
-                                      "Ref": "AssetParametersd9eec48ad1f02b781f39b31c6abdece99e300e5e7787381797def6df90750b38S3VersionKey5003C700"
-                                    }
+                                      "Ref": "AWS::Partition"
+                                    },
+                                    ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
                                   ]
-                                }
-                              ]
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-iam.CfnRole",
+                          "version": "1.145.0"
+                        }
+                      },
+                      "DefaultPolicy": {
+                        "id": "DefaultPolicy",
+                        "path": "EventBridgeAtm/ny_prefix_transaction_handler/ny_prefix_transaction_handler/ServiceRole/DefaultPolicy",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "EventBridgeAtm/ny_prefix_transaction_handler/ny_prefix_transaction_handler/ServiceRole/DefaultPolicy/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                              "aws:cdk:cloudformation:props": {
+                                "policyDocument": {
+                                  "Statement": [
+                                    {
+                                      "Action": [
+                                        "xray:PutTraceSegments",
+                                        "xray:PutTelemetryRecords"
+                                      ],
+                                      "Effect": "Allow",
+                                      "Resource": "*"
+                                    }
+                                  ],
+                                  "Version": "2012-10-17"
+                                },
+                                "policyName": "nyprefixtransactionhandlerServiceRoleDefaultPolicy79225037",
+                                "roles": [
+                                  {
+                                    "Ref": "nyprefixtransactionhandlerServiceRoleAC1068C4"
+                                  }
+                                ]
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "@aws-cdk/aws-iam.CfnPolicy",
+                              "version": "1.145.0"
                             }
-                          ]
-                        ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-iam.Policy",
+                          "version": "1.145.0"
+                        }
                       }
                     },
-                    "role": {
-                      "Fn::GetAtt": [
-                        "nyprefixtransactionhandlerServiceRoleC5B2CC8B",
-                        "Arn"
-                      ]
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-iam.Role",
+                      "version": "1.145.0"
+                    }
+                  },
+                  "Code": {
+                    "id": "Code",
+                    "path": "EventBridgeAtm/ny_prefix_transaction_handler/ny_prefix_transaction_handler/Code",
+                    "children": {
+                      "Stage": {
+                        "id": "Stage",
+                        "path": "EventBridgeAtm/ny_prefix_transaction_handler/ny_prefix_transaction_handler/Code/Stage",
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/core.AssetStaging",
+                          "version": "1.145.0"
+                        }
+                      },
+                      "AssetBucket": {
+                        "id": "AssetBucket",
+                        "path": "EventBridgeAtm/ny_prefix_transaction_handler/ny_prefix_transaction_handler/Code/AssetBucket",
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-s3.BucketBase",
+                          "version": "1.145.0"
+                        }
+                      }
                     },
-                    "handler": "atm_consumer.ny_prefix_transaction_handler",
-                    "runtime": "python3.9"
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-s3-assets.Asset",
+                      "version": "1.145.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "EventBridgeAtm/ny_prefix_transaction_handler/ny_prefix_transaction_handler/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                      "aws:cdk:cloudformation:props": {
+                        "code": {
+                          "s3Bucket": {
+                            "Ref": "AssetParametersd9eec48ad1f02b781f39b31c6abdece99e300e5e7787381797def6df90750b38S3Bucket9DD51BFA"
+                          },
+                          "s3Key": {
+                            "Fn::Join": [
+                              "",
+                              [
+                                {
+                                  "Fn::Select": [
+                                    0,
+                                    {
+                                      "Fn::Split": [
+                                        "||",
+                                        {
+                                          "Ref": "AssetParametersd9eec48ad1f02b781f39b31c6abdece99e300e5e7787381797def6df90750b38S3VersionKey5003C700"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Fn::Select": [
+                                    1,
+                                    {
+                                      "Fn::Split": [
+                                        "||",
+                                        {
+                                          "Ref": "AssetParametersd9eec48ad1f02b781f39b31c6abdece99e300e5e7787381797def6df90750b38S3VersionKey5003C700"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            ]
+                          }
+                        },
+                        "role": {
+                          "Fn::GetAtt": [
+                            "nyprefixtransactionhandlerServiceRoleAC1068C4",
+                            "Arn"
+                          ]
+                        },
+                        "handler": "atm_consumer.ny_prefix_transaction_handler",
+                        "layers": [
+                          {
+                            "Ref": "nyprefixtransactionhandlerawsxraysdkLambdaLayer173EA887"
+                          }
+                        ],
+                        "runtime": "python3.9",
+                        "timeout": 60,
+                        "tracingConfig": {
+                          "mode": "Active"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-lambda.CfnFunction",
+                      "version": "1.145.0"
+                    }
                   }
                 },
                 "constructInfo": {
-                  "fqn": "@aws-cdk/aws-lambda.CfnFunction",
+                  "fqn": "@aws-cdk/aws-lambda.Function",
+                  "version": "1.145.0"
+                }
+              },
+              "Lambda invocation Errors > 2%": {
+                "id": "Lambda invocation Errors > 2%",
+                "path": "EventBridgeAtm/ny_prefix_transaction_handler/Lambda invocation Errors > 2%",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "EventBridgeAtm/ny_prefix_transaction_handler/Lambda invocation Errors > 2%/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                      "aws:cdk:cloudformation:props": {
+                        "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                        "evaluationPeriods": 6,
+                        "alarmActions": [
+                          {
+                            "Ref": "nyprefixtransactionhandlerErrorTopic5A4FDF42"
+                          }
+                        ],
+                        "datapointsToAlarm": 1,
+                        "metrics": [
+                          {
+                            "expression": "(errors / invocations) * 100",
+                            "id": "expr_1",
+                            "label": "% of invocations that errored, last 5 mins"
+                          },
+                          {
+                            "metricStat": {
+                              "metric": {
+                                "metricName": "Invocations",
+                                "namespace": "AWS/Lambda",
+                                "dimensions": [
+                                  {
+                                    "name": "FunctionName",
+                                    "value": {
+                                      "Ref": "nyprefixtransactionhandler6DE7B76B"
+                                    }
+                                  }
+                                ]
+                              },
+                              "period": 300,
+                              "stat": "Sum"
+                            },
+                            "id": "invocations",
+                            "returnData": false
+                          },
+                          {
+                            "metricStat": {
+                              "metric": {
+                                "metricName": "Errors",
+                                "namespace": "AWS/Lambda",
+                                "dimensions": [
+                                  {
+                                    "name": "FunctionName",
+                                    "value": {
+                                      "Ref": "nyprefixtransactionhandler6DE7B76B"
+                                    }
+                                  }
+                                ]
+                              },
+                              "period": 300,
+                              "stat": "Sum"
+                            },
+                            "id": "errors",
+                            "returnData": false
+                          }
+                        ],
+                        "threshold": 2,
+                        "treatMissingData": "notBreaching"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
+                      "version": "1.145.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
+                  "version": "1.145.0"
+                }
+              },
+              "Lambda p99 Long Duration (>1s)": {
+                "id": "Lambda p99 Long Duration (>1s)",
+                "path": "EventBridgeAtm/ny_prefix_transaction_handler/Lambda p99 Long Duration (>1s)",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "EventBridgeAtm/ny_prefix_transaction_handler/Lambda p99 Long Duration (>1s)/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                      "aws:cdk:cloudformation:props": {
+                        "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                        "evaluationPeriods": 6,
+                        "alarmActions": [
+                          {
+                            "Ref": "nyprefixtransactionhandlerErrorTopic5A4FDF42"
+                          }
+                        ],
+                        "datapointsToAlarm": 1,
+                        "dimensions": [
+                          {
+                            "name": "FunctionName",
+                            "value": {
+                              "Ref": "nyprefixtransactionhandler6DE7B76B"
+                            }
+                          }
+                        ],
+                        "extendedStatistic": "p99",
+                        "metricName": "Duration",
+                        "namespace": "AWS/Lambda",
+                        "period": 300,
+                        "threshold": 1000,
+                        "treatMissingData": "notBreaching"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
+                      "version": "1.145.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
+                  "version": "1.145.0"
+                }
+              },
+              "Lambda Throttled invocations >2%": {
+                "id": "Lambda Throttled invocations >2%",
+                "path": "EventBridgeAtm/ny_prefix_transaction_handler/Lambda Throttled invocations >2%",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "EventBridgeAtm/ny_prefix_transaction_handler/Lambda Throttled invocations >2%/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                      "aws:cdk:cloudformation:props": {
+                        "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                        "evaluationPeriods": 6,
+                        "alarmActions": [
+                          {
+                            "Ref": "nyprefixtransactionhandlerErrorTopic5A4FDF42"
+                          }
+                        ],
+                        "datapointsToAlarm": 1,
+                        "metrics": [
+                          {
+                            "expression": "(throttles * 100) / (invocations + throttles)",
+                            "id": "expr_1",
+                            "label": "throttled requests % in last 30 mins"
+                          },
+                          {
+                            "metricStat": {
+                              "metric": {
+                                "metricName": "Invocations",
+                                "namespace": "AWS/Lambda",
+                                "dimensions": [
+                                  {
+                                    "name": "FunctionName",
+                                    "value": {
+                                      "Ref": "nyprefixtransactionhandler6DE7B76B"
+                                    }
+                                  }
+                                ]
+                              },
+                              "period": 300,
+                              "stat": "Sum"
+                            },
+                            "id": "invocations",
+                            "returnData": false
+                          },
+                          {
+                            "metricStat": {
+                              "metric": {
+                                "metricName": "Throttles",
+                                "namespace": "AWS/Lambda",
+                                "dimensions": [
+                                  {
+                                    "name": "FunctionName",
+                                    "value": {
+                                      "Ref": "nyprefixtransactionhandler6DE7B76B"
+                                    }
+                                  }
+                                ]
+                              },
+                              "period": 300,
+                              "stat": "Sum"
+                            },
+                            "id": "throttles",
+                            "returnData": false
+                          }
+                        ],
+                        "threshold": 2,
+                        "treatMissingData": "notBreaching"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
+                      "version": "1.145.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
+                  "version": "1.145.0"
+                }
+              },
+              "CloudWatchDashBoard": {
+                "id": "CloudWatchDashBoard",
+                "path": "EventBridgeAtm/ny_prefix_transaction_handler/CloudWatchDashBoard",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "EventBridgeAtm/ny_prefix_transaction_handler/CloudWatchDashBoard/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::CloudWatch::Dashboard",
+                      "aws:cdk:cloudformation:props": {
+                        "dashboardBody": {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Error %\",\"region\":\"",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+                              {
+                                "Ref": "nyprefixtransactionhandler6DE7B76B"
+                              },
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
+                              {
+                                "Ref": "nyprefixtransactionhandler6DE7B76B"
+                              },
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+                              {
+                                "Ref": "nyprefixtransactionhandler6DE7B76B"
+                              },
+                              "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+                              {
+                                "Ref": "nyprefixtransactionhandler6DE7B76B"
+                              },
+                              "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+                              {
+                                "Ref": "nyprefixtransactionhandler6DE7B76B"
+                              },
+                              "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Throttle %\",\"region\":\"",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+                              {
+                                "Ref": "nyprefixtransactionhandler6DE7B76B"
+                              },
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
+                              {
+                                "Ref": "nyprefixtransactionhandler6DE7B76B"
+                              },
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
+                            ]
+                          ]
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-cloudwatch.CfnDashboard",
+                      "version": "1.145.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-cloudwatch.Dashboard",
                   "version": "1.145.0"
                 }
               }
             },
             "constructInfo": {
-              "fqn": "@aws-cdk/aws-lambda.Function",
+              "fqn": "@aws-cdk/core.Construct",
               "version": "1.145.0"
             }
           },
@@ -13130,7 +14062,7 @@
                         "id": "Target0",
                         "arn": {
                           "Fn::GetAtt": [
-                            "notapprovedtransactionhandler5DBBBDA5",
+                            "notapprovedtransactionhandler4228E78A",
                             "Arn"
                           ]
                         }
@@ -13143,16 +14075,16 @@
                   "version": "1.145.0"
                 }
               },
-              "AllowEventRuleEventBridgeAtmnotapprovedtransactionhandlerF3382F6A": {
-                "id": "AllowEventRuleEventBridgeAtmnotapprovedtransactionhandlerF3382F6A",
-                "path": "EventBridgeAtm/not_approved_transaction_rule/AllowEventRuleEventBridgeAtmnotapprovedtransactionhandlerF3382F6A",
+              "AllowEventRuleEventBridgeAtmnotapprovedtransactionhandler66A56882": {
+                "id": "AllowEventRuleEventBridgeAtmnotapprovedtransactionhandler66A56882",
+                "path": "EventBridgeAtm/not_approved_transaction_rule/AllowEventRuleEventBridgeAtmnotapprovedtransactionhandler66A56882",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                   "aws:cdk:cloudformation:props": {
                     "action": "lambda:InvokeFunction",
                     "functionName": {
                       "Fn::GetAtt": [
-                        "notapprovedtransactionhandler5DBBBDA5",
+                        "notapprovedtransactionhandler4228E78A",
                         "Arn"
                       ]
                     },
@@ -13180,143 +14112,592 @@
             "id": "not_approved_transaction_handler",
             "path": "EventBridgeAtm/not_approved_transaction_handler",
             "children": {
-              "ServiceRole": {
-                "id": "ServiceRole",
-                "path": "EventBridgeAtm/not_approved_transaction_handler/ServiceRole",
+              "ErrorTopic": {
+                "id": "ErrorTopic",
+                "path": "EventBridgeAtm/not_approved_transaction_handler/ErrorTopic",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "EventBridgeAtm/not_approved_transaction_handler/ServiceRole/Resource",
+                    "path": "EventBridgeAtm/not_approved_transaction_handler/ErrorTopic/Resource",
                     "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:type": "AWS::SNS::Topic",
                       "aws:cdk:cloudformation:props": {
-                        "assumeRolePolicyDocument": {
-                          "Statement": [
-                            {
-                              "Action": "sts:AssumeRole",
-                              "Effect": "Allow",
-                              "Principal": {
-                                "Service": "lambda.amazonaws.com"
-                              }
-                            }
-                          ],
-                          "Version": "2012-10-17"
-                        },
-                        "managedPolicyArns": [
-                          {
-                            "Fn::Join": [
-                              "",
-                              [
-                                "arn:",
-                                {
-                                  "Ref": "AWS::Partition"
-                                },
-                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-                              ]
-                            ]
-                          }
-                        ]
+                        "displayName": "ErrorTopic"
                       }
                     },
                     "constructInfo": {
-                      "fqn": "@aws-cdk/aws-iam.CfnRole",
+                      "fqn": "@aws-cdk/aws-sns.CfnTopic",
                       "version": "1.145.0"
                     }
                   }
                 },
                 "constructInfo": {
-                  "fqn": "@aws-cdk/aws-iam.Role",
+                  "fqn": "@aws-cdk/aws-sns.Topic",
                   "version": "1.145.0"
                 }
               },
-              "Code": {
-                "id": "Code",
-                "path": "EventBridgeAtm/not_approved_transaction_handler/Code",
+              "aws-xray-sdkLambdaLayer": {
+                "id": "aws-xray-sdkLambdaLayer",
+                "path": "EventBridgeAtm/not_approved_transaction_handler/aws-xray-sdkLambdaLayer",
                 "children": {
-                  "Stage": {
-                    "id": "Stage",
-                    "path": "EventBridgeAtm/not_approved_transaction_handler/Code/Stage",
+                  "Code": {
+                    "id": "Code",
+                    "path": "EventBridgeAtm/not_approved_transaction_handler/aws-xray-sdkLambdaLayer/Code",
+                    "children": {
+                      "Stage": {
+                        "id": "Stage",
+                        "path": "EventBridgeAtm/not_approved_transaction_handler/aws-xray-sdkLambdaLayer/Code/Stage",
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/core.AssetStaging",
+                          "version": "1.145.0"
+                        }
+                      },
+                      "AssetBucket": {
+                        "id": "AssetBucket",
+                        "path": "EventBridgeAtm/not_approved_transaction_handler/aws-xray-sdkLambdaLayer/Code/AssetBucket",
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-s3.BucketBase",
+                          "version": "1.145.0"
+                        }
+                      }
+                    },
                     "constructInfo": {
-                      "fqn": "@aws-cdk/core.AssetStaging",
+                      "fqn": "@aws-cdk/aws-s3-assets.Asset",
                       "version": "1.145.0"
                     }
                   },
-                  "AssetBucket": {
-                    "id": "AssetBucket",
-                    "path": "EventBridgeAtm/not_approved_transaction_handler/Code/AssetBucket",
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "EventBridgeAtm/not_approved_transaction_handler/aws-xray-sdkLambdaLayer/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::Lambda::LayerVersion",
+                      "aws:cdk:cloudformation:props": {
+                        "content": {
+                          "s3Bucket": {
+                            "Ref": "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3BucketC7A2EC7F"
+                          },
+                          "s3Key": {
+                            "Fn::Join": [
+                              "",
+                              [
+                                {
+                                  "Fn::Select": [
+                                    0,
+                                    {
+                                      "Fn::Split": [
+                                        "||",
+                                        {
+                                          "Ref": "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3VersionKeyF23940AD"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Fn::Select": [
+                                    1,
+                                    {
+                                      "Fn::Split": [
+                                        "||",
+                                        {
+                                          "Ref": "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3VersionKeyF23940AD"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            ]
+                          }
+                        },
+                        "description": "AWS XRay SDK Lambda Layer"
+                      }
+                    },
                     "constructInfo": {
-                      "fqn": "@aws-cdk/aws-s3.BucketBase",
+                      "fqn": "@aws-cdk/aws-lambda.CfnLayerVersion",
                       "version": "1.145.0"
                     }
                   }
                 },
                 "constructInfo": {
-                  "fqn": "@aws-cdk/aws-s3-assets.Asset",
+                  "fqn": "@aws-cdk/aws-lambda.LayerVersion",
                   "version": "1.145.0"
                 }
               },
-              "Resource": {
-                "id": "Resource",
-                "path": "EventBridgeAtm/not_approved_transaction_handler/Resource",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
-                  "aws:cdk:cloudformation:props": {
-                    "code": {
-                      "s3Bucket": {
-                        "Ref": "AssetParametersd9eec48ad1f02b781f39b31c6abdece99e300e5e7787381797def6df90750b38S3Bucket9DD51BFA"
-                      },
-                      "s3Key": {
-                        "Fn::Join": [
-                          "",
-                          [
-                            {
-                              "Fn::Select": [
-                                0,
+              "not_approved_transaction_handler": {
+                "id": "not_approved_transaction_handler",
+                "path": "EventBridgeAtm/not_approved_transaction_handler/not_approved_transaction_handler",
+                "children": {
+                  "ServiceRole": {
+                    "id": "ServiceRole",
+                    "path": "EventBridgeAtm/not_approved_transaction_handler/not_approved_transaction_handler/ServiceRole",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "EventBridgeAtm/not_approved_transaction_handler/not_approved_transaction_handler/ServiceRole/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                          "aws:cdk:cloudformation:props": {
+                            "assumeRolePolicyDocument": {
+                              "Statement": [
                                 {
-                                  "Fn::Split": [
-                                    "||",
-                                    {
-                                      "Ref": "AssetParametersd9eec48ad1f02b781f39b31c6abdece99e300e5e7787381797def6df90750b38S3VersionKey5003C700"
-                                    }
-                                  ]
+                                  "Action": "sts:AssumeRole",
+                                  "Effect": "Allow",
+                                  "Principal": {
+                                    "Service": "lambda.amazonaws.com"
+                                  }
                                 }
-                              ]
+                              ],
+                              "Version": "2012-10-17"
                             },
-                            {
-                              "Fn::Select": [
-                                1,
-                                {
-                                  "Fn::Split": [
-                                    "||",
+                            "managedPolicyArns": [
+                              {
+                                "Fn::Join": [
+                                  "",
+                                  [
+                                    "arn:",
                                     {
-                                      "Ref": "AssetParametersd9eec48ad1f02b781f39b31c6abdece99e300e5e7787381797def6df90750b38S3VersionKey5003C700"
-                                    }
+                                      "Ref": "AWS::Partition"
+                                    },
+                                    ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
                                   ]
-                                }
-                              ]
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-iam.CfnRole",
+                          "version": "1.145.0"
+                        }
+                      },
+                      "DefaultPolicy": {
+                        "id": "DefaultPolicy",
+                        "path": "EventBridgeAtm/not_approved_transaction_handler/not_approved_transaction_handler/ServiceRole/DefaultPolicy",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "EventBridgeAtm/not_approved_transaction_handler/not_approved_transaction_handler/ServiceRole/DefaultPolicy/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                              "aws:cdk:cloudformation:props": {
+                                "policyDocument": {
+                                  "Statement": [
+                                    {
+                                      "Action": [
+                                        "xray:PutTraceSegments",
+                                        "xray:PutTelemetryRecords"
+                                      ],
+                                      "Effect": "Allow",
+                                      "Resource": "*"
+                                    }
+                                  ],
+                                  "Version": "2012-10-17"
+                                },
+                                "policyName": "notapprovedtransactionhandlerServiceRoleDefaultPolicyC888D55F",
+                                "roles": [
+                                  {
+                                    "Ref": "notapprovedtransactionhandlerServiceRoleCF984608"
+                                  }
+                                ]
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "@aws-cdk/aws-iam.CfnPolicy",
+                              "version": "1.145.0"
                             }
-                          ]
-                        ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-iam.Policy",
+                          "version": "1.145.0"
+                        }
                       }
                     },
-                    "role": {
-                      "Fn::GetAtt": [
-                        "notapprovedtransactionhandlerServiceRole94BCD5D8",
-                        "Arn"
-                      ]
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-iam.Role",
+                      "version": "1.145.0"
+                    }
+                  },
+                  "Code": {
+                    "id": "Code",
+                    "path": "EventBridgeAtm/not_approved_transaction_handler/not_approved_transaction_handler/Code",
+                    "children": {
+                      "Stage": {
+                        "id": "Stage",
+                        "path": "EventBridgeAtm/not_approved_transaction_handler/not_approved_transaction_handler/Code/Stage",
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/core.AssetStaging",
+                          "version": "1.145.0"
+                        }
+                      },
+                      "AssetBucket": {
+                        "id": "AssetBucket",
+                        "path": "EventBridgeAtm/not_approved_transaction_handler/not_approved_transaction_handler/Code/AssetBucket",
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-s3.BucketBase",
+                          "version": "1.145.0"
+                        }
+                      }
                     },
-                    "handler": "atm_consumer.not_approved_transaction_handler",
-                    "runtime": "python3.9"
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-s3-assets.Asset",
+                      "version": "1.145.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "EventBridgeAtm/not_approved_transaction_handler/not_approved_transaction_handler/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                      "aws:cdk:cloudformation:props": {
+                        "code": {
+                          "s3Bucket": {
+                            "Ref": "AssetParametersd9eec48ad1f02b781f39b31c6abdece99e300e5e7787381797def6df90750b38S3Bucket9DD51BFA"
+                          },
+                          "s3Key": {
+                            "Fn::Join": [
+                              "",
+                              [
+                                {
+                                  "Fn::Select": [
+                                    0,
+                                    {
+                                      "Fn::Split": [
+                                        "||",
+                                        {
+                                          "Ref": "AssetParametersd9eec48ad1f02b781f39b31c6abdece99e300e5e7787381797def6df90750b38S3VersionKey5003C700"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Fn::Select": [
+                                    1,
+                                    {
+                                      "Fn::Split": [
+                                        "||",
+                                        {
+                                          "Ref": "AssetParametersd9eec48ad1f02b781f39b31c6abdece99e300e5e7787381797def6df90750b38S3VersionKey5003C700"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            ]
+                          }
+                        },
+                        "role": {
+                          "Fn::GetAtt": [
+                            "notapprovedtransactionhandlerServiceRoleCF984608",
+                            "Arn"
+                          ]
+                        },
+                        "handler": "atm_consumer.not_approved_transaction_handler",
+                        "layers": [
+                          {
+                            "Ref": "notapprovedtransactionhandlerawsxraysdkLambdaLayer3B31DB91"
+                          }
+                        ],
+                        "runtime": "python3.9",
+                        "timeout": 60,
+                        "tracingConfig": {
+                          "mode": "Active"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-lambda.CfnFunction",
+                      "version": "1.145.0"
+                    }
                   }
                 },
                 "constructInfo": {
-                  "fqn": "@aws-cdk/aws-lambda.CfnFunction",
+                  "fqn": "@aws-cdk/aws-lambda.Function",
+                  "version": "1.145.0"
+                }
+              },
+              "Lambda invocation Errors > 2%": {
+                "id": "Lambda invocation Errors > 2%",
+                "path": "EventBridgeAtm/not_approved_transaction_handler/Lambda invocation Errors > 2%",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "EventBridgeAtm/not_approved_transaction_handler/Lambda invocation Errors > 2%/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                      "aws:cdk:cloudformation:props": {
+                        "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                        "evaluationPeriods": 6,
+                        "alarmActions": [
+                          {
+                            "Ref": "notapprovedtransactionhandlerErrorTopic53DD8018"
+                          }
+                        ],
+                        "datapointsToAlarm": 1,
+                        "metrics": [
+                          {
+                            "expression": "(errors / invocations) * 100",
+                            "id": "expr_1",
+                            "label": "% of invocations that errored, last 5 mins"
+                          },
+                          {
+                            "metricStat": {
+                              "metric": {
+                                "metricName": "Invocations",
+                                "namespace": "AWS/Lambda",
+                                "dimensions": [
+                                  {
+                                    "name": "FunctionName",
+                                    "value": {
+                                      "Ref": "notapprovedtransactionhandler4228E78A"
+                                    }
+                                  }
+                                ]
+                              },
+                              "period": 300,
+                              "stat": "Sum"
+                            },
+                            "id": "invocations",
+                            "returnData": false
+                          },
+                          {
+                            "metricStat": {
+                              "metric": {
+                                "metricName": "Errors",
+                                "namespace": "AWS/Lambda",
+                                "dimensions": [
+                                  {
+                                    "name": "FunctionName",
+                                    "value": {
+                                      "Ref": "notapprovedtransactionhandler4228E78A"
+                                    }
+                                  }
+                                ]
+                              },
+                              "period": 300,
+                              "stat": "Sum"
+                            },
+                            "id": "errors",
+                            "returnData": false
+                          }
+                        ],
+                        "threshold": 2,
+                        "treatMissingData": "notBreaching"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
+                      "version": "1.145.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
+                  "version": "1.145.0"
+                }
+              },
+              "Lambda p99 Long Duration (>1s)": {
+                "id": "Lambda p99 Long Duration (>1s)",
+                "path": "EventBridgeAtm/not_approved_transaction_handler/Lambda p99 Long Duration (>1s)",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "EventBridgeAtm/not_approved_transaction_handler/Lambda p99 Long Duration (>1s)/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                      "aws:cdk:cloudformation:props": {
+                        "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                        "evaluationPeriods": 6,
+                        "alarmActions": [
+                          {
+                            "Ref": "notapprovedtransactionhandlerErrorTopic53DD8018"
+                          }
+                        ],
+                        "datapointsToAlarm": 1,
+                        "dimensions": [
+                          {
+                            "name": "FunctionName",
+                            "value": {
+                              "Ref": "notapprovedtransactionhandler4228E78A"
+                            }
+                          }
+                        ],
+                        "extendedStatistic": "p99",
+                        "metricName": "Duration",
+                        "namespace": "AWS/Lambda",
+                        "period": 300,
+                        "threshold": 1000,
+                        "treatMissingData": "notBreaching"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
+                      "version": "1.145.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
+                  "version": "1.145.0"
+                }
+              },
+              "Lambda Throttled invocations >2%": {
+                "id": "Lambda Throttled invocations >2%",
+                "path": "EventBridgeAtm/not_approved_transaction_handler/Lambda Throttled invocations >2%",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "EventBridgeAtm/not_approved_transaction_handler/Lambda Throttled invocations >2%/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                      "aws:cdk:cloudformation:props": {
+                        "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                        "evaluationPeriods": 6,
+                        "alarmActions": [
+                          {
+                            "Ref": "notapprovedtransactionhandlerErrorTopic53DD8018"
+                          }
+                        ],
+                        "datapointsToAlarm": 1,
+                        "metrics": [
+                          {
+                            "expression": "(throttles * 100) / (invocations + throttles)",
+                            "id": "expr_1",
+                            "label": "throttled requests % in last 30 mins"
+                          },
+                          {
+                            "metricStat": {
+                              "metric": {
+                                "metricName": "Invocations",
+                                "namespace": "AWS/Lambda",
+                                "dimensions": [
+                                  {
+                                    "name": "FunctionName",
+                                    "value": {
+                                      "Ref": "notapprovedtransactionhandler4228E78A"
+                                    }
+                                  }
+                                ]
+                              },
+                              "period": 300,
+                              "stat": "Sum"
+                            },
+                            "id": "invocations",
+                            "returnData": false
+                          },
+                          {
+                            "metricStat": {
+                              "metric": {
+                                "metricName": "Throttles",
+                                "namespace": "AWS/Lambda",
+                                "dimensions": [
+                                  {
+                                    "name": "FunctionName",
+                                    "value": {
+                                      "Ref": "notapprovedtransactionhandler4228E78A"
+                                    }
+                                  }
+                                ]
+                              },
+                              "period": 300,
+                              "stat": "Sum"
+                            },
+                            "id": "throttles",
+                            "returnData": false
+                          }
+                        ],
+                        "threshold": 2,
+                        "treatMissingData": "notBreaching"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
+                      "version": "1.145.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
+                  "version": "1.145.0"
+                }
+              },
+              "CloudWatchDashBoard": {
+                "id": "CloudWatchDashBoard",
+                "path": "EventBridgeAtm/not_approved_transaction_handler/CloudWatchDashBoard",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "EventBridgeAtm/not_approved_transaction_handler/CloudWatchDashBoard/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::CloudWatch::Dashboard",
+                      "aws:cdk:cloudformation:props": {
+                        "dashboardBody": {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Error %\",\"region\":\"",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+                              {
+                                "Ref": "notapprovedtransactionhandler4228E78A"
+                              },
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
+                              {
+                                "Ref": "notapprovedtransactionhandler4228E78A"
+                              },
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+                              {
+                                "Ref": "notapprovedtransactionhandler4228E78A"
+                              },
+                              "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+                              {
+                                "Ref": "notapprovedtransactionhandler4228E78A"
+                              },
+                              "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+                              {
+                                "Ref": "notapprovedtransactionhandler4228E78A"
+                              },
+                              "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Throttle %\",\"region\":\"",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+                              {
+                                "Ref": "notapprovedtransactionhandler4228E78A"
+                              },
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
+                              {
+                                "Ref": "notapprovedtransactionhandler4228E78A"
+                              },
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
+                            ]
+                          ]
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-cloudwatch.CfnDashboard",
+                      "version": "1.145.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-cloudwatch.Dashboard",
                   "version": "1.145.0"
                 }
               }
             },
             "constructInfo": {
-              "fqn": "@aws-cdk/aws-lambda.Function",
+              "fqn": "@aws-cdk/core.Construct",
               "version": "1.145.0"
             }
           },
@@ -13324,182 +14705,597 @@
             "id": "handler",
             "path": "EventBridgeAtm/handler",
             "children": {
-              "ServiceRole": {
-                "id": "ServiceRole",
-                "path": "EventBridgeAtm/handler/ServiceRole",
+              "ErrorTopic": {
+                "id": "ErrorTopic",
+                "path": "EventBridgeAtm/handler/ErrorTopic",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "EventBridgeAtm/handler/ServiceRole/Resource",
+                    "path": "EventBridgeAtm/handler/ErrorTopic/Resource",
                     "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:type": "AWS::SNS::Topic",
                       "aws:cdk:cloudformation:props": {
-                        "assumeRolePolicyDocument": {
-                          "Statement": [
-                            {
-                              "Action": "sts:AssumeRole",
-                              "Effect": "Allow",
-                              "Principal": {
-                                "Service": "lambda.amazonaws.com"
-                              }
-                            }
-                          ],
-                          "Version": "2012-10-17"
-                        },
-                        "managedPolicyArns": [
-                          {
-                            "Fn::Join": [
-                              "",
-                              [
-                                "arn:",
-                                {
-                                  "Ref": "AWS::Partition"
-                                },
-                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-                              ]
-                            ]
-                          }
-                        ]
+                        "displayName": "ErrorTopic"
                       }
                     },
                     "constructInfo": {
-                      "fqn": "@aws-cdk/aws-iam.CfnRole",
+                      "fqn": "@aws-cdk/aws-sns.CfnTopic",
                       "version": "1.145.0"
                     }
-                  },
-                  "DefaultPolicy": {
-                    "id": "DefaultPolicy",
-                    "path": "EventBridgeAtm/handler/ServiceRole/DefaultPolicy",
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-sns.Topic",
+                  "version": "1.145.0"
+                }
+              },
+              "aws-xray-sdkLambdaLayer": {
+                "id": "aws-xray-sdkLambdaLayer",
+                "path": "EventBridgeAtm/handler/aws-xray-sdkLambdaLayer",
+                "children": {
+                  "Code": {
+                    "id": "Code",
+                    "path": "EventBridgeAtm/handler/aws-xray-sdkLambdaLayer/Code",
                     "children": {
-                      "Resource": {
-                        "id": "Resource",
-                        "path": "EventBridgeAtm/handler/ServiceRole/DefaultPolicy/Resource",
-                        "attributes": {
-                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
-                          "aws:cdk:cloudformation:props": {
-                            "policyDocument": {
-                              "Statement": [
-                                {
-                                  "Action": "events:PutEvents",
-                                  "Effect": "Allow",
-                                  "Resource": "*"
-                                }
-                              ],
-                              "Version": "2012-10-17"
-                            },
-                            "policyName": "handlerServiceRoleDefaultPolicyB5E76755",
-                            "roles": [
-                              {
-                                "Ref": "handlerServiceRole187D5A5A"
-                              }
-                            ]
-                          }
-                        },
+                      "Stage": {
+                        "id": "Stage",
+                        "path": "EventBridgeAtm/handler/aws-xray-sdkLambdaLayer/Code/Stage",
                         "constructInfo": {
-                          "fqn": "@aws-cdk/aws-iam.CfnPolicy",
+                          "fqn": "@aws-cdk/core.AssetStaging",
+                          "version": "1.145.0"
+                        }
+                      },
+                      "AssetBucket": {
+                        "id": "AssetBucket",
+                        "path": "EventBridgeAtm/handler/aws-xray-sdkLambdaLayer/Code/AssetBucket",
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-s3.BucketBase",
                           "version": "1.145.0"
                         }
                       }
                     },
                     "constructInfo": {
-                      "fqn": "@aws-cdk/aws-iam.Policy",
-                      "version": "1.145.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-iam.Role",
-                  "version": "1.145.0"
-                }
-              },
-              "Code": {
-                "id": "Code",
-                "path": "EventBridgeAtm/handler/Code",
-                "children": {
-                  "Stage": {
-                    "id": "Stage",
-                    "path": "EventBridgeAtm/handler/Code/Stage",
-                    "constructInfo": {
-                      "fqn": "@aws-cdk/core.AssetStaging",
+                      "fqn": "@aws-cdk/aws-s3-assets.Asset",
                       "version": "1.145.0"
                     }
                   },
-                  "AssetBucket": {
-                    "id": "AssetBucket",
-                    "path": "EventBridgeAtm/handler/Code/AssetBucket",
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "EventBridgeAtm/handler/aws-xray-sdkLambdaLayer/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::Lambda::LayerVersion",
+                      "aws:cdk:cloudformation:props": {
+                        "content": {
+                          "s3Bucket": {
+                            "Ref": "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3BucketC7A2EC7F"
+                          },
+                          "s3Key": {
+                            "Fn::Join": [
+                              "",
+                              [
+                                {
+                                  "Fn::Select": [
+                                    0,
+                                    {
+                                      "Fn::Split": [
+                                        "||",
+                                        {
+                                          "Ref": "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3VersionKeyF23940AD"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Fn::Select": [
+                                    1,
+                                    {
+                                      "Fn::Split": [
+                                        "||",
+                                        {
+                                          "Ref": "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3VersionKeyF23940AD"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            ]
+                          }
+                        },
+                        "description": "AWS XRay SDK Lambda Layer"
+                      }
+                    },
                     "constructInfo": {
-                      "fqn": "@aws-cdk/aws-s3.BucketBase",
+                      "fqn": "@aws-cdk/aws-lambda.CfnLayerVersion",
                       "version": "1.145.0"
                     }
                   }
                 },
                 "constructInfo": {
-                  "fqn": "@aws-cdk/aws-s3-assets.Asset",
+                  "fqn": "@aws-cdk/aws-lambda.LayerVersion",
                   "version": "1.145.0"
                 }
               },
-              "Resource": {
-                "id": "Resource",
-                "path": "EventBridgeAtm/handler/Resource",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
-                  "aws:cdk:cloudformation:props": {
-                    "code": {
-                      "s3Bucket": {
-                        "Ref": "AssetParameters49e8e926a5312c4c27e1b1e1df3638adeae6ce37cf6bed2e3c5a93e299dd50e0S3Bucket6ADA7D70"
-                      },
-                      "s3Key": {
-                        "Fn::Join": [
-                          "",
-                          [
-                            {
-                              "Fn::Select": [
-                                0,
+              "handler": {
+                "id": "handler",
+                "path": "EventBridgeAtm/handler/handler",
+                "children": {
+                  "ServiceRole": {
+                    "id": "ServiceRole",
+                    "path": "EventBridgeAtm/handler/handler/ServiceRole",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "EventBridgeAtm/handler/handler/ServiceRole/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                          "aws:cdk:cloudformation:props": {
+                            "assumeRolePolicyDocument": {
+                              "Statement": [
                                 {
-                                  "Fn::Split": [
-                                    "||",
-                                    {
-                                      "Ref": "AssetParameters49e8e926a5312c4c27e1b1e1df3638adeae6ce37cf6bed2e3c5a93e299dd50e0S3VersionKey18A7C0C0"
-                                    }
-                                  ]
+                                  "Action": "sts:AssumeRole",
+                                  "Effect": "Allow",
+                                  "Principal": {
+                                    "Service": "lambda.amazonaws.com"
+                                  }
                                 }
-                              ]
+                              ],
+                              "Version": "2012-10-17"
                             },
-                            {
-                              "Fn::Select": [
-                                1,
-                                {
-                                  "Fn::Split": [
-                                    "||",
+                            "managedPolicyArns": [
+                              {
+                                "Fn::Join": [
+                                  "",
+                                  [
+                                    "arn:",
                                     {
-                                      "Ref": "AssetParameters49e8e926a5312c4c27e1b1e1df3638adeae6ce37cf6bed2e3c5a93e299dd50e0S3VersionKey18A7C0C0"
-                                    }
+                                      "Ref": "AWS::Partition"
+                                    },
+                                    ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
                                   ]
-                                }
-                              ]
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-iam.CfnRole",
+                          "version": "1.145.0"
+                        }
+                      },
+                      "DefaultPolicy": {
+                        "id": "DefaultPolicy",
+                        "path": "EventBridgeAtm/handler/handler/ServiceRole/DefaultPolicy",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "EventBridgeAtm/handler/handler/ServiceRole/DefaultPolicy/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                              "aws:cdk:cloudformation:props": {
+                                "policyDocument": {
+                                  "Statement": [
+                                    {
+                                      "Action": [
+                                        "xray:PutTraceSegments",
+                                        "xray:PutTelemetryRecords"
+                                      ],
+                                      "Effect": "Allow",
+                                      "Resource": "*"
+                                    },
+                                    {
+                                      "Action": "events:PutEvents",
+                                      "Effect": "Allow",
+                                      "Resource": "*"
+                                    }
+                                  ],
+                                  "Version": "2012-10-17"
+                                },
+                                "policyName": "handlerServiceRoleDefaultPolicy6BFD97B0",
+                                "roles": [
+                                  {
+                                    "Ref": "handlerServiceRole2B8AB3DF"
+                                  }
+                                ]
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "@aws-cdk/aws-iam.CfnPolicy",
+                              "version": "1.145.0"
                             }
-                          ]
-                        ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-iam.Policy",
+                          "version": "1.145.0"
+                        }
                       }
                     },
-                    "role": {
-                      "Fn::GetAtt": [
-                        "handlerServiceRole187D5A5A",
-                        "Arn"
-                      ]
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-iam.Role",
+                      "version": "1.145.0"
+                    }
+                  },
+                  "Code": {
+                    "id": "Code",
+                    "path": "EventBridgeAtm/handler/handler/Code",
+                    "children": {
+                      "Stage": {
+                        "id": "Stage",
+                        "path": "EventBridgeAtm/handler/handler/Code/Stage",
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/core.AssetStaging",
+                          "version": "1.145.0"
+                        }
+                      },
+                      "AssetBucket": {
+                        "id": "AssetBucket",
+                        "path": "EventBridgeAtm/handler/handler/Code/AssetBucket",
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/aws-s3.BucketBase",
+                          "version": "1.145.0"
+                        }
+                      }
                     },
-                    "handler": "atm_producer.handler",
-                    "runtime": "python3.9"
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-s3-assets.Asset",
+                      "version": "1.145.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "EventBridgeAtm/handler/handler/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                      "aws:cdk:cloudformation:props": {
+                        "code": {
+                          "s3Bucket": {
+                            "Ref": "AssetParameters49e8e926a5312c4c27e1b1e1df3638adeae6ce37cf6bed2e3c5a93e299dd50e0S3Bucket6ADA7D70"
+                          },
+                          "s3Key": {
+                            "Fn::Join": [
+                              "",
+                              [
+                                {
+                                  "Fn::Select": [
+                                    0,
+                                    {
+                                      "Fn::Split": [
+                                        "||",
+                                        {
+                                          "Ref": "AssetParameters49e8e926a5312c4c27e1b1e1df3638adeae6ce37cf6bed2e3c5a93e299dd50e0S3VersionKey18A7C0C0"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Fn::Select": [
+                                    1,
+                                    {
+                                      "Fn::Split": [
+                                        "||",
+                                        {
+                                          "Ref": "AssetParameters49e8e926a5312c4c27e1b1e1df3638adeae6ce37cf6bed2e3c5a93e299dd50e0S3VersionKey18A7C0C0"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            ]
+                          }
+                        },
+                        "role": {
+                          "Fn::GetAtt": [
+                            "handlerServiceRole2B8AB3DF",
+                            "Arn"
+                          ]
+                        },
+                        "handler": "atm_producer.handler",
+                        "layers": [
+                          {
+                            "Ref": "handlerawsxraysdkLambdaLayerA2BD36A4"
+                          }
+                        ],
+                        "runtime": "python3.9",
+                        "timeout": 60,
+                        "tracingConfig": {
+                          "mode": "Active"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-lambda.CfnFunction",
+                      "version": "1.145.0"
+                    }
                   }
                 },
                 "constructInfo": {
-                  "fqn": "@aws-cdk/aws-lambda.CfnFunction",
+                  "fqn": "@aws-cdk/aws-lambda.Function",
+                  "version": "1.145.0"
+                }
+              },
+              "Lambda invocation Errors > 2%": {
+                "id": "Lambda invocation Errors > 2%",
+                "path": "EventBridgeAtm/handler/Lambda invocation Errors > 2%",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "EventBridgeAtm/handler/Lambda invocation Errors > 2%/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                      "aws:cdk:cloudformation:props": {
+                        "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                        "evaluationPeriods": 6,
+                        "alarmActions": [
+                          {
+                            "Ref": "handlerErrorTopicAF1FF98D"
+                          }
+                        ],
+                        "datapointsToAlarm": 1,
+                        "metrics": [
+                          {
+                            "expression": "(errors / invocations) * 100",
+                            "id": "expr_1",
+                            "label": "% of invocations that errored, last 5 mins"
+                          },
+                          {
+                            "metricStat": {
+                              "metric": {
+                                "metricName": "Invocations",
+                                "namespace": "AWS/Lambda",
+                                "dimensions": [
+                                  {
+                                    "name": "FunctionName",
+                                    "value": {
+                                      "Ref": "handler9A1C0C74"
+                                    }
+                                  }
+                                ]
+                              },
+                              "period": 300,
+                              "stat": "Sum"
+                            },
+                            "id": "invocations",
+                            "returnData": false
+                          },
+                          {
+                            "metricStat": {
+                              "metric": {
+                                "metricName": "Errors",
+                                "namespace": "AWS/Lambda",
+                                "dimensions": [
+                                  {
+                                    "name": "FunctionName",
+                                    "value": {
+                                      "Ref": "handler9A1C0C74"
+                                    }
+                                  }
+                                ]
+                              },
+                              "period": 300,
+                              "stat": "Sum"
+                            },
+                            "id": "errors",
+                            "returnData": false
+                          }
+                        ],
+                        "threshold": 2,
+                        "treatMissingData": "notBreaching"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
+                      "version": "1.145.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
+                  "version": "1.145.0"
+                }
+              },
+              "Lambda p99 Long Duration (>1s)": {
+                "id": "Lambda p99 Long Duration (>1s)",
+                "path": "EventBridgeAtm/handler/Lambda p99 Long Duration (>1s)",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "EventBridgeAtm/handler/Lambda p99 Long Duration (>1s)/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                      "aws:cdk:cloudformation:props": {
+                        "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                        "evaluationPeriods": 6,
+                        "alarmActions": [
+                          {
+                            "Ref": "handlerErrorTopicAF1FF98D"
+                          }
+                        ],
+                        "datapointsToAlarm": 1,
+                        "dimensions": [
+                          {
+                            "name": "FunctionName",
+                            "value": {
+                              "Ref": "handler9A1C0C74"
+                            }
+                          }
+                        ],
+                        "extendedStatistic": "p99",
+                        "metricName": "Duration",
+                        "namespace": "AWS/Lambda",
+                        "period": 300,
+                        "threshold": 1000,
+                        "treatMissingData": "notBreaching"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
+                      "version": "1.145.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
+                  "version": "1.145.0"
+                }
+              },
+              "Lambda Throttled invocations >2%": {
+                "id": "Lambda Throttled invocations >2%",
+                "path": "EventBridgeAtm/handler/Lambda Throttled invocations >2%",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "EventBridgeAtm/handler/Lambda Throttled invocations >2%/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                      "aws:cdk:cloudformation:props": {
+                        "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                        "evaluationPeriods": 6,
+                        "alarmActions": [
+                          {
+                            "Ref": "handlerErrorTopicAF1FF98D"
+                          }
+                        ],
+                        "datapointsToAlarm": 1,
+                        "metrics": [
+                          {
+                            "expression": "(throttles * 100) / (invocations + throttles)",
+                            "id": "expr_1",
+                            "label": "throttled requests % in last 30 mins"
+                          },
+                          {
+                            "metricStat": {
+                              "metric": {
+                                "metricName": "Invocations",
+                                "namespace": "AWS/Lambda",
+                                "dimensions": [
+                                  {
+                                    "name": "FunctionName",
+                                    "value": {
+                                      "Ref": "handler9A1C0C74"
+                                    }
+                                  }
+                                ]
+                              },
+                              "period": 300,
+                              "stat": "Sum"
+                            },
+                            "id": "invocations",
+                            "returnData": false
+                          },
+                          {
+                            "metricStat": {
+                              "metric": {
+                                "metricName": "Throttles",
+                                "namespace": "AWS/Lambda",
+                                "dimensions": [
+                                  {
+                                    "name": "FunctionName",
+                                    "value": {
+                                      "Ref": "handler9A1C0C74"
+                                    }
+                                  }
+                                ]
+                              },
+                              "period": 300,
+                              "stat": "Sum"
+                            },
+                            "id": "throttles",
+                            "returnData": false
+                          }
+                        ],
+                        "threshold": 2,
+                        "treatMissingData": "notBreaching"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-cloudwatch.CfnAlarm",
+                      "version": "1.145.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-cloudwatch.Alarm",
+                  "version": "1.145.0"
+                }
+              },
+              "CloudWatchDashBoard": {
+                "id": "CloudWatchDashBoard",
+                "path": "EventBridgeAtm/handler/CloudWatchDashBoard",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "EventBridgeAtm/handler/CloudWatchDashBoard/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::CloudWatch::Dashboard",
+                      "aws:cdk:cloudformation:props": {
+                        "dashboardBody": {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Error %\",\"region\":\"",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+                              {
+                                "Ref": "handler9A1C0C74"
+                              },
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
+                              {
+                                "Ref": "handler9A1C0C74"
+                              },
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+                              {
+                                "Ref": "handler9A1C0C74"
+                              },
+                              "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+                              {
+                                "Ref": "handler9A1C0C74"
+                              },
+                              "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+                              {
+                                "Ref": "handler9A1C0C74"
+                              },
+                              "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Throttle %\",\"region\":\"",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+                              {
+                                "Ref": "handler9A1C0C74"
+                              },
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
+                              {
+                                "Ref": "handler9A1C0C74"
+                              },
+                              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
+                            ]
+                          ]
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-cloudwatch.CfnDashboard",
+                      "version": "1.145.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-cloudwatch.Dashboard",
                   "version": "1.145.0"
                 }
               }
             },
             "constructInfo": {
-              "fqn": "@aws-cdk/aws-lambda.Function",
+              "fqn": "@aws-cdk/core.Construct",
               "version": "1.145.0"
             }
           },
@@ -13630,7 +15426,7 @@
                           "Ref": "EndpointEEF1FD8F"
                         },
                         "deploymentId": {
-                          "Ref": "EndpointDeployment318525DA75e077afc42ac98a770212035cc3c82a"
+                          "Ref": "EndpointDeployment318525DA8ad7930d681e0acd1766be406636603d"
                         },
                         "stageName": "prod"
                       }
@@ -13698,7 +15494,7 @@
                                 "action": "lambda:InvokeFunction",
                                 "functionName": {
                                   "Fn::GetAtt": [
-                                    "handlerE1533BD5",
+                                    "handler9A1C0C74",
                                     "Arn"
                                   ]
                                 },
@@ -13747,7 +15543,7 @@
                                 "action": "lambda:InvokeFunction",
                                 "functionName": {
                                   "Fn::GetAtt": [
-                                    "handlerE1533BD5",
+                                    "handler9A1C0C74",
                                     "Arn"
                                   ]
                                 },
@@ -13814,7 +15610,7 @@
                                         ":lambda:path/2015-03-31/functions/",
                                         {
                                           "Fn::GetAtt": [
-                                            "handlerE1533BD5",
+                                            "handler9A1C0C74",
                                             "Arn"
                                           ]
                                         },
@@ -13856,7 +15652,7 @@
                             "action": "lambda:InvokeFunction",
                             "functionName": {
                               "Fn::GetAtt": [
-                                "handlerE1533BD5",
+                                "handler9A1C0C74",
                                 "Arn"
                               ]
                             },
@@ -13905,7 +15701,7 @@
                             "action": "lambda:InvokeFunction",
                             "functionName": {
                               "Fn::GetAtt": [
-                                "handlerE1533BD5",
+                                "handler9A1C0C74",
                                 "Arn"
                               ]
                             },
@@ -13975,7 +15771,7 @@
                                     ":lambda:path/2015-03-31/functions/",
                                     {
                                       "Fn::GetAtt": [
-                                        "handlerE1533BD5",
+                                        "handler9A1C0C74",
                                         "Arn"
                                       ]
                                     },
