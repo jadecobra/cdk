@@ -79,61 +79,11 @@
           ]
         },
         "Handler": "handler.case_1_handler",
-        "Runtime": "nodejs12.x"
+        "Runtime": "python3.9"
       },
       "DependsOn": [
         "atmconsumer1LambdaServiceRole4975F77B"
       ]
-    },
-    "atmconsumer1LambdaRule2413667B": {
-      "Type": "AWS::Events::Rule",
-      "Properties": {
-        "Description": "Approved Transactions",
-        "EventPattern": {
-          "detail": {
-            "result": [
-              "approved"
-            ]
-          },
-          "detail-type": [
-            "transaction"
-          ],
-          "source": [
-            "custom.myATMapp"
-          ]
-        },
-        "State": "ENABLED",
-        "Targets": [
-          {
-            "Arn": {
-              "Fn::GetAtt": [
-                "atmconsumer1LambdaD4681485",
-                "Arn"
-              ]
-            },
-            "Id": "Target0"
-          }
-        ]
-      }
-    },
-    "atmconsumer1LambdaRuleAllowEventRuleEventBridgeAtmatmconsumer1Lambda58BCFCCA2E18933F": {
-      "Type": "AWS::Lambda::Permission",
-      "Properties": {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": {
-          "Fn::GetAtt": [
-            "atmconsumer1LambdaD4681485",
-            "Arn"
-          ]
-        },
-        "Principal": "events.amazonaws.com",
-        "SourceArn": {
-          "Fn::GetAtt": [
-            "atmconsumer1LambdaRule2413667B",
-            "Arn"
-          ]
-        }
-      }
     },
     "atmconsumer2LambdaServiceRole5E806641": {
       "Type": "AWS::IAM::Role",
@@ -214,62 +164,11 @@
           ]
         },
         "Handler": "handler.case_2_handler",
-        "Runtime": "nodejs12.x"
+        "Runtime": "python3.9"
       },
       "DependsOn": [
         "atmconsumer2LambdaServiceRole5E806641"
       ]
-    },
-    "atmconsumer2LambdaRule05EB0FC6": {
-      "Type": "AWS::Events::Rule",
-      "Properties": {
-        "EventPattern": {
-          "detail": {
-            "location": [
-              {
-                "prefix": "NY-"
-              }
-            ]
-          },
-          "detail-type": [
-            "transaction"
-          ],
-          "source": [
-            "custom.myATMapp"
-          ]
-        },
-        "State": "ENABLED",
-        "Targets": [
-          {
-            "Arn": {
-              "Fn::GetAtt": [
-                "atmconsumer2Lambda876C1CE2",
-                "Arn"
-              ]
-            },
-            "Id": "Target0"
-          }
-        ]
-      }
-    },
-    "atmconsumer2LambdaRuleAllowEventRuleEventBridgeAtmatmconsumer2Lambda5B060AB635F65C35": {
-      "Type": "AWS::Lambda::Permission",
-      "Properties": {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": {
-          "Fn::GetAtt": [
-            "atmconsumer2Lambda876C1CE2",
-            "Arn"
-          ]
-        },
-        "Principal": "events.amazonaws.com",
-        "SourceArn": {
-          "Fn::GetAtt": [
-            "atmconsumer2LambdaRule05EB0FC6",
-            "Arn"
-          ]
-        }
-      }
     },
     "atmconsumer3LambdaServiceRoleDCD755B4": {
       "Type": "AWS::IAM::Role",
@@ -350,11 +249,112 @@
           ]
         },
         "Handler": "handler.case_3_handler",
-        "Runtime": "nodejs12.x"
+        "Runtime": "python3.9"
       },
       "DependsOn": [
         "atmconsumer3LambdaServiceRoleDCD755B4"
       ]
+    },
+    "atmconsumer1LambdaRule2413667B": {
+      "Type": "AWS::Events::Rule",
+      "Properties": {
+        "Description": "Approved Transactions",
+        "EventPattern": {
+          "detail": {
+            "result": [
+              "approved"
+            ]
+          },
+          "detail-type": [
+            "transaction"
+          ],
+          "source": [
+            "custom.myATMapp"
+          ]
+        },
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Fn::GetAtt": [
+                "atmconsumer1LambdaD4681485",
+                "Arn"
+              ]
+            },
+            "Id": "Target0"
+          }
+        ]
+      }
+    },
+    "atmconsumer1LambdaRuleAllowEventRuleEventBridgeAtmatmconsumer1Lambda58BCFCCA2E18933F": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "atmconsumer1LambdaD4681485",
+            "Arn"
+          ]
+        },
+        "Principal": "events.amazonaws.com",
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "atmconsumer1LambdaRule2413667B",
+            "Arn"
+          ]
+        }
+      }
+    },
+    "atmconsumer2LambdaRule05EB0FC6": {
+      "Type": "AWS::Events::Rule",
+      "Properties": {
+        "EventPattern": {
+          "detail": {
+            "location": [
+              {
+                "prefix": "NY-"
+              }
+            ]
+          },
+          "detail-type": [
+            "transaction"
+          ],
+          "source": [
+            "custom.myATMapp"
+          ]
+        },
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Fn::GetAtt": [
+                "atmconsumer2Lambda876C1CE2",
+                "Arn"
+              ]
+            },
+            "Id": "Target0"
+          }
+        ]
+      }
+    },
+    "atmconsumer2LambdaRuleAllowEventRuleEventBridgeAtmatmconsumer2Lambda5B060AB635F65C35": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "atmconsumer2Lambda876C1CE2",
+            "Arn"
+          ]
+        },
+        "Principal": "events.amazonaws.com",
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "atmconsumer2LambdaRule05EB0FC6",
+            "Arn"
+          ]
+        }
+      }
     },
     "atmconsumer3LambdaRule67445D28": {
       "Type": "AWS::Events::Rule",
@@ -507,7 +507,7 @@
           ]
         },
         "Handler": "handler.lambdaHandler",
-        "Runtime": "nodejs12.x"
+        "Runtime": "python3.9"
       },
       "DependsOn": [
         "atmProducerLambdaServiceRoleDefaultPolicy984C4CFE",

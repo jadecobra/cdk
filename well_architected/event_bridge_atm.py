@@ -13,15 +13,29 @@ class EventBridgeAtm(cdk.Stack):
     def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-
-
-        #
-        # Approved Transaction Consumer
-        #
         approved_transaction_lambda_function = aws_lambda.Function(
             self, "atm_consumer1Lambda",
-            runtime=aws_lambda.Runtime.NODEJS_12_X,
+            runtime=aws_lambda.Runtime.PYTHON_3_9,
             handler="handler.case_1_handler",
+            code=aws_lambda.Code.from_asset("lambda_functions/atm_consumer")
+        )
+        # approved_transaction_lambda_function = self.create_lambda_function(
+        #     stack_name="atm_consumer1Lambda",
+        #     handler_name="case_1_handler",
+        #     function_name="atm_consumer"
+        # )
+
+        ny_prefix_transaction_lambda_function = aws_lambda.Function(
+            self, "atm_consumer2Lambda",
+            runtime=aws_lambda.Runtime.PYTHON_3_9,
+            handler="handler.case_2_handler",
+            code=aws_lambda.Code.from_asset("lambda_functions/atm_consumer")
+        )
+
+        not_approved_transaction_lambda_function = aws_lambda.Function(
+            self, "atm_consumer3Lambda",
+            runtime=aws_lambda.Runtime.PYTHON_3_9,
+            handler="handler.case_3_handler",
             code=aws_lambda.Code.from_asset("lambda_functions/atm_consumer")
         )
 
@@ -37,13 +51,6 @@ class EventBridgeAtm(cdk.Stack):
             )
         )
 
-        ny_prefix_transaction_lambda_function = aws_lambda.Function(
-            self, "atm_consumer2Lambda",
-            runtime=aws_lambda.Runtime.NODEJS_12_X,
-            handler="handler.case_2_handler",
-            code=aws_lambda.Code.from_asset("lambda_functions/atm_consumer")
-        )
-
         ny_prefix_transaction_rule = events.Rule(
             self, 'atm_consumer2LambdaRule',
             event_pattern=events.EventPattern(
@@ -53,13 +60,6 @@ class EventBridgeAtm(cdk.Stack):
                     "location": [{"prefix": "NY-"}]
                 }
             )
-        )
-
-        not_approved_transaction_lambda_function = aws_lambda.Function(
-            self, "atm_consumer3Lambda",
-            runtime=aws_lambda.Runtime.NODEJS_12_X,
-            handler="handler.case_3_handler",
-            code=aws_lambda.Code.from_asset("lambda_functions/atm_consumer")
         )
 
         not_approved_transaction_rule = events.Rule(
@@ -80,7 +80,7 @@ class EventBridgeAtm(cdk.Stack):
 
         atm_producer_lambda = aws_lambda.Function(
             self, "atmProducerLambda",
-            runtime=aws_lambda.Runtime.NODEJS_12_X,
+            runtime=aws_lambda.Runtime.PYTHON_3_9,
             handler="handler.lambdaHandler",
             code=aws_lambda.Code.from_asset("lambda_functions/atm_producer")
         )
@@ -96,4 +96,12 @@ class EventBridgeAtm(cdk.Stack):
         api_gateway.LambdaRestApi(
             self, 'Endpoint',
             handler=atm_producer_lambda
+        )
+
+    def create_lambda_function(self, stack_name=None, handler_name=None, function_name=None):
+        return aws_lambda.Function(
+            self, stack_name,
+            runtime=aws_lambda.Runtime.PYTHON_3_9,
+            handler=f"handler.{handler_name}",
+            code=aws_lambda.Code.from_asset(f"lambda_functions/{function_name}")
         )
