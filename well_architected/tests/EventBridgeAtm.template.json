@@ -1,264 +1,9 @@
 {
   "Resources": {
-    "atmconsumer1LambdaServiceRole4975F77B": {
-      "Type": "AWS::IAM::Role",
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com"
-              }
-            }
-          ],
-          "Version": "2012-10-17"
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition"
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-              ]
-            ]
-          }
-        ]
-      }
-    },
-    "atmconsumer1LambdaD4681485": {
-      "Type": "AWS::Lambda::Function",
-      "Properties": {
-        "Code": {
-          "S3Bucket": {
-            "Ref": "AssetParametersd9eec48ad1f02b781f39b31c6abdece99e300e5e7787381797def6df90750b38S3Bucket9DD51BFA"
-          },
-          "S3Key": {
-            "Fn::Join": [
-              "",
-              [
-                {
-                  "Fn::Select": [
-                    0,
-                    {
-                      "Fn::Split": [
-                        "||",
-                        {
-                          "Ref": "AssetParametersd9eec48ad1f02b781f39b31c6abdece99e300e5e7787381797def6df90750b38S3VersionKey5003C700"
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "Fn::Select": [
-                    1,
-                    {
-                      "Fn::Split": [
-                        "||",
-                        {
-                          "Ref": "AssetParametersd9eec48ad1f02b781f39b31c6abdece99e300e5e7787381797def6df90750b38S3VersionKey5003C700"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            ]
-          }
-        },
-        "Role": {
-          "Fn::GetAtt": [
-            "atmconsumer1LambdaServiceRole4975F77B",
-            "Arn"
-          ]
-        },
-        "Handler": "handler.case_1_handler",
-        "Runtime": "python3.9"
-      },
-      "DependsOn": [
-        "atmconsumer1LambdaServiceRole4975F77B"
-      ]
-    },
-    "atmconsumer2LambdaServiceRole5E806641": {
-      "Type": "AWS::IAM::Role",
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com"
-              }
-            }
-          ],
-          "Version": "2012-10-17"
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition"
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-              ]
-            ]
-          }
-        ]
-      }
-    },
-    "atmconsumer2Lambda876C1CE2": {
-      "Type": "AWS::Lambda::Function",
-      "Properties": {
-        "Code": {
-          "S3Bucket": {
-            "Ref": "AssetParametersd9eec48ad1f02b781f39b31c6abdece99e300e5e7787381797def6df90750b38S3Bucket9DD51BFA"
-          },
-          "S3Key": {
-            "Fn::Join": [
-              "",
-              [
-                {
-                  "Fn::Select": [
-                    0,
-                    {
-                      "Fn::Split": [
-                        "||",
-                        {
-                          "Ref": "AssetParametersd9eec48ad1f02b781f39b31c6abdece99e300e5e7787381797def6df90750b38S3VersionKey5003C700"
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "Fn::Select": [
-                    1,
-                    {
-                      "Fn::Split": [
-                        "||",
-                        {
-                          "Ref": "AssetParametersd9eec48ad1f02b781f39b31c6abdece99e300e5e7787381797def6df90750b38S3VersionKey5003C700"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            ]
-          }
-        },
-        "Role": {
-          "Fn::GetAtt": [
-            "atmconsumer2LambdaServiceRole5E806641",
-            "Arn"
-          ]
-        },
-        "Handler": "handler.case_2_handler",
-        "Runtime": "python3.9"
-      },
-      "DependsOn": [
-        "atmconsumer2LambdaServiceRole5E806641"
-      ]
-    },
-    "atmconsumer3LambdaServiceRoleDCD755B4": {
-      "Type": "AWS::IAM::Role",
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com"
-              }
-            }
-          ],
-          "Version": "2012-10-17"
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition"
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-              ]
-            ]
-          }
-        ]
-      }
-    },
-    "atmconsumer3Lambda0CB334B8": {
-      "Type": "AWS::Lambda::Function",
-      "Properties": {
-        "Code": {
-          "S3Bucket": {
-            "Ref": "AssetParametersd9eec48ad1f02b781f39b31c6abdece99e300e5e7787381797def6df90750b38S3Bucket9DD51BFA"
-          },
-          "S3Key": {
-            "Fn::Join": [
-              "",
-              [
-                {
-                  "Fn::Select": [
-                    0,
-                    {
-                      "Fn::Split": [
-                        "||",
-                        {
-                          "Ref": "AssetParametersd9eec48ad1f02b781f39b31c6abdece99e300e5e7787381797def6df90750b38S3VersionKey5003C700"
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "Fn::Select": [
-                    1,
-                    {
-                      "Fn::Split": [
-                        "||",
-                        {
-                          "Ref": "AssetParametersd9eec48ad1f02b781f39b31c6abdece99e300e5e7787381797def6df90750b38S3VersionKey5003C700"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            ]
-          }
-        },
-        "Role": {
-          "Fn::GetAtt": [
-            "atmconsumer3LambdaServiceRoleDCD755B4",
-            "Arn"
-          ]
-        },
-        "Handler": "handler.case_3_handler",
-        "Runtime": "python3.9"
-      },
-      "DependsOn": [
-        "atmconsumer3LambdaServiceRoleDCD755B4"
-      ]
-    },
-    "atmconsumer1LambdaRule2413667B": {
+    "approvedtransactionsruleE5F33157": {
       "Type": "AWS::Events::Rule",
       "Properties": {
-        "Description": "Approved Transactions",
+        "Description": "Approved Transaction",
         "EventPattern": {
           "detail": {
             "result": [
@@ -277,7 +22,7 @@
           {
             "Arn": {
               "Fn::GetAtt": [
-                "atmconsumer1LambdaD4681485",
+                "approvedtransactionhandler6C205DA8",
                 "Arn"
               ]
             },
@@ -286,26 +31,111 @@
         ]
       }
     },
-    "atmconsumer1LambdaRuleAllowEventRuleEventBridgeAtmatmconsumer1Lambda58BCFCCA2E18933F": {
+    "approvedtransactionsruleAllowEventRuleEventBridgeAtmapprovedtransactionhandler89C399BB620C32F4": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "atmconsumer1LambdaD4681485",
+            "approvedtransactionhandler6C205DA8",
             "Arn"
           ]
         },
         "Principal": "events.amazonaws.com",
         "SourceArn": {
           "Fn::GetAtt": [
-            "atmconsumer1LambdaRule2413667B",
+            "approvedtransactionsruleE5F33157",
             "Arn"
           ]
         }
       }
     },
-    "atmconsumer2LambdaRule05EB0FC6": {
+    "approvedtransactionhandlerServiceRole66BFD390": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    "approvedtransactionhandler6C205DA8": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "AssetParametersd9eec48ad1f02b781f39b31c6abdece99e300e5e7787381797def6df90750b38S3Bucket9DD51BFA"
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersd9eec48ad1f02b781f39b31c6abdece99e300e5e7787381797def6df90750b38S3VersionKey5003C700"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersd9eec48ad1f02b781f39b31c6abdece99e300e5e7787381797def6df90750b38S3VersionKey5003C700"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "approvedtransactionhandlerServiceRole66BFD390",
+            "Arn"
+          ]
+        },
+        "Handler": "atm_consumer.approved_transaction_handler",
+        "Runtime": "python3.9"
+      },
+      "DependsOn": [
+        "approvedtransactionhandlerServiceRole66BFD390"
+      ]
+    },
+    "nyprefixtransactionsrule4EF83B41": {
       "Type": "AWS::Events::Rule",
       "Properties": {
         "EventPattern": {
@@ -328,7 +158,7 @@
           {
             "Arn": {
               "Fn::GetAtt": [
-                "atmconsumer2Lambda876C1CE2",
+                "nyprefixtransactionhandler901504D5",
                 "Arn"
               ]
             },
@@ -337,77 +167,26 @@
         ]
       }
     },
-    "atmconsumer2LambdaRuleAllowEventRuleEventBridgeAtmatmconsumer2Lambda5B060AB635F65C35": {
+    "nyprefixtransactionsruleAllowEventRuleEventBridgeAtmnyprefixtransactionhandler13E8D378298E8E33": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "atmconsumer2Lambda876C1CE2",
+            "nyprefixtransactionhandler901504D5",
             "Arn"
           ]
         },
         "Principal": "events.amazonaws.com",
         "SourceArn": {
           "Fn::GetAtt": [
-            "atmconsumer2LambdaRule05EB0FC6",
+            "nyprefixtransactionsrule4EF83B41",
             "Arn"
           ]
         }
       }
     },
-    "atmconsumer3LambdaRule67445D28": {
-      "Type": "AWS::Events::Rule",
-      "Properties": {
-        "EventPattern": {
-          "detail": {
-            "result": [
-              {
-                "anything-but": "approved"
-              }
-            ]
-          },
-          "detail-type": [
-            "transaction"
-          ],
-          "source": [
-            "custom.myATMapp"
-          ]
-        },
-        "State": "ENABLED",
-        "Targets": [
-          {
-            "Arn": {
-              "Fn::GetAtt": [
-                "atmconsumer3Lambda0CB334B8",
-                "Arn"
-              ]
-            },
-            "Id": "Target0"
-          }
-        ]
-      }
-    },
-    "atmconsumer3LambdaRuleAllowEventRuleEventBridgeAtmatmconsumer3Lambda136DC8771FD4B020": {
-      "Type": "AWS::Lambda::Permission",
-      "Properties": {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": {
-          "Fn::GetAtt": [
-            "atmconsumer3Lambda0CB334B8",
-            "Arn"
-          ]
-        },
-        "Principal": "events.amazonaws.com",
-        "SourceArn": {
-          "Fn::GetAtt": [
-            "atmconsumer3LambdaRule67445D28",
-            "Arn"
-          ]
-        }
-      }
-    },
-    "atmProducerLambdaServiceRoleEF3D6079": {
+    "nyprefixtransactionhandlerServiceRoleC5B2CC8B": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -438,7 +217,228 @@
         ]
       }
     },
-    "atmProducerLambdaServiceRoleDefaultPolicy984C4CFE": {
+    "nyprefixtransactionhandler901504D5": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "AssetParametersd9eec48ad1f02b781f39b31c6abdece99e300e5e7787381797def6df90750b38S3Bucket9DD51BFA"
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersd9eec48ad1f02b781f39b31c6abdece99e300e5e7787381797def6df90750b38S3VersionKey5003C700"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersd9eec48ad1f02b781f39b31c6abdece99e300e5e7787381797def6df90750b38S3VersionKey5003C700"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "nyprefixtransactionhandlerServiceRoleC5B2CC8B",
+            "Arn"
+          ]
+        },
+        "Handler": "atm_consumer.ny_prefix_transaction_handler",
+        "Runtime": "python3.9"
+      },
+      "DependsOn": [
+        "nyprefixtransactionhandlerServiceRoleC5B2CC8B"
+      ]
+    },
+    "notapprovedtransactionrule65719B85": {
+      "Type": "AWS::Events::Rule",
+      "Properties": {
+        "EventPattern": {
+          "detail": {
+            "result": [
+              {
+                "anything-but": "approved"
+              }
+            ]
+          },
+          "detail-type": [
+            "transaction"
+          ],
+          "source": [
+            "custom.myATMapp"
+          ]
+        },
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Fn::GetAtt": [
+                "notapprovedtransactionhandler5DBBBDA5",
+                "Arn"
+              ]
+            },
+            "Id": "Target0"
+          }
+        ]
+      }
+    },
+    "notapprovedtransactionruleAllowEventRuleEventBridgeAtmnotapprovedtransactionhandlerF3382F6AA5A77777": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "notapprovedtransactionhandler5DBBBDA5",
+            "Arn"
+          ]
+        },
+        "Principal": "events.amazonaws.com",
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "notapprovedtransactionrule65719B85",
+            "Arn"
+          ]
+        }
+      }
+    },
+    "notapprovedtransactionhandlerServiceRole94BCD5D8": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    "notapprovedtransactionhandler5DBBBDA5": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "AssetParametersd9eec48ad1f02b781f39b31c6abdece99e300e5e7787381797def6df90750b38S3Bucket9DD51BFA"
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersd9eec48ad1f02b781f39b31c6abdece99e300e5e7787381797def6df90750b38S3VersionKey5003C700"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersd9eec48ad1f02b781f39b31c6abdece99e300e5e7787381797def6df90750b38S3VersionKey5003C700"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "notapprovedtransactionhandlerServiceRole94BCD5D8",
+            "Arn"
+          ]
+        },
+        "Handler": "atm_consumer.not_approved_transaction_handler",
+        "Runtime": "python3.9"
+      },
+      "DependsOn": [
+        "notapprovedtransactionhandlerServiceRole94BCD5D8"
+      ]
+    },
+    "handlerServiceRole187D5A5A": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    "handlerServiceRoleDefaultPolicyB5E76755": {
       "Type": "AWS::IAM::Policy",
       "Properties": {
         "PolicyDocument": {
@@ -451,15 +451,15 @@
           ],
           "Version": "2012-10-17"
         },
-        "PolicyName": "atmProducerLambdaServiceRoleDefaultPolicy984C4CFE",
+        "PolicyName": "handlerServiceRoleDefaultPolicyB5E76755",
         "Roles": [
           {
-            "Ref": "atmProducerLambdaServiceRoleEF3D6079"
+            "Ref": "handlerServiceRole187D5A5A"
           }
         ]
       }
     },
-    "atmProducerLambda71029F8F": {
+    "handlerE1533BD5": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
@@ -502,16 +502,16 @@
         },
         "Role": {
           "Fn::GetAtt": [
-            "atmProducerLambdaServiceRoleEF3D6079",
+            "handlerServiceRole187D5A5A",
             "Arn"
           ]
         },
-        "Handler": "handler.lambdaHandler",
+        "Handler": "atm_producer.handler",
         "Runtime": "python3.9"
       },
       "DependsOn": [
-        "atmProducerLambdaServiceRoleDefaultPolicy984C4CFE",
-        "atmProducerLambdaServiceRoleEF3D6079"
+        "handlerServiceRoleDefaultPolicyB5E76755",
+        "handlerServiceRole187D5A5A"
       ]
     },
     "EndpointEEF1FD8F": {
@@ -565,7 +565,7 @@
         "EndpointEEF1FD8F"
       ]
     },
-    "EndpointDeployment318525DAc5ec098967d4829b9ba0e557bed788e2": {
+    "EndpointDeployment318525DA75e077afc42ac98a770212035cc3c82a": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -586,7 +586,7 @@
           "Ref": "EndpointEEF1FD8F"
         },
         "DeploymentId": {
-          "Ref": "EndpointDeployment318525DAc5ec098967d4829b9ba0e557bed788e2"
+          "Ref": "EndpointDeployment318525DA75e077afc42ac98a770212035cc3c82a"
         },
         "StageName": "prod"
       },
@@ -615,7 +615,7 @@
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "atmProducerLambda71029F8F",
+            "handlerE1533BD5",
             "Arn"
           ]
         },
@@ -656,7 +656,7 @@
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "atmProducerLambda71029F8F",
+            "handlerE1533BD5",
             "Arn"
           ]
         },
@@ -716,7 +716,7 @@
                 ":lambda:path/2015-03-31/functions/",
                 {
                   "Fn::GetAtt": [
-                    "atmProducerLambda71029F8F",
+                    "handlerE1533BD5",
                     "Arn"
                   ]
                 },
@@ -733,7 +733,7 @@
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "atmProducerLambda71029F8F",
+            "handlerE1533BD5",
             "Arn"
           ]
         },
@@ -774,7 +774,7 @@
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "atmProducerLambda71029F8F",
+            "handlerE1533BD5",
             "Arn"
           ]
         },
@@ -837,7 +837,7 @@
                 ":lambda:path/2015-03-31/functions/",
                 {
                   "Fn::GetAtt": [
-                    "atmProducerLambda71029F8F",
+                    "handlerE1533BD5",
                     "Arn"
                   ]
                 },

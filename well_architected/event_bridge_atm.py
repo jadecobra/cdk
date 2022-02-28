@@ -13,57 +13,46 @@ class EventBridgeAtm(cdk.Stack):
     def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        approved_transaction_rule = self.create_event_bridge_rule(
-            rule_name='atm_consumer1LambdaRule',
-            description='Approved Transactions',
-            detail={
-                "result": ["approved"]
-            }
-        )
-
-        ny_prefix_transaction_rule = self.create_event_bridge_rule(
-            rule_name='atm_consumer2LambdaRule',
-            detail={
-                "location": [{"prefix": "NY-"}]
-            }
-        )
-
-        not_approved_transaction_rule = self.create_event_bridge_rule(
-            rule_name='atm_consumer3LambdaRule',
-            detail={
-                "result": [{"anything-but": "approved"}]
-            }
+        self.create_lambda_function(
+            handler_name="approved_transaction_handler",
+            function_name="atm_consumer",
+            event_bridge_rule=self.create_event_bridge_rule(
+                rule_name="approved_transactions_rule",
+                description='Approved Transaction',
+                detail={
+                    "result": ["approved"]
+                }
+            ),
         )
 
         self.create_lambda_function(
-            stack_name="atm_consumer1Lambda",
-            handler_name="case_1_handler",
+            handler_name="ny_prefix_transaction_handler",
             function_name="atm_consumer",
-            event_bridge_rule=approved_transaction_rule,
+            event_bridge_rule=self.create_event_bridge_rule(
+                rule_name="ny_prefix_transactions_rule",
+                detail={
+                    "location": [{"prefix": "NY-"}]
+                }
+            ),
         )
 
         self.create_lambda_function(
-            stack_name="atm_consumer2Lambda",
-            handler_name="case_2_handler",
+            handler_name="not_approved_transaction_handler",
             function_name="atm_consumer",
-            event_bridge_rule=ny_prefix_transaction_rule,
-        )
-
-        self.create_lambda_function(
-            stack_name="atm_consumer3Lambda",
-            handler_name="case_3_handler",
-            function_name="atm_consumer",
-            event_bridge_rule=not_approved_transaction_rule,
+            event_bridge_rule=self.create_event_bridge_rule(
+                rule_name="not_approved_transaction_rule",
+                detail={
+                    "result": [{"anything-but": "approved"}]
+                }
+            ),
         )
 
         atm_producer_lambda = self.create_lambda_function(
-            stack_name="atmProducerLambda",
-            handler_name="lambdaHandler",
             function_name="atm_producer"
         )
 
         atm_producer_lambda.add_to_role_policy(
-                iam.PolicyStatement(
+            iam.PolicyStatement(
                 effect=iam.Effect.ALLOW,
                 resources=['*'],
                 actions=['events:PutEvents']
@@ -90,10 +79,11 @@ class EventBridgeAtm(cdk.Stack):
         self, stack_name=None, handler_name=None, function_name=None,
         event_bridge_rule:events.Rule=None
     ):
+        handler_name = 'handler' if not handler_name else handler_name
         lambda_function = aws_lambda.Function(
-            self, stack_name,
+            self, handler_name,
             runtime=aws_lambda.Runtime.PYTHON_3_9,
-            handler=f"handler.{handler_name}",
+            handler=f"{function_name}.{handler_name}",
             code=aws_lambda.Code.from_asset(f"lambda_functions/{function_name}")
         )
         if event_bridge_rule:

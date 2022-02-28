@@ -12580,17 +12580,17 @@
         "id": "EventBridgeAtm",
         "path": "EventBridgeAtm",
         "children": {
-          "atm_consumer1LambdaRule": {
-            "id": "atm_consumer1LambdaRule",
-            "path": "EventBridgeAtm/atm_consumer1LambdaRule",
+          "approved_transactions_rule": {
+            "id": "approved_transactions_rule",
+            "path": "EventBridgeAtm/approved_transactions_rule",
             "children": {
               "Resource": {
                 "id": "Resource",
-                "path": "EventBridgeAtm/atm_consumer1LambdaRule/Resource",
+                "path": "EventBridgeAtm/approved_transactions_rule/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::Events::Rule",
                   "aws:cdk:cloudformation:props": {
-                    "description": "Approved Transactions",
+                    "description": "Approved Transaction",
                     "eventPattern": {
                       "detail": {
                         "result": [
@@ -12610,7 +12610,7 @@
                         "id": "Target0",
                         "arn": {
                           "Fn::GetAtt": [
-                            "atmconsumer1LambdaD4681485",
+                            "approvedtransactionhandler6C205DA8",
                             "Arn"
                           ]
                         }
@@ -12623,23 +12623,23 @@
                   "version": "1.145.0"
                 }
               },
-              "AllowEventRuleEventBridgeAtmatmconsumer1Lambda58BCFCCA": {
-                "id": "AllowEventRuleEventBridgeAtmatmconsumer1Lambda58BCFCCA",
-                "path": "EventBridgeAtm/atm_consumer1LambdaRule/AllowEventRuleEventBridgeAtmatmconsumer1Lambda58BCFCCA",
+              "AllowEventRuleEventBridgeAtmapprovedtransactionhandler89C399BB": {
+                "id": "AllowEventRuleEventBridgeAtmapprovedtransactionhandler89C399BB",
+                "path": "EventBridgeAtm/approved_transactions_rule/AllowEventRuleEventBridgeAtmapprovedtransactionhandler89C399BB",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                   "aws:cdk:cloudformation:props": {
                     "action": "lambda:InvokeFunction",
                     "functionName": {
                       "Fn::GetAtt": [
-                        "atmconsumer1LambdaD4681485",
+                        "approvedtransactionhandler6C205DA8",
                         "Arn"
                       ]
                     },
                     "principal": "events.amazonaws.com",
                     "sourceArn": {
                       "Fn::GetAtt": [
-                        "atmconsumer1LambdaRule2413667B",
+                        "approvedtransactionsruleE5F33157",
                         "Arn"
                       ]
                     }
@@ -12656,171 +12656,17 @@
               "version": "1.145.0"
             }
           },
-          "atm_consumer2LambdaRule": {
-            "id": "atm_consumer2LambdaRule",
-            "path": "EventBridgeAtm/atm_consumer2LambdaRule",
-            "children": {
-              "Resource": {
-                "id": "Resource",
-                "path": "EventBridgeAtm/atm_consumer2LambdaRule/Resource",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::Events::Rule",
-                  "aws:cdk:cloudformation:props": {
-                    "eventPattern": {
-                      "detail": {
-                        "location": [
-                          {
-                            "prefix": "NY-"
-                          }
-                        ]
-                      },
-                      "detail-type": [
-                        "transaction"
-                      ],
-                      "source": [
-                        "custom.myATMapp"
-                      ]
-                    },
-                    "state": "ENABLED",
-                    "targets": [
-                      {
-                        "id": "Target0",
-                        "arn": {
-                          "Fn::GetAtt": [
-                            "atmconsumer2Lambda876C1CE2",
-                            "Arn"
-                          ]
-                        }
-                      }
-                    ]
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-events.CfnRule",
-                  "version": "1.145.0"
-                }
-              },
-              "AllowEventRuleEventBridgeAtmatmconsumer2Lambda5B060AB6": {
-                "id": "AllowEventRuleEventBridgeAtmatmconsumer2Lambda5B060AB6",
-                "path": "EventBridgeAtm/atm_consumer2LambdaRule/AllowEventRuleEventBridgeAtmatmconsumer2Lambda5B060AB6",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
-                  "aws:cdk:cloudformation:props": {
-                    "action": "lambda:InvokeFunction",
-                    "functionName": {
-                      "Fn::GetAtt": [
-                        "atmconsumer2Lambda876C1CE2",
-                        "Arn"
-                      ]
-                    },
-                    "principal": "events.amazonaws.com",
-                    "sourceArn": {
-                      "Fn::GetAtt": [
-                        "atmconsumer2LambdaRule05EB0FC6",
-                        "Arn"
-                      ]
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-lambda.CfnPermission",
-                  "version": "1.145.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/aws-events.Rule",
-              "version": "1.145.0"
-            }
-          },
-          "atm_consumer3LambdaRule": {
-            "id": "atm_consumer3LambdaRule",
-            "path": "EventBridgeAtm/atm_consumer3LambdaRule",
-            "children": {
-              "Resource": {
-                "id": "Resource",
-                "path": "EventBridgeAtm/atm_consumer3LambdaRule/Resource",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::Events::Rule",
-                  "aws:cdk:cloudformation:props": {
-                    "eventPattern": {
-                      "detail": {
-                        "result": [
-                          {
-                            "anything-but": "approved"
-                          }
-                        ]
-                      },
-                      "detail-type": [
-                        "transaction"
-                      ],
-                      "source": [
-                        "custom.myATMapp"
-                      ]
-                    },
-                    "state": "ENABLED",
-                    "targets": [
-                      {
-                        "id": "Target0",
-                        "arn": {
-                          "Fn::GetAtt": [
-                            "atmconsumer3Lambda0CB334B8",
-                            "Arn"
-                          ]
-                        }
-                      }
-                    ]
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-events.CfnRule",
-                  "version": "1.145.0"
-                }
-              },
-              "AllowEventRuleEventBridgeAtmatmconsumer3Lambda136DC877": {
-                "id": "AllowEventRuleEventBridgeAtmatmconsumer3Lambda136DC877",
-                "path": "EventBridgeAtm/atm_consumer3LambdaRule/AllowEventRuleEventBridgeAtmatmconsumer3Lambda136DC877",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
-                  "aws:cdk:cloudformation:props": {
-                    "action": "lambda:InvokeFunction",
-                    "functionName": {
-                      "Fn::GetAtt": [
-                        "atmconsumer3Lambda0CB334B8",
-                        "Arn"
-                      ]
-                    },
-                    "principal": "events.amazonaws.com",
-                    "sourceArn": {
-                      "Fn::GetAtt": [
-                        "atmconsumer3LambdaRule67445D28",
-                        "Arn"
-                      ]
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "@aws-cdk/aws-lambda.CfnPermission",
-                  "version": "1.145.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "@aws-cdk/aws-events.Rule",
-              "version": "1.145.0"
-            }
-          },
-          "atm_consumer1Lambda": {
-            "id": "atm_consumer1Lambda",
-            "path": "EventBridgeAtm/atm_consumer1Lambda",
+          "approved_transaction_handler": {
+            "id": "approved_transaction_handler",
+            "path": "EventBridgeAtm/approved_transaction_handler",
             "children": {
               "ServiceRole": {
                 "id": "ServiceRole",
-                "path": "EventBridgeAtm/atm_consumer1Lambda/ServiceRole",
+                "path": "EventBridgeAtm/approved_transaction_handler/ServiceRole",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "EventBridgeAtm/atm_consumer1Lambda/ServiceRole/Resource",
+                    "path": "EventBridgeAtm/approved_transaction_handler/ServiceRole/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                       "aws:cdk:cloudformation:props": {
@@ -12865,11 +12711,11 @@
               },
               "Code": {
                 "id": "Code",
-                "path": "EventBridgeAtm/atm_consumer1Lambda/Code",
+                "path": "EventBridgeAtm/approved_transaction_handler/Code",
                 "children": {
                   "Stage": {
                     "id": "Stage",
-                    "path": "EventBridgeAtm/atm_consumer1Lambda/Code/Stage",
+                    "path": "EventBridgeAtm/approved_transaction_handler/Code/Stage",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.AssetStaging",
                       "version": "1.145.0"
@@ -12877,7 +12723,7 @@
                   },
                   "AssetBucket": {
                     "id": "AssetBucket",
-                    "path": "EventBridgeAtm/atm_consumer1Lambda/Code/AssetBucket",
+                    "path": "EventBridgeAtm/approved_transaction_handler/Code/AssetBucket",
                     "constructInfo": {
                       "fqn": "@aws-cdk/aws-s3.BucketBase",
                       "version": "1.145.0"
@@ -12891,7 +12737,7 @@
               },
               "Resource": {
                 "id": "Resource",
-                "path": "EventBridgeAtm/atm_consumer1Lambda/Resource",
+                "path": "EventBridgeAtm/approved_transaction_handler/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
                   "aws:cdk:cloudformation:props": {
@@ -12935,11 +12781,11 @@
                     },
                     "role": {
                       "Fn::GetAtt": [
-                        "atmconsumer1LambdaServiceRole4975F77B",
+                        "approvedtransactionhandlerServiceRole66BFD390",
                         "Arn"
                       ]
                     },
-                    "handler": "handler.case_1_handler",
+                    "handler": "atm_consumer.approved_transaction_handler",
                     "runtime": "python3.9"
                   }
                 },
@@ -13032,17 +12878,94 @@
               "version": "1.145.0"
             }
           },
-          "atm_consumer2Lambda": {
-            "id": "atm_consumer2Lambda",
-            "path": "EventBridgeAtm/atm_consumer2Lambda",
+          "ny_prefix_transactions_rule": {
+            "id": "ny_prefix_transactions_rule",
+            "path": "EventBridgeAtm/ny_prefix_transactions_rule",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "EventBridgeAtm/ny_prefix_transactions_rule/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Events::Rule",
+                  "aws:cdk:cloudformation:props": {
+                    "eventPattern": {
+                      "detail": {
+                        "location": [
+                          {
+                            "prefix": "NY-"
+                          }
+                        ]
+                      },
+                      "detail-type": [
+                        "transaction"
+                      ],
+                      "source": [
+                        "custom.myATMapp"
+                      ]
+                    },
+                    "state": "ENABLED",
+                    "targets": [
+                      {
+                        "id": "Target0",
+                        "arn": {
+                          "Fn::GetAtt": [
+                            "nyprefixtransactionhandler901504D5",
+                            "Arn"
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-events.CfnRule",
+                  "version": "1.145.0"
+                }
+              },
+              "AllowEventRuleEventBridgeAtmnyprefixtransactionhandler13E8D378": {
+                "id": "AllowEventRuleEventBridgeAtmnyprefixtransactionhandler13E8D378",
+                "path": "EventBridgeAtm/ny_prefix_transactions_rule/AllowEventRuleEventBridgeAtmnyprefixtransactionhandler13E8D378",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                  "aws:cdk:cloudformation:props": {
+                    "action": "lambda:InvokeFunction",
+                    "functionName": {
+                      "Fn::GetAtt": [
+                        "nyprefixtransactionhandler901504D5",
+                        "Arn"
+                      ]
+                    },
+                    "principal": "events.amazonaws.com",
+                    "sourceArn": {
+                      "Fn::GetAtt": [
+                        "nyprefixtransactionsrule4EF83B41",
+                        "Arn"
+                      ]
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-lambda.CfnPermission",
+                  "version": "1.145.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/aws-events.Rule",
+              "version": "1.145.0"
+            }
+          },
+          "ny_prefix_transaction_handler": {
+            "id": "ny_prefix_transaction_handler",
+            "path": "EventBridgeAtm/ny_prefix_transaction_handler",
             "children": {
               "ServiceRole": {
                 "id": "ServiceRole",
-                "path": "EventBridgeAtm/atm_consumer2Lambda/ServiceRole",
+                "path": "EventBridgeAtm/ny_prefix_transaction_handler/ServiceRole",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "EventBridgeAtm/atm_consumer2Lambda/ServiceRole/Resource",
+                    "path": "EventBridgeAtm/ny_prefix_transaction_handler/ServiceRole/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                       "aws:cdk:cloudformation:props": {
@@ -13087,11 +13010,11 @@
               },
               "Code": {
                 "id": "Code",
-                "path": "EventBridgeAtm/atm_consumer2Lambda/Code",
+                "path": "EventBridgeAtm/ny_prefix_transaction_handler/Code",
                 "children": {
                   "Stage": {
                     "id": "Stage",
-                    "path": "EventBridgeAtm/atm_consumer2Lambda/Code/Stage",
+                    "path": "EventBridgeAtm/ny_prefix_transaction_handler/Code/Stage",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.AssetStaging",
                       "version": "1.145.0"
@@ -13099,7 +13022,7 @@
                   },
                   "AssetBucket": {
                     "id": "AssetBucket",
-                    "path": "EventBridgeAtm/atm_consumer2Lambda/Code/AssetBucket",
+                    "path": "EventBridgeAtm/ny_prefix_transaction_handler/Code/AssetBucket",
                     "constructInfo": {
                       "fqn": "@aws-cdk/aws-s3.BucketBase",
                       "version": "1.145.0"
@@ -13113,7 +13036,7 @@
               },
               "Resource": {
                 "id": "Resource",
-                "path": "EventBridgeAtm/atm_consumer2Lambda/Resource",
+                "path": "EventBridgeAtm/ny_prefix_transaction_handler/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
                   "aws:cdk:cloudformation:props": {
@@ -13157,11 +13080,11 @@
                     },
                     "role": {
                       "Fn::GetAtt": [
-                        "atmconsumer2LambdaServiceRole5E806641",
+                        "nyprefixtransactionhandlerServiceRoleC5B2CC8B",
                         "Arn"
                       ]
                     },
-                    "handler": "handler.case_2_handler",
+                    "handler": "atm_consumer.ny_prefix_transaction_handler",
                     "runtime": "python3.9"
                   }
                 },
@@ -13176,17 +13099,94 @@
               "version": "1.145.0"
             }
           },
-          "atm_consumer3Lambda": {
-            "id": "atm_consumer3Lambda",
-            "path": "EventBridgeAtm/atm_consumer3Lambda",
+          "not_approved_transaction_rule": {
+            "id": "not_approved_transaction_rule",
+            "path": "EventBridgeAtm/not_approved_transaction_rule",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "EventBridgeAtm/not_approved_transaction_rule/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Events::Rule",
+                  "aws:cdk:cloudformation:props": {
+                    "eventPattern": {
+                      "detail": {
+                        "result": [
+                          {
+                            "anything-but": "approved"
+                          }
+                        ]
+                      },
+                      "detail-type": [
+                        "transaction"
+                      ],
+                      "source": [
+                        "custom.myATMapp"
+                      ]
+                    },
+                    "state": "ENABLED",
+                    "targets": [
+                      {
+                        "id": "Target0",
+                        "arn": {
+                          "Fn::GetAtt": [
+                            "notapprovedtransactionhandler5DBBBDA5",
+                            "Arn"
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-events.CfnRule",
+                  "version": "1.145.0"
+                }
+              },
+              "AllowEventRuleEventBridgeAtmnotapprovedtransactionhandlerF3382F6A": {
+                "id": "AllowEventRuleEventBridgeAtmnotapprovedtransactionhandlerF3382F6A",
+                "path": "EventBridgeAtm/not_approved_transaction_rule/AllowEventRuleEventBridgeAtmnotapprovedtransactionhandlerF3382F6A",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                  "aws:cdk:cloudformation:props": {
+                    "action": "lambda:InvokeFunction",
+                    "functionName": {
+                      "Fn::GetAtt": [
+                        "notapprovedtransactionhandler5DBBBDA5",
+                        "Arn"
+                      ]
+                    },
+                    "principal": "events.amazonaws.com",
+                    "sourceArn": {
+                      "Fn::GetAtt": [
+                        "notapprovedtransactionrule65719B85",
+                        "Arn"
+                      ]
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-lambda.CfnPermission",
+                  "version": "1.145.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/aws-events.Rule",
+              "version": "1.145.0"
+            }
+          },
+          "not_approved_transaction_handler": {
+            "id": "not_approved_transaction_handler",
+            "path": "EventBridgeAtm/not_approved_transaction_handler",
             "children": {
               "ServiceRole": {
                 "id": "ServiceRole",
-                "path": "EventBridgeAtm/atm_consumer3Lambda/ServiceRole",
+                "path": "EventBridgeAtm/not_approved_transaction_handler/ServiceRole",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "EventBridgeAtm/atm_consumer3Lambda/ServiceRole/Resource",
+                    "path": "EventBridgeAtm/not_approved_transaction_handler/ServiceRole/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                       "aws:cdk:cloudformation:props": {
@@ -13231,11 +13231,11 @@
               },
               "Code": {
                 "id": "Code",
-                "path": "EventBridgeAtm/atm_consumer3Lambda/Code",
+                "path": "EventBridgeAtm/not_approved_transaction_handler/Code",
                 "children": {
                   "Stage": {
                     "id": "Stage",
-                    "path": "EventBridgeAtm/atm_consumer3Lambda/Code/Stage",
+                    "path": "EventBridgeAtm/not_approved_transaction_handler/Code/Stage",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.AssetStaging",
                       "version": "1.145.0"
@@ -13243,7 +13243,7 @@
                   },
                   "AssetBucket": {
                     "id": "AssetBucket",
-                    "path": "EventBridgeAtm/atm_consumer3Lambda/Code/AssetBucket",
+                    "path": "EventBridgeAtm/not_approved_transaction_handler/Code/AssetBucket",
                     "constructInfo": {
                       "fqn": "@aws-cdk/aws-s3.BucketBase",
                       "version": "1.145.0"
@@ -13257,7 +13257,7 @@
               },
               "Resource": {
                 "id": "Resource",
-                "path": "EventBridgeAtm/atm_consumer3Lambda/Resource",
+                "path": "EventBridgeAtm/not_approved_transaction_handler/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
                   "aws:cdk:cloudformation:props": {
@@ -13301,11 +13301,11 @@
                     },
                     "role": {
                       "Fn::GetAtt": [
-                        "atmconsumer3LambdaServiceRoleDCD755B4",
+                        "notapprovedtransactionhandlerServiceRole94BCD5D8",
                         "Arn"
                       ]
                     },
-                    "handler": "handler.case_3_handler",
+                    "handler": "atm_consumer.not_approved_transaction_handler",
                     "runtime": "python3.9"
                   }
                 },
@@ -13320,17 +13320,17 @@
               "version": "1.145.0"
             }
           },
-          "atmProducerLambda": {
-            "id": "atmProducerLambda",
-            "path": "EventBridgeAtm/atmProducerLambda",
+          "handler": {
+            "id": "handler",
+            "path": "EventBridgeAtm/handler",
             "children": {
               "ServiceRole": {
                 "id": "ServiceRole",
-                "path": "EventBridgeAtm/atmProducerLambda/ServiceRole",
+                "path": "EventBridgeAtm/handler/ServiceRole",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "EventBridgeAtm/atmProducerLambda/ServiceRole/Resource",
+                    "path": "EventBridgeAtm/handler/ServiceRole/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                       "aws:cdk:cloudformation:props": {
@@ -13369,11 +13369,11 @@
                   },
                   "DefaultPolicy": {
                     "id": "DefaultPolicy",
-                    "path": "EventBridgeAtm/atmProducerLambda/ServiceRole/DefaultPolicy",
+                    "path": "EventBridgeAtm/handler/ServiceRole/DefaultPolicy",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "EventBridgeAtm/atmProducerLambda/ServiceRole/DefaultPolicy/Resource",
+                        "path": "EventBridgeAtm/handler/ServiceRole/DefaultPolicy/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
                           "aws:cdk:cloudformation:props": {
@@ -13387,10 +13387,10 @@
                               ],
                               "Version": "2012-10-17"
                             },
-                            "policyName": "atmProducerLambdaServiceRoleDefaultPolicy984C4CFE",
+                            "policyName": "handlerServiceRoleDefaultPolicyB5E76755",
                             "roles": [
                               {
-                                "Ref": "atmProducerLambdaServiceRoleEF3D6079"
+                                "Ref": "handlerServiceRole187D5A5A"
                               }
                             ]
                           }
@@ -13414,11 +13414,11 @@
               },
               "Code": {
                 "id": "Code",
-                "path": "EventBridgeAtm/atmProducerLambda/Code",
+                "path": "EventBridgeAtm/handler/Code",
                 "children": {
                   "Stage": {
                     "id": "Stage",
-                    "path": "EventBridgeAtm/atmProducerLambda/Code/Stage",
+                    "path": "EventBridgeAtm/handler/Code/Stage",
                     "constructInfo": {
                       "fqn": "@aws-cdk/core.AssetStaging",
                       "version": "1.145.0"
@@ -13426,7 +13426,7 @@
                   },
                   "AssetBucket": {
                     "id": "AssetBucket",
-                    "path": "EventBridgeAtm/atmProducerLambda/Code/AssetBucket",
+                    "path": "EventBridgeAtm/handler/Code/AssetBucket",
                     "constructInfo": {
                       "fqn": "@aws-cdk/aws-s3.BucketBase",
                       "version": "1.145.0"
@@ -13440,7 +13440,7 @@
               },
               "Resource": {
                 "id": "Resource",
-                "path": "EventBridgeAtm/atmProducerLambda/Resource",
+                "path": "EventBridgeAtm/handler/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
                   "aws:cdk:cloudformation:props": {
@@ -13484,11 +13484,11 @@
                     },
                     "role": {
                       "Fn::GetAtt": [
-                        "atmProducerLambdaServiceRoleEF3D6079",
+                        "handlerServiceRole187D5A5A",
                         "Arn"
                       ]
                     },
-                    "handler": "handler.lambdaHandler",
+                    "handler": "atm_producer.handler",
                     "runtime": "python3.9"
                   }
                 },
@@ -13630,7 +13630,7 @@
                           "Ref": "EndpointEEF1FD8F"
                         },
                         "deploymentId": {
-                          "Ref": "EndpointDeployment318525DAc5ec098967d4829b9ba0e557bed788e2"
+                          "Ref": "EndpointDeployment318525DA75e077afc42ac98a770212035cc3c82a"
                         },
                         "stageName": "prod"
                       }
@@ -13698,7 +13698,7 @@
                                 "action": "lambda:InvokeFunction",
                                 "functionName": {
                                   "Fn::GetAtt": [
-                                    "atmProducerLambda71029F8F",
+                                    "handlerE1533BD5",
                                     "Arn"
                                   ]
                                 },
@@ -13747,7 +13747,7 @@
                                 "action": "lambda:InvokeFunction",
                                 "functionName": {
                                   "Fn::GetAtt": [
-                                    "atmProducerLambda71029F8F",
+                                    "handlerE1533BD5",
                                     "Arn"
                                   ]
                                 },
@@ -13814,7 +13814,7 @@
                                         ":lambda:path/2015-03-31/functions/",
                                         {
                                           "Fn::GetAtt": [
-                                            "atmProducerLambda71029F8F",
+                                            "handlerE1533BD5",
                                             "Arn"
                                           ]
                                         },
@@ -13856,7 +13856,7 @@
                             "action": "lambda:InvokeFunction",
                             "functionName": {
                               "Fn::GetAtt": [
-                                "atmProducerLambda71029F8F",
+                                "handlerE1533BD5",
                                 "Arn"
                               ]
                             },
@@ -13905,7 +13905,7 @@
                             "action": "lambda:InvokeFunction",
                             "functionName": {
                               "Fn::GetAtt": [
-                                "atmProducerLambda71029F8F",
+                                "handlerE1533BD5",
                                 "Arn"
                               ]
                             },
@@ -13975,7 +13975,7 @@
                                     ":lambda:path/2015-03-31/functions/",
                                     {
                                       "Fn::GetAtt": [
-                                        "atmProducerLambda71029F8F",
+                                        "handlerE1533BD5",
                                         "Arn"
                                       ]
                                     },
