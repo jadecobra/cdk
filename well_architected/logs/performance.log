@@ -15145,3 +15145,6 @@
 2022-02-28 05:46:26.106908::Time taken to synthesize stack: EventBridgeAtm::  4.0915 seconds
 2022-02-28 05:48:00.041234::Time taken to synthesize stack: EventBridgeAtm::  3.6211 seconds
 2022-02-28 05:48:27.750270::Time taken to synthesize stack: EventBridgeAtm::  4.0529 seconds
+2022-02-28 05:48:51.001400::Time taken to synthesize stack: EventBridgeAtm::  2.6863 seconds
+2022-02-28 05:49:27.029091::Time taken to synthesize stack: EventBridgeAtm::  3.5297 seconds
+2022-02-28 05:50:28.573407::Time taken to synthesize stack: EventBridgeAtm::  3.9493 seconds

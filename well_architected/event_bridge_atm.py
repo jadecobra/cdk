@@ -50,24 +50,27 @@ class EventBridgeAtm(cdk.Stack):
         approved_transaction_lambda_function = self.create_lambda_function(
             stack_name="atm_consumer1Lambda",
             handler_name="case_1_handler",
-            function_name="atm_consumer"
+            function_name="atm_consumer",
+            event_bridge_rule=approved_transaction_rule,
         )
 
         ny_prefix_transaction_lambda_function = self.create_lambda_function(
             stack_name="atm_consumer2Lambda",
             handler_name="case_2_handler",
-            function_name="atm_consumer"
+            function_name="atm_consumer",
+            event_bridge_rule=ny_prefix_transaction_rule,
         )
 
         not_approved_transaction_lambda_function = self.create_lambda_function(
             stack_name="atm_consumer3Lambda",
             handler_name="case_3_handler",
-            function_name="atm_consumer"
+            function_name="atm_consumer",
+            event_bridge_rule=not_approved_transaction_rule,
         )
 
-        approved_transaction_rule.add_target(targets.LambdaFunction(handler=approved_transaction_lambda_function))
-        ny_prefix_transaction_rule.add_target(targets.LambdaFunction(handler=ny_prefix_transaction_lambda_function))
-        not_approved_transaction_rule.add_target(targets.LambdaFunction(handler=not_approved_transaction_lambda_function))
+        # approved_transaction_rule.add_target(targets.LambdaFunction(handler=approved_transaction_lambda_function))
+        # ny_prefix_transaction_rule.add_target(targets.LambdaFunction(handler=ny_prefix_transaction_lambda_function))
+        # not_approved_transaction_rule.add_target(targets.LambdaFunction(handler=not_approved_transaction_lambda_function))
 
 
         atm_producer_lambda = self.create_lambda_function(
@@ -100,5 +103,9 @@ class EventBridgeAtm(cdk.Stack):
             code=aws_lambda.Code.from_asset(f"lambda_functions/{function_name}")
         )
         if event_bridge_rule:
-            event_bridge_rule.add_target(lambda_function)
+            event_bridge_rule.add_target(
+                targets.LambdaFunction(
+                    handler=lambda_function
+                )
+            )
         return lambda_function
