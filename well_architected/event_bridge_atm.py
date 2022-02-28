@@ -13,65 +13,48 @@ class EventBridgeAtm(cdk.Stack):
     def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        approved_transaction_rule = events.Rule(
-            self, 'atm_consumer1LambdaRule',
+        approved_transaction_rule = self.create_event_bridge_rule(
+            rule_name='atm_consumer1LambdaRule',
             description='Approved Transactions',
-            event_pattern=events.EventPattern(
-                source=['custom.myATMapp'],
-                detail_type=['transaction'],
-                detail={
-                    "result": ["approved"]
-                }
-            )
+            detail={
+                "result": ["approved"]
+            }
         )
 
-        ny_prefix_transaction_rule = events.Rule(
-            self, 'atm_consumer2LambdaRule',
-            event_pattern=events.EventPattern(
-                source=['custom.myATMapp'],
-                detail_type=['transaction'],
-                detail={
-                    "location": [{"prefix": "NY-"}]
-                }
-            )
+        ny_prefix_transaction_rule = self.create_event_bridge_rule(
+            rule_name='atm_consumer2LambdaRule',
+            detail={
+                "location": [{"prefix": "NY-"}]
+            }
         )
 
-        not_approved_transaction_rule = events.Rule(
-            self, 'atm_consumer3LambdaRule',
-            event_pattern=events.EventPattern(
-                source=['custom.myATMapp'],
-                detail_type=['transaction'],
-                detail={
-                    "result": [{"anything-but": "approved"}]
-                }
-            )
+        not_approved_transaction_rule = self.create_event_bridge_rule(
+            rule_name='atm_consumer3LambdaRule',
+            detail={
+                "result": [{"anything-but": "approved"}]
+            }
         )
 
-        approved_transaction_lambda_function = self.create_lambda_function(
+        self.create_lambda_function(
             stack_name="atm_consumer1Lambda",
             handler_name="case_1_handler",
             function_name="atm_consumer",
             event_bridge_rule=approved_transaction_rule,
         )
 
-        ny_prefix_transaction_lambda_function = self.create_lambda_function(
+        self.create_lambda_function(
             stack_name="atm_consumer2Lambda",
             handler_name="case_2_handler",
             function_name="atm_consumer",
             event_bridge_rule=ny_prefix_transaction_rule,
         )
 
-        not_approved_transaction_lambda_function = self.create_lambda_function(
+        self.create_lambda_function(
             stack_name="atm_consumer3Lambda",
             handler_name="case_3_handler",
             function_name="atm_consumer",
             event_bridge_rule=not_approved_transaction_rule,
         )
-
-        # approved_transaction_rule.add_target(targets.LambdaFunction(handler=approved_transaction_lambda_function))
-        # ny_prefix_transaction_rule.add_target(targets.LambdaFunction(handler=ny_prefix_transaction_lambda_function))
-        # not_approved_transaction_rule.add_target(targets.LambdaFunction(handler=not_approved_transaction_lambda_function))
-
 
         atm_producer_lambda = self.create_lambda_function(
             stack_name="atmProducerLambda",
@@ -90,6 +73,17 @@ class EventBridgeAtm(cdk.Stack):
         api_gateway.LambdaRestApi(
             self, 'Endpoint',
             handler=atm_producer_lambda
+        )
+
+    def create_event_bridge_rule(self, rule_name=None, description=None, detail=None):
+        return events.Rule(
+            self, rule_name,
+            description=description,
+            event_pattern=events.EventPattern(
+                source=['custom.myATMapp'],
+                detail_type=['transaction'],
+                detail=detail
+            )
         )
 
     def create_lambda_function(
