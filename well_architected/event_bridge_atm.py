@@ -37,7 +37,6 @@ class EventBridgeAtm(cdk.Stack):
             )
         )
 
-        atm_consumer1_rule.add_target(targets.LambdaFunction(handler=atm_consumer1_lambda))
 
         #
         # NY Prefix Consumer
@@ -60,7 +59,7 @@ class EventBridgeAtm(cdk.Stack):
             )
         )
 
-        atm_consumer2_rule.add_target(targets.LambdaFunction(handler=atm_consumer2_lambda))
+
 
         #
         # Not Approved Consumer
@@ -83,6 +82,8 @@ class EventBridgeAtm(cdk.Stack):
             )
         )
 
+        atm_consumer1_rule.add_target(targets.LambdaFunction(handler=atm_consumer1_lambda))
+        atm_consumer2_rule.add_target(targets.LambdaFunction(handler=atm_consumer2_lambda))
         atm_consumer3_rule.add_target(targets.LambdaFunction(handler=atm_consumer3_lambda))
 
 
