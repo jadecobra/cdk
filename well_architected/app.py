@@ -33,7 +33,20 @@ class WellArchitected(cdk.App):
             }
         )
         self.dynamodb_table.dynamodb_table.grant_read_write_data(self.lambda_function.lambda_function)
-
+        http_api.LambdaHttpApiGateway(
+            self, 'LambdaHttpApiGateway',
+            lambda_function=self.lambda_function.lambda_function,
+            error_topic=self.error_topic,
+        )
+        self.rest_api = rest_api.LambdaRestAPIGatewayStack(
+            self, 'LambdaRestAPIGateway',
+            lambda_function=self.lambda_function.lambda_function,
+            error_topic=self.error_topic,
+        ).rest_api
+        web_application_firewall.WebApplicationFirewall(
+            self, 'WebApplicationFirewall',
+            target_arn=self.rest_api.resource_arn
+        )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -58,11 +71,7 @@ class WellArchitected(cdk.App):
         )
         event_bridge_etl.EventbridgeEtl(self, 'EventBridgeEtl')
 
-        http_api.LambdaHttpApiGateway(
-            self, 'LambdaHttpApiGateway',
-            lambda_function=self.lambda_function.lambda_function,
-            error_topic=self.error_topic,
-        )
+
 
         lambda_trilogy.lambda_lith.LambdaLith(self, "LambdaLith")
         lambda_trilogy.fat_lambda.TheFatLambdaStack(self, "FatLambda")
@@ -70,11 +79,7 @@ class WellArchitected(cdk.App):
         lambda_circuit_breaker.LambdaCircuitBreaker(self, "LambdaCircuitBreaker")
 
         rds_proxy.RdsProxy(self, "RdsProxy")
-        self.rest_api = rest_api.LambdaRestAPIGatewayStack(
-            self, 'LambdaRestAPIGateway',
-            lambda_function=self.lambda_function.lambda_function,
-            error_topic=self.error_topic,
-        ).rest_api
+
         scalable_webhook.ScalableWebhook(self, "ScalableWebhook")
 
         xray_tracer_sns_topic = sns_topic.SnsTopic(
@@ -86,18 +91,6 @@ class WellArchitected(cdk.App):
         xray_tracer.http_flow.HttpFlow(self, 'HttpFlow', sns_topic=xray_tracer_sns_topic)
         xray_tracer.dynamodb_flow.DynamoDBFlow(
             self, 'DynamoDBFlow', sns_topic=xray_tracer_sns_topic
-        )
-
-        web_application_firewall.WebApplicationFirewall(
-            self, 'WebApplicationFirewall',
-            target_arn=self.rest_api.resource_arn
-        )
-
-    def create_http_api(self):
-        return http_api.LambdaHttpApiGateway(
-            self, 'LambdaHttpApiGateway',
-            lambda_function=self.lambda_function.lambda_function,
-            error_topic=self.error_topic,
         )
 
     def create_dynamodb_table(self, error_topic):
