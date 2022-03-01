@@ -23,43 +23,10 @@ import web_application_firewall
 
 class WellArchitected(cdk.App):
 
-    def create_webservice(self):
-        self.error_topic = sns_topic.SnsTopic(self, 'SnsTopic').topic
-        self.dynamodb_table = self.create_dynamodb_table(self.error_topic)
-        self.lambda_function = self.create_lambda_function(
-            error_topic=self.error_topic,
-            environment_variables={
-                'HITS_TABLE_NAME': self.dynamodb_table.dynamodb_table.table_name
-            }
-        )
-        self.dynamodb_table.dynamodb_table.grant_read_write_data(self.lambda_function.lambda_function)
-        http_api.LambdaHttpApiGateway(
-            self, 'LambdaHttpApiGateway',
-            lambda_function=self.lambda_function.lambda_function,
-            error_topic=self.error_topic,
-        )
-        self.rest_api = rest_api.LambdaRestAPIGatewayStack(
-            self, 'LambdaRestAPIGateway',
-            lambda_function=self.lambda_function.lambda_function,
-            error_topic=self.error_topic,
-        ).rest_api
-        web_application_firewall.WebApplicationFirewall(
-            self, 'WebApplicationFirewall',
-            target_arn=self.rest_api.resource_arn
-        )
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # self.error_topic = sns_topic.SnsTopic(self, 'SnsTopic').topic
-        # self.dynamodb_table = self.create_dynamodb_table(self.error_topic)
-        # self.lambda_function = self.create_lambda_function(
-        #     error_topic=self.error_topic,
-        #     environment_variables={
-        #         'HITS_TABLE_NAME': self.dynamodb_table.dynamodb_table.table_name
-        #     }
-        # )
-        # self.dynamodb_table.dynamodb_table.grant_read_write_data(self.lambda_function.lambda_function)
         self.create_webservice()
+        self.create_xray_tracer()
 
         big_fan.BigFan(self, "BigFan")
 
@@ -71,8 +38,6 @@ class WellArchitected(cdk.App):
         )
         event_bridge_etl.EventbridgeEtl(self, 'EventBridgeEtl')
 
-
-
         lambda_trilogy.lambda_lith.LambdaLith(self, "LambdaLith")
         lambda_trilogy.fat_lambda.TheFatLambdaStack(self, "FatLambda")
         lambda_trilogy.single_purpose_lambda.TheSinglePurposeFunctionStack(self, "SinglePurposeLambda")
@@ -82,33 +47,52 @@ class WellArchitected(cdk.App):
 
         scalable_webhook.ScalableWebhook(self, "ScalableWebhook")
 
+    def create_webservice(self):
+        error_sns_topic = sns_topic.SnsTopic(self, 'SnsTopic').topic
+        hits_record = dynamodb_table.DynamoDBTableStack(
+            self, 'DynamoDBTable',
+            error_topic=error_sns_topic,
+            partition_key=aws_dynamodb.Attribute(
+                name="path",
+                type=aws_dynamodb.AttributeType.STRING,
+            )
+        ).dynamodb_table
+        hits_counter = lambda_function.LambdaFunctionStack(
+            self, 'HitCounter',
+            function_name='hit_counter',
+            error_topic=error_sns_topic,
+            environment_variables={
+                'HITS_TABLE_NAME': hits_record.table_name
+            },
+        )
+        hits_record.grant_read_write_data(hits_counter.lambda_function)
+        http_api.LambdaHttpApiGateway(
+            self, 'LambdaHttpApiGateway',
+            lambda_function=hits_counter.lambda_function,
+            error_topic=error_sns_topic,
+        )
+        self.rest_api = rest_api.LambdaRestAPIGatewayStack(
+            self, 'LambdaRestAPIGateway',
+            lambda_function=hits_counter.lambda_function,
+            error_topic=error_sns_topic,
+        ).rest_api
+        web_application_firewall.WebApplicationFirewall(
+            self, 'WebApplicationFirewall',
+            target_arn=self.rest_api.resource_arn
+        )
+
+    def create_xray_tracer(self):
         xray_tracer_sns_topic = sns_topic.SnsTopic(
             self, 'XRayTracerSnsFanOutTopic', display_name='The XRay Tracer Fan Out Topic'
         ).topic
-        xray_tracer.sns_rest_api.SnsRestApi(self, 'SnsRestApi', sns_topic=xray_tracer_sns_topic)
+        xray_tracer.sns_rest_api.SnsRestApi(
+            self, 'SnsRestApi', sns_topic=xray_tracer_sns_topic
+        )
         xray_tracer.sns_flow.SnsFlow(self, 'SnsFlow', sns_topic=xray_tracer_sns_topic)
         xray_tracer.sqs_flow.SqsFlow(self, 'SqsFlow', sns_topic=xray_tracer_sns_topic)
         xray_tracer.http_flow.HttpFlow(self, 'HttpFlow', sns_topic=xray_tracer_sns_topic)
         xray_tracer.dynamodb_flow.DynamoDBFlow(
             self, 'DynamoDBFlow', sns_topic=xray_tracer_sns_topic
-        )
-
-    def create_dynamodb_table(self, error_topic):
-        return dynamodb_table.DynamoDBTableStack(
-            self, 'DynamoDBTable',
-            error_topic=error_topic,
-            partition_key=aws_dynamodb.Attribute(
-                name="path",
-                type=aws_dynamodb.AttributeType.STRING,
-            )
-        )
-
-    def create_lambda_function(self, environment_variables=None, error_topic=None):
-        return lambda_function.LambdaFunctionStack(
-            self, 'HitCounter',
-            function_name='hit_counter',
-            environment_variables=environment_variables,
-            error_topic=error_topic
         )
 
 WellArchitected().synth()
