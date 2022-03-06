@@ -15701,3 +15701,4 @@
 2022-03-06 09:06:25.287012::Time taken to synthesize stack: SagaStepFunction::  4.3897 seconds
 2022-03-06 09:13:02.569893::Time taken to synthesize stack: SagaStepFunction::  4.5542 seconds
 2022-03-06 09:14:07.583951::Time taken to synthesize stack: SagaStepFunction::  4.5273 seconds
+2022-03-06 09:15:39.867062::Time taken to synthesize stack: SagaStepFunction::  2.6072 seconds
