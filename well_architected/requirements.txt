@@ -39,6 +39,7 @@ aws-cdk.aws-sns
 aws-cdk.aws-sqs
 aws-cdk.aws-ssm
 aws-cdk.aws-stepfunctions
+aws-cdk.aws-stepfunctions-tasks
 aws-cdk.aws-wafv2
 aws-cdk.cloud-assembly-schema
 aws-cdk.core

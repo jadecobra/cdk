@@ -15,6 +15,7 @@ import lambda_trilogy.single_purpose_lambda
 import lambda_function
 import rds_proxy
 import rest_api
+import saga_step_function
 import scalable_webhook
 import sns_topic
 import xray_tracer
@@ -44,7 +45,7 @@ class WellArchitected(cdk.App):
         lambda_circuit_breaker.LambdaCircuitBreaker(self, "LambdaCircuitBreaker")
 
         rds_proxy.RdsProxy(self, "RdsProxy")
-
+        saga_step_function.SagaStepFunction(self, "SagaStepFunction")
         scalable_webhook.ScalableWebhook(self, "ScalableWebhook")
 
     def create_webservice(self):
