@@ -1,9 +1,9 @@
 from aws_cdk import (
-    aws_lambda as _lambda,
-    aws_apigateway as api_gw,
+    aws_lambda,
+    aws_apigateway,
     aws_dynamodb as dynamo_db,
-    aws_stepfunctions as step_fn,
-    aws_stepfunctions_tasks as step_fn_tasks,
+    aws_stepfunctions,
+    aws_stepfunctions_tasks,
     core as cdk
 )
 
@@ -64,61 +64,61 @@ class SagaStepFunction(cdk.Stack):
         # 3) Confirm Flight and Hotel booking
 
         # Our two end states
-        booking_succeeded = step_fn.Succeed(self, 'We have made your booking!')
-        booking_failed = step_fn.Fail(self, "Sorry, We Couldn't make the booking")
+        booking_succeeded = aws_stepfunctions.Succeed(self, 'We have made your booking!')
+        booking_failed = aws_stepfunctions.Fail(self, "Sorry, We Couldn't make the booking")
 
         # 1) Reserve Flights and Hotel
-        cancel_hotel_reservation = step_fn_tasks.LambdaInvoke(
+        cancel_hotel_reservation = aws_stepfunctions_tasks.LambdaInvoke(
             self, 'CancelHotelReservation',
             lambda_function=cancel_hotel_function,
             result_path='$.CancelHotelReservationResult'
         ).add_retry(max_attempts=3).next(booking_failed)
 
-        reserve_hotel = step_fn_tasks.LambdaInvoke(
+        reserve_hotel = aws_stepfunctions_tasks.LambdaInvoke(
             self, 'ReserveHotel',
             lambda_function=reserve_hotel_function,
             result_path='$.ReserveHotelResult'
         ).add_catch(cancel_hotel_reservation, result_path="$.ReserveHotelError")
 
-        cancel_flight_reservation = step_fn_tasks.LambdaInvoke(
+        cancel_flight_reservation = aws_stepfunctions_tasks.LambdaInvoke(
             self, 'CancelFlightReservation',
             lambda_function=cancel_flight_function,
             result_path='$.CancelFlightReservationResult'
         ).add_retry(max_attempts=3).next(cancel_hotel_reservation)
 
-        reserve_flight = step_fn_tasks.LambdaInvoke(
+        reserve_flight = aws_stepfunctions_tasks.LambdaInvoke(
             self, 'ReserveFlight',
             lambda_function=reserve_flight_function,
             result_path='$.ReserveFlightResult'
         ).add_catch(cancel_flight_reservation, result_path="$.ReserveFlightError")
 
         # 2) Take Payment
-        refund_payment = step_fn_tasks.LambdaInvoke(
+        refund_payment = aws_stepfunctions_tasks.LambdaInvoke(
             self, 'RefundPayment',
             lambda_function=refund_payment_function,
             result_path='$.RefundPaymentResult'
         ).add_retry(max_attempts=3).next(cancel_flight_reservation)
 
-        take_payment = step_fn_tasks.LambdaInvoke(
+        take_payment = aws_stepfunctions_tasks.LambdaInvoke(
             self, 'TakePayment',
             lambda_function=take_payment_function,
             result_path='$.TakePaymentResult'
         ).add_catch(refund_payment, result_path="$.TakePaymentError")
 
         # 3) Confirm Flight and Hotel Booking
-        confirm_hotel = step_fn_tasks.LambdaInvoke(
+        confirm_hotel = aws_stepfunctions_tasks.LambdaInvoke(
             self, 'ConfirmHotelBooking',
             lambda_function=confirm_hotel_function,
             result_path='$.ConfirmHotelBookingResult'
         ).add_catch(refund_payment, result_path="$.ConfirmHotelBookingError")
 
-        confirm_flight = step_fn_tasks.LambdaInvoke(
+        confirm_flight = aws_stepfunctions_tasks.LambdaInvoke(
             self, 'ConfirmFlight',
             lambda_function=confirm_flight_function,
             result_path='$.ConfirmFlightResult'
         ).add_catch(refund_payment, result_path="$.ConfirmFlightError")
 
-        definition = step_fn.Chain \
+        definition = aws_stepfunctions.Chain \
             .start(reserve_hotel) \
             .next(reserve_flight) \
             .next(take_payment) \
@@ -126,7 +126,7 @@ class SagaStepFunction(cdk.Stack):
             .next(confirm_flight) \
             .next(booking_succeeded)
 
-        saga = step_fn.StateMachine(
+        saga = aws_stepfunctions.StateMachine(
             self, 'BookingSaga',
             definition=definition,
             timeout=cdk.Duration.minutes(5)
@@ -134,11 +134,11 @@ class SagaStepFunction(cdk.Stack):
 
         # defines an AWS Lambda resource to connect to our API Gateway and kick
         # off our step function
-        saga_lambda = _lambda.Function(
+        saga_lambda = aws_lambda.Function(
             self, "sagaLambdaHandler",
-            runtime=_lambda.Runtime.NODEJS_12_X,
+            runtime=aws_lambda.Runtime.NODEJS_12_X,
             handler="sagaLambda.handler",
-            code=_lambda.Code.from_asset("lambda_functions"),
+            code=aws_lambda.Code.from_asset("lambda_functions"),
             environment={
                 'statemachine_arn': saga.state_machine_arn
             }
@@ -146,17 +146,17 @@ class SagaStepFunction(cdk.Stack):
         saga.grant_start_execution(saga_lambda)
 
         # defines an API Gateway REST API resource backed by our "stateMachineLambda" function.
-        api_gw.LambdaRestApi(
+        aws_api_gateway.LambdaRestApi(
             self, 'SagaPatternSingleTable',
             handler=saga_lambda
         )
 
     def create_lambda_function(self, scope: cdk.Stack, lambda_id: str, handler: str, table: dynamo_db.Table):
-        function = _lambda.Function(
+        function = aws_lambda.Function(
             scope, lambda_id,
-            runtime=_lambda.Runtime.NODEJS_12_X,
+            runtime=aws_lambda.Runtime.NODEJS_12_X,
             handler=handler,
-            code=_lambda.Code.from_asset("lambda_functions"),
+            code=aws_lambda.Code.from_asset("lambda_functions"),
             environment={
                 'TABLE_NAME': table.table_name
             }
