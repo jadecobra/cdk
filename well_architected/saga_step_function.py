@@ -1,18 +1,16 @@
-# import os
-# os.system('pip install -r requirements.txt --upgrade')
 from aws_cdk import (
     aws_lambda as _lambda,
     aws_apigateway as api_gw,
     aws_dynamodb as dynamo_db,
     aws_stepfunctions as step_fn,
     aws_stepfunctions_tasks as step_fn_tasks,
-    core
+    core as cdk
 )
 
 
-class SagaStepFunction(core.Stack):
+class SagaStepFunction(cdk.Stack):
 
-    def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
+    def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         ###
@@ -136,34 +134,37 @@ class SagaStepFunction(core.Stack):
         saga = step_fn.StateMachine(
             self, 'BookingSaga',
             definition=definition,
-            timeout=core.Duration.minutes(5)
+            timeout=cdk.Duration.minutes(5)
         )
 
         # defines an AWS Lambda resource to connect to our API Gateway and kick
         # off our step function
-        saga_lambda = _lambda.Function(self, "sagaLambdaHandler",
-                                       runtime=_lambda.Runtime.NODEJS_12_X,
-                                       handler="sagaLambda.handler",
-                                       code=_lambda.Code.from_asset("lambda_functions"),
-                                       environment={
-                                           'statemachine_arn': saga.state_machine_arn
-                                       }
-                                       )
+        saga_lambda = _lambda.Function(
+            self, "sagaLambdaHandler",
+            runtime=_lambda.Runtime.NODEJS_12_X,
+            handler="sagaLambda.handler",
+            code=_lambda.Code.from_asset("lambda_functions"),
+            environment={
+                'statemachine_arn': saga.state_machine_arn
+            }
+        )
         saga.grant_start_execution(saga_lambda)
 
         # defines an API Gateway REST API resource backed by our "stateMachineLambda" function.
-        api_gw.LambdaRestApi(self, 'SagaPatternSingleTable',
-                             handler=saga_lambda
-                             )
+        api_gw.LambdaRestApi(
+            self, 'SagaPatternSingleTable',
+            handler=saga_lambda
+        )
 
-    def create_lambda(self, scope: core.Stack, lambda_id: str, handler: str, table: dynamo_db.Table):
-        fn = _lambda.Function(scope, lambda_id,
-                              runtime=_lambda.Runtime.NODEJS_12_X,
-                              handler=handler,
-                              code=_lambda.Code.from_asset("lambda_functions"),
-                              environment={
-                                  'TABLE_NAME': table.table_name
-                              }
-                              )
-        table.grant_read_write_data(fn)
-        return fn
+    def create_lambda(self, scope: cdk.Stack, lambda_id: str, handler: str, table: dynamo_db.Table):
+        function = _lambda.Function(
+            scope, lambda_id,
+            runtime=_lambda.Runtime.NODEJS_12_X,
+            handler=handler,
+            code=_lambda.Code.from_asset("lambda_functions"),
+            environment={
+                'TABLE_NAME': table.table_name
+            }
+        )
+        table.grant_read_write_data(function)
+        return function
