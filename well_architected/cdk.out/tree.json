@@ -25222,21 +25222,21 @@
                   "aws:cdk:cloudformation:props": {
                     "keySchema": [
                       {
-                        "attributeName": "pk",
+                        "attributeName": "trip_id",
                         "keyType": "HASH"
                       },
                       {
-                        "attributeName": "sk",
+                        "attributeName": "booking_type",
                         "keyType": "RANGE"
                       }
                     ],
                     "attributeDefinitions": [
                       {
-                        "attributeName": "pk",
+                        "attributeName": "trip_id",
                         "attributeType": "S"
                       },
                       {
-                        "attributeName": "sk",
+                        "attributeName": "booking_type",
                         "attributeType": "S"
                       }
                     ],
