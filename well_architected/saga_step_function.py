@@ -146,7 +146,7 @@ class SagaStepFunction(cdk.Stack):
         saga.grant_start_execution(saga_lambda)
 
         # defines an API Gateway REST API resource backed by our "stateMachineLambda" function.
-        aws_api_gateway.LambdaRestApi(
+        aws_apigateway.LambdaRestApi(
             self, 'SagaPatternSingleTable',
             handler=saga_lambda
         )

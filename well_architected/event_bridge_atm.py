@@ -1,5 +1,4 @@
 from aws_cdk import (
-    aws_lambda,
     aws_apigateway as api_gateway,
     aws_events as events,
     aws_events_targets as targets,
@@ -74,7 +73,7 @@ class EventBridgeAtm(cdk.Stack):
                 detail=detail
             )
         )
-        
+
     def create_lambda_function_with_event_bridge_rule(
         self, handler_name=None, function_name=None,
         event_bridge_rule:events.Rule=None
