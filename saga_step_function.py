@@ -26,12 +26,7 @@ class SagaStepFunction(cdk.Stack):
         #
         # All functions need access to our DynamoDB table above.
         # We also need to take payment for this trip
-        #
-        # 1) Flights
-        # 2) Hotel
-        # 3) Payment
 
-        # 1) Flights
         reserve_flight = self.alt_create_lambda_function(
             self,
             function_name='flights/reserve_flight',
@@ -48,7 +43,6 @@ class SagaStepFunction(cdk.Stack):
             table=bookings
         )
 
-        # 2) Hotel
         reserve_hotel = self.alt_create_lambda_function(
             self,
             function_name="hotels/reserve_hotel",
@@ -65,7 +59,6 @@ class SagaStepFunction(cdk.Stack):
             table=bookings
         )
 
-        # 3) Payment For Holiday
         process_payment = self.alt_create_lambda_function(
             self,
             function_name="payments/process_payment",

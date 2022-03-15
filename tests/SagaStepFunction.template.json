@@ -168,7 +168,7 @@
         "flightsreserveflightServiceRole459CF800"
       ]
     },
-    "confirmFlightLambdaHandlerServiceRole45F91B6E": {
+    "flightsconfirmflightServiceRole8EE7591E": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -199,7 +199,7 @@
         ]
       }
     },
-    "confirmFlightLambdaHandlerServiceRoleDefaultPolicyA7A08CCB": {
+    "flightsconfirmflightServiceRoleDefaultPolicy7D2EFC6B": {
       "Type": "AWS::IAM::Policy",
       "Properties": {
         "PolicyDocument": {
@@ -235,20 +235,20 @@
           ],
           "Version": "2012-10-17"
         },
-        "PolicyName": "confirmFlightLambdaHandlerServiceRoleDefaultPolicyA7A08CCB",
+        "PolicyName": "flightsconfirmflightServiceRoleDefaultPolicy7D2EFC6B",
         "Roles": [
           {
-            "Ref": "confirmFlightLambdaHandlerServiceRole45F91B6E"
+            "Ref": "flightsconfirmflightServiceRole8EE7591E"
           }
         ]
       }
     },
-    "confirmFlightLambdaHandler96C3663F": {
+    "flightsconfirmflightB34E7CA3": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": {
-            "Ref": "AssetParameters8c25bcf969d5c44db3786e06e9654cbaeb8195315e50b77ec96e7a35924d3893S3Bucket3CA48617"
+            "Ref": "AssetParametersa6312e522fdac75cf679d858da6b2140b80c0a41a5a5042dd66e5107822158e1S3BucketA04CBF2C"
           },
           "S3Key": {
             "Fn::Join": [
@@ -261,7 +261,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters8c25bcf969d5c44db3786e06e9654cbaeb8195315e50b77ec96e7a35924d3893S3VersionKey880BCBF5"
+                          "Ref": "AssetParametersa6312e522fdac75cf679d858da6b2140b80c0a41a5a5042dd66e5107822158e1S3VersionKeyEBC898C0"
                         }
                       ]
                     }
@@ -274,7 +274,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters8c25bcf969d5c44db3786e06e9654cbaeb8195315e50b77ec96e7a35924d3893S3VersionKey880BCBF5"
+                          "Ref": "AssetParametersa6312e522fdac75cf679d858da6b2140b80c0a41a5a5042dd66e5107822158e1S3VersionKeyEBC898C0"
                         }
                       ]
                     }
@@ -286,7 +286,7 @@
         },
         "Role": {
           "Fn::GetAtt": [
-            "confirmFlightLambdaHandlerServiceRole45F91B6E",
+            "flightsconfirmflightServiceRole8EE7591E",
             "Arn"
           ]
         },
@@ -297,15 +297,15 @@
             }
           }
         },
-        "Handler": "flights/confirmFlight.handler",
-        "Runtime": "nodejs12.x"
+        "Handler": "flights/confirm_flight.handler",
+        "Runtime": "python3.9"
       },
       "DependsOn": [
-        "confirmFlightLambdaHandlerServiceRoleDefaultPolicyA7A08CCB",
-        "confirmFlightLambdaHandlerServiceRole45F91B6E"
+        "flightsconfirmflightServiceRoleDefaultPolicy7D2EFC6B",
+        "flightsconfirmflightServiceRole8EE7591E"
       ]
     },
-    "cancelFlightLambdaHandlerServiceRole7F2439CB": {
+    "flightscancelflightServiceRole603CBD39": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -336,7 +336,7 @@
         ]
       }
     },
-    "cancelFlightLambdaHandlerServiceRoleDefaultPolicy59295FBF": {
+    "flightscancelflightServiceRoleDefaultPolicy18C7A4AA": {
       "Type": "AWS::IAM::Policy",
       "Properties": {
         "PolicyDocument": {
@@ -372,20 +372,20 @@
           ],
           "Version": "2012-10-17"
         },
-        "PolicyName": "cancelFlightLambdaHandlerServiceRoleDefaultPolicy59295FBF",
+        "PolicyName": "flightscancelflightServiceRoleDefaultPolicy18C7A4AA",
         "Roles": [
           {
-            "Ref": "cancelFlightLambdaHandlerServiceRole7F2439CB"
+            "Ref": "flightscancelflightServiceRole603CBD39"
           }
         ]
       }
     },
-    "cancelFlightLambdaHandler437EEC76": {
+    "flightscancelflight9A89BA1E": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": {
-            "Ref": "AssetParameters8c25bcf969d5c44db3786e06e9654cbaeb8195315e50b77ec96e7a35924d3893S3Bucket3CA48617"
+            "Ref": "AssetParameters571216cd7f11585818ba1d193eef4ee16654561388c1b555eb2690ff4f1c806cS3Bucket47E7D758"
           },
           "S3Key": {
             "Fn::Join": [
@@ -398,7 +398,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters8c25bcf969d5c44db3786e06e9654cbaeb8195315e50b77ec96e7a35924d3893S3VersionKey880BCBF5"
+                          "Ref": "AssetParameters571216cd7f11585818ba1d193eef4ee16654561388c1b555eb2690ff4f1c806cS3VersionKey74AA7B04"
                         }
                       ]
                     }
@@ -411,7 +411,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters8c25bcf969d5c44db3786e06e9654cbaeb8195315e50b77ec96e7a35924d3893S3VersionKey880BCBF5"
+                          "Ref": "AssetParameters571216cd7f11585818ba1d193eef4ee16654561388c1b555eb2690ff4f1c806cS3VersionKey74AA7B04"
                         }
                       ]
                     }
@@ -423,7 +423,7 @@
         },
         "Role": {
           "Fn::GetAtt": [
-            "cancelFlightLambdaHandlerServiceRole7F2439CB",
+            "flightscancelflightServiceRole603CBD39",
             "Arn"
           ]
         },
@@ -434,15 +434,15 @@
             }
           }
         },
-        "Handler": "flights/cancelFlight.handler",
-        "Runtime": "nodejs12.x"
+        "Handler": "flights/cancel_flight.handler",
+        "Runtime": "python3.9"
       },
       "DependsOn": [
-        "cancelFlightLambdaHandlerServiceRoleDefaultPolicy59295FBF",
-        "cancelFlightLambdaHandlerServiceRole7F2439CB"
+        "flightscancelflightServiceRoleDefaultPolicy18C7A4AA",
+        "flightscancelflightServiceRole603CBD39"
       ]
     },
-    "reserveHotelLambdaHandlerServiceRole452F23B7": {
+    "hotelsreservehotelServiceRole1ACFB547": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -473,7 +473,7 @@
         ]
       }
     },
-    "reserveHotelLambdaHandlerServiceRoleDefaultPolicy18196942": {
+    "hotelsreservehotelServiceRoleDefaultPolicyFB075FCE": {
       "Type": "AWS::IAM::Policy",
       "Properties": {
         "PolicyDocument": {
@@ -509,20 +509,20 @@
           ],
           "Version": "2012-10-17"
         },
-        "PolicyName": "reserveHotelLambdaHandlerServiceRoleDefaultPolicy18196942",
+        "PolicyName": "hotelsreservehotelServiceRoleDefaultPolicyFB075FCE",
         "Roles": [
           {
-            "Ref": "reserveHotelLambdaHandlerServiceRole452F23B7"
+            "Ref": "hotelsreservehotelServiceRole1ACFB547"
           }
         ]
       }
     },
-    "reserveHotelLambdaHandler020AE24A": {
+    "hotelsreservehotelA484A091": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": {
-            "Ref": "AssetParameters8c25bcf969d5c44db3786e06e9654cbaeb8195315e50b77ec96e7a35924d3893S3Bucket3CA48617"
+            "Ref": "AssetParameters80b93102fd04fb862350ac228ce183fa7ca4ca64eabd21c76d471e884f8d647dS3Bucket3D4A4822"
           },
           "S3Key": {
             "Fn::Join": [
@@ -535,7 +535,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters8c25bcf969d5c44db3786e06e9654cbaeb8195315e50b77ec96e7a35924d3893S3VersionKey880BCBF5"
+                          "Ref": "AssetParameters80b93102fd04fb862350ac228ce183fa7ca4ca64eabd21c76d471e884f8d647dS3VersionKey1B4D60E9"
                         }
                       ]
                     }
@@ -548,7 +548,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters8c25bcf969d5c44db3786e06e9654cbaeb8195315e50b77ec96e7a35924d3893S3VersionKey880BCBF5"
+                          "Ref": "AssetParameters80b93102fd04fb862350ac228ce183fa7ca4ca64eabd21c76d471e884f8d647dS3VersionKey1B4D60E9"
                         }
                       ]
                     }
@@ -560,7 +560,7 @@
         },
         "Role": {
           "Fn::GetAtt": [
-            "reserveHotelLambdaHandlerServiceRole452F23B7",
+            "hotelsreservehotelServiceRole1ACFB547",
             "Arn"
           ]
         },
@@ -571,15 +571,15 @@
             }
           }
         },
-        "Handler": "hotel/reserveHotel.handler",
-        "Runtime": "nodejs12.x"
+        "Handler": "hotels/reserve_hotel.handler",
+        "Runtime": "python3.9"
       },
       "DependsOn": [
-        "reserveHotelLambdaHandlerServiceRoleDefaultPolicy18196942",
-        "reserveHotelLambdaHandlerServiceRole452F23B7"
+        "hotelsreservehotelServiceRoleDefaultPolicyFB075FCE",
+        "hotelsreservehotelServiceRole1ACFB547"
       ]
     },
-    "confirmHotelLambdaHandlerServiceRoleD5F8F90E": {
+    "hotelsconfirmhotelServiceRole597261A7": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -610,7 +610,7 @@
         ]
       }
     },
-    "confirmHotelLambdaHandlerServiceRoleDefaultPolicy69537B84": {
+    "hotelsconfirmhotelServiceRoleDefaultPolicy245DE7C3": {
       "Type": "AWS::IAM::Policy",
       "Properties": {
         "PolicyDocument": {
@@ -646,20 +646,20 @@
           ],
           "Version": "2012-10-17"
         },
-        "PolicyName": "confirmHotelLambdaHandlerServiceRoleDefaultPolicy69537B84",
+        "PolicyName": "hotelsconfirmhotelServiceRoleDefaultPolicy245DE7C3",
         "Roles": [
           {
-            "Ref": "confirmHotelLambdaHandlerServiceRoleD5F8F90E"
+            "Ref": "hotelsconfirmhotelServiceRole597261A7"
           }
         ]
       }
     },
-    "confirmHotelLambdaHandler882ACF2D": {
+    "hotelsconfirmhotelFEB4E4E0": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": {
-            "Ref": "AssetParameters8c25bcf969d5c44db3786e06e9654cbaeb8195315e50b77ec96e7a35924d3893S3Bucket3CA48617"
+            "Ref": "AssetParameters853370a8eaae63cd4861c94053f03abf4979bbba53a3d5ab1d889804314a4c8eS3Bucket3024AA13"
           },
           "S3Key": {
             "Fn::Join": [
@@ -672,7 +672,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters8c25bcf969d5c44db3786e06e9654cbaeb8195315e50b77ec96e7a35924d3893S3VersionKey880BCBF5"
+                          "Ref": "AssetParameters853370a8eaae63cd4861c94053f03abf4979bbba53a3d5ab1d889804314a4c8eS3VersionKeyED8455E9"
                         }
                       ]
                     }
@@ -685,7 +685,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters8c25bcf969d5c44db3786e06e9654cbaeb8195315e50b77ec96e7a35924d3893S3VersionKey880BCBF5"
+                          "Ref": "AssetParameters853370a8eaae63cd4861c94053f03abf4979bbba53a3d5ab1d889804314a4c8eS3VersionKeyED8455E9"
                         }
                       ]
                     }
@@ -697,7 +697,7 @@
         },
         "Role": {
           "Fn::GetAtt": [
-            "confirmHotelLambdaHandlerServiceRoleD5F8F90E",
+            "hotelsconfirmhotelServiceRole597261A7",
             "Arn"
           ]
         },
@@ -708,15 +708,15 @@
             }
           }
         },
-        "Handler": "hotel/confirmHotel.handler",
-        "Runtime": "nodejs12.x"
+        "Handler": "hotels/confirm_hotel.handler",
+        "Runtime": "python3.9"
       },
       "DependsOn": [
-        "confirmHotelLambdaHandlerServiceRoleDefaultPolicy69537B84",
-        "confirmHotelLambdaHandlerServiceRoleD5F8F90E"
+        "hotelsconfirmhotelServiceRoleDefaultPolicy245DE7C3",
+        "hotelsconfirmhotelServiceRole597261A7"
       ]
     },
-    "cancelHotelLambdaHandlerServiceRole4815D152": {
+    "hotelscancelhotelServiceRoleF9095220": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -747,7 +747,7 @@
         ]
       }
     },
-    "cancelHotelLambdaHandlerServiceRoleDefaultPolicy58EA01C9": {
+    "hotelscancelhotelServiceRoleDefaultPolicyA153E70B": {
       "Type": "AWS::IAM::Policy",
       "Properties": {
         "PolicyDocument": {
@@ -783,20 +783,20 @@
           ],
           "Version": "2012-10-17"
         },
-        "PolicyName": "cancelHotelLambdaHandlerServiceRoleDefaultPolicy58EA01C9",
+        "PolicyName": "hotelscancelhotelServiceRoleDefaultPolicyA153E70B",
         "Roles": [
           {
-            "Ref": "cancelHotelLambdaHandlerServiceRole4815D152"
+            "Ref": "hotelscancelhotelServiceRoleF9095220"
           }
         ]
       }
     },
-    "cancelHotelLambdaHandler09F13EF6": {
+    "hotelscancelhotelC5FA4E93": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": {
-            "Ref": "AssetParameters8c25bcf969d5c44db3786e06e9654cbaeb8195315e50b77ec96e7a35924d3893S3Bucket3CA48617"
+            "Ref": "AssetParameters57c357630371a89d83bda227de1baa80bfc09d5c8e8ce527c21578f38db7c223S3Bucket80DF54C7"
           },
           "S3Key": {
             "Fn::Join": [
@@ -809,7 +809,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters8c25bcf969d5c44db3786e06e9654cbaeb8195315e50b77ec96e7a35924d3893S3VersionKey880BCBF5"
+                          "Ref": "AssetParameters57c357630371a89d83bda227de1baa80bfc09d5c8e8ce527c21578f38db7c223S3VersionKey16031C41"
                         }
                       ]
                     }
@@ -822,7 +822,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters8c25bcf969d5c44db3786e06e9654cbaeb8195315e50b77ec96e7a35924d3893S3VersionKey880BCBF5"
+                          "Ref": "AssetParameters57c357630371a89d83bda227de1baa80bfc09d5c8e8ce527c21578f38db7c223S3VersionKey16031C41"
                         }
                       ]
                     }
@@ -834,7 +834,7 @@
         },
         "Role": {
           "Fn::GetAtt": [
-            "cancelHotelLambdaHandlerServiceRole4815D152",
+            "hotelscancelhotelServiceRoleF9095220",
             "Arn"
           ]
         },
@@ -845,15 +845,15 @@
             }
           }
         },
-        "Handler": "hotel/cancelHotel.handler",
-        "Runtime": "nodejs12.x"
+        "Handler": "hotels/cancel_hotel.handler",
+        "Runtime": "python3.9"
       },
       "DependsOn": [
-        "cancelHotelLambdaHandlerServiceRoleDefaultPolicy58EA01C9",
-        "cancelHotelLambdaHandlerServiceRole4815D152"
+        "hotelscancelhotelServiceRoleDefaultPolicyA153E70B",
+        "hotelscancelhotelServiceRoleF9095220"
       ]
     },
-    "takePaymentLambdaHandlerServiceRole56CA2808": {
+    "paymentsprocesspaymentServiceRoleBB5F393F": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -884,7 +884,7 @@
         ]
       }
     },
-    "takePaymentLambdaHandlerServiceRoleDefaultPolicy95F3D626": {
+    "paymentsprocesspaymentServiceRoleDefaultPolicy8E1EEEF2": {
       "Type": "AWS::IAM::Policy",
       "Properties": {
         "PolicyDocument": {
@@ -920,20 +920,20 @@
           ],
           "Version": "2012-10-17"
         },
-        "PolicyName": "takePaymentLambdaHandlerServiceRoleDefaultPolicy95F3D626",
+        "PolicyName": "paymentsprocesspaymentServiceRoleDefaultPolicy8E1EEEF2",
         "Roles": [
           {
-            "Ref": "takePaymentLambdaHandlerServiceRole56CA2808"
+            "Ref": "paymentsprocesspaymentServiceRoleBB5F393F"
           }
         ]
       }
     },
-    "takePaymentLambdaHandlerB96529D4": {
+    "paymentsprocesspayment7E58198E": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": {
-            "Ref": "AssetParameters8c25bcf969d5c44db3786e06e9654cbaeb8195315e50b77ec96e7a35924d3893S3Bucket3CA48617"
+            "Ref": "AssetParameters55b78720c0af0f63c9f4b613722fad90fa99e383187204d04794f0c5f415b184S3Bucket3E8B1462"
           },
           "S3Key": {
             "Fn::Join": [
@@ -946,7 +946,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters8c25bcf969d5c44db3786e06e9654cbaeb8195315e50b77ec96e7a35924d3893S3VersionKey880BCBF5"
+                          "Ref": "AssetParameters55b78720c0af0f63c9f4b613722fad90fa99e383187204d04794f0c5f415b184S3VersionKeyA481D7A4"
                         }
                       ]
                     }
@@ -959,7 +959,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters8c25bcf969d5c44db3786e06e9654cbaeb8195315e50b77ec96e7a35924d3893S3VersionKey880BCBF5"
+                          "Ref": "AssetParameters55b78720c0af0f63c9f4b613722fad90fa99e383187204d04794f0c5f415b184S3VersionKeyA481D7A4"
                         }
                       ]
                     }
@@ -971,7 +971,7 @@
         },
         "Role": {
           "Fn::GetAtt": [
-            "takePaymentLambdaHandlerServiceRole56CA2808",
+            "paymentsprocesspaymentServiceRoleBB5F393F",
             "Arn"
           ]
         },
@@ -982,15 +982,15 @@
             }
           }
         },
-        "Handler": "payment/takePayment.handler",
-        "Runtime": "nodejs12.x"
+        "Handler": "payments/process_payment.handler",
+        "Runtime": "python3.9"
       },
       "DependsOn": [
-        "takePaymentLambdaHandlerServiceRoleDefaultPolicy95F3D626",
-        "takePaymentLambdaHandlerServiceRole56CA2808"
+        "paymentsprocesspaymentServiceRoleDefaultPolicy8E1EEEF2",
+        "paymentsprocesspaymentServiceRoleBB5F393F"
       ]
     },
-    "refundPaymentLambdaHandlerServiceRole62F72F0D": {
+    "paymentsrefundpaymentServiceRole1B32383A": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -1021,7 +1021,7 @@
         ]
       }
     },
-    "refundPaymentLambdaHandlerServiceRoleDefaultPolicy39778F0D": {
+    "paymentsrefundpaymentServiceRoleDefaultPolicy91B6B6D7": {
       "Type": "AWS::IAM::Policy",
       "Properties": {
         "PolicyDocument": {
@@ -1057,20 +1057,20 @@
           ],
           "Version": "2012-10-17"
         },
-        "PolicyName": "refundPaymentLambdaHandlerServiceRoleDefaultPolicy39778F0D",
+        "PolicyName": "paymentsrefundpaymentServiceRoleDefaultPolicy91B6B6D7",
         "Roles": [
           {
-            "Ref": "refundPaymentLambdaHandlerServiceRole62F72F0D"
+            "Ref": "paymentsrefundpaymentServiceRole1B32383A"
           }
         ]
       }
     },
-    "refundPaymentLambdaHandler932D11D5": {
+    "paymentsrefundpaymentA1B2703D": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": {
-            "Ref": "AssetParameters8c25bcf969d5c44db3786e06e9654cbaeb8195315e50b77ec96e7a35924d3893S3Bucket3CA48617"
+            "Ref": "AssetParametersd55dc2d20e821cf430803e0ab5e2f1aac99ef8c9b7833283c004da8d6c5e011eS3Bucket3BD8913D"
           },
           "S3Key": {
             "Fn::Join": [
@@ -1083,7 +1083,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters8c25bcf969d5c44db3786e06e9654cbaeb8195315e50b77ec96e7a35924d3893S3VersionKey880BCBF5"
+                          "Ref": "AssetParametersd55dc2d20e821cf430803e0ab5e2f1aac99ef8c9b7833283c004da8d6c5e011eS3VersionKeyC6356719"
                         }
                       ]
                     }
@@ -1096,7 +1096,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters8c25bcf969d5c44db3786e06e9654cbaeb8195315e50b77ec96e7a35924d3893S3VersionKey880BCBF5"
+                          "Ref": "AssetParametersd55dc2d20e821cf430803e0ab5e2f1aac99ef8c9b7833283c004da8d6c5e011eS3VersionKeyC6356719"
                         }
                       ]
                     }
@@ -1108,7 +1108,7 @@
         },
         "Role": {
           "Fn::GetAtt": [
-            "refundPaymentLambdaHandlerServiceRole62F72F0D",
+            "paymentsrefundpaymentServiceRole1B32383A",
             "Arn"
           ]
         },
@@ -1119,12 +1119,12 @@
             }
           }
         },
-        "Handler": "payment/refundPayment.handler",
-        "Runtime": "nodejs12.x"
+        "Handler": "payments/refund_payment.handler",
+        "Runtime": "python3.9"
       },
       "DependsOn": [
-        "refundPaymentLambdaHandlerServiceRoleDefaultPolicy39778F0D",
-        "refundPaymentLambdaHandlerServiceRole62F72F0D"
+        "paymentsrefundpaymentServiceRoleDefaultPolicy91B6B6D7",
+        "paymentsrefundpaymentServiceRole1B32383A"
       ]
     },
     "BookingSagaRole82982544": {
@@ -1162,7 +1162,7 @@
               "Effect": "Allow",
               "Resource": {
                 "Fn::GetAtt": [
-                  "reserveHotelLambdaHandler020AE24A",
+                  "hotelsreservehotelA484A091",
                   "Arn"
                 ]
               }
@@ -1182,7 +1182,7 @@
               "Effect": "Allow",
               "Resource": {
                 "Fn::GetAtt": [
-                  "takePaymentLambdaHandlerB96529D4",
+                  "paymentsprocesspayment7E58198E",
                   "Arn"
                 ]
               }
@@ -1192,7 +1192,7 @@
               "Effect": "Allow",
               "Resource": {
                 "Fn::GetAtt": [
-                  "confirmHotelLambdaHandler882ACF2D",
+                  "hotelsconfirmhotelFEB4E4E0",
                   "Arn"
                 ]
               }
@@ -1202,7 +1202,7 @@
               "Effect": "Allow",
               "Resource": {
                 "Fn::GetAtt": [
-                  "confirmFlightLambdaHandler96C3663F",
+                  "flightsconfirmflightB34E7CA3",
                   "Arn"
                 ]
               }
@@ -1212,7 +1212,7 @@
               "Effect": "Allow",
               "Resource": {
                 "Fn::GetAtt": [
-                  "refundPaymentLambdaHandler932D11D5",
+                  "paymentsrefundpaymentA1B2703D",
                   "Arn"
                 ]
               }
@@ -1222,7 +1222,7 @@
               "Effect": "Allow",
               "Resource": {
                 "Fn::GetAtt": [
-                  "cancelFlightLambdaHandler437EEC76",
+                  "flightscancelflight9A89BA1E",
                   "Arn"
                 ]
               }
@@ -1232,7 +1232,7 @@
               "Effect": "Allow",
               "Resource": {
                 "Fn::GetAtt": [
-                  "cancelHotelLambdaHandler09F13EF6",
+                  "hotelscancelhotelC5FA4E93",
                   "Arn"
                 ]
               }
@@ -1268,7 +1268,7 @@
               ":states:::lambda:invoke\",\"Parameters\":{\"FunctionName\":\"",
               {
                 "Fn::GetAtt": [
-                  "reserveHotelLambdaHandler020AE24A",
+                  "hotelsreservehotelA484A091",
                   "Arn"
                 ]
               },
@@ -1290,7 +1290,7 @@
               ":states:::lambda:invoke\",\"Parameters\":{\"FunctionName\":\"",
               {
                 "Fn::GetAtt": [
-                  "takePaymentLambdaHandlerB96529D4",
+                  "paymentsprocesspayment7E58198E",
                   "Arn"
                 ]
               },
@@ -1301,7 +1301,7 @@
               ":states:::lambda:invoke\",\"Parameters\":{\"FunctionName\":\"",
               {
                 "Fn::GetAtt": [
-                  "confirmHotelLambdaHandler882ACF2D",
+                  "hotelsconfirmhotelFEB4E4E0",
                   "Arn"
                 ]
               },
@@ -1312,7 +1312,7 @@
               ":states:::lambda:invoke\",\"Parameters\":{\"FunctionName\":\"",
               {
                 "Fn::GetAtt": [
-                  "confirmFlightLambdaHandler96C3663F",
+                  "flightsconfirmflightB34E7CA3",
                   "Arn"
                 ]
               },
@@ -1323,7 +1323,7 @@
               ":states:::lambda:invoke\",\"Parameters\":{\"FunctionName\":\"",
               {
                 "Fn::GetAtt": [
-                  "refundPaymentLambdaHandler932D11D5",
+                  "paymentsrefundpaymentA1B2703D",
                   "Arn"
                 ]
               },
@@ -1334,7 +1334,7 @@
               ":states:::lambda:invoke\",\"Parameters\":{\"FunctionName\":\"",
               {
                 "Fn::GetAtt": [
-                  "cancelFlightLambdaHandler437EEC76",
+                  "flightscancelflight9A89BA1E",
                   "Arn"
                 ]
               },
@@ -1345,7 +1345,7 @@
               ":states:::lambda:invoke\",\"Parameters\":{\"FunctionName\":\"",
               {
                 "Fn::GetAtt": [
-                  "cancelHotelLambdaHandler09F13EF6",
+                  "hotelscancelhotelC5FA4E93",
                   "Arn"
                 ]
               },
@@ -1418,7 +1418,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": {
-            "Ref": "AssetParameters8c25bcf969d5c44db3786e06e9654cbaeb8195315e50b77ec96e7a35924d3893S3Bucket3CA48617"
+            "Ref": "AssetParameters514829b57ec66d9d5b00f7b80f7089b4793a1f8cca8fc7c1fce3e70b001b1230S3Bucket24D22DCC"
           },
           "S3Key": {
             "Fn::Join": [
@@ -1431,7 +1431,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters8c25bcf969d5c44db3786e06e9654cbaeb8195315e50b77ec96e7a35924d3893S3VersionKey880BCBF5"
+                          "Ref": "AssetParameters514829b57ec66d9d5b00f7b80f7089b4793a1f8cca8fc7c1fce3e70b001b1230S3VersionKey4FBC093B"
                         }
                       ]
                     }
@@ -1444,7 +1444,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters8c25bcf969d5c44db3786e06e9654cbaeb8195315e50b77ec96e7a35924d3893S3VersionKey880BCBF5"
+                          "Ref": "AssetParameters514829b57ec66d9d5b00f7b80f7089b4793a1f8cca8fc7c1fce3e70b001b1230S3VersionKey4FBC093B"
                         }
                       ]
                     }
@@ -1823,17 +1823,101 @@
       "Type": "String",
       "Description": "Artifact hash for asset \"21d94be1cd6f1e9584629e926200f4dbfcc73c09a2dfcd6f984254297c59c9f1\""
     },
-    "AssetParameters8c25bcf969d5c44db3786e06e9654cbaeb8195315e50b77ec96e7a35924d3893S3Bucket3CA48617": {
+    "AssetParametersa6312e522fdac75cf679d858da6b2140b80c0a41a5a5042dd66e5107822158e1S3BucketA04CBF2C": {
       "Type": "String",
-      "Description": "S3 bucket for asset \"8c25bcf969d5c44db3786e06e9654cbaeb8195315e50b77ec96e7a35924d3893\""
+      "Description": "S3 bucket for asset \"a6312e522fdac75cf679d858da6b2140b80c0a41a5a5042dd66e5107822158e1\""
     },
-    "AssetParameters8c25bcf969d5c44db3786e06e9654cbaeb8195315e50b77ec96e7a35924d3893S3VersionKey880BCBF5": {
+    "AssetParametersa6312e522fdac75cf679d858da6b2140b80c0a41a5a5042dd66e5107822158e1S3VersionKeyEBC898C0": {
       "Type": "String",
-      "Description": "S3 key for asset version \"8c25bcf969d5c44db3786e06e9654cbaeb8195315e50b77ec96e7a35924d3893\""
+      "Description": "S3 key for asset version \"a6312e522fdac75cf679d858da6b2140b80c0a41a5a5042dd66e5107822158e1\""
     },
-    "AssetParameters8c25bcf969d5c44db3786e06e9654cbaeb8195315e50b77ec96e7a35924d3893ArtifactHashC9C5765A": {
+    "AssetParametersa6312e522fdac75cf679d858da6b2140b80c0a41a5a5042dd66e5107822158e1ArtifactHash85BE2791": {
       "Type": "String",
-      "Description": "Artifact hash for asset \"8c25bcf969d5c44db3786e06e9654cbaeb8195315e50b77ec96e7a35924d3893\""
+      "Description": "Artifact hash for asset \"a6312e522fdac75cf679d858da6b2140b80c0a41a5a5042dd66e5107822158e1\""
+    },
+    "AssetParameters571216cd7f11585818ba1d193eef4ee16654561388c1b555eb2690ff4f1c806cS3Bucket47E7D758": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"571216cd7f11585818ba1d193eef4ee16654561388c1b555eb2690ff4f1c806c\""
+    },
+    "AssetParameters571216cd7f11585818ba1d193eef4ee16654561388c1b555eb2690ff4f1c806cS3VersionKey74AA7B04": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"571216cd7f11585818ba1d193eef4ee16654561388c1b555eb2690ff4f1c806c\""
+    },
+    "AssetParameters571216cd7f11585818ba1d193eef4ee16654561388c1b555eb2690ff4f1c806cArtifactHashF46E6742": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"571216cd7f11585818ba1d193eef4ee16654561388c1b555eb2690ff4f1c806c\""
+    },
+    "AssetParameters80b93102fd04fb862350ac228ce183fa7ca4ca64eabd21c76d471e884f8d647dS3Bucket3D4A4822": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"80b93102fd04fb862350ac228ce183fa7ca4ca64eabd21c76d471e884f8d647d\""
+    },
+    "AssetParameters80b93102fd04fb862350ac228ce183fa7ca4ca64eabd21c76d471e884f8d647dS3VersionKey1B4D60E9": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"80b93102fd04fb862350ac228ce183fa7ca4ca64eabd21c76d471e884f8d647d\""
+    },
+    "AssetParameters80b93102fd04fb862350ac228ce183fa7ca4ca64eabd21c76d471e884f8d647dArtifactHashD9D5F85C": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"80b93102fd04fb862350ac228ce183fa7ca4ca64eabd21c76d471e884f8d647d\""
+    },
+    "AssetParameters853370a8eaae63cd4861c94053f03abf4979bbba53a3d5ab1d889804314a4c8eS3Bucket3024AA13": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"853370a8eaae63cd4861c94053f03abf4979bbba53a3d5ab1d889804314a4c8e\""
+    },
+    "AssetParameters853370a8eaae63cd4861c94053f03abf4979bbba53a3d5ab1d889804314a4c8eS3VersionKeyED8455E9": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"853370a8eaae63cd4861c94053f03abf4979bbba53a3d5ab1d889804314a4c8e\""
+    },
+    "AssetParameters853370a8eaae63cd4861c94053f03abf4979bbba53a3d5ab1d889804314a4c8eArtifactHash09FFA850": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"853370a8eaae63cd4861c94053f03abf4979bbba53a3d5ab1d889804314a4c8e\""
+    },
+    "AssetParameters57c357630371a89d83bda227de1baa80bfc09d5c8e8ce527c21578f38db7c223S3Bucket80DF54C7": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"57c357630371a89d83bda227de1baa80bfc09d5c8e8ce527c21578f38db7c223\""
+    },
+    "AssetParameters57c357630371a89d83bda227de1baa80bfc09d5c8e8ce527c21578f38db7c223S3VersionKey16031C41": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"57c357630371a89d83bda227de1baa80bfc09d5c8e8ce527c21578f38db7c223\""
+    },
+    "AssetParameters57c357630371a89d83bda227de1baa80bfc09d5c8e8ce527c21578f38db7c223ArtifactHashF0490B22": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"57c357630371a89d83bda227de1baa80bfc09d5c8e8ce527c21578f38db7c223\""
+    },
+    "AssetParameters55b78720c0af0f63c9f4b613722fad90fa99e383187204d04794f0c5f415b184S3Bucket3E8B1462": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"55b78720c0af0f63c9f4b613722fad90fa99e383187204d04794f0c5f415b184\""
+    },
+    "AssetParameters55b78720c0af0f63c9f4b613722fad90fa99e383187204d04794f0c5f415b184S3VersionKeyA481D7A4": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"55b78720c0af0f63c9f4b613722fad90fa99e383187204d04794f0c5f415b184\""
+    },
+    "AssetParameters55b78720c0af0f63c9f4b613722fad90fa99e383187204d04794f0c5f415b184ArtifactHash4F1D9503": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"55b78720c0af0f63c9f4b613722fad90fa99e383187204d04794f0c5f415b184\""
+    },
+    "AssetParametersd55dc2d20e821cf430803e0ab5e2f1aac99ef8c9b7833283c004da8d6c5e011eS3Bucket3BD8913D": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"d55dc2d20e821cf430803e0ab5e2f1aac99ef8c9b7833283c004da8d6c5e011e\""
+    },
+    "AssetParametersd55dc2d20e821cf430803e0ab5e2f1aac99ef8c9b7833283c004da8d6c5e011eS3VersionKeyC6356719": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"d55dc2d20e821cf430803e0ab5e2f1aac99ef8c9b7833283c004da8d6c5e011e\""
+    },
+    "AssetParametersd55dc2d20e821cf430803e0ab5e2f1aac99ef8c9b7833283c004da8d6c5e011eArtifactHash722953CA": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"d55dc2d20e821cf430803e0ab5e2f1aac99ef8c9b7833283c004da8d6c5e011e\""
+    },
+    "AssetParameters514829b57ec66d9d5b00f7b80f7089b4793a1f8cca8fc7c1fce3e70b001b1230S3Bucket24D22DCC": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"514829b57ec66d9d5b00f7b80f7089b4793a1f8cca8fc7c1fce3e70b001b1230\""
+    },
+    "AssetParameters514829b57ec66d9d5b00f7b80f7089b4793a1f8cca8fc7c1fce3e70b001b1230S3VersionKey4FBC093B": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"514829b57ec66d9d5b00f7b80f7089b4793a1f8cca8fc7c1fce3e70b001b1230\""
+    },
+    "AssetParameters514829b57ec66d9d5b00f7b80f7089b4793a1f8cca8fc7c1fce3e70b001b1230ArtifactHashB4E7EFBC": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"514829b57ec66d9d5b00f7b80f7089b4793a1f8cca8fc7c1fce3e70b001b1230\""
     }
   },
   "Outputs": {
