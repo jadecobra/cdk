@@ -39,27 +39,43 @@ class SagaStepFunction(cdk.Stack):
         )
         confirm_flight = self.alt_create_lambda_function(
             self,
-            function_name='flights/confirmFlight.handler',
+            function_name='flights/confirm_flight',
             table=bookings
         )
-        cancel_flight = self.create_lambda_function(
-            scope=self, lambda_id="cancelFlightLambdaHandler",
-            handler='flights/cancelFlight.handler', table=bookings
+        cancel_flight = self.alt_create_lambda_function(
+            self,
+            function_name='flights/cancel_flight',
+            table=bookings
         )
 
         # 2) Hotel
-        reserve_hotel = self.create_lambda_function(scope=self, lambda_id="reserveHotelLambdaHandler",
-                                                  handler='hotel/reserveHotel.handler', table=bookings)
-        confirm_hotel = self.create_lambda_function(scope=self, lambda_id="confirmHotelLambdaHandler",
-                                                  handler='hotel/confirmHotel.handler', table=bookings)
-        cancel_hotel = self.create_lambda_function(scope=self, lambda_id="cancelHotelLambdaHandler",
-                                                 handler='hotel/cancelHotel.handler', table=bookings)
+        reserve_hotel = self.alt_create_lambda_function(
+            self,
+            function_name="hotels/reserve_hotel",
+            table=bookings
+        )
+        confirm_hotel = self.alt_create_lambda_function(
+            self,
+            function_name='hotels/confirm_hotel',
+            table=bookings
+        )
+        cancel_hotel = self.alt_create_lambda_function(
+            self,
+            function_name="hotels/cancel_hotel",
+            table=bookings
+        )
 
         # 3) Payment For Holiday
-        process_payment = self.create_lambda_function(scope=self, lambda_id="takePaymentLambdaHandler",
-                                                 handler='payment/takePayment.handler', table=bookings)
-        refund_payment = self.create_lambda_function(scope=self, lambda_id="refundPaymentLambdaHandler",
-                                                   handler='payment/refundPayment.handler', table=bookings)
+        process_payment = self.alt_create_lambda_function(
+            self,
+            function_name="payments/process_payment",
+            table=bookings
+        )
+        refund_payment = self.alt_create_lambda_function(
+            self,
+            function_name="payments/refund_payment",
+            table=bookings
+        )
 
         ###
         # Saga Pattern Step Function
