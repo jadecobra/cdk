@@ -1418,7 +1418,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": {
-            "Ref": "AssetParameters514829b57ec66d9d5b00f7b80f7089b4793a1f8cca8fc7c1fce3e70b001b1230S3Bucket24D22DCC"
+            "Ref": "AssetParameters683bb4504495e9f5cfe9e568c2ba88c37bbcc2399063b48f9a9500e0eee67a95S3BucketD0E33F9C"
           },
           "S3Key": {
             "Fn::Join": [
@@ -1431,7 +1431,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters514829b57ec66d9d5b00f7b80f7089b4793a1f8cca8fc7c1fce3e70b001b1230S3VersionKey4FBC093B"
+                          "Ref": "AssetParameters683bb4504495e9f5cfe9e568c2ba88c37bbcc2399063b48f9a9500e0eee67a95S3VersionKey6E074EFA"
                         }
                       ]
                     }
@@ -1444,7 +1444,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters514829b57ec66d9d5b00f7b80f7089b4793a1f8cca8fc7c1fce3e70b001b1230S3VersionKey4FBC093B"
+                          "Ref": "AssetParameters683bb4504495e9f5cfe9e568c2ba88c37bbcc2399063b48f9a9500e0eee67a95S3VersionKey6E074EFA"
                         }
                       ]
                     }
@@ -1467,8 +1467,8 @@
             }
           }
         },
-        "Handler": "sagaLambda.handler",
-        "Runtime": "nodejs12.x"
+        "Handler": "saga_lambda.handler",
+        "Runtime": "python3.9"
       },
       "DependsOn": [
         "sagaLambdaHandlerServiceRoleDefaultPolicyFE9A40F4",
@@ -1907,17 +1907,17 @@
       "Type": "String",
       "Description": "Artifact hash for asset \"d55dc2d20e821cf430803e0ab5e2f1aac99ef8c9b7833283c004da8d6c5e011e\""
     },
-    "AssetParameters514829b57ec66d9d5b00f7b80f7089b4793a1f8cca8fc7c1fce3e70b001b1230S3Bucket24D22DCC": {
+    "AssetParameters683bb4504495e9f5cfe9e568c2ba88c37bbcc2399063b48f9a9500e0eee67a95S3BucketD0E33F9C": {
       "Type": "String",
-      "Description": "S3 bucket for asset \"514829b57ec66d9d5b00f7b80f7089b4793a1f8cca8fc7c1fce3e70b001b1230\""
+      "Description": "S3 bucket for asset \"683bb4504495e9f5cfe9e568c2ba88c37bbcc2399063b48f9a9500e0eee67a95\""
     },
-    "AssetParameters514829b57ec66d9d5b00f7b80f7089b4793a1f8cca8fc7c1fce3e70b001b1230S3VersionKey4FBC093B": {
+    "AssetParameters683bb4504495e9f5cfe9e568c2ba88c37bbcc2399063b48f9a9500e0eee67a95S3VersionKey6E074EFA": {
       "Type": "String",
-      "Description": "S3 key for asset version \"514829b57ec66d9d5b00f7b80f7089b4793a1f8cca8fc7c1fce3e70b001b1230\""
+      "Description": "S3 key for asset version \"683bb4504495e9f5cfe9e568c2ba88c37bbcc2399063b48f9a9500e0eee67a95\""
     },
-    "AssetParameters514829b57ec66d9d5b00f7b80f7089b4793a1f8cca8fc7c1fce3e70b001b1230ArtifactHashB4E7EFBC": {
+    "AssetParameters683bb4504495e9f5cfe9e568c2ba88c37bbcc2399063b48f9a9500e0eee67a95ArtifactHash9D6F4A72": {
       "Type": "String",
-      "Description": "Artifact hash for asset \"514829b57ec66d9d5b00f7b80f7089b4793a1f8cca8fc7c1fce3e70b001b1230\""
+      "Description": "Artifact hash for asset \"683bb4504495e9f5cfe9e568c2ba88c37bbcc2399063b48f9a9500e0eee67a95\""
     }
   },
   "Outputs": {

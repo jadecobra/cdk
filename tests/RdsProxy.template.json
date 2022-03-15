@@ -1,741 +1,37 @@
 {
   "Resources": {
-    "Vpc8378EB38": {
-      "Type": "AWS::EC2::VPC",
+    "BookingsB1C24132": {
+      "Type": "AWS::DynamoDB::Table",
       "Properties": {
-        "CidrBlock": "10.0.0.0/16",
-        "EnableDnsHostnames": true,
-        "EnableDnsSupport": true,
-        "InstanceTenancy": "default",
-        "Tags": [
+        "KeySchema": [
           {
-            "Key": "Name",
-            "Value": "RdsProxy/Vpc"
-          }
-        ]
-      }
-    },
-    "VpcPublicSubnet1Subnet5C2D37C4": {
-      "Type": "AWS::EC2::Subnet",
-      "Properties": {
-        "CidrBlock": "10.0.0.0/18",
-        "VpcId": {
-          "Ref": "Vpc8378EB38"
-        },
-        "AvailabilityZone": {
-          "Fn::Select": [
-            0,
-            {
-              "Fn::GetAZs": ""
-            }
-          ]
-        },
-        "MapPublicIpOnLaunch": true,
-        "Tags": [
-          {
-            "Key": "aws-cdk:subnet-name",
-            "Value": "Public"
+            "AttributeName": "booking_id",
+            "KeyType": "HASH"
           },
           {
-            "Key": "aws-cdk:subnet-type",
-            "Value": "Public"
-          },
-          {
-            "Key": "Name",
-            "Value": "RdsProxy/Vpc/PublicSubnet1"
-          }
-        ]
-      }
-    },
-    "VpcPublicSubnet1RouteTable6C95E38E": {
-      "Type": "AWS::EC2::RouteTable",
-      "Properties": {
-        "VpcId": {
-          "Ref": "Vpc8378EB38"
-        },
-        "Tags": [
-          {
-            "Key": "Name",
-            "Value": "RdsProxy/Vpc/PublicSubnet1"
-          }
-        ]
-      }
-    },
-    "VpcPublicSubnet1RouteTableAssociation97140677": {
-      "Type": "AWS::EC2::SubnetRouteTableAssociation",
-      "Properties": {
-        "RouteTableId": {
-          "Ref": "VpcPublicSubnet1RouteTable6C95E38E"
-        },
-        "SubnetId": {
-          "Ref": "VpcPublicSubnet1Subnet5C2D37C4"
-        }
-      }
-    },
-    "VpcPublicSubnet1DefaultRoute3DA9E72A": {
-      "Type": "AWS::EC2::Route",
-      "Properties": {
-        "RouteTableId": {
-          "Ref": "VpcPublicSubnet1RouteTable6C95E38E"
-        },
-        "DestinationCidrBlock": "0.0.0.0/0",
-        "GatewayId": {
-          "Ref": "VpcIGWD7BA715C"
-        }
-      },
-      "DependsOn": [
-        "VpcVPCGWBF912B6E"
-      ]
-    },
-    "VpcPublicSubnet1EIPD7E02669": {
-      "Type": "AWS::EC2::EIP",
-      "Properties": {
-        "Domain": "vpc",
-        "Tags": [
-          {
-            "Key": "Name",
-            "Value": "RdsProxy/Vpc/PublicSubnet1"
-          }
-        ]
-      }
-    },
-    "VpcPublicSubnet1NATGateway4D7517AA": {
-      "Type": "AWS::EC2::NatGateway",
-      "Properties": {
-        "SubnetId": {
-          "Ref": "VpcPublicSubnet1Subnet5C2D37C4"
-        },
-        "AllocationId": {
-          "Fn::GetAtt": [
-            "VpcPublicSubnet1EIPD7E02669",
-            "AllocationId"
-          ]
-        },
-        "Tags": [
-          {
-            "Key": "Name",
-            "Value": "RdsProxy/Vpc/PublicSubnet1"
-          }
-        ]
-      }
-    },
-    "VpcPublicSubnet2Subnet691E08A3": {
-      "Type": "AWS::EC2::Subnet",
-      "Properties": {
-        "CidrBlock": "10.0.64.0/18",
-        "VpcId": {
-          "Ref": "Vpc8378EB38"
-        },
-        "AvailabilityZone": {
-          "Fn::Select": [
-            1,
-            {
-              "Fn::GetAZs": ""
-            }
-          ]
-        },
-        "MapPublicIpOnLaunch": true,
-        "Tags": [
-          {
-            "Key": "aws-cdk:subnet-name",
-            "Value": "Public"
-          },
-          {
-            "Key": "aws-cdk:subnet-type",
-            "Value": "Public"
-          },
-          {
-            "Key": "Name",
-            "Value": "RdsProxy/Vpc/PublicSubnet2"
-          }
-        ]
-      }
-    },
-    "VpcPublicSubnet2RouteTable94F7E489": {
-      "Type": "AWS::EC2::RouteTable",
-      "Properties": {
-        "VpcId": {
-          "Ref": "Vpc8378EB38"
-        },
-        "Tags": [
-          {
-            "Key": "Name",
-            "Value": "RdsProxy/Vpc/PublicSubnet2"
-          }
-        ]
-      }
-    },
-    "VpcPublicSubnet2RouteTableAssociationDD5762D8": {
-      "Type": "AWS::EC2::SubnetRouteTableAssociation",
-      "Properties": {
-        "RouteTableId": {
-          "Ref": "VpcPublicSubnet2RouteTable94F7E489"
-        },
-        "SubnetId": {
-          "Ref": "VpcPublicSubnet2Subnet691E08A3"
-        }
-      }
-    },
-    "VpcPublicSubnet2DefaultRoute97F91067": {
-      "Type": "AWS::EC2::Route",
-      "Properties": {
-        "RouteTableId": {
-          "Ref": "VpcPublicSubnet2RouteTable94F7E489"
-        },
-        "DestinationCidrBlock": "0.0.0.0/0",
-        "GatewayId": {
-          "Ref": "VpcIGWD7BA715C"
-        }
-      },
-      "DependsOn": [
-        "VpcVPCGWBF912B6E"
-      ]
-    },
-    "VpcPublicSubnet2EIP3C605A87": {
-      "Type": "AWS::EC2::EIP",
-      "Properties": {
-        "Domain": "vpc",
-        "Tags": [
-          {
-            "Key": "Name",
-            "Value": "RdsProxy/Vpc/PublicSubnet2"
-          }
-        ]
-      }
-    },
-    "VpcPublicSubnet2NATGateway9182C01D": {
-      "Type": "AWS::EC2::NatGateway",
-      "Properties": {
-        "SubnetId": {
-          "Ref": "VpcPublicSubnet2Subnet691E08A3"
-        },
-        "AllocationId": {
-          "Fn::GetAtt": [
-            "VpcPublicSubnet2EIP3C605A87",
-            "AllocationId"
-          ]
-        },
-        "Tags": [
-          {
-            "Key": "Name",
-            "Value": "RdsProxy/Vpc/PublicSubnet2"
-          }
-        ]
-      }
-    },
-    "VpcPrivateSubnet1Subnet536B997A": {
-      "Type": "AWS::EC2::Subnet",
-      "Properties": {
-        "CidrBlock": "10.0.128.0/18",
-        "VpcId": {
-          "Ref": "Vpc8378EB38"
-        },
-        "AvailabilityZone": {
-          "Fn::Select": [
-            0,
-            {
-              "Fn::GetAZs": ""
-            }
-          ]
-        },
-        "MapPublicIpOnLaunch": false,
-        "Tags": [
-          {
-            "Key": "aws-cdk:subnet-name",
-            "Value": "Private"
-          },
-          {
-            "Key": "aws-cdk:subnet-type",
-            "Value": "Private"
-          },
-          {
-            "Key": "Name",
-            "Value": "RdsProxy/Vpc/PrivateSubnet1"
-          }
-        ]
-      }
-    },
-    "VpcPrivateSubnet1RouteTableB2C5B500": {
-      "Type": "AWS::EC2::RouteTable",
-      "Properties": {
-        "VpcId": {
-          "Ref": "Vpc8378EB38"
-        },
-        "Tags": [
-          {
-            "Key": "Name",
-            "Value": "RdsProxy/Vpc/PrivateSubnet1"
-          }
-        ]
-      }
-    },
-    "VpcPrivateSubnet1RouteTableAssociation70C59FA6": {
-      "Type": "AWS::EC2::SubnetRouteTableAssociation",
-      "Properties": {
-        "RouteTableId": {
-          "Ref": "VpcPrivateSubnet1RouteTableB2C5B500"
-        },
-        "SubnetId": {
-          "Ref": "VpcPrivateSubnet1Subnet536B997A"
-        }
-      }
-    },
-    "VpcPrivateSubnet1DefaultRouteBE02A9ED": {
-      "Type": "AWS::EC2::Route",
-      "Properties": {
-        "RouteTableId": {
-          "Ref": "VpcPrivateSubnet1RouteTableB2C5B500"
-        },
-        "DestinationCidrBlock": "0.0.0.0/0",
-        "NatGatewayId": {
-          "Ref": "VpcPublicSubnet1NATGateway4D7517AA"
-        }
-      }
-    },
-    "VpcPrivateSubnet2Subnet3788AAA1": {
-      "Type": "AWS::EC2::Subnet",
-      "Properties": {
-        "CidrBlock": "10.0.192.0/18",
-        "VpcId": {
-          "Ref": "Vpc8378EB38"
-        },
-        "AvailabilityZone": {
-          "Fn::Select": [
-            1,
-            {
-              "Fn::GetAZs": ""
-            }
-          ]
-        },
-        "MapPublicIpOnLaunch": false,
-        "Tags": [
-          {
-            "Key": "aws-cdk:subnet-name",
-            "Value": "Private"
-          },
-          {
-            "Key": "aws-cdk:subnet-type",
-            "Value": "Private"
-          },
-          {
-            "Key": "Name",
-            "Value": "RdsProxy/Vpc/PrivateSubnet2"
-          }
-        ]
-      }
-    },
-    "VpcPrivateSubnet2RouteTableA678073B": {
-      "Type": "AWS::EC2::RouteTable",
-      "Properties": {
-        "VpcId": {
-          "Ref": "Vpc8378EB38"
-        },
-        "Tags": [
-          {
-            "Key": "Name",
-            "Value": "RdsProxy/Vpc/PrivateSubnet2"
-          }
-        ]
-      }
-    },
-    "VpcPrivateSubnet2RouteTableAssociationA89CAD56": {
-      "Type": "AWS::EC2::SubnetRouteTableAssociation",
-      "Properties": {
-        "RouteTableId": {
-          "Ref": "VpcPrivateSubnet2RouteTableA678073B"
-        },
-        "SubnetId": {
-          "Ref": "VpcPrivateSubnet2Subnet3788AAA1"
-        }
-      }
-    },
-    "VpcPrivateSubnet2DefaultRoute060D2087": {
-      "Type": "AWS::EC2::Route",
-      "Properties": {
-        "RouteTableId": {
-          "Ref": "VpcPrivateSubnet2RouteTableA678073B"
-        },
-        "DestinationCidrBlock": "0.0.0.0/0",
-        "NatGatewayId": {
-          "Ref": "VpcPublicSubnet2NATGateway9182C01D"
-        }
-      }
-    },
-    "VpcIGWD7BA715C": {
-      "Type": "AWS::EC2::InternetGateway",
-      "Properties": {
-        "Tags": [
-          {
-            "Key": "Name",
-            "Value": "RdsProxy/Vpc"
-          }
-        ]
-      }
-    },
-    "VpcVPCGWBF912B6E": {
-      "Type": "AWS::EC2::VPCGatewayAttachment",
-      "Properties": {
-        "VpcId": {
-          "Ref": "Vpc8378EB38"
-        },
-        "InternetGatewayId": {
-          "Ref": "VpcIGWD7BA715C"
-        }
-      }
-    },
-    "DBCredentialsSecretAFB45EA2": {
-      "Type": "AWS::SecretsManager::Secret",
-      "Properties": {
-        "GenerateSecretString": {
-          "ExcludePunctuation": true,
-          "GenerateStringKey": "password",
-          "IncludeSpace": false,
-          "SecretStringTemplate": "{\"username\":\"syscdk\"}"
-        },
-        "Name": "RdsProxy-rds-credentials"
-      },
-      "UpdateReplacePolicy": "Delete",
-      "DeletionPolicy": "Delete"
-    },
-    "DBCredentialsSecretAttachment8D28662C": {
-      "Type": "AWS::SecretsManager::SecretTargetAttachment",
-      "Properties": {
-        "SecretId": {
-          "Ref": "DBCredentialsSecretAFB45EA2"
-        },
-        "TargetId": {
-          "Ref": "DBInstance46641A50"
-        },
-        "TargetType": "AWS::RDS::DBInstance"
-      }
-    },
-    "DBCredentialsArn15122902": {
-      "Type": "AWS::SSM::Parameter",
-      "Properties": {
-        "Type": "String",
-        "Value": {
-          "Ref": "DBCredentialsSecretAFB45EA2"
-        },
-        "Name": "rds-credentials-arn"
-      }
-    },
-    "DBInstanceSubnetGroupF597B45B": {
-      "Type": "AWS::RDS::DBSubnetGroup",
-      "Properties": {
-        "DBSubnetGroupDescription": "Subnet group for DBInstance database",
-        "SubnetIds": [
-          {
-            "Ref": "VpcPrivateSubnet1Subnet536B997A"
-          },
-          {
-            "Ref": "VpcPrivateSubnet2Subnet3788AAA1"
-          }
-        ]
-      }
-    },
-    "DBInstanceSecurityGroup8BE42C36": {
-      "Type": "AWS::EC2::SecurityGroup",
-      "Properties": {
-        "GroupDescription": "Security group for DBInstance database",
-        "SecurityGroupEgress": [
-          {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all outbound traffic by default",
-            "IpProtocol": "-1"
+            "AttributeName": "booking_type",
+            "KeyType": "RANGE"
           }
         ],
-        "VpcId": {
-          "Ref": "Vpc8378EB38"
-        }
-      }
-    },
-    "DBInstanceSecurityGroupfromRdsProxyDBInstanceRdsProxyproxyProxySecurityGroupEB245284IndirectPort2EDC4D33": {
-      "Type": "AWS::EC2::SecurityGroupIngress",
-      "Properties": {
-        "IpProtocol": "tcp",
-        "Description": "Allow connections to the database Instance from the Proxy",
-        "FromPort": {
-          "Fn::GetAtt": [
-            "DBInstance46641A50",
-            "Endpoint.Port"
-          ]
-        },
-        "GroupId": {
-          "Fn::GetAtt": [
-            "DBInstanceSecurityGroup8BE42C36",
-            "GroupId"
-          ]
-        },
-        "SourceSecurityGroupId": {
-          "Fn::GetAtt": [
-            "DBInstanceRdsProxyproxyProxySecurityGroupCC1FF042",
-            "GroupId"
-          ]
-        },
-        "ToPort": {
-          "Fn::GetAtt": [
-            "DBInstance46641A50",
-            "Endpoint.Port"
-          ]
-        }
-      }
-    },
-    "DBInstanceSecurityGroupfromRdsProxyDBInstanceRdsProxyproxyProxySecurityGroupEB24528433068C96F3BC": {
-      "Type": "AWS::EC2::SecurityGroupIngress",
-      "Properties": {
-        "IpProtocol": "tcp",
-        "Description": "allow db connection",
-        "FromPort": 3306,
-        "GroupId": {
-          "Fn::GetAtt": [
-            "DBInstanceSecurityGroup8BE42C36",
-            "GroupId"
-          ]
-        },
-        "SourceSecurityGroupId": {
-          "Fn::GetAtt": [
-            "DBInstanceRdsProxyproxyProxySecurityGroupCC1FF042",
-            "GroupId"
-          ]
-        },
-        "ToPort": 3306
-      }
-    },
-    "DBInstanceSecurityGroupfromRdsProxyrdsSecurityGroup612B5BD233067BAE4BA5": {
-      "Type": "AWS::EC2::SecurityGroupIngress",
-      "Properties": {
-        "IpProtocol": "tcp",
-        "Description": "allow lambda connection",
-        "FromPort": 3306,
-        "GroupId": {
-          "Fn::GetAtt": [
-            "DBInstanceSecurityGroup8BE42C36",
-            "GroupId"
-          ]
-        },
-        "SourceSecurityGroupId": {
-          "Fn::GetAtt": [
-            "rdsSecurityGroup68A57640",
-            "GroupId"
-          ]
-        },
-        "ToPort": 3306
-      }
-    },
-    "DBInstance46641A50": {
-      "Type": "AWS::RDS::DBInstance",
-      "Properties": {
-        "DBInstanceClass": "db.t2.small",
-        "AllocatedStorage": "100",
-        "CopyTagsToSnapshot": true,
-        "DBSubnetGroupName": {
-          "Ref": "DBInstanceSubnetGroupF597B45B"
-        },
-        "DeletionProtection": false,
-        "Engine": "mysql",
-        "EngineVersion": "5.7.30",
-        "MasterUsername": {
-          "Fn::Join": [
-            "",
-            [
-              "{{resolve:secretsmanager:",
-              {
-                "Ref": "DBCredentialsSecretAFB45EA2"
-              },
-              ":SecretString:username::}}"
-            ]
-          ]
-        },
-        "MasterUserPassword": {
-          "Fn::Join": [
-            "",
-            [
-              "{{resolve:secretsmanager:",
-              {
-                "Ref": "DBCredentialsSecretAFB45EA2"
-              },
-              ":SecretString:password::}}"
-            ]
-          ]
-        },
-        "StorageType": "gp2",
-        "VPCSecurityGroups": [
+        "AttributeDefinitions": [
           {
-            "Fn::GetAtt": [
-              "DBInstanceSecurityGroup8BE42C36",
-              "GroupId"
-            ]
+            "AttributeName": "booking_id",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "booking_type",
+            "AttributeType": "S"
           }
-        ]
+        ],
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 5,
+          "WriteCapacityUnits": 5
+        }
       },
-      "UpdateReplacePolicy": "Delete",
-      "DeletionPolicy": "Delete"
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain"
     },
-    "DBInstanceRdsProxyproxyIAMRole4CB97C4E": {
-      "Type": "AWS::IAM::Role",
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "rds.amazonaws.com"
-              }
-            }
-          ],
-          "Version": "2012-10-17"
-        }
-      }
-    },
-    "DBInstanceRdsProxyproxyIAMRoleDefaultPolicyB79610A3": {
-      "Type": "AWS::IAM::Policy",
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "secretsmanager:GetSecretValue",
-                "secretsmanager:DescribeSecret"
-              ],
-              "Effect": "Allow",
-              "Resource": {
-                "Ref": "DBCredentialsSecretAFB45EA2"
-              }
-            }
-          ],
-          "Version": "2012-10-17"
-        },
-        "PolicyName": "DBInstanceRdsProxyproxyIAMRoleDefaultPolicyB79610A3",
-        "Roles": [
-          {
-            "Ref": "DBInstanceRdsProxyproxyIAMRole4CB97C4E"
-          }
-        ]
-      }
-    },
-    "DBInstanceRdsProxyproxyProxySecurityGroupCC1FF042": {
-      "Type": "AWS::EC2::SecurityGroup",
-      "Properties": {
-        "GroupDescription": "SecurityGroup for Database Proxy",
-        "SecurityGroupEgress": [
-          {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all outbound traffic by default",
-            "IpProtocol": "-1"
-          }
-        ],
-        "VpcId": {
-          "Ref": "Vpc8378EB38"
-        }
-      }
-    },
-    "DBInstanceRdsProxyproxy27D968E8": {
-      "Type": "AWS::RDS::DBProxy",
-      "Properties": {
-        "Auth": [
-          {
-            "AuthScheme": "SECRETS",
-            "IAMAuth": "DISABLED",
-            "SecretArn": {
-              "Ref": "DBCredentialsSecretAFB45EA2"
-            }
-          }
-        ],
-        "DBProxyName": "RdsProxy-proxy",
-        "EngineFamily": "MYSQL",
-        "RoleArn": {
-          "Fn::GetAtt": [
-            "DBInstanceRdsProxyproxyIAMRole4CB97C4E",
-            "Arn"
-          ]
-        },
-        "VpcSubnetIds": [
-          {
-            "Ref": "VpcPrivateSubnet1Subnet536B997A"
-          },
-          {
-            "Ref": "VpcPrivateSubnet2Subnet3788AAA1"
-          }
-        ],
-        "DebugLogging": true,
-        "RequireTLS": true,
-        "VpcSecurityGroupIds": [
-          {
-            "Fn::GetAtt": [
-              "DBInstanceRdsProxyproxyProxySecurityGroupCC1FF042",
-              "GroupId"
-            ]
-          }
-        ]
-      }
-    },
-    "DBInstanceRdsProxyproxyProxyTargetGroupA20BD07F": {
-      "Type": "AWS::RDS::DBProxyTargetGroup",
-      "Properties": {
-        "DBProxyName": {
-          "Ref": "DBInstanceRdsProxyproxy27D968E8"
-        },
-        "TargetGroupName": "default",
-        "ConnectionPoolConfigurationInfo": {},
-        "DBInstanceIdentifiers": [
-          {
-            "Ref": "DBInstance46641A50"
-          }
-        ]
-      }
-    },
-    "rdsErrorTopic9DEB559C": {
-      "Type": "AWS::SNS::Topic",
-      "Properties": {
-        "DisplayName": "ErrorTopic"
-      }
-    },
-    "rdsawsxraysdkLambdaLayer270D45E6": {
-      "Type": "AWS::Lambda::LayerVersion",
-      "Properties": {
-        "Content": {
-          "S3Bucket": {
-            "Ref": "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3BucketC7A2EC7F"
-          },
-          "S3Key": {
-            "Fn::Join": [
-              "",
-              [
-                {
-                  "Fn::Select": [
-                    0,
-                    {
-                      "Fn::Split": [
-                        "||",
-                        {
-                          "Ref": "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3VersionKeyF23940AD"
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "Fn::Select": [
-                    1,
-                    {
-                      "Fn::Split": [
-                        "||",
-                        {
-                          "Ref": "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3VersionKeyF23940AD"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            ]
-          }
-        },
-        "Description": "AWS XRay SDK Lambda Layer"
-      }
-    },
-    "rdsServiceRole5D510015": {
+    "flightsreserveflightServiceRole459CF800": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -762,78 +58,60 @@
                 ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
               ]
             ]
-          },
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition"
-                },
-                ":iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
-              ]
-            ]
           }
         ]
       }
     },
-    "rdsServiceRoleDefaultPolicy8EE3CC79": {
+    "flightsreserveflightServiceRoleDefaultPolicy1B185C71": {
       "Type": "AWS::IAM::Policy",
       "Properties": {
         "PolicyDocument": {
           "Statement": [
             {
               "Action": [
-                "xray:PutTraceSegments",
-                "xray:PutTelemetryRecords"
+                "dynamodb:BatchGetItem",
+                "dynamodb:GetRecords",
+                "dynamodb:GetShardIterator",
+                "dynamodb:Query",
+                "dynamodb:GetItem",
+                "dynamodb:Scan",
+                "dynamodb:ConditionCheckItem",
+                "dynamodb:BatchWriteItem",
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem",
+                "dynamodb:DeleteItem",
+                "dynamodb:DescribeTable"
               ],
               "Effect": "Allow",
-              "Resource": "*"
-            },
-            {
-              "Action": [
-                "secretsmanager:GetSecretValue",
-                "secretsmanager:DescribeSecret"
-              ],
-              "Effect": "Allow",
-              "Resource": {
-                "Ref": "DBCredentialsSecretAFB45EA2"
-              }
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "BookingsB1C24132",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Ref": "AWS::NoValue"
+                }
+              ]
             }
           ],
           "Version": "2012-10-17"
         },
-        "PolicyName": "rdsServiceRoleDefaultPolicy8EE3CC79",
+        "PolicyName": "flightsreserveflightServiceRoleDefaultPolicy1B185C71",
         "Roles": [
           {
-            "Ref": "rdsServiceRole5D510015"
+            "Ref": "flightsreserveflightServiceRole459CF800"
           }
         ]
       }
     },
-    "rdsSecurityGroup68A57640": {
-      "Type": "AWS::EC2::SecurityGroup",
-      "Properties": {
-        "GroupDescription": "Automatic security group for Lambda Function RdsProxyrds0E25E2F7",
-        "SecurityGroupEgress": [
-          {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all outbound traffic by default",
-            "IpProtocol": "-1"
-          }
-        ],
-        "VpcId": {
-          "Ref": "Vpc8378EB38"
-        }
-      }
-    },
-    "rds169785B9": {
+    "flightsreserveflight7BBF8BFB": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": {
-            "Ref": "AssetParametersef6ac2b9601673d31e1e2071a9a1b3f9ab84564c0a952916e86b3444e0efe8d0S3Bucket90873A8D"
+            "Ref": "AssetParameters21d94be1cd6f1e9584629e926200f4dbfcc73c09a2dfcd6f984254297c59c9f1S3Bucket3E022A35"
           },
           "S3Key": {
             "Fn::Join": [
@@ -846,7 +124,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParametersef6ac2b9601673d31e1e2071a9a1b3f9ab84564c0a952916e86b3444e0efe8d0S3VersionKeyBB5EBAE6"
+                          "Ref": "AssetParameters21d94be1cd6f1e9584629e926200f4dbfcc73c09a2dfcd6f984254297c59c9f1S3VersionKey2F48AA09"
                         }
                       ]
                     }
@@ -859,7 +137,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParametersef6ac2b9601673d31e1e2071a9a1b3f9ab84564c0a952916e86b3444e0efe8d0S3VersionKeyBB5EBAE6"
+                          "Ref": "AssetParameters21d94be1cd6f1e9584629e926200f4dbfcc73c09a2dfcd6f984254297c59c9f1S3VersionKey2F48AA09"
                         }
                       ]
                     }
@@ -871,274 +149,1434 @@
         },
         "Role": {
           "Fn::GetAtt": [
-            "rdsServiceRole5D510015",
+            "flightsreserveflightServiceRole459CF800",
             "Arn"
           ]
         },
         "Environment": {
           "Variables": {
-            "PROXY_ENDPOINT": {
-              "Fn::GetAtt": [
-                "DBInstanceRdsProxyproxy27D968E8",
-                "Endpoint"
-              ]
-            },
-            "RDS_SECRET_NAME": "RdsProxy-rds-credentials"
+            "TABLE_NAME": {
+              "Ref": "BookingsB1C24132"
+            }
           }
         },
-        "Handler": "rds.handler",
-        "Layers": [
-          {
-            "Ref": "rdsawsxraysdkLambdaLayer270D45E6"
-          }
-        ],
-        "Runtime": "python3.9",
-        "Timeout": 60,
-        "TracingConfig": {
-          "Mode": "Active"
-        },
-        "VpcConfig": {
-          "SecurityGroupIds": [
+        "Handler": "flights/reserve_flight.handler",
+        "Runtime": "python3.9"
+      },
+      "DependsOn": [
+        "flightsreserveflightServiceRoleDefaultPolicy1B185C71",
+        "flightsreserveflightServiceRole459CF800"
+      ]
+    },
+    "flightsconfirmflightServiceRole8EE7591E": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
             {
-              "Fn::GetAtt": [
-                "rdsSecurityGroup68A57640",
-                "GroupId"
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    "flightsconfirmflightServiceRoleDefaultPolicy7D2EFC6B": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "dynamodb:BatchGetItem",
+                "dynamodb:GetRecords",
+                "dynamodb:GetShardIterator",
+                "dynamodb:Query",
+                "dynamodb:GetItem",
+                "dynamodb:Scan",
+                "dynamodb:ConditionCheckItem",
+                "dynamodb:BatchWriteItem",
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem",
+                "dynamodb:DeleteItem",
+                "dynamodb:DescribeTable"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "BookingsB1C24132",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Ref": "AWS::NoValue"
+                }
               ]
             }
           ],
-          "SubnetIds": [
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "flightsconfirmflightServiceRoleDefaultPolicy7D2EFC6B",
+        "Roles": [
+          {
+            "Ref": "flightsconfirmflightServiceRole8EE7591E"
+          }
+        ]
+      }
+    },
+    "flightsconfirmflightB34E7CA3": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "AssetParametersa6312e522fdac75cf679d858da6b2140b80c0a41a5a5042dd66e5107822158e1S3BucketA04CBF2C"
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersa6312e522fdac75cf679d858da6b2140b80c0a41a5a5042dd66e5107822158e1S3VersionKeyEBC898C0"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersa6312e522fdac75cf679d858da6b2140b80c0a41a5a5042dd66e5107822158e1S3VersionKeyEBC898C0"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "flightsconfirmflightServiceRole8EE7591E",
+            "Arn"
+          ]
+        },
+        "Environment": {
+          "Variables": {
+            "TABLE_NAME": {
+              "Ref": "BookingsB1C24132"
+            }
+          }
+        },
+        "Handler": "flights/confirm_flight.handler",
+        "Runtime": "python3.9"
+      },
+      "DependsOn": [
+        "flightsconfirmflightServiceRoleDefaultPolicy7D2EFC6B",
+        "flightsconfirmflightServiceRole8EE7591E"
+      ]
+    },
+    "flightscancelflightServiceRole603CBD39": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
             {
-              "Ref": "VpcPrivateSubnet1Subnet536B997A"
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    "flightscancelflightServiceRoleDefaultPolicy18C7A4AA": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "dynamodb:BatchGetItem",
+                "dynamodb:GetRecords",
+                "dynamodb:GetShardIterator",
+                "dynamodb:Query",
+                "dynamodb:GetItem",
+                "dynamodb:Scan",
+                "dynamodb:ConditionCheckItem",
+                "dynamodb:BatchWriteItem",
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem",
+                "dynamodb:DeleteItem",
+                "dynamodb:DescribeTable"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "BookingsB1C24132",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Ref": "AWS::NoValue"
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "flightscancelflightServiceRoleDefaultPolicy18C7A4AA",
+        "Roles": [
+          {
+            "Ref": "flightscancelflightServiceRole603CBD39"
+          }
+        ]
+      }
+    },
+    "flightscancelflight9A89BA1E": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "AssetParameters571216cd7f11585818ba1d193eef4ee16654561388c1b555eb2690ff4f1c806cS3Bucket47E7D758"
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParameters571216cd7f11585818ba1d193eef4ee16654561388c1b555eb2690ff4f1c806cS3VersionKey74AA7B04"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParameters571216cd7f11585818ba1d193eef4ee16654561388c1b555eb2690ff4f1c806cS3VersionKey74AA7B04"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "flightscancelflightServiceRole603CBD39",
+            "Arn"
+          ]
+        },
+        "Environment": {
+          "Variables": {
+            "TABLE_NAME": {
+              "Ref": "BookingsB1C24132"
+            }
+          }
+        },
+        "Handler": "flights/cancel_flight.handler",
+        "Runtime": "python3.9"
+      },
+      "DependsOn": [
+        "flightscancelflightServiceRoleDefaultPolicy18C7A4AA",
+        "flightscancelflightServiceRole603CBD39"
+      ]
+    },
+    "hotelsreservehotelServiceRole1ACFB547": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    "hotelsreservehotelServiceRoleDefaultPolicyFB075FCE": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "dynamodb:BatchGetItem",
+                "dynamodb:GetRecords",
+                "dynamodb:GetShardIterator",
+                "dynamodb:Query",
+                "dynamodb:GetItem",
+                "dynamodb:Scan",
+                "dynamodb:ConditionCheckItem",
+                "dynamodb:BatchWriteItem",
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem",
+                "dynamodb:DeleteItem",
+                "dynamodb:DescribeTable"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "BookingsB1C24132",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Ref": "AWS::NoValue"
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "hotelsreservehotelServiceRoleDefaultPolicyFB075FCE",
+        "Roles": [
+          {
+            "Ref": "hotelsreservehotelServiceRole1ACFB547"
+          }
+        ]
+      }
+    },
+    "hotelsreservehotelA484A091": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "AssetParameters80b93102fd04fb862350ac228ce183fa7ca4ca64eabd21c76d471e884f8d647dS3Bucket3D4A4822"
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParameters80b93102fd04fb862350ac228ce183fa7ca4ca64eabd21c76d471e884f8d647dS3VersionKey1B4D60E9"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParameters80b93102fd04fb862350ac228ce183fa7ca4ca64eabd21c76d471e884f8d647dS3VersionKey1B4D60E9"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "hotelsreservehotelServiceRole1ACFB547",
+            "Arn"
+          ]
+        },
+        "Environment": {
+          "Variables": {
+            "TABLE_NAME": {
+              "Ref": "BookingsB1C24132"
+            }
+          }
+        },
+        "Handler": "hotels/reserve_hotel.handler",
+        "Runtime": "python3.9"
+      },
+      "DependsOn": [
+        "hotelsreservehotelServiceRoleDefaultPolicyFB075FCE",
+        "hotelsreservehotelServiceRole1ACFB547"
+      ]
+    },
+    "hotelsconfirmhotelServiceRole597261A7": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    "hotelsconfirmhotelServiceRoleDefaultPolicy245DE7C3": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "dynamodb:BatchGetItem",
+                "dynamodb:GetRecords",
+                "dynamodb:GetShardIterator",
+                "dynamodb:Query",
+                "dynamodb:GetItem",
+                "dynamodb:Scan",
+                "dynamodb:ConditionCheckItem",
+                "dynamodb:BatchWriteItem",
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem",
+                "dynamodb:DeleteItem",
+                "dynamodb:DescribeTable"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "BookingsB1C24132",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Ref": "AWS::NoValue"
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "hotelsconfirmhotelServiceRoleDefaultPolicy245DE7C3",
+        "Roles": [
+          {
+            "Ref": "hotelsconfirmhotelServiceRole597261A7"
+          }
+        ]
+      }
+    },
+    "hotelsconfirmhotelFEB4E4E0": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "AssetParameters853370a8eaae63cd4861c94053f03abf4979bbba53a3d5ab1d889804314a4c8eS3Bucket3024AA13"
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParameters853370a8eaae63cd4861c94053f03abf4979bbba53a3d5ab1d889804314a4c8eS3VersionKeyED8455E9"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParameters853370a8eaae63cd4861c94053f03abf4979bbba53a3d5ab1d889804314a4c8eS3VersionKeyED8455E9"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "hotelsconfirmhotelServiceRole597261A7",
+            "Arn"
+          ]
+        },
+        "Environment": {
+          "Variables": {
+            "TABLE_NAME": {
+              "Ref": "BookingsB1C24132"
+            }
+          }
+        },
+        "Handler": "hotels/confirm_hotel.handler",
+        "Runtime": "python3.9"
+      },
+      "DependsOn": [
+        "hotelsconfirmhotelServiceRoleDefaultPolicy245DE7C3",
+        "hotelsconfirmhotelServiceRole597261A7"
+      ]
+    },
+    "hotelscancelhotelServiceRoleF9095220": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    "hotelscancelhotelServiceRoleDefaultPolicyA153E70B": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "dynamodb:BatchGetItem",
+                "dynamodb:GetRecords",
+                "dynamodb:GetShardIterator",
+                "dynamodb:Query",
+                "dynamodb:GetItem",
+                "dynamodb:Scan",
+                "dynamodb:ConditionCheckItem",
+                "dynamodb:BatchWriteItem",
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem",
+                "dynamodb:DeleteItem",
+                "dynamodb:DescribeTable"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "BookingsB1C24132",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Ref": "AWS::NoValue"
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "hotelscancelhotelServiceRoleDefaultPolicyA153E70B",
+        "Roles": [
+          {
+            "Ref": "hotelscancelhotelServiceRoleF9095220"
+          }
+        ]
+      }
+    },
+    "hotelscancelhotelC5FA4E93": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "AssetParameters57c357630371a89d83bda227de1baa80bfc09d5c8e8ce527c21578f38db7c223S3Bucket80DF54C7"
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParameters57c357630371a89d83bda227de1baa80bfc09d5c8e8ce527c21578f38db7c223S3VersionKey16031C41"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParameters57c357630371a89d83bda227de1baa80bfc09d5c8e8ce527c21578f38db7c223S3VersionKey16031C41"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "hotelscancelhotelServiceRoleF9095220",
+            "Arn"
+          ]
+        },
+        "Environment": {
+          "Variables": {
+            "TABLE_NAME": {
+              "Ref": "BookingsB1C24132"
+            }
+          }
+        },
+        "Handler": "hotels/cancel_hotel.handler",
+        "Runtime": "python3.9"
+      },
+      "DependsOn": [
+        "hotelscancelhotelServiceRoleDefaultPolicyA153E70B",
+        "hotelscancelhotelServiceRoleF9095220"
+      ]
+    },
+    "paymentsprocesspaymentServiceRoleBB5F393F": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    "paymentsprocesspaymentServiceRoleDefaultPolicy8E1EEEF2": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "dynamodb:BatchGetItem",
+                "dynamodb:GetRecords",
+                "dynamodb:GetShardIterator",
+                "dynamodb:Query",
+                "dynamodb:GetItem",
+                "dynamodb:Scan",
+                "dynamodb:ConditionCheckItem",
+                "dynamodb:BatchWriteItem",
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem",
+                "dynamodb:DeleteItem",
+                "dynamodb:DescribeTable"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "BookingsB1C24132",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Ref": "AWS::NoValue"
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "paymentsprocesspaymentServiceRoleDefaultPolicy8E1EEEF2",
+        "Roles": [
+          {
+            "Ref": "paymentsprocesspaymentServiceRoleBB5F393F"
+          }
+        ]
+      }
+    },
+    "paymentsprocesspayment7E58198E": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "AssetParameters55b78720c0af0f63c9f4b613722fad90fa99e383187204d04794f0c5f415b184S3Bucket3E8B1462"
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParameters55b78720c0af0f63c9f4b613722fad90fa99e383187204d04794f0c5f415b184S3VersionKeyA481D7A4"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParameters55b78720c0af0f63c9f4b613722fad90fa99e383187204d04794f0c5f415b184S3VersionKeyA481D7A4"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "paymentsprocesspaymentServiceRoleBB5F393F",
+            "Arn"
+          ]
+        },
+        "Environment": {
+          "Variables": {
+            "TABLE_NAME": {
+              "Ref": "BookingsB1C24132"
+            }
+          }
+        },
+        "Handler": "payments/process_payment.handler",
+        "Runtime": "python3.9"
+      },
+      "DependsOn": [
+        "paymentsprocesspaymentServiceRoleDefaultPolicy8E1EEEF2",
+        "paymentsprocesspaymentServiceRoleBB5F393F"
+      ]
+    },
+    "paymentsrefundpaymentServiceRole1B32383A": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    "paymentsrefundpaymentServiceRoleDefaultPolicy91B6B6D7": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "dynamodb:BatchGetItem",
+                "dynamodb:GetRecords",
+                "dynamodb:GetShardIterator",
+                "dynamodb:Query",
+                "dynamodb:GetItem",
+                "dynamodb:Scan",
+                "dynamodb:ConditionCheckItem",
+                "dynamodb:BatchWriteItem",
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem",
+                "dynamodb:DeleteItem",
+                "dynamodb:DescribeTable"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "BookingsB1C24132",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Ref": "AWS::NoValue"
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "paymentsrefundpaymentServiceRoleDefaultPolicy91B6B6D7",
+        "Roles": [
+          {
+            "Ref": "paymentsrefundpaymentServiceRole1B32383A"
+          }
+        ]
+      }
+    },
+    "paymentsrefundpaymentA1B2703D": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "AssetParametersd55dc2d20e821cf430803e0ab5e2f1aac99ef8c9b7833283c004da8d6c5e011eS3Bucket3BD8913D"
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersd55dc2d20e821cf430803e0ab5e2f1aac99ef8c9b7833283c004da8d6c5e011eS3VersionKeyC6356719"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersd55dc2d20e821cf430803e0ab5e2f1aac99ef8c9b7833283c004da8d6c5e011eS3VersionKeyC6356719"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "paymentsrefundpaymentServiceRole1B32383A",
+            "Arn"
+          ]
+        },
+        "Environment": {
+          "Variables": {
+            "TABLE_NAME": {
+              "Ref": "BookingsB1C24132"
+            }
+          }
+        },
+        "Handler": "payments/refund_payment.handler",
+        "Runtime": "python3.9"
+      },
+      "DependsOn": [
+        "paymentsrefundpaymentServiceRoleDefaultPolicy91B6B6D7",
+        "paymentsrefundpaymentServiceRole1B32383A"
+      ]
+    },
+    "BookingSagaRole82982544": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": {
+                  "Fn::FindInMap": [
+                    "ServiceprincipalMap",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    "states"
+                  ]
+                }
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      }
+    },
+    "BookingSagaRoleDefaultPolicy6595FE9E": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "hotelsreservehotelA484A091",
+                  "Arn"
+                ]
+              }
             },
             {
-              "Ref": "VpcPrivateSubnet2Subnet3788AAA1"
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "flightsreserveflight7BBF8BFB",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "paymentsprocesspayment7E58198E",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "hotelsconfirmhotelFEB4E4E0",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "flightsconfirmflightB34E7CA3",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "paymentsrefundpaymentA1B2703D",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "flightscancelflight9A89BA1E",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "hotelscancelhotelC5FA4E93",
+                  "Arn"
+                ]
+              }
             }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "BookingSagaRoleDefaultPolicy6595FE9E",
+        "Roles": [
+          {
+            "Ref": "BookingSagaRole82982544"
+          }
+        ]
+      }
+    },
+    "BookingSagaFA991213": {
+      "Type": "AWS::StepFunctions::StateMachine",
+      "Properties": {
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "BookingSagaRole82982544",
+            "Arn"
+          ]
+        },
+        "DefinitionString": {
+          "Fn::Join": [
+            "",
+            [
+              "{\"StartAt\":\"ReserveHotel\",\"States\":{\"ReserveHotel\":{\"Next\":\"ReserveFlight\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Catch\":[{\"ErrorEquals\":[\"States.ALL\"],\"ResultPath\":\"$.ReserveHotelError\",\"Next\":\"CancelHotelReservation\"}],\"Type\":\"Task\",\"ResultPath\":\"$.ReserveHotelResult\",\"Resource\":\"arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":states:::lambda:invoke\",\"Parameters\":{\"FunctionName\":\"",
+              {
+                "Fn::GetAtt": [
+                  "hotelsreservehotelA484A091",
+                  "Arn"
+                ]
+              },
+              "\",\"Payload.$\":\"$\"}},\"ReserveFlight\":{\"Next\":\"TakePayment\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Catch\":[{\"ErrorEquals\":[\"States.ALL\"],\"ResultPath\":\"$.ReserveFlightError\",\"Next\":\"CancelFlightReservation\"}],\"Type\":\"Task\",\"ResultPath\":\"$.ReserveFlightResult\",\"Resource\":\"arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":states:::lambda:invoke\",\"Parameters\":{\"FunctionName\":\"",
+              {
+                "Fn::GetAtt": [
+                  "flightsreserveflight7BBF8BFB",
+                  "Arn"
+                ]
+              },
+              "\",\"Payload.$\":\"$\"}},\"TakePayment\":{\"Next\":\"ConfirmHotelBooking\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Catch\":[{\"ErrorEquals\":[\"States.ALL\"],\"ResultPath\":\"$.TakePaymentError\",\"Next\":\"RefundPayment\"}],\"Type\":\"Task\",\"ResultPath\":\"$.TakePaymentResult\",\"Resource\":\"arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":states:::lambda:invoke\",\"Parameters\":{\"FunctionName\":\"",
+              {
+                "Fn::GetAtt": [
+                  "paymentsprocesspayment7E58198E",
+                  "Arn"
+                ]
+              },
+              "\",\"Payload.$\":\"$\"}},\"ConfirmHotelBooking\":{\"Next\":\"ConfirmFlight\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Catch\":[{\"ErrorEquals\":[\"States.ALL\"],\"ResultPath\":\"$.ConfirmHotelBookingError\",\"Next\":\"RefundPayment\"}],\"Type\":\"Task\",\"ResultPath\":\"$.ConfirmHotelBookingResult\",\"Resource\":\"arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":states:::lambda:invoke\",\"Parameters\":{\"FunctionName\":\"",
+              {
+                "Fn::GetAtt": [
+                  "hotelsconfirmhotelFEB4E4E0",
+                  "Arn"
+                ]
+              },
+              "\",\"Payload.$\":\"$\"}},\"ConfirmFlight\":{\"Next\":\"We have made your booking!\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Catch\":[{\"ErrorEquals\":[\"States.ALL\"],\"ResultPath\":\"$.ConfirmFlightError\",\"Next\":\"RefundPayment\"}],\"Type\":\"Task\",\"ResultPath\":\"$.ConfirmFlightResult\",\"Resource\":\"arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":states:::lambda:invoke\",\"Parameters\":{\"FunctionName\":\"",
+              {
+                "Fn::GetAtt": [
+                  "flightsconfirmflightB34E7CA3",
+                  "Arn"
+                ]
+              },
+              "\",\"Payload.$\":\"$\"}},\"We have made your booking!\":{\"Type\":\"Succeed\"},\"RefundPayment\":{\"Next\":\"CancelFlightReservation\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"States.ALL\"],\"MaxAttempts\":3}],\"Type\":\"Task\",\"ResultPath\":\"$.RefundPaymentResult\",\"Resource\":\"arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":states:::lambda:invoke\",\"Parameters\":{\"FunctionName\":\"",
+              {
+                "Fn::GetAtt": [
+                  "paymentsrefundpaymentA1B2703D",
+                  "Arn"
+                ]
+              },
+              "\",\"Payload.$\":\"$\"}},\"CancelFlightReservation\":{\"Next\":\"CancelHotelReservation\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"States.ALL\"],\"MaxAttempts\":3}],\"Type\":\"Task\",\"ResultPath\":\"$.CancelFlightReservationResult\",\"Resource\":\"arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":states:::lambda:invoke\",\"Parameters\":{\"FunctionName\":\"",
+              {
+                "Fn::GetAtt": [
+                  "flightscancelflight9A89BA1E",
+                  "Arn"
+                ]
+              },
+              "\",\"Payload.$\":\"$\"}},\"CancelHotelReservation\":{\"Next\":\"Sorry, We Couldn't make the booking\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"States.ALL\"],\"MaxAttempts\":3}],\"Type\":\"Task\",\"ResultPath\":\"$.CancelHotelReservationResult\",\"Resource\":\"arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":states:::lambda:invoke\",\"Parameters\":{\"FunctionName\":\"",
+              {
+                "Fn::GetAtt": [
+                  "hotelscancelhotelC5FA4E93",
+                  "Arn"
+                ]
+              },
+              "\",\"Payload.$\":\"$\"}},\"Sorry, We Couldn't make the booking\":{\"Type\":\"Fail\"}},\"TimeoutSeconds\":300}"
+            ]
           ]
         }
       },
       "DependsOn": [
-        "rdsServiceRoleDefaultPolicy8EE3CC79",
-        "rdsServiceRole5D510015"
+        "BookingSagaRoleDefaultPolicy6595FE9E",
+        "BookingSagaRole82982544"
       ]
     },
-    "rdsLambdainvocationErrors2B1E933C4": {
-      "Type": "AWS::CloudWatch::Alarm",
+    "sagaLambdaHandlerServiceRole7EB685BD": {
+      "Type": "AWS::IAM::Role",
       "Properties": {
-        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
-        "EvaluationPeriods": 6,
-        "AlarmActions": [
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
           {
-            "Ref": "rdsErrorTopic9DEB559C"
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
           }
-        ],
-        "DatapointsToAlarm": 1,
-        "Metrics": [
-          {
-            "Expression": "(errors / invocations) * 100",
-            "Id": "expr_1",
-            "Label": "% of invocations that errored, last 5 mins"
-          },
-          {
-            "Id": "invocations",
-            "MetricStat": {
-              "Metric": {
-                "Dimensions": [
-                  {
-                    "Name": "FunctionName",
-                    "Value": {
-                      "Ref": "rds169785B9"
-                    }
-                  }
-                ],
-                "MetricName": "Invocations",
-                "Namespace": "AWS/Lambda"
-              },
-              "Period": 300,
-              "Stat": "Sum"
-            },
-            "ReturnData": false
-          },
-          {
-            "Id": "errors",
-            "MetricStat": {
-              "Metric": {
-                "Dimensions": [
-                  {
-                    "Name": "FunctionName",
-                    "Value": {
-                      "Ref": "rds169785B9"
-                    }
-                  }
-                ],
-                "MetricName": "Errors",
-                "Namespace": "AWS/Lambda"
-              },
-              "Period": 300,
-              "Stat": "Sum"
-            },
-            "ReturnData": false
-          }
-        ],
-        "Threshold": 2,
-        "TreatMissingData": "notBreaching"
+        ]
       }
     },
-    "rdsLambdap99LongDuration1s71246B50": {
-      "Type": "AWS::CloudWatch::Alarm",
+    "sagaLambdaHandlerServiceRoleDefaultPolicyFE9A40F4": {
+      "Type": "AWS::IAM::Policy",
       "Properties": {
-        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
-        "EvaluationPeriods": 6,
-        "AlarmActions": [
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "states:StartExecution",
+              "Effect": "Allow",
+              "Resource": {
+                "Ref": "BookingSagaFA991213"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "sagaLambdaHandlerServiceRoleDefaultPolicyFE9A40F4",
+        "Roles": [
           {
-            "Ref": "rdsErrorTopic9DEB559C"
+            "Ref": "sagaLambdaHandlerServiceRole7EB685BD"
           }
-        ],
-        "DatapointsToAlarm": 1,
-        "Dimensions": [
-          {
-            "Name": "FunctionName",
-            "Value": {
-              "Ref": "rds169785B9"
+        ]
+      }
+    },
+    "sagaLambdaHandlerFC24742F": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "AssetParameters683bb4504495e9f5cfe9e568c2ba88c37bbcc2399063b48f9a9500e0eee67a95S3BucketD0E33F9C"
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParameters683bb4504495e9f5cfe9e568c2ba88c37bbcc2399063b48f9a9500e0eee67a95S3VersionKey6E074EFA"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParameters683bb4504495e9f5cfe9e568c2ba88c37bbcc2399063b48f9a9500e0eee67a95S3VersionKey6E074EFA"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "sagaLambdaHandlerServiceRole7EB685BD",
+            "Arn"
+          ]
+        },
+        "Environment": {
+          "Variables": {
+            "statemachine_arn": {
+              "Ref": "BookingSagaFA991213"
             }
           }
-        ],
-        "ExtendedStatistic": "p99",
-        "MetricName": "Duration",
-        "Namespace": "AWS/Lambda",
-        "Period": 300,
-        "Threshold": 1000,
-        "TreatMissingData": "notBreaching"
+        },
+        "Handler": "saga_lambda.handler",
+        "Runtime": "python3.9"
+      },
+      "DependsOn": [
+        "sagaLambdaHandlerServiceRoleDefaultPolicyFE9A40F4",
+        "sagaLambdaHandlerServiceRole7EB685BD"
+      ]
+    },
+    "SagaPatternSingleTable288D85B3": {
+      "Type": "AWS::ApiGateway::RestApi",
+      "Properties": {
+        "Name": "SagaPatternSingleTable"
       }
     },
-    "rdsLambdaThrottledinvocations23FAB5E5C": {
-      "Type": "AWS::CloudWatch::Alarm",
+    "SagaPatternSingleTableCloudWatchRole130684F0": {
+      "Type": "AWS::IAM::Role",
       "Properties": {
-        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
-        "EvaluationPeriods": 6,
-        "AlarmActions": [
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "apigateway.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
           {
-            "Ref": "rdsErrorTopic9DEB559C"
-          }
-        ],
-        "DatapointsToAlarm": 1,
-        "Metrics": [
-          {
-            "Expression": "(throttles * 100) / (invocations + throttles)",
-            "Id": "expr_1",
-            "Label": "throttled requests % in last 30 mins"
-          },
-          {
-            "Id": "invocations",
-            "MetricStat": {
-              "Metric": {
-                "Dimensions": [
-                  {
-                    "Name": "FunctionName",
-                    "Value": {
-                      "Ref": "rds169785B9"
-                    }
-                  }
-                ],
-                "MetricName": "Invocations",
-                "Namespace": "AWS/Lambda"
-              },
-              "Period": 300,
-              "Stat": "Sum"
-            },
-            "ReturnData": false
-          },
-          {
-            "Id": "throttles",
-            "MetricStat": {
-              "Metric": {
-                "Dimensions": [
-                  {
-                    "Name": "FunctionName",
-                    "Value": {
-                      "Ref": "rds169785B9"
-                    }
-                  }
-                ],
-                "MetricName": "Throttles",
-                "Namespace": "AWS/Lambda"
-              },
-              "Period": 300,
-              "Stat": "Sum"
-            },
-            "ReturnData": false
-          }
-        ],
-        "Threshold": 2,
-        "TreatMissingData": "notBreaching"
-      }
-    },
-    "rdsCloudWatchDashBoard074EBA8E": {
-      "Type": "AWS::CloudWatch::Dashboard",
-      "Properties": {
-        "DashboardBody": {
-          "Fn::Join": [
-            "",
-            [
-              "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Error %\",\"region\":\"",
-              {
-                "Ref": "AWS::Region"
-              },
-              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"% of invocations that errored, last 5 mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
-              {
-                "Ref": "rds169785B9"
-              },
-              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
-              {
-                "Ref": "rds169785B9"
-              },
-              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Duration\",\"region\":\"",
-              {
-                "Ref": "AWS::Region"
-              },
-              "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
-              {
-                "Ref": "rds169785B9"
-              },
-              "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
-              {
-                "Ref": "rds169785B9"
-              },
-              "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
-              {
-                "Ref": "rds169785B9"
-              },
-              "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Lambda Throttle %\",\"region\":\"",
-              {
-                "Ref": "AWS::Region"
-              },
-              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled requests % in last 30 mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
-              {
-                "Ref": "rds169785B9"
-              },
-              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
-              {
-                "Ref": "rds169785B9"
-              },
-              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+              ]
             ]
+          }
+        ]
+      }
+    },
+    "SagaPatternSingleTableAccount4A29EC28": {
+      "Type": "AWS::ApiGateway::Account",
+      "Properties": {
+        "CloudWatchRoleArn": {
+          "Fn::GetAtt": [
+            "SagaPatternSingleTableCloudWatchRole130684F0",
+            "Arn"
           ]
+        }
+      },
+      "DependsOn": [
+        "SagaPatternSingleTable288D85B3"
+      ]
+    },
+    "SagaPatternSingleTableDeployment96972FE73b8e3f63fd2a1f026cfd8fbfa1ec4404": {
+      "Type": "AWS::ApiGateway::Deployment",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "SagaPatternSingleTable288D85B3"
+        },
+        "Description": "Automatically created by the RestApi construct"
+      },
+      "DependsOn": [
+        "SagaPatternSingleTableproxyANY8778A55C",
+        "SagaPatternSingleTableproxy9F7D6084",
+        "SagaPatternSingleTableANYFE1A7CB0"
+      ]
+    },
+    "SagaPatternSingleTableDeploymentStageprod92F0690D": {
+      "Type": "AWS::ApiGateway::Stage",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "SagaPatternSingleTable288D85B3"
+        },
+        "DeploymentId": {
+          "Ref": "SagaPatternSingleTableDeployment96972FE73b8e3f63fd2a1f026cfd8fbfa1ec4404"
+        },
+        "StageName": "prod"
+      },
+      "DependsOn": [
+        "SagaPatternSingleTableAccount4A29EC28"
+      ]
+    },
+    "SagaPatternSingleTableproxy9F7D6084": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "SagaPatternSingleTable288D85B3",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "{proxy+}",
+        "RestApiId": {
+          "Ref": "SagaPatternSingleTable288D85B3"
         }
       }
     },
-    "EndpointEEF1FD8F": {
-      "Type": "AWS::ApiGatewayV2::Api",
-      "Properties": {
-        "Name": "Endpoint",
-        "ProtocolType": "HTTP"
-      }
-    },
-    "EndpointDefaultRouteLambdaIntegrationPermission7193A698": {
+    "SagaPatternSingleTableproxyANYApiPermissionSagaStepFunctionSagaPatternSingleTable865F4F4DANYproxy4B878BCB": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "rds169785B9",
+            "sagaLambdaHandlerFC24742F",
             "Arn"
           ]
         },
@@ -1161,7 +1599,11 @@
               },
               ":",
               {
-                "Ref": "EndpointEEF1FD8F"
+                "Ref": "SagaPatternSingleTable288D85B3"
+              },
+              "/",
+              {
+                "Ref": "SagaPatternSingleTableDeploymentStageprod92F0690D"
               },
               "/*/*"
             ]
@@ -1169,89 +1611,324 @@
         }
       }
     },
-    "EndpointDefaultRouteLambdaIntegration06279B9B": {
-      "Type": "AWS::ApiGatewayV2::Integration",
+    "SagaPatternSingleTableproxyANYApiPermissionTestSagaStepFunctionSagaPatternSingleTable865F4F4DANYproxy35A08972": {
+      "Type": "AWS::Lambda::Permission",
       "Properties": {
-        "ApiId": {
-          "Ref": "EndpointEEF1FD8F"
-        },
-        "IntegrationType": "AWS_PROXY",
-        "IntegrationUri": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
           "Fn::GetAtt": [
-            "rds169785B9",
+            "sagaLambdaHandlerFC24742F",
             "Arn"
           ]
         },
-        "PayloadFormatVersion": "2.0"
-      }
-    },
-    "EndpointDefaultRouteB7B22F2B": {
-      "Type": "AWS::ApiGatewayV2::Route",
-      "Properties": {
-        "ApiId": {
-          "Ref": "EndpointEEF1FD8F"
-        },
-        "RouteKey": "$default",
-        "AuthorizationType": "NONE",
-        "Target": {
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
           "Fn::Join": [
             "",
             [
-              "integrations/",
+              "arn:",
               {
-                "Ref": "EndpointDefaultRouteLambdaIntegration06279B9B"
-              }
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "SagaPatternSingleTable288D85B3"
+              },
+              "/test-invoke-stage/*/*"
             ]
           ]
         }
       }
     },
-    "EndpointDefaultStage0AD21F27": {
-      "Type": "AWS::ApiGatewayV2::Stage",
+    "SagaPatternSingleTableproxyANY8778A55C": {
+      "Type": "AWS::ApiGateway::Method",
       "Properties": {
-        "ApiId": {
-          "Ref": "EndpointEEF1FD8F"
+        "HttpMethod": "ANY",
+        "ResourceId": {
+          "Ref": "SagaPatternSingleTableproxy9F7D6084"
         },
-        "StageName": "$default",
-        "AutoDeploy": true
+        "RestApiId": {
+          "Ref": "SagaPatternSingleTable288D85B3"
+        },
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "sagaLambdaHandlerFC24742F",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        }
+      }
+    },
+    "SagaPatternSingleTableANYApiPermissionSagaStepFunctionSagaPatternSingleTable865F4F4DANY0DD5F6DB": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "sagaLambdaHandlerFC24742F",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "SagaPatternSingleTable288D85B3"
+              },
+              "/",
+              {
+                "Ref": "SagaPatternSingleTableDeploymentStageprod92F0690D"
+              },
+              "/*/"
+            ]
+          ]
+        }
+      }
+    },
+    "SagaPatternSingleTableANYApiPermissionTestSagaStepFunctionSagaPatternSingleTable865F4F4DANY4FBFDAA8": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "sagaLambdaHandlerFC24742F",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "SagaPatternSingleTable288D85B3"
+              },
+              "/test-invoke-stage/*/"
+            ]
+          ]
+        }
+      }
+    },
+    "SagaPatternSingleTableANYFE1A7CB0": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "ANY",
+        "ResourceId": {
+          "Fn::GetAtt": [
+            "SagaPatternSingleTable288D85B3",
+            "RootResourceId"
+          ]
+        },
+        "RestApiId": {
+          "Ref": "SagaPatternSingleTable288D85B3"
+        },
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "sagaLambdaHandlerFC24742F",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        }
       }
     }
   },
   "Parameters": {
-    "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3BucketC7A2EC7F": {
+    "AssetParameters21d94be1cd6f1e9584629e926200f4dbfcc73c09a2dfcd6f984254297c59c9f1S3Bucket3E022A35": {
       "Type": "String",
-      "Description": "S3 bucket for asset \"d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81\""
+      "Description": "S3 bucket for asset \"21d94be1cd6f1e9584629e926200f4dbfcc73c09a2dfcd6f984254297c59c9f1\""
     },
-    "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81S3VersionKeyF23940AD": {
+    "AssetParameters21d94be1cd6f1e9584629e926200f4dbfcc73c09a2dfcd6f984254297c59c9f1S3VersionKey2F48AA09": {
       "Type": "String",
-      "Description": "S3 key for asset version \"d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81\""
+      "Description": "S3 key for asset version \"21d94be1cd6f1e9584629e926200f4dbfcc73c09a2dfcd6f984254297c59c9f1\""
     },
-    "AssetParametersd8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81ArtifactHashA3AAFFE1": {
+    "AssetParameters21d94be1cd6f1e9584629e926200f4dbfcc73c09a2dfcd6f984254297c59c9f1ArtifactHash95591980": {
       "Type": "String",
-      "Description": "Artifact hash for asset \"d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81\""
+      "Description": "Artifact hash for asset \"21d94be1cd6f1e9584629e926200f4dbfcc73c09a2dfcd6f984254297c59c9f1\""
     },
-    "AssetParametersef6ac2b9601673d31e1e2071a9a1b3f9ab84564c0a952916e86b3444e0efe8d0S3Bucket90873A8D": {
+    "AssetParametersa6312e522fdac75cf679d858da6b2140b80c0a41a5a5042dd66e5107822158e1S3BucketA04CBF2C": {
       "Type": "String",
-      "Description": "S3 bucket for asset \"ef6ac2b9601673d31e1e2071a9a1b3f9ab84564c0a952916e86b3444e0efe8d0\""
+      "Description": "S3 bucket for asset \"a6312e522fdac75cf679d858da6b2140b80c0a41a5a5042dd66e5107822158e1\""
     },
-    "AssetParametersef6ac2b9601673d31e1e2071a9a1b3f9ab84564c0a952916e86b3444e0efe8d0S3VersionKeyBB5EBAE6": {
+    "AssetParametersa6312e522fdac75cf679d858da6b2140b80c0a41a5a5042dd66e5107822158e1S3VersionKeyEBC898C0": {
       "Type": "String",
-      "Description": "S3 key for asset version \"ef6ac2b9601673d31e1e2071a9a1b3f9ab84564c0a952916e86b3444e0efe8d0\""
+      "Description": "S3 key for asset version \"a6312e522fdac75cf679d858da6b2140b80c0a41a5a5042dd66e5107822158e1\""
     },
-    "AssetParametersef6ac2b9601673d31e1e2071a9a1b3f9ab84564c0a952916e86b3444e0efe8d0ArtifactHash6886E9D8": {
+    "AssetParametersa6312e522fdac75cf679d858da6b2140b80c0a41a5a5042dd66e5107822158e1ArtifactHash85BE2791": {
       "Type": "String",
-      "Description": "Artifact hash for asset \"ef6ac2b9601673d31e1e2071a9a1b3f9ab84564c0a952916e86b3444e0efe8d0\""
+      "Description": "Artifact hash for asset \"a6312e522fdac75cf679d858da6b2140b80c0a41a5a5042dd66e5107822158e1\""
+    },
+    "AssetParameters571216cd7f11585818ba1d193eef4ee16654561388c1b555eb2690ff4f1c806cS3Bucket47E7D758": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"571216cd7f11585818ba1d193eef4ee16654561388c1b555eb2690ff4f1c806c\""
+    },
+    "AssetParameters571216cd7f11585818ba1d193eef4ee16654561388c1b555eb2690ff4f1c806cS3VersionKey74AA7B04": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"571216cd7f11585818ba1d193eef4ee16654561388c1b555eb2690ff4f1c806c\""
+    },
+    "AssetParameters571216cd7f11585818ba1d193eef4ee16654561388c1b555eb2690ff4f1c806cArtifactHashF46E6742": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"571216cd7f11585818ba1d193eef4ee16654561388c1b555eb2690ff4f1c806c\""
+    },
+    "AssetParameters80b93102fd04fb862350ac228ce183fa7ca4ca64eabd21c76d471e884f8d647dS3Bucket3D4A4822": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"80b93102fd04fb862350ac228ce183fa7ca4ca64eabd21c76d471e884f8d647d\""
+    },
+    "AssetParameters80b93102fd04fb862350ac228ce183fa7ca4ca64eabd21c76d471e884f8d647dS3VersionKey1B4D60E9": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"80b93102fd04fb862350ac228ce183fa7ca4ca64eabd21c76d471e884f8d647d\""
+    },
+    "AssetParameters80b93102fd04fb862350ac228ce183fa7ca4ca64eabd21c76d471e884f8d647dArtifactHashD9D5F85C": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"80b93102fd04fb862350ac228ce183fa7ca4ca64eabd21c76d471e884f8d647d\""
+    },
+    "AssetParameters853370a8eaae63cd4861c94053f03abf4979bbba53a3d5ab1d889804314a4c8eS3Bucket3024AA13": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"853370a8eaae63cd4861c94053f03abf4979bbba53a3d5ab1d889804314a4c8e\""
+    },
+    "AssetParameters853370a8eaae63cd4861c94053f03abf4979bbba53a3d5ab1d889804314a4c8eS3VersionKeyED8455E9": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"853370a8eaae63cd4861c94053f03abf4979bbba53a3d5ab1d889804314a4c8e\""
+    },
+    "AssetParameters853370a8eaae63cd4861c94053f03abf4979bbba53a3d5ab1d889804314a4c8eArtifactHash09FFA850": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"853370a8eaae63cd4861c94053f03abf4979bbba53a3d5ab1d889804314a4c8e\""
+    },
+    "AssetParameters57c357630371a89d83bda227de1baa80bfc09d5c8e8ce527c21578f38db7c223S3Bucket80DF54C7": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"57c357630371a89d83bda227de1baa80bfc09d5c8e8ce527c21578f38db7c223\""
+    },
+    "AssetParameters57c357630371a89d83bda227de1baa80bfc09d5c8e8ce527c21578f38db7c223S3VersionKey16031C41": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"57c357630371a89d83bda227de1baa80bfc09d5c8e8ce527c21578f38db7c223\""
+    },
+    "AssetParameters57c357630371a89d83bda227de1baa80bfc09d5c8e8ce527c21578f38db7c223ArtifactHashF0490B22": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"57c357630371a89d83bda227de1baa80bfc09d5c8e8ce527c21578f38db7c223\""
+    },
+    "AssetParameters55b78720c0af0f63c9f4b613722fad90fa99e383187204d04794f0c5f415b184S3Bucket3E8B1462": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"55b78720c0af0f63c9f4b613722fad90fa99e383187204d04794f0c5f415b184\""
+    },
+    "AssetParameters55b78720c0af0f63c9f4b613722fad90fa99e383187204d04794f0c5f415b184S3VersionKeyA481D7A4": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"55b78720c0af0f63c9f4b613722fad90fa99e383187204d04794f0c5f415b184\""
+    },
+    "AssetParameters55b78720c0af0f63c9f4b613722fad90fa99e383187204d04794f0c5f415b184ArtifactHash4F1D9503": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"55b78720c0af0f63c9f4b613722fad90fa99e383187204d04794f0c5f415b184\""
+    },
+    "AssetParametersd55dc2d20e821cf430803e0ab5e2f1aac99ef8c9b7833283c004da8d6c5e011eS3Bucket3BD8913D": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"d55dc2d20e821cf430803e0ab5e2f1aac99ef8c9b7833283c004da8d6c5e011e\""
+    },
+    "AssetParametersd55dc2d20e821cf430803e0ab5e2f1aac99ef8c9b7833283c004da8d6c5e011eS3VersionKeyC6356719": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"d55dc2d20e821cf430803e0ab5e2f1aac99ef8c9b7833283c004da8d6c5e011e\""
+    },
+    "AssetParametersd55dc2d20e821cf430803e0ab5e2f1aac99ef8c9b7833283c004da8d6c5e011eArtifactHash722953CA": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"d55dc2d20e821cf430803e0ab5e2f1aac99ef8c9b7833283c004da8d6c5e011e\""
+    },
+    "AssetParameters683bb4504495e9f5cfe9e568c2ba88c37bbcc2399063b48f9a9500e0eee67a95S3BucketD0E33F9C": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"683bb4504495e9f5cfe9e568c2ba88c37bbcc2399063b48f9a9500e0eee67a95\""
+    },
+    "AssetParameters683bb4504495e9f5cfe9e568c2ba88c37bbcc2399063b48f9a9500e0eee67a95S3VersionKey6E074EFA": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"683bb4504495e9f5cfe9e568c2ba88c37bbcc2399063b48f9a9500e0eee67a95\""
+    },
+    "AssetParameters683bb4504495e9f5cfe9e568c2ba88c37bbcc2399063b48f9a9500e0eee67a95ArtifactHash9D6F4A72": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"683bb4504495e9f5cfe9e568c2ba88c37bbcc2399063b48f9a9500e0eee67a95\""
     }
   },
   "Outputs": {
-    "HTTPAPIUrl": {
+    "SagaPatternSingleTableEndpoint3B912404": {
       "Value": {
         "Fn::Join": [
           "",
           [
             "https://",
             {
-              "Ref": "EndpointEEF1FD8F"
+              "Ref": "SagaPatternSingleTable288D85B3"
             },
             ".execute-api.",
             {
@@ -1261,9 +1938,107 @@
             {
               "Ref": "AWS::URLSuffix"
             },
+            "/",
+            {
+              "Ref": "SagaPatternSingleTableDeploymentStageprod92F0690D"
+            },
             "/"
           ]
         ]
+      }
+    }
+  },
+  "Mappings": {
+    "ServiceprincipalMap": {
+      "af-south-1": {
+        "states": "states.af-south-1.amazonaws.com"
+      },
+      "ap-east-1": {
+        "states": "states.ap-east-1.amazonaws.com"
+      },
+      "ap-northeast-1": {
+        "states": "states.ap-northeast-1.amazonaws.com"
+      },
+      "ap-northeast-2": {
+        "states": "states.ap-northeast-2.amazonaws.com"
+      },
+      "ap-northeast-3": {
+        "states": "states.ap-northeast-3.amazonaws.com"
+      },
+      "ap-south-1": {
+        "states": "states.ap-south-1.amazonaws.com"
+      },
+      "ap-southeast-1": {
+        "states": "states.ap-southeast-1.amazonaws.com"
+      },
+      "ap-southeast-2": {
+        "states": "states.ap-southeast-2.amazonaws.com"
+      },
+      "ap-southeast-3": {
+        "states": "states.ap-southeast-3.amazonaws.com"
+      },
+      "ca-central-1": {
+        "states": "states.ca-central-1.amazonaws.com"
+      },
+      "cn-north-1": {
+        "states": "states.cn-north-1.amazonaws.com"
+      },
+      "cn-northwest-1": {
+        "states": "states.cn-northwest-1.amazonaws.com"
+      },
+      "eu-central-1": {
+        "states": "states.eu-central-1.amazonaws.com"
+      },
+      "eu-north-1": {
+        "states": "states.eu-north-1.amazonaws.com"
+      },
+      "eu-south-1": {
+        "states": "states.eu-south-1.amazonaws.com"
+      },
+      "eu-south-2": {
+        "states": "states.eu-south-2.amazonaws.com"
+      },
+      "eu-west-1": {
+        "states": "states.eu-west-1.amazonaws.com"
+      },
+      "eu-west-2": {
+        "states": "states.eu-west-2.amazonaws.com"
+      },
+      "eu-west-3": {
+        "states": "states.eu-west-3.amazonaws.com"
+      },
+      "me-south-1": {
+        "states": "states.me-south-1.amazonaws.com"
+      },
+      "sa-east-1": {
+        "states": "states.sa-east-1.amazonaws.com"
+      },
+      "us-east-1": {
+        "states": "states.us-east-1.amazonaws.com"
+      },
+      "us-east-2": {
+        "states": "states.us-east-2.amazonaws.com"
+      },
+      "us-gov-east-1": {
+        "states": "states.us-gov-east-1.amazonaws.com"
+      },
+      "us-gov-west-1": {
+        "states": "states.us-gov-west-1.amazonaws.com"
+      },
+      "us-iso-east-1": {
+        "states": "states.amazonaws.com"
+      },
+      "us-iso-west-1": {
+        "states": "states.amazonaws.com"
+      },
+      "us-isob-east-1": {
+        "states": "states.amazonaws.com"
+      },
+      "us-west-1": {
+        "states": "states.us-west-1.amazonaws.com"
+      },
+      "us-west-2": {
+        "states": "states.us-west-2.amazonaws.com"
       }
     }
   }
