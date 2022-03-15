@@ -1,6 +1,0 @@
-test eventbridge circuit breaker lambda functions
-compare LambdaRestApi resources with rest_api.py results
-fix import statements to match standard
-abstract rest api from lambda and sns rest apis
-create simple webservice construct
-write well architected auditor - config + lambda + dynamoDB
