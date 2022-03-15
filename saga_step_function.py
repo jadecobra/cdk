@@ -27,44 +27,44 @@ class SagaStepFunction(cdk.Stack):
         # All functions need access to our DynamoDB table above.
         # We also need to take payment for this trip
 
-        reserve_flight = self.alt_create_lambda_function(
+        reserve_flight = self.create_lambda_function(
             self,
             function_name='flights/reserve_flight',
             table=bookings
         )
-        confirm_flight = self.alt_create_lambda_function(
+        confirm_flight = self.create_lambda_function(
             self,
             function_name='flights/confirm_flight',
             table=bookings
         )
-        cancel_flight = self.alt_create_lambda_function(
+        cancel_flight = self.create_lambda_function(
             self,
             function_name='flights/cancel_flight',
             table=bookings
         )
 
-        reserve_hotel = self.alt_create_lambda_function(
+        reserve_hotel = self.create_lambda_function(
             self,
             function_name="hotels/reserve_hotel",
             table=bookings
         )
-        confirm_hotel = self.alt_create_lambda_function(
+        confirm_hotel = self.create_lambda_function(
             self,
             function_name='hotels/confirm_hotel',
             table=bookings
         )
-        cancel_hotel = self.alt_create_lambda_function(
+        cancel_hotel = self.create_lambda_function(
             self,
             function_name="hotels/cancel_hotel",
             table=bookings
         )
 
-        process_payment = self.alt_create_lambda_function(
+        process_payment = self.create_lambda_function(
             self,
             function_name="payments/process_payment",
             table=bookings
         )
-        refund_payment = self.alt_create_lambda_function(
+        refund_payment = self.create_lambda_function(
             self,
             function_name="payments/refund_payment",
             table=bookings
@@ -166,20 +166,7 @@ class SagaStepFunction(cdk.Stack):
             handler=saga_lambda
         )
 
-    def create_lambda_function(self, scope: cdk.Stack, lambda_id: str, handler: str, table: dynamo_db.Table):
-        function = aws_lambda.Function(
-            scope, lambda_id,
-            runtime=aws_lambda.Runtime.NODEJS_12_X,
-            handler=handler,
-            code=aws_lambda.Code.from_asset("lambda_functions"),
-            environment={
-                'TABLE_NAME': table.table_name
-            }
-        )
-        table.grant_read_write_data(function)
-        return function
-
-    def alt_create_lambda_function(self, scope: cdk.Stack, table: dynamo_db.Table=None, function_name=None):
+    def create_lambda_function(self, scope: cdk.Stack, table: dynamo_db.Table=None, function_name=None):
         function = aws_lambda.Function(
             scope, function_name,
             runtime=aws_lambda.Runtime.PYTHON_3_9,
