@@ -37,10 +37,15 @@ class SagaStepFunction(cdk.Stack):
             function_name='flights/reserve_flight',
             table=bookings
         )
-        confirm_flight = self.create_lambda_function(scope=self, lambda_id="confirmFlightLambdaHandler",
-                                                   handler='flights/confirmFlight.handler', table=bookings)
-        cancel_flight = self.create_lambda_function(scope=self, lambda_id="cancelFlightLambdaHandler",
-                                                  handler='flights/cancelFlight.handler', table=bookings)
+        confirm_flight = self.alt_create_lambda_function(
+            self,
+            function_name='flights/confirmFlight.handler',
+            table=bookings
+        )
+        cancel_flight = self.create_lambda_function(
+            scope=self, lambda_id="cancelFlightLambdaHandler",
+            handler='flights/cancelFlight.handler', table=bookings
+        )
 
         # 2) Hotel
         reserve_hotel = self.create_lambda_function(scope=self, lambda_id="reserveHotelLambdaHandler",
