@@ -136,16 +136,6 @@ class SagaStepFunction(cdk.Stack):
             result_path='$.ConfirmFlightResult'
         ).add_catch(refund_payment, result_path="$.ConfirmFlightError")
 
-        # definition = (
-        #     aws_stepfunctions.Chain
-        #                      .start(reserve_hotel)
-        #                      .next(reserve_flight)
-        #                      .next(process_payment)
-        #                      .next(confirm_hotel)
-        #                      .next(confirm_flight)
-        #                      .next(booking_succeeded)
-        # )
-
         saga_state_machine = aws_stepfunctions.StateMachine(
             self, 'BookingSaga',
             definition=(
@@ -160,8 +150,6 @@ class SagaStepFunction(cdk.Stack):
             timeout=cdk.Duration.minutes(5)
         )
 
-        # defines an AWS Lambda resource to connect to our API Gateway and kick
-        # off our step function
         saga_lambda = aws_lambda.Function(
             self, "sagaLambdaHandler",
             runtime=aws_lambda.Runtime.PYTHON_3_9,
@@ -173,7 +161,6 @@ class SagaStepFunction(cdk.Stack):
         )
         saga_state_machine.grant_start_execution(saga_lambda)
 
-        # defines an API Gateway REST API resource backed by our "stateMachineLambda" function.
         aws_apigateway.LambdaRestApi(
             self, 'SagaPatternSingleTable',
             handler=saga_lambda
