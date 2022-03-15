@@ -151,9 +151,9 @@ class SagaStepFunction(cdk.Stack):
         # off our step function
         saga_lambda = aws_lambda.Function(
             self, "sagaLambdaHandler",
-            runtime=aws_lambda.Runtime.NODEJS_12_X,
-            handler="sagaLambda.handler",
-            code=aws_lambda.Code.from_asset("lambda_functions"),
+            runtime=aws_lambda.Runtime.PYTHON_3_9,
+            handler="saga_lambda.handler",
+            code=aws_lambda.Code.from_asset("lambda_functions/saga_lambda"),
             environment={
                 'statemachine_arn': saga.state_machine_arn
             }
