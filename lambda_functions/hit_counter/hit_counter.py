@@ -18,6 +18,7 @@ def add_count(path):
 
 def get_path(event):
     return event.get('rawPath')
+
 def handler(event, context):
     add_count(get_path(event))
     return {
