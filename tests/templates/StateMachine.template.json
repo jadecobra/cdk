@@ -1,0 +1,412 @@
+{
+  "Resources": {
+    "pineappleCheckLambdaHandlerServiceRoleFC4E3211": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    "pineappleCheckLambdaHandlerFDB742D5": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "AssetParametersd3978257cfa310d7e26a0d86a7535987d7287f901e8cd103748c74f0b81e31afS3Bucket6BE6CFFB"
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersd3978257cfa310d7e26a0d86a7535987d7287f901e8cd103748c74f0b81e31afS3VersionKeyBB439CE1"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersd3978257cfa310d7e26a0d86a7535987d7287f901e8cd103748c74f0b81e31afS3VersionKeyBB439CE1"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "pineappleCheckLambdaHandlerServiceRoleFC4E3211",
+            "Arn"
+          ]
+        },
+        "Handler": "order_pizza.handler",
+        "Runtime": "python3.9"
+      },
+      "DependsOn": [
+        "pineappleCheckLambdaHandlerServiceRoleFC4E3211"
+      ]
+    },
+    "StateMachineRoleB840431D": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": {
+                  "Fn::FindInMap": [
+                    "ServiceprincipalMap",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    "states"
+                  ]
+                }
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      }
+    },
+    "StateMachineRoleDefaultPolicyDF1E6607": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "xray:PutTraceSegments",
+                "xray:PutTelemetryRecords",
+                "xray:GetSamplingRules",
+                "xray:GetSamplingTargets"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "pineappleCheckLambdaHandlerFDB742D5",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "StateMachineRoleDefaultPolicyDF1E6607",
+        "Roles": [
+          {
+            "Ref": "StateMachineRoleB840431D"
+          }
+        ]
+      }
+    },
+    "StateMachine2E01A3A5": {
+      "Type": "AWS::StepFunctions::StateMachine",
+      "Properties": {
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "StateMachineRoleB840431D",
+            "Arn"
+          ]
+        },
+        "DefinitionString": {
+          "Fn::Join": [
+            "",
+            [
+              "{\"StartAt\":\"Order Pizza Job\",\"States\":{\"Order Pizza Job\":{\"Next\":\"Contains Pineapple?\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Type\":\"Task\",\"InputPath\":\"$.flavour\",\"ResultPath\":\"$.pineappleAnalysis\",\"Resource\":\"",
+              {
+                "Fn::GetAtt": [
+                  "pineappleCheckLambdaHandlerFDB742D5",
+                  "Arn"
+                ]
+              },
+              "\"},\"Contains Pineapple?\":{\"Type\":\"Choice\",\"Choices\":[{\"Variable\":\"$.pineappleAnalysis.containsPineapple\",\"BooleanEquals\":true,\"Next\":\"Sorry, We Dont add Pineapple\"}],\"Default\":\"Lets make your pizza\"},\"Lets make your pizza\":{\"Type\":\"Succeed\",\"OutputPath\":\"$.pineappleAnalysis\"},\"Sorry, We Dont add Pineapple\":{\"Type\":\"Fail\",\"Error\":\"Failed To Make Pizza\",\"Cause\":\"They asked for Pineapple\"}},\"TimeoutSeconds\":300}"
+            ]
+          ]
+        },
+        "StateMachineType": "EXPRESS",
+        "TracingConfiguration": {
+          "Enabled": true
+        }
+      },
+      "DependsOn": [
+        "StateMachineRoleDefaultPolicyDF1E6607",
+        "StateMachineRoleB840431D"
+      ]
+    },
+    "HttpApiRole79B5C31A": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "apigateway.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "states:StartSyncExecution",
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Ref": "StateMachine2E01A3A5"
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "AllowSFNExec"
+          }
+        ]
+      }
+    },
+    "StateMachineHttpApi26ACE8C1": {
+      "Type": "AWS::ApiGatewayV2::Api",
+      "Properties": {
+        "Name": "StateMachineHttpApi",
+        "ProtocolType": "HTTP"
+      }
+    },
+    "StateMachineHttpApiDefaultStage5A865BDC": {
+      "Type": "AWS::ApiGatewayV2::Stage",
+      "Properties": {
+        "ApiId": {
+          "Ref": "StateMachineHttpApi26ACE8C1"
+        },
+        "StageName": "$default",
+        "AutoDeploy": true
+      }
+    },
+    "StepFunctionsApiGatewayIntegration": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "StateMachineHttpApi26ACE8C1"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "ConnectionType": "INTERNET",
+        "CredentialsArn": {
+          "Fn::GetAtt": [
+            "HttpApiRole79B5C31A",
+            "Arn"
+          ]
+        },
+        "IntegrationSubtype": "StepFunctions-StartSyncExecution",
+        "PayloadFormatVersion": "1.0",
+        "RequestParameters": {
+          "Input": "$request.body",
+          "StateMachineArn": {
+            "Ref": "StateMachine2E01A3A5"
+          }
+        },
+        "TimeoutInMillis": 10000
+      }
+    },
+    "DefaultRoute": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "StateMachineHttpApi26ACE8C1"
+        },
+        "RouteKey": "$default",
+        "Target": {
+          "Fn::Join": [
+            "",
+            [
+              "integrations/",
+              {
+                "Ref": "StepFunctionsApiGatewayIntegration"
+              }
+            ]
+          ]
+        }
+      }
+    }
+  },
+  "Parameters": {
+    "AssetParametersd3978257cfa310d7e26a0d86a7535987d7287f901e8cd103748c74f0b81e31afS3Bucket6BE6CFFB": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"d3978257cfa310d7e26a0d86a7535987d7287f901e8cd103748c74f0b81e31af\""
+    },
+    "AssetParametersd3978257cfa310d7e26a0d86a7535987d7287f901e8cd103748c74f0b81e31afS3VersionKeyBB439CE1": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"d3978257cfa310d7e26a0d86a7535987d7287f901e8cd103748c74f0b81e31af\""
+    },
+    "AssetParametersd3978257cfa310d7e26a0d86a7535987d7287f901e8cd103748c74f0b81e31afArtifactHashE42B9C16": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"d3978257cfa310d7e26a0d86a7535987d7287f901e8cd103748c74f0b81e31af\""
+    }
+  },
+  "Outputs": {
+    "HTTPAPIURL": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Ref": "StateMachineHttpApi26ACE8C1"
+            },
+            ".execute-api.",
+            {
+              "Ref": "AWS::Region"
+            },
+            ".",
+            {
+              "Ref": "AWS::URLSuffix"
+            },
+            "/"
+          ]
+        ]
+      }
+    }
+  },
+  "Mappings": {
+    "ServiceprincipalMap": {
+      "af-south-1": {
+        "states": "states.af-south-1.amazonaws.com"
+      },
+      "ap-east-1": {
+        "states": "states.ap-east-1.amazonaws.com"
+      },
+      "ap-northeast-1": {
+        "states": "states.ap-northeast-1.amazonaws.com"
+      },
+      "ap-northeast-2": {
+        "states": "states.ap-northeast-2.amazonaws.com"
+      },
+      "ap-northeast-3": {
+        "states": "states.ap-northeast-3.amazonaws.com"
+      },
+      "ap-south-1": {
+        "states": "states.ap-south-1.amazonaws.com"
+      },
+      "ap-southeast-1": {
+        "states": "states.ap-southeast-1.amazonaws.com"
+      },
+      "ap-southeast-2": {
+        "states": "states.ap-southeast-2.amazonaws.com"
+      },
+      "ap-southeast-3": {
+        "states": "states.ap-southeast-3.amazonaws.com"
+      },
+      "ca-central-1": {
+        "states": "states.ca-central-1.amazonaws.com"
+      },
+      "cn-north-1": {
+        "states": "states.cn-north-1.amazonaws.com"
+      },
+      "cn-northwest-1": {
+        "states": "states.cn-northwest-1.amazonaws.com"
+      },
+      "eu-central-1": {
+        "states": "states.eu-central-1.amazonaws.com"
+      },
+      "eu-north-1": {
+        "states": "states.eu-north-1.amazonaws.com"
+      },
+      "eu-south-1": {
+        "states": "states.eu-south-1.amazonaws.com"
+      },
+      "eu-south-2": {
+        "states": "states.eu-south-2.amazonaws.com"
+      },
+      "eu-west-1": {
+        "states": "states.eu-west-1.amazonaws.com"
+      },
+      "eu-west-2": {
+        "states": "states.eu-west-2.amazonaws.com"
+      },
+      "eu-west-3": {
+        "states": "states.eu-west-3.amazonaws.com"
+      },
+      "me-south-1": {
+        "states": "states.me-south-1.amazonaws.com"
+      },
+      "sa-east-1": {
+        "states": "states.sa-east-1.amazonaws.com"
+      },
+      "us-east-1": {
+        "states": "states.us-east-1.amazonaws.com"
+      },
+      "us-east-2": {
+        "states": "states.us-east-2.amazonaws.com"
+      },
+      "us-gov-east-1": {
+        "states": "states.us-gov-east-1.amazonaws.com"
+      },
+      "us-gov-west-1": {
+        "states": "states.us-gov-west-1.amazonaws.com"
+      },
+      "us-iso-east-1": {
+        "states": "states.amazonaws.com"
+      },
+      "us-iso-west-1": {
+        "states": "states.amazonaws.com"
+      },
+      "us-isob-east-1": {
+        "states": "states.amazonaws.com"
+      },
+      "us-west-1": {
+        "states": "states.us-west-1.amazonaws.com"
+      },
+      "us-west-2": {
+        "states": "states.us-west-2.amazonaws.com"
+      }
+    }
+  }
+}
