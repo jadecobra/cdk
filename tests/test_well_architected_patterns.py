@@ -20,13 +20,14 @@ class TestWellArchitectedPatterns(TestTemplates):
             # 'LambdaLith',
             # 'LambdaRestAPIGateway',
             # 'RdsProxy',
-            'SagaStepFunction',
-            # 'ScalableWebhook', # What services are connected in this?
+            # 'SagaStepFunction',
+            # 'ScalableWebhook', # deprecated by RdsProxy
             # 'SinglePurposeLambda',
             # 'SnsFlow',
             # 'SnsRestApi',
             # 'SNSTopic',
             # 'SqsFlow',
+            'StateMachine',
             # 'WebApplicationFirewall',
             # 'XRayTracerSnsFanOutTopic',
         )

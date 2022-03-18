@@ -20,6 +20,7 @@ import scalable_webhook
 import sns_topic
 import xray_tracer
 import web_application_firewall
+import state_machine
 
 
 class WellArchitected(cdk.App):
@@ -47,6 +48,7 @@ class WellArchitected(cdk.App):
         rds_proxy.RdsProxy(self, "RdsProxy")
         saga_step_function.SagaStepFunction(self, "SagaStepFunction")
         scalable_webhook.ScalableWebhook(self, "ScalableWebhook")
+        state_machine.StateMachine(self, "StateMachine")
 
     def create_webservice(self):
         error_sns_topic = sns_topic.SnsTopic(self, 'SnsTopic').topic
