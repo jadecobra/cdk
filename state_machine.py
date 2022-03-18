@@ -6,6 +6,7 @@ from aws_cdk import (
     aws_apigatewayv2 as api_gateway,
     core
 )
+import lambda_function
 
 
 class StateMachine(core.Stack):
@@ -66,11 +67,8 @@ class StateMachine(core.Stack):
         )
 
     def order_pizza(self):
-        return aws_lambda.Function(
-            self, "pineappleCheckLambdaHandler",
-            runtime=aws_lambda.Runtime.PYTHON_3_9,
-            handler="order_pizza.handler",
-            code=aws_lambda.Code.from_asset("lambda_functions/order_pizza"),
+        return lambda_function.create_python_lambda_function(
+            self, function_name='order_pizza',
         )
 
     @staticmethod
