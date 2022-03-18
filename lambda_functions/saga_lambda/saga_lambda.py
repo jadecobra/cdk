@@ -36,5 +36,5 @@ def handler(event, context):
         )
     else:
         return response(
-            message='The holiday booking system is processing your order'
+            body='The holiday booking system is processing your order'
         )
