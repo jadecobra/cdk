@@ -7,6 +7,7 @@ from aws_cdk import (
     core
 )
 import lambda_function
+import api_gateway_cloudwatch
 
 
 class StateMachine(core.Stack):
@@ -102,10 +103,15 @@ class StateMachine(core.Stack):
         )
 
     def create_http_api(self):
-        return api_gateway.HttpApi(
+        http_api = api_gateway.HttpApi(
             self, 'StateMachineHttpApi',
             create_default_stage=True
         )
+        api_gateway_cloudwatch.ApiGatewayCloudWatch(
+            self, 'HttpApiGatewayCloudWatch',
+            api_id=http_api.http_api_id,
+        )
+        return http_api
 
     def create_stepfunctions_api_gateway_integration(self, api_id=None, iam_role_arn=None, state_machine_arn=None):
         return api_gateway.CfnIntegration(
