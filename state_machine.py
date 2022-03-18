@@ -1,5 +1,5 @@
 from aws_cdk import (
-    aws_lambda,
+    aws_sns,
     aws_stepfunctions,
     aws_stepfunctions_tasks,
     aws_iam,
@@ -15,9 +15,10 @@ class StateMachine(core.Stack):
     def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
         self.pineapple_analysis = '$.pineappleAnalysis'
-        state_machine = self.create_state_machine(self.order_pizza())
+        error_topic = self.create_error_topic()
+        state_machine = self.create_state_machine(self.order_pizza(error_topic))
         http_api_role = self.create_iam_role(state_machine.state_machine_arn)
-        http_api = self.create_http_api()
+        http_api = self.create_http_api(error_topic)
         self.create_api_gateway_route(
             api_id=http_api.http_api_id,
             iam_role_arn=http_api_role.role_arn,
@@ -27,6 +28,12 @@ class StateMachine(core.Stack):
         core.CfnOutput(
             self, 'HTTP API URL',
             value=http_api.url
+        )
+
+    def create_error_topic(self):
+        return aws_sns.Topic(
+            self, 'OrderPizzaErrorTopic',
+            display_name='OrderPizzaError'
         )
 
     def order_failure(self):
@@ -67,9 +74,10 @@ class StateMachine(core.Stack):
                 )
         )
 
-    def order_pizza(self):
+    def order_pizza(self, error_topic):
         return lambda_function.create_python_lambda_function(
             self, function_name='order_pizza',
+            error_topic=error_topic
         )
 
     @staticmethod
@@ -86,7 +94,7 @@ class StateMachine(core.Stack):
 
     def create_iam_role(self, state_machine_arn):
         return aws_iam.Role(
-            self, 'HttpApiRole',
+            self, 'StateMachineHttpApiRole',
             assumed_by=aws_iam.ServicePrincipal('apigateway.amazonaws.com'),
             inline_policies={
                 "AllowSFNExec": self.state_machine_execution_permissions(state_machine_arn)
@@ -102,20 +110,21 @@ class StateMachine(core.Stack):
             state_machine_type=aws_stepfunctions.StateMachineType.EXPRESS
         )
 
-    def create_http_api(self):
+    def create_http_api(self, error_topic):
         http_api = api_gateway.HttpApi(
             self, 'StateMachineHttpApi',
             create_default_stage=True
         )
         api_gateway_cloudwatch.ApiGatewayCloudWatch(
-            self, 'HttpApiGatewayCloudWatch',
+            self, 'StateMachineHttpApiCloudWatch',
             api_id=http_api.http_api_id,
+            error_topic=error_topic
         )
         return http_api
 
     def create_stepfunctions_api_gateway_integration(self, api_id=None, iam_role_arn=None, state_machine_arn=None):
         return api_gateway.CfnIntegration(
-            self, 'StepFunctionsApiGatewayIntegration',
+            self, 'StateMachineHttpApiIntegration',
             api_id=api_id,
             integration_type='AWS_PROXY',
             connection_type='INTERNET',
@@ -136,7 +145,7 @@ class StateMachine(core.Stack):
             state_machine_arn=state_machine_arn
         ).ref
         return api_gateway.CfnRoute(
-            self, 'DefaultRoute',
+            self, 'StateMachineHttpApiDefaultRoute',
             api_id=api_id,
             route_key=api_gateway.HttpRouteKey.DEFAULT.key,
             target=f'integrations/{target}'

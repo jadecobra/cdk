@@ -1,9 +1,9 @@
 {
   "Resources": {
-    "orderpizzaErrorTopic41AD1721": {
+    "OrderPizzaErrorTopic61274F8E": {
       "Type": "AWS::SNS::Topic",
       "Properties": {
-        "DisplayName": "ErrorTopic"
+        "DisplayName": "OrderPizzaError"
       }
     },
     "orderpizzaawsxraysdkLambdaLayerE805D295": {
@@ -110,7 +110,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": {
-            "Ref": "AssetParametersf6577333890e4d81c169bfcacedc8a0149fbdc23729560739269bfe47fe33affS3BucketD5157C4C"
+            "Ref": "AssetParameters73caf88fd61d6684ecd85db26d26f37563d33542a2ebe63ce4c8c9e06ee3cc8aS3Bucket8C3172A2"
           },
           "S3Key": {
             "Fn::Join": [
@@ -123,7 +123,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParametersf6577333890e4d81c169bfcacedc8a0149fbdc23729560739269bfe47fe33affS3VersionKeyB6C1EC59"
+                          "Ref": "AssetParameters73caf88fd61d6684ecd85db26d26f37563d33542a2ebe63ce4c8c9e06ee3cc8aS3VersionKeyDDDE2D08"
                         }
                       ]
                     }
@@ -136,7 +136,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParametersf6577333890e4d81c169bfcacedc8a0149fbdc23729560739269bfe47fe33affS3VersionKeyB6C1EC59"
+                          "Ref": "AssetParameters73caf88fd61d6684ecd85db26d26f37563d33542a2ebe63ce4c8c9e06ee3cc8aS3VersionKeyDDDE2D08"
                         }
                       ]
                     }
@@ -176,7 +176,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "orderpizzaErrorTopic41AD1721"
+            "Ref": "OrderPizzaErrorTopic61274F8E"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -238,7 +238,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "orderpizzaErrorTopic41AD1721"
+            "Ref": "OrderPizzaErrorTopic61274F8E"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -265,7 +265,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "orderpizzaErrorTopic41AD1721"
+            "Ref": "OrderPizzaErrorTopic61274F8E"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -468,7 +468,7 @@
         "StateMachineRoleB840431D"
       ]
     },
-    "HttpApiRole79B5C31A": {
+    "StateMachineHttpApiRoleDFAC5A68": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -519,20 +519,14 @@
         "AutoDeploy": true
       }
     },
-    "HttpApiGatewayCloudWatchErrorTopic393C1E7A": {
-      "Type": "AWS::SNS::Topic",
-      "Properties": {
-        "DisplayName": "ErrorTopic"
-      }
-    },
-    "HttpApiGatewayCloudWatchAPIGateway4XXErrors11708112F": {
+    "StateMachineHttpApiCloudWatchAPIGateway4XXErrors13E8FBA9E": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "HttpApiGatewayCloudWatchErrorTopic393C1E7A"
+            "Ref": "OrderPizzaErrorTopic61274F8E"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -591,14 +585,14 @@
         "TreatMissingData": "notBreaching"
       }
     },
-    "HttpApiGatewayCloudWatchAPIGateway5XXErrors0A7AA7A2C": {
+    "StateMachineHttpApiCloudWatchAPIGateway5XXErrors0845ED712": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "HttpApiGatewayCloudWatchErrorTopic393C1E7A"
+            "Ref": "OrderPizzaErrorTopic61274F8E"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -630,14 +624,14 @@
         "TreatMissingData": "notBreaching"
       }
     },
-    "HttpApiGatewayCloudWatchAPIp99latencyalarm1s34BDE4DB": {
+    "StateMachineHttpApiCloudWatchAPIp99latencyalarm1sC9E07B0B": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "HttpApiGatewayCloudWatchErrorTopic393C1E7A"
+            "Ref": "OrderPizzaErrorTopic61274F8E"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -669,7 +663,7 @@
         "TreatMissingData": "notBreaching"
       }
     },
-    "HttpApiGatewayCloudWatchCloudWatchDashBoardF7157DBB": {
+    "StateMachineHttpApiCloudWatchCloudWatchDashBoard38F07050": {
       "Type": "AWS::CloudWatch::Dashboard",
       "Properties": {
         "DashboardBody": {
@@ -718,7 +712,7 @@
         }
       }
     },
-    "StepFunctionsApiGatewayIntegration": {
+    "StateMachineHttpApiIntegration": {
       "Type": "AWS::ApiGatewayV2::Integration",
       "Properties": {
         "ApiId": {
@@ -728,7 +722,7 @@
         "ConnectionType": "INTERNET",
         "CredentialsArn": {
           "Fn::GetAtt": [
-            "HttpApiRole79B5C31A",
+            "StateMachineHttpApiRoleDFAC5A68",
             "Arn"
           ]
         },
@@ -743,7 +737,7 @@
         "TimeoutInMillis": 10000
       }
     },
-    "DefaultRoute": {
+    "StateMachineHttpApiDefaultRoute": {
       "Type": "AWS::ApiGatewayV2::Route",
       "Properties": {
         "ApiId": {
@@ -756,7 +750,7 @@
             [
               "integrations/",
               {
-                "Ref": "StepFunctionsApiGatewayIntegration"
+                "Ref": "StateMachineHttpApiIntegration"
               }
             ]
           ]
@@ -777,17 +771,17 @@
       "Type": "String",
       "Description": "Artifact hash for asset \"d8a9de398a8d94394f523eb048f8c992b721ccd2294b3ae9f90cfc890e704b81\""
     },
-    "AssetParametersf6577333890e4d81c169bfcacedc8a0149fbdc23729560739269bfe47fe33affS3BucketD5157C4C": {
+    "AssetParameters73caf88fd61d6684ecd85db26d26f37563d33542a2ebe63ce4c8c9e06ee3cc8aS3Bucket8C3172A2": {
       "Type": "String",
-      "Description": "S3 bucket for asset \"f6577333890e4d81c169bfcacedc8a0149fbdc23729560739269bfe47fe33aff\""
+      "Description": "S3 bucket for asset \"73caf88fd61d6684ecd85db26d26f37563d33542a2ebe63ce4c8c9e06ee3cc8a\""
     },
-    "AssetParametersf6577333890e4d81c169bfcacedc8a0149fbdc23729560739269bfe47fe33affS3VersionKeyB6C1EC59": {
+    "AssetParameters73caf88fd61d6684ecd85db26d26f37563d33542a2ebe63ce4c8c9e06ee3cc8aS3VersionKeyDDDE2D08": {
       "Type": "String",
-      "Description": "S3 key for asset version \"f6577333890e4d81c169bfcacedc8a0149fbdc23729560739269bfe47fe33aff\""
+      "Description": "S3 key for asset version \"73caf88fd61d6684ecd85db26d26f37563d33542a2ebe63ce4c8c9e06ee3cc8a\""
     },
-    "AssetParametersf6577333890e4d81c169bfcacedc8a0149fbdc23729560739269bfe47fe33affArtifactHash07C01606": {
+    "AssetParameters73caf88fd61d6684ecd85db26d26f37563d33542a2ebe63ce4c8c9e06ee3cc8aArtifactHashCD06BB6D": {
       "Type": "String",
-      "Description": "Artifact hash for asset \"f6577333890e4d81c169bfcacedc8a0149fbdc23729560739269bfe47fe33aff\""
+      "Description": "Artifact hash for asset \"73caf88fd61d6684ecd85db26d26f37563d33542a2ebe63ce4c8c9e06ee3cc8a\""
     }
   },
   "Outputs": {

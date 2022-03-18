@@ -13,6 +13,11 @@ Successful Request
 
 '''
 
+from aws_xray_sdk.core import xray_recorder
+from aws_xray_sdk.core import patch_all
+
+patch_all()
+
 def handler(flavor):
     print(f"Requested Pizza : {flavor}")
     contains_pineapple = False
