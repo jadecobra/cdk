@@ -36,7 +36,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": {
-            "Ref": "AssetParametersd3978257cfa310d7e26a0d86a7535987d7287f901e8cd103748c74f0b81e31afS3Bucket6BE6CFFB"
+            "Ref": "AssetParametersf6577333890e4d81c169bfcacedc8a0149fbdc23729560739269bfe47fe33affS3BucketD5157C4C"
           },
           "S3Key": {
             "Fn::Join": [
@@ -49,7 +49,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParametersd3978257cfa310d7e26a0d86a7535987d7287f901e8cd103748c74f0b81e31afS3VersionKeyBB439CE1"
+                          "Ref": "AssetParametersf6577333890e4d81c169bfcacedc8a0149fbdc23729560739269bfe47fe33affS3VersionKeyB6C1EC59"
                         }
                       ]
                     }
@@ -62,7 +62,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParametersd3978257cfa310d7e26a0d86a7535987d7287f901e8cd103748c74f0b81e31afS3VersionKeyBB439CE1"
+                          "Ref": "AssetParametersf6577333890e4d81c169bfcacedc8a0149fbdc23729560739269bfe47fe33affS3VersionKeyB6C1EC59"
                         }
                       ]
                     }
@@ -159,7 +159,7 @@
           "Fn::Join": [
             "",
             [
-              "{\"StartAt\":\"Order Pizza Job\",\"States\":{\"Order Pizza Job\":{\"Next\":\"Contains Pineapple?\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Type\":\"Task\",\"InputPath\":\"$.flavour\",\"ResultPath\":\"$.pineappleAnalysis\",\"Resource\":\"",
+              "{\"StartAt\":\"Order Pizza Job\",\"States\":{\"Order Pizza Job\":{\"Next\":\"Contains Pineapple?\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Type\":\"Task\",\"InputPath\":\"$.flavor\",\"ResultPath\":\"$.pineappleAnalysis\",\"Resource\":\"",
               {
                 "Fn::GetAtt": [
                   "pineappleCheckLambdaHandlerFDB742D5",
@@ -278,17 +278,17 @@
     }
   },
   "Parameters": {
-    "AssetParametersd3978257cfa310d7e26a0d86a7535987d7287f901e8cd103748c74f0b81e31afS3Bucket6BE6CFFB": {
+    "AssetParametersf6577333890e4d81c169bfcacedc8a0149fbdc23729560739269bfe47fe33affS3BucketD5157C4C": {
       "Type": "String",
-      "Description": "S3 bucket for asset \"d3978257cfa310d7e26a0d86a7535987d7287f901e8cd103748c74f0b81e31af\""
+      "Description": "S3 bucket for asset \"f6577333890e4d81c169bfcacedc8a0149fbdc23729560739269bfe47fe33aff\""
     },
-    "AssetParametersd3978257cfa310d7e26a0d86a7535987d7287f901e8cd103748c74f0b81e31afS3VersionKeyBB439CE1": {
+    "AssetParametersf6577333890e4d81c169bfcacedc8a0149fbdc23729560739269bfe47fe33affS3VersionKeyB6C1EC59": {
       "Type": "String",
-      "Description": "S3 key for asset version \"d3978257cfa310d7e26a0d86a7535987d7287f901e8cd103748c74f0b81e31af\""
+      "Description": "S3 key for asset version \"f6577333890e4d81c169bfcacedc8a0149fbdc23729560739269bfe47fe33aff\""
     },
-    "AssetParametersd3978257cfa310d7e26a0d86a7535987d7287f901e8cd103748c74f0b81e31afArtifactHashE42B9C16": {
+    "AssetParametersf6577333890e4d81c169bfcacedc8a0149fbdc23729560739269bfe47fe33affArtifactHash07C01606": {
       "Type": "String",
-      "Description": "Artifact hash for asset \"d3978257cfa310d7e26a0d86a7535987d7287f901e8cd103748c74f0b81e31af\""
+      "Description": "Artifact hash for asset \"f6577333890e4d81c169bfcacedc8a0149fbdc23729560739269bfe47fe33aff\""
     }
   },
   "Outputs": {

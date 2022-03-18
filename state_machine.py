@@ -12,6 +12,7 @@ class StateMachine(core.Stack):
 
     def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
+        self.pineapple_analysis = '$.pineappleAnalysis'
         state_machine = self.create_state_machine(self.order_pizza())
         http_api_role = self.create_iam_role(state_machine.state_machine_arn)
         http_api = self.create_http_api()
@@ -33,25 +34,24 @@ class StateMachine(core.Stack):
             error='Failed To Make Pizza'
         )
 
-    @staticmethod
-    def order_contains_pineapple():
+    def order_contains_pineapple(self):
         return aws_stepfunctions.Condition.boolean_equals(
-            '$.pineappleAnalysis.containsPineapple', True
+            f'{self.pineapple_analysis}.containsPineapple', True
         )
 
     def order_pizza_task(self, lambda_function):
         return aws_stepfunctions_tasks.LambdaInvoke(
-            self, 'Order Pizza Job',
+            self, 'Order Pizza',
             lambda_function=lambda_function,
-            input_path='$.flavour',
-            result_path='$.pineappleAnalysis',
+            input_path='$.flavor',
+            result_path=self.pineapple_analysis,
             payload_response_only=True
         )
 
     def cook_pizza(self):
         return aws_stepfunctions.Succeed(
             self, 'Lets make your pizza',
-            output_path='$.pineappleAnalysis'
+            output_path=self.pineapple_analysis
         )
 
     def state_machine_definition(self, lambda_function):
