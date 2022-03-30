@@ -83,6 +83,10 @@ class WellArchitected(cdk.App):
             self, 'WebApplicationFirewall',
             target_arn=self.rest_api.resource_arn
         )
+        # web_application_firewall.WebApplicationFirewall(
+        #     self, 'WebApplicationFirewall',
+        #     target_arn=http_api.ref
+        # )
 
     def create_xray_tracer(self):
         xray_tracer_sns_topic = sns_topic.SnsTopic(

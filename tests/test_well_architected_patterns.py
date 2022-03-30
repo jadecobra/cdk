@@ -1,6 +1,6 @@
-from tests.utilities import TestTemplates, true, false
+import tests.utilities
 
-class TestWellArchitectedPatterns(TestTemplates):
+class TestWellArchitectedPatterns(tests.utilities.TestTemplates):
 
     @staticmethod
     def patterns():
@@ -23,11 +23,12 @@ class TestWellArchitectedPatterns(TestTemplates):
             # 'SagaStepFunction',
             # 'ScalableWebhook', # deprecated by RdsProxy
             # 'SinglePurposeLambda',
+            'SimpleGraphQLService',
             # 'SnsFlow',
             # 'SnsRestApi',
             # 'SNSTopic',
             # 'SqsFlow',
-            'StateMachine',
+            # 'StateMachine',
             # 'WebApplicationFirewall',
             # 'XRayTracerSnsFanOutTopic',
         )

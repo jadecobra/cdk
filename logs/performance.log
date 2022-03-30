@@ -16195,3 +16195,6 @@
 2022-03-18 04:29:45.226176::Time taken to synthesize stack: StateMachine::  4.2006 seconds
 2022-03-18 04:29:55.145060::Time taken to synthesize stack: StateMachine::  4.2145 seconds
 2022-03-18 04:31:28.866671::Time taken to synthesize stack: StateMachine::  4.1491 seconds
+2022-03-18 12:23:55.421797::Time taken to synthesize stack: StateMachine::  4.4941 seconds
+2022-03-29 09:30:47.256819::Time taken to synthesize stack: StateMachine::  3.9138 seconds
+2022-03-30 07:05:49.219871::Time taken to synthesize stack: StateMachine::  6.9817 seconds

@@ -76,4 +76,6 @@ def handler(event, context):
     setup_database(connection=connection, event=event)
     url_queries = get_url_queries(connection)
 
-    return response(f'You have connected with the RDS Proxy! <br /><br /> {url_queries}')
+    return response(
+        body=f'You have connected with the RDS Proxy! <br /><br /> {url_queries}'
+    )
