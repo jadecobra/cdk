@@ -8,56 +8,7 @@ import json
 
 class DynamoStreamer(aws_cdk.core.Stack):
 
-    @staticmethod
-    def add_response_model_to_rest_api(rest_api):
-        return rest_api.add_model(
-            'ResponseModel',
-            content_type='application/json',
-            model_name='ResponseModel',
-            schema=aws_cdk.aws_apigateway.JsonSchema(
-                schema=aws_cdk.aws_apigateway.JsonSchemaVersion.DRAFT4,
-                title='pollResponse',
-                type=aws_cdk.aws_apigateway.JsonSchemaType.OBJECT,
-                properties={
-                    'message': aws_cdk.aws_apigateway.JsonSchema(type=aws_cdk.aws_apigateway.JsonSchemaType.STRING)
-                }
-            )
-        )
 
-    @staticmethod
-    def add_error_response_model_to_rest_api(rest_api):
-        return rest_api.add_model(
-            'ErrorResponseModel',
-            content_type='application/json',
-            model_name='ErrorResponseModel',
-            schema=aws_cdk.aws_apigateway.JsonSchema(
-                schema=aws_cdk.aws_apigateway.JsonSchemaVersion.DRAFT4,
-                title='errorResponse',
-                type=aws_cdk.aws_apigateway.JsonSchemaType.OBJECT,
-                properties={
-                    'state': aws_cdk.aws_apigateway.JsonSchema(type=aws_cdk.aws_apigateway.JsonSchemaType.STRING),
-                    'message': aws_cdk.aws_apigateway.JsonSchema(type=aws_cdk.aws_apigateway.JsonSchemaType.STRING)
-                }
-            )
-        )
-
-    @staticmethod
-    def application_json_template(template, separators=(',', ':')):
-        return {'application/json': json.dumps(template, separators=separators)}
-
-    def request_template(self, table_name):
-        return self.application_json_template({
-            "TableName": table_name,
-            "Item": {
-                "message": {"S": "$input.path('$.message')"}
-            }
-        })
-
-    def error_response_template(self):
-        return self.application_json_template({
-            "state": 'error',
-            "message": "$util.escapeJavaScript($input.path('$.errorMessage'))"
-        })
 
     def __init__(self, scope: aws_cdk.core.Construct, id: str, **kwargs) -> None:
 
@@ -81,12 +32,8 @@ class DynamoStreamer(aws_cdk.core.Stack):
             integration_responses=[
                 aws_cdk.aws_apigateway.IntegrationResponse(
                     status_code='200',
-                    # response_templates={
-                    #     "application/json": json.dumps(
-                    #         {"message": 'item added to db'})
-                    # }
                     response_templates=self.application_json_template(
-                        {"message": 'item added to db'},
+                        template={"message": 'item added to db'},
                         separators=None
                     )
                 ),
@@ -180,3 +127,54 @@ class DynamoStreamer(aws_cdk.core.Stack):
             self, 'ApiGatewayRole',
             assumed_by=aws_cdk.aws_iam.ServicePrincipal('apigateway.amazonaws.com')
         )
+
+    @staticmethod
+    def add_response_model_to_rest_api(rest_api):
+        return rest_api.add_model(
+            'ResponseModel',
+            content_type='application/json',
+            model_name='ResponseModel',
+            schema=aws_cdk.aws_apigateway.JsonSchema(
+                schema=aws_cdk.aws_apigateway.JsonSchemaVersion.DRAFT4,
+                title='pollResponse',
+                type=aws_cdk.aws_apigateway.JsonSchemaType.OBJECT,
+                properties={
+                    'message': aws_cdk.aws_apigateway.JsonSchema(type=aws_cdk.aws_apigateway.JsonSchemaType.STRING)
+                }
+            )
+        )
+
+    @staticmethod
+    def add_error_response_model_to_rest_api(rest_api):
+        return rest_api.add_model(
+            'ErrorResponseModel',
+            content_type='application/json',
+            model_name='ErrorResponseModel',
+            schema=aws_cdk.aws_apigateway.JsonSchema(
+                schema=aws_cdk.aws_apigateway.JsonSchemaVersion.DRAFT4,
+                title='errorResponse',
+                type=aws_cdk.aws_apigateway.JsonSchemaType.OBJECT,
+                properties={
+                    'state': aws_cdk.aws_apigateway.JsonSchema(type=aws_cdk.aws_apigateway.JsonSchemaType.STRING),
+                    'message': aws_cdk.aws_apigateway.JsonSchema(type=aws_cdk.aws_apigateway.JsonSchemaType.STRING)
+                }
+            )
+        )
+
+    @staticmethod
+    def application_json_template(template, separators=(',', ':')):
+        return {'application/json': json.dumps(template, separators=separators)}
+
+    def request_template(self, table_name):
+        return self.application_json_template({
+            "TableName": table_name,
+            "Item": {
+                "message": {"S": "$input.path('$.message')"}
+            }
+        })
+
+    def error_response_template(self):
+        return self.application_json_template({
+            "state": 'error',
+            "message": "$util.escapeJavaScript($input.path('$.errorMessage'))"
+        })
