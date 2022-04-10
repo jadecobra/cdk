@@ -78,6 +78,17 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
             response_mapping_template=response_mapping_template,
         )
 
+    def create_mutation_resolver(
+        self, data_source=None, field_name=None,
+        request_mapping_template=None, response_mapping_template=None
+    ):
+        return data_source.create_resolver(
+            type_name='Mutation',
+            field_name=field_name,
+            request_mapping_template=request_mapping_template,
+            response_mapping_template=response_mapping_template,
+        )
+
     def add_get_customers_query_resolver_lambda(self, data_source):
         self.create_query_resolver(
             data_source=data_source,
@@ -88,17 +99,11 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
 
     def add_get_customers_query_resolver_dynamodb(self, data_source):
         self.create_query_resolver(
-            data_source=data_source
+            data_source=data_source,
             field_name='getCustomers',
             request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_scan_table(),
             response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_result_list(),
         )
-        # data_source.create_resolver(
-        #     type_name='Query',
-        #     field_name='getCustomers',
-        #     request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_scan_table(),
-        #     response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_result_list(),
-        # )
 
     def add_get_customer_query_resolver(self, data_source):
         self.create_query_resolver(
@@ -109,20 +114,10 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
             ),
             response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_result_item(),
         )
-        # # Query Resolver to get an individual Customer by their id
-        # data_source.create_resolver(
-        #     type_name='Query',
-        #     field_name='getCustomer',
-        #     request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_get_item(
-        #         'id', 'id'
-        #     ),
-        #     response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_result_item(),
-        # )
 
-    @staticmethod
-    def add_add_customer_mutation_resolver(data_source):
-        data_source.create_resolver(
-            type_name='Mutation',
+    def add_add_customer_mutation_resolver(self, data_source):
+        self.create_mutation_resolver(
+            # type_name='Mutation',
             field_name='addCustomer',
             request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_put_item(
                 key=aws_cdk.aws_appsync.PrimaryKey.partition('id').auto(),
