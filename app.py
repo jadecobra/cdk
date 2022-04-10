@@ -1,27 +1,31 @@
 import aws_cdk.core as cdk
 import aws_cdk.aws_dynamodb as aws_dynamodb
-
-import big_fan
-import destined_lambda
-import dynamodb_table
-import event_bridge_atm
-import event_bridge_circuit_breaker
-import event_bridge_etl
-import http_api
-import lambda_circuit_breaker
-import lambda_trilogy.lambda_lith
-import lambda_trilogy.fat_lambda
-import lambda_trilogy.single_purpose_lambda
-import lambda_function
-import rds_proxy
-import rest_api
-import saga_step_function
-import scalable_webhook
-import sns_topic
-import xray_tracer
-import web_application_firewall
-import state_machine
-
+import os
+try:
+    import big_fan
+    import destined_lambda
+    import dynamodb_table
+    import event_bridge_atm
+    import event_bridge_circuit_breaker
+    import event_bridge_etl
+    import http_api
+    import lambda_circuit_breaker
+    import lambda_trilogy.lambda_lith
+    import lambda_trilogy.fat_lambda
+    import lambda_trilogy.single_purpose_lambda
+    import lambda_function
+    import rds_proxy
+    import rest_api
+    import saga_step_function
+    import scalable_webhook
+    import sns_topic
+    import xray_tracer
+    import web_application_firewall
+    import state_machine
+    import simple_graphql_service
+except ImportError:
+    os.system('pip install -r requirements.txt')
+    
 
 class WellArchitected(cdk.App):
 
@@ -49,6 +53,7 @@ class WellArchitected(cdk.App):
         saga_step_function.SagaStepFunction(self, "SagaStepFunction")
         scalable_webhook.ScalableWebhook(self, "ScalableWebhook")
         state_machine.StateMachine(self, "StateMachine")
+        simple_graphql_service.SimpleGraphQlService(self, "SimpleGraphqlService")
 
     def create_webservice(self):
         error_sns_topic = sns_topic.SnsTopic(self, 'SnsTopic').topic

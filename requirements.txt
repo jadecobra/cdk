@@ -5,6 +5,7 @@ aws-cdk.aws-apigateway
 aws-cdk.aws-apigatewayv2
 aws-cdk.aws-apigatewayv2-integrations
 aws-cdk.aws-applicationautoscaling
+aws-cdk.aws-appsync
 aws-cdk.aws-autoscaling
 aws-cdk.aws-autoscaling-common
 aws-cdk.aws-certificatemanager
