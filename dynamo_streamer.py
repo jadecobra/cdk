@@ -8,35 +8,6 @@ import json
 
 class DynamoStreamer(aws_cdk.core.Stack):
 
-    @staticmethod
-    def create_response_parameters(content_type=True, origin=True, credentials=True):
-        return {
-            'method.response.header.Content-Type': content_type,
-            'method.response.header.Access-Control-Allow-Origin': origin,
-            'method.response.header.Access-Control-Allow-Credentials': credentials,
-        }
-
-    def get_integration_responses(self):
-        return [
-            aws_cdk.aws_apigateway.IntegrationResponse(
-                status_code='200',
-                response_templates=self.application_json_template(
-                    template={"message": 'item added to db'},
-                    separators=None
-                )
-            ),
-            aws_cdk.aws_apigateway.IntegrationResponse(
-                selection_pattern="^\[BadRequest\].*",
-                status_code='400',
-                response_templates=self.error_response_template(),
-                response_parameters=self.create_response_parameters(
-                    content_type="'application/json'",
-                    origin="'*'",
-                    credentials="'true'",
-                )
-            )
-        ]
-
     def __init__(self, scope: aws_cdk.core.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
@@ -47,8 +18,8 @@ class DynamoStreamer(aws_cdk.core.Stack):
         dynamodb_table.grant_read_write_data(api_gateway_service_role)
 
         # Because this isn't a proxy integration, we need to define our response model
-        # ok_response_model = self.add_response_model_to_rest_api(rest_api)
-        # error_response_model = self.add_error_response_model_to_rest_api(rest_api)
+        ok_response_model = self.add_response_model_to_rest_api(rest_api)
+        error_response_model = self.add_error_response_model_to_rest_api(rest_api)
 
         (
             rest_api.root
@@ -63,8 +34,8 @@ class DynamoStreamer(aws_cdk.core.Stack):
                     )
                 ),
                 method_responses=self.create_method_responses(
-                    ok_response_model=self.add_response_model_to_rest_api(rest_api),
-                    error_response_model=self.add_error_response_model_to_rest_api(rest_api),
+                    ok_response_model=ok_response_model,
+                    error_response_model=error_response_model,
                 )
             )
         )
@@ -193,3 +164,32 @@ class DynamoStreamer(aws_cdk.core.Stack):
             "state": 'error',
             "message": "$util.escapeJavaScript($input.path('$.errorMessage'))"
         })
+
+    @staticmethod
+    def create_response_parameters(content_type=True, origin=True, credentials=True):
+        return {
+            'method.response.header.Content-Type': content_type,
+            'method.response.header.Access-Control-Allow-Origin': origin,
+            'method.response.header.Access-Control-Allow-Credentials': credentials,
+        }
+
+    def get_integration_responses(self):
+        return [
+            aws_cdk.aws_apigateway.IntegrationResponse(
+                status_code='200',
+                response_templates=self.application_json_template(
+                    template={"message": 'item added to db'},
+                    separators=None
+                )
+            ),
+            aws_cdk.aws_apigateway.IntegrationResponse(
+                selection_pattern="^\[BadRequest\].*",
+                status_code='400',
+                response_templates=self.error_response_template(),
+                response_parameters=self.create_response_parameters(
+                    content_type="'application/json'",
+                    origin="'*'",
+                    credentials="'true'",
+                )
+            )
+        ]
