@@ -8,46 +8,6 @@ import json
 
 class DynamoStreamer(aws_cdk.core.Stack):
 
-    def create_dynamodb_table(self):
-        return aws_cdk.aws_dynamodb.Table(
-            self, "DynamoDbTable",
-            stream=aws_cdk.aws_dynamodb.StreamViewType.NEW_IMAGE,
-            partition_key=aws_cdk.aws_dynamodb.Attribute(
-                name="message",
-                type=aws_cdk.aws_dynamodb.AttributeType.STRING
-            ),
-        )
-
-    def create_lambda_function_with_dynamodb_event_source(self, dynamodb_table):
-        return aws_cdk.aws_lambda.Function(
-            self, 'LambdaFunction',
-            runtime=aws_cdk.aws_lambda.Runtime.PYTHON_3_8,
-            handler="lambda.handler",
-            code=aws_cdk.aws_lambda.Code.from_asset("lambda_functions/subscribe")
-        ).add_event_source(
-            aws_cdk.aws_lambda_event_sources.DynamoEventSource(
-                table=dynamodb_table,
-                starting_position=aws_cdk.aws_lambda.StartingPosition.LATEST
-            )
-        )
-
-    def create_rest_api(self):
-        return aws_cdk.aws_apigateway.RestApi(
-            self, 'ApiGateway',
-            deploy_options=aws_cdk.aws_apigateway.StageOptions(
-                metrics_enabled=True,
-                logging_level=aws_cdk.aws_apigateway.MethodLoggingLevel.INFO,
-                data_trace_enabled=True,
-                stage_name='prod'
-            )
-        )
-
-    def create_api_gateway_service_role(self):
-        return aws_cdk.aws_iam.Role(
-            self, 'ApiGatewayRole',
-            assumed_by=aws_cdk.aws_iam.ServicePrincipal('apigateway.amazonaws.com')
-        )
-
     def __init__(self, scope: aws_cdk.core.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
@@ -169,4 +129,44 @@ class DynamoStreamer(aws_cdk.core.Stack):
                     ),
                 ]
             )
+        )
+
+    def create_dynamodb_table(self):
+        return aws_cdk.aws_dynamodb.Table(
+            self, "DynamoDbTable",
+            stream=aws_cdk.aws_dynamodb.StreamViewType.NEW_IMAGE,
+            partition_key=aws_cdk.aws_dynamodb.Attribute(
+                name="message",
+                type=aws_cdk.aws_dynamodb.AttributeType.STRING
+            ),
+        )
+
+    def create_lambda_function_with_dynamodb_event_source(self, dynamodb_table):
+        return aws_cdk.aws_lambda.Function(
+            self, 'LambdaFunction',
+            runtime=aws_cdk.aws_lambda.Runtime.PYTHON_3_8,
+            handler="lambda.handler",
+            code=aws_cdk.aws_lambda.Code.from_asset("lambda_functions/subscribe")
+        ).add_event_source(
+            aws_cdk.aws_lambda_event_sources.DynamoEventSource(
+                table=dynamodb_table,
+                starting_position=aws_cdk.aws_lambda.StartingPosition.LATEST
+            )
+        )
+
+    def create_rest_api(self):
+        return aws_cdk.aws_apigateway.RestApi(
+            self, 'ApiGateway',
+            deploy_options=aws_cdk.aws_apigateway.StageOptions(
+                metrics_enabled=True,
+                logging_level=aws_cdk.aws_apigateway.MethodLoggingLevel.INFO,
+                data_trace_enabled=True,
+                stage_name='prod'
+            )
+        )
+
+    def create_api_gateway_service_role(self):
+        return aws_cdk.aws_iam.Role(
+            self, 'ApiGatewayRole',
+            assumed_by=aws_cdk.aws_iam.ServicePrincipal('apigateway.amazonaws.com')
         )
