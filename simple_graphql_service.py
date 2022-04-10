@@ -10,14 +10,16 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        schema_location = os.path.dirname(os.path.realpath(__file__)) + "/schema/schema.graphql"
-
         # Create a new AppSync GraphQL API
         api = aws_cdk.aws_appsync.GraphqlApi(
             self, 'Api',
             name="demoapi",
-            log_config=aws_cdk.aws_appsync.LogConfig(field_log_level=aws_cdk.aws_appsync.FieldLogLevel.ALL),
-            schema=aws_cdk.aws_appsync.Schema.from_asset(schema_location)
+            log_config=aws_cdk.aws_appsync.LogConfig(
+                field_log_level=aws_cdk.aws_appsync.FieldLogLevel.ALL
+            ),
+            schema=aws_cdk.aws_appsync.Schema.from_asset(
+                os.path.dirname(os.path.realpath(__file__)) + "/schema/schema.graphql"
+            )
         )
 
         api_key = aws_cdk.aws_appsync.CfnApiKey(
