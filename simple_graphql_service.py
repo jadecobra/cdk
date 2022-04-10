@@ -115,6 +115,10 @@ class SimpleGraphQlService(core.Stack):
             response_mapping_template=appsync.MappingTemplate.lambda_result(),
         )
 
-        for
-        aws_cdk.core.CfnOutput(self, 'Endpoint', value=api.graphql_url)
-        aws_cdk.core.CfnOutput(self, 'API_Key', value=api_key.attr_api_key)
+        for logical_id, value in (
+            'Endpoint', api.graphql_url,
+            'API_Key', api_key.attr_api_key
+        ):
+            aws_cdk.core.CfnOutput(self, logical_id, value=value)
+        # aws_cdk.core.CfnOutput(self, 'Endpoint', value=api.graphql_url)
+        # aws_cdk.core.CfnOutput(self, 'API_Key', value=api_key.attr_api_key)
