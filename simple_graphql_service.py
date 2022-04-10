@@ -42,13 +42,6 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
         self.add_save_customer_with_first_order_mutation_resolver(customer_data_source)
         self.add_remove_customer_mutation_resolver(customer_data_source)
         self.add_get_customers_query_resolver_lambda(loyalty_data_source)
-        # Query Resolver to get all Customers
-        # loyalty_data_source.create_resolver(
-        #     type_name='Query',
-        #     field_name='getLoyaltyLevel',
-        #     request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.lambda_request(),
-        #     response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.lambda_result(),
-        # )
 
         for logical_id, value in (
             ('Endpoint', api.graphql_url),
@@ -74,13 +67,30 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
         )
 
     @staticmethod
-    def add_get_customers_query_resolver_lambda(data_source):
-        data_source.create_resolver(
+    def create_query_resolver(
+        data_source=None, field_name=None,
+        request_mapping_template=None, response_mapping_template=None
+    ):
+        return data_source.create_resolver(
             type_name='Query',
+            field_name=field_name,
+            request_mapping_template=request_mapping_template,
+            response_mapping_template=response_mapping_template,
+        )
+
+    def add_get_customers_query_resolver_lambda(self, data_source):
+        self.create_query_resolver(
+            data_source=data_source,
             field_name='getLoyaltyLevel',
             request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.lambda_request(),
             response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.lambda_result(),
         )
+        # data_source.create_resolver(
+        #     type_name='Query',
+        #     field_name='getLoyaltyLevel',
+        #     request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.lambda_request(),
+        #     response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.lambda_result(),
+        # )
 
     @staticmethod
     def add_get_customers_query_resolver_dynamodb(data_source):
