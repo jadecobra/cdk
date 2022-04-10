@@ -1,3 +1,4 @@
+from re import M
 import aws_cdk.core
 import aws_cdk.aws_lambda
 import aws_cdk.aws_lambda_event_sources
@@ -41,6 +42,30 @@ class DynamoStreamer(aws_cdk.core.Stack):
             )
         )
 
+    @staticmethod
+    def separators():
+        return (',', ':')
+
+    def request_template_string(self):
+        return json.dumps(
+            {
+                "TableName": dynamodb_table.table_name,
+                "Item": {
+                    "message": {"S": "$input.path('$.message')"}
+                }
+            },
+            separators=self.separators(),
+        )
+
+    def error_template_string(self):
+        return json.dumps(
+            {
+                "state": 'error',
+                "message": "$util.escapeJavaScript($input.path('$.errorMessage'))"
+            },
+            separators=self.separators(),
+        )
+
     def __init__(self, scope: aws_cdk.core.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
@@ -50,32 +75,32 @@ class DynamoStreamer(aws_cdk.core.Stack):
         self.create_lambda_function_with_dynamodb_event_source(dynamodb_table)
         dynamodb_table.grant_read_write_data(api_gateway_service_role)
 
-
         # Because this isn't a proxy integration, we need to define our response model
         response_model = self.add_response_model_to_rest_api(rest_api)
-        error_response_model = self.add_error_response_model_to_rest_api(*rest_api)
+        error_response_model = self.add_error_response_model_to_rest_api(rest_api)
 
         # This is the VTL to transform our incoming JSON to a Dynamo Insert Query
-        request_template = {
-            "TableName": dynamodb_table.table_name,
-            "Item": {
-                "message": {"S": "$input.path('$.message')"}
-            }
-        }
-        request_template_string = json.dumps(request_template, separators=(',', ':'))
+        # request_template = {
+        #     "TableName": dynamodb_table.table_name,
+        #     "Item": {
+        #         "message": {"S": "$input.path('$.message')"}
+        #     }
+        # }
 
-        # This is the VTL to transform the error response
-        error_template = {
-            "state": 'error',
-            "message": "$util.escapeJavaScript($input.path('$.errorMessage'))"
-        }
-        error_template_string = json.dumps(error_template, separators=(',', ':'))
+        # # This is the VTL to transform the error response
+        # error_template = {
+        #     "state": 'error',
+        #     "message": "$util.escapeJavaScript($input.path('$.errorMessage'))"
+        # }
+        # request_template_string = json.dumps(request_template, separators=(',', ':'))
+        # error_template_string = json.dumps(error_template, separators=(',', ':'))
+
 
         # This is how our gateway chooses what response to send based on selection_pattern
         integration_options = aws_cdk.aws_apigateway.IntegrationOptions(
             credentials_role=api_gateway_service_role,
             request_templates={
-                "application/json": request_template_string
+                "application/json": self.request_template_string()
             },
             passthrough_behavior=aws_cdk.aws_apigateway.PassthroughBehavior.NEVER,
             integration_responses=[
@@ -89,7 +114,7 @@ class DynamoStreamer(aws_cdk.core.Stack):
                     selection_pattern="^\[BadRequest\].*",
                     status_code='400',
                     response_templates={
-                        "application/json": error_template_string
+                        "application/json": self.error_template_string()
                     },
                     response_parameters={
                         'method.response.header.Content-Type': "'application/json'",
