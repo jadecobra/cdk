@@ -14,22 +14,28 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
         super().__init__(scope, id, **kwargs)
 
         graphql_api = self.create_graphql_api()
-        dynamodb_data_source = self.create_dynamodb_table_data_source(
-            api=graphql_api,
-            title='Customer'
-        )
-        lambda_function_data_source = self.create_lambda_function_data_source(
-            api=graphql_api,
-            title='Loyalty'
-        )
         self.add_dynamodb_data_source_resolvers(
-            self.create_dynamodb_table_data_source(
-                api=graphql_api,
-                title='Customer'
+            graphql_api.add_dynamo_db_data_source(
+                'Customer',
+                aws_cdk.aws_dynamodb.Table(
+                    self, "CustomerTable",
+                    partition_key=aws_cdk.aws_dynamodb.Attribute(
+                        name="id",
+                        type=aws_cdk.aws_dynamodb.AttributeType.STRING
+                    )
+                )
             )
         )
         self.add_get_customers_query_resolver_lambda(
-            lambda_function_data_source
+            graphql_api.add_lambda_data_source(
+                'Loyalty',
+                aws_cdk.aws_lambda.Function(
+                    self, "LoyaltyLambdaHandler",
+                    runtime=aws_cdk.aws_lambda.Runtime.PYTHON_3_9,
+                    handler="loyalty.handler",
+                    code=aws_cdk.aws_lambda.Code.from_asset("lambda_functions/loyalty"),
+                )
+            )
         )
 
         for logical_id, value in (
@@ -54,28 +60,6 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
         return aws_cdk.aws_appsync.CfnApiKey(
             self, 'the-simple-graphql-service-api-key',
             api_id=api_id
-        )
-
-    def create_dynamodb_table_data_source(self, title=None, api=None):
-        return api.add_dynamo_db_data_source(
-            title,
-            aws_cdk.aws_dynamodb.Table(
-                self, "CustomerTable",
-                partition_key=aws_cdk.aws_dynamodb.Attribute(
-                    name="id",
-                    type=aws_cdk.aws_dynamodb.AttributeType.STRING
-                )
-            )
-        )
-
-    def create_lambda_function_data_source(self, title=None, api=None):
-        return api.add_lambda_data_source(
-            title,
-            aws_cdk.aws_lambda.Function(self, "LoyaltyLambdaHandler",
-                runtime=aws_cdk.aws_lambda.Runtime.PYTHON_3_9,
-                handler="loyalty.handler",
-                code=aws_cdk.aws_lambda.Code.from_asset("lambda_functions/loyalty"),
-            )
         )
 
     @staticmethod
@@ -165,7 +149,7 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
         )
 
     def add_dynamodb_data_source_resolvers(self, dynamodb_data_source):
-        for add_dynamodb_data_source_resolver in (
+        for method in (
             self.add_get_customers_query_resolver_dynamodb,
             self.add_get_customer_query_resolver,
             self.add_add_customer_mutation_resolver,
@@ -173,4 +157,4 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
             self.add_save_customer_with_first_order_mutation_resolver,
             self.add_remove_customer_mutation_resolver,
         ):
-            add_dynamodb_data_source_resolver(dynamodb_data_source)
+            method(dynamodb_data_source)
