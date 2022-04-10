@@ -22,8 +22,15 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
             api=graphql_api,
             title='Loyalty'
         )
-        self.add_dynamodb_data_source_resolvers(dynamodb_data_source)
-        self.add_get_customers_query_resolver_lambda(lambda_function_data_source)
+        self.add_dynamodb_data_source_resolvers(
+            self.create_dynamodb_table_data_source(
+                api=graphql_api,
+                title='Customer'
+            )
+        )
+        self.add_get_customers_query_resolver_lambda(
+            lambda_function_data_source
+        )
 
         for logical_id, value in (
             ('Endpoint', graphql_api.graphql_url),
