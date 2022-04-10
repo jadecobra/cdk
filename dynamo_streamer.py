@@ -46,10 +46,10 @@ class DynamoStreamer(aws_cdk.core.Stack):
     def separators():
         return (',', ':')
 
-    def request_template_string(self):
+    def request_template_string(self, table_name):
         return json.dumps(
             {
-                "TableName": dynamodb_table.table_name,
+                "TableName": table_name,
                 "Item": {
                     "message": {"S": "$input.path('$.message')"}
                 }
@@ -100,7 +100,7 @@ class DynamoStreamer(aws_cdk.core.Stack):
         integration_options = aws_cdk.aws_apigateway.IntegrationOptions(
             credentials_role=api_gateway_service_role,
             request_templates={
-                "application/json": self.request_template_string()
+                "application/json": self.request_template_string(dynamodb_table.table_name)
             },
             passthrough_behavior=aws_cdk.aws_apigateway.PassthroughBehavior.NEVER,
             integration_responses=[
