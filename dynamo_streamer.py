@@ -45,39 +45,23 @@ class DynamoStreamer(aws_cdk.core.Stack):
     def separators():
         return (',', ':')
 
-    @staticmethod
-    def application_json_template(template):
-        return {'appplication/json': json.dumps(template, separators=(',', ':'))}
+    # @staticmethod
+    def application_json_template(self, template):
+        return {'application/json': json.dumps(template, separators=self.separators())}
 
     def request_template(self, table_name):
-        return {
-            "application/json": self.request_template_string(table_name)
-        }
+        return self.application_json_template({
+            "TableName": table_name,
+            "Item": {
+                "message": {"S": "$input.path('$.message')"}
+            }
+        })
 
     def error_response_template(self):
-        return {
-            "application/json": self.error_template_string()
-        }
-
-    def request_template_string(self, table_name):
-        return json.dumps(
-            {
-                "TableName": table_name,
-                "Item": {
-                    "message": {"S": "$input.path('$.message')"}
-                }
-            },
-            separators=self.separators(),
-        )
-
-    def error_template_string(self):
-        return json.dumps(
-            {
-                "state": 'error',
-                "message": "$util.escapeJavaScript($input.path('$.errorMessage'))"
-            },
-            separators=self.separators(),
-        )
+        return self.application_json_template({
+            "state": 'error',
+            "message": "$util.escapeJavaScript($input.path('$.errorMessage'))"
+        })
 
     def __init__(self, scope: aws_cdk.core.Construct, id: str, **kwargs) -> None:
 
@@ -108,9 +92,6 @@ class DynamoStreamer(aws_cdk.core.Stack):
                 aws_cdk.aws_apigateway.IntegrationResponse(
                     selection_pattern="^\[BadRequest\].*",
                     status_code='400',
-                    # response_templates={
-                    #     "application/json": self.error_template_string()
-                    # },
                     response_templates=self.error_response_template(),
                     response_parameters={
                         'method.response.header.Content-Type': "'application/json'",
