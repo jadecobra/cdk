@@ -8,17 +8,15 @@ import os
 
 class SimpleGraphQlService(aws_cdk.core.Stack):
 
-
-
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         graphql_api = self.create_graphql_api()
         self.add_dynamodb_data_source_resolvers(
             graphql_api.add_dynamo_db_data_source(
-                'Customer',
+                'DynamoDbDataSource',
                 aws_cdk.aws_dynamodb.Table(
-                    self, "CustomerTable",
+                    self, "DynamoDBTable",
                     partition_key=aws_cdk.aws_dynamodb.Attribute(
                         name="id",
                         type=aws_cdk.aws_dynamodb.AttributeType.STRING
@@ -28,9 +26,9 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
         )
         self.add_get_customers_query_resolver_lambda(
             graphql_api.add_lambda_data_source(
-                'Loyalty',
+                'LambdaDataSource',
                 aws_cdk.aws_lambda.Function(
-                    self, "LoyaltyLambdaHandler",
+                    self, "LambdaFunction",
                     runtime=aws_cdk.aws_lambda.Runtime.PYTHON_3_9,
                     handler="loyalty.handler",
                     code=aws_cdk.aws_lambda.Code.from_asset("lambda_functions/loyalty"),
@@ -46,7 +44,7 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
 
     def create_graphql_api(self):
         return aws_cdk.aws_appsync.GraphqlApi(
-            self, 'Api',
+            self, 'GraphQlApi',
             name="demoapi",
             log_config=aws_cdk.aws_appsync.LogConfig(
                 field_log_level=aws_cdk.aws_appsync.FieldLogLevel.ALL
@@ -58,7 +56,7 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
 
     def create_graphql_api_key(self, api_id):
         return aws_cdk.aws_appsync.CfnApiKey(
-            self, 'the-simple-graphql-service-api-key',
+            self, 'GraphQlApiKey',
             api_id=api_id
         )
 
