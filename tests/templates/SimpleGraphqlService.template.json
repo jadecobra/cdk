@@ -1,0 +1,533 @@
+{
+  "Resources": {
+    "ApiApiLogsRole90293F72": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "appsync.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSAppSyncPushToCloudWatchLogs"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    "ApiF70053CD": {
+      "Type": "AWS::AppSync::GraphQLApi",
+      "Properties": {
+        "AuthenticationType": "API_KEY",
+        "Name": "demoapi",
+        "LogConfig": {
+          "CloudWatchLogsRoleArn": {
+            "Fn::GetAtt": [
+              "ApiApiLogsRole90293F72",
+              "Arn"
+            ]
+          },
+          "FieldLogLevel": "ALL"
+        }
+      }
+    },
+    "ApiSchema510EECD7": {
+      "Type": "AWS::AppSync::GraphQLSchema",
+      "Properties": {
+        "ApiId": {
+          "Fn::GetAtt": [
+            "ApiF70053CD",
+            "ApiId"
+          ]
+        },
+        "Definition": "type Customer {\n  id: String!\n  name: String!\n}\n\ninput SaveCustomerInput {\n  name: String!\n}\n\ntype Order {\n  customer: String!\n  order: String!\n}\n\ntype Loyalty {\n  level: String\n}\n\ntype Query {\n  getCustomers: [Customer]\n  getCustomer(id: String): Customer\n  getLoyaltyLevel(id: String): Loyalty\n}\n\ninput FirstOrderInput {\n  product: String!\n  quantity: Int!\n}\n\ntype Mutation {\n  addCustomer(customer: SaveCustomerInput!): Customer\n  saveCustomer(id: String!, customer: SaveCustomerInput!): Customer\n  removeCustomer(id: String!): Customer\n  saveCustomerWithFirstOrder(\n    customer: SaveCustomerInput!\n    order: FirstOrderInput!\n    referral: String\n  ): Order\n}\n"
+      }
+    },
+    "ApiDefaultApiKeyF991C37B": {
+      "Type": "AWS::AppSync::ApiKey",
+      "Properties": {
+        "ApiId": {
+          "Fn::GetAtt": [
+            "ApiF70053CD",
+            "ApiId"
+          ]
+        }
+      },
+      "DependsOn": [
+        "ApiSchema510EECD7"
+      ]
+    },
+    "ApiCustomerServiceRole28709567": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "appsync.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      }
+    },
+    "ApiCustomerServiceRoleDefaultPolicy285BC091": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "dynamodb:BatchGetItem",
+                "dynamodb:GetRecords",
+                "dynamodb:GetShardIterator",
+                "dynamodb:Query",
+                "dynamodb:GetItem",
+                "dynamodb:Scan",
+                "dynamodb:ConditionCheckItem",
+                "dynamodb:BatchWriteItem",
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem",
+                "dynamodb:DeleteItem",
+                "dynamodb:DescribeTable"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "CustomerTable260DCC08",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Ref": "AWS::NoValue"
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "ApiCustomerServiceRoleDefaultPolicy285BC091",
+        "Roles": [
+          {
+            "Ref": "ApiCustomerServiceRole28709567"
+          }
+        ]
+      }
+    },
+    "ApiCustomerFEDF5079": {
+      "Type": "AWS::AppSync::DataSource",
+      "Properties": {
+        "ApiId": {
+          "Fn::GetAtt": [
+            "ApiF70053CD",
+            "ApiId"
+          ]
+        },
+        "Name": "Customer",
+        "Type": "AMAZON_DYNAMODB",
+        "DynamoDBConfig": {
+          "AwsRegion": {
+            "Ref": "AWS::Region"
+          },
+          "TableName": {
+            "Ref": "CustomerTable260DCC08"
+          }
+        },
+        "ServiceRoleArn": {
+          "Fn::GetAtt": [
+            "ApiCustomerServiceRole28709567",
+            "Arn"
+          ]
+        }
+      }
+    },
+    "ApiCustomerQuerygetCustomersResolverE72D1F66": {
+      "Type": "AWS::AppSync::Resolver",
+      "Properties": {
+        "ApiId": {
+          "Fn::GetAtt": [
+            "ApiF70053CD",
+            "ApiId"
+          ]
+        },
+        "FieldName": "getCustomers",
+        "TypeName": "Query",
+        "DataSourceName": "Customer",
+        "Kind": "UNIT",
+        "RequestMappingTemplate": "{\"version\" : \"2017-02-28\", \"operation\" : \"Scan\"}",
+        "ResponseMappingTemplate": "$util.toJson($ctx.result.items)"
+      },
+      "DependsOn": [
+        "ApiCustomerFEDF5079",
+        "ApiSchema510EECD7"
+      ]
+    },
+    "ApiCustomerQuerygetCustomerResolver631A810F": {
+      "Type": "AWS::AppSync::Resolver",
+      "Properties": {
+        "ApiId": {
+          "Fn::GetAtt": [
+            "ApiF70053CD",
+            "ApiId"
+          ]
+        },
+        "FieldName": "getCustomer",
+        "TypeName": "Query",
+        "DataSourceName": "Customer",
+        "Kind": "UNIT",
+        "RequestMappingTemplate": "{\"version\": \"2017-02-28\", \"operation\": \"GetItem\", \"key\": {\"id\": $util.dynamodb.toDynamoDBJson($ctx.args.id)}}",
+        "ResponseMappingTemplate": "$util.toJson($ctx.result)"
+      },
+      "DependsOn": [
+        "ApiCustomerFEDF5079",
+        "ApiSchema510EECD7"
+      ]
+    },
+    "ApiCustomerMutationaddCustomerResolver1663CC6D": {
+      "Type": "AWS::AppSync::Resolver",
+      "Properties": {
+        "ApiId": {
+          "Fn::GetAtt": [
+            "ApiF70053CD",
+            "ApiId"
+          ]
+        },
+        "FieldName": "addCustomer",
+        "TypeName": "Mutation",
+        "DataSourceName": "Customer",
+        "Kind": "UNIT",
+        "RequestMappingTemplate": "\n      #set($input = $ctx.args.customer)\n      \n      {\n        \"version\": \"2017-02-28\",\n        \"operation\": \"PutItem\",\n        \"key\" : {\n      \"id\" : $util.dynamodb.toDynamoDBJson($util.autoId())\n    },\n        \"attributeValues\": $util.dynamodb.toMapValuesJson($input)\n      }",
+        "ResponseMappingTemplate": "$util.toJson($ctx.result)"
+      },
+      "DependsOn": [
+        "ApiCustomerFEDF5079",
+        "ApiSchema510EECD7"
+      ]
+    },
+    "ApiCustomerMutationsaveCustomerResolverC9A07034": {
+      "Type": "AWS::AppSync::Resolver",
+      "Properties": {
+        "ApiId": {
+          "Fn::GetAtt": [
+            "ApiF70053CD",
+            "ApiId"
+          ]
+        },
+        "FieldName": "saveCustomer",
+        "TypeName": "Mutation",
+        "DataSourceName": "Customer",
+        "Kind": "UNIT",
+        "RequestMappingTemplate": "\n      #set($input = $ctx.args.customer)\n      \n      {\n        \"version\": \"2017-02-28\",\n        \"operation\": \"PutItem\",\n        \"key\" : {\n      \"id\" : $util.dynamodb.toDynamoDBJson($ctx.args.id)\n    },\n        \"attributeValues\": $util.dynamodb.toMapValuesJson($input)\n      }",
+        "ResponseMappingTemplate": "$util.toJson($ctx.result)"
+      },
+      "DependsOn": [
+        "ApiCustomerFEDF5079",
+        "ApiSchema510EECD7"
+      ]
+    },
+    "ApiCustomerMutationsaveCustomerWithFirstOrderResolver19B240AC": {
+      "Type": "AWS::AppSync::Resolver",
+      "Properties": {
+        "ApiId": {
+          "Fn::GetAtt": [
+            "ApiF70053CD",
+            "ApiId"
+          ]
+        },
+        "FieldName": "saveCustomerWithFirstOrder",
+        "TypeName": "Mutation",
+        "DataSourceName": "Customer",
+        "Kind": "UNIT",
+        "RequestMappingTemplate": "\n      #set($input = $ctx.args.order)\n      $util.qr($input.put(\"referral\", referral))\n      {\n        \"version\": \"2017-02-28\",\n        \"operation\": \"PutItem\",\n        \"key\" : {\n      \"order\" : $util.dynamodb.toDynamoDBJson($util.autoId()),\"customer\" : $util.dynamodb.toDynamoDBJson($ctx.args.customer.id)\n    },\n        \"attributeValues\": $util.dynamodb.toMapValuesJson($input)\n      }",
+        "ResponseMappingTemplate": "$util.toJson($ctx.result)"
+      },
+      "DependsOn": [
+        "ApiCustomerFEDF5079",
+        "ApiSchema510EECD7"
+      ]
+    },
+    "ApiCustomerMutationremoveCustomerResolver0BB8C0C3": {
+      "Type": "AWS::AppSync::Resolver",
+      "Properties": {
+        "ApiId": {
+          "Fn::GetAtt": [
+            "ApiF70053CD",
+            "ApiId"
+          ]
+        },
+        "FieldName": "removeCustomer",
+        "TypeName": "Mutation",
+        "DataSourceName": "Customer",
+        "Kind": "UNIT",
+        "RequestMappingTemplate": "{\"version\": \"2017-02-28\", \"operation\": \"DeleteItem\", \"key\": {\"id\": $util.dynamodb.toDynamoDBJson($ctx.args.id)}}",
+        "ResponseMappingTemplate": "$util.toJson($ctx.result)"
+      },
+      "DependsOn": [
+        "ApiCustomerFEDF5079",
+        "ApiSchema510EECD7"
+      ]
+    },
+    "ApiLoyaltyServiceRole2B487CD2": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "appsync.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      }
+    },
+    "ApiLoyaltyServiceRoleDefaultPolicyBAB04E12": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "LoyaltyLambdaHandler5918F0DA",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "ApiLoyaltyServiceRoleDefaultPolicyBAB04E12",
+        "Roles": [
+          {
+            "Ref": "ApiLoyaltyServiceRole2B487CD2"
+          }
+        ]
+      }
+    },
+    "ApiLoyaltyE1BE9BB1": {
+      "Type": "AWS::AppSync::DataSource",
+      "Properties": {
+        "ApiId": {
+          "Fn::GetAtt": [
+            "ApiF70053CD",
+            "ApiId"
+          ]
+        },
+        "Name": "Loyalty",
+        "Type": "AWS_LAMBDA",
+        "LambdaConfig": {
+          "LambdaFunctionArn": {
+            "Fn::GetAtt": [
+              "LoyaltyLambdaHandler5918F0DA",
+              "Arn"
+            ]
+          }
+        },
+        "ServiceRoleArn": {
+          "Fn::GetAtt": [
+            "ApiLoyaltyServiceRole2B487CD2",
+            "Arn"
+          ]
+        }
+      }
+    },
+    "ApiLoyaltyQuerygetLoyaltyLevelResolverC05B5E79": {
+      "Type": "AWS::AppSync::Resolver",
+      "Properties": {
+        "ApiId": {
+          "Fn::GetAtt": [
+            "ApiF70053CD",
+            "ApiId"
+          ]
+        },
+        "FieldName": "getLoyaltyLevel",
+        "TypeName": "Query",
+        "DataSourceName": "Loyalty",
+        "Kind": "UNIT",
+        "RequestMappingTemplate": "{\"version\": \"2017-02-28\", \"operation\": \"Invoke\", \"payload\": $util.toJson($ctx)}",
+        "ResponseMappingTemplate": "$util.toJson($ctx.result)"
+      },
+      "DependsOn": [
+        "ApiLoyaltyE1BE9BB1",
+        "ApiSchema510EECD7"
+      ]
+    },
+    "thesimplegraphqlserviceapikey": {
+      "Type": "AWS::AppSync::ApiKey",
+      "Properties": {
+        "ApiId": {
+          "Fn::GetAtt": [
+            "ApiF70053CD",
+            "ApiId"
+          ]
+        }
+      }
+    },
+    "CustomerTable260DCC08": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "KeySchema": [
+          {
+            "AttributeName": "id",
+            "KeyType": "HASH"
+          }
+        ],
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "id",
+            "AttributeType": "S"
+          }
+        ],
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 5,
+          "WriteCapacityUnits": 5
+        }
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain"
+    },
+    "LoyaltyLambdaHandlerServiceRole62E814E8": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    "LoyaltyLambdaHandler5918F0DA": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "AssetParameters1375529b6ad184708e02f5d7154dfa2558520109588606755760202b905cb6d6S3Bucket5F4883EC"
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParameters1375529b6ad184708e02f5d7154dfa2558520109588606755760202b905cb6d6S3VersionKeyBC396BD2"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParameters1375529b6ad184708e02f5d7154dfa2558520109588606755760202b905cb6d6S3VersionKeyBC396BD2"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "LoyaltyLambdaHandlerServiceRole62E814E8",
+            "Arn"
+          ]
+        },
+        "Handler": "loyalty.handler",
+        "Runtime": "nodejs12.x"
+      },
+      "DependsOn": [
+        "LoyaltyLambdaHandlerServiceRole62E814E8"
+      ]
+    }
+  },
+  "Parameters": {
+    "AssetParameters1375529b6ad184708e02f5d7154dfa2558520109588606755760202b905cb6d6S3Bucket5F4883EC": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"1375529b6ad184708e02f5d7154dfa2558520109588606755760202b905cb6d6\""
+    },
+    "AssetParameters1375529b6ad184708e02f5d7154dfa2558520109588606755760202b905cb6d6S3VersionKeyBC396BD2": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"1375529b6ad184708e02f5d7154dfa2558520109588606755760202b905cb6d6\""
+    },
+    "AssetParameters1375529b6ad184708e02f5d7154dfa2558520109588606755760202b905cb6d6ArtifactHashACB141FD": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"1375529b6ad184708e02f5d7154dfa2558520109588606755760202b905cb6d6\""
+    }
+  },
+  "Outputs": {
+    "Endpoint": {
+      "Value": {
+        "Fn::GetAtt": [
+          "ApiF70053CD",
+          "GraphQLUrl"
+        ]
+      }
+    },
+    "APIKey": {
+      "Value": {
+        "Fn::GetAtt": [
+          "thesimplegraphqlserviceapikey",
+          "ApiKey"
+        ]
+      }
+    }
+  }
+}
