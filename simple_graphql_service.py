@@ -15,19 +15,30 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
 
         graphql_api = self.create_graphql_api()
         dynamodb_data_source = self.create_dynamodb_table_data_source(
-            api=graphql_api, title='Customer'
+            api=graphql_api,
+            title='Customer'
         )
-        # lambda_function_data_source = graphql_api.add_lambda_data_source('Loyalty', self.create_lambda_function())
         lambda_function_data_source = self.create_lambda_function_data_source(
-            api=graphql_api, title='Loyalty'
+            api=graphql_api,
+            title='Loyalty'
         )
 
-        self.add_get_customers_query_resolver_dynamodb(dynamodb_data_source)
-        self.add_get_customer_query_resolver(dynamodb_data_source)
-        self.add_add_customer_mutation_resolver(dynamodb_data_source)
-        self.add_save_customer_mutation_resolver(dynamodb_data_source)
-        self.add_save_customer_with_first_order_mutation_resolver(dynamodb_data_source)
-        self.add_remove_customer_mutation_resolver(dynamodb_data_source)
+        for method in (
+            self.add_get_customers_query_resolver_dynamodb,
+            self.add_get_customer_query_resolver,
+            self.add_add_customer_mutation_resolver,
+            self.add_save_customer_mutation_resolver,
+            self.add_save_customer_with_first_order_mutation_resolver,
+            self.add_remove_customer_mutation_resolver,
+        ):
+            method(dynamodb_data_source)
+
+        # self.add_get_customers_query_resolver_dynamodb(dynamodb_data_source)
+        # self.add_get_customer_query_resolver(dynamodb_data_source)
+        # self.add_add_customer_mutation_resolver(dynamodb_data_source)
+        # self.add_save_customer_mutation_resolver(dynamodb_data_source)
+        # self.add_save_customer_with_first_order_mutation_resolver(dynamodb_data_source)
+        # self.add_remove_customer_mutation_resolver(dynamodb_data_source)
         self.add_get_customers_query_resolver_lambda(lambda_function_data_source)
 
         for logical_id, value in (
@@ -74,11 +85,6 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
                 handler="loyalty.handler",
                 code=aws_cdk.aws_lambda.Code.from_asset("lambda_functions/loyalty"),
             )
-        )
-        return aws_cdk.aws_lambda.Function(self, "LoyaltyLambdaHandler",
-            runtime=aws_cdk.aws_lambda.Runtime.PYTHON_3_9,
-            handler="loyalty.handler",
-            code=aws_cdk.aws_lambda.Code.from_asset("lambda_functions/loyalty"),
         )
 
     @staticmethod
