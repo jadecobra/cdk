@@ -24,7 +24,8 @@ try:
     import web_application_firewall
     import state_machine
     import simple_graphql_service
-except ImportError:
+except ImportError as error:
+    print(error)
     os.system('pip install -r requirements.txt')
 
 
