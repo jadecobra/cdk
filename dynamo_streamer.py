@@ -18,17 +18,19 @@ class DynamoStreamer(aws_cdk.core.Stack):
             ),
         )
 
-    def __init__(self, scope: aws_cdk.core.Construct, id: str, **kwargs) -> None:
-        super().__init__(scope, id, **kwargs)
-
-        dynamodb_table = self.create_dynamodb_table()
-
-        subscriber_lambda_function = aws_cdk.aws_lambda.Function(
+    def create_lambda_function(self):
+        return aws_cdk.aws_lambda.Function(
             self, 'LambdaFunction',
             runtime=aws_cdk.aws_lambda.Runtime.PYTHON_3_8,
             handler="lambda.handler",
             code=aws_cdk.aws_lambda.Code.from_asset("lambda_functions/subscribe")
         )
+
+    def __init__(self, scope: aws_cdk.core.Construct, id: str, **kwargs) -> None:
+        super().__init__(scope, id, **kwargs)
+
+        dynamodb_table = self.create_dynamodb_table()
+        subscriber_lambda_function = self.create_lambda_function()
 
         subscriber_lambda_function.add_event_source(
             aws_cdk.aws_lambda_event_sources.DynamoEventSource(
