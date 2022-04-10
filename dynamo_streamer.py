@@ -42,8 +42,8 @@ class DynamoStreamer(aws_cdk.core.Stack):
         )
 
     @staticmethod
-    def application_json_template(template):
-        return {'application/json': json.dumps(template, separators=(',', ':'))}
+    def application_json_template(template, separators=(',', ':')):
+        return {'application/json': json.dumps(template, separators=separators)}
 
     def request_template(self, table_name):
         return self.application_json_template({
@@ -81,10 +81,15 @@ class DynamoStreamer(aws_cdk.core.Stack):
             integration_responses=[
                 aws_cdk.aws_apigateway.IntegrationResponse(
                     status_code='200',
-                    response_templates={
-                        "application/json": json.dumps(
-                            {"message": 'item added to db'})
-                    }),
+                    # response_templates={
+                    #     "application/json": json.dumps(
+                    #         {"message": 'item added to db'})
+                    # }
+                    response_templates=self.application_json_template(
+                        {"message": 'item added to db'},
+                        separators=None
+                    )
+                ),
                 aws_cdk.aws_apigateway.IntegrationResponse(
                     selection_pattern="^\[BadRequest\].*",
                     status_code='400',
