@@ -123,7 +123,6 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
                 key=aws_cdk.aws_appsync.PrimaryKey.partition('id').auto(),
                 values=aws_cdk.aws_appsync.Values.projecting('customer')
             ),
-            response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_result_item()
         )
 
     def add_save_customer_mutation_resolver(self, data_source):
@@ -134,7 +133,6 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
                 key=aws_cdk.aws_appsync.PrimaryKey.partition('id').is_('id'),
                 values=aws_cdk.aws_appsync.Values.projecting('customer')
             ),
-            response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_result_item()
         )
 
     def add_save_customer_with_first_order_mutation_resolver(self, data_source):
@@ -145,7 +143,6 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
                 key=aws_cdk.aws_appsync.PrimaryKey.partition('order').auto().sort('customer').is_('customer.id'),
                 values=aws_cdk.aws_appsync.Values.projecting('order').attribute('referral').is_('referral')
             ),
-            response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_result_item()
         )
 
     def add_remove_customer_mutation_resolver(self, data_source):
@@ -153,5 +150,4 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
             data_source=data_source,
             field_name='removeCustomer',
             request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_delete_item('id', 'id'),
-            response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_result_item(),
         )
