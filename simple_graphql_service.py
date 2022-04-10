@@ -16,21 +16,26 @@ class SimpleGraphQlService(core.Stack):
         schema_location = os.path.dirname(os.path.realpath(__file__)) + "/schema/schema.graphql"
 
         # Create a new AppSync GraphQL API
-        api = appsync.GraphqlApi(self, 'Api',
-                                 name="demoapi",
-                                 log_config=appsync.LogConfig(field_log_level=appsync.FieldLogLevel.ALL),
-                                 schema=appsync.Schema.from_asset(schema_location)
-                                 )
+        api = appsync.GraphqlApi(
+            self, 'Api',
+            name="demoapi",
+            log_config=appsync.LogConfig(field_log_level=appsync.FieldLogLevel.ALL),
+            schema=appsync.Schema.from_asset(schema_location)
+        )
 
-        api_key = appsync.CfnApiKey(self, 'the-simple-graphql-service-api-key',
-                                    api_id=api.api_id
-                                    )
+        api_key = appsync.CfnApiKey(
+            self, 'the-simple-graphql-service-api-key',
+            api_id=api.api_id
+        )
 
         # Create new DynamoDB Table for Customer
-        customer_table = dynamo_db.Table(self, "CustomerTable",
-                                         partition_key=dynamo_db.Attribute(name="id",
-                                                                           type=dynamo_db.AttributeType.STRING)
-                                         )
+        customer_table = dynamo_db.Table(
+            self, "CustomerTable",
+            partition_key=dynamo_db.Attribute(
+                name="id",
+                type=dynamo_db.AttributeType.STRING
+            )
+        )
 
         # Add Customer DynamoDB as a Datasource for the Graphql API.
         customer_ds = api.add_dynamo_db_data_source('Customer', customer_table)
