@@ -35,26 +35,27 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
         customer_data_source = api.add_dynamo_db_data_source('Customer', customer_data_table)
         loyalty_data_source = api.add_lambda_data_source('Loyalty', loyalty_lambda)
 
-        self.get_customers_query_resolver(customer_data_source)
-        self.get_customer_query_resolver(customer_data_source)
-        self.get_add_customer_mutation_resolver(customer_data_source)
-        self.get_save_customer_mutation_resolver(customer_data_source)
-        self.get_save_customer_with_first_order_mutation_resolver(customer_data_source)
-        self.get_remove_customer_mutation_resolver(customer_data_source)
-
+        self.add_get_customers_query_resolver_dynamodb(customer_data_source)
+        self.add_get_customer_query_resolver(customer_data_source)
+        self.add_add_customer_mutation_resolver(customer_data_source)
+        self.add_save_customer_mutation_resolver(customer_data_source)
+        self.add_save_customer_with_first_order_mutation_resolver(customer_data_source)
+        self.add_remove_customer_mutation_resolver(customer_data_source)
+        self.add_get_customers_query_resolver_lambda(loyalty_data_source)
         # Query Resolver to get all Customers
-        loyalty_data_source.create_resolver(
-            type_name='Query',
-            field_name='getLoyaltyLevel',
-            request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.lambda_request(),
-            response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.lambda_result(),
-        )
+        # loyalty_data_source.create_resolver(
+        #     type_name='Query',
+        #     field_name='getLoyaltyLevel',
+        #     request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.lambda_request(),
+        #     response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.lambda_result(),
+        # )
 
         for logical_id, value in (
             ('Endpoint', api.graphql_url),
             ('API_Key', api_key.attr_api_key),
         ):
             aws_cdk.core.CfnOutput(self, logical_id, value=value)
+
 
     def create_dynamodb_table(self):
         return aws_cdk.aws_dynamodb.Table(
@@ -73,8 +74,17 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
         )
 
     @staticmethod
-    def get_customers_query_resolver(dynamodb_data_source):
-        dynamodb_data_source.create_resolver(
+    def add_get_customers_query_resolver_lambda(data_source):
+        data_source.create_resolver(
+            type_name='Query',
+            field_name='getLoyaltyLevel',
+            request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.lambda_request(),
+            response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.lambda_result(),
+        )
+
+    @staticmethod
+    def add_get_customers_query_resolver_dynamodb(data_source):
+        data_source.create_resolver(
             type_name='Query',
             field_name='getCustomers',
             request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_scan_table(),
@@ -82,9 +92,9 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
         )
 
     @staticmethod
-    def get_customer_query_resolver(dynamodb_data_source):
+    def add_get_customer_query_resolver(data_source):
         # Query Resolver to get an individual Customer by their id
-        dynamodb_data_source.create_resolver(
+        data_source.create_resolver(
             type_name='Query',
             field_name='getCustomer',
             request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_get_item(
@@ -94,8 +104,8 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
         )
 
     @staticmethod
-    def get_add_customer_mutation_resolver(dynamodb_data_source):
-        dynamodb_data_source.create_resolver(
+    def add_add_customer_mutation_resolver(data_source):
+        data_source.create_resolver(
             type_name='Mutation',
             field_name='addCustomer',
             request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_put_item(
@@ -106,8 +116,8 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
         )
 
     @staticmethod
-    def get_save_customer_mutation_resolver(dynamodb_data_source):
-        dynamodb_data_source.create_resolver(
+    def add_save_customer_mutation_resolver(data_source):
+        data_source.create_resolver(
             type_name='Mutation',
             field_name='saveCustomer',
             request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_put_item(
@@ -118,8 +128,8 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
         )
 
     @staticmethod
-    def get_save_customer_with_first_order_mutation_resolver(dynamodb_data_source):
-        dynamodb_data_source.create_resolver(
+    def add_save_customer_with_first_order_mutation_resolver(data_source):
+        data_source.create_resolver(
             type_name='Mutation',
             field_name='saveCustomerWithFirstOrder',
             request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_put_item(
@@ -130,8 +140,8 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
         )
 
     @staticmethod
-    def get_remove_customer_mutation_resolver(dynamodb_data_source):
-        dynamodb_data_source.create_resolver(
+    def add_remove_customer_mutation_resolver(data_source):
+        data_source.create_resolver(
             type_name='Mutation',
             field_name='removeCustomer',
             request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_delete_item('id', 'id'),
