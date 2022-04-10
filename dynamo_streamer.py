@@ -31,21 +31,8 @@ class DynamoStreamer(aws_cdk.core.Stack):
             )
         )
 
-    def __init__(self, scope: aws_cdk.core.Construct, id: str, **kwargs) -> None:
-        super().__init__(scope, id, **kwargs)
-
-        dynamodb_table = self.create_dynamodb_table()
-        self.create_lambda_function_with_dynamodb_event_source(dynamodb_table)
-        # subscriber_lambda_function = self.create_lambda_function()
-        # subscriber_lambda_function.add_event_source(
-        #     aws_cdk.aws_lambda_event_sources.DynamoEventSource(
-        #         table=dynamodb_table,
-        #         starting_position=aws_cdk.aws_lambda.StartingPosition.LATEST
-        #     )
-        # )
-
-        # API Gateway Creation
-        api_gateway = aws_cdk.aws_apigateway.RestApi(
+    def create_rest_api(self):
+        return aws_cdk.aws_apigateway.RestApi(
             self, 'ApiGateway',
             deploy_options=aws_cdk.aws_apigateway.StageOptions(
                 metrics_enabled=True,
@@ -54,6 +41,15 @@ class DynamoStreamer(aws_cdk.core.Stack):
                 stage_name='prod'
             )
         )
+
+    def __init__(self, scope: aws_cdk.core.Construct, id: str, **kwargs) -> None:
+        super().__init__(scope, id, **kwargs)
+
+        dynamodb_table = self.create_dynamodb_table()
+        self.create_lambda_function_with_dynamodb_event_source(dynamodb_table)
+
+        # API Gateway Creation
+        api_gateway = self.create_rest_api()
 
         # Give our gateway permissions to interact with dynamodb
         api_gw_dynamo_role = aws_cdk.aws_iam.Role(
