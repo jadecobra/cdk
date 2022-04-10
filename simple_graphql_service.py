@@ -13,25 +13,21 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        api = self.create_graphql_api()
-        # api_key = self.create_graphql_api_key(api.api_id)
+        graphql_api = self.create_graphql_api()
+        dynamodb_data_source = graphql_api.add_dynamo_db_data_source('Customer', self.create_dynamodb_table())
+        lambda_function_data_source = graphql_api.add_lambda_data_source('Loyalty', self.create_lambda_function())
 
-        customer_data_table = self.create_dynamodb_table()
-        loyalty_lambda = self.create_lambda_function()
-        customer_data_source = api.add_dynamo_db_data_source('Customer', customer_data_table)
-        loyalty_data_source = api.add_lambda_data_source('Loyalty', loyalty_lambda)
-
-        self.add_get_customers_query_resolver_dynamodb(customer_data_source)
-        self.add_get_customer_query_resolver(customer_data_source)
-        self.add_add_customer_mutation_resolver(customer_data_source)
-        self.add_save_customer_mutation_resolver(customer_data_source)
-        self.add_save_customer_with_first_order_mutation_resolver(customer_data_source)
-        self.add_remove_customer_mutation_resolver(customer_data_source)
-        self.add_get_customers_query_resolver_lambda(loyalty_data_source)
+        self.add_get_customers_query_resolver_dynamodb(dynamodb_data_source)
+        self.add_get_customer_query_resolver(dynamodb_data_source)
+        self.add_add_customer_mutation_resolver(dynamodb_data_source)
+        self.add_save_customer_mutation_resolver(dynamodb_data_source)
+        self.add_save_customer_with_first_order_mutation_resolver(dynamodb_data_source)
+        self.add_remove_customer_mutation_resolver(dynamodb_data_source)
+        self.add_get_customers_query_resolver_lambda(lambda_function_data_source)
 
         for logical_id, value in (
-            ('Endpoint', api.graphql_url),
-            ('API_Key', self.create_graphql_api_key(api.api_id).attr_api_key),
+            ('Endpoint', graphql_api.graphql_url),
+            ('API_Key', self.create_graphql_api_key(graphql_api.api_id).attr_api_key),
         ):
             aws_cdk.core.CfnOutput(self, logical_id, value=value)
 
