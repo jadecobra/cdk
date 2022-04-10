@@ -7,6 +7,16 @@ import os
 
 
 class SimpleGraphQlService(aws_cdk.core.Stack):
+
+    def create_dynamodb_table(self):
+        return aws_cdk.aws_dynamodb.Table(
+            self, "CustomerTable",
+            partition_key=aws_cdk.aws_dynamodb.Attribute(
+                name="id",
+                type=aws_cdk.aws_dynamodb.AttributeType.STRING
+            )
+        )
+
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
@@ -26,15 +36,8 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
             self, 'the-simple-graphql-service-api-key',
             api_id=api.api_id
         )
-
-        # Create new DynamoDB Table for Customer
-        customer_table = aws_cdk.aws_dynamodb.Table(
-            self, "CustomerTable",
-            partition_key=aws_cdk.aws_dynamodb.Attribute(
-                name="id",
-                type=aws_cdk.aws_dynamodb.AttributeType.STRING
-            )
-        )
+        
+        customer_table = self.create_dynamodb_table()
 
         # Add Customer DynamoDB as a Datasource for the Graphql API.
         customer_ds = api.add_dynamo_db_data_source('Customer', customer_table)
