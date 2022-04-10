@@ -50,29 +50,47 @@ class DynamoStreamer(aws_cdk.core.Stack):
         ok_response_model = self.add_response_model_to_rest_api(rest_api)
         error_response_model = self.add_error_response_model_to_rest_api(rest_api)
 
-        api_gateway_response_options = aws_cdk.aws_apigateway.IntegrationOptions(
-            credentials_role=api_gateway_service_role,
-            request_templates=self.request_template(dynamodb_table.table_name),
-            passthrough_behavior=aws_cdk.aws_apigateway.PassthroughBehavior.NEVER,
-            integration_responses=self.get_integration_responses()
-        )
-
-        # Add an InsertItem endpoint onto the gateway
         (
             rest_api.root
             .add_resource('InsertItem')
             .add_method(
-                'POST', aws_cdk.aws_apigateway.Integration(
-                    type=aws_cdk.aws_apigateway.IntegrationType.AWS,
-                    integration_http_method='POST',
-                    uri='arn:aws:apigateway:us-east-1:dynamodb:action/PutItem',
-                    options=api_gateway_response_options
+                'POST',
+                # self.integrate_dynamodb_and_rest_api(api_gateway_response_options),
+                self.integrate_dynamodb_and_rest_api(
+                    api_gateway_service_role=api_gateway_service_role,
+                    dynamodb_table_name=dynamodb_table.table_name,
                 ),
                 method_responses=self.create_method_responses(
                     ok_response_model=ok_response_model,
                     error_response_model=error_response_model,
                 )
             )
+        )
+
+    def get_api_gateway_response_options(self, api_gateway_service_role=None, dynamodb_table_name=None):
+        return aws_cdk.aws_apigateway.IntegrationOptions(
+            credentials_role=api_gateway_service_role,
+            request_templates=self.request_template(dynamodb_table_name),
+            passthrough_behavior=aws_cdk.aws_apigateway.PassthroughBehavior.NEVER,
+            integration_responses=self.get_integration_responses()
+        )
+
+    def integrate_dynamodb_and_rest_api(self, api_gateway_service_role=None, dynamodb_table_name=None):
+        return aws_cdk.aws_apigateway.Integration(
+            type=aws_cdk.aws_apigateway.IntegrationType.AWS,
+            integration_http_method='POST',
+            uri='arn:aws:apigateway:us-east-1:dynamodb:action/PutItem',
+            options=self.get_api_gateway_response_options(
+                api_gateway_service_role=api_gateway_service_role,
+                dynamodb_table_name=dynamodb_table_name
+            )
+        )
+
+    def create_method_response(self, status_code='200', response_model=None):
+        return aws_cdk.aws_apigateway.MethodResponse(
+            status_code=status_code,
+            response_parameters=self.create_response_parameters(),
+            response_models={ 'application/json': response_model },
         )
 
     def create_method_responses(self, ok_response_model=None, error_response_model=None):
@@ -85,13 +103,6 @@ class DynamoStreamer(aws_cdk.core.Stack):
                 ('400', error_response_model)
             )
         ]
-
-    def create_method_response(self, status_code='200', response_model=None):
-        return aws_cdk.aws_apigateway.MethodResponse(
-            status_code=status_code,
-            response_parameters=self.create_response_parameters(),
-            response_models={ 'application/json': response_model },
-        )
 
     def create_dynamodb_table(self):
         return aws_cdk.aws_dynamodb.Table(
