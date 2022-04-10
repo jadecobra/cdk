@@ -1,7 +1,7 @@
 import aws_cdk
 import constructs
 from aws_cdk import (
-    aws_lambda as _lambda,
+    aws_lambda,
     aws_appsync as appsync,
     aws_dynamodb as dynamo_db,
     core
@@ -98,10 +98,10 @@ class SimpleGraphQlService(core.Stack):
         )
 
         # defines an AWS  Lambda resource
-        loyalty_lambda = _lambda.Function(self, "LoyaltyLambdaHandler",
-            runtime=_lambda.Runtime.NODEJS_12_X,
+        loyalty_lambda = aws_lambda.Function(self, "LoyaltyLambdaHandler",
+            runtime=aws_lambda.Runtime.NODEJS_12_X,
             handler="loyalty.handler",
-            code=_lambda.Code.from_asset("lambda_functions"),
+            code=aws_lambda.Code.from_asset("lambda_functions"),
         )
 
         # Add Loyalty Lambda as a Datasource for the Graphql API.
