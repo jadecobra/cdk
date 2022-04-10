@@ -86,7 +86,7 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
             type_name='Mutation',
             field_name=field_name,
             request_mapping_template=request_mapping_template,
-            response_mapping_template=response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_result_item(),
+            response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_result_item(),
         )
 
     def add_get_customers_query_resolver_lambda(self, data_source):
