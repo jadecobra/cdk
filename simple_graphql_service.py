@@ -8,6 +8,66 @@ import os
 
 class SimpleGraphQlService(aws_cdk.core.Stack):
 
+    def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
+        super().__init__(scope, id, **kwargs)
+
+        # Create a new AppSync GraphQL API
+        api = aws_cdk.aws_appsync.GraphqlApi(
+            self, 'Api',
+            name="demoapi",
+            log_config=aws_cdk.aws_appsync.LogConfig(
+                field_log_level=aws_cdk.aws_appsync.FieldLogLevel.ALL
+            ),
+            schema=aws_cdk.aws_appsync.Schema.from_asset(
+                os.path.dirname(os.path.realpath(__file__)) + "/schema/schema.graphql"
+            )
+        )
+
+        api_key = aws_cdk.aws_appsync.CfnApiKey(
+            self, 'the-simple-graphql-service-api-key',
+            api_id=api.api_id
+        )
+
+        customer_data_table = self.create_dynamodb_table()
+        customer_data_source = api.add_dynamo_db_data_source('Customer', customer_data_table)
+        self.get_customers_query_resolver(customer_data_source)
+        self.get_customer_query_resolver(customer_data_source)
+        self.get_add_customer_mutation_resolver(customer_data_source)
+        self.get_save_customer_mutation_resolver(customer_data_source)
+        self.get_save_customer_with_first_order_mutation_resolver(customer_data_source)
+
+        # Mutation Resolver for deleting an existing Customer
+        customer_data_source.create_resolver(
+            type_name='Mutation',
+            field_name='removeCustomer',
+            request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_delete_item('id', 'id'),
+            response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_result_item(),
+        )
+
+        # defines an AWS  Lambda resource
+        loyalty_lambda = aws_cdk.aws_lambda.Function(self, "LoyaltyLambdaHandler",
+            runtime=aws_cdk.aws_lambda.Runtime.NODEJS_12_X,
+            handler="loyalty.handler",
+            code=aws_cdk.aws_lambda.Code.from_asset("lambda_functions"),
+        )
+
+        # Add Loyalty Lambda as a Datasource for the Graphql API.
+        loyalty_ds = api.add_lambda_data_source('Loyalty', loyalty_lambda)
+
+        # Query Resolver to get all Customers
+        loyalty_ds.create_resolver(
+            type_name='Query',
+            field_name='getLoyaltyLevel',
+            request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.lambda_request(),
+            response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.lambda_result(),
+        )
+
+        for logical_id, value in (
+            ('Endpoint', api.graphql_url),
+            ('API_Key', api_key.attr_api_key),
+        ):
+            aws_cdk.core.CfnOutput(self, logical_id, value=value)
+
     def create_dynamodb_table(self):
         return aws_cdk.aws_dynamodb.Table(
             self, "CustomerTable",
@@ -73,63 +133,3 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
             ),
             response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_result_item()
         )
-
-    def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
-        super().__init__(scope, id, **kwargs)
-
-        # Create a new AppSync GraphQL API
-        api = aws_cdk.aws_appsync.GraphqlApi(
-            self, 'Api',
-            name="demoapi",
-            log_config=aws_cdk.aws_appsync.LogConfig(
-                field_log_level=aws_cdk.aws_appsync.FieldLogLevel.ALL
-            ),
-            schema=aws_cdk.aws_appsync.Schema.from_asset(
-                os.path.dirname(os.path.realpath(__file__)) + "/schema/schema.graphql"
-            )
-        )
-
-        api_key = aws_cdk.aws_appsync.CfnApiKey(
-            self, 'the-simple-graphql-service-api-key',
-            api_id=api.api_id
-        )
-
-        customer_data_table = self.create_dynamodb_table()
-        customer_data_source = api.add_dynamo_db_data_source('Customer', customer_data_table)
-        self.get_customers_query_resolver(customer_data_source)
-        self.get_customer_query_resolver(customer_data_source)
-        self.get_add_customer_mutation_resolver(customer_data_source)
-        self.get_save_customer_mutation_resolver(customer_data_source)
-        self.get_save_customer_with_first_order_mutation_resolver(customer_data_source)
-
-        # Mutation Resolver for deleting an existing Customer
-        customer_data_source.create_resolver(
-            type_name='Mutation',
-            field_name='removeCustomer',
-            request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_delete_item('id', 'id'),
-            response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_result_item(),
-        )
-
-        # defines an AWS  Lambda resource
-        loyalty_lambda = aws_cdk.aws_lambda.Function(self, "LoyaltyLambdaHandler",
-            runtime=aws_cdk.aws_lambda.Runtime.NODEJS_12_X,
-            handler="loyalty.handler",
-            code=aws_cdk.aws_lambda.Code.from_asset("lambda_functions"),
-        )
-
-        # Add Loyalty Lambda as a Datasource for the Graphql API.
-        loyalty_ds = api.add_lambda_data_source('Loyalty', loyalty_lambda)
-
-        # Query Resolver to get all Customers
-        loyalty_ds.create_resolver(
-            type_name='Query',
-            field_name='getLoyaltyLevel',
-            request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.lambda_request(),
-            response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.lambda_result(),
-        )
-
-        for logical_id, value in (
-            ('Endpoint', api.graphql_url),
-            ('API_Key', api_key.attr_api_key),
-        ):
-            aws_cdk.core.CfnOutput(self, logical_id, value=value)
