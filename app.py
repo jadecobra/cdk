@@ -5,6 +5,7 @@ try:
     import big_fan
     import destined_lambda
     import dynamodb_table
+    import dynamo_streamer
     import event_bridge_atm
     import event_bridge_circuit_breaker
     import event_bridge_etl
@@ -25,7 +26,7 @@ try:
     import simple_graphql_service
 except ImportError:
     os.system('pip install -r requirements.txt')
-    
+
 
 class WellArchitected(cdk.App):
 
@@ -54,6 +55,7 @@ class WellArchitected(cdk.App):
         scalable_webhook.ScalableWebhook(self, "ScalableWebhook")
         state_machine.StateMachine(self, "StateMachine")
         simple_graphql_service.SimpleGraphQlService(self, "SimpleGraphqlService")
+        dynamo_streamer.DynamoStreamer(self, "DynamoStreamer")
 
     def create_webservice(self):
         error_sns_topic = sns_topic.SnsTopic(self, 'SnsTopic').topic

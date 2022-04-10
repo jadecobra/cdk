@@ -9,6 +9,7 @@ class TestWellArchitectedPatterns(tests.utilities.TestTemplates):
             # 'DestinedLambda',
             # 'DynamoDBFlow',
             # 'DynamoDBTable',
+            'DynamoStreamer',
             # 'EventBridgeAtm',
             # 'EventBridgeCircuitBreaker',
             # 'EventBridgeEtl',
@@ -23,7 +24,7 @@ class TestWellArchitectedPatterns(tests.utilities.TestTemplates):
             # 'SagaStepFunction',
             # 'ScalableWebhook', # deprecated by RdsProxy
             # 'SinglePurposeLambda',
-            'SimpleGraphQLService',
+            # 'SimpleGraphQLService',
             # 'SnsFlow',
             # 'SnsRestApi',
             # 'SNSTopic',
