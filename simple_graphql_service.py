@@ -9,12 +9,19 @@ import os
 class SimpleGraphQlService(aws_cdk.core.Stack):
 
     @staticmethod
-    def get_remove_customer_mutation_resolver(dynamodb_data_source):'
+    def get_remove_customer_mutation_resolver(dynamodb_data_source):
         dynamodb_data_source.create_resolver(
             type_name='Mutation',
             field_name='removeCustomer',
             request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_delete_item('id', 'id'),
             response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_result_item(),
+        )
+
+    def create_lambda_function(self):
+        return aws_cdk.aws_lambda.Function(self, "LoyaltyLambdaHandler",
+            runtime=aws_cdk.aws_lambda.Runtime.NODEJS_12_X,
+            handler="loyalty.handler",
+            code=aws_cdk.aws_lambda.Code.from_asset("lambda_functions"),
         )
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
@@ -45,21 +52,12 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
         self.get_save_customer_mutation_resolver(customer_data_source)
         self.get_save_customer_with_first_order_mutation_resolver(customer_data_source)
         self.get_remove_customer_mutation_resolver(customer_data_source)
-
-        # Mutation Resolver for deleting an existing Customer
-        # customer_data_source.create_resolver(
-        #     type_name='Mutation',
-        #     field_name='removeCustomer',
-        #     request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_delete_item('id', 'id'),
-        #     response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_result_item(),
+        loyalty_lambda = self.create_lambda_function()
+        # loyalty_lambda = aws_cdk.aws_lambda.Function(self, "LoyaltyLambdaHandler",
+        #     runtime=aws_cdk.aws_lambda.Runtime.NODEJS_12_X,
+        #     handler="loyalty.handler",
+        #     code=aws_cdk.aws_lambda.Code.from_asset("lambda_functions"),
         # )
-
-        # defines an AWS  Lambda resource
-        loyalty_lambda = aws_cdk.aws_lambda.Function(self, "LoyaltyLambdaHandler",
-            runtime=aws_cdk.aws_lambda.Runtime.NODEJS_12_X,
-            handler="loyalty.handler",
-            code=aws_cdk.aws_lambda.Code.from_asset("lambda_functions"),
-        )
 
         # Add Loyalty Lambda as a Datasource for the Graphql API.
         loyalty_ds = api.add_lambda_data_source('Loyalty', loyalty_lambda)

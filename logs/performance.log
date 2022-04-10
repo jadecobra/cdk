@@ -17231,3 +17231,5 @@
 2022-04-10 12:34:18.547990::Time taken to synthesize stack: SimpleGraphQLService::  3.9161 seconds
 2022-04-10 12:34:39.810182::Time taken to synthesize stack: SimpleGraphQLService::  4.4120 seconds
 2022-04-10 12:35:17.017431::Time taken to synthesize stack: SimpleGraphQLService::  4.6797 seconds
+2022-04-10 12:36:44.052376::Time taken to synthesize stack: SimpleGraphQLService::  2.9038 seconds
+2022-04-10 12:41:27.769681::Time taken to synthesize stack: SimpleGraphQLService::  4.2995 seconds
