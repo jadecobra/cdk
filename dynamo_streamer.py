@@ -14,26 +14,23 @@ class DynamoStreamer(core.Stack):
     def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        # DynamoDB Table
-        # Streaming is enabled to send the whole new object down the pipe
         dynamodb_table = dynamo_db.Table(
             self, "DynamoDbTable",
+            stream=dynamo_db.StreamViewType.NEW_IMAGE,
             partition_key=dynamo_db.Attribute(
                 name="message",
                 type=dynamo_db.AttributeType.STRING
             ),
-            stream=dynamo_db.StreamViewType.NEW_IMAGE
         )
 
-        # defines an AWS  Lambda resource
-        subscriber_lambda = _lambda.Function(
+        subscriber_lambda_function = _lambda.Function(
             self, 'LambdaFunction',
             runtime=_lambda.Runtime.PYTHON_3_8,
             handler="lambda.handler",
             code=_lambda.Code.from_asset("lambda_functions/subscribe")
         )
 
-        subscriber_lambda.add_event_source(
+        subscriber_lambda_function.add_event_source(
             _event.DynamoEventSource(
                 table=dynamodb_table,
                 starting_position=_lambda.StartingPosition.LATEST
