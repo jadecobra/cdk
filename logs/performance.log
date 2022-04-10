@@ -17428,3 +17428,16 @@
 2022-04-10 15:49:54.921352::Time taken to synthesize stack: DynamoStreamer::  5.8894 seconds
 2022-04-10 15:50:33.006855::Time taken to synthesize stack: DynamoStreamer::  4.3018 seconds
 2022-04-10 15:52:48.866200::Time taken to synthesize stack: DynamoStreamer::  4.3109 seconds
+2022-04-10 15:53:11.549726::Time taken to synthesize stack: DynamoStreamer::  4.2718 seconds
+2022-04-10 15:53:44.950126::Time taken to synthesize stack: DynamoStreamer::  2.5902 seconds
+2022-04-10 15:53:57.019712::Time taken to synthesize stack: DynamoStreamer::  4.2984 seconds
+2022-04-10 15:54:14.463045::Time taken to synthesize stack: DynamoStreamer::  4.0908 seconds
+2022-04-10 15:54:40.296294::Time taken to synthesize stack: DynamoStreamer::  3.8395 seconds
+2022-04-10 15:54:56.191927::Time taken to synthesize stack: DynamoStreamer::  3.7834 seconds
+2022-04-10 15:55:40.234279::Time taken to synthesize stack: DynamoStreamer::  4.2963 seconds
+2022-04-10 15:56:53.420261::Time taken to synthesize stack: DynamoStreamer::  4.6026 seconds
+2022-04-10 15:59:17.262681::Time taken to synthesize stack: DynamoStreamer::  4.0536 seconds
+2022-04-10 15:59:47.618711::Time taken to synthesize stack: DynamoStreamer::  3.8676 seconds
+2022-04-10 16:00:21.828745::Time taken to synthesize stack: DynamoStreamer::  3.9418 seconds
+2022-04-10 16:00:40.840235::Time taken to synthesize stack: DynamoStreamer::  2.4211 seconds
+2022-04-10 16:00:56.572176::Time taken to synthesize stack: DynamoStreamer::  4.3984 seconds

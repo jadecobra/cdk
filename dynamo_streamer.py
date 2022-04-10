@@ -11,9 +11,9 @@ class DynamoStreamer(aws_cdk.core.Stack):
     @staticmethod
     def create_response_parameters(content_type=True, origin=True, credentials=True):
         return {
-            'method.response.header.Content-Type': "'application/json'",
-            'method.response.header.Access-Control-Allow-Origin': "'*'",
-            'method.response.header.Access-Control-Allow-Credentials': "'true'"
+            'method.response.header.Content-Type': content_type,
+            'method.response.header.Access-Control-Allow-Origin': origin,
+            'method.response.header.Access-Control-Allow-Credentials': credentials,
         }
 
     def get_integration_responses(self):
@@ -71,28 +71,31 @@ class DynamoStreamer(aws_cdk.core.Stack):
                 method_responses=[
                     aws_cdk.aws_apigateway.MethodResponse(
                         status_code='200',
-                        response_parameters={
-                            'method.response.header.Content-Type': True,
-                            'method.response.header.Access-Control-Allow-Origin': True,
-                            'method.response.header.Access-Control-Allow-Credentials': True
-                        },
+                        response_parameters=self.create_response_parameters(),
                         response_models={
                             'application/json': response_model
                         }
                     ),
-                    aws_cdk.aws_apigateway.MethodResponse(
+                    # aws_cdk.aws_apigateway.MethodResponse(
+                    #     status_code='400',
+                    #     response_parameters=self.create_response_parameters(),
+                    #     response_models={
+                    #         'application/json': error_response_model
+                    #     }
+                    # ),
+                    self.create_method_response(
                         status_code='400',
-                        response_parameters={
-                            'method.response.header.Content-Type': True,
-                            'method.response.header.Access-Control-Allow-Origin': True,
-                            'method.response.header.Access-Control-Allow-Credentials': True
-                        },
-                        response_models={
-                            'application/json': error_response_model
-                        }
+                        response_model=error_response_model
                     ),
                 ]
             )
+        )
+
+    def create_method_response(self, status_code='200', response_model=None):
+        return aws_cdk.aws_apigateway.MethodResponse(
+            status_code=status_code,
+            response_parameters=self.create_response_parameters(),
+            response_models={ 'application/json': response_model },
         )
 
     def create_dynamodb_table(self):
