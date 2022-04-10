@@ -42,12 +42,8 @@ class DynamoStreamer(aws_cdk.core.Stack):
         )
 
     @staticmethod
-    def separators():
-        return (',', ':')
-
-    # @staticmethod
-    def application_json_template(self, template):
-        return {'application/json': json.dumps(template, separators=self.separators())}
+    def application_json_template(stemplate):
+        return {'application/json': json.dumps(template, separators=(',', ':'))}
 
     def request_template(self, table_name):
         return self.application_json_template({
