@@ -8,10 +8,28 @@ import json
 
 class DynamoStreamer(aws_cdk.core.Stack):
 
-
+    def add_integration_responses(self):
+        return [
+            aws_cdk.aws_apigateway.IntegrationResponse(
+                status_code='200',
+                response_templates=self.application_json_template(
+                    template={"message": 'item added to db'},
+                    separators=None
+                )
+            ),
+            aws_cdk.aws_apigateway.IntegrationResponse(
+                selection_pattern="^\[BadRequest\].*",
+                status_code='400',
+                response_templates=self.error_response_template(),
+                response_parameters={
+                    'method.response.header.Content-Type': "'application/json'",
+                    'method.response.header.Access-Control-Allow-Origin': "'*'",
+                    'method.response.header.Access-Control-Allow-Credentials': "'true'"
+                }
+            )
+        ]
 
     def __init__(self, scope: aws_cdk.core.Construct, id: str, **kwargs) -> None:
-
         super().__init__(scope, id, **kwargs)
 
         api_gateway_service_role = self.create_api_gateway_service_role()
@@ -29,25 +47,7 @@ class DynamoStreamer(aws_cdk.core.Stack):
             credentials_role=api_gateway_service_role,
             request_templates=self.request_template(dynamodb_table.table_name),
             passthrough_behavior=aws_cdk.aws_apigateway.PassthroughBehavior.NEVER,
-            integration_responses=[
-                aws_cdk.aws_apigateway.IntegrationResponse(
-                    status_code='200',
-                    response_templates=self.application_json_template(
-                        template={"message": 'item added to db'},
-                        separators=None
-                    )
-                ),
-                aws_cdk.aws_apigateway.IntegrationResponse(
-                    selection_pattern="^\[BadRequest\].*",
-                    status_code='400',
-                    response_templates=self.error_response_template(),
-                    response_parameters={
-                        'method.response.header.Content-Type': "'application/json'",
-                        'method.response.header.Access-Control-Allow-Origin': "'*'",
-                        'method.response.header.Access-Control-Allow-Credentials': "'true'"
-                    }
-                )
-            ]
+            integration_responses=self.add_integration_responses()
         )
 
         # Add an InsertItem endpoint onto the gateway
