@@ -86,7 +86,7 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
             type_name='Mutation',
             field_name=field_name,
             request_mapping_template=request_mapping_template,
-            response_mapping_template=response_mapping_template,
+            response_mapping_template=response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_result_item(),
         )
 
     def add_get_customers_query_resolver_lambda(self, data_source):
@@ -117,7 +117,6 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
 
     def add_add_customer_mutation_resolver(self, data_source):
         self.create_mutation_resolver(
-            # type_name='Mutation',
             data_source=data_source,
             field_name='addCustomer',
             request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_put_item(
@@ -127,10 +126,9 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
             response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_result_item()
         )
 
-    @staticmethod
-    def add_save_customer_mutation_resolver(data_source):
-        data_source.create_resolver(
-            type_name='Mutation',
+    def add_save_customer_mutation_resolver(self, data_source):
+        self.create_mutation_resolver(
+            data_source=data_source,
             field_name='saveCustomer',
             request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_put_item(
                 key=aws_cdk.aws_appsync.PrimaryKey.partition('id').is_('id'),
@@ -139,10 +137,9 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
             response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_result_item()
         )
 
-    @staticmethod
-    def add_save_customer_with_first_order_mutation_resolver(data_source):
-        data_source.create_resolver(
-            type_name='Mutation',
+    def add_save_customer_with_first_order_mutation_resolver(self, data_source):
+        self.create_mutation_resolver(
+            data_source=data_source,
             field_name='saveCustomerWithFirstOrder',
             request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_put_item(
                 key=aws_cdk.aws_appsync.PrimaryKey.partition('order').auto().sort('customer').is_('customer.id'),
@@ -151,10 +148,9 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
             response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_result_item()
         )
 
-    @staticmethod
-    def add_remove_customer_mutation_resolver(data_source):
-        data_source.create_resolver(
-            type_name='Mutation',
+    def add_remove_customer_mutation_resolver(self, data_source):
+        self.create_mutation_resolver(
+            data_source=data_source,
             field_name='removeCustomer',
             request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_delete_item('id', 'id'),
             response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_result_item(),
