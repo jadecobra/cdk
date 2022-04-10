@@ -47,7 +47,7 @@ class DynamoStreamer(aws_cdk.core.Stack):
         dynamodb_table.grant_read_write_data(api_gateway_service_role)
 
         # Because this isn't a proxy integration, we need to define our response model
-        response_model = self.add_response_model_to_rest_api(rest_api)
+        ok_response_model = self.add_response_model_to_rest_api(rest_api)
         error_response_model = self.add_error_response_model_to_rest_api(rest_api)
 
         api_gateway_response_options = aws_cdk.aws_apigateway.IntegrationOptions(
@@ -68,28 +68,23 @@ class DynamoStreamer(aws_cdk.core.Stack):
                     uri='arn:aws:apigateway:us-east-1:dynamodb:action/PutItem',
                     options=api_gateway_response_options
                 ),
-                method_responses=[
-                    aws_cdk.aws_apigateway.MethodResponse(
-                        status_code='200',
-                        response_parameters=self.create_response_parameters(),
-                        response_models={
-                            'application/json': response_model
-                        }
-                    ),
-                    # aws_cdk.aws_apigateway.MethodResponse(
-                    #     status_code='400',
-                    #     response_parameters=self.create_response_parameters(),
-                    #     response_models={
-                    #         'application/json': error_response_model
-                    #     }
-                    # ),
-                    self.create_method_response(
-                        status_code='400',
-                        response_model=error_response_model
-                    ),
-                ]
+                method_responses=self.create_method_responses(
+                    ok_response_model=ok_response_model,
+                    error_response_model=error_response_model,
+                )
             )
         )
+
+    def create_method_responses(self, ok_response_model=None, error_response_model=None):
+        return [
+            self.create_method_response(
+                status_code=status_code,
+                response_model=response_model
+            ) for status_code, response_model in (
+                ('200', ok_response_model),
+                ('400', error_response_model)
+            )
+        ]
 
     def create_method_response(self, status_code='200', response_model=None):
         return aws_cdk.aws_apigateway.MethodResponse(
