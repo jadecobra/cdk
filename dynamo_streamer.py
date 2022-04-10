@@ -24,20 +24,9 @@ class DynamoStreamer(aws_cdk.core.Stack):
             )
         )
 
-    def __init__(self, scope: aws_cdk.core.Construct, id: str, **kwargs) -> None:
-        super().__init__(scope, id, **kwargs)
-
-        api_gateway_service_role = self.create_api_gateway_service_role()
-        rest_api = self.create_rest_api()
-        dynamodb_table = self.create_dynamodb_table()
-        self.create_lambda_function_with_dynamodb_event_source(dynamodb_table)
-        dynamodb_table.grant_read_write_data(api_gateway_service_role)
-
-
-        # Because this isn't a proxy integration, we need to define our response model
-        response_model = self.add_response_model_to_rest_api(rest_api)
-
-        error_response_model = rest_api.add_model(
+    @staticmethod
+    def add_error_response_model_to_rest_api(rest_api):
+        return rest_api.add_model(
             'ErrorResponseModel',
             content_type='application/json',
             model_name='ErrorResponseModel',
@@ -51,6 +40,20 @@ class DynamoStreamer(aws_cdk.core.Stack):
                 }
             )
         )
+
+    def __init__(self, scope: aws_cdk.core.Construct, id: str, **kwargs) -> None:
+        super().__init__(scope, id, **kwargs)
+
+        api_gateway_service_role = self.create_api_gateway_service_role()
+        rest_api = self.create_rest_api()
+        dynamodb_table = self.create_dynamodb_table()
+        self.create_lambda_function_with_dynamodb_event_source(dynamodb_table)
+        dynamodb_table.grant_read_write_data(api_gateway_service_role)
+
+
+        # Because this isn't a proxy integration, we need to define our response model
+        response_model = self.add_response_model_to_rest_api(rest_api)
+        error_response_model = self.add_error_response_model_to_rest_api(*rest_api)
 
         # This is the VTL to transform our incoming JSON to a Dynamo Insert Query
         request_template = {
