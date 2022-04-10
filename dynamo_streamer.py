@@ -8,7 +8,15 @@ import json
 
 class DynamoStreamer(aws_cdk.core.Stack):
 
-    def add_integration_responses(self):
+    @staticmethod
+    def create_response_parameters(content_type=True, origin=True, credentials=True):
+        return {
+            'method.response.header.Content-Type': "'application/json'",
+            'method.response.header.Access-Control-Allow-Origin': "'*'",
+            'method.response.header.Access-Control-Allow-Credentials': "'true'"
+        }
+
+    def get_integration_responses(self):
         return [
             aws_cdk.aws_apigateway.IntegrationResponse(
                 status_code='200',
@@ -21,11 +29,11 @@ class DynamoStreamer(aws_cdk.core.Stack):
                 selection_pattern="^\[BadRequest\].*",
                 status_code='400',
                 response_templates=self.error_response_template(),
-                response_parameters={
-                    'method.response.header.Content-Type': "'application/json'",
-                    'method.response.header.Access-Control-Allow-Origin': "'*'",
-                    'method.response.header.Access-Control-Allow-Credentials': "'true'"
-                }
+                response_parameters=self.create_response_parameters(
+                    content_type="'application/json'",
+                    origin="'*'",
+                    credentials="'true'",
+                )
             )
         ]
 
@@ -42,12 +50,11 @@ class DynamoStreamer(aws_cdk.core.Stack):
         response_model = self.add_response_model_to_rest_api(rest_api)
         error_response_model = self.add_error_response_model_to_rest_api(rest_api)
 
-        # This is how our gateway chooses what response to send based on selection_pattern
-        integration_options = aws_cdk.aws_apigateway.IntegrationOptions(
+        api_gateway_response_options = aws_cdk.aws_apigateway.IntegrationOptions(
             credentials_role=api_gateway_service_role,
             request_templates=self.request_template(dynamodb_table.table_name),
             passthrough_behavior=aws_cdk.aws_apigateway.PassthroughBehavior.NEVER,
-            integration_responses=self.add_integration_responses()
+            integration_responses=self.get_integration_responses()
         )
 
         # Add an InsertItem endpoint onto the gateway
@@ -59,7 +66,7 @@ class DynamoStreamer(aws_cdk.core.Stack):
                     type=aws_cdk.aws_apigateway.IntegrationType.AWS,
                     integration_http_method='POST',
                     uri='arn:aws:apigateway:us-east-1:dynamodb:action/PutItem',
-                    options=integration_options
+                    options=api_gateway_response_options
                 ),
                 method_responses=[
                     aws_cdk.aws_apigateway.MethodResponse(
