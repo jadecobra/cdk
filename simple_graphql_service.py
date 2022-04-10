@@ -118,6 +118,7 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
     def add_add_customer_mutation_resolver(self, data_source):
         self.create_mutation_resolver(
             # type_name='Mutation',
+            data_source=data_source,
             field_name='addCustomer',
             request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_put_item(
                 key=aws_cdk.aws_appsync.PrimaryKey.partition('id').auto(),
