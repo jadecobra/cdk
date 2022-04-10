@@ -18,26 +18,31 @@ class DynamoStreamer(aws_cdk.core.Stack):
             ),
         )
 
-    def create_lambda_function(self):
+    def create_lambda_function_with_dynamodb_event_source(self, dynamodb_table):
         return aws_cdk.aws_lambda.Function(
             self, 'LambdaFunction',
             runtime=aws_cdk.aws_lambda.Runtime.PYTHON_3_8,
             handler="lambda.handler",
             code=aws_cdk.aws_lambda.Code.from_asset("lambda_functions/subscribe")
+        ).add_event_source(
+            aws_cdk.aws_lambda_event_sources.DynamoEventSource(
+                table=dynamodb_table,
+                starting_position=aws_cdk.aws_lambda.StartingPosition.LATEST
+            )
         )
 
     def __init__(self, scope: aws_cdk.core.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         dynamodb_table = self.create_dynamodb_table()
-        subscriber_lambda_function = self.create_lambda_function()
-
-        subscriber_lambda_function.add_event_source(
-            aws_cdk.aws_lambda_event_sources.DynamoEventSource(
-                table=dynamodb_table,
-                starting_position=aws_cdk.aws_lambda.StartingPosition.LATEST
-            )
-        )
+        self.create_lambda_function_with_dynamodb_event_source(dynamodb_table)
+        # subscriber_lambda_function = self.create_lambda_function()
+        # subscriber_lambda_function.add_event_source(
+        #     aws_cdk.aws_lambda_event_sources.DynamoEventSource(
+        #         table=dynamodb_table,
+        #         starting_position=aws_cdk.aws_lambda.StartingPosition.LATEST
+        #     )
+        # )
 
         # API Gateway Creation
         api_gateway = aws_cdk.aws_apigateway.RestApi(
