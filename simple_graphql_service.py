@@ -17,6 +17,28 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
             )
         )
 
+    @staticmethod
+    def get_customers_query_resolver(dynamodb_data_source):
+        dynamodb_data_source.create_resolver(
+            type_name='Query',
+            field_name='getCustomers',
+            request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_scan_table(),
+            response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_result_list(),
+        )
+
+    @staticmethod
+    def get_customer_query_resolver(dynamodb_data_source):
+        # Query Resolver to get an individual Customer by their id
+        dynamodb_data_source.create_resolver(
+            type_name='Query',
+            field_name='getCustomer',
+            request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_get_item(
+                'id', 'id'
+            ),
+            response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_result_item(),
+        )
+
+
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
@@ -36,30 +58,29 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
             self, 'the-simple-graphql-service-api-key',
             api_id=api.api_id
         )
-        
-        customer_table = self.create_dynamodb_table()
 
-        # Add Customer DynamoDB as a Datasource for the Graphql API.
-        customer_ds = api.add_dynamo_db_data_source('Customer', customer_table)
+        customer_data_table = self.create_dynamodb_table()
+        customer_data_source = api.add_dynamo_db_data_source('Customer', customer_data_table)
+        self.get_customers_query_resolver(customer_data_source)
+        self.get_customer_query_resolver(customer_data_source)
+        # # Query Resolver to get all Customers
+        # customer_data_source.create_resolver(
+        #     type_name='Query',
+        #     field_name='getCustomers',
+        #     request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_scan_table(),
+        #     response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_result_list(),
+        # )
 
-        # Query Resolver to get all Customers
-        customer_ds.create_resolver(
-            type_name='Query',
-            field_name='getCustomers',
-            request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_scan_table(),
-            response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_result_list(),
-        )
-
-        # Query Resolver to get an individual Customer by their id
-        customer_ds.create_resolver(
-            type_name='Query',
-            field_name='getCustomer',
-            request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_get_item('id', 'id'),
-            response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_result_item(),
-        )
+        # # Query Resolver to get an individual Customer by their id
+        # customer_data_source.create_resolver(
+        #     type_name='Query',
+        #     field_name='getCustomer',
+        #     request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_get_item('id', 'id'),
+        #     response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_result_item(),
+        # )
 
         # Mutation Resolver for adding a new Customer
-        customer_ds.create_resolver(
+        customer_data_source.create_resolver(
             type_name='Mutation',
             field_name='addCustomer',
             request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_put_item(
@@ -70,7 +91,7 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
         )
 
         # Mutation Resolver for updating an existing Customer
-        customer_ds.create_resolver(
+        customer_data_source.create_resolver(
             type_name='Mutation',
             field_name='saveCustomer',
             request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_put_item(
@@ -81,7 +102,7 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
         )
 
         #  Mutation resolver for creating a new customer along with their first order
-        customer_ds.create_resolver(
+        customer_data_source.create_resolver(
             type_name='Mutation',
             field_name='saveCustomerWithFirstOrder',
             request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_put_item(
@@ -92,7 +113,7 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
         )
 
         # Mutation Resolver for deleting an existing Customer
-        customer_ds.create_resolver(
+        customer_data_source.create_resolver(
             type_name='Mutation',
             field_name='removeCustomer',
             request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_delete_item('id', 'id'),
