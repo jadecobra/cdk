@@ -8,21 +8,7 @@ import os
 
 class SimpleGraphQlService(aws_cdk.core.Stack):
 
-    @staticmethod
-    def get_remove_customer_mutation_resolver(dynamodb_data_source):
-        dynamodb_data_source.create_resolver(
-            type_name='Mutation',
-            field_name='removeCustomer',
-            request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_delete_item('id', 'id'),
-            response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_result_item(),
-        )
 
-    def create_lambda_function(self):
-        return aws_cdk.aws_lambda.Function(self, "LoyaltyLambdaHandler",
-            runtime=aws_cdk.aws_lambda.Runtime.NODEJS_12_X,
-            handler="loyalty.handler",
-            code=aws_cdk.aws_lambda.Code.from_asset("lambda_functions"),
-        )
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
@@ -45,25 +31,19 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
         )
 
         customer_data_table = self.create_dynamodb_table()
+        loyalty_lambda = self.create_lambda_function()
         customer_data_source = api.add_dynamo_db_data_source('Customer', customer_data_table)
+        loyalty_data_source = api.add_lambda_data_source('Loyalty', loyalty_lambda)
+
         self.get_customers_query_resolver(customer_data_source)
         self.get_customer_query_resolver(customer_data_source)
         self.get_add_customer_mutation_resolver(customer_data_source)
         self.get_save_customer_mutation_resolver(customer_data_source)
         self.get_save_customer_with_first_order_mutation_resolver(customer_data_source)
         self.get_remove_customer_mutation_resolver(customer_data_source)
-        loyalty_lambda = self.create_lambda_function()
-        # loyalty_lambda = aws_cdk.aws_lambda.Function(self, "LoyaltyLambdaHandler",
-        #     runtime=aws_cdk.aws_lambda.Runtime.NODEJS_12_X,
-        #     handler="loyalty.handler",
-        #     code=aws_cdk.aws_lambda.Code.from_asset("lambda_functions"),
-        # )
-
-        # Add Loyalty Lambda as a Datasource for the Graphql API.
-        loyalty_ds = api.add_lambda_data_source('Loyalty', loyalty_lambda)
 
         # Query Resolver to get all Customers
-        loyalty_ds.create_resolver(
+        loyalty_data_source.create_resolver(
             type_name='Query',
             field_name='getLoyaltyLevel',
             request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.lambda_request(),
@@ -83,6 +63,13 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
                 name="id",
                 type=aws_cdk.aws_dynamodb.AttributeType.STRING
             )
+        )
+
+    def create_lambda_function(self):
+        return aws_cdk.aws_lambda.Function(self, "LoyaltyLambdaHandler",
+            runtime=aws_cdk.aws_lambda.Runtime.NODEJS_12_X,
+            handler="loyalty.handler",
+            code=aws_cdk.aws_lambda.Code.from_asset("lambda_functions"),
         )
 
     @staticmethod
@@ -140,4 +127,13 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
                 values=aws_cdk.aws_appsync.Values.projecting('order').attribute('referral').is_('referral')
             ),
             response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_result_item()
+        )
+
+    @staticmethod
+    def get_remove_customer_mutation_resolver(dynamodb_data_source):
+        dynamodb_data_source.create_resolver(
+            type_name='Mutation',
+            field_name='removeCustomer',
+            request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_delete_item('id', 'id'),
+            response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_result_item(),
         )
