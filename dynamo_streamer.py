@@ -57,8 +57,10 @@ class DynamoStreamer(aws_cdk.core.Stack):
                 'POST',
                 # self.integrate_dynamodb_and_rest_api(api_gateway_response_options),
                 self.integrate_dynamodb_and_rest_api(
-                    api_gateway_service_role=api_gateway_service_role,
-                    dynamodb_table_name=dynamodb_table.table_name,
+                    self.get_api_response_options(
+                        api_gateway_service_role=api_gateway_service_role,
+                        dynamodb_table_name=dynamodb_table.table_name
+                    )
                 ),
                 method_responses=self.create_method_responses(
                     ok_response_model=ok_response_model,
@@ -67,7 +69,7 @@ class DynamoStreamer(aws_cdk.core.Stack):
             )
         )
 
-    def get_api_gateway_response_options(self, api_gateway_service_role=None, dynamodb_table_name=None):
+    def get_api_response_options(self, api_gateway_service_role=None, dynamodb_table_name=None):
         return aws_cdk.aws_apigateway.IntegrationOptions(
             credentials_role=api_gateway_service_role,
             request_templates=self.request_template(dynamodb_table_name),
@@ -75,15 +77,12 @@ class DynamoStreamer(aws_cdk.core.Stack):
             integration_responses=self.get_integration_responses()
         )
 
-    def integrate_dynamodb_and_rest_api(self, api_gateway_service_role=None, dynamodb_table_name=None):
+    def integrate_dynamodb_and_rest_api(self, api_response_options):
         return aws_cdk.aws_apigateway.Integration(
             type=aws_cdk.aws_apigateway.IntegrationType.AWS,
             integration_http_method='POST',
             uri='arn:aws:apigateway:us-east-1:dynamodb:action/PutItem',
-            options=self.get_api_gateway_response_options(
-                api_gateway_service_role=api_gateway_service_role,
-                dynamodb_table_name=dynamodb_table_name
-            )
+            options=api_response_options
         )
 
     def create_method_response(self, status_code='200', response_model=None):
