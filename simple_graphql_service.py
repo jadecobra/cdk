@@ -61,9 +61,9 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
 
     def create_lambda_function(self):
         return aws_cdk.aws_lambda.Function(self, "LoyaltyLambdaHandler",
-            runtime=aws_cdk.aws_lambda.Runtime.NODEJS_12_X,
+            runtime=aws_cdk.aws_lambda.Runtime.PYTHON_3_9,
             handler="loyalty.handler",
-            code=aws_cdk.aws_lambda.Code.from_asset("lambda_functions"),
+            code=aws_cdk.aws_lambda.Code.from_asset("lambda_functions/loyalty"),
         )
 
     @staticmethod
