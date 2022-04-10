@@ -13,13 +13,8 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        # Create a new AppSync GraphQL API
         api = self.create_graphql_api()
-
-        api_key = aws_cdk.aws_appsync.CfnApiKey(
-            self, 'the-simple-graphql-service-api-key',
-            api_id=api.api_id
-        )
+        # api_key = self.create_graphql_api_key(api.api_id)
 
         customer_data_table = self.create_dynamodb_table()
         loyalty_lambda = self.create_lambda_function()
@@ -36,7 +31,7 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
 
         for logical_id, value in (
             ('Endpoint', api.graphql_url),
-            ('API_Key', api_key.attr_api_key),
+            ('API_Key', self.create_graphql_api_key(api.api_id).attr_api_key),
         ):
             aws_cdk.core.CfnOutput(self, logical_id, value=value)
 
@@ -48,8 +43,14 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
                 field_log_level=aws_cdk.aws_appsync.FieldLogLevel.ALL
             ),
             schema=aws_cdk.aws_appsync.Schema.from_asset(
-                os.path.dirname(os.path.realpath(__file__)) + "/schema/schema.graphql"
+                f'{os.path.dirname(os.path.realpath(__file__))}/schema/schema.graphql'
             )
+        )
+
+    def create_graphql_api_key(self, api_id):
+        return aws_cdk.aws_appsync.CfnApiKey(
+            self, 'the-simple-graphql-service-api-key',
+            api_id=api_id
         )
 
     def create_dynamodb_table(self):
