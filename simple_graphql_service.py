@@ -115,6 +115,6 @@ class SimpleGraphQlService(core.Stack):
             response_mapping_template=appsync.MappingTemplate.lambda_result(),
         )
 
-        # GraphQL API Endpoint
+        for
         aws_cdk.core.CfnOutput(self, 'Endpoint', value=api.graphql_url)
         aws_cdk.core.CfnOutput(self, 'API_Key', value=api_key.attr_api_key)
