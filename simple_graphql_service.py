@@ -85,33 +85,39 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
             request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.lambda_request(),
             response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.lambda_result(),
         )
-        # data_source.create_resolver(
-        #     type_name='Query',
-        #     field_name='getLoyaltyLevel',
-        #     request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.lambda_request(),
-        #     response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.lambda_result(),
-        # )
 
-    @staticmethod
-    def add_get_customers_query_resolver_dynamodb(data_source):
-        data_source.create_resolver(
-            type_name='Query',
+    def add_get_customers_query_resolver_dynamodb(self, data_source):
+        self.create_query_resolver(
+            data_source=data_source
             field_name='getCustomers',
             request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_scan_table(),
             response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_result_list(),
         )
+        # data_source.create_resolver(
+        #     type_name='Query',
+        #     field_name='getCustomers',
+        #     request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_scan_table(),
+        #     response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_result_list(),
+        # )
 
-    @staticmethod
-    def add_get_customer_query_resolver(data_source):
-        # Query Resolver to get an individual Customer by their id
-        data_source.create_resolver(
-            type_name='Query',
+    def add_get_customer_query_resolver(self, data_source):
+        self.create_query_resolver(
+            data_source=data_source,
             field_name='getCustomer',
             request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_get_item(
                 'id', 'id'
             ),
             response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_result_item(),
         )
+        # # Query Resolver to get an individual Customer by their id
+        # data_source.create_resolver(
+        #     type_name='Query',
+        #     field_name='getCustomer',
+        #     request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_get_item(
+        #         'id', 'id'
+        #     ),
+        #     response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_result_item(),
+        # )
 
     @staticmethod
     def add_add_customer_mutation_resolver(data_source):
