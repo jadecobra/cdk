@@ -22,23 +22,7 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
             api=graphql_api,
             title='Loyalty'
         )
-
-        for method in (
-            self.add_get_customers_query_resolver_dynamodb,
-            self.add_get_customer_query_resolver,
-            self.add_add_customer_mutation_resolver,
-            self.add_save_customer_mutation_resolver,
-            self.add_save_customer_with_first_order_mutation_resolver,
-            self.add_remove_customer_mutation_resolver,
-        ):
-            method(dynamodb_data_source)
-
-        # self.add_get_customers_query_resolver_dynamodb(dynamodb_data_source)
-        # self.add_get_customer_query_resolver(dynamodb_data_source)
-        # self.add_add_customer_mutation_resolver(dynamodb_data_source)
-        # self.add_save_customer_mutation_resolver(dynamodb_data_source)
-        # self.add_save_customer_with_first_order_mutation_resolver(dynamodb_data_source)
-        # self.add_remove_customer_mutation_resolver(dynamodb_data_source)
+        self.add_dynamodb_data_source_resolvers(dynamodb_data_source)
         self.add_get_customers_query_resolver_lambda(lambda_function_data_source)
 
         for logical_id, value in (
@@ -172,3 +156,14 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
             field_name='removeCustomer',
             request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_delete_item('id', 'id'),
         )
+
+    def add_dynamodb_data_source_resolvers(self, dynamodb_data_source):
+        for add_dynamodb_data_source_resolver in (
+            self.add_get_customers_query_resolver_dynamodb,
+            self.add_get_customer_query_resolver,
+            self.add_add_customer_mutation_resolver,
+            self.add_save_customer_mutation_resolver,
+            self.add_save_customer_with_first_order_mutation_resolver,
+            self.add_remove_customer_mutation_resolver,
+        ):
+            add_dynamodb_data_source_resolver(dynamodb_data_source)
