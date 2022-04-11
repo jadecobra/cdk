@@ -119,8 +119,23 @@ class DynamoStreamer(aws_cdk.core.Stack):
             properties=properties
         )
 
-    @staticmethod
-    def add_response_model_to_rest_api(rest_api=None, model_name=None, schema=None):
+    def add_response_model_to_rest_api(self, rest_api=None, model_name=None, schema=None, schema_title='pollResponse', schema_properties=None):
+        if not schema_properties:
+            schema_properties = {}
+        return rest_api.add_model(
+            model_name,
+            content_type='application/json',
+            model_name=model_name,
+            schema=self.create_json_schema(
+                title=schema_title,
+                properties={
+                    'message': aws_cdk.aws_apigateway.JsonSchema(
+                        type=aws_cdk.aws_apigateway.JsonSchemaType.STRING
+                    ),
+                    **schema_properties,
+                }
+            )
+        )
         return rest_api.add_model(
             model_name,
             content_type='application/json',
@@ -129,6 +144,11 @@ class DynamoStreamer(aws_cdk.core.Stack):
         )
 
     def add_success_response_model_to_rest_api(self, rest_api):
+        return self.add_response_model_to_rest_api(
+            rest_api=rest_api,
+            model_name='ResponseModel',
+            schema_title='pollResponse',
+        )
         return self.add_response_model_to_rest_api(
             rest_api=rest_api,
             model_name='ResponseModel',
@@ -146,23 +166,21 @@ class DynamoStreamer(aws_cdk.core.Stack):
         return self.add_response_model_to_rest_api(
             rest_api=rest_api,
             model_name='ErrorResponseModel',
-            schema=self.create_json_schema(
-                title='errorResponse',
-                properties={
-                    'state': aws_cdk.aws_apigateway.JsonSchema(type=aws_cdk.aws_apigateway.JsonSchemaType.STRING),
-                    'message': aws_cdk.aws_apigateway.JsonSchema(type=aws_cdk.aws_apigateway.JsonSchemaType.STRING)
-                }
-            )
+            schema_title='errorResponse',
+            schema_properties={
+                'state': aws_cdk.aws_apigateway.JsonSchema(type=aws_cdk.aws_apigateway.JsonSchemaType.STRING),
+            }
         )
-        return rest_api.add_model(
-            'ErrorResponseModel',
-            content_type='application/json',
+        return self.add_response_model_to_rest_api(
+            rest_api=rest_api,
             model_name='ErrorResponseModel',
             schema=self.create_json_schema(
                 title='errorResponse',
                 properties={
                     'state': aws_cdk.aws_apigateway.JsonSchema(type=aws_cdk.aws_apigateway.JsonSchemaType.STRING),
-                    'message': aws_cdk.aws_apigateway.JsonSchema(type=aws_cdk.aws_apigateway.JsonSchemaType.STRING)
+                    'message': aws_cdk.aws_apigateway.JsonSchema(
+                        type=aws_cdk.aws_apigateway.JsonSchemaType.STRING
+                    )
                 }
             )
         )
