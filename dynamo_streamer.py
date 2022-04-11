@@ -29,6 +29,7 @@ class DynamoStreamer(aws_cdk.core.Stack):
                     )
                 ),
                 method_responses=self.create_method_responses(
+                    rest_api=rest_api,
                     success_response_model=self.add_response_model_to_rest_api(
                         rest_api=rest_api,
                         schema=self.create_json_schema()
@@ -69,7 +70,35 @@ class DynamoStreamer(aws_cdk.core.Stack):
             response_models={ 'application/json': response_model },
         )
 
-    def create_method_responses(self, success_response_model=None, failure_response_model=None):
+    def get_response_models(self, rest_api):
+        return (
+            (
+                '200',
+                self.add_response_model_to_rest_api(
+                    rest_api=rest_api,
+                    schema=self.create_json_schema()
+                )
+            ),
+            (
+                '400',
+                self.add_response_model_to_rest_api(
+                        rest_api=rest_api,
+                        model_name='ErrorResponseModel',
+                        schema=self.create_json_schema(
+                            response_type='errorResponse',
+                            additional_properties='state',
+                        )
+                    )
+            )
+        )
+
+    def create_method_responses(self, success_response_model=None, failure_response_model=None, rest_api=None):
+        return [
+            self.create_method_response(
+                status_code=status_code,
+                response_model=response_model
+            ) for status_code, response_model in self.get_response_models(rest_api)
+        ]
         return [
             self.create_method_response(
                 status_code=status_code,
