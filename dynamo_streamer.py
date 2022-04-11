@@ -110,45 +110,47 @@ class DynamoStreamer(aws_cdk.core.Stack):
             assumed_by=aws_cdk.aws_iam.ServicePrincipal('apigateway.amazonaws.com')
         )
 
-    @staticmethod
-    def create_json_schema(title=None, properties=None):
+    # @staticmethod
+    def create_json_schema(self, response_type=None, additional_schema_properties=None, properties=None):
+        properties = ['message']
+        properties.append(additional_schema_properties) if additional_schema_properties else None
         return aws_cdk.aws_apigateway.JsonSchema(
             schema=aws_cdk.aws_apigateway.JsonSchemaVersion.DRAFT4,
-            title=title,
+            title=response_type,
             type=aws_cdk.aws_apigateway.JsonSchemaType.OBJECT,
-            properties=properties
+            properties={
+                key: self.json_string() for key in properties
+            }
         )
 
     @staticmethod
     def json_string():
         return aws_cdk.aws_apigateway.JsonSchema(type=aws_cdk.aws_apigateway.JsonSchemaType.STRING)
 
-    def add_response_model_to_rest_api(self, rest_api=None, model_name='ResponseModel', schema=None, response_type='pollResponse', extra_schema_properties=None):
-        properties = ['message']
-        properties.append(extra_schema_properties) if extra_schema_properties else None
+    def add_response_model_to_rest_api(self, rest_api=None, model_name='ResponseModel', schema=None):
         return rest_api.add_model(
             model_name,
             content_type='application/json',
             model_name=model_name,
-            schema=self.create_json_schema(
-                title=response_type,
-                properties={
-                    key: self.json_string() for key in properties
-                },
-            )
+            schema=schema
         )
 
     def add_success_response_model_to_rest_api(self, rest_api):
         return self.add_response_model_to_rest_api(
             rest_api=rest_api,
+            schema=self.create_json_schema(
+                response_type='pollResponse',
+            )
         )
 
     def add_error_response_model_to_rest_api(self, rest_api):
         return self.add_response_model_to_rest_api(
             rest_api=rest_api,
             model_name='ErrorResponseModel',
-            response_type='errorResponse',
-            extra_schema_properties='state',
+            schema=self.create_json_schema(
+                response_type='errorResponse',
+                additional_schema_properties='state',
+            )
         )
 
     @staticmethod
