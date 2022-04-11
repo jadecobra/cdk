@@ -23,10 +23,8 @@ class DynamoStreamer(aws_cdk.core.Stack):
             .add_method(
                 'POST',
                 self.connect_dynamodb_put_item_to_rest_api(
-                    self.get_api_response_options(
-                        api_gateway_service_role=api_gateway_service_role,
-                        dynamodb_table_name=dynamodb_table.table_name
-                    )
+                    api_gateway_service_role=api_gateway_service_role,
+                    dynamodb_table_name=dynamodb_table.table_name
                 ),
                 method_responses=self.create_method_responses(rest_api)
             )
@@ -41,12 +39,15 @@ class DynamoStreamer(aws_cdk.core.Stack):
             integration_responses=self.get_integration_responses()
         )
 
-    def connect_dynamodb_put_item_to_rest_api(self, api_response_options):
+    def connect_dynamodb_put_item_to_rest_api(self, api_response_options=None, api_gateway_service_role=None, dynamodb_table_name=None):
         return aws_cdk.aws_apigateway.Integration(
             type=aws_cdk.aws_apigateway.IntegrationType.AWS,
             integration_http_method='POST',
             uri='arn:aws:apigateway:us-east-1:dynamodb:action/PutItem',
-            options=api_response_options
+            options=self.get_api_response_options(
+                api_gateway_service_role=api_gateway_service_role,
+                dynamodb_table_name=dynamodb_table_name
+            )
         )
 
     def create_method_response(self, status_code='200', response_model=None):
