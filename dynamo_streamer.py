@@ -14,21 +14,34 @@ class DynamoStreamer(aws_cdk.core.Stack):
 
         rest_api = self.create_rest_api()
         api_gateway_service_role = self.create_api_gateway_service_role()
-        partition_key = 'message'
-        dynamodb_table = self.create_dynamodb_table(partition_key)
+
+        dynamodb_partition_key = 'message'
+        dynamodb_table = self.create_dynamodb_table(dynamodb_partition_key)
         dynamodb_table.grant_read_write_data(api_gateway_service_role)
+        self.add_method_to_rest_api(
+            rest_api=rest_api,
+            api_gateway_service_role=api_gateway_service_role,
+            dynamodb_table_name=dynamodb_table.table_name,
+            dynamodb_partition_key=dynamodb_partition_key
+        )
         self.create_lambda_function_with_dynamodb_event_source(dynamodb_table)
-        resource = rest_api.root.add_resource('InsertItem')
-        resource.add_method(
+
+    def add_method_to_rest_api(
+        self, rest_api=None, api_gateway_service_role=None,
+        dynamodb_table_name=None, dynamodb_partition_key=None
+    ):
+        return rest_api.root.add_resource(
+            'InsertItem'
+        ).add_method(
             'POST',
             self.integrate_rest_api_with_dynamodb_put_item(
                 api_gateway_service_role=api_gateway_service_role,
-                dynamodb_table_name=dynamodb_table.table_name,
-                dynamodb_partition_key=partition_key,
+                dynamodb_table_name=dynamodb_table_name,
+                dynamodb_partition_key=dynamodb_partition_key,
             ),
             method_responses=self.create_method_responses(
                 rest_api=rest_api,
-                dynamodb_partition_key=partition_key
+                dynamodb_partition_key=dynamodb_partition_key
             )
         )
 
@@ -45,18 +58,18 @@ class DynamoStreamer(aws_cdk.core.Stack):
             separators=None,
         )
 
+    def error_response_template(self):
+        return self.create_api_request_template({
+            "state": 'error',
+            "message": "$util.escapeJavaScript($input.path('$.errorMessage'))"
+        })
+
     def request_template(self, table_name):
         return self.create_api_request_template({
             "TableName": table_name,
             "Item": {
                 "message": { "S": "$input.path('$.message')" }
             }
-        })
-
-    def error_response_template(self):
-        return self.create_api_request_template({
-            "state": 'error',
-            "message": "$util.escapeJavaScript($input.path('$.errorMessage'))"
         })
 
     def create_response_status_mappings(self, dynamodb_partition_key):
@@ -146,7 +159,8 @@ class DynamoStreamer(aws_cdk.core.Stack):
                         additional_properties=response.get('additional_properties'),
                     )
                 )
-            ) for status_code, response in self.create_response_status_mappings(dynamodb_partition_key).items()
+            ) for status_code, response
+            in self.create_response_status_mappings(dynamodb_partition_key).items()
         )
 
     def create_method_responses(self, rest_api=None, dynamodb_partition_key=None):
@@ -156,7 +170,8 @@ class DynamoStreamer(aws_cdk.core.Stack):
                 response_parameters=self.create_response_parameters(),
                 response_models=self.create_api_request_template(response_model),
             ) for status_code, response_model in self.create_response_models(
-                rest_api=rest_api, dynamodb_partition_key=dynamodb_partition_key
+                rest_api=rest_api,
+                dynamodb_partition_key=dynamodb_partition_key,
             )
         ]
 
@@ -166,7 +181,7 @@ class DynamoStreamer(aws_cdk.core.Stack):
             stream=aws_cdk.aws_dynamodb.StreamViewType.NEW_IMAGE,
             partition_key=aws_cdk.aws_dynamodb.Attribute(
                 name=partition_key,
-                type=aws_cdk.aws_dynamodb.AttributeType.STRING
+                type=aws_cdk.aws_dynamodb.AttributeType.STRING,
             ),
         )
 
@@ -179,7 +194,7 @@ class DynamoStreamer(aws_cdk.core.Stack):
         ).add_event_source(
             aws_cdk.aws_lambda_event_sources.DynamoEventSource(
                 table=dynamodb_table,
-                starting_position=aws_cdk.aws_lambda.StartingPosition.LATEST
+                starting_position=aws_cdk.aws_lambda.StartingPosition.LATEST,
             )
         )
 
@@ -190,12 +205,12 @@ class DynamoStreamer(aws_cdk.core.Stack):
                 metrics_enabled=True,
                 logging_level=aws_cdk.aws_apigateway.MethodLoggingLevel.INFO,
                 data_trace_enabled=True,
-                stage_name='prod'
+                stage_name='prod',
             )
         )
 
     def create_api_gateway_service_role(self):
         return aws_cdk.aws_iam.Role(
             self, 'ApiGatewayServiceRole',
-            assumed_by=aws_cdk.aws_iam.ServicePrincipal('apigateway.amazonaws.com')
+            assumed_by=aws_cdk.aws_iam.ServicePrincipal('apigateway.amazonaws.com'),
         )
