@@ -43,7 +43,7 @@ class DynamoStreamer(aws_cdk.core.Stack):
             integration_responses=self.get_integration_responses()
         )
 
-    def integrate_rest_api_with_dynamodb_put_item(self, api_response_options=None, api_gateway_service_role=None, dynamodb_table_name=None):
+    def integrate_rest_api_with_dynamodb_put_item(self, api_gateway_service_role=None, dynamodb_table_name=None):
         return aws_cdk.aws_apigateway.Integration(
             type=aws_cdk.aws_apigateway.IntegrationType.AWS,
             integration_http_method='POST',
