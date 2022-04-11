@@ -30,18 +30,18 @@ class DynamoStreamer(aws_cdk.core.Stack):
                 ),
                 method_responses=self.create_method_responses(
                     rest_api=rest_api,
-                    success_response_model=self.add_response_model_to_rest_api(
-                        rest_api=rest_api,
-                        schema=self.create_json_schema()
-                    ),
-                    failure_response_model=self.add_response_model_to_rest_api(
-                        rest_api=rest_api,
-                        model_name='ErrorResponseModel',
-                        schema=self.create_json_schema(
-                            response_type='errorResponse',
-                            additional_properties='state',
-                        )
-                    )
+                    # success_response_model=self.add_response_model_to_rest_api(
+                    #     rest_api=rest_api,
+                    #     schema=self.create_json_schema()
+                    # ),
+                    # failure_response_model=self.add_response_model_to_rest_api(
+                    #     rest_api=rest_api,
+                    #     model_name='ErrorResponseModel',
+                    #     schema=self.create_json_schema(
+                    #         response_type='errorResponse',
+                    #         additional_properties='state',
+                    #     )
+                    # )
                 )
             )
         )
