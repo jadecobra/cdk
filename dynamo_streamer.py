@@ -119,11 +119,9 @@ class DynamoStreamer(aws_cdk.core.Stack):
             properties=properties
         )
 
-    def add_response_model_to_rest_api(self, rest_api=None, model_name=None, schema=None, schema_title='pollResponse', schema_properties=None, extra_properties=None):
+    def add_response_model_to_rest_api(self, rest_api=None, model_name='ResponseModel', schema=None, schema_title='pollResponse', extra_schema_properties=None):
         properties = ['message']
-        if extra_properties:
-            properties.append(extra_properties)
-
+        properties.append(extra_schema_properties) if extra_schema_properties else None
         return rest_api.add_model(
             model_name,
             content_type='application/json',
@@ -141,8 +139,8 @@ class DynamoStreamer(aws_cdk.core.Stack):
     def add_success_response_model_to_rest_api(self, rest_api):
         return self.add_response_model_to_rest_api(
             rest_api=rest_api,
-            model_name='ResponseModel',
-            schema_title='pollResponse',
+            # model_name='ResponseModel',
+            # schema_title='pollResponse',
         )
 
     def add_error_response_model_to_rest_api(self, rest_api):
@@ -150,10 +148,7 @@ class DynamoStreamer(aws_cdk.core.Stack):
             rest_api=rest_api,
             model_name='ErrorResponseModel',
             schema_title='errorResponse',
-            schema_properties={
-                'state': aws_cdk.aws_apigateway.JsonSchema(type=aws_cdk.aws_apigateway.JsonSchemaType.STRING),
-            },
-            extra_properties='state',
+            extra_schema_properties='state',
         )
 
     @staticmethod
