@@ -19,19 +19,19 @@ class DynamoStreamer(aws_cdk.core.Stack):
 
         (
             rest_api.root
-            .add_resource('InsertItem')
-            .add_method(
-                'POST',
-                self.connect_dynamodb_put_item_to_rest_api(
-                    api_gateway_service_role=api_gateway_service_role,
-                    dynamodb_table_name=dynamodb_table.table_name
-                ),
-                method_responses=self.create_method_responses(rest_api)
-            )
+                    .add_resource('InsertItem')
+                    .add_method(
+                        'POST',
+                        self.connect_dynamodb_put_item_to_rest_api(
+                            api_gateway_service_role=api_gateway_service_role,
+                            dynamodb_table_name=dynamodb_table.table_name
+                        ),
+                        method_responses=self.create_method_responses(rest_api)
+                    )
         )
 
 
-    def get_api_response_options(self, api_gateway_service_role=None, dynamodb_table_name=None):
+    def create_api_integration_options(self, api_gateway_service_role=None, dynamodb_table_name=None):
         return aws_cdk.aws_apigateway.IntegrationOptions(
             credentials_role=api_gateway_service_role,
             request_templates=self.request_template(dynamodb_table_name),
@@ -44,11 +44,19 @@ class DynamoStreamer(aws_cdk.core.Stack):
             type=aws_cdk.aws_apigateway.IntegrationType.AWS,
             integration_http_method='POST',
             uri='arn:aws:apigateway:us-east-1:dynamodb:action/PutItem',
-            options=self.get_api_response_options(
+            options=self.create_api_integration_options(
                 api_gateway_service_role=api_gateway_service_role,
                 dynamodb_table_name=dynamodb_table_name
             )
         )
+
+    @staticmethod
+    def create_response_parameters(content_type=True, origin=True, credentials=True):
+        return {
+            'method.response.header.Content-Type': content_type,
+            'method.response.header.Access-Control-Allow-Origin': origin,
+            'method.response.header.Access-Control-Allow-Credentials': credentials,
+        }
 
     def create_method_response(self, status_code='200', response_model=None):
         return aws_cdk.aws_apigateway.MethodResponse(
@@ -127,7 +135,6 @@ class DynamoStreamer(aws_cdk.core.Stack):
             assumed_by=aws_cdk.aws_iam.ServicePrincipal('apigateway.amazonaws.com')
         )
 
-    # @staticmethod
     def create_json_schema(self, response_type='pollResponse', additional_properties=None):
         properties = ['message']
         properties.append(additional_properties) if additional_properties else None
@@ -167,14 +174,6 @@ class DynamoStreamer(aws_cdk.core.Stack):
             "state": 'error',
             "message": "$util.escapeJavaScript($input.path('$.errorMessage'))"
         })
-
-    @staticmethod
-    def create_response_parameters(content_type=True, origin=True, credentials=True):
-        return {
-            'method.response.header.Content-Type': content_type,
-            'method.response.header.Access-Control-Allow-Origin': origin,
-            'method.response.header.Access-Control-Allow-Credentials': credentials,
-        }
 
     def get_integration_responses(self):
         return [
