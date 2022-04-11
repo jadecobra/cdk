@@ -29,8 +29,18 @@ class DynamoStreamer(aws_cdk.core.Stack):
                     )
                 ),
                 method_responses=self.create_method_responses(
-                    success_response_model=self.add_success_response_model_to_rest_api(rest_api),
-                    failure_response_model=self.add_error_response_model_to_rest_api(rest_api),
+                    success_response_model=self.add_response_model_to_rest_api(
+                        rest_api=rest_api,
+                        schema=self.create_json_schema()
+                    ),
+                    failure_response_model=self.add_response_model_to_rest_api(
+                        rest_api=rest_api,
+                        model_name='ErrorResponseModel',
+                        schema=self.create_json_schema(
+                            response_type='errorResponse',
+                            additional_properties='state',
+                        )
+                    )
                 )
             )
         )
@@ -111,16 +121,14 @@ class DynamoStreamer(aws_cdk.core.Stack):
         )
 
     # @staticmethod
-    def create_json_schema(self, response_type=None, additional_schema_properties=None, properties=None):
+    def create_json_schema(self, response_type='pollResponse', additional_properties=None):
         properties = ['message']
-        properties.append(additional_schema_properties) if additional_schema_properties else None
+        properties.append(additional_properties) if additional_properties else None
         return aws_cdk.aws_apigateway.JsonSchema(
             schema=aws_cdk.aws_apigateway.JsonSchemaVersion.DRAFT4,
             title=response_type,
             type=aws_cdk.aws_apigateway.JsonSchemaType.OBJECT,
-            properties={
-                key: self.json_string() for key in properties
-            }
+            properties={ key: self.json_string() for key in properties }
         )
 
     @staticmethod
@@ -135,23 +143,15 @@ class DynamoStreamer(aws_cdk.core.Stack):
             schema=schema
         )
 
-    def add_success_response_model_to_rest_api(self, rest_api):
-        return self.add_response_model_to_rest_api(
-            rest_api=rest_api,
-            schema=self.create_json_schema(
-                response_type='pollResponse',
-            )
-        )
-
-    def add_error_response_model_to_rest_api(self, rest_api):
-        return self.add_response_model_to_rest_api(
-            rest_api=rest_api,
-            model_name='ErrorResponseModel',
-            schema=self.create_json_schema(
-                response_type='errorResponse',
-                additional_schema_properties='state',
-            )
-        )
+    # def add_error_response_model_to_rest_api(self, rest_api):
+    #     return self.add_response_model_to_rest_api(
+    #         rest_api=rest_api,
+    #         model_name='ErrorResponseModel',
+    #         schema=self.create_json_schema(
+    #             response_type='errorResponse',
+    #             additional_properties='state',
+    #         )
+    #     )
 
     @staticmethod
     def application_json_template(template, separators=(',', ':')):
