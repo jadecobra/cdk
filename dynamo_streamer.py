@@ -78,16 +78,16 @@ class DynamoStreamer(aws_cdk.core.Stack):
             separators=None
         )
 
-    def response_status_codes(self):
+    def response_status_mappings(self):
         return {
             '200': dict(
-                response_type='pollResponse',
                 model_name='ResponseModel',
+                response_type='pollResponse',
                 response_templates=self.success_response_template(),
             ),
             '400': dict(
-                response_type='errorResponse',
                 model_name='ErrorResponseModel',
+                response_type='errorResponse',
                 additional_properties='state',
                 response_templates=self.error_response_template(),
                 selection_pattern="^\[BadRequest\].*",
@@ -113,7 +113,7 @@ class DynamoStreamer(aws_cdk.core.Stack):
                         additional_properties=response.get('additional_properties'),
                     )
                 )
-            ) for status_code, response in self.response_status_codes().items()
+            ) for status_code, response in self.response_status_mappings().items()
         )
 
     def create_method_responses(self, rest_api=None, dynamodb_partition_key='message'):
@@ -141,7 +141,7 @@ class DynamoStreamer(aws_cdk.core.Stack):
         return aws_cdk.aws_lambda.Function(
             self, 'LambdaFunction',
             runtime=aws_cdk.aws_lambda.Runtime.PYTHON_3_8,
-            handler="lambda.handler",
+            handler="subscribe.handler",
             code=aws_cdk.aws_lambda.Code.from_asset("lambda_functions/subscribe")
         ).add_event_source(
             aws_cdk.aws_lambda_event_sources.DynamoEventSource(
@@ -169,13 +169,13 @@ class DynamoStreamer(aws_cdk.core.Stack):
 
     @staticmethod
     def application_json_template(template, separators=(',', ':')):
-        return {'application/json': json.dumps(template, separators=separators)}
+        return { 'application/json': json.dumps(template, separators=separators) }
 
     def request_template(self, table_name):
         return self.application_json_template({
             "TableName": table_name,
             "Item": {
-                "message": {"S": "$input.path('$.message')"}
+                "message": { "S": "$input.path('$.message')" }
             }
         })
 
@@ -192,5 +192,5 @@ class DynamoStreamer(aws_cdk.core.Stack):
                 response_templates=values['response_templates'],
                 response_parameters=values.get('response_parameters'),
                 selection_pattern=values.get('selection_pattern'),
-            ) for status_code, values in self.response_status_codes().items()
+            ) for status_code, values in self.response_status_mappings().items()
         ]
