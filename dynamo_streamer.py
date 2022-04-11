@@ -141,21 +141,19 @@ class DynamoStreamer(aws_cdk.core.Stack):
                 }
             )
         )
-        return rest_api.add_model(
-            'ResponseModel',
-            content_type='application/json',
-            model_name='ResponseModel',
+
+    def add_error_response_model_to_rest_api(self, rest_api):
+        return self.add_response_model_to_rest_api(
+            rest_api=rest_api,
+            model_name='ErrorResponseModel',
             schema=self.create_json_schema(
-                title='pollResponse',
+                title='errorResponse',
                 properties={
-                    'message': aws_cdk.aws_apigateway.JsonSchema(
-                        type=aws_cdk.aws_apigateway.JsonSchemaType.STRING
-                    )
+                    'state': aws_cdk.aws_apigateway.JsonSchema(type=aws_cdk.aws_apigateway.JsonSchemaType.STRING),
+                    'message': aws_cdk.aws_apigateway.JsonSchema(type=aws_cdk.aws_apigateway.JsonSchemaType.STRING)
                 }
             )
         )
-
-    def add_error_response_model_to_rest_api(self, rest_api):
         return rest_api.add_model(
             'ErrorResponseModel',
             content_type='application/json',
