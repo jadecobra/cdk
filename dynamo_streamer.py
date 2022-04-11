@@ -143,16 +143,6 @@ class DynamoStreamer(aws_cdk.core.Stack):
             schema=schema
         )
 
-    # def add_error_response_model_to_rest_api(self, rest_api):
-    #     return self.add_response_model_to_rest_api(
-    #         rest_api=rest_api,
-    #         model_name='ErrorResponseModel',
-    #         schema=self.create_json_schema(
-    #             response_type='errorResponse',
-    #             additional_properties='state',
-    #         )
-    #     )
-
     @staticmethod
     def application_json_template(template, separators=(',', ':')):
         return {'application/json': json.dumps(template, separators=separators)}
