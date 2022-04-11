@@ -66,12 +66,6 @@ class DynamoStreamer(aws_cdk.core.Stack):
                 response_models={ 'application/json': response_model },
             ) for status_code, response_model in self.create_response_models(rest_api)
         ]
-        return [
-            self.create_method_response(
-                status_code=status_code,
-                response_model=response_model
-            ) for status_code, response_model in self.create_response_models(rest_api)
-        ]
 
     def create_dynamodb_table(self):
         return aws_cdk.aws_dynamodb.Table(
