@@ -62,6 +62,34 @@ class DynamoStreamer(aws_cdk.core.Stack):
             'method.response.header.Access-Control-Allow-Credentials': credentials,
         }
 
+    def create_response_models(self, rest_api=None, dynamodb_partition_key=None):
+        return (
+            (
+                '200',
+                self.add_response_model_to_rest_api(
+                    rest_api=rest_api,
+                    model_name='ResponseModel',
+                    schema=self.create_json_schema(
+                        dynamodb_partition_key,
+                        response_type='pollResponse',
+                        additional_properties=None,
+                    )
+                )
+            ),
+            (
+                '400',
+                self.add_response_model_to_rest_api(
+                    rest_api=rest_api,
+                    model_name='ErrorResponseModel',
+                    schema=self.create_json_schema(
+                        dynamodb_partition_key,
+                        response_type='errorResponse',
+                        additional_properties='state',
+                    )
+                )
+            )
+        )
+
     def create_method_responses(self, rest_api=None, dynamodb_partition_key='message'):
         return [
             aws_cdk.aws_apigateway.MethodResponse(
@@ -125,29 +153,6 @@ class DynamoStreamer(aws_cdk.core.Stack):
             title=response_type,
             type=aws_cdk.aws_apigateway.JsonSchemaType.OBJECT,
             properties={ key: self.json_string() for key in properties }
-        )
-
-    def create_response_models(self, rest_api=None, dynamodb_partition_key=None):
-        return (
-            (
-                '200',
-                self.add_response_model_to_rest_api(
-                    rest_api=rest_api,
-                    schema=self.create_json_schema(dynamodb_partition_key)
-                )
-            ),
-            (
-                '400',
-                self.add_response_model_to_rest_api(
-                    rest_api=rest_api,
-                    model_name='ErrorResponseModel',
-                    schema=self.create_json_schema(
-                        dynamodb_partition_key,
-                        response_type='errorResponse',
-                        additional_properties='state',
-                    )
-                )
-            )
         )
 
     def add_response_model_to_rest_api(self, rest_api=None, model_name='ResponseModel', schema=None):
