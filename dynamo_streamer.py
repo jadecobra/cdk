@@ -31,6 +31,75 @@ class DynamoStreamer(aws_cdk.core.Stack):
             )
         )
 
+    @staticmethod
+    def application_json_template(template, separators=(',', ':')):
+        return { 'application/json': template }
+        return { 'application/json': json.dumps(template, separators=separators) }
+
+    @staticmethod
+    def separator():
+        return (',', ':')
+
+    def success_response_template(self, partition_key=None):
+        return self.application_json_template(
+            template=json.dumps({partition_key: 'item added to db'}),
+            separators=None
+        )
+
+    def request_template(self, table_name):
+        return self.application_json_template(
+            json.dumps(
+                {
+                    "TableName": table_name,
+                    "Item": {
+                        "message": { "S": "$input.path('$.message')" }
+                    }
+                },
+                separators=self.separator()
+            )
+        )
+
+    def error_response_template(self):
+        return self.application_json_template(
+            json.dumps(
+                {
+                    "state": 'error',
+                    "message": "$util.escapeJavaScript($input.path('$.errorMessage'))"
+                },
+                separators=self.separator(),
+            )
+        )
+
+    def create_response_status_mappings(self, dynamodb_partition_key):
+        return {
+            '200': dict(
+                model_name='ResponseModel',
+                response_type='pollResponse',
+                response_templates=self.success_response_template(dynamodb_partition_key),
+            ),
+            '400': dict(
+                model_name='ErrorResponseModel',
+                response_type='errorResponse',
+                additional_properties='state',
+                response_templates=self.error_response_template(),
+                selection_pattern="^\[BadRequest\].*",
+                response_parameters=self.create_response_parameters(
+                    content_type="'application/json'",
+                    origin="'*'",
+                    credentials="'true'",
+                )
+            ),
+        }
+
+    def get_integration_responses(self, dynamodb_partition_key):
+        return [
+            aws_cdk.aws_apigateway.IntegrationResponse(
+                status_code=status_code,
+                response_templates=values['response_templates'],
+                response_parameters=values.get('response_parameters'),
+                selection_pattern=values.get('selection_pattern'),
+            ) for status_code, values in self.create_response_status_mappings(dynamodb_partition_key).items()
+        ]
 
     def create_api_integration_options(self, api_gateway_service_role=None, dynamodb_table_name=None, dynamodb_partition_key=None):
         return aws_cdk.aws_apigateway.IntegrationOptions(
@@ -64,7 +133,7 @@ class DynamoStreamer(aws_cdk.core.Stack):
     def json_string():
         return aws_cdk.aws_apigateway.JsonSchema(type=aws_cdk.aws_apigateway.JsonSchemaType.STRING)
 
-    def create_json_schema(self, dynamodb_partition_key=None, response_type='pollResponse', additional_properties=None):
+    def create_json_schema(self, dynamodb_partition_key=None, response_type=None, additional_properties=None):
         properties = [dynamodb_partition_key]
         properties.append(additional_properties) if additional_properties else None
         return aws_cdk.aws_apigateway.JsonSchema(
@@ -73,33 +142,6 @@ class DynamoStreamer(aws_cdk.core.Stack):
             type=aws_cdk.aws_apigateway.JsonSchemaType.OBJECT,
             properties={ key: self.json_string() for key in properties }
         )
-
-    def success_response_template(self, partition_key=None):
-        return self.application_json_template(
-            template={partition_key: 'item added to db'},
-            separators=None
-        )
-
-    def create_response_status_mappings(self, dynamodb_partition_key):
-        return {
-            '200': dict(
-                model_name='ResponseModel',
-                response_type='pollResponse',
-                response_templates=self.success_response_template(dynamodb_partition_key),
-            ),
-            '400': dict(
-                model_name='ErrorResponseModel',
-                response_type='errorResponse',
-                additional_properties='state',
-                response_templates=self.error_response_template(),
-                selection_pattern="^\[BadRequest\].*",
-                response_parameters=self.create_response_parameters(
-                    content_type="'application/json'",
-                    origin="'*'",
-                    credentials="'true'",
-                )
-            ),
-        }
 
     def create_response_models(self, rest_api=None, dynamodb_partition_key=None):
         return (
@@ -123,7 +165,7 @@ class DynamoStreamer(aws_cdk.core.Stack):
             aws_cdk.aws_apigateway.MethodResponse(
                 status_code=status_code,
                 response_parameters=self.create_response_parameters(),
-                response_models={ 'application/json': response_model },
+                response_models=self.application_json_template(response_model),
             ) for status_code, response_model in self.create_response_models(
                 rest_api=rest_api, dynamodb_partition_key=dynamodb_partition_key
             )
@@ -168,31 +210,3 @@ class DynamoStreamer(aws_cdk.core.Stack):
             self, 'ApiGatewayServiceRole',
             assumed_by=aws_cdk.aws_iam.ServicePrincipal('apigateway.amazonaws.com')
         )
-
-    @staticmethod
-    def application_json_template(template, separators=(',', ':')):
-        return { 'application/json': json.dumps(template, separators=separators) }
-
-    def request_template(self, table_name):
-        return self.application_json_template({
-            "TableName": table_name,
-            "Item": {
-                "message": { "S": "$input.path('$.message')" }
-            }
-        })
-
-    def error_response_template(self):
-        return self.application_json_template({
-            "state": 'error',
-            "message": "$util.escapeJavaScript($input.path('$.errorMessage'))"
-        })
-
-    def get_integration_responses(self, dynamodb_partition_key=None):
-        return [
-            aws_cdk.aws_apigateway.IntegrationResponse(
-                status_code=status_code,
-                response_templates=values['response_templates'],
-                response_parameters=values.get('response_parameters'),
-                selection_pattern=values.get('selection_pattern'),
-            ) for status_code, values in self.create_response_status_mappings(dynamodb_partition_key).items()
-        ]
