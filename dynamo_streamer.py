@@ -22,7 +22,8 @@ class DynamoStreamer(aws_cdk.core.Stack):
             'POST',
             self.integrate_rest_api_with_dynamodb_put_item(
                 api_gateway_service_role=api_gateway_service_role,
-                dynamodb_table_name=dynamodb_table.table_name
+                dynamodb_table_name=dynamodb_table.table_name,
+                dynamodb_partition_key=partition_key,
             ),
             method_responses=self.create_method_responses(
                 rest_api=rest_api,
@@ -31,22 +32,23 @@ class DynamoStreamer(aws_cdk.core.Stack):
         )
 
 
-    def create_api_integration_options(self, api_gateway_service_role=None, dynamodb_table_name=None):
+    def create_api_integration_options(self, api_gateway_service_role=None, dynamodb_table_name=None, dynamodb_partition_key=None):
         return aws_cdk.aws_apigateway.IntegrationOptions(
             credentials_role=api_gateway_service_role,
             request_templates=self.request_template(dynamodb_table_name),
             passthrough_behavior=aws_cdk.aws_apigateway.PassthroughBehavior.NEVER,
-            integration_responses=self.get_integration_responses()
+            integration_responses=self.get_integration_responses(dynamodb_partition_key)
         )
 
-    def integrate_rest_api_with_dynamodb_put_item(self, api_gateway_service_role=None, dynamodb_table_name=None):
+    def integrate_rest_api_with_dynamodb_put_item(self, api_gateway_service_role=None, dynamodb_table_name=None, dynamodb_partition_key=None):
         return aws_cdk.aws_apigateway.Integration(
             type=aws_cdk.aws_apigateway.IntegrationType.AWS,
             integration_http_method='POST',
             uri='arn:aws:apigateway:us-east-1:dynamodb:action/PutItem',
             options=self.create_api_integration_options(
                 api_gateway_service_role=api_gateway_service_role,
-                dynamodb_table_name=dynamodb_table_name
+                dynamodb_table_name=dynamodb_table_name,
+                dynamodb_partition_key=dynamodb_partition_key,
             )
         )
 
@@ -72,18 +74,18 @@ class DynamoStreamer(aws_cdk.core.Stack):
             properties={ key: self.json_string() for key in properties }
         )
 
-    def success_response_template(self):
+    def success_response_template(self, partition_key=None):
         return self.application_json_template(
-            template={"message": 'item added to db'},
+            template={partition_key: 'item added to db'},
             separators=None
         )
 
-    def response_status_mappings(self):
+    def create_response_status_mappings(self, dynamodb_partition_key):
         return {
             '200': dict(
                 model_name='ResponseModel',
                 response_type='pollResponse',
-                response_templates=self.success_response_template(),
+                response_templates=self.success_response_template(dynamodb_partition_key),
             ),
             '400': dict(
                 model_name='ErrorResponseModel',
@@ -113,10 +115,10 @@ class DynamoStreamer(aws_cdk.core.Stack):
                         additional_properties=response.get('additional_properties'),
                     )
                 )
-            ) for status_code, response in self.response_status_mappings().items()
+            ) for status_code, response in self.create_response_status_mappings(dynamodb_partition_key).items()
         )
 
-    def create_method_responses(self, rest_api=None, dynamodb_partition_key='message'):
+    def create_method_responses(self, rest_api=None, dynamodb_partition_key=None):
         return [
             aws_cdk.aws_apigateway.MethodResponse(
                 status_code=status_code,
@@ -185,12 +187,12 @@ class DynamoStreamer(aws_cdk.core.Stack):
             "message": "$util.escapeJavaScript($input.path('$.errorMessage'))"
         })
 
-    def get_integration_responses(self):
+    def get_integration_responses(self, dynamodb_partition_key=None):
         return [
             aws_cdk.aws_apigateway.IntegrationResponse(
                 status_code=status_code,
                 response_templates=values['response_templates'],
                 response_parameters=values.get('response_parameters'),
                 selection_pattern=values.get('selection_pattern'),
-            ) for status_code, values in self.response_status_mappings().items()
+            ) for status_code, values in self.create_response_status_mappings(dynamodb_partition_key).items()
         ]
