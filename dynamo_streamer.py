@@ -17,10 +17,6 @@ class DynamoStreamer(aws_cdk.core.Stack):
         self.create_lambda_function_with_dynamodb_event_source(dynamodb_table)
         dynamodb_table.grant_read_write_data(api_gateway_service_role)
 
-        # Because this isn't a proxy integration, we need to define our response model
-        ok_response_model = self.add_response_model_to_rest_api(rest_api)
-        error_response_model = self.add_error_response_model_to_rest_api(rest_api)
-
         (
             rest_api.root
             .add_resource('InsertItem')
@@ -34,8 +30,8 @@ class DynamoStreamer(aws_cdk.core.Stack):
                     )
                 ),
                 method_responses=self.create_method_responses(
-                    ok_response_model=ok_response_model,
-                    error_response_model=error_response_model,
+                    ok_response_model=self.add_response_model_to_rest_api(rest_api),
+                    error_response_model=self.add_error_response_model_to_rest_api(rest_api),
                 )
             )
         )
@@ -125,7 +121,9 @@ class DynamoStreamer(aws_cdk.core.Stack):
                 title='pollResponse',
                 type=aws_cdk.aws_apigateway.JsonSchemaType.OBJECT,
                 properties={
-                    'message': aws_cdk.aws_apigateway.JsonSchema(type=aws_cdk.aws_apigateway.JsonSchemaType.STRING)
+                    'message': aws_cdk.aws_apigateway.JsonSchema(
+                        type=aws_cdk.aws_apigateway.JsonSchemaType.STRING
+                    )
                 }
             )
         )
