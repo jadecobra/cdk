@@ -17550,3 +17550,6 @@
 2022-04-10 20:56:08.371099::Time taken to synthesize stack: DynamoStreamer::  4.4872 seconds
 2022-04-10 20:56:45.842437::Time taken to synthesize stack: DynamoStreamer::  4.3720 seconds
 2022-04-10 21:01:04.427233::Time taken to synthesize stack: DynamoStreamer::  4.2399 seconds
+2022-04-10 21:03:31.950911::Time taken to synthesize stack: DynamoStreamer::  4.3999 seconds
+2022-04-10 21:11:26.570011::Time taken to synthesize stack: DynamoStreamer::  2.6169 seconds
+2022-04-10 21:14:23.202212::Time taken to synthesize stack: DynamoStreamer::  4.2867 seconds

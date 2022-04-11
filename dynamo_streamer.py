@@ -72,30 +72,48 @@ class DynamoStreamer(aws_cdk.core.Stack):
             properties={ key: self.json_string() for key in properties }
         )
 
-    @staticmethod
-    def response_status_codes():
+    def success_response_template(self):
+        return self.application_json_template(
+            template={"message": 'item added to db'},
+            separators=None
+        )
+
+    def response_status_codes(self):
         return {
-            200: dict(response_type='pollResponse', model_name='ResponseModel'),
-            400: dict(
-                response_type='errorResponse', model_name='ErrorResponseModel', additional_properties='state'
+            '200': dict(
+                response_type='pollResponse',
+                model_name='ResponseModel',
+                response_templates=self.success_response_template(),
+            ),
+            '400': dict(
+                response_type='errorResponse',
+                model_name='ErrorResponseModel',
+                additional_properties='state',
+                response_templates=self.error_response_template(),
+                selection_pattern="^\[BadRequest\].*",
+                response_parameters=self.create_response_parameters(
+                    content_type="'application/json'",
+                    origin="'*'",
+                    credentials="'true'",
+                )
             ),
         }
 
     def create_response_models(self, rest_api=None, dynamodb_partition_key=None):
         return (
             (
-                str(status_code),
+                status_code,
                 rest_api.add_model(
-                    values['model_name'],
+                    response['model_name'],
                     content_type='application/json',
-                    model_name=values['model_name'],
+                    model_name=response['model_name'],
                     schema=self.create_json_schema(
                         dynamodb_partition_key=dynamodb_partition_key,
-                        response_type=values.get('response_type'),
-                        additional_properties=values.get('additional_properties'),
+                        response_type=response['response_type'],
+                        additional_properties=response.get('additional_properties'),
                     )
                 )
-            ) for status_code, values in self.response_status_codes().items()
+            ) for status_code, response in self.response_status_codes().items()
         )
 
     def create_method_responses(self, rest_api=None, dynamodb_partition_key='message'):
@@ -170,20 +188,9 @@ class DynamoStreamer(aws_cdk.core.Stack):
     def get_integration_responses(self):
         return [
             aws_cdk.aws_apigateway.IntegrationResponse(
-                status_code='200',
-                response_templates=self.application_json_template(
-                    template={"message": 'item added to db'},
-                    separators=None
-                )
-            ),
-            aws_cdk.aws_apigateway.IntegrationResponse(
-                selection_pattern="^\[BadRequest\].*",
-                status_code='400',
-                response_templates=self.error_response_template(),
-                response_parameters=self.create_response_parameters(
-                    content_type="'application/json'",
-                    origin="'*'",
-                    credentials="'true'",
-                )
-            )
+                status_code=status_code,
+                response_templates=values['response_templates'],
+                response_parameters=values.get('response_parameters'),
+                selection_pattern=values.get('selection_pattern'),
+            ) for status_code, values in self.response_status_codes().items()
         ]
