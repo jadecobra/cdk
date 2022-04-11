@@ -11,18 +11,17 @@ class DynamoStreamer(aws_cdk.core.Stack):
     def __init__(self, scope: aws_cdk.core.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        api_gateway_service_role = self.create_api_gateway_service_role()
         rest_api = self.create_rest_api()
+        api_gateway_service_role = self.create_api_gateway_service_role()
         dynamodb_table = self.create_dynamodb_table()
-        self.create_lambda_function_with_dynamodb_event_source(dynamodb_table)
         dynamodb_table.grant_read_write_data(api_gateway_service_role)
+        self.create_lambda_function_with_dynamodb_event_source(dynamodb_table)
 
         (
             rest_api.root
             .add_resource('InsertItem')
             .add_method(
                 'POST',
-                # self.integrate_dynamodb_and_rest_api(api_gateway_response_options),
                 self.connect_dynamodb_put_item_to_rest_api(
                     self.get_api_response_options(
                         api_gateway_service_role=api_gateway_service_role,
@@ -30,11 +29,12 @@ class DynamoStreamer(aws_cdk.core.Stack):
                     )
                 ),
                 method_responses=self.create_method_responses(
-                    ok_response_model=self.add_response_model_to_rest_api(rest_api),
-                    error_response_model=self.add_error_response_model_to_rest_api(rest_api),
+                    success_response_model=self.add_response_model_to_rest_api(rest_api),
+                    failure_response_model=self.add_error_response_model_to_rest_api(rest_api),
                 )
             )
         )
+
 
     def get_api_response_options(self, api_gateway_service_role=None, dynamodb_table_name=None):
         return aws_cdk.aws_apigateway.IntegrationOptions(
@@ -59,14 +59,14 @@ class DynamoStreamer(aws_cdk.core.Stack):
             response_models={ 'application/json': response_model },
         )
 
-    def create_method_responses(self, ok_response_model=None, error_response_model=None):
+    def create_method_responses(self, success_response_model=None, failure_response_model=None):
         return [
             self.create_method_response(
                 status_code=status_code,
                 response_model=response_model
             ) for status_code, response_model in (
-                ('200', ok_response_model),
-                ('400', error_response_model)
+                ('200', success_response_model),
+                ('400', failure_response_model)
             )
         ]
 
@@ -111,15 +111,31 @@ class DynamoStreamer(aws_cdk.core.Stack):
         )
 
     @staticmethod
-    def add_response_model_to_rest_api(rest_api):
+    def create_json_schema(title=None, properties=None):
+        return aws_cdk.aws_apigateway.JsonSchema(
+            schema=aws_cdk.aws_apigateway.JsonSchemaVersion.DRAFT4,
+            title=title,
+            type=aws_cdk.aws_apigateway.JsonSchemaType.OBJECT,
+            properties=properties
+        )
+
+    def add_response_model_to_rest_api(self, rest_api):
         return rest_api.add_model(
             'ResponseModel',
             content_type='application/json',
             model_name='ResponseModel',
-            schema=aws_cdk.aws_apigateway.JsonSchema(
-                schema=aws_cdk.aws_apigateway.JsonSchemaVersion.DRAFT4,
+            # schema=aws_cdk.aws_apigateway.JsonSchema(
+            #     schema=aws_cdk.aws_apigateway.JsonSchemaVersion.DRAFT4,
+            #     title='pollResponse',
+            #     type=aws_cdk.aws_apigateway.JsonSchemaType.OBJECT,
+            #     properties={
+            #         'message': aws_cdk.aws_apigateway.JsonSchema(
+            #             type=aws_cdk.aws_apigateway.JsonSchemaType.STRING
+            #         )
+            #     }
+            # )
+            schema=self.create_json_schema(
                 title='pollResponse',
-                type=aws_cdk.aws_apigateway.JsonSchemaType.OBJECT,
                 properties={
                     'message': aws_cdk.aws_apigateway.JsonSchema(
                         type=aws_cdk.aws_apigateway.JsonSchemaType.STRING
