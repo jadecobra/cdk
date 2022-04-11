@@ -13,7 +13,8 @@ class DynamoStreamer(aws_cdk.core.Stack):
 
         rest_api = self.create_rest_api()
         api_gateway_service_role = self.create_api_gateway_service_role()
-        dynamodb_table = self.create_dynamodb_table()
+        partition_key = 'message'
+        dynamodb_table = self.create_dynamodb_table(partition_key)
         dynamodb_table.grant_read_write_data(api_gateway_service_role)
         self.create_lambda_function_with_dynamodb_event_source(dynamodb_table)
 
@@ -26,7 +27,10 @@ class DynamoStreamer(aws_cdk.core.Stack):
                             api_gateway_service_role=api_gateway_service_role,
                             dynamodb_table_name=dynamodb_table.table_name
                         ),
-                        method_responses=self.create_method_responses(rest_api)
+                        method_responses=self.create_method_responses(
+                            rest_api=rest_api,
+                            dynamodb_partition_key=partition_key
+                        )
                     )
         )
 
@@ -58,21 +62,23 @@ class DynamoStreamer(aws_cdk.core.Stack):
             'method.response.header.Access-Control-Allow-Credentials': credentials,
         }
 
-    def create_method_responses(self, rest_api):
+    def create_method_responses(self, rest_api=None, dynamodb_partition_key='message'):
         return [
             aws_cdk.aws_apigateway.MethodResponse(
                 status_code=status_code,
                 response_parameters=self.create_response_parameters(),
                 response_models={ 'application/json': response_model },
-            ) for status_code, response_model in self.create_response_models(rest_api)
+            ) for status_code, response_model in self.create_response_models(
+                rest_api=rest_api, dynamodb_partition_key=dynamodb_partition_key
+            )
         ]
 
-    def create_dynamodb_table(self):
+    def create_dynamodb_table(self, partition_key):
         return aws_cdk.aws_dynamodb.Table(
             self, "DynamoDbTable",
             stream=aws_cdk.aws_dynamodb.StreamViewType.NEW_IMAGE,
             partition_key=aws_cdk.aws_dynamodb.Attribute(
-                name="message",
+                name=partition_key,
                 type=aws_cdk.aws_dynamodb.AttributeType.STRING
             ),
         )
@@ -111,8 +117,8 @@ class DynamoStreamer(aws_cdk.core.Stack):
     def json_string():
         return aws_cdk.aws_apigateway.JsonSchema(type=aws_cdk.aws_apigateway.JsonSchemaType.STRING)
 
-    def create_json_schema(self, response_type='pollResponse', additional_properties=None):
-        properties = ['message']
+    def create_json_schema(self, partition_key=None, response_type='pollResponse', additional_properties=None):
+        properties = [partition_key]
         properties.append(additional_properties) if additional_properties else None
         return aws_cdk.aws_apigateway.JsonSchema(
             schema=aws_cdk.aws_apigateway.JsonSchemaVersion.DRAFT4,
@@ -121,13 +127,13 @@ class DynamoStreamer(aws_cdk.core.Stack):
             properties={ key: self.json_string() for key in properties }
         )
 
-    def create_response_models(self, rest_api):
+    def create_response_models(self, rest_api=None, dynamodb_partition_key=None):
         return (
             (
                 '200',
                 self.add_response_model_to_rest_api(
                     rest_api=rest_api,
-                    schema=self.create_json_schema()
+                    schema=self.create_json_schema(dynamodb_partition_key)
                 )
             ),
             (
@@ -136,6 +142,7 @@ class DynamoStreamer(aws_cdk.core.Stack):
                     rest_api=rest_api,
                     model_name='ErrorResponseModel',
                     schema=self.create_json_schema(
+                        dynamodb_partition_key,
                         response_type='errorResponse',
                         additional_properties='state',
                     )
