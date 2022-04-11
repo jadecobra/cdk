@@ -1,3 +1,4 @@
+from re import L
 import aws_cdk.core
 import aws_cdk.aws_lambda
 import aws_cdk.aws_lambda_event_sources
@@ -32,43 +33,31 @@ class DynamoStreamer(aws_cdk.core.Stack):
         )
 
     @staticmethod
-    def application_json_template(template, separators=(',', ':')):
-        return { 'application/json': template }
-        return { 'application/json': json.dumps(template, separators=separators) }
-
-    @staticmethod
-    def separator():
-        return (',', ':')
+    def create_api_request_template(template, separators=(',', ':')):
+        return {
+            'application/json': json.dumps(template, separators=separators)
+            if not isinstance(template, aws_cdk.aws_apigateway.Model) else template
+        }
 
     def success_response_template(self, partition_key=None):
-        return self.application_json_template(
-            template=json.dumps({partition_key: 'item added to db'}),
-            separators=None
+        return self.create_api_request_template(
+            template={partition_key: 'item added to db'},
+            separators=None,
         )
 
     def request_template(self, table_name):
-        return self.application_json_template(
-            json.dumps(
-                {
-                    "TableName": table_name,
-                    "Item": {
-                        "message": { "S": "$input.path('$.message')" }
-                    }
-                },
-                separators=self.separator()
-            )
-        )
+        return self.create_api_request_template({
+            "TableName": table_name,
+            "Item": {
+                "message": { "S": "$input.path('$.message')" }
+            }
+        })
 
     def error_response_template(self):
-        return self.application_json_template(
-            json.dumps(
-                {
-                    "state": 'error',
-                    "message": "$util.escapeJavaScript($input.path('$.errorMessage'))"
-                },
-                separators=self.separator(),
-            )
-        )
+        return self.create_api_request_template({
+            "state": 'error',
+            "message": "$util.escapeJavaScript($input.path('$.errorMessage'))"
+        })
 
     def create_response_status_mappings(self, dynamodb_partition_key):
         return {
@@ -165,7 +154,7 @@ class DynamoStreamer(aws_cdk.core.Stack):
             aws_cdk.aws_apigateway.MethodResponse(
                 status_code=status_code,
                 response_parameters=self.create_response_parameters(),
-                response_models=self.application_json_template(response_model),
+                response_models=self.create_api_request_template(response_model),
             ) for status_code, response_model in self.create_response_models(
                 rest_api=rest_api, dynamodb_partition_key=dynamodb_partition_key
             )
