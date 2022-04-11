@@ -22,7 +22,7 @@ class DynamoStreamer(aws_cdk.core.Stack):
                     .add_resource('InsertItem')
                     .add_method(
                         'POST',
-                        self.connect_dynamodb_put_item_to_rest_api(
+                        self.integrate_rest_api_with_dynamodb_put_item(
                             api_gateway_service_role=api_gateway_service_role,
                             dynamodb_table_name=dynamodb_table.table_name
                         ),
@@ -39,7 +39,7 @@ class DynamoStreamer(aws_cdk.core.Stack):
             integration_responses=self.get_integration_responses()
         )
 
-    def connect_dynamodb_put_item_to_rest_api(self, api_response_options=None, api_gateway_service_role=None, dynamodb_table_name=None):
+    def integrate_rest_api_with_dynamodb_put_item(self, api_response_options=None, api_gateway_service_role=None, dynamodb_table_name=None):
         return aws_cdk.aws_apigateway.Integration(
             type=aws_cdk.aws_apigateway.IntegrationType.AWS,
             integration_http_method='POST',
@@ -58,36 +58,14 @@ class DynamoStreamer(aws_cdk.core.Stack):
             'method.response.header.Access-Control-Allow-Credentials': credentials,
         }
 
-    def create_method_response(self, status_code='200', response_model=None):
-        return aws_cdk.aws_apigateway.MethodResponse(
-            status_code=status_code,
-            response_parameters=self.create_response_parameters(),
-            response_models={ 'application/json': response_model },
-        )
-
-    def create_response_models(self, rest_api):
-        return (
-            (
-                '200',
-                self.add_response_model_to_rest_api(
-                    rest_api=rest_api,
-                    schema=self.create_json_schema()
-                )
-            ),
-            (
-                '400',
-                self.add_response_model_to_rest_api(
-                    rest_api=rest_api,
-                    model_name='ErrorResponseModel',
-                    schema=self.create_json_schema(
-                        response_type='errorResponse',
-                        additional_properties='state',
-                    )
-                )
-            )
-        )
-
     def create_method_responses(self, rest_api):
+        return [
+            aws_cdk.aws_apigateway.MethodResponse(
+                status_code=status_code,
+                response_parameters=self.create_response_parameters(),
+                response_models={ 'application/json': response_model },
+            ) for status_code, response_model in self.create_response_models(rest_api)
+        ]
         return [
             self.create_method_response(
                 status_code=status_code,
@@ -135,6 +113,10 @@ class DynamoStreamer(aws_cdk.core.Stack):
             assumed_by=aws_cdk.aws_iam.ServicePrincipal('apigateway.amazonaws.com')
         )
 
+    @staticmethod
+    def json_string():
+        return aws_cdk.aws_apigateway.JsonSchema(type=aws_cdk.aws_apigateway.JsonSchemaType.STRING)
+
     def create_json_schema(self, response_type='pollResponse', additional_properties=None):
         properties = ['message']
         properties.append(additional_properties) if additional_properties else None
@@ -145,9 +127,27 @@ class DynamoStreamer(aws_cdk.core.Stack):
             properties={ key: self.json_string() for key in properties }
         )
 
-    @staticmethod
-    def json_string():
-        return aws_cdk.aws_apigateway.JsonSchema(type=aws_cdk.aws_apigateway.JsonSchemaType.STRING)
+    def create_response_models(self, rest_api):
+        return (
+            (
+                '200',
+                self.add_response_model_to_rest_api(
+                    rest_api=rest_api,
+                    schema=self.create_json_schema()
+                )
+            ),
+            (
+                '400',
+                self.add_response_model_to_rest_api(
+                    rest_api=rest_api,
+                    model_name='ErrorResponseModel',
+                    schema=self.create_json_schema(
+                        response_type='errorResponse',
+                        additional_properties='state',
+                    )
+                )
+            )
+        )
 
     def add_response_model_to_rest_api(self, rest_api=None, model_name='ResponseModel', schema=None):
         return rest_api.add_model(
