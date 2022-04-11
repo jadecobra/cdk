@@ -124,16 +124,6 @@ class DynamoStreamer(aws_cdk.core.Stack):
             'ResponseModel',
             content_type='application/json',
             model_name='ResponseModel',
-            # schema=aws_cdk.aws_apigateway.JsonSchema(
-            #     schema=aws_cdk.aws_apigateway.JsonSchemaVersion.DRAFT4,
-            #     title='pollResponse',
-            #     type=aws_cdk.aws_apigateway.JsonSchemaType.OBJECT,
-            #     properties={
-            #         'message': aws_cdk.aws_apigateway.JsonSchema(
-            #             type=aws_cdk.aws_apigateway.JsonSchemaType.STRING
-            #         )
-            #     }
-            # )
             schema=self.create_json_schema(
                 title='pollResponse',
                 properties={
@@ -144,16 +134,13 @@ class DynamoStreamer(aws_cdk.core.Stack):
             )
         )
 
-    @staticmethod
-    def add_error_response_model_to_rest_api(rest_api):
+    def add_error_response_model_to_rest_api(self, rest_api):
         return rest_api.add_model(
             'ErrorResponseModel',
             content_type='application/json',
             model_name='ErrorResponseModel',
-            schema=aws_cdk.aws_apigateway.JsonSchema(
-                schema=aws_cdk.aws_apigateway.JsonSchemaVersion.DRAFT4,
+            schema=self.create_json_schema(
                 title='errorResponse',
-                type=aws_cdk.aws_apigateway.JsonSchemaType.OBJECT,
                 properties={
                     'state': aws_cdk.aws_apigateway.JsonSchema(type=aws_cdk.aws_apigateway.JsonSchemaType.STRING),
                     'message': aws_cdk.aws_apigateway.JsonSchema(type=aws_cdk.aws_apigateway.JsonSchemaType.STRING)
