@@ -10,9 +10,10 @@ class LambdaPowerTuner(aws_cdk.core.Stack):
 
         example_lambda_function = aws_cdk.aws_lambda.Function(
             self, "exampleLambda",
-            runtime=aws_cdk.aws_lambda.Runtime.NODEJS_12_X,
+            runtime=aws_cdk.aws_lambda.Runtime.PYTHON_3_9,
             handler="index.handler",
-            code=aws_cdk.aws_lambda.Code.from_inline("exports.handler = function(event, ctx, cb) { return cb(null, 'hi'); }"),
+            code=aws_cdk.aws_lambda.Code.from_inline(
+                "def handler(event, context): return 'hi'"),
         )
 
         # uncomment to only allow this power tuner to manipulate this defined function
