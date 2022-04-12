@@ -16,22 +16,29 @@ class LambdaPowerTuner(aws_cdk.core.Stack):
                 "def handler(event, context): return 'hi'"),
         )
 
-        # uncomment to only allow this power tuner to manipulate this defined function
-        # lambda_resource = example_lamdba.function_arn
-
         # Output the Lambda function ARN in the deploy logs to ease testing
         aws_cdk.core.CfnOutput(self, 'LambdaARN', value=example_lambda_function.function_arn)
 
         # Deploy the aws-lambda-powertuning application from the Serverless Application Repository
         # https://serverlessrepo.aws.amazon.com/applications/arn:aws:serverlessrepo:us-east-1:451282441545:applications~aws-lambda-power-tuning
-        aws_cdk.aws_sam.CfnApplication(self, 'powerTuner', location={
+        aws_cdk.aws_sam.CfnApplication(
+            self, 'powerTuner',
+            location=self.get_lambda_power_tuner_location(),
+            parameters=self.get_parameters(),
+        )
+
+    @staticmethod
+    def get_lambda_power_tuner_location():
+        return {
             "applicationId": "arn:aws:serverlessrepo:us-east-1:451282441545:applications/aws-lambda-power-tuning",
             "semanticVersion": "3.4.0"
-        }, parameters={
+        }
+
+    def get_parameters(self):
+        return {
             "lambdaResource": self.default_lambda_resources(),
             "PowerValues": self.power_values()
-        })
-
+        }
 
     @staticmethod
     def power_values():
