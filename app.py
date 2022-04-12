@@ -11,10 +11,11 @@ try:
     import event_bridge_etl
     import http_api
     import lambda_circuit_breaker
+    import lambda_function
+    import lambda_power_tuner
     import lambda_trilogy.lambda_lith
     import lambda_trilogy.fat_lambda
     import lambda_trilogy.single_purpose_lambda
-    import lambda_function
     import rds_proxy
     import rest_api
     import saga_step_function
@@ -57,6 +58,7 @@ class WellArchitected(cdk.App):
         state_machine.StateMachine(self, "StateMachine")
         simple_graphql_service.SimpleGraphQlService(self, "SimpleGraphqlService")
         dynamo_streamer.DynamoStreamer(self, "DynamoStreamer")
+        lambda_power_tuner.LambdaPowerTuner(self, "LambdaPowerTuner")
 
     def create_webservice(self):
         error_sns_topic = sns_topic.SnsTopic(self, 'SnsTopic').topic
