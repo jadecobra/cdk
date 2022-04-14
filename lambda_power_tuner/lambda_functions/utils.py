@@ -340,14 +340,13 @@ def regionFromARN(arn):
 def lambdaClientFromARN(lambda_arn):
     return boto3.client('lambda', region_name=regionFromARN(lambda_arn))
 
-def buildVisualizationURL(stats, baseURL):
-    function encode(inputList, EncodeType = null:
-        EncodeType = EncodeType || Float32Array
-        inputList = new EncodeType(inputList)
-        inputList = new Uint8Array(inputList.buffer)
-        return Buffer.from(inputList).toString('base64')
-    }
+def encode(inputList, EncodeType=None):
+    EncodeType = EncodeType if EncodeType else Float32Array
+    inputList = EncodeType(inputList)
+    inputList = Uint8Array(inputList.buffer)
+    return Buffer.from(inputList).toString('base64')
 
+def buildVisualizationURL(stats, baseURL):
     # sort by power
     stats.sort((p1, p2):
         return p1.power - p2.power

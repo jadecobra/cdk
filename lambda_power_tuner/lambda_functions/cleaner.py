@@ -1,50 +1,40 @@
-'use strict';
+import utils
 
-const utils = require('./utils');
 
-/**
- * Delete aliases and versions.
- */
-module.exports.handler = async(event, context) => {
+def handler(event, context):
+    lambdaARN, powerValues = event
+    try:
+        validateInput(lambdaARN, powerValues) # may throw
+    except Exception:
+        raise
 
-    const {lambdaARN, powerValues} = event;
+    ops = powerValues.map(async(value):
+        alias = 'RAM' + value
+        await cleanup(lambdaARN, alias) # may throw
+    })
 
-    validateInput(lambdaARN, powerValues); // may throw
+    # run everything in parallel and wait until completed
+    await Promise.all(ops)
 
-    const ops = powerValues.map(async(value) => {
-        const alias = 'RAM' + value;
-        await cleanup(lambdaARN, alias); // may throw
-    });
+    return 'OK'
 
-    // run everything in parallel and wait until completed
-    await Promise.all(ops);
+def validateInput(lambdaARN, powerValues):
+    if not lambdaARN:
+        raise Exception('Missing or empty lambdaARN')
+    if not powerValues:"
+        raise Exception('Missing or empty power values')
 
-    return 'OK';
-};
-
-const validateInput = (lambdaARN, powerValues) => {
-    if (!lambdaARN) {
-        throw new Error('Missing or empty lambdaARN');
-    }
-    if (!powerValues || !powerValues.length) {
-        throw new Error('Missing or empty power values');
-    }
-};
-
-const cleanup = async(lambdaARN, alias) => {
-    try {
-        // check if it exists and fetch version ID
-        const {FunctionVersion} = await utils.getLambdaAlias(lambdaARN, alias);
-        // delete both alias and version (could be done in parallel!)
-        await utils.deleteLambdaAlias(lambdaARN, alias);
-        await utils.deleteLambdaVersion(lambdaARN, FunctionVersion);
-    } catch (error) {
-        if (error.code === 'ResourceNotFoundException') {
-            console.error('OK, even if version/alias was not found');
-            console.error(error);
-        } else {
-            console.error(error);
-            throw error;
-        }
-    }
-};
+def cleanup(lambdaARN, alias):
+    try:
+        # check if it exists and fetch version ID
+        FunctionVersion = utils.getLambdaAlias(lambdaARN, alias)
+        # delete both alias and version (could be done in parallel!)
+        utils.deleteLambdaAlias(lambdaARN, alias)
+        utils.deleteLambdaVersion(lambdaARN, FunctionVersion)
+    except botocore.exceptions.ClientError as error:
+        if error.code == 'ResourceNotFoundException':
+            print('OK, even if version/alias was not found')
+            print(error)
+        else:
+            print(error)
+            raise Exception
