@@ -6,7 +6,7 @@ import constructs
 import os
 
 
-class SimpleGraphQlService(aws_cdk.core.Stack):
+class SimpleGraphQlService(aws_cdk.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
@@ -40,7 +40,7 @@ class SimpleGraphQlService(aws_cdk.core.Stack):
             ('Endpoint', graphql_api.graphql_url),
             ('API_Key', self.create_graphql_api_key(graphql_api.api_id).attr_api_key),
         ):
-            aws_cdk.core.CfnOutput(self, logical_id, value=value)
+            aws_cdk.CfnOutput(self, logical_id, value=value)
 
     def create_graphql_api(self):
         return aws_cdk.aws_appsync.GraphqlApi(

@@ -1,6 +1,6 @@
 from json import dumps
 from aws_cdk.aws_sns import Topic, ITopic
-from aws_cdk.core import Stack, Construct
+from aws_cdk import Stack, Construct
 from aws_cdk.aws_iam import Role, ServicePrincipal
 from aws_cdk import aws_apigateway
 

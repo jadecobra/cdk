@@ -1,4 +1,4 @@
-from aws_cdk.core import Duration, Construct
+from aws_cdk import Duration, Construct
 from aws_cdk.aws_cloudwatch import Metric, Unit
 from well_architected import WellArchitectedFrameworkConstruct
 

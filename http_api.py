@@ -1,4 +1,4 @@
-from aws_cdk.core import Construct, CfnOutput, Stack
+from aws_cdk import Construct, CfnOutput, Stack
 from aws_cdk.aws_lambda import Function
 from aws_cdk.aws_apigatewayv2 import HttpApi
 from aws_cdk.aws_apigatewayv2_integrations import HttpLambdaIntegration

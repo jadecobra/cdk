@@ -1,4 +1,4 @@
-from aws_cdk.core import Construct, Stack
+from aws_cdk import Construct, Stack
 from aws_cdk.aws_logs import LogGroup
 from aws_cdk.aws_lambda import Function
 from aws_cdk.aws_sns import ITopic

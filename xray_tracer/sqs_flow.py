@@ -1,4 +1,4 @@
-from aws_cdk.core import Stack, Construct, Duration
+from aws_cdk import Stack, Construct, Duration
 from aws_cdk.aws_sqs import Queue
 from aws_cdk.aws_sns_subscriptions import LambdaSubscription
 from aws_cdk.aws_lambda_event_sources import SqsEventSource

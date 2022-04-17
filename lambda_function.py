@@ -1,4 +1,4 @@
-from aws_cdk.core import Construct, Duration, Stack
+from aws_cdk import Construct, Duration, Stack
 from aws_cdk.aws_lambda import Function, Code, Runtime, Tracing, LayerVersion
 from aws_cdk.aws_sns import ITopic
 from well_architected import WellArchitectedFrameworkConstruct

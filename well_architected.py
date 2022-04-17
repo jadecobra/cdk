@@ -1,4 +1,4 @@
-from aws_cdk.core import Stack, Construct, Duration
+from aws_cdk import Stack, Construct, Duration
 from aws_cdk.aws_cloudwatch import Dashboard, GraphWidget, MathExpression, Alarm, TreatMissingData
 from aws_cdk.aws_cloudwatch_actions import SnsAction
 from aws_cdk.aws_sns import Topic

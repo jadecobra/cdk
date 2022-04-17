@@ -1,11 +1,12 @@
-import aws_cdk.core
+import aws_cdk
 import aws_cdk.aws_lambda
 import aws_cdk.aws_sam
+import constructs
 
 
-class LambdaPowerTuner(aws_cdk.core.Stack):
+class LambdaPowerTuner(aws_cdk.Stack):
 
-    def __init__(self, scope: aws_cdk.core.Construct, id: str, **kwargs) -> None:
+    def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         example_lambda_function = aws_cdk.aws_lambda.Function(
@@ -17,7 +18,7 @@ class LambdaPowerTuner(aws_cdk.core.Stack):
         )
 
         # Output the Lambda function ARN in the deploy logs to ease testing
-        aws_cdk.core.CfnOutput(self, 'LambdaARN', value=example_lambda_function.function_arn)
+        aws_cdk.CfnOutput(self, 'LambdaARN', value=example_lambda_function.function_arn)
 
         # Deploy the aws-lambda-powertuning application from the Serverless Application Repository
         # https://serverlessrepo.aws.amazon.com/applications/arn:aws:serverlessrepo:us-east-1:451282441545:applications~aws-lambda-power-tuning

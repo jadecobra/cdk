@@ -1,4 +1,4 @@
-from aws_cdk.core import Construct, Stack
+from aws_cdk import Construct, Stack
 from aws_cdk.aws_lambda import LayerVersion, Code
 
 class LambdaLayer(Stack):

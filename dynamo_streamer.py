@@ -1,14 +1,15 @@
-import aws_cdk.core
+import aws_cdk
 import aws_cdk.aws_lambda
 import aws_cdk.aws_lambda_event_sources
 import aws_cdk.aws_dynamodb
 import aws_cdk.aws_apigateway
 import aws_cdk.aws_iam
+import constructs
 import json
 
-class DynamoStreamer(aws_cdk.core.Stack):
+class DynamoStreamer(aws_cdk.Stack):
 
-    def __init__(self, scope: aws_cdk.core.Construct, id: str, **kwargs) -> None:
+    def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         rest_api = self.create_rest_api()
