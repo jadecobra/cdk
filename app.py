@@ -1,4 +1,4 @@
-import aws_cdk.core as cdk
+import aws_cdk
 import aws_cdk.aws_dynamodb as aws_dynamodb
 import os
 try:
@@ -30,7 +30,7 @@ except ImportError as error:
     os.system('pip install -r requirements.txt')
 
 
-class WellArchitected(cdk.App):
+class WellArchitected(aws_cdk.App):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
