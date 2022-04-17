@@ -1,15 +1,17 @@
+import aws_cdk
+import constructs
+import lambda_function
+
 from aws_cdk import (
     aws_apigateway as api_gateway,
     aws_events as events,
     aws_events_targets as targets,
     aws_iam as iam,
-    core as cdk
 )
-import lambda_function
 
-class EventBridgeAtm(cdk.Stack):
+class EventBridgeAtm(aws_cdk.Stack):
 
-    def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
+    def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         self.create_lambda_function_with_event_bridge_rule(

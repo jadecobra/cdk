@@ -113,3 +113,6 @@ class WellArchitected(aws_cdk.App):
         )
 
 WellArchitected().synth()
+
+# TODO
+# Refactor Destined Lambda

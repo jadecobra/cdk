@@ -1,3 +1,8 @@
+import json
+import aws_cdk
+import constructs
+import dynamodb_table
+
 from aws_cdk import (
     aws_lambda as _lambda,
     aws_lambda_event_sources as lambda_event_sources,
@@ -11,15 +16,12 @@ from aws_cdk import (
     aws_logs as logs,
     aws_events as events,
     aws_events_targets as event_bridge_targets,
-    core as cdk
 )
-import json
-import dynamodb_table
 
 
-class EventbridgeEtl(cdk.Stack):
+class EventbridgeEtl(aws_cdk.Stack):
 
-    def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
+    def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
         self.upload_bucket = s3.Bucket(self, "LandingBucket")
 
@@ -102,8 +104,6 @@ class EventbridgeEtl(cdk.Stack):
         self.upload_queue.grant_consume_messages(self.extractor)
         self.transformed_data.grant_read_write_data(self.loader)
 
-
-
     def create_event_bridge_rule(
         self, name=None, description=None, detail_type=None, status=None,
         lambda_function=None
@@ -135,7 +135,7 @@ class EventbridgeEtl(cdk.Stack):
             handler=f'{function_name}.handler',
             code=_lambda.Code.from_asset(f'lambda_functions/{function_name}'),
             reserved_concurrent_executions=concurrent_executions,
-            timeout=cdk.Duration.seconds(timeout),
+            timeout=aws_cdk.Duration.seconds(timeout),
             environment=environment_variables,
         )
         if event_bridge_rule_description:
@@ -160,7 +160,7 @@ class EventbridgeEtl(cdk.Stack):
     def create_sqs_queue(self):
         return sqs.Queue(
             self, 'newObjectInLandingBucketEventQueue',
-            visibility_timeout=cdk.Duration.seconds(300)
+            visibility_timeout=aws_cdk.Duration.seconds(300)
         )
 
     @staticmethod

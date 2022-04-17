@@ -1,19 +1,20 @@
+import aws_cdk
+import constructs
+import lambda_function
+
 from aws_cdk import (
-    aws_lambda as _lambda,
     aws_apigatewayv2 as api_gw,
-    aws_apigatewayv2_integrations as integrations,
+    aws_apigatewayv2_integrations_alpha as integrations,
     aws_ec2 as ec2,
     aws_rds as rds,
     aws_secretsmanager as secrets,
     aws_ssm as ssm,
-    core as cdk
 )
-import lambda_function
 
 
 class RdsProxy(cdk.Stack):
 
-    def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
+    def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         vpc = ec2.Vpc(self, 'Vpc', max_azs=2)
@@ -55,7 +56,7 @@ class RdsProxy(cdk.Stack):
             )
         )
 
-        cdk.CfnOutput(self, 'HTTP API Url', value=api.url);
+        aws_cdk.CfnOutput(self, 'HTTP API Url', value=api.url);
 
 
     def create_credentials_secret(self, id):

@@ -1,3 +1,7 @@
+import aws_cdk
+import constructs
+import json
+
 from aws_cdk import (
     aws_lambda as aws_lambda,
     aws_lambda_destinations,
@@ -6,15 +10,13 @@ from aws_cdk import (
     aws_events_targets as targets,
     aws_sns as sns,
     aws_sns_subscriptions as subscriptions,
-    aws_apigateway as api_gw,
-    core as cdk
+    aws_apigateway as api_gw
 )
-import json
 
 
-class DestinedLambda(cdk.Stack):
+class DestinedLambda(aws_cdk.Stack):
 
-    def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
+    def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         ###
@@ -51,7 +53,7 @@ class DestinedLambda(cdk.Stack):
             runtime=aws_lambda.Runtime.NODEJS_12_X,
             handler="success.handler",
             code=aws_lambda.Code.from_asset("lambda_functions"),
-            timeout=cdk.Duration.seconds(3)
+            timeout=aws_cdk.Duration.seconds(3)
         )
         ###
         # EventBridge Rule to send events to our success lambda
@@ -86,7 +88,7 @@ class DestinedLambda(cdk.Stack):
             runtime=aws_lambda.Runtime.NODEJS_12_X,
             handler="failure.handler",
             code=aws_lambda.Code.from_asset("lambda_functions"),
-            timeout=cdk.Duration.seconds(3)
+            timeout=aws_cdk.Duration.seconds(3)
         )
 
         ###

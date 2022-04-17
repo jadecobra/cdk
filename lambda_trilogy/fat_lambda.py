@@ -1,14 +1,16 @@
+import aws_cdk
+import constructs
+import lambda_function
+
 from aws_cdk import (
     aws_lambda as aws_lambda,
     aws_apigateway as api_gateway,
-    core as cdk
 )
 
-import lambda_function
 
-class TheFatLambdaStack(cdk.Stack):
+class TheFatLambdaStack(aws_cdk.Stack):
 
-    def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
+    def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         adder = self.create_lambda_function('add')
