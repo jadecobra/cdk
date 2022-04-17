@@ -1,18 +1,20 @@
+import aws_cdk
+import constructs
+import lambda_function
+
 from aws_cdk import (
     aws_lambda as aws_lambda,
     aws_lambda_event_sources as lambda_event,
     aws_apigateway as api_gw,
     aws_dynamodb as dynamo_db,
     aws_sqs as sqs,
-    core as cdk
 )
-import lambda_function
 
 
-class ScalableWebhook(cdk.Stack):
+class ScalableWebhook(aws_cdk.Stack):
     '''This pattern is made obsolete by RDS Proxy'''
 
-    def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
+    def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         # This could be any database table. Using dynamodb because it's cheaper
@@ -23,7 +25,7 @@ class ScalableWebhook(cdk.Stack):
 
         queue = sqs.Queue(
             self, 'RDSPublishQueue',
-            visibility_timeout=cdk.Duration.seconds(300)
+            visibility_timeout=aws_cdk.Duration.seconds(300)
         )
 
         publisher = lambda_function.create_python_lambda_function(
