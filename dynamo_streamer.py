@@ -1,4 +1,3 @@
-from re import L
 import aws_cdk.core
 import aws_cdk.aws_lambda
 import aws_cdk.aws_lambda_event_sources
@@ -18,7 +17,7 @@ class DynamoStreamer(aws_cdk.core.Stack):
         dynamodb_partition_key = 'message'
         dynamodb_table = self.create_dynamodb_table(dynamodb_partition_key)
         dynamodb_table.grant_read_write_data(api_gateway_service_role)
-        self.try(
+        self.add_method_to_rest_api(
             rest_api=rest_api,
             api_gateway_service_role=api_gateway_service_role,
             dynamodb_table_name=dynamodb_table.table_name,
