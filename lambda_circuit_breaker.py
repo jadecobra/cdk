@@ -1,20 +1,19 @@
+import aws_cdk
+import constructs
+import dynamodb_table
+import aws_apigatewayv2_integrations_alpha as integrations
+
 from aws_cdk import (
     aws_lambda as aws_lambda,
     aws_apigatewayv2 as api_gw,
-    aws_apigatewayv2_integrations as integrations,
     aws_dynamodb as dynamo_db,
-    core as cdk
 )
-import subprocess
-import os
-
-import dynamodb_table
-import http_api
 
 
-class LambdaCircuitBreaker(cdk.Stack):
 
-    def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
+class LambdaCircuitBreaker(aws_cdk.Stack):
+
+    def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         table = dynamodb_table.DynamoDBTableConstruct(
@@ -52,4 +51,4 @@ class LambdaCircuitBreaker(cdk.Stack):
             )
         );
 
-        cdk.CfnOutput(self, 'HTTP API Url', value=api.url);
+        aws_cdk.CfnOutput(self, 'HTTP API Url', value=api.url);

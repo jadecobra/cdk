@@ -1,4 +1,5 @@
-from pickle import STACK_GLOBAL
+import aws_cdk
+import constructs
 from aws_cdk import (
     aws_lambda,
     aws_lambda_event_sources,
@@ -7,14 +8,13 @@ from aws_cdk import (
     aws_sns as sns,
     aws_sns_subscriptions as subscriptions,
     aws_sqs as sqs,
-    core as cdk
 )
 import json
 
 
-class BigFan(cdk.Stack):
+class BigFan(aws_cdk.Stack):
 
-    def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
+    def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         topic = sns.Topic(

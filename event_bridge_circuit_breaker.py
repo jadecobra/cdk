@@ -1,8 +1,8 @@
-import os
+import aws_cdk
+import constructs
 import lambda_function
 import dynamodb_table
 import rest_api
-import sns_topic
 
 from aws_cdk import (
     aws_apigateway as api_gateway,
@@ -11,12 +11,11 @@ from aws_cdk import (
     aws_events_targets as targets,
     aws_iam as iam,
     aws_sns as sns,
-    core as cdk,
 )
 
-class EventBridgeCircuitBreaker(cdk.Stack):
+class EventBridgeCircuitBreaker(aws_cdk.Stack):
 
-    def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
+    def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         error_topic = sns.Topic(

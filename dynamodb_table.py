@@ -1,11 +1,12 @@
-import aws_cdk.core as cdk
+import aws_cdk
+import constructs
 import aws_cdk.aws_dynamodb as aws_dynamodb
 import well_architected
 
 class DynamoDBTableConstruct(well_architected.WellArchitectedFrameworkConstruct):
 
     def __init__(
-        self, scope: cdk.Construct, id: str, error_topic=None,
+        self, scope: constructs.Construct, id: str, error_topic=None,
             partition_key: aws_dynamodb.Attribute=None,
             sort_key: aws_dynamodb.Attribute=None,
             time_to_live_attribute=None,
@@ -19,7 +20,7 @@ class DynamoDBTableConstruct(well_architected.WellArchitectedFrameworkConstruct)
             billing_mode=aws_dynamodb.BillingMode.PAY_PER_REQUEST,
             partition_key=partition_key,
             sort_key=sort_key,
-            removal_policy=cdk.RemovalPolicy.DESTROY,
+            removal_policy=aws_cdk.RemovalPolicy.DESTROY,
             time_to_live_attribute=time_to_live_attribute,
         )
         self.create_user_errors_alarm()

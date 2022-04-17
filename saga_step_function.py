@@ -1,16 +1,18 @@
+import aws_cdk
+import constructs
+
 from aws_cdk import (
     aws_lambda,
     aws_apigateway,
     aws_dynamodb as dynamo_db,
     aws_stepfunctions,
     aws_stepfunctions_tasks,
-    core as cdk
 )
 
 
-class SagaStepFunction(cdk.Stack):
+class SagaStepFunction(aws_cdk.Stack):
 
-    def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
+    def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         bookings = dynamo_db.Table(

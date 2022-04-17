@@ -1,12 +1,13 @@
-import aws_cdk.core as cdk
+import aws_cdk
+import constructs
 import aws_cdk.aws_sns as aws_sns
 import aws_cdk.aws_sns_subscriptions as aws_sns_subscriptions
 import aws_cdk.aws_dynamodb as aws_dynamodb
 import lambda_function
 import dynamodb_table
 
-class DynamoDBFlow(cdk.Stack):
-    def __init__(self, scope: cdk.Construct, id: str, sns_topic: aws_sns.ITopic = None, **kwargs) -> None:
+class DynamoDBFlow(aws_cdk.Stack):
+    def __init__(self, scope: constructs.Construct, id: str, sns_topic: aws_sns.ITopic = None, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         table = dynamodb_table.DynamoDBTableConstruct(

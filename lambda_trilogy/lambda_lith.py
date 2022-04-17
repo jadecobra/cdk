@@ -1,14 +1,16 @@
-from aws_cdk import (
-    aws_lambda as _lambda,
-    aws_apigateway as api_gw,
-    core as cdk
-)
+import aws_cdk
+import constructs
 import lambda_function
 import rest_api
 
-class LambdaLith(cdk.Stack):
+from aws_cdk import (
+    aws_lambda as _lambda,
+    aws_apigateway as api_gw,
+)
 
-    def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
+class LambdaLith(aws_cdk.Stack):
+
+    def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         rest_api.LambdaRestAPIGatewayConstruct(
