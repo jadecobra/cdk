@@ -141,7 +141,7 @@ class StateMachine(aws_cdk.Stack):
             iam_role_arn=iam_role_arn,
             state_machine_arn=state_machine_arn
         ).ref
-        return aws_cdk.aws_apigateway.CfnRoute(
+        return aws_cdk.aws_apigatewayv2.CfnRoute(
             self, 'StateMachineHttpApiDefaultRoute',
             api_id=api_id,
             route_key=aws_cdk.aws_apigatewayv2_alpha.HttpRouteKey.DEFAULT.key,
