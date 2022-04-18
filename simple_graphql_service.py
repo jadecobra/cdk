@@ -1,7 +1,5 @@
 import aws_cdk
-import aws_cdk.aws_lambda
-import aws_cdk.aws_dynamodb
-import aws_cdk.aws_appsync
+import aws_cdk.aws_appsync_alpha
 import constructs
 import os
 
@@ -43,19 +41,19 @@ class SimpleGraphQlService(aws_cdk.Stack):
             aws_cdk.CfnOutput(self, logical_id, value=value)
 
     def create_graphql_api(self):
-        return aws_cdk.aws_appsync.GraphqlApi(
+        return aws_cdk.aws_appsync_alpha.GraphqlApi(
             self, 'GraphQlApi',
             name="demoapi",
-            log_config=aws_cdk.aws_appsync.LogConfig(
-                field_log_level=aws_cdk.aws_appsync.FieldLogLevel.ALL
+            log_config=aws_cdk.aws_appsync_alpha.LogConfig(
+                field_log_level=aws_cdk.aws_appsync_alpha.FieldLogLevel.ALL
             ),
-            schema=aws_cdk.aws_appsync.Schema.from_asset(
+            schema=aws_cdk.aws_appsync_alpha.Schema.from_asset(
                 f'{os.path.dirname(os.path.realpath(__file__))}/schema/schema.graphql'
             )
         )
 
     def create_graphql_api_key(self, api_id):
-        return aws_cdk.aws_appsync.CfnApiKey(
+        return aws_cdk.aws_appsync_alpha.CfnApiKey(
             self, 'GraphQlApiKey',
             api_id=api_id
         )
@@ -80,42 +78,42 @@ class SimpleGraphQlService(aws_cdk.Stack):
             type_name='Mutation',
             field_name=field_name,
             request_mapping_template=request_mapping_template,
-            response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_result_item(),
+            response_mapping_template=aws_cdk.aws_appsync_alpha.MappingTemplate.dynamo_db_result_item(),
         )
 
     def add_get_customers_query_resolver_lambda(self, data_source):
         self.create_query_resolver(
             data_source=data_source,
             field_name='getLoyaltyLevel',
-            request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.lambda_request(),
-            response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.lambda_result(),
+            request_mapping_template=aws_cdk.aws_appsync_alpha.MappingTemplate.lambda_request(),
+            response_mapping_template=aws_cdk.aws_appsync_alpha.MappingTemplate.lambda_result(),
         )
 
     def add_get_customers_query_resolver_dynamodb(self, data_source):
         self.create_query_resolver(
             data_source=data_source,
             field_name='getCustomers',
-            request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_scan_table(),
-            response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_result_list(),
+            request_mapping_template=aws_cdk.aws_appsync_alpha.MappingTemplate.dynamo_db_scan_table(),
+            response_mapping_template=aws_cdk.aws_appsync_alpha.MappingTemplate.dynamo_db_result_list(),
         )
 
     def add_get_customer_query_resolver(self, data_source):
         self.create_query_resolver(
             data_source=data_source,
             field_name='getCustomer',
-            request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_get_item(
+            request_mapping_template=aws_cdk.aws_appsync_alpha.MappingTemplate.dynamo_db_get_item(
                 'id', 'id'
             ),
-            response_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_result_item(),
+            response_mapping_template=aws_cdk.aws_appsync_alpha.MappingTemplate.dynamo_db_result_item(),
         )
 
     def add_add_customer_mutation_resolver(self, data_source):
         self.create_mutation_resolver(
             data_source=data_source,
             field_name='addCustomer',
-            request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_put_item(
-                key=aws_cdk.aws_appsync.PrimaryKey.partition('id').auto(),
-                values=aws_cdk.aws_appsync.Values.projecting('customer')
+            request_mapping_template=aws_cdk.aws_appsync_alpha.MappingTemplate.dynamo_db_put_item(
+                key=aws_cdk.aws_appsync_alpha.PrimaryKey.partition('id').auto(),
+                values=aws_cdk.aws_appsync_alpha.Values.projecting('customer')
             ),
         )
 
@@ -123,9 +121,9 @@ class SimpleGraphQlService(aws_cdk.Stack):
         self.create_mutation_resolver(
             data_source=data_source,
             field_name='saveCustomer',
-            request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_put_item(
-                key=aws_cdk.aws_appsync.PrimaryKey.partition('id').is_('id'),
-                values=aws_cdk.aws_appsync.Values.projecting('customer')
+            request_mapping_template=aws_cdk.aws_appsync_alpha.MappingTemplate.dynamo_db_put_item(
+                key=aws_cdk.aws_appsync_alpha.PrimaryKey.partition('id').is_('id'),
+                values=aws_cdk.aws_appsync_alpha.Values.projecting('customer')
             ),
         )
 
@@ -133,9 +131,9 @@ class SimpleGraphQlService(aws_cdk.Stack):
         self.create_mutation_resolver(
             data_source=data_source,
             field_name='saveCustomerWithFirstOrder',
-            request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_put_item(
-                key=aws_cdk.aws_appsync.PrimaryKey.partition('order').auto().sort('customer').is_('customer.id'),
-                values=aws_cdk.aws_appsync.Values.projecting('order').attribute('referral').is_('referral')
+            request_mapping_template=aws_cdk.aws_appsync_alpha.MappingTemplate.dynamo_db_put_item(
+                key=aws_cdk.aws_appsync_alpha.PrimaryKey.partition('order').auto().sort('customer').is_('customer.id'),
+                values=aws_cdk.aws_appsync_alpha.Values.projecting('order').attribute('referral').is_('referral')
             ),
         )
 
@@ -143,7 +141,7 @@ class SimpleGraphQlService(aws_cdk.Stack):
         self.create_mutation_resolver(
             data_source=data_source,
             field_name='removeCustomer',
-            request_mapping_template=aws_cdk.aws_appsync.MappingTemplate.dynamo_db_delete_item('id', 'id'),
+            request_mapping_template=aws_cdk.aws_appsync_alpha.MappingTemplate.dynamo_db_delete_item('id', 'id'),
         )
 
     def add_dynamodb_data_source_resolvers(self, dynamodb_data_source):

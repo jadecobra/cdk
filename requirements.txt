@@ -2,4 +2,6 @@ sniffer
 macfsevents
 boto3
 aws-cdk-lib
+aws-cdk.aws-apigatewayv2-alpha
 aws-cdk.aws-apigatewayv2-integrations-alpha
+aws_cdk.aws-appsync-alpha
