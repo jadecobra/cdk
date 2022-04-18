@@ -3,7 +3,6 @@ import constructs
 import lambda_function
 
 
-
 class SnsFlow(aws_cdk.Stack):
     def __init__(self, scope: constructs.Construct, id: str, sns_topic: aws_cdk.aws_sns.ITopic = None, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
@@ -26,7 +25,7 @@ class SnsFlow(aws_cdk.Stack):
         )
 
         apigw_topic = aws_cdk.aws_sns.Topic.from_topic_arn(self, 'SNSTopic', sns_topic.topic_arn)
-        apigw_topic.add_subscription(LambdaSubscription(sns_publisher))
+        apigw_topic.add_subscription(aws_cdk.aws_sns_subscriptions.LambdaSubscription(sns_publisher))
 
     def create_sns_publisher(self, topic: aws_cdk.aws_sns.ITopic):
         return lambda_function.create_python_lambda_function(

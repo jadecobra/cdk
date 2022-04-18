@@ -33,6 +33,6 @@ class SqsFlow(aws_cdk.Stack):
         sqs_subscriber = lambda_function.create_python_lambda_function(
             self, function_name="sqs_subscribe"
         )
-        sqs_subscriber.add_event_source(aws_cdk.aws_sqs.SqsEventSource(sqs_queue))
+        sqs_subscriber.add_event_source(aws_cdk.aws_lambda_event_sources.SqsEventSource(sqs_queue))
         sqs_queue.grant_consume_messages(sqs_subscriber)
         return sqs_subscriber
