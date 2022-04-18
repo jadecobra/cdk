@@ -53,7 +53,7 @@ class SimpleGraphQlService(aws_cdk.Stack):
         )
 
     def create_graphql_api_key(self, api_id):
-        return aws_cdk.aws_appsync_alpha.CfnApiKey(
+        return aws_cdk.aws_appsync.CfnApiKey(
             self, 'GraphQlApiKey',
             api_id=api_id
         )
