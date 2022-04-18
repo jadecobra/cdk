@@ -1,15 +1,8 @@
 import aws_cdk
+import aws_cdk.aws_apigatewayv2_alpha
+import aws_cdk.aws_apigatewayv2_integrations_alpha
 import constructs
 import lambda_function
-
-from aws_cdk import (
-    aws_apigatewayv2 as api_gw,
-    aws_apigatewayv2_integrations_alpha as integrations,
-    aws_ec2 as ec2,
-    aws_rds as rds,
-    aws_secretsmanager as secrets,
-    aws_ssm as ssm,
-)
 
 
 class RdsProxy(aws_cdk.Stack):
@@ -17,7 +10,7 @@ class RdsProxy(aws_cdk.Stack):
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        vpc = ec2.Vpc(self, 'Vpc', max_azs=2)
+        vpc = aws_cdk.aws_ec2.Vpc(self, 'Vpc', max_azs=2)
         db_credentials_secret = self.create_credentials_secret(id)
         self.create_parameter_store_for_db_credentials(db_credentials_secret.secret_arn)
         rds_instance = self.create_rds_instance(
@@ -47,12 +40,17 @@ class RdsProxy(aws_cdk.Stack):
             (rds_proxy, 'allow db connection'),
             (rds_lambda, 'allow lambda connection'),
         ):
-            rds_instance.connections.allow_from(security_group, ec2.Port.tcp(3306), description=description)
+            rds_instance.connections.allow_from(
+                security_group,
+                aws_cdk.aws_ec2.Port.tcp(3306),
+                description=description
+            )
 
-        api = api_gw.HttpApi(
+        api = aws_cdk.aws_apigatewayv2_alpha.HttpApi(
             self, 'Endpoint',
-            default_integration=integrations.HttpLambdaIntegration(
-                'LambdaIntegration', handler=rds_lambda
+            default_integration=aws_cdk.aws_apigatewayv2_integrations_alpha.HttpLambdaIntegration(
+                'LambdaIntegration',
+                handler=rds_lambda
             )
         )
 
@@ -60,10 +58,10 @@ class RdsProxy(aws_cdk.Stack):
 
 
     def create_credentials_secret(self, id):
-        return secrets.Secret(
+        return aws_cdk.aws_secretsmanager.Secret(
             self, 'DBCredentialsSecret',
             secret_name=f'{id}-rds-credentials',
-            generate_secret_string=secrets.SecretStringGenerator(
+            generate_secret_string=aws_cdk.aws_secretsmanager.SecretStringGenerator(
                 secret_string_template="{\"username\":\"syscdk\"}",
                 exclude_punctuation=True,
                 include_space=False,
@@ -72,24 +70,24 @@ class RdsProxy(aws_cdk.Stack):
         )
 
     def create_parameter_store_for_db_credentials(self, db_credentials_arn):
-        return ssm.StringParameter(
+        return aws_cdk.aws_ssm.StringParameter(
             self, 'DBCredentialsArn',
             parameter_name='rds-credentials-arn',
             string_value=db_credentials_arn
         )
 
     def create_rds_instance(self, credentials_secret=None, vpc=None):
-        return rds.DatabaseInstance(
+        return aws_cdk.aws_rds.DatabaseInstance(
             self, 'DBInstance',
-            engine=rds.DatabaseInstanceEngine.mysql(
-                version=rds.MysqlEngineVersion.VER_5_7_30
+            engine=aws_cdk.aws_rds.DatabaseInstanceEngine.mysql(
+                version=aws_cdk.aws_rds.MysqlEngineVersion.VER_5_7_30
             ),
-            credentials=rds.Credentials.from_secret(credentials_secret),
-            instance_type=ec2.InstanceType.of(
-                ec2.InstanceClass.BURSTABLE2,
-                ec2.InstanceSize.SMALL
+            credentials=aws_cdk.aws_rds.Credentials.from_secret(credentials_secret),
+            instance_type=aws_cdk.aws_ec2.InstanceType.of(
+                aws_cdk.aws_ec2.InstanceClass.BURSTABLE2,
+                aws_cdk.aws_ec2.InstanceSize.SMALL
             ),
             vpc=vpc,
-            removal_policy=cdk.RemovalPolicy.DESTROY,
+            removal_policy=aws_cdk.RemovalPolicy.DESTROY,
             deletion_protection=False,
         )

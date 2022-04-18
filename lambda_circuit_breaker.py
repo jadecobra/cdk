@@ -2,12 +2,7 @@ import aws_cdk
 import constructs
 import dynamodb_table
 import aws_cdk.aws_apigatewayv2_integrations_alpha as integrations
-
-from aws_cdk import (
-    aws_lambda as aws_lambda,
-    aws_apigatewayv2 as api_gw,
-    aws_dynamodb as dynamo_db,
-)
+import aws_cdk.aws_apigatewayv2_alpha
 
 
 
@@ -18,8 +13,9 @@ class LambdaCircuitBreaker(aws_cdk.Stack):
 
         table = dynamodb_table.DynamoDBTableConstruct(
             self, "CircuitBreakerTable",
-            partition_key=dynamo_db.Attribute(
-                name="id", type=dynamo_db.AttributeType.STRING
+            partition_key=aws_cdk.aws_dynamodb.Attribute(
+                name="id",
+                type=aws_cdk.aws_dynamodb.AttributeType.STRING
             ),
         ).dynamodb_table
 
@@ -29,12 +25,11 @@ class LambdaCircuitBreaker(aws_cdk.Stack):
         # subprocess.check_call("npm run build".split(), cwd=lambda_folder, stdout=subprocess.DEVNULL)
 
         # defines an AWS Lambda resource with unreliable code
-        unreliable_lambda = aws_lambda.Function(
+        unreliable_lambda = aws_cdk.aws_lambda.Function(
             self, "UnreliableLambdaHandler",
-            runtime=aws_lambda.Runtime.NODEJS_12_X,
+            runtime=aws_cdk.aws_lambda.Runtime.NODEJS_12_X,
             handler="unreliable.handler",
-            code=aws_lambda.Code.from_asset("lambda_functions/unreliable"),
-            # Code loaded from the lambda_functions dir
+            code=aws_cdk.aws_lambda.Code.from_asset("lambda_functions/unreliable"),
             environment={
                 'CIRCUITBREAKER_TABLE': table.table_name
             }
@@ -44,11 +39,11 @@ class LambdaCircuitBreaker(aws_cdk.Stack):
         table.grant_read_write_data(unreliable_lambda)
 
         # defines an API Gateway Http API resource backed by our "dynamoLambda" function.
-        api = api_gw.HttpApi(
+        api = aws_cdk.aws_apigatewayv2_alpha.HttpApi(
             self, 'CircuitBreakerGateway',
             default_integration=integrations.HttpLambdaIntegration(
                 'HttpLambdaIntegration', handler=unreliable_lambda
             )
-        );
+        )
 
-        aws_cdk.CfnOutput(self, 'HTTP API Url', value=api.url);
+        aws_cdk.CfnOutput(self, 'HTTP API Url', value=api.url)
