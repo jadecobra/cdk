@@ -103,10 +103,10 @@ class DynamoDBTableConstruct(well_architected.WellArchitectedFrameworkConstruct)
         )
 
 
-class DynamoDBTableStack(cdk.Stack):
+class DynamoDBTableStack(aws_cdk.Stack):
 
     def __init__(
-        self, scope: cdk.Construct, id: str, error_topic=None,
+        self, scope: constructs.Construct, id: str, error_topic=None,
             partition_key: aws_dynamodb.Attribute=None,
             sort_key: aws_dynamodb.Attribute=None,
             time_to_live_attribute=None,

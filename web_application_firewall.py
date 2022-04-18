@@ -1,10 +1,10 @@
-from aws_cdk import Stack, Construct
-from aws_cdk.aws_wafv2 import CfnWebACL, CfnWebACLAssociation
+import aws_cdk
+import constructs
 
 
-class WebApplicationFirewall(Stack):
+class WebApplicationFirewall(aws_cdk.Stack):
 
-    def __init__(self, scope: Construct, id: str, target_arn=None, web_application_firewall_scope='REGIONAL', **kwargs) -> None:
+    def __init__(self, scope: constructs.Construct, id: str, target_arn=None, web_application_firewall_scope='REGIONAL', **kwargs) -> None:
         '''This only works with APIGateway REST APIs and CloudFront
         HTTP APIs are not supported yet
         '''
@@ -23,23 +23,23 @@ class WebApplicationFirewall(Stack):
         )
 
     def default_override_action(self):
-        return CfnWebACL.OverrideActionProperty(none={})
+        return aws_cdk.aws_wafv2.CfnWebACL.OverrideActionProperty(none={})
 
     def create_visibility_configuration(self, metric_name):
-        return CfnWebACL.VisibilityConfigProperty(
+        return aws_cdk.aws_wafv2.CfnWebACL.VisibilityConfigProperty(
             cloud_watch_metrics_enabled=True,
             metric_name=metric_name,
             sampled_requests_enabled=True
         )
 
     def create_managed_rule(self, name=None, priority=None, excluded_rules=None):
-        return CfnWebACL.RuleProperty(
+        return aws_cdk.aws_wafv2.CfnWebACL.RuleProperty(
             name=name,
             priority=priority,
             override_action=self.default_override_action(),
             visibility_config=self.create_visibility_configuration(name),
-            statement=CfnWebACL.StatementProperty(
-                managed_rule_group_statement=CfnWebACL.ManagedRuleGroupStatementProperty(
+            statement=aws_cdk.aws_wafv2.CfnWebACL.StatementProperty(
+                managed_rule_group_statement=aws_cdk.aws_wafv2.CfnWebACL.ManagedRuleGroupStatementProperty(
                     name=name,
                     vendor_name='AWS',
                     excluded_rules=excluded_rules if excluded_rules else []
@@ -51,7 +51,11 @@ class WebApplicationFirewall(Stack):
         return self.create_managed_rule(
             name='AWSManagedRulesCommonRuleSet',
             priority=1,
-            excluded_rules=[CfnWebACL.ExcludedRuleProperty(name='SizeRestrictions_BODY')],
+            excluded_rules=[
+                aws_cdk.aws_wafv2.CfnWebACL.ExcludedRuleProperty(
+                    name='SizeRestrictions_BODY'
+                )
+            ],
         )
 
     def anonymous_ip_rule(self):
@@ -67,23 +71,23 @@ class WebApplicationFirewall(Stack):
         )
 
     def add_geoblock_rule(self):
-        return CfnWebACL.RuleProperty(
+        return aws_cdk.aws_wafv2.CfnWebACL.RuleProperty(
             name='geoblocking_rule',
             priority=4,
-            action=CfnWebACL.RuleActionProperty(block={}),
+            action=aws_cdk.aws_wafv2.CfnWebACL.RuleActionProperty(block={}),
             visibility_config=self.create_visibility_configuration('geoblock'),
-            statement=CfnWebACL.StatementProperty(
-                geo_match_statement=CfnWebACL.GeoMatchStatementProperty(
+            statement=aws_cdk.aws_wafv2.CfnWebACL.StatementProperty(
+                geo_match_statement=aws_cdk.aws_wafv2.CfnWebACL.GeoMatchStatementProperty(
                     country_codes=['NZ'],
                 )
             ),
         )
 
     def allow_action(self):
-        return CfnWebACL.DefaultActionProperty(allow={})
+        return aws_cdk.aws_wafv2.CfnWebACL.DefaultActionProperty(allow={})
 
     def create_waf_acl(self, waf_rules=None, scope=None):
-        return CfnWebACL(
+        return aws_cdk.aws_wafv2.CfnWebACL(
             self, 'WebACL',
             default_action=self.allow_action(),
             scope=scope,
@@ -93,7 +97,7 @@ class WebApplicationFirewall(Stack):
         )
 
     def associate_web_application_firewall(self, web_application_firewall=None, target_arn=None):
-        return CfnWebACLAssociation(
+        return aws_cdk.aws_wafv2.CfnWebACLAssociation(
             self, 'WAFAPIGatewayAssociation',
             web_acl_arn=web_application_firewall.attr_arn,
             resource_arn=target_arn

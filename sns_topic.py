@@ -1,12 +1,12 @@
-from aws_cdk import Stack, Construct
-from aws_cdk.aws_sns import Topic
+import aws_cdk
+import constructs
 
 
-class SnsTopic(Stack):
+class SnsTopic(aws_cdk.Stack):
 
-    def __init__(self, scope: Construct, id: str, display_name=None, **kwargs) -> None:
+    def __init__(self, scope: constructs.Construct, id: str, display_name=None, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
-        self.topic = Topic(
+        self.topic = aws_cdk.aws_sns.Topic(
             self, id,
             display_name=display_name
         )

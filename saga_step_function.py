@@ -141,15 +141,16 @@ class SagaStepFunction(aws_cdk.Stack):
         saga_state_machine = aws_stepfunctions.StateMachine(
             self, 'BookingSaga',
             definition=(
-                aws_stepfunctions.Chain
-                                .start(reserve_hotel)
-                                .next(reserve_flight)
-                                .next(process_payment)
-                                .next(confirm_hotel)
-                                .next(confirm_flight)
-                                .next(booking_succeeded)
+                aws_stepfunctions
+                    .Chain
+                    .start(reserve_hotel)
+                    .next(reserve_flight)
+                    .next(process_payment)
+                    .next(confirm_hotel)
+                    .next(confirm_flight)
+                    .next(booking_succeeded)
             ),
-            timeout=cdk.Duration.minutes(5)
+            timeout=aws_cdk.Duration.minutes(5)
         )
 
         saga_lambda = aws_lambda.Function(
@@ -168,7 +169,7 @@ class SagaStepFunction(aws_cdk.Stack):
             handler=saga_lambda
         )
 
-    def create_lambda_function(self, scope: cdk.Stack, table: dynamo_db.Table=None, function_name=None):
+    def create_lambda_function(self, scope: aws_cdk.Stack, table: dynamo_db.Table=None, function_name=None):
         function = aws_lambda.Function(
             scope, function_name,
             runtime=aws_lambda.Runtime.PYTHON_3_9,

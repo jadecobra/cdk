@@ -1,11 +1,13 @@
-from aws_cdk import Duration, Construct
+import aws_cdk
+import constructs
+
 from aws_cdk.aws_cloudwatch import Metric, Unit
 from well_architected import WellArchitectedFrameworkConstruct
 
 class ApiGatewayCloudWatch(WellArchitectedFrameworkConstruct):
 
     def __init__(self,
-        scope: Construct, id: str, api_id=None,
+        scope: constructs.Construct, id: str, api_id=None,
         error_topic=None, **kwargs
     ) -> None:
         super().__init__(
@@ -18,7 +20,7 @@ class ApiGatewayCloudWatch(WellArchitectedFrameworkConstruct):
         self.create_cloudwatch_dashboard(self.create_cloudwatch_widgets())
 
     def add_api_gateway_metric(self, metric_name: str = None, label: str = None,
-            period=Duration.seconds(900), statistic: str = 'sum',
+            period=aws_cdk.Duration.seconds(900), statistic: str = 'sum',
         ):
         return Metric(
             metric_name=metric_name,

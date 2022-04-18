@@ -1,13 +1,15 @@
-from aws_cdk import Construct, CfnOutput, Stack
+import aws_cdk
+import constructs
+
 from aws_cdk.aws_lambda import Function
-from aws_cdk.aws_apigatewayv2 import HttpApi
-from aws_cdk.aws_apigatewayv2_integrations import HttpLambdaIntegration
+from aws_cdk.aws_apigatewayv2_alpha import HttpApi
+from aws_cdk.aws_apigatewayv2_integrations_alpha import HttpLambdaIntegration
 from api_gateway_cloudwatch import ApiGatewayCloudWatch
 
 
-class LambdaHttpApiGateway(Stack):
+class LambdaHttpApiGateway(aws_cdk.Stack):
 
-    def __init__(self, scope: Construct, id: str, lambda_function: Function, error_topic=None, **kwargs) -> None:
+    def __init__(self, scope: constructs.Construct, id: str, lambda_function: Function, error_topic=None, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         self.http_api = HttpApi(
@@ -24,4 +26,4 @@ class LambdaHttpApiGateway(Stack):
             error_topic=error_topic,
         )
 
-        CfnOutput(self, 'HTTP API Url', value=self.http_api.url)
+        aws_cdk.CfnOutput(self, 'HTTP API Url', value=self.http_api.url)

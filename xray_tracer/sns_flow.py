@@ -1,32 +1,35 @@
-from aws_cdk.aws_sns import ITopic, Topic
-from aws_cdk import Stack, Construct
-from aws_cdk.aws_sns_subscriptions import LambdaSubscription
-from lambda_function import create_python_lambda_function
+import aws_cdk
+import constructs
+import lambda_function
 
 
 
-class SnsFlow(Stack):
-    def __init__(self, scope: Construct, id: str, sns_topic: ITopic = None, **kwargs) -> None:
+class SnsFlow(aws_cdk.Stack):
+    def __init__(self, scope: constructs.Construct, id: str, sns_topic: aws_cdk.aws_sns.ITopic = None, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        topic = Topic(self, 'TheXRayTracerSnsTopic', display_name='The XRay Tracer CDK Pattern Topic')
+        topic = aws_cdk.aws_sns.Topic(self, 'TheXRayTracerSnsTopic', display_name='The XRay Tracer CDK Pattern Topic')
 
-        sns_publisher = create_python_lambda_function(
+        sns_publisher = lambda_function.create_python_lambda_function(
             self, function_name="sns_publish",
             environment_variables={
                 "TOPIC_ARN": topic.topic_arn
             }
         )
-        sns_subscriber = create_python_lambda_function(self, "sns_subscribe")
+        sns_subscriber = lambda_function.create_python_lambda_function(self, "sns_subscribe")
 
         topic.grant_publish(sns_publisher)
-        topic.add_subscription(LambdaSubscription(sns_subscriber))
+        topic.add_subscription(
+            aws_cdk.aws_sns_subscriptions.LambdaSubscription(
+                sns_subscriber
+            )
+        )
 
-        apigw_topic = Topic.from_topic_arn(self, 'SNSTopic', sns_topic.topic_arn)
+        apigw_topic = aws_cdk.aws_sns.Topic.from_topic_arn(self, 'SNSTopic', sns_topic.topic_arn)
         apigw_topic.add_subscription(LambdaSubscription(sns_publisher))
 
-    def create_sns_publisher(self, topic: ITopic):
-        return create_python_lambda_function(
+    def create_sns_publisher(self, topic: aws_cdk.aws_sns.ITopic):
+        return lambda_function.create_python_lambda_function(
             self, function_name="sns_publish",
             environment_variables={
                 "TOPIC_ARN": topic.topic_arn

@@ -1,12 +1,10 @@
-from json import dumps
-from aws_cdk.aws_sns import Topic, ITopic
-from aws_cdk import Stack, Construct
-from aws_cdk.aws_iam import Role, ServicePrincipal
-from aws_cdk import aws_apigateway
+import aws_cdk
+import constructs
+import json
 
 
-class SnsRestApi(Stack):
-    def __init__(self, scope: Construct, id: str, sns_topic: ITopic = None, **kwargs) -> None:
+class SnsRestApi(aws_cdk.Stack):
+    def __init__(self, scope: constructs.Construct, id: str, sns_topic: aws_cdk.aws_sns.ITopic = None, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
         self.sns_topic = sns_topic
         self.gateway = self.create_rest_api()
@@ -37,11 +35,11 @@ class SnsRestApi(Stack):
         self.create_proxy_endpoint()
 
     def create_rest_api(self):
-        return aws_apigateway.RestApi(
+        return aws_cdk.aws_apigateway.RestApi(
             self, 'RestApi',
-            deploy_options=aws_apigateway.StageOptions(
+            deploy_options=aws_cdk.aws_apigateway.StageOptions(
                 metrics_enabled=True,
-                logging_level=aws_apigateway.MethodLoggingLevel.INFO,
+                logging_level=aws_cdk.aws_apigateway.MethodLoggingLevel.INFO,
                 data_trace_enabled=True,
                 tracing_enabled=True,
                 stage_name='prod'
@@ -49,9 +47,9 @@ class SnsRestApi(Stack):
         )
 
     def create_iam_role(self):
-        return Role(
+        return aws_cdk.aws_iam.Role(
             self, 'ApiGatewaySNSRole',
-            assumed_by=ServicePrincipal('apigateway.amazonaws.com')
+            assumed_by=aws_cdk.aws_iam.ServicePrincipal('apigateway.amazonaws.com')
         )
 
     def response_properties(self):
@@ -59,7 +57,9 @@ class SnsRestApi(Stack):
 
     @staticmethod
     def json_schema_string():
-        return aws_apigateway.JsonSchema(type=aws_apigateway.JsonSchemaType.STRING)
+        return aws_cdk.aws_apigateway.JsonSchema(
+            type=aws_cdk.aws_apigateway.JsonSchemaType.STRING
+        )
 
     def create_response_model(self, model_name=None, schema=None):
         return self.gateway.add_model(
@@ -71,10 +71,10 @@ class SnsRestApi(Stack):
 
     @staticmethod
     def create_schema(title=None, properties=None):
-        return aws_apigateway.JsonSchema(
-            schema=aws_apigateway.JsonSchemaVersion.DRAFT4,
+        return aws_cdk.aws_apigateway.JsonSchema(
+            schema=aws_cdk.aws_apigateway.JsonSchemaVersion.DRAFT4,
             title=title,
-            type=aws_apigateway.JsonSchemaType.OBJECT,
+            type=aws_cdk.aws_apigateway.JsonSchemaType.OBJECT,
             properties=properties,
         )
 
@@ -86,7 +86,7 @@ class SnsRestApi(Stack):
 
     @staticmethod
     def error_template():
-        return dumps(
+        return json.dumps(
             {
                 "state": 'error',
                 "message": "$util.escapeJavaScript($input.path('$.errorMessage'))"
@@ -96,7 +96,7 @@ class SnsRestApi(Stack):
 
     @staticmethod
     def response_template():
-        return dumps({"message": 'message added to topic'})
+        return json.dumps({"message": 'message added to topic'})
 
     @staticmethod
     def create_response_template(model):
@@ -104,19 +104,19 @@ class SnsRestApi(Stack):
 
     def integration_options(self):
         # This is how our gateway chooses what response to send based on selection_pattern
-        return aws_apigateway.IntegrationOptions(
+        return aws_cdk.aws_apigateway.IntegrationOptions(
             credentials_role=self.api_gateway_sns_role,
             request_parameters={
                 'integration.request.header.Content-Type': "'application/x-www-form-urlencoded'"
             },
             request_templates=self.create_response_template(self.request_template()),
-            passthrough_behavior=aws_apigateway.PassthroughBehavior.NEVER,
+            passthrough_behavior=aws_cdk.aws_apigateway.PassthroughBehavior.NEVER,
             integration_responses=[
-                aws_apigateway.IntegrationResponse(
+                aws_cdk.aws_apigateway.IntegrationResponse(
                     status_code='200',
                     response_templates=self.create_response_template(self.response_template()),
                 ),
-                aws_apigateway.IntegrationResponse(
+                aws_cdk.aws_apigateway.IntegrationResponse(
                     selection_pattern="^\[Error\].*",
                     status_code='400',
                     response_templates=self.create_response_template(self.error_template()),
@@ -141,7 +141,7 @@ class SnsRestApi(Stack):
         )
 
     def create_method_response(self, status_code='200', response_model=None):
-        return aws_apigateway.MethodResponse(
+        return aws_cdk.aws_apigateway.MethodResponse(
             status_code=status_code,
             response_parameters=self.create_response_parameters(),
             response_models=self.create_response_template(response_model)
@@ -155,8 +155,8 @@ class SnsRestApi(Stack):
 
     def create_endpoint(self, resource):
         return resource.add_method(
-            'GET', aws_apigateway.Integration(
-                type=aws_apigateway.IntegrationType.AWS,
+            'GET', aws_cdk.aws_apigateway.Integration(
+                type=aws_cdk.aws_apigateway.IntegrationType.AWS,
                 integration_http_method='POST',
                 uri=f'arn:aws:apigateway:{self.region}:sns:path//',
                 options=self.integration_options()

@@ -12,7 +12,7 @@ from aws_cdk import (
 )
 
 
-class RdsProxy(cdk.Stack):
+class RdsProxy(aws_cdk.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)

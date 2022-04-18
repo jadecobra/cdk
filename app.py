@@ -1,33 +1,33 @@
 import aws_cdk
 import aws_cdk.aws_dynamodb as aws_dynamodb
 import os
-try:
-    import big_fan
-    import destined_lambda
-    import dynamodb_table
-    import dynamo_streamer
-    import event_bridge_atm
-    import event_bridge_circuit_breaker
-    import event_bridge_etl
-    import http_api
-    import lambda_circuit_breaker
-    import lambda_function
-    import lambda_power_tuner
-    import lambda_trilogy.lambda_lith
-    import lambda_trilogy.fat_lambda
-    import lambda_trilogy.single_purpose_lambda
-    import rds_proxy
-    import rest_api
-    import saga_step_function
-    import scalable_webhook
-    import sns_topic
-    import xray_tracer
-    import web_application_firewall
-    import state_machine
-    import simple_graphql_service
-except ImportError as error:
-    print(error)
-    os.system('pip install -r requirements.txt')
+# try:
+import big_fan
+import destined_lambda
+import dynamodb_table
+import dynamo_streamer
+import event_bridge_atm
+import event_bridge_circuit_breaker
+import event_bridge_etl
+import http_api
+import lambda_circuit_breaker
+import lambda_function
+import lambda_power_tuner
+import lambda_trilogy.lambda_lith
+import lambda_trilogy.fat_lambda
+import lambda_trilogy.single_purpose_lambda
+import rds_proxy
+import rest_api
+import saga_step_function
+import scalable_webhook
+import sns_topic
+import xray_tracer
+import web_application_firewall
+import state_machine
+import simple_graphql_service
+# except ImportError as error:
+#     print(error)
+#     os.system('pip install -r requirements.txt')
 
 
 class WellArchitected(aws_cdk.App):

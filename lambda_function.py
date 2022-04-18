@@ -1,11 +1,14 @@
-from aws_cdk import Construct, Duration, Stack
+import constructs
+import aws_cdk
+
+from aws_cdk import Duration, Stack
 from aws_cdk.aws_lambda import Function, Code, Runtime, Tracing, LayerVersion
 from aws_cdk.aws_sns import ITopic
 from well_architected import WellArchitectedFrameworkConstruct
 
 class LambdaFunctionConstruct(WellArchitectedFrameworkConstruct):
 
-    def __init__(self, scope: Construct, id: str,
+    def __init__(self, scope: constructs.Construct, id: str,
         function_name=None, handler_name=None,
         environment_variables=None,
         error_topic:ITopic=None, layers:list[str]=None,
@@ -128,7 +131,7 @@ class LambdaFunctionConstruct(WellArchitectedFrameworkConstruct):
 
 class LambdaFunctionStack(Stack):
 
-    def __init__(self, scope: Construct, id: str,
+    def __init__(self, scope: constructs.Construct, id: str,
         function_name=None, environment_variables=None, error_topic:ITopic=None,
         handler_name=None,
         **kwargs) -> None:

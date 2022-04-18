@@ -1,7 +1,7 @@
 import aws_cdk
 import constructs
 import dynamodb_table
-import aws_apigatewayv2_integrations_alpha as integrations
+import aws_cdk.aws_apigatewayv2_integrations_alpha as integrations
 
 from aws_cdk import (
     aws_lambda as aws_lambda,

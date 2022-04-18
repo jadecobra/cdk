@@ -1,15 +1,16 @@
-from aws_cdk import Stack, Construct
-from aws_cdk.aws_sns import ITopic
-from aws_cdk.aws_sns_subscriptions import LambdaSubscription
-from lambda_function import create_python_lambda_function
+import aws_cdk
+import constructs
+import lambda_function
 
 
-class HttpFlow(Stack):
+class HttpFlow(aws_cdk.Stack):
 
-    def __init__(self, scope: Construct, id: str, sns_topic: ITopic = None, **kwargs) -> None:
+    def __init__(self, scope: constructs.Construct, id: str, sns_topic: aws_cdk.aws_sns.ITopic=None, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        http_lambda = create_python_lambda_function(
+        http_lambda = lambda_function.create_python_lambda_function(
             self, function_name="http",
         )
-        sns_topic.add_subscription(LambdaSubscription(http_lambda))
+        sns_topic.add_subscription(
+            aws_cdk.aws_sns_subscriptions.LambdaSubscription(http_lambda)
+        )

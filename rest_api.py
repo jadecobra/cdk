@@ -1,15 +1,16 @@
-from aws_cdk import Construct, Stack
+import api_gateway_cloudwatch
+import aws_cdk.aws_apigateway as api_gateway
+import constructs
+import aws_cdk
+
 from aws_cdk.aws_logs import LogGroup
 from aws_cdk.aws_lambda import Function
 from aws_cdk.aws_sns import ITopic
 
-import api_gateway_cloudwatch
-import aws_cdk.aws_apigateway as api_gateway
 
+class LambdaRestAPIGatewayConstruct(constructs.Construct):
 
-class LambdaRestAPIGatewayConstruct(Construct):
-
-    def __init__(self, scope: Construct, id: str, lambda_function: Function, error_topic:ITopic=None, **kwargs) -> None:
+    def __init__(self, scope: constructs.Construct, id: str, lambda_function: Function, error_topic:ITopic=None, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         self.rest_api = self.create_rest_api()
@@ -102,9 +103,9 @@ class LambdaRestAPIGatewayConstruct(Construct):
             deploy_options=self.deploy_options(),
         )
 
-class LambdaRestAPIGatewayStack(Stack):
+class LambdaRestAPIGatewayStack(aws_cdk.Stack):
 
-    def __init__(self, scope: Construct, id: str, lambda_function: Function, error_topic:ITopic=None, **kwargs) -> None:
+    def __init__(self, scope: constructs.Construct, id: str, lambda_function: Function, error_topic:ITopic=None, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
         self.rest_api = LambdaRestAPIGatewayConstruct(
             self, id,

@@ -1,12 +1,16 @@
-from aws_cdk import Stack, Construct, Duration
+import aws_cdk
+import constructs
+
+from aws_cdk import Stack, Duration
 from aws_cdk.aws_cloudwatch import Dashboard, GraphWidget, MathExpression, Alarm, TreatMissingData
+
 from aws_cdk.aws_cloudwatch_actions import SnsAction
 from aws_cdk.aws_sns import Topic
 
 
-class WellArchitectedFrameworkConstruct(Construct):
+class WellArchitectedFrameworkConstruct(constructs.Construct):
 
-    def __init__(self, scope: Construct, id: str, error_topic=None, **kwargs):
+    def __init__(self, scope: constructs.Construct, id: str, error_topic=None, **kwargs):
         super().__init__(scope, id, **kwargs)
         self.error_topic = error_topic if error_topic else self.create_error_topic()
 

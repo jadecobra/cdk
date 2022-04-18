@@ -1,18 +1,20 @@
+import aws_cdk
+import constructs
+import lambda_function
+import api_gateway_cloudwatch
+
 from aws_cdk import (
     aws_sns,
     aws_stepfunctions,
     aws_stepfunctions_tasks,
     aws_iam,
     aws_apigatewayv2 as api_gateway,
-    core
 )
-import lambda_function
-import api_gateway_cloudwatch
 
 
-class StateMachine(core.Stack):
+class StateMachine(aws_cdk.Stack):
 
-    def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
+    def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
         self.pineapple_analysis = '$.pineappleAnalysis'
         error_topic = self.create_error_topic()
@@ -25,7 +27,7 @@ class StateMachine(core.Stack):
             state_machine_arn=state_machine.state_machine_arn
         )
 
-        core.CfnOutput(
+        aws_cdk.CfnOutput(
             self, 'HTTP API URL',
             value=http_api.url
         )
@@ -105,7 +107,7 @@ class StateMachine(core.Stack):
         return aws_stepfunctions.StateMachine(
             self, 'StateMachine',
             definition=self.state_machine_definition(lambda_function),
-            timeout=core.Duration.minutes(5),
+            timeout=aws_cdk.Duration.minutes(5),
             tracing_enabled=True,
             state_machine_type=aws_stepfunctions.StateMachineType.EXPRESS
         )
