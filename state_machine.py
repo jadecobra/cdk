@@ -16,8 +16,11 @@ class StateMachine(aws_cdk.Stack):
         http_api = self.create_http_api(error_topic)
         self.create_api_gateway_route(
             api_id=http_api.http_api_id,
-            iam_role_arn=http_api_role.role_arn,
-            state_machine_arn=state_machine.state_machine_arn
+            target=self.create_stepfunctions_api_gateway_integration(
+                api_id=http_api.http_api_id,
+                iam_role_arn=http_api_role.role_arn,
+                state_machine_arn=state_machine.state_machine_arn
+            ).ref,
         )
 
         aws_cdk.CfnOutput(
@@ -135,12 +138,7 @@ class StateMachine(aws_cdk.Stack):
             timeout_in_millis=10000
         )
 
-    def create_api_gateway_route(self, api_id=None, iam_role_arn=None, state_machine_arn=None):
-        target = self.create_stepfunctions_api_gateway_integration(
-            api_id=api_id,
-            iam_role_arn=iam_role_arn,
-            state_machine_arn=state_machine_arn
-        ).ref
+    def create_api_gateway_route(self, api_id=None, target=None):
         return aws_cdk.aws_apigatewayv2.CfnRoute(
             self, 'StateMachineHttpApiDefaultRoute',
             api_id=api_id,
