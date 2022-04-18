@@ -1,14 +1,5 @@
 import aws_cdk
 import constructs
-from aws_cdk import (
-    aws_lambda,
-    aws_lambda_event_sources,
-    aws_apigateway as api_gateway,
-    aws_iam as iam,
-    aws_sns as sns,
-    aws_sns_subscriptions as subscriptions,
-    aws_sqs as sqs,
-)
 import json
 
 
@@ -17,7 +8,7 @@ class BigFan(aws_cdk.Stack):
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        topic = sns.Topic(
+        topic = aws_cdk.aws_sns.Topic(
             self, 'theBigFanTopic',
             display_name='The Big Fan CDK Pattern Topic'
         )
@@ -37,14 +28,14 @@ class BigFan(aws_cdk.Stack):
                 sqs_queue=sqs_queue
             )
 
-        api = api_gateway.RestApi(
+        api = aws_cdk.aws_apigateway.RestApi(
             self, 'theBigFanAPI',
             deploy_options=self.deploy_options()
         )
 
-        api_gateway_service_role_for_sns = iam.Role(
+        api_gateway_service_role_for_sns = aws_cdk.aws_iam.Role(
             self, 'DefaultLambdaHanderRole',
-            assumed_by=iam.ServicePrincipal('apigateway.amazonaws.com')
+            assumed_by=aws_cdk.aws_iam.ServicePrincipal('apigateway.amazonaws.com')
         )
 
         topic.grant_publish(api_gateway_service_role_for_sns)
@@ -57,9 +48,9 @@ class BigFan(aws_cdk.Stack):
 
     @staticmethod
     def deploy_options():
-        return api_gateway.StageOptions(
+        return aws_cdk.aws_apigateway.StageOptions(
             metrics_enabled=True,
-            logging_level=api_gateway.MethodLoggingLevel.INFO,
+            logging_level=aws_cdk.aws_apigateway.MethodLoggingLevel.INFO,
             data_trace_enabled=True,
             stage_name='prod'
         )
@@ -69,8 +60,8 @@ class BigFan(aws_cdk.Stack):
             'SendEvent'
         ).add_method(
             'POST',
-            api_gateway.Integration(
-                type=api_gateway.IntegrationType.AWS,
+            aws_cdk.aws_apigateway.Integration(
+                type=aws_cdk.aws_apigateway.IntegrationType.AWS,
                 integration_http_method='POST',
                 uri='arn:aws:apigateway:us-east-1:sns:path//',
                 options=self.integration_options(
@@ -106,7 +97,7 @@ class BigFan(aws_cdk.Stack):
         )
 
     def integration_options(self, iam_role=None, topic_arn=None):
-        return api_gateway.IntegrationOptions(
+        return aws_cdk.aws_apigateway.IntegrationOptions(
             credentials_role=iam_role,
             request_parameters={
                 'integration.request.header.Content-Type': "'application/x-www-form-urlencoded'"
@@ -122,9 +113,9 @@ class BigFan(aws_cdk.Stack):
                     "MessageAttributes.entry.1.Value.StringValue=$util.urlEncode($input.path('$.status'))"
                 )
             ),
-            passthrough_behavior=api_gateway.PassthroughBehavior.NEVER,
+            passthrough_behavior=aws_cdk.aws_apigateway.PassthroughBehavior.NEVER,
             integration_responses=[
-                api_gateway.IntegrationResponse(
+                aws_cdk.aws_apigateway.IntegrationResponse(
                     status_code='200',
                     response_templates=self.create_json_template(
                         json.dumps(
@@ -132,7 +123,7 @@ class BigFan(aws_cdk.Stack):
                         )
                     )
                 ),
-                api_gateway.IntegrationResponse(
+                aws_cdk.aws_apigateway.IntegrationResponse(
                     selection_pattern="^\[Error\].*",
                     status_code='400',
                     response_templates=self.create_json_template(
@@ -155,7 +146,7 @@ class BigFan(aws_cdk.Stack):
 
     @staticmethod
     def json_schema_string():
-        return api_gateway.JsonSchema(type=api_gateway.JsonSchemaType.STRING)
+        return aws_cdk.aws_apigateway.JsonSchema(type=aws_cdk.aws_apigateway.JsonSchemaType.STRING)
 
     @staticmethod
     def create_api_response_model(api=None, model_name=None, title=None, properties=None):
@@ -163,10 +154,10 @@ class BigFan(aws_cdk.Stack):
             model_name,
             content_type='application/json',
             model_name=model_name,
-            schema=api_gateway.JsonSchema(
-                schema=api_gateway.JsonSchemaVersion.DRAFT4,
+            schema=aws_cdk.aws_apigateway.JsonSchema(
+                schema=aws_cdk.aws_apigateway.JsonSchemaVersion.DRAFT4,
                 title=title,
-                type=api_gateway.JsonSchemaType.OBJECT,
+                type=aws_cdk.aws_apigateway.JsonSchemaType.OBJECT,
                 properties=properties
             )
         )
@@ -176,7 +167,7 @@ class BigFan(aws_cdk.Stack):
         return {'application/json': template}
 
     def create_method_response(self, status_code=None, response_model=None):
-        return api_gateway.MethodResponse(
+        return aws_cdk.aws_apigateway.MethodResponse(
             status_code=str(status_code),
             response_parameters={
                 'method.response.header.Content-Type': True,
@@ -187,20 +178,20 @@ class BigFan(aws_cdk.Stack):
         )
 
     def create_sqs_queue(self, queue_name):
-        return sqs.Queue(
+        return aws_cdk.aws_sqs.Queue(
             self, queue_name,
-            visibility_timeout=cdk.Duration.seconds(300),
+            visibility_timeout=aws_cdk.Duration.seconds(300),
             queue_name=queue_name
         )
 
     def create_sqs_queue_with_subscription(self, queue_name=None, sns_topic=None, filter_name=None):
         sqs_queue = self.create_sqs_queue(queue_name)
         sns_topic.add_subscription(
-            subscriptions.SqsSubscription(
+            aws_cdk.aws_sns_subscriptions.SqsSubscription(
                 sqs_queue,
                 raw_message_delivery=True,
                 filter_policy={
-                    'status': sns.SubscriptionFilter.string_filter(
+                    'status': aws_cdk.aws_sns.SubscriptionFilter.string_filter(
                         **{filter_name: ['created']}
                     )
                 }
@@ -212,12 +203,14 @@ class BigFan(aws_cdk.Stack):
     def connect_lambda_function_with_sqs_queue(lambda_function=None, sqs_queue=None):
         if sqs_queue is not None or lambda_function is not None:
             sqs_queue.grant_consume_messages(lambda_function)
-            lambda_function.add_event_source(aws_lambda_event_sources.SqsEventSource(sqs_queue))
+            lambda_function.add_event_source(
+                aws_cdk.aws_lambda_event_sources.SqsEventSource(sqs_queue)
+            )
 
     def create_lambda_function(self, function_name):
-        return aws_lambda.Function(
+        return aws_cdk.aws_lambda.Function(
             self, function_name,
-            runtime=aws_lambda.Runtime.PYTHON_3_8,
+            runtime=aws_cdk.aws_lambda.Runtime.PYTHON_3_8,
             handler=f"{function_name}.handler",
-            code=aws_lambda.Code.from_asset(f"lambda_functions/{function_name}")
+            code=aws_cdk.aws_lambda.Code.from_asset(f"lambda_functions/{function_name}")
         )
