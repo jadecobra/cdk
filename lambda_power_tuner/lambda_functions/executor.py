@@ -55,13 +55,13 @@ def handler(event, context):
 
 validateInput = (lambdaARN, value, num):
     if (!lambdaARN) {
-        throw new Error('Missing or empty lambdaARN')
+        raise Exception('Missing or empty lambdaARN')
     }
     if (!value || isNaN(value)) {
-        throw new Error('Invalid value: ' + value)
+        raise Exception('Invalid value: ' + value)
     }
     if (!num || isNaN(num)) {
-        throw new Error('Invalid num: ' + num)
+        raise Exception('Invalid num: ' + num)
     }
 
 
@@ -96,7 +96,7 @@ runInParallel(num, lambdaARN, lambdaAlias, payloads, preARN, postARN):
         {invocationResults, actualPayload} = utils.invokeLambdaWithProcessors(lambdaARN, lambdaAlias, payloads[i], preARN, postARN)
         # invocation errors return 200 and contain FunctionError and Payload
         if (invocationResults.FunctionError) {
-            throw new Error(f'Invocation error (running in parallel): {invocationResults.Payload} with payload {JSON.stringify(actualPayload)}f')
+            raise Exception(f'Invocation error (running in parallel): {invocationResults.Payload} with payload {JSON.stringify(actualPayload)}f')
         }
         results.push(invocationResults)
     })
@@ -112,7 +112,7 @@ runInSeries(num, lambdaARN, lambdaAlias, payloads, preARN, postARN):
         {invocationResults, actualPayload} = utils.invokeLambdaWithProcessors(lambdaARN, lambdaAlias, payloads[i], preARN, postARN)
         # invocation errors return 200 and contain FunctionError and Payload
         if (invocationResults.FunctionError) {
-            throw new Error(f'Invocation error (running in series): {invocationResults.Payload} with payload {JSON.stringify(actualPayload)}f')
+            raise Exception(f'Invocation error (running in series): {invocationResults.Payload} with payload {JSON.stringify(actualPayload)}f')
         }
         results.push(invocationResults)
     }

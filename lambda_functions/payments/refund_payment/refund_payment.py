@@ -1,32 +1,32 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const { DynamoDB } = require('aws-sdk');
+"use strict"
+Object.defineProperty(exports, "__esModule", { value: true })
+{ DynamoDB } = require('aws-sdk')
 exports.handler = async function (event) {
-    console.log("request:", JSON.stringify(event, undefined, 2));
+    print("request:", JSON.stringify(event, undefined, 2))
     if (Math.random() < 0.4) {
-        throw new Error("Internal Server Error");
+        raise Exception("Internal Server Error")
     }
-    let paymentID = '';
+    paymentID = ''
     if (typeof event.TakePaymentResult !== 'undefined') {
-        paymentID = event.TakePaymentResult.Payload.payment_id;
+        paymentID = event.TakePaymentResult.Payload.payment_id
     }
     // create AWS SDK clients
-    const dynamo = new DynamoDB();
-    var params = {
+    dynamo = new DynamoDB()
+    params = {
         TableName: process.env.TABLE_NAME,
         Key: {
             'pk': { S: event.trip_id },
             'sk': { S: 'PAYMENT#' + paymentID }
         }
-    };
+    }
     // Call DynamoDB to add the item to the table
-    let result = await dynamo.deleteItem(params).promise().catch((error) => {
-        throw new Error(error);
-    });
-    console.log('Payment has been refunded:');
-    console.log(result);
+    result = dynamo.deleteItem(params).catch((error):
+        raise Exception(error)
+    })
+    print('Payment has been refunded:')
+    print(result)
     // return status of ok
     return {
         status: "ok",
-    };
-};
+    }
+}

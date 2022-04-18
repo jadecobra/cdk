@@ -10,11 +10,11 @@ def handler(event, context):
 
     ops = powerValues.map(async(value):
         alias = 'RAM' + value
-        await cleanup(lambdaARN, alias) # may throw
+        cleanup(lambdaARN, alias) # may throw
     })
 
     # run everything in parallel and wait until completed
-    await Promise.all(ops)
+    Promise.all(ops)
 
     return 'OK'
 

@@ -80,8 +80,8 @@ def handler(event, context):
         IndexName="UrlIndex",
     )
 
-    print('--- Recent Errors ---');
-    print(len(recentErrors));
-    print(json.dumps(recentErrors));
+    print('--- Recent Errors ---')
+    print(len(recentErrors))
+    print(json.dumps(recentErrors))
 
     return circuit_breaker(service_url=serviceURL, recent_errors=recentErrors)

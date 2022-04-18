@@ -54,7 +54,7 @@ class RdsProxy(aws_cdk.Stack):
             )
         )
 
-        aws_cdk.CfnOutput(self, 'HTTP API Url', value=api.url);
+        aws_cdk.CfnOutput(self, 'HTTP API Url', value=api.url)
 
 
     def create_credentials_secret(self, id):

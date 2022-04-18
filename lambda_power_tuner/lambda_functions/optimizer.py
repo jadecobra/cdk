@@ -1,42 +1,30 @@
-'use strict';
+import utils
 
-const utils = require('./utils');
+def handler(event, context):
+    '''Optionally auto-optimize based on the optimal power value.'''
 
-/**
- * Optionally auto-optimize based on the optimal power value.
- */
-module.exports.handler = async(event, context) => {
+    {lambdaARN, analysis, autoOptimize, autoOptimizeAlias, dryRun} = event
+    optimalValue = (analysis || {}).power
 
-    const {lambdaARN, analysis, autoOptimize, autoOptimizeAlias, dryRun} = event;
+    if dryRun:
+        return print('[Dry-run] Not optimizing')
 
-    const optimalValue = (analysis || {}).power;
+    validateInput(lambdaARN, optimalValue) // may throw
 
-    if (dryRun) {
-        return console.log('[Dry-run] Not optimizing');
-    }
+    if not autoOptimize:
+        return print('Not optimizing')
 
-    validateInput(lambdaARN, optimalValue); // may throw
+    if not autoOptimizeAlias:
+        # only update $LATEST power
+        utils.setLambdaPower(lambdaARN, optimalValue)
+    else:
+        # create/update alias
+        utils.createPowerConfiguration(lambdaARN, optimalValue, autoOptimizeAlias)
 
-    if (!autoOptimize) {
-        return console.log('Not optimizing');
-    }
+    return 'OK'
 
-    if (!autoOptimizeAlias) {
-        // only update $LATEST power
-        await utils.setLambdaPower(lambdaARN, optimalValue);
-    } else {
-        // create/update alias
-        await utils.createPowerConfiguration(lambdaARN, optimalValue, autoOptimizeAlias);
-    }
-
-    return 'OK';
-};
-
-const validateInput = (lambdaARN, optimalValue) => {
-    if (!lambdaARN) {
-        throw new Error('Missing or empty lambdaARN');
-    }
-    if (!optimalValue) {
-        throw new Error('Missing or empty optimal value');
-    }
-};
+def validateInput(lambdaARN=None, optimalValue=None):
+    if not lambdaARN:
+        raise Exception('Missing or empty lambdaARN')
+    if not optimalValue:
+        raise Exception('Missing or empty optimal value')

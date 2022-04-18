@@ -57,9 +57,9 @@ def get_url_queries(connection):
         url_queries = "<table><tr><th>ID</th><th>URL</th></tr>"
         for row in cursor:
             url_queries += f'<tr><td>{row["id"]}</td><td>{row["url"]}</td></tr>'
-            url_queries += "</table>";
+            url_queries += "</table>"
             print(f'All Current Data in rds_proxy Table (url is whatever url you hit on the HTTP API, try another random url like /hello) {url_queries}')
-    connection.commit();
+    connection.commit()
     return url_queries
 
 def handler(event, context):
