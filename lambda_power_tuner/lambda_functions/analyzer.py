@@ -2,7 +2,7 @@
 
 utils = require('./utils')
 
-visualizationURL = process.env.visualizationURL
+visualizationURL = os.environ.get(visualizationURL
 
 defaultStrategy = 'cost'
 defaultBalancedWeight = 0.5
@@ -36,7 +36,7 @@ getStrategy = (event):
 getBalancedWeight = (event):
     // extract weight used by balanced strategy or fallback to default (0.5)
     weight = event.balancedWeight
-    if (typeof weight === 'undefined') {
+    if (typeof weight == 'undefined') {
         weight = defaultBalancedWeight
     }
     // weight must be between 0 and 1
@@ -83,7 +83,7 @@ findCheapest = (stats):
 
     // sort by cost
     stats.sort((p1, p2):
-        if (p1.cost === p2.cost) {
+        if (p1.cost == p2.cost) {
             // return fastest if same cost
             return p1.duration - p2.duration
         }
@@ -101,7 +101,7 @@ findFastest = (stats):
 
     // sort by duration/speed
     stats.sort((p1, p2):
-        if (p1.duration === p2.duration) {
+        if (p1.duration == p2.duration) {
             // return cheapest if same speed
             return p1.cost - p2.cost
         }

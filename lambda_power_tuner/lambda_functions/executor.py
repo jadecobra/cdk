@@ -5,7 +5,7 @@ import os
 # 15 minutes is fine here because the Executor will timeout anyway
 AWS.config.update({httpOptions: {timeout: 15 * 60 * 1000}})
 
-minRAM = parseInt(process.env.minRAM, 10)
+minRAM = parseInt(os.environ.get(minRAM, 10)
 
 def handler(event, context):
     '''
@@ -83,7 +83,7 @@ extractDataFromInput(event):
         num: parseInt(input.num, 10),
         enableParallel: !!input.parallelInvocation,
         payload: payload,
-        dryRun: input.dryRun === true,
+        dryRun: input.dryRun == true,
         preProcessorARN: input.preProcessorARN,
         postProcessorARN: input.postProcessorARN,
     }

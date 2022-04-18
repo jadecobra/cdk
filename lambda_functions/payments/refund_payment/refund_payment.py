@@ -7,13 +7,13 @@ exports.handler = async function (event) {
         raise Exception("Internal Server Error")
     }
     paymentID = ''
-    if (typeof event.TakePaymentResult !== 'undefined') {
+    if (typeof event.TakePaymentResult != 'undefined') {
         paymentID = event.TakePaymentResult.Payload.payment_id
     }
     // create AWS SDK clients
     dynamo = new DynamoDB()
     params = {
-        TableName: process.env.TABLE_NAME,
+        TableName: os.environ.get(TABLE_NAME,
         Key: {
             'pk': { S: event.trip_id },
             'sk': { S: 'PAYMENT#' + paymentID }
