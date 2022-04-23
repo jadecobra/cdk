@@ -33,7 +33,7 @@ def filename_endswith(filename=None, suffix=None):
 @sniffer.api.file_validator
 def json_files(filename):
     return (
-        filename_endswith(filename=filename, suffix='json')
+        filename_endswith(filename=filename, suffix='py')
      or filename_endswith(filename=filename, suffix='json')
     ) and not os.path.basename(filename).startswith('.')
     return (filename.endswith('.json') and not os.path.basename(filename).startswith('.')) or (filename.endswith('.py') and not os.path.basename(filename).startswith('.'))
