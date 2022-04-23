@@ -17730,3 +17730,5 @@
 2022-04-22 20:26:38.277582::Time taken to synthesize stack: LambdaPowerTuner::  5.5176 seconds
 2022-04-22 20:26:59.028649::Time taken to synthesize stack: DynamoStreamer::  5.5110 seconds
 2022-04-22 20:27:04.571403::Time taken to synthesize stack: LambdaPowerTuner::  5.5366 seconds
+2022-04-22 20:27:29.440976::Time taken to synthesize stack: DynamoStreamer::  5.8791 seconds
+2022-04-22 20:27:34.997535::Time taken to synthesize stack: LambdaPowerTuner::  5.5511 seconds
