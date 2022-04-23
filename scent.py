@@ -12,7 +12,7 @@ import os
 # fail_bg_color = termstyle.bg_default
 
 # All lists in this variable will be under surveillance for changes.
-# watch_paths = ['.', 'tests/']
+watch_paths = ['.', 'tests/', 'cdk.out/']
 
 # this gets invoked on every file that gets changed in the directory. Return
 # True to invoke any runnable functions, False otherwise.
@@ -22,6 +22,10 @@ import os
 @sniffer.api.file_validator
 def py_files(filename):
     return filename.endswith('.py') and not os.path.basename(filename).startswith('.')
+
+@sniffer.api.file_validator
+def json_files(filename):
+    return filename.endswith('.json') and not os.path.basename(filename).startswith('.')
 
 @sniffer.api.runnable
 def run_tests(*args):
