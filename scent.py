@@ -27,17 +27,11 @@ watch_paths = [
 # def py_files(filename):
 #     return filename.endswith('.py') and not os.path.basename(filename).startswith('.')
 
-def suffix(text):
-    return f'.{text}'
-
-def filename_endswith(filename=None, suffix=None):
-    return filename.endswith(f'.{suffix}')
-
 @sniffer.api.file_validator
 def json_files(filename):
     return (
-        filename.endswith(suffix('py'))
-     or filename.endswith(suffix('json'))
+        filename.endswith('.py')
+     or filename.endswith('.json')
     ) and not os.path.basename(filename).startswith('.')
 
 @sniffer.api.runnable
