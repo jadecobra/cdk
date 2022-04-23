@@ -31,7 +31,7 @@ watch_paths = [
 def json_files(filename):
     return (
         filename.endswith('.py')
-     or filename.endswith('.json')
+    #  or filename.endswith('.json')
     ) and not os.path.basename(filename).startswith('.')
 
 @sniffer.api.runnable
