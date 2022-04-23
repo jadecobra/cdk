@@ -30,6 +30,9 @@
       ]
      }
     ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "LambdaPowerTuner/exampleLambda/ServiceRole/Resource"
    }
   },
   "exampleLambda5B59FD0F": {
@@ -49,7 +52,10 @@
    },
    "DependsOn": [
     "exampleLambdaServiceRole2A3F73C1"
-   ]
+   ],
+   "Metadata": {
+    "aws:cdk:path": "LambdaPowerTuner/exampleLambda/Resource"
+   }
   },
   "powerTuner": {
    "Type": "AWS::Serverless::Application",
@@ -62,6 +68,9 @@
      "lambdaResource": "*",
      "PowerValues": "128,256,512,1024,1536,3008"
     }
+   },
+   "Metadata": {
+    "aws:cdk:path": "LambdaPowerTuner/powerTuner"
    }
   }
  },
@@ -73,40 +82,6 @@
      "Arn"
     ]
    }
-  }
- },
- "Parameters": {
-  "BootstrapVersion": {
-   "Type": "AWS::SSM::Parameter::Value<String>",
-   "Default": "/cdk-bootstrap/hnb659fds/version",
-   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
-  }
- },
- "Rules": {
-  "CheckBootstrapVersion": {
-   "Assertions": [
-    {
-     "Assert": {
-      "Fn::Not": [
-       {
-        "Fn::Contains": [
-         [
-          "1",
-          "2",
-          "3",
-          "4",
-          "5"
-         ],
-         {
-          "Ref": "BootstrapVersion"
-         }
-        ]
-       }
-      ]
-     },
-     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
-    }
-   ]
   }
  }
 }

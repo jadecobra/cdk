@@ -57,8 +57,14 @@ class WellArchitected(aws_cdk.App):
         scalable_webhook.ScalableWebhook(self, "ScalableWebhook")
         state_machine.StateMachine(self, "StateMachine")
         simple_graphql_service.SimpleGraphQlService(self, "SimpleGraphqlService")
-        dynamo_streamer.DynamoStreamer(self, "DynamoStreamer")
-        lambda_power_tuner.LambdaPowerTuner(self, "LambdaPowerTuner")
+        dynamo_streamer.DynamoStreamer(self, "DynamoStreamer", synthesizer=self.stack_synthesizer())
+        lambda_power_tuner.LambdaPowerTuner(self, "LambdaPowerTuner", synthesizer=self.stack_synthesizer())
+
+    @staticmethod
+    def stack_synthesizer():
+        return aws_cdk.DefaultStackSynthesizer(
+            generate_bootstrap_version_rule=False,
+        )
 
     def create_webservice(self):
         error_sns_topic = sns_topic.SnsTopic(self, 'SnsTopic').topic
