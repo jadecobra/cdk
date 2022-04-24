@@ -18,14 +18,17 @@ class WebApplicationFirewall(well_architected.WellArchitectedFrameworkStack):
             target_arn=target_arn,
             web_application_firewall=self.create_web_application_firewall(
                 scope=web_application_firewall_scope,
-                waf_rules=[
-                    self.common_ruleset(),
-                    self.anonymous_ip_rule(),
-                    self.restricted_ip_list_rule(),
-                    self.add_geoblock_rule(),
-                ],
+                web_application_firewall_rules=self.web_application_firewall_rules(),
             ),
         )
+
+    def web_application_firewall_rules(self):
+        return [
+            self.common_ruleset(),
+            self.anonymous_ip_rule(),
+            self.restricted_ip_list_rule(),
+            self.add_geoblock_rule(),
+        ]
 
     def default_override_action(self):
         return aws_cdk.aws_wafv2.CfnWebACL.OverrideActionProperty(none={})
@@ -91,19 +94,19 @@ class WebApplicationFirewall(well_architected.WellArchitectedFrameworkStack):
     def allow_action(self):
         return aws_cdk.aws_wafv2.CfnWebACL.DefaultActionProperty(allow={})
 
-    def create_web_application_firewall(self, waf_rules=None, scope=None):
+    def create_web_application_firewall(self, web_application_firewall_rules=None, scope=None):
         return aws_cdk.aws_wafv2.CfnWebACL(
             self, 'WebApplicationFirewall',
             default_action=self.allow_action(),
             scope=scope,
             visibility_config=self.create_visibility_configuration('webACL'),
             name='WebApplicationFirewall',
-            rules=waf_rules
+            rules=web_application_firewall_rules
         )
 
     def create_web_application_firewall_association(self, web_application_firewall=None, target_arn=None):
         return aws_cdk.aws_wafv2.CfnWebACLAssociation(
-            self, 'WAFAPIGatewayAssociation',
+            self, 'WebApplicationFirewallAPIGatewayAssociation',
             web_acl_arn=web_application_firewall.attr_arn,
             resource_arn=target_arn
         )
