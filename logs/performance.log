@@ -18201,3 +18201,5 @@
 2022-04-23 20:56:02.303556::Time taken to synthesize stack: WebApplicationFirewall::  4.5476 seconds
 2022-04-23 20:56:47.731714::Time taken to synthesize stack: StateMachine::  4.5460 seconds
 2022-04-23 20:56:52.286832::Time taken to synthesize stack: WebApplicationFirewall::  4.5504 seconds
+2022-04-23 20:57:46.855252::Time taken to synthesize stack: StateMachine::  5.0364 seconds
+2022-04-23 20:57:51.501553::Time taken to synthesize stack: WebApplicationFirewall::  4.6407 seconds
