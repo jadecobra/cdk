@@ -113,20 +113,10 @@ class StateMachine(well_architected.WellArchitectedFrameworkStack):
         )
 
     def create_http_api(self, error_topic):
-        return http_api = http_api_gateway.HttpApi(
+        return http_api_gateway.HttpApi(
             self, 'StateMachineHttpApi',
             create_default_stage=True
         ).http_api
-        http_api = aws_cdk.aws_apigatewayv2_alpha.HttpApi(
-            self, 'StateMachineHttpApi',
-            create_default_stage=True
-        )
-        api_gateway_cloudwatch.ApiGatewayCloudWatch(
-            self, 'StateMachineHttpApiCloudWatch',
-            api_id=http_api.http_api_id,
-            error_topic=error_topic
-        )
-        return http_api
 
     def create_stepfunctions_api_gateway_integration(self, http_api_id=None, iam_role_arn=None, state_machine_arn=None):
         return aws_cdk.aws_apigatewayv2.CfnIntegration(
