@@ -3,7 +3,6 @@ import aws_cdk.aws_apigatewayv2_alpha
 import constructs
 import lambda_function
 import http_api_gateway
-import api_gateway_cloudwatch
 import well_architected
 
 # TODO:
@@ -25,11 +24,6 @@ class StateMachine(well_architected.WellArchitectedFrameworkStack):
             ),
         )
 
-        # aws_cdk.CfnOutput(
-        #     self, 'HTTP API URL',
-        #     value=http_api.url
-        # )
-
     def create_error_topic(self):
         return aws_cdk.aws_sns.Topic(
             self, 'OrderPizzaErrorTopic',
@@ -50,7 +44,7 @@ class StateMachine(well_architected.WellArchitectedFrameworkStack):
 
     def order_pizza_task(self, lambda_function):
         return aws_cdk.aws_stepfunctions_tasks.LambdaInvoke(
-            self, 'Order Pizza',
+            self, 'OrderPizza',
             lambda_function=lambda_function,
             input_path='$.flavor',
             result_path=self.output_path,
