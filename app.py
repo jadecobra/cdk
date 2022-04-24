@@ -23,7 +23,7 @@ try:
     import sns_topic
     import xray_tracer
     import web_application_firewall
-    import state_machine
+    import state_machine_http_api
     import simple_graphql_service
 except ImportError as error:
     print(error)
@@ -59,7 +59,7 @@ class WellArchitected(aws_cdk.App):
         # rds_proxy.RdsProxy(self, "RdsProxy", )
         # saga_step_function.SagaStepFunction(self, "SagaStepFunction", )
         # scalable_webhook.ScalableWebhook(self, "ScalableWebhook", )
-        state_machine.StateMachine(self, "StateMachine", )
+        state_machine_http_api.StateMachine(self, "StateMachine", )
         # simple_graphql_service.SimpleGraphQlService(self, "SimpleGraphqlService", )
         # dynamo_streamer.DynamoStreamer(self, "DynamoStreamer", )
         # lambda_power_tuner.LambdaPowerTuner(self, "LambdaPowerTuner", )

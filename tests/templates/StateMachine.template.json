@@ -399,7 +399,7 @@
      "Fn::Join": [
       "",
       [
-       "{\"StartAt\":\"RunTask\",\"States\":{\"RunTask\":{\"Next\":\"meets Condition?\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Type\":\"Task\",\"InputPath\":\"$.flavor\",\"ResultPath\":\"$.pineappleAnalysis\",\"Resource\":\"",
+       "{\"StartAt\":\"InvokeLambda\",\"States\":{\"InvokeLambda\":{\"Next\":\"meets Condition?\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Type\":\"Task\",\"InputPath\":\"$.flavor\",\"ResultPath\":\"$.pineappleAnalysis\",\"Resource\":\"",
        {
         "Fn::GetAtt": [
          "orderpizzaLambdaFunctionDF110574",
