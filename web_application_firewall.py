@@ -93,7 +93,7 @@ class WebApplicationFirewall(well_architected.WellArchitectedFrameworkStack):
 
     def create_web_application_firewall(self, waf_rules=None, scope=None):
         return aws_cdk.aws_wafv2.CfnWebACL(
-            self, 'WebACL',
+            self, 'WebApplicationFirewall',
             default_action=self.allow_action(),
             scope=scope,
             visibility_config=self.create_visibility_configuration('webACL'),
