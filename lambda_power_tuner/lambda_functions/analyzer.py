@@ -17,7 +17,7 @@ optimizationStrategies = {
  */
 def handler(event, context):
 
-    if (!Array.isArray(event.stats) || !event.stats.length) {
+    if (!Array.isArray(event.stats) or !event.stats.length) {
         raise Exception('Wrong input ' + JSON.stringify(event))
     }
 
@@ -30,7 +30,7 @@ def handler(event, context):
 
 getStrategy = (event):
     // extract strategy name or fallback to default (cost)
-    return event.strategy || defaultStrategy
+    return event.strategy or defaultStrategy
 }
 
 getBalancedWeight = (event):

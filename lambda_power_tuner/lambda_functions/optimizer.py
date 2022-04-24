@@ -2,14 +2,20 @@ import utils
 
 def handler(event, context):
     '''Optionally auto-optimize based on the optimal power value.'''
-
-    {lambdaARN, analysis, autoOptimize, autoOptimizeAlias, dryRun} = event
-    optimalValue = (analysis || {}).power
+    lambdaARN = event['lambdaARN']
+    analysis = event['analysis']
+    autoOptimize = event['autoOptimize']
+    autoOptimizeAlias = event['autoOptimizeAlias']
+    dryRun = event['dryRun']
+    if analysis:
+        optimalValue = analysis.power
+    else:
+        optimalValue = {}
 
     if dryRun:
         return print('[Dry-run] Not optimizing')
 
-    validateInput(lambdaARN, optimalValue) // may throw
+    validateInput(lambdaARN, optimalValue)
 
     if not autoOptimize:
         return print('Not optimizing')

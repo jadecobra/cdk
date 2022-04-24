@@ -186,7 +186,7 @@ def fetchPayloadFromS3(s3Path):
         raise Exception('Invalid S3 path, not a string in the format s3://BUCKET/KEY')
 
     URI = url.parse(s3Path)
-    URI.pathname = decodeURIComponent(URI.pathname || '')
+    URI.pathname = decodeURIComponent(URI.pathname or '')
 
     bucket = URI.hostname
     key = URI.pathname.slice(1)
@@ -221,7 +221,7 @@ def fetchS3Object(bucket, key):
 
 def generatePayloads(num, payloadInput):
     if isinstance(payloadInput, list):
-        if len(payloadInput) == 0 or payloadInput.some(p => !p.weight || !p.payload)):
+        if len(payloadInput) == 0 or payloadInput.some(p => !p.weight or !p.payload)):
             raise Exception('Invalid weighted payload structure')
 
         if num < len(payloadInput):
@@ -283,7 +283,7 @@ def computePrice(minCost, minRAM, value, duration):
 
 def parseLogAndExtractDurations(data):
     return data.map(log => {
-        logString = utils.base64decode(log.LogResult || '')
+        logString = utils.base64decode(log.LogResult or '')
         return utils.extractDuration(logString)
     })
 

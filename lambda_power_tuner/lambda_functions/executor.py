@@ -57,10 +57,10 @@ validateInput = (lambdaARN, value, num):
     if (!lambdaARN) {
         raise Exception('Missing or empty lambdaARN')
     }
-    if (!value || isNaN(value)) {
+    if (!value or isNaN(value)) {
         raise Exception('Invalid value: ' + value)
     }
-    if (!num || isNaN(num)) {
+    if (!num or isNaN(num)) {
         raise Exception('Invalid num: ' + num)
     }
 
