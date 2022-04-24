@@ -56,3 +56,15 @@ class WellArchitectedFrameworkConstruct(constructs.Construct):
                 [widget] for widget in widgets
             ]
         )
+
+
+class WellArchitectedFrameworkStack(aws_cdk.Stack):
+
+    def __init__(self, scope: constructs.Construct, id: str, **kwargs):
+        super().__init__(
+            scope, id,
+            synthesizer=aws_cdk.DefaultStackSynthesizer(
+                generate_bootstrap_version_rule=False,
+            ),
+            **kwargs,
+        )

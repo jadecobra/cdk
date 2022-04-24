@@ -1,8 +1,10 @@
 import aws_cdk
 import constructs
+import well_architected
 
 
-class WebApplicationFirewall(aws_cdk.Stack):
+# class WebApplicationFirewall(aws_cdk.Stack):
+class WebApplicationFirewall(well_architected.WellArchitectedFrameworkStack):
 
     def __init__(
         self, scope: constructs.Construct, id: str,

@@ -15,7 +15,6 @@ import os
 watch_paths = [
     '.',
     'tests/',
-    # 'cdk.out/'
 ]
 
 # this gets invoked on every file that gets changed in the directory. Return

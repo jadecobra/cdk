@@ -32,6 +32,10 @@ except ImportError as error:
 
 class WellArchitected(aws_cdk.App):
 
+    stack_synthesizer = aws_cdk.DefaultStackSynthesizer(
+        generate_bootstrap_version_rule=False,
+    )
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.create_webservice()
@@ -43,28 +47,22 @@ class WellArchitected(aws_cdk.App):
 
         event_bridge_atm.EventBridgeAtm(self, "EventBridgeAtm")
         event_bridge_circuit_breaker.EventBridgeCircuitBreaker(
-            self, 'EventBridgeCircuitBreaker'
+            self, 'EventBridgeCircuitBreaker',
         )
-        event_bridge_etl.EventbridgeEtl(self, 'EventBridgeEtl')
+        event_bridge_etl.EventbridgeEtl(self, 'EventBridgeEtl', )
 
-        lambda_trilogy.lambda_lith.LambdaLith(self, "LambdaLith")
-        lambda_trilogy.fat_lambda.TheFatLambdaStack(self, "FatLambda")
-        lambda_trilogy.single_purpose_lambda.TheSinglePurposeFunctionStack(self, "SinglePurposeLambda")
-        lambda_circuit_breaker.LambdaCircuitBreaker(self, "LambdaCircuitBreaker")
+        lambda_trilogy.lambda_lith.LambdaLith(self, "LambdaLith", )
+        lambda_trilogy.fat_lambda.TheFatLambdaStack(self, "FatLambda", )
+        lambda_trilogy.single_purpose_lambda.TheSinglePurposeFunctionStack(self, "SinglePurposeLambda", )
+        lambda_circuit_breaker.LambdaCircuitBreaker(self, "LambdaCircuitBreaker", )
 
-        rds_proxy.RdsProxy(self, "RdsProxy")
-        saga_step_function.SagaStepFunction(self, "SagaStepFunction")
-        scalable_webhook.ScalableWebhook(self, "ScalableWebhook")
-        state_machine.StateMachine(self, "StateMachine")
-        simple_graphql_service.SimpleGraphQlService(self, "SimpleGraphqlService")
-        dynamo_streamer.DynamoStreamer(self, "DynamoStreamer", synthesizer=self.stack_synthesizer())
-        lambda_power_tuner.LambdaPowerTuner(self, "LambdaPowerTuner", synthesizer=self.stack_synthesizer())
-
-    @staticmethod
-    def stack_synthesizer():
-        return aws_cdk.DefaultStackSynthesizer(
-            generate_bootstrap_version_rule=False,
-        )
+        rds_proxy.RdsProxy(self, "RdsProxy", )
+        saga_step_function.SagaStepFunction(self, "SagaStepFunction", )
+        scalable_webhook.ScalableWebhook(self, "ScalableWebhook", )
+        state_machine.StateMachine(self, "StateMachine", )
+        simple_graphql_service.SimpleGraphQlService(self, "SimpleGraphqlService", )
+        dynamo_streamer.DynamoStreamer(self, "DynamoStreamer", )
+        lambda_power_tuner.LambdaPowerTuner(self, "LambdaPowerTuner", )
 
     def create_webservice(self):
         error_sns_topic = sns_topic.SnsTopic(self, 'SnsTopic').topic
@@ -97,7 +95,7 @@ class WellArchitected(aws_cdk.App):
         ).rest_api
         web_application_firewall.WebApplicationFirewall(
             self, 'WebApplicationFirewall',
-            target_arn=self.rest_api.resource_arn
+            target_arn=self.rest_api.resource_arn,
         )
         # web_application_firewall.WebApplicationFirewall(
         #     self, 'WebApplicationFirewall',
