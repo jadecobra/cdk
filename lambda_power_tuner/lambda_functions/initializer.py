@@ -7,10 +7,11 @@ def handler(event, context):
     '''
     Initialize versions & aliases so we can execute everything in parallel.
     '''
-    {lambdaARN, num} = event
+    lambdaARN = event['lambdaARN']
+    num = event['num']
     powerValues = extractPowerValues(event)
 
-    validateInput(lambdaARN, num) // may throw
+    validateInput(lambdaARN, num)
 
     # fetch initial $LATEST value so we can reset it later
     initialPower = utils.getLambdaPower(lambdaARN)
@@ -25,7 +26,7 @@ def handler(event, context):
     return powerValues
 
 def extractPowerValues(event):
-    powerValues = event.powerValues # could be undefined
+    powerValues = event['powerValues']
 
     # auto-generate all possible values if ALL
     if powerValues == 'ALL':
