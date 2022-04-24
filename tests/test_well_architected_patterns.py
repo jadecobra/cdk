@@ -9,7 +9,7 @@ class TestWellArchitectedPatterns(tests.utilities.TestTemplates):
             # 'DestinedLambda',
             # 'DynamoDBFlow',
             # 'DynamoDBTable',
-            'DynamoStreamer',
+            # 'DynamoStreamer',
             # 'EventBridgeAtm',
             # 'EventBridgeCircuitBreaker',
             # 'EventBridgeEtl',
@@ -17,7 +17,7 @@ class TestWellArchitectedPatterns(tests.utilities.TestTemplates):
             # 'HitCounter',
             # 'HttpFlow',
             # 'LambdaCircuitBreaker',
-            'LambdaPowerTuner',
+            # 'LambdaPowerTuner',
             # 'LambdaHttpApiGateway',
             # 'LambdaLith',
             # 'LambdaRestAPIGateway',
@@ -31,7 +31,7 @@ class TestWellArchitectedPatterns(tests.utilities.TestTemplates):
             # 'SNSTopic',
             # 'SqsFlow',
             # 'StateMachine',
-            # 'WebApplicationFirewall',
+            'WebApplicationFirewall',
             # 'XRayTracerSnsFanOutTopic',
         )
 
