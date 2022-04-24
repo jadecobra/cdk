@@ -18298,3 +18298,11 @@
 2022-04-23 22:47:58.928619::Time taken to synthesize stack: LambdaHttpApiGateway::  4.7229 seconds
 2022-04-23 22:48:03.753406::Time taken to synthesize stack: StateMachine::  4.8203 seconds
 2022-04-23 22:48:08.345526::Time taken to synthesize stack: WebApplicationFirewall::  4.5883 seconds
+2022-04-23 22:50:30.122493::Time taken to synthesize stack: LambdaHttpApiGateway::  4.5854 seconds
+2022-04-23 22:50:34.721964::Time taken to synthesize stack: StateMachine::  4.5928 seconds
+2022-04-23 22:51:38.697082::Time taken to synthesize stack: LambdaHttpApiGateway::  4.5717 seconds
+2022-04-23 22:51:43.257576::Time taken to synthesize stack: StateMachine::  4.5570 seconds
+2022-04-23 22:51:47.804768::Time taken to synthesize stack: WebApplicationFirewall::  4.5435 seconds
+2022-04-23 23:02:58.442180::Time taken to synthesize stack: LambdaHttpApiGateway::  4.6709 seconds
+2022-04-23 23:03:03.017789::Time taken to synthesize stack: StateMachine::  4.5716 seconds
+2022-04-23 23:03:07.575714::Time taken to synthesize stack: WebApplicationFirewall::  4.5531 seconds

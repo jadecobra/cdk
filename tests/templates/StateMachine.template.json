@@ -744,28 +744,6 @@
      ]
     ]
    }
-  },
-  "HTTPAPIURL": {
-   "Value": {
-    "Fn::Join": [
-     "",
-     [
-      "https://",
-      {
-       "Ref": "StateMachineHttpApiHttpAPI6BCB919B"
-      },
-      ".execute-api.",
-      {
-       "Ref": "AWS::Region"
-      },
-      ".",
-      {
-       "Ref": "AWS::URLSuffix"
-      },
-      "/"
-     ]
-    ]
-   }
   }
  },
  "Mappings": {

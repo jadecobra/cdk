@@ -25,10 +25,10 @@ class StateMachine(well_architected.WellArchitectedFrameworkStack):
             ),
         )
 
-        aws_cdk.CfnOutput(
-            self, 'HTTP API URL',
-            value=http_api.url
-        )
+        # aws_cdk.CfnOutput(
+        #     self, 'HTTP API URL',
+        #     value=http_api.url
+        # )
 
     def create_error_topic(self):
         return aws_cdk.aws_sns.Topic(
