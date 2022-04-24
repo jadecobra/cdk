@@ -1,12 +1,6 @@
 import aws_cdk
 import constructs
 
-# from aws_cdk import Stack, Duration
-from aws_cdk.aws_cloudwatch import Dashboard, GraphWidget, MathExpression, Alarm, TreatMissingData
-
-from aws_cdk.aws_cloudwatch_actions import SnsAction
-from aws_cdk.aws_sns import Topic
-
 
 class WellArchitectedFrameworkConstruct(constructs.Construct):
 
@@ -15,7 +9,7 @@ class WellArchitectedFrameworkConstruct(constructs.Construct):
         self.error_topic = error_topic if error_topic else self.create_error_topic()
 
     def create_error_topic(self):
-        return Topic(
+        return aws_cdk.aws_sns.Topic(
             self, "ErrorTopic",
             display_name="ErrorTopic",
         )
@@ -50,9 +44,9 @@ class WellArchitectedFrameworkConstruct(constructs.Construct):
             threshold=threshold,
             evaluation_periods=6,
             datapoints_to_alarm=1,
-            treat_missing_data=TreatMissingData.NOT_BREACHING,
+            treat_missing_data=aws_cdk.aws_cloudwatch.TreatMissingData.NOT_BREACHING,
         ).add_alarm_action(
-            SnsAction(self.error_topic)
+            aws_cdk.aws_cloudwatch_actions.SnsAction(self.error_topic)
         )
 
     def create_cloudwatch_dashboard(self, widgets):
