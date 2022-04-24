@@ -1,9 +1,9 @@
 {
  "Resources": {
-  "OrderPizzaErrorTopic61274F8E": {
+  "StateMachineErrorTopic38C39788": {
    "Type": "AWS::SNS::Topic",
    "Properties": {
-    "DisplayName": "OrderPizzaError"
+    "DisplayName": "StateMachineError"
    }
   },
   "orderpizzaawsxraysdkLambdaLayerE805D295": {
@@ -112,7 +112,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "OrderPizzaErrorTopic61274F8E"
+      "Ref": "StateMachineErrorTopic38C39788"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -174,7 +174,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "OrderPizzaErrorTopic61274F8E"
+      "Ref": "StateMachineErrorTopic38C39788"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -201,7 +201,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "OrderPizzaErrorTopic61274F8E"
+      "Ref": "StateMachineErrorTopic38C39788"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -399,14 +399,14 @@
      "Fn::Join": [
       "",
       [
-       "{\"StartAt\":\"Order Pizza\",\"States\":{\"Order Pizza\":{\"Next\":\"Contains Pineapple?\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Type\":\"Task\",\"InputPath\":\"$.flavor\",\"ResultPath\":\"$.pineappleAnalysis\",\"Resource\":\"",
+       "{\"StartAt\":\"RunTask\",\"States\":{\"RunTask\":{\"Next\":\"meets Condition?\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Type\":\"Task\",\"InputPath\":\"$.flavor\",\"ResultPath\":\"$.pineappleAnalysis\",\"Resource\":\"",
        {
         "Fn::GetAtt": [
          "orderpizzaLambdaFunctionDF110574",
          "Arn"
         ]
        },
-       "\"},\"Contains Pineapple?\":{\"Type\":\"Choice\",\"Choices\":[{\"Variable\":\"$.pineappleAnalysis.containsPineapple\",\"BooleanEquals\":true,\"Next\":\"Sorry, We Dont add Pineapple\"}],\"Default\":\"Lets make your pizza\"},\"Lets make your pizza\":{\"Type\":\"Succeed\",\"OutputPath\":\"$.pineappleAnalysis\"},\"Sorry, We Dont add Pineapple\":{\"Type\":\"Fail\",\"Error\":\"Failed To Make Pizza\",\"Cause\":\"They asked for Pineapple\"}},\"TimeoutSeconds\":300}"
+       "\"},\"meets Condition?\":{\"Type\":\"Choice\",\"Choices\":[{\"Variable\":\"$.pineappleAnalysis.containsPineapple\",\"BooleanEquals\":true,\"Next\":\"Failed, Unable to run Process\"}],\"Default\":\"Success\"},\"Success\":{\"Type\":\"Succeed\",\"OutputPath\":\"$.pineappleAnalysis\"},\"Failed, Unable to run Process\":{\"Type\":\"Fail\",\"Error\":\"Failed To run Process\",\"Cause\":\"Failure conditions met\"}},\"TimeoutSeconds\":300}"
       ]
      ]
     },

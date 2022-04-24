@@ -26,53 +26,60 @@ class StateMachine(well_architected.WellArchitectedFrameworkStack):
 
     def create_error_topic(self):
         return aws_cdk.aws_sns.Topic(
-            self, 'OrderPizzaErrorTopic',
-            display_name='OrderPizzaError'
+            self, 'StateMachineErrorTopic',
+            display_name='StateMachineError'
         )
 
-    def order_failure(self):
+    def failure_message(self):
         return aws_cdk.aws_stepfunctions.Fail(
-            self, 'Sorry, We Dont add Pineapple',
-            cause='They asked for Pineapple',
-            error='Failed To Make Pizza'
+            self, 'Failed, Unable to run Process',
+            cause='Failure conditions met',
+            error='Failed To run Process'
         )
 
-    def order_contains_pineapple(self):
+    def condition(self):
         return aws_cdk.aws_stepfunctions.Condition.boolean_equals(
             f'{self.output_path}.containsPineapple', True
         )
 
-    def order_pizza_task(self, lambda_function):
+    def invoke_lambda_function(self, lambda_function):
         return aws_cdk.aws_stepfunctions_tasks.LambdaInvoke(
-            self, 'OrderPizza',
+            self, 'InvokeLambdaFunction',
             lambda_function=lambda_function,
             input_path='$.flavor',
             result_path=self.output_path,
             payload_response_only=True
         )
 
-    def cook_pizza(self):
+    def success_message(self):
         return aws_cdk.aws_stepfunctions.Succeed(
-            self, 'Lets make your pizza',
+            self, 'Success',
             output_path=self.output_path
+        )
+
+    def make_decision(self):
+        return (
+            aws_cdk.aws_stepfunctions.Choice(
+                self, 'condition met?'
+            ).when(
+                self.condition(),
+                self.failure_message()
+            ).otherwise(
+                self.success_message()
+            )
         )
 
     def state_machine_definition(self, lambda_function):
         return (
             aws_cdk.aws_stepfunctions
                 .Chain
-                .start(self.order_pizza_task(lambda_function))
-                .next(
-                    aws_cdk.aws_stepfunctions
-                        .Choice(self, 'Contains Pineapple?')
-                        .when(self.order_contains_pineapple(), self.order_failure())
-                        .otherwise(self.cook_pizza())
-                )
+                .start(self.invoke_lambda_function(lambda_function))
+                .next(self.make_decision())
         )
 
     def create_lambda_function(self, error_topic):
         return lambda_function.create_python_lambda_function(
-            self, function_name='order_pizza',
+            self, function_name='LambdaFunction',
             error_topic=error_topic
         )
 
