@@ -18242,3 +18242,7 @@
 2022-04-23 21:21:49.643964::Time taken to synthesize stack: LambdaHttpApiGateway::  4.7122 seconds
 2022-04-23 21:22:28.951244::Time taken to synthesize stack: LambdaHttpApiGateway::  4.6804 seconds
 2022-04-23 21:23:28.436620::Time taken to synthesize stack: LambdaHttpApiGateway::  4.5729 seconds
+2022-04-23 21:24:04.827563::Time taken to synthesize stack: LambdaHttpApiGateway::  4.5027 seconds
+2022-04-23 21:24:21.733758::Time taken to synthesize stack: LambdaHttpApiGateway::  4.5755 seconds
+2022-04-23 21:24:43.645852::Time taken to synthesize stack: LambdaHttpApiGateway::  4.6440 seconds
+2022-04-23 21:25:55.826774::Time taken to synthesize stack: LambdaHttpApiGateway::  4.7405 seconds
