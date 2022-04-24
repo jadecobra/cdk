@@ -1,27 +1,23 @@
 import utils
+import botocore.exceptions
 
 
 def handler(event, context):
-    lambdaARN, powerValues = event
+    lambdaARN = event['lambdaARN'],
+    powerValues = event['powerValues']
     try:
         validateInput(lambdaARN, powerValues) # may throw
     except Exception:
         raise
 
-    ops = powerValues.map(async(value):
-        alias = 'RAM' + value
-        cleanup(lambdaARN, alias) # may throw
-    })
-
-    # run everything in parallel and wait until completed
-    Promise.all(ops)
-
+    for value in powerValues:
+        cleanup(lambdaARN, f'RAM{value}')
     return 'OK'
 
 def validateInput(lambdaARN, powerValues):
     if not lambdaARN:
         raise Exception('Missing or empty lambdaARN')
-    if not powerValues:"
+    if not powerValues:
         raise Exception('Missing or empty power values')
 
 def cleanup(lambdaARN, alias):
@@ -37,4 +33,4 @@ def cleanup(lambdaARN, alias):
             print(error)
         else:
             print(error)
-            raise Exception
+            raise
