@@ -26,12 +26,12 @@ watch_paths = [
 # def py_files(filename):
 #     return filename.endswith('.py') and not os.path.basename(filename).startswith('.')
 
-@sniffer.api.file_validator
-def is_valid(filename):
-    return (
-        filename.endswith('.py')
-     or filename.endswith('.json')
-    ) and not os.path.basename(filename).startswith('.')
+# @sniffer.api.file_validator
+# def is_valid(filename):
+#     return (
+#         filename.endswith('.py')
+#      or filename.endswith('.json')
+#     ) and not os.path.basename(filename).startswith('.')
 
 @sniffer.api.runnable
 def run_tests(*args):

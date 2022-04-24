@@ -3,24 +3,24 @@ import aws_cdk.aws_apigatewayv2_alpha
 import constructs
 import lambda_function
 import api_gateway_cloudwatch
+import well_architected
 
 
-class StateMachine(aws_cdk.Stack):
+class StateMachine(well_architected.WellArchitectedFrameworkStack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
-        self.pineapple_analysis = '$.pineappleAnalysis'
+        self.output_path = '$.pineappleAnalysis'
         error_topic = self.create_error_topic()
-        state_machine = self.create_state_machine(self.order_pizza(error_topic))
-        http_api_role = self.create_iam_role(state_machine.state_machine_arn)
+        state_machine = self.create_state_machine(self.create_lambda_function(error_topic))
         http_api = self.create_http_api(error_topic)
         self.create_api_gateway_route(
             api_id=http_api.http_api_id,
             target=self.create_stepfunctions_api_gateway_integration(
-                api_id=http_api.http_api_id,
-                iam_role_arn=http_api_role.role_arn,
-                state_machine_arn=state_machine.state_machine_arn
-            ).ref,
+                http_api_id=http_api.http_api_id,
+                iam_role_arn=self.get_iam_service_role_arn(state_machine.state_machine_arn),
+                state_machine_arn=state_machine.state_machine_arn,
+            ),
         )
 
         aws_cdk.CfnOutput(
@@ -43,7 +43,7 @@ class StateMachine(aws_cdk.Stack):
 
     def order_contains_pineapple(self):
         return aws_cdk.aws_stepfunctions.Condition.boolean_equals(
-            f'{self.pineapple_analysis}.containsPineapple', True
+            f'{self.output_path}.containsPineapple', True
         )
 
     def order_pizza_task(self, lambda_function):
@@ -51,14 +51,14 @@ class StateMachine(aws_cdk.Stack):
             self, 'Order Pizza',
             lambda_function=lambda_function,
             input_path='$.flavor',
-            result_path=self.pineapple_analysis,
+            result_path=self.output_path,
             payload_response_only=True
         )
 
     def cook_pizza(self):
         return aws_cdk.aws_stepfunctions.Succeed(
             self, 'Lets make your pizza',
-            output_path=self.pineapple_analysis
+            output_path=self.output_path
         )
 
     def state_machine_definition(self, lambda_function):
@@ -74,7 +74,7 @@ class StateMachine(aws_cdk.Stack):
                 )
         )
 
-    def order_pizza(self, error_topic):
+    def create_lambda_function(self, error_topic):
         return lambda_function.create_python_lambda_function(
             self, function_name='order_pizza',
             error_topic=error_topic
@@ -92,14 +92,14 @@ class StateMachine(aws_cdk.Stack):
             ]
         )
 
-    def create_iam_role(self, state_machine_arn):
+    def get_iam_service_role_arn(self, state_machine_arn):
         return aws_cdk.aws_iam.Role(
-            self, 'StateMachineHttpApiRole',
+            self, 'StateMachineHttpApiIamRole',
             assumed_by=aws_cdk.aws_iam.ServicePrincipal('apigateway.amazonaws.com'),
             inline_policies={
                 "AllowSFNExec": self.state_machine_execution_permissions(state_machine_arn)
             }
-        )
+        ).role_arn
 
     def create_state_machine(self, lambda_function):
         return aws_cdk.aws_stepfunctions.StateMachine(
@@ -122,10 +122,10 @@ class StateMachine(aws_cdk.Stack):
         )
         return http_api
 
-    def create_stepfunctions_api_gateway_integration(self, api_id=None, iam_role_arn=None, state_machine_arn=None):
+    def create_stepfunctions_api_gateway_integration(self, http_api_id=None, iam_role_arn=None, state_machine_arn=None):
         return aws_cdk.aws_apigatewayv2.CfnIntegration(
             self, 'StateMachineHttpApiIntegration',
-            api_id=api_id,
+            api_id=http_api_id,
             integration_type='AWS_PROXY',
             connection_type='INTERNET',
             integration_subtype='StepFunctions-StartSyncExecution',
@@ -136,7 +136,7 @@ class StateMachine(aws_cdk.Stack):
             },
             payload_format_version="1.0",
             timeout_in_millis=10000
-        )
+        ).ref
 
     def create_api_gateway_route(self, api_id=None, target=None):
         return aws_cdk.aws_apigatewayv2.CfnRoute(

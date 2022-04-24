@@ -79,7 +79,7 @@
       "Action": {
        "Block": {}
       },
-      "Name": "geoblocking_rule",
+      "Name": "GeoBlockingRule",
       "Priority": 4,
       "Statement": {
        "GeoMatchStatement": {

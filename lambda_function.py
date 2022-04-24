@@ -11,27 +11,29 @@ class LambdaFunctionConstruct(WellArchitectedFrameworkConstruct):
     def __init__(self, scope: constructs.Construct, id: str,
         function_name=None, handler_name=None,
         environment_variables=None,
-        error_topic:ITopic=None, layers:list[str]=None,
+        error_topic:ITopic=None,
+        layers:list[str]=None,
         concurrent_executions=None,
         duration=60, vpc=None,
-        **kwargs) -> None:
+        **kwargs
+    ) -> None:
         super().__init__(scope, id, error_topic=error_topic, **kwargs)
         handler_name = 'handler' if handler_name is None else handler_name
-        self.lambda_function = Function(
-            self, id, # can we use id as function_name
-            runtime=Runtime.PYTHON_3_9,
+        self.lambda_function = aws_cdk.aws_lambda.Function(
+            self, 'LambdaFunction', # can we use id as function_name
+            runtime=aws_cdk.aws_lambda.Runtime.PYTHON_3_9,
             handler=f'{function_name}.{handler_name}',
-            code=Code.from_asset(f"lambda_functions/{function_name}"),
-            timeout=Duration.seconds(duration),
-            tracing=Tracing.ACTIVE,
+            code=aws_cdk.aws_lambda.Code.from_asset(f"lambda_functions/{function_name}"),
+            timeout=aws_cdk.Duration.seconds(duration),
+            tracing=aws_cdk.aws_lambda.Tracing.ACTIVE,
             layers=self.create_layers(layers),
             vpc=vpc,
             reserved_concurrent_executions=concurrent_executions,
             environment=environment_variables,
         )
-        self.create_2_percent_error_alarm()
-        self.create_long_duration_alarm()
-        self.create_throttled_percentage_alarm()
+        self.create_invocations_error_greater_than_2_percent_alarm()
+        self.create_invocation_longer_than_1_second_alarmration_alarm()
+        self.create_throttled_invocations_greater_than_2_percent_alarm()
         self.create_cloudwatch_dashboard(
             self.create_cloudwatch_widgets()
         )
@@ -40,7 +42,7 @@ class LambdaFunctionConstruct(WellArchitectedFrameworkConstruct):
         return LayerVersion(
             self, f'{layer}LambdaLayer',
             code=Code.from_asset(f"lambda_layers/{layer}"),
-            description=f"AWS XRay SDK Lambda Layer"
+            description=f"{layer} Lambda Layer"
         )
 
     def create_layers(self, layers):
@@ -57,8 +59,8 @@ class LambdaFunctionConstruct(WellArchitectedFrameworkConstruct):
 
     def create_lambda_error_percentage_metric(self):
         return self.create_cloudwatch_math_expression(
+            label="invocations_errored_percentage_last_5_mins",
             expression="(errors / invocations) * 100",
-            label="% of invocations that errored, last 5 mins",
             using_metrics={
                 "invocations": self.get_lambda_function_metric('Invocations'),
                 "errors": self.get_lambda_function_metric("Errors"),
@@ -66,9 +68,9 @@ class LambdaFunctionConstruct(WellArchitectedFrameworkConstruct):
         )
 
     def create_lambda_throttled_percentage_metric(self):
-        # note: throttled requests are not counted in total number of invocations
+        # NOTE: throttled requests are not counted in total number of invocations
         return self.create_cloudwatch_math_expression(
-            label="throttled requests % in last 30 mins",
+            label="throttled_requests_percentage_last_30_mins",
             expression="(throttles * 100) / (invocations + throttles)",
             using_metrics={
                 "invocations": self.get_lambda_function_metric("Invocations"),
@@ -76,39 +78,37 @@ class LambdaFunctionConstruct(WellArchitectedFrameworkConstruct):
             },
         )
 
-    def create_2_percent_error_alarm(self):
-        # 2% of Dynamo Lambda invocations erroring
+    def create_invocations_error_greater_than_2_percent_alarm(self):
         return self.create_cloudwatch_alarm(
-            id="Lambda invocation Errors > 2%",
+            id="LambdaInvocationsErrorsGreaterThan2Percent",
             metric=self.create_lambda_error_percentage_metric(),
             threshold=2,
         )
 
-    def create_long_duration_alarm(self):
-        # 1% of Lambda invocations taking longer than 1 second
+    def create_invocation_longer_than_1_second_alarmration_alarm(self):
         return self.create_cloudwatch_alarm(
-            id="Lambda p99 Long Duration (>1s)",
+            id="LambdaP99LongDurationGreaterThan1s",
             metric=self.lambda_function.metric_duration(statistic="p99"),
             threshold=1000,
         )
 
-    def create_throttled_percentage_alarm(self):
+    def create_throttled_invocations_greater_than_2_percent_alarm(self):
         return self.create_cloudwatch_alarm(
-            id="Lambda Throttled invocations >2%",
+            id="LambdaThrottledInvocationsGreaterThan2Percent",
             metric=self.create_lambda_throttled_percentage_metric(),
             threshold=2,
         )
 
     def create_lambda_error_percentage_widget(self):
         return self.create_cloudwatch_widget(
-            title="Lambda Error %",
+            title="lambda_error_percentage",
             stacked=False,
             left=[self.create_lambda_error_percentage_metric()],
         )
 
     def create_lambda_duration_widget(self):
         return self.create_cloudwatch_widget(
-            title="Lambda Duration",
+            title="lambda_duration",
             left=[
                 self.lambda_function.metric_duration(statistic=statistic)
                 for statistic in ('p50', 'p90', 'p99')
@@ -117,7 +117,7 @@ class LambdaFunctionConstruct(WellArchitectedFrameworkConstruct):
 
     def create_lambda_throttled_percentage_widget(self):
         return self.create_cloudwatch_widget(
-            title="Lambda Throttle %",
+            title="lambda_throttle_percentage",
             left=[self.create_lambda_throttled_percentage_metric()],
             stacked=False,
         )

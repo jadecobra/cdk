@@ -38,31 +38,31 @@ class WellArchitected(aws_cdk.App):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.create_webservice()
-        self.create_xray_tracer()
+        # self.create_webservice()
+        # self.create_xray_tracer()
 
-        big_fan.BigFan(self, "BigFan")
+        # big_fan.BigFan(self, "BigFan")
 
-        destined_lambda.DestinedLambda(self, "DestinedLambda")
+        # destined_lambda.DestinedLambda(self, "DestinedLambda")
 
-        event_bridge_atm.EventBridgeAtm(self, "EventBridgeAtm")
-        event_bridge_circuit_breaker.EventBridgeCircuitBreaker(
-            self, 'EventBridgeCircuitBreaker',
-        )
-        event_bridge_etl.EventbridgeEtl(self, 'EventBridgeEtl', )
+        # event_bridge_atm.EventBridgeAtm(self, "EventBridgeAtm")
+        # event_bridge_circuit_breaker.EventBridgeCircuitBreaker(
+        #     self, 'EventBridgeCircuitBreaker',
+        # )
+        # event_bridge_etl.EventbridgeEtl(self, 'EventBridgeEtl', )
 
-        lambda_trilogy.lambda_lith.LambdaLith(self, "LambdaLith", )
-        lambda_trilogy.fat_lambda.TheFatLambdaStack(self, "FatLambda", )
-        lambda_trilogy.single_purpose_lambda.TheSinglePurposeFunctionStack(self, "SinglePurposeLambda", )
-        lambda_circuit_breaker.LambdaCircuitBreaker(self, "LambdaCircuitBreaker", )
+        # lambda_trilogy.lambda_lith.LambdaLith(self, "LambdaLith", )
+        # lambda_trilogy.fat_lambda.TheFatLambdaStack(self, "FatLambda", )
+        # lambda_trilogy.single_purpose_lambda.TheSinglePurposeFunctionStack(self, "SinglePurposeLambda", )
+        # lambda_circuit_breaker.LambdaCircuitBreaker(self, "LambdaCircuitBreaker", )
 
-        rds_proxy.RdsProxy(self, "RdsProxy", )
-        saga_step_function.SagaStepFunction(self, "SagaStepFunction", )
-        scalable_webhook.ScalableWebhook(self, "ScalableWebhook", )
+        # rds_proxy.RdsProxy(self, "RdsProxy", )
+        # saga_step_function.SagaStepFunction(self, "SagaStepFunction", )
+        # scalable_webhook.ScalableWebhook(self, "ScalableWebhook", )
         state_machine.StateMachine(self, "StateMachine", )
-        simple_graphql_service.SimpleGraphQlService(self, "SimpleGraphqlService", )
-        dynamo_streamer.DynamoStreamer(self, "DynamoStreamer", )
-        lambda_power_tuner.LambdaPowerTuner(self, "LambdaPowerTuner", )
+        # simple_graphql_service.SimpleGraphQlService(self, "SimpleGraphqlService", )
+        # dynamo_streamer.DynamoStreamer(self, "DynamoStreamer", )
+        # lambda_power_tuner.LambdaPowerTuner(self, "LambdaPowerTuner", )
 
     def create_webservice(self):
         error_sns_topic = sns_topic.SnsTopic(self, 'SnsTopic').topic
