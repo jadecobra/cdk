@@ -2,9 +2,8 @@ import boto3
 import botocore.exceptions
 import os
 
-url = require('url')
-s3 = new AWS.S3()
 
+S3 = boto3.client('s3')
 
 def get_base_cost_for_region(price_map, region):
     return price_map.get(region, price_map['default'])

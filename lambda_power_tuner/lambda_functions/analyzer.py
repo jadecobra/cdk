@@ -1,84 +1,70 @@
-'use strict'
+import os
+import utils
 
-utils = require('./utils')
-
-visualizationURL = os.environ.get(visualizationURL
-
+visualizationURL = os.environ.get(visualizationURL)\
 defaultStrategy = 'cost'
 defaultBalancedWeight = 0.5
 optimizationStrategies = {
-    cost: () => findCheapest,
-    speed: () => findFastest,
-    balanced: () => findBalanced,
+    'cost': findCheapest,
+    'speed': findFastest,
+    'balanced': findBalanced,
 }
 
-/**
- * Receive average cost and decide which power config wins.
- */
 def handler(event, context):
+    '''Receive average cost and decide which power config wins.'''
+    if not isinstance(event['stats'], list) or not len(event['stats']):
+        raise Exception(f'Wrong input {event}')
 
-    if (!Array.isArray(event.stats) or !event.stats.length) {
-        raise Exception('Wrong input ' + JSON.stringify(event))
-    }
-
-    if (event.dryRun) {
+    if event['dryRun']:
         return print('[Dry-run] Skipping analysis')
-    }
 
     return findOptimalConfiguration(event)
-}
 
-getStrategy = (event):
-    // extract strategy name or fallback to default (cost)
-    return event.strategy or defaultStrategy
-}
+def getStrategy(event):
+    # extract strategy name or fallback to default (cost)
+    return event['strategy'] or defaultStrategy
 
-getBalancedWeight = (event):
-    // extract weight used by balanced strategy or fallback to default (0.5)
-    weight = event.balancedWeight
-    if (typeof weight == 'undefined') {
+def getBalancedWeight(event):
+    # extract weight used by balanced strategy or fallback to default (0.5)
+    weight = event['balancedWeight']
+    if not weight:
         weight = defaultBalancedWeight
-    }
-    // weight must be between 0 and 1
-    return Math.min(Math.max(weight, 0.0), 1.0)
-}
+    # weight must be between 0 and 1
+    return min(max(weight, 0.0), 1.0)
 
-findOptimalConfiguration = (event):
+def findOptimalConfiguration(event):
     stats = extractStatistics(event)
     strategy = getStrategy(event)
     balancedWeight = getBalancedWeight(event)
     optimizationFunction = optimizationStrategies[strategy]()
     optimal = optimizationFunction(stats, balancedWeight)
 
-    // also compute total cost of optimization state machine & lambda
+    # also compute total cost of optimization state machine & lambda
     optimal.stateMachine = {}
-    optimal.stateMachine.executionCost = utils.stepFunctionsCost(event.stats.length)
-    optimal.stateMachine.lambdaCost = stats
-        .map((p) => p.totalCost)
-        .reduce((a, b) => a + b, 0)
-    optimal.stateMachine.visualization = utils.buildVisualizationURL(stats, visualizationURL)
+    optimal.stateMachine['executionCost'] = utils.stepFunctionsCost(len(event['stats']))
+    # optimal.stateMachine['lambdaCost'] = stats.map(p, p.totalCost).reduce((a, b), (a + b), 0) # fix this
+    optimal.stateMachine['visualization'] = utils.buildVisualizationURL(stats, visualizationURL)
 
-    // the total cost of the optimal branch execution is not needed
-    delete optimal.totalCost
+    # the total cost of the optimal branch execution is not needed
+    del optimal.totalCost
 
     return optimal
-}
 
 
-extractStatistics = (event):
-    // generate a list of objects with only the relevant data/stats
-    return event.stats
-    // handle empty results from executor
-        .filter(stat => stat && stat.averageDuration)
-        .map(stat => ({
-            power: stat.value,
-            cost: stat.averagePrice,
-            duration: stat.averageDuration,
-            totalCost: stat.totalCost,
-        }))
-}
+def extractStatistics(event):
+    # generate a list of objects with only the relevant data/stats
+    return event['stats']
+    # handle empty results from executor
+    # fix this
+        # .filter(stat => stat && stat.averageDuration)
+        # .map(stat => ({
+        #     power: stat.value,
+        #     cost: stat.averagePrice,
+        #     duration: stat.averageDuration,
+        #     totalCost: stat.totalCost,
+        # }))
 
-findCheapest = (stats):
+def findCheapest(stats):
     print('Finding cheapest')
 
     // sort by cost

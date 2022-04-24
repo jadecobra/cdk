@@ -1,7 +1,7 @@
 import aws_cdk
 import constructs
 
-from aws_cdk import Stack, Duration
+# from aws_cdk import Stack, Duration
 from aws_cdk.aws_cloudwatch import Dashboard, GraphWidget, MathExpression, Alarm, TreatMissingData
 
 from aws_cdk.aws_cloudwatch_actions import SnsAction
@@ -22,11 +22,11 @@ class WellArchitectedFrameworkConstruct(constructs.Construct):
 
     @staticmethod
     def create_cloudwatch_math_expression(expression=None, label=None, using_metrics=None):
-        return MathExpression(
+        return aws_cdk.aws_cloudwatch.MathExpression(
             expression=expression,
             label=label,
             using_metrics=using_metrics,
-            period=Duration.minutes(5),
+            period=aws_cdk.Duration.minutes(5),
         )
 
     def cloudwatch_math_sum(self, label=None, m1=None, m2=None):
@@ -38,12 +38,12 @@ class WellArchitectedFrameworkConstruct(constructs.Construct):
 
     @staticmethod
     def create_cloudwatch_widget(title=None, stacked=True, left=None):
-        return GraphWidget(
+        return aws_cdk.aws_cloudwatch.GraphWidget(
             title=title, width=8, stacked=stacked, left=left
         )
 
     def create_cloudwatch_alarm(self, id=None, metric=None, threshold=1):
-        return Alarm(
+        return aws_cdk.aws_cloudwatch.Alarm(
             self,
             id=id,
             metric=metric,
@@ -56,7 +56,7 @@ class WellArchitectedFrameworkConstruct(constructs.Construct):
         )
 
     def create_cloudwatch_dashboard(self, widgets):
-        return Dashboard(
+        return aws_cdk.aws_cloudwatch.Dashboard(
             self, "CloudWatchDashBoard",
             widgets=[
                 [widget] for widget in widgets
