@@ -1,17 +1,13 @@
 import constructs
 import aws_cdk
+import well_architected
 
-from aws_cdk import Duration, Stack
-from aws_cdk.aws_lambda import Function, Code, Runtime, Tracing, LayerVersion
-from aws_cdk.aws_sns import ITopic
-from well_architected import WellArchitectedFrameworkConstruct
-
-class LambdaFunctionConstruct(WellArchitectedFrameworkConstruct):
+class LambdaFunctionConstruct(well_architected.WellArchitectedFrameworkConstruct):
 
     def __init__(self, scope: constructs.Construct, id: str,
         function_name=None, handler_name=None,
         environment_variables=None,
-        error_topic:ITopic=None,
+        error_topic:aws_cdk.aws_sns.ITopic=None,
         layers:list[str]=None,
         concurrent_executions=None,
         duration=60, vpc=None,
@@ -39,9 +35,9 @@ class LambdaFunctionConstruct(WellArchitectedFrameworkConstruct):
         )
 
     def create_layer(self, layer):
-        return LayerVersion(
+        return aws_cdk.aws_lambda.LayerVersion(
             self, f'{layer}LambdaLayer',
-            code=Code.from_asset(f"lambda_layers/{layer}"),
+            code=aws_cdk.aws_lambda.Code.from_asset(f"lambda_layers/{layer}"),
             description=f"{layer} Lambda Layer"
         )
 
@@ -129,10 +125,10 @@ class LambdaFunctionConstruct(WellArchitectedFrameworkConstruct):
             self.create_lambda_throttled_percentage_widget(),
         )
 
-class LambdaFunctionStack(Stack):
+class LambdaFunctionStack(aws_cdk.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str,
-        function_name=None, environment_variables=None, error_topic:ITopic=None,
+        function_name=None, environment_variables=None, error_topic:aws_cdk.aws_sns.ITopic=None,
         handler_name=None,
         **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
