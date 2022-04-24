@@ -18203,3 +18203,10 @@
 2022-04-23 20:56:52.286832::Time taken to synthesize stack: WebApplicationFirewall::  4.5504 seconds
 2022-04-23 20:57:46.855252::Time taken to synthesize stack: StateMachine::  5.0364 seconds
 2022-04-23 20:57:51.501553::Time taken to synthesize stack: WebApplicationFirewall::  4.6407 seconds
+2022-04-23 20:59:23.504136::Time taken to synthesize stack: LambdaFunction::  4.3869 seconds
+2022-04-23 20:59:31.631787::Time taken to synthesize stack: LambdaFunction::  4.4170 seconds
+2022-04-23 21:00:50.306605::Time taken to synthesize stack: LambdaFunction::  4.4133 seconds
+2022-04-23 21:01:00.524190::Time taken to synthesize stack: LambdaFunction::  4.5259 seconds
+2022-04-23 21:01:08.738286::Time taken to synthesize stack: LambdaFunction::  4.4998 seconds
+2022-04-23 21:01:25.411693::Time taken to synthesize stack: StateMachine::  4.5957 seconds
+2022-04-23 21:01:29.998883::Time taken to synthesize stack: WebApplicationFirewall::  4.5829 seconds

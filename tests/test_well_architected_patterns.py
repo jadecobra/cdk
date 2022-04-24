@@ -30,7 +30,6 @@ class TestWellArchitectedPatterns(tests.utilities.TestTemplates):
             # 'SnsRestApi',
             # 'SNSTopic',
             # 'SqsFlow',
-            'LambdaFunction',
             'StateMachine',
             'WebApplicationFirewall',
             # 'XRayTracerSnsFanOutTopic',
