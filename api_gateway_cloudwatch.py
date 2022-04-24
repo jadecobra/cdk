@@ -34,7 +34,7 @@ class ApiGatewayCloudWatch(WellArchitectedFrameworkConstruct):
 
     def create_api_gateway_4xx_alarm(self):
         return self.create_cloudwatch_alarm(
-            id="API Gateway 4XX Errors > 1%",
+            id="ApiGateway4XXErrorsGreaterThan1Percent",
             metric=self.create_cloudwatch_math_expression(
                 expression="m1/m2*100",
                 label="% API Gateway 4xx Errors",
@@ -53,7 +53,7 @@ class ApiGatewayCloudWatch(WellArchitectedFrameworkConstruct):
 
     def create_api_gateway_5xx_alarm(self):
         return self.create_cloudwatch_alarm(
-            id="API Gateway 5XX Errors > 0",
+            id="APIGateway5XXErrorsGreaterThan0",
             metric=self.add_api_gateway_metric(
                 metric_name="5XXError",
                 label="5XX Errors",
@@ -64,7 +64,7 @@ class ApiGatewayCloudWatch(WellArchitectedFrameworkConstruct):
 
     def create_api_gateway_latency_alarm(self):
         return self.create_cloudwatch_alarm(
-            id="API p99 latency alarm >= 1s",
+            id="ApiGatewayP99LatencyGreaterThan1s",
             metric=self.add_api_gateway_metric(
                 metric_name="Latency",
                 label="API GW Latency",
@@ -75,7 +75,7 @@ class ApiGatewayCloudWatch(WellArchitectedFrameworkConstruct):
 
     def create_api_gateway_errors_widget(self):
         return self.create_cloudwatch_widget(
-            title="API GW Errors",
+            title="api_gateway_errors",
             left=[
                 self.add_api_gateway_metric(
                     metric_name=metric_name,
@@ -89,16 +89,14 @@ class ApiGatewayCloudWatch(WellArchitectedFrameworkConstruct):
 
     def create_api_gateway_latency_widget(self):
         return self.create_cloudwatch_widget(
-            title="API GW Latency",
+            title="api_gateway_latency",
             left=[
                 self.add_api_gateway_metric(
                     metric_name="Latency",
-                    label=label,
+                    label=f'api_gateway_latency_{statistic}',
                     statistic=statistic,
-                ) for label, statistic in (
-                    ("API Latency p50", "p50"),
-                    ("API Latency p90", "p90"),
-                    ("API Latency p99", "p99"),
+                ) for statistic in (
+                    "p50", "p90", "p99",
                 )
             ]
         )
