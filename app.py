@@ -9,7 +9,7 @@ try:
     import event_bridge_atm
     import event_bridge_circuit_breaker
     import event_bridge_etl
-    import http_api
+    import http_api_gateway
     import lambda_circuit_breaker
     import lambda_function
     import lambda_power_tuner
@@ -38,7 +38,7 @@ class WellArchitected(aws_cdk.App):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # self.create_webservice()
+        self.create_webservice()
         # self.create_xray_tracer()
 
         # big_fan.BigFan(self, "BigFan")
@@ -83,7 +83,7 @@ class WellArchitected(aws_cdk.App):
             },
         )
         hits_record.grant_read_write_data(hits_counter.lambda_function)
-        http_api.LambdaHttpApiGateway(
+        http_api_gateway.LambdaHttpApiGateway(
             self, 'LambdaHttpApiGateway',
             lambda_function=hits_counter.lambda_function,
             error_topic=error_sns_topic,

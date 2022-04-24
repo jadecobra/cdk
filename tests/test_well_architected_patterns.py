@@ -18,7 +18,6 @@ class TestWellArchitectedPatterns(tests.utilities.TestTemplates):
             # 'HttpFlow',
             # 'LambdaCircuitBreaker',
             # 'LambdaPowerTuner',
-            # 'LambdaHttpApiGateway',
             # 'LambdaLith',
             # 'LambdaRestAPIGateway',
             # 'RdsProxy',
@@ -30,8 +29,9 @@ class TestWellArchitectedPatterns(tests.utilities.TestTemplates):
             # 'SnsRestApi',
             # 'SNSTopic',
             # 'SqsFlow',
-            'StateMachine',
-            'WebApplicationFirewall',
+            'LambdaHttpApiGateway',
+            # 'StateMachine',
+            # 'WebApplicationFirewall',
             # 'XRayTracerSnsFanOutTopic',
         )
 

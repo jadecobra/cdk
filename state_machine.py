@@ -2,7 +2,7 @@ import aws_cdk
 import aws_cdk.aws_apigatewayv2_alpha
 import constructs
 import lambda_function
-import http_api
+import http_api_gateway
 import api_gateway_cloudwatch
 import well_architected
 
@@ -117,6 +117,10 @@ class StateMachine(well_architected.WellArchitectedFrameworkStack):
             self, 'StateMachineHttpApi',
             create_default_stage=True
         )
+        # http_api = api_gateway.HttpApi(
+        #     self, 'StateMachineHttpApi',
+        #     create_default_stage=True
+        # )
         api_gateway_cloudwatch.ApiGatewayCloudWatch(
             self, 'StateMachineHttpApiCloudWatch',
             api_id=http_api.http_api_id,
