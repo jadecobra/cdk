@@ -38,13 +38,7 @@ class HttpApi(WellArchitectedFrameworkConstruct):
     ) -> None:
         super().__init__(scope, id, **kwargs)
 
-        self.http_api = HttpApi(
-            self, 'HttpAPI',
-            default_integration=HttpLambdaIntegration(
-                'HTTPLambdaIntegration',
-                handler=lambda_function
-            )
-        )
+        self.http_api = HttpApi(self, 'HttpAPI')
 
         ApiGatewayCloudWatch(
             self, 'ApiGatewayCloudWatch',
