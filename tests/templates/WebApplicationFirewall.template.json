@@ -97,7 +97,7 @@
     ]
    }
   },
-  "WAFAPIGatewayAssociation": {
+  "WebApplicationFirewallAPIGatewayAssociation": {
    "Type": "AWS::WAFv2::WebACLAssociation",
    "Properties": {
     "ResourceArn": "arn:aws:apigateway:{self.region}::/restapis/{self.api_id}/stages/{self.rest_api.deployment_stage.stage_name}",

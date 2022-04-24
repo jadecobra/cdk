@@ -24,14 +24,11 @@ class WebApplicationFirewall(well_architected.WellArchitectedFrameworkStack):
 
     def web_application_firewall_rules(self):
         return [
-            self.common_ruleset(),
-            self.anonymous_ip_rule(),
-            self.restricted_ip_list_rule(),
-            self.add_geoblock_rule(),
+            self.common_ruleset(1),
+            self.anonymous_ip_rule(2),
+            self.restricted_ip_list_rule(3),
+            self.add_geoblock_rule(4),
         ]
-
-    def default_override_action(self):
-        return aws_cdk.aws_wafv2.CfnWebACL.OverrideActionProperty(none={})
 
     def create_visibility_configuration(self, metric_name):
         return aws_cdk.aws_wafv2.CfnWebACL.VisibilityConfigProperty(
@@ -40,25 +37,32 @@ class WebApplicationFirewall(well_architected.WellArchitectedFrameworkStack):
             sampled_requests_enabled=True
         )
 
+    @staticmethod
+    def create_managed_rule_group_statement(name=None, excluded_rules=None):
+        return aws_cdk.aws_wafv2.CfnWebACL.StatementProperty(
+            managed_rule_group_statement=aws_cdk.aws_wafv2.CfnWebACL.ManagedRuleGroupStatementProperty(
+                name=name,
+                vendor_name='AWS',
+                excluded_rules=excluded_rules if excluded_rules else []
+            )
+        )
+
     def create_managed_rule(self, name=None, priority=None, excluded_rules=None):
         return aws_cdk.aws_wafv2.CfnWebACL.RuleProperty(
             name=name,
             priority=priority,
-            override_action=self.default_override_action(),
+            override_action=aws_cdk.aws_wafv2.CfnWebACL.OverrideActionProperty(none={}),
             visibility_config=self.create_visibility_configuration(name),
-            statement=aws_cdk.aws_wafv2.CfnWebACL.StatementProperty(
-                managed_rule_group_statement=aws_cdk.aws_wafv2.CfnWebACL.ManagedRuleGroupStatementProperty(
-                    name=name,
-                    vendor_name='AWS',
-                    excluded_rules=excluded_rules if excluded_rules else []
-                )
+            statement=self.create_managed_rule_group_statement(
+                name=name,
+                excluded_rules=excluded_rules
             ),
         )
 
-    def common_ruleset(self):
+    def common_ruleset(self, priority):
         return self.create_managed_rule(
             name='AWSManagedRulesCommonRuleSet',
-            priority=1,
+            priority=priority,
             excluded_rules=[
                 aws_cdk.aws_wafv2.CfnWebACL.ExcludedRuleProperty(
                     name='SizeRestrictions_BODY'
@@ -66,38 +70,39 @@ class WebApplicationFirewall(well_architected.WellArchitectedFrameworkStack):
             ],
         )
 
-    def anonymous_ip_rule(self):
+    def anonymous_ip_rule(self, priority):
         return self.create_managed_rule(
             name='AWSManagedRulesAnonymousIpList',
-            priority=2,
+            priority=priority,
         )
 
-    def restricted_ip_list_rule(self):
+    def restricted_ip_list_rule(self, priority):
         return self.create_managed_rule(
             name='AWSManagedRulesAmazonIpReputationList',
-            priority=3,
+            priority=priority,
         )
 
-    def add_geoblock_rule(self):
+    @staticmethod
+    def country_codes():
+        return ['NZ']
+
+    def add_geoblock_rule(self, priority):
         return aws_cdk.aws_wafv2.CfnWebACL.RuleProperty(
-            name='geoblocking_rule',
-            priority=4,
+            name='GeoBlockingRule',
+            priority=priority,
             action=aws_cdk.aws_wafv2.CfnWebACL.RuleActionProperty(block={}),
             visibility_config=self.create_visibility_configuration('geoblock'),
             statement=aws_cdk.aws_wafv2.CfnWebACL.StatementProperty(
                 geo_match_statement=aws_cdk.aws_wafv2.CfnWebACL.GeoMatchStatementProperty(
-                    country_codes=['NZ'],
+                    country_codes=self.country_codes(),
                 )
             ),
         )
 
-    def allow_action(self):
-        return aws_cdk.aws_wafv2.CfnWebACL.DefaultActionProperty(allow={})
-
     def create_web_application_firewall(self, web_application_firewall_rules=None, scope=None):
         return aws_cdk.aws_wafv2.CfnWebACL(
             self, 'WebApplicationFirewall',
-            default_action=self.allow_action(),
+            default_action=aws_cdk.aws_wafv2.CfnWebACL.DefaultActionProperty(allow={}),
             scope=scope,
             visibility_config=self.create_visibility_configuration('webACL'),
             name='WebApplicationFirewall',
