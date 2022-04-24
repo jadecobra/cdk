@@ -4,14 +4,17 @@ import constructs
 
 class WebApplicationFirewall(aws_cdk.Stack):
 
-    def __init__(self, scope: constructs.Construct, id: str, target_arn=None, web_application_firewall_scope='REGIONAL', **kwargs) -> None:
-        '''This only works with APIGateway REST APIs and CloudFront
-        HTTP APIs are not supported yet
-        '''
+    def __init__(
+        self, scope: constructs.Construct, id: str,
+        target_arn=None,
+        web_application_firewall_scope='REGIONAL',
+        **kwargs
+    ) -> None:
+        '''NOTE: HTTP APIs are not supported yet'''
         super().__init__(scope, id, **kwargs)
-        self.associate_web_application_firewall(
+        self.create_web_application_firewall_association(
             target_arn=target_arn,
-            web_application_firewall=self.create_waf_acl(
+            web_application_firewall=self.create_web_application_firewall(
                 scope=web_application_firewall_scope,
                 waf_rules=[
                     self.common_ruleset(),
@@ -86,7 +89,7 @@ class WebApplicationFirewall(aws_cdk.Stack):
     def allow_action(self):
         return aws_cdk.aws_wafv2.CfnWebACL.DefaultActionProperty(allow={})
 
-    def create_waf_acl(self, waf_rules=None, scope=None):
+    def create_web_application_firewall(self, waf_rules=None, scope=None):
         return aws_cdk.aws_wafv2.CfnWebACL(
             self, 'WebACL',
             default_action=self.allow_action(),
@@ -96,7 +99,7 @@ class WebApplicationFirewall(aws_cdk.Stack):
             rules=waf_rules
         )
 
-    def associate_web_application_firewall(self, web_application_firewall=None, target_arn=None):
+    def create_web_application_firewall_association(self, web_application_firewall=None, target_arn=None):
         return aws_cdk.aws_wafv2.CfnWebACLAssociation(
             self, 'WAFAPIGatewayAssociation',
             web_acl_arn=web_application_firewall.attr_arn,
