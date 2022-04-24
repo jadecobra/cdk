@@ -437,7 +437,7 @@
     "AutoDeploy": true
    }
   },
-  "StateMachineHttpApiCloudWatchAPIGateway4XXErrors13E8FBA9E": {
+  "StateMachineHttpApiCloudWatchApiGateway4XXErrorsGreaterThan1Percent88A17526": {
    "Type": "AWS::CloudWatch::Alarm",
    "Properties": {
     "ComparisonOperator": "GreaterThanOrEqualToThreshold",
@@ -450,13 +450,13 @@
     "DatapointsToAlarm": 1,
     "Metrics": [
      {
-      "Expression": "m1/m2*100",
+      "Expression": "m1 / m2 * 100",
       "Id": "expr_1",
-      "Label": "% API Gateway 4xx Errors"
+      "Label": "api_gateway_4XX_errors_percentage"
      },
      {
       "Id": "m1",
-      "Label": "4XX Errors",
+      "Label": "4XX_errors",
       "MetricStat": {
        "Metric": {
         "Dimensions": [
@@ -478,7 +478,7 @@
      },
      {
       "Id": "m2",
-      "Label": "# Requests",
+      "Label": "number_of_requests",
       "MetricStat": {
        "Metric": {
         "Dimensions": [
@@ -503,7 +503,7 @@
     "TreatMissingData": "notBreaching"
    }
   },
-  "StateMachineHttpApiCloudWatchAPIGateway5XXErrors0845ED712": {
+  "StateMachineHttpApiCloudWatchAPIGateway5XXErrorsGreaterThan0BF246C71": {
    "Type": "AWS::CloudWatch::Alarm",
    "Properties": {
     "ComparisonOperator": "GreaterThanOrEqualToThreshold",
@@ -517,7 +517,7 @@
     "Metrics": [
      {
       "Id": "m1",
-      "Label": "5XX Errors",
+      "Label": "api_gateway_5XX_errors",
       "MetricStat": {
        "Metric": {
         "Dimensions": [
@@ -542,7 +542,7 @@
     "TreatMissingData": "notBreaching"
    }
   },
-  "StateMachineHttpApiCloudWatchAPIp99latencyalarm1sC9E07B0B": {
+  "StateMachineHttpApiCloudWatchApiGatewayP99LatencyGreaterThan1s180CEC58": {
    "Type": "AWS::CloudWatch::Alarm",
    "Properties": {
     "ComparisonOperator": "GreaterThanOrEqualToThreshold",
@@ -556,7 +556,7 @@
     "Metrics": [
      {
       "Id": "m1",
-      "Label": "API GW Latency",
+      "Label": "api_gateway_latency",
       "MetricStat": {
        "Metric": {
         "Dimensions": [
@@ -596,7 +596,7 @@
        {
         "Ref": "StateMachineHttpApi26ACE8C1"
        },
-       "\",{\"label\":\"# Requests\",\"period\":900,\"stat\":\"Sum\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"API GW Latency\",\"region\":\"",
+       "\",{\"label\":\"# Requests\",\"period\":900,\"stat\":\"Sum\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"api_gateway_latency\",\"region\":\"",
        {
         "Ref": "AWS::Region"
        },
@@ -604,15 +604,15 @@
        {
         "Ref": "StateMachineHttpApi26ACE8C1"
        },
-       "\",{\"label\":\"API Latency p50\",\"period\":900,\"stat\":\"p50\"}],[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
+       "\",{\"label\":\"api_gateway_latency_p50\",\"period\":900,\"stat\":\"p50\"}],[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
        {
         "Ref": "StateMachineHttpApi26ACE8C1"
        },
-       "\",{\"label\":\"API Latency p90\",\"period\":900,\"stat\":\"p90\"}],[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
+       "\",{\"label\":\"api_gateway_latency_p90\",\"period\":900,\"stat\":\"p90\"}],[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
        {
         "Ref": "StateMachineHttpApi26ACE8C1"
        },
-       "\",{\"label\":\"API Latency p99\",\"period\":900,\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"API GW Errors\",\"region\":\"",
+       "\",{\"label\":\"api_gateway_latency_p99\",\"period\":900,\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"api_gateway_errors\",\"region\":\"",
        {
         "Ref": "AWS::Region"
        },
@@ -620,11 +620,11 @@
        {
         "Ref": "StateMachineHttpApi26ACE8C1"
        },
-       "\",{\"label\":\"4XX Errors\",\"period\":900,\"stat\":\"Sum\"}],[\"AWS/ApiGateway\",\"5XXError\",\"ApiId\",\"",
+       "\",{\"label\":\"api_gateway_4XXErrors\",\"period\":900,\"stat\":\"Sum\"}],[\"AWS/ApiGateway\",\"5XXError\",\"ApiId\",\"",
        {
         "Ref": "StateMachineHttpApi26ACE8C1"
        },
-       "\",{\"label\":\"5XX Errors\",\"period\":900,\"stat\":\"Sum\"}]],\"yAxis\":{}}}]}"
+       "\",{\"label\":\"api_gateway_5XXErrors\",\"period\":900,\"stat\":\"Sum\"}]],\"yAxis\":{}}}]}"
       ]
      ]
     }

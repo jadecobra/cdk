@@ -36,16 +36,16 @@ class ApiGatewayCloudWatch(WellArchitectedFrameworkConstruct):
         return self.create_cloudwatch_alarm(
             id="ApiGateway4XXErrorsGreaterThan1Percent",
             metric=self.create_cloudwatch_math_expression(
-                expression="m1/m2*100",
-                label="% API Gateway 4xx Errors",
+                expression="m1 / m2 * 100",
+                label="api_gateway_4XX_errors_percentage",
                 using_metrics={
                     "m1": self.add_api_gateway_metric(
                         metric_name='4XXError',
-                        label='4XX Errors',
+                        label='4XX_errors',
                     ),
                     "m2": self.add_api_gateway_metric(
                         metric_name='Count',
-                        label='# Requests',
+                        label='number_of_requests',
                     ),
                 },
             ),
@@ -56,7 +56,7 @@ class ApiGatewayCloudWatch(WellArchitectedFrameworkConstruct):
             id="APIGateway5XXErrorsGreaterThan0",
             metric=self.add_api_gateway_metric(
                 metric_name="5XXError",
-                label="5XX Errors",
+                label="api_gateway_5XX_errors",
                 statistic="p99",
             ),
             threshold=0,
@@ -67,11 +67,19 @@ class ApiGatewayCloudWatch(WellArchitectedFrameworkConstruct):
             id="ApiGatewayP99LatencyGreaterThan1s",
             metric=self.add_api_gateway_metric(
                 metric_name="Latency",
-                label="API GW Latency",
+                label="api_gateway_latency",
                 statistic="p99",
             ),
             threshold=1000,
         )
+
+    @staticmethod
+    def percentile_statistics():
+        return ("p50", "p90", "p99",)
+
+    @staticmethod
+    def metric_names():
+        return (f'{code}XXError' for code in ('4', '5'))
 
     def create_api_gateway_errors_widget(self):
         return self.create_cloudwatch_widget(
@@ -79,13 +87,11 @@ class ApiGatewayCloudWatch(WellArchitectedFrameworkConstruct):
             left=[
                 self.add_api_gateway_metric(
                     metric_name=metric_name,
-                    label=label,
-                ) for metric_name, label in (
-                    ("4XXError", "4XX Errors"),
-                    ("5XXError", "5XX Errors"),
-                )
+                    label=f'api_gateway_{metric_name}s',
+                ) for metric_name in self.metric_names()
             ]
         )
+
 
     def create_api_gateway_latency_widget(self):
         return self.create_cloudwatch_widget(
@@ -95,9 +101,7 @@ class ApiGatewayCloudWatch(WellArchitectedFrameworkConstruct):
                     metric_name="Latency",
                     label=f'api_gateway_latency_{statistic}',
                     statistic=statistic,
-                ) for statistic in (
-                    "p50", "p90", "p99",
-                )
+                ) for statistic in self.percentile_statistics()
             ]
         )
 

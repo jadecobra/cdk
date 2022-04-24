@@ -97,7 +97,7 @@
     "DisplayName": "ErrorTopic"
    }
   },
-  "HttpApiApiGatewayCloudWatchAPIGateway4XXErrors196542324": {
+  "HttpApiApiGatewayCloudWatchApiGateway4XXErrorsGreaterThan1PercentE2675956": {
    "Type": "AWS::CloudWatch::Alarm",
    "Properties": {
     "ComparisonOperator": "GreaterThanOrEqualToThreshold",
@@ -110,13 +110,13 @@
     "DatapointsToAlarm": 1,
     "Metrics": [
      {
-      "Expression": "m1/m2*100",
+      "Expression": "m1 / m2 * 100",
       "Id": "expr_1",
-      "Label": "% API Gateway 4xx Errors"
+      "Label": "api_gateway_4XX_errors_percentage"
      },
      {
       "Id": "m1",
-      "Label": "4XX Errors",
+      "Label": "4XX_errors",
       "MetricStat": {
        "Metric": {
         "Dimensions": [
@@ -138,7 +138,7 @@
      },
      {
       "Id": "m2",
-      "Label": "# Requests",
+      "Label": "number_of_requests",
       "MetricStat": {
        "Metric": {
         "Dimensions": [
@@ -163,7 +163,7 @@
     "TreatMissingData": "notBreaching"
    }
   },
-  "HttpApiApiGatewayCloudWatchAPIGateway5XXErrors068AFC677": {
+  "HttpApiApiGatewayCloudWatchAPIGateway5XXErrorsGreaterThan061175F19": {
    "Type": "AWS::CloudWatch::Alarm",
    "Properties": {
     "ComparisonOperator": "GreaterThanOrEqualToThreshold",
@@ -177,7 +177,7 @@
     "Metrics": [
      {
       "Id": "m1",
-      "Label": "5XX Errors",
+      "Label": "api_gateway_5XX_errors",
       "MetricStat": {
        "Metric": {
         "Dimensions": [
@@ -202,7 +202,7 @@
     "TreatMissingData": "notBreaching"
    }
   },
-  "HttpApiApiGatewayCloudWatchAPIp99latencyalarm1s56F58CDD": {
+  "HttpApiApiGatewayCloudWatchApiGatewayP99LatencyGreaterThan1s305D3AE2": {
    "Type": "AWS::CloudWatch::Alarm",
    "Properties": {
     "ComparisonOperator": "GreaterThanOrEqualToThreshold",
@@ -216,7 +216,7 @@
     "Metrics": [
      {
       "Id": "m1",
-      "Label": "API GW Latency",
+      "Label": "api_gateway_latency",
       "MetricStat": {
        "Metric": {
         "Dimensions": [
@@ -256,7 +256,7 @@
        {
         "Ref": "HttpApiHttpAPI53748FB6"
        },
-       "\",{\"label\":\"# Requests\",\"period\":900,\"stat\":\"Sum\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"API GW Latency\",\"region\":\"",
+       "\",{\"label\":\"# Requests\",\"period\":900,\"stat\":\"Sum\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"api_gateway_latency\",\"region\":\"",
        {
         "Ref": "AWS::Region"
        },
@@ -264,15 +264,15 @@
        {
         "Ref": "HttpApiHttpAPI53748FB6"
        },
-       "\",{\"label\":\"API Latency p50\",\"period\":900,\"stat\":\"p50\"}],[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
+       "\",{\"label\":\"api_gateway_latency_p50\",\"period\":900,\"stat\":\"p50\"}],[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
        {
         "Ref": "HttpApiHttpAPI53748FB6"
        },
-       "\",{\"label\":\"API Latency p90\",\"period\":900,\"stat\":\"p90\"}],[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
+       "\",{\"label\":\"api_gateway_latency_p90\",\"period\":900,\"stat\":\"p90\"}],[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
        {
         "Ref": "HttpApiHttpAPI53748FB6"
        },
-       "\",{\"label\":\"API Latency p99\",\"period\":900,\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"API GW Errors\",\"region\":\"",
+       "\",{\"label\":\"api_gateway_latency_p99\",\"period\":900,\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"api_gateway_errors\",\"region\":\"",
        {
         "Ref": "AWS::Region"
        },
@@ -280,11 +280,11 @@
        {
         "Ref": "HttpApiHttpAPI53748FB6"
        },
-       "\",{\"label\":\"4XX Errors\",\"period\":900,\"stat\":\"Sum\"}],[\"AWS/ApiGateway\",\"5XXError\",\"ApiId\",\"",
+       "\",{\"label\":\"api_gateway_4XXErrors\",\"period\":900,\"stat\":\"Sum\"}],[\"AWS/ApiGateway\",\"5XXError\",\"ApiId\",\"",
        {
         "Ref": "HttpApiHttpAPI53748FB6"
        },
-       "\",{\"label\":\"5XX Errors\",\"period\":900,\"stat\":\"Sum\"}]],\"yAxis\":{}}}]}"
+       "\",{\"label\":\"api_gateway_5XXErrors\",\"period\":900,\"stat\":\"Sum\"}]],\"yAxis\":{}}}]}"
       ]
      ]
     }
