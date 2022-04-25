@@ -63,6 +63,7 @@ class WellArchitected(aws_cdk.App):
         # simple_graphql_service.SimpleGraphQlService(self, "SimpleGraphqlService", )
         # dynamo_streamer.DynamoStreamer(self, "DynamoStreamer", )
         # lambda_power_tuner.LambdaPowerTuner(self, "LambdaPowerTuner", )
+        http_api_lambda_function_dynamodb.HttpApiLambdaFunctionDynamoDb(self, 'HttpApiLambdaFunctionDynamoDb')
 
     def create_webservice(self):
         error_sns_topic = sns_topic.SnsTopic(self, 'SnsTopic').topic

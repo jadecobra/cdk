@@ -18428,3 +18428,6 @@
 2022-04-24 19:35:37.797716::Time taken to synthesize stack: HttpApiLambdaFunction::  4.6403 seconds
 2022-04-24 19:35:42.447526::Time taken to synthesize stack: HttpApiStateMachine::  4.6452 seconds
 2022-04-24 19:35:47.036344::Time taken to synthesize stack: WebApplicationFirewall::  4.5857 seconds
+2022-04-24 19:36:52.869498::Time taken to synthesize stack: HttpApiLambdaFunction::  4.3593 seconds
+2022-04-24 19:36:57.208561::Time taken to synthesize stack: HttpApiStateMachine::  4.3333 seconds
+2022-04-24 19:37:01.628056::Time taken to synthesize stack: WebApplicationFirewall::  4.4163 seconds
