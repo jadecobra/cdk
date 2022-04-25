@@ -5,7 +5,7 @@ try:
     import big_fan
     import destined_lambda
     import dynamodb_table
-    import dynamo_streamer
+    import http_api_dynamodb
     import event_bridge_atm
     import event_bridge_circuit_breaker
     import event_bridge_etl
@@ -23,7 +23,7 @@ try:
     import sns_topic
     import xray_tracer
     import web_application_firewall
-    import state_machine_http_api
+    import http_api_step_functions
     import simple_graphql_service
 except ImportError as error:
     print(error)
@@ -59,7 +59,7 @@ class WellArchitected(aws_cdk.App):
         # rds_proxy.RdsProxy(self, "RdsProxy", )
         # saga_step_function.SagaStepFunction(self, "SagaStepFunction", )
         # scalable_webhook.ScalableWebhook(self, "ScalableWebhook", )
-        state_machine_http_api.StateMachine(self, "StateMachine", )
+        http_api_step_functions.StateMachine(self, "HttpApiStateMachine")
         # simple_graphql_service.SimpleGraphQlService(self, "SimpleGraphqlService", )
         # dynamo_streamer.DynamoStreamer(self, "DynamoStreamer", )
         # lambda_power_tuner.LambdaPowerTuner(self, "LambdaPowerTuner", )
@@ -84,12 +84,12 @@ class WellArchitected(aws_cdk.App):
         )
         hits_record.grant_read_write_data(hits_counter.lambda_function)
         http_api_gateway.LambdaHttpApiGateway(
-            self, 'LambdaHttpApiGateway',
+            self, 'HttpApiLambdaFunction',
             lambda_function=hits_counter.lambda_function,
             error_topic=error_sns_topic,
         )
         self.rest_api = rest_api.LambdaRestAPIGatewayStack(
-            self, 'LambdaRestAPIGateway',
+            self, 'RestAPILambdaFunction',
             lambda_function=hits_counter.lambda_function,
             error_topic=error_sns_topic,
         ).rest_api
