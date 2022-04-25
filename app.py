@@ -4,27 +4,28 @@ import os
 try:
     import big_fan
     import destined_lambda
-    import dynamodb_table
-    import http_api_dynamodb
+    import well_architected_dynamodb_table
     import event_bridge_atm
     import event_bridge_circuit_breaker
     import event_bridge_etl
-    import http_api_gateway
+    import http_api_dynamodb
+    import http_api_step_functions
+    import http_api_lambda_dynamodb
     import lambda_circuit_breaker
-    import lambda_function
     import lambda_power_tuner
     import lambda_trilogy.lambda_lith
     import lambda_trilogy.fat_lambda
     import lambda_trilogy.single_purpose_lambda
     import rds_proxy
-    import rest_api
     import saga_step_function
     import scalable_webhook
     import sns_topic
     import xray_tracer
     import web_application_firewall
-    import http_api_step_functions
     import simple_graphql_service
+    import well_architected_http_api
+    import well_architected_rest_api
+    import well_architected_lambda
 except ImportError as error:
     print(error)
     os.system('pip install -r requirements.txt')
@@ -38,7 +39,7 @@ class WellArchitected(aws_cdk.App):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.create_webservice()
+        # self.create_webservice()
         # self.create_xray_tracer()
 
         # big_fan.BigFan(self, "BigFan")
@@ -59,15 +60,19 @@ class WellArchitected(aws_cdk.App):
         # rds_proxy.RdsProxy(self, "RdsProxy", )
         # saga_step_function.SagaStepFunction(self, "SagaStepFunction", )
         # scalable_webhook.ScalableWebhook(self, "ScalableWebhook", )
-        http_api_step_functions.HttpApiStateMachine(self, "HttpApiStateMachine")
         # simple_graphql_service.SimpleGraphQlService(self, "SimpleGraphqlService", )
         # dynamo_streamer.DynamoStreamer(self, "DynamoStreamer", )
         # lambda_power_tuner.LambdaPowerTuner(self, "LambdaPowerTuner", )
-        http_api_lambda_function_dynamodb.HttpApiLambdaFunctionDynamoDb(self, 'HttpApiLambdaFunctionDynamoDb')
+        http_api_lambda_dynamodb.HttpApiLambdaDynamodb(
+            self, 'HttpApiLambdaDynamodb',
+            lambda_function_name='hit_counter'
+        )
+        # http_api_step_functions.HttpApiStateMachine(self, "HttpApiStateMachine")
 
     def create_webservice(self):
+
         error_sns_topic = sns_topic.SnsTopic(self, 'SnsTopic').topic
-        hits_record = dynamodb_table.DynamoDBTableStack(
+        hits_record = well_architected_dynamodb_table.DynamoDBTableStack(
             self, 'DynamoDBTable',
             error_topic=error_sns_topic,
             partition_key=aws_dynamodb.Attribute(
@@ -75,7 +80,7 @@ class WellArchitected(aws_cdk.App):
                 type=aws_dynamodb.AttributeType.STRING,
             )
         ).dynamodb_table
-        hits_counter = lambda_function.LambdaFunctionStack(
+        hits_counter = well_architected_lambda.LambdaFunctionStack(
             self, 'HitCounter',
             function_name='hit_counter',
             error_topic=error_sns_topic,
@@ -84,12 +89,12 @@ class WellArchitected(aws_cdk.App):
             },
         )
         hits_record.grant_read_write_data(hits_counter.lambda_function)
-        http_api_gateway.LambdaHttpApiGateway(
+        well_architected_http_api.LambdaHttpApiGateway(
             self, 'HttpApiLambdaFunction',
             lambda_function=hits_counter.lambda_function,
             error_topic=error_sns_topic,
         )
-        self.rest_api = rest_api.LambdaRestAPIGatewayStack(
+        self.rest_api = well_architected_rest_api.LambdaRestAPIGatewayStack(
             self, 'RestAPILambdaFunction',
             lambda_function=hits_counter.lambda_function,
             error_topic=error_sns_topic,

@@ -1,0 +1,318 @@
+{
+ "Resources": {
+  "HttpApiErrorTopicD26302CE": {
+   "Type": "AWS::SNS::Topic",
+   "Properties": {
+    "DisplayName": "ErrorTopic"
+   }
+  },
+  "HttpApiHttpAPI53748FB6": {
+   "Type": "AWS::ApiGatewayV2::Api",
+   "Properties": {
+    "Name": "HttpAPI",
+    "ProtocolType": "HTTP"
+   }
+  },
+  "HttpApiHttpAPIDefaultRouteHTTPLambdaIntegrationB3918BA8": {
+   "Type": "AWS::ApiGatewayV2::Integration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "HttpApiHttpAPI53748FB6"
+    },
+    "IntegrationType": "AWS_PROXY",
+    "IntegrationUri": {
+     "Fn::ImportValue": "HitCounter:ExportsOutputFnGetAtthitcounterLambdaFunctionB862C182Arn3B74EE41"
+    },
+    "PayloadFormatVersion": "2.0"
+   }
+  },
+  "HttpApiHttpAPIDefaultRouteHTTPLambdaIntegrationPermission59C87145": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::ImportValue": "HitCounter:ExportsOutputFnGetAtthitcounterLambdaFunctionB862C182Arn3B74EE41"
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "HttpApiHttpAPI53748FB6"
+       },
+       "/*/*"
+      ]
+     ]
+    }
+   }
+  },
+  "HttpApiHttpAPIDefaultRouteD62BFA4D": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "HttpApiHttpAPI53748FB6"
+    },
+    "RouteKey": "$default",
+    "AuthorizationType": "NONE",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "HttpApiHttpAPIDefaultRouteHTTPLambdaIntegrationB3918BA8"
+       }
+      ]
+     ]
+    }
+   }
+  },
+  "HttpApiHttpAPIDefaultStage786A62BE": {
+   "Type": "AWS::ApiGatewayV2::Stage",
+   "Properties": {
+    "ApiId": {
+     "Ref": "HttpApiHttpAPI53748FB6"
+    },
+    "StageName": "$default",
+    "AutoDeploy": true
+   }
+  },
+  "HttpApiApiGatewayCloudWatchErrorTopicEDAFD698": {
+   "Type": "AWS::SNS::Topic",
+   "Properties": {
+    "DisplayName": "ErrorTopic"
+   }
+  },
+  "HttpApiApiGatewayCloudWatchApiGateway4XXErrorsGreaterThan1PercentE2675956": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "HttpApiApiGatewayCloudWatchErrorTopicEDAFD698"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "Metrics": [
+     {
+      "Expression": "m1 / m2 * 100",
+      "Id": "expr_1",
+      "Label": "api_gateway_4XX_errors_percentage"
+     },
+     {
+      "Id": "m1",
+      "Label": "4XX_errors",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "ApiId",
+          "Value": {
+           "Ref": "HttpApiHttpAPI53748FB6"
+          }
+         }
+        ],
+        "MetricName": "4XXError",
+        "Namespace": "AWS/ApiGateway"
+       },
+       "Period": 300,
+       "Stat": "Sum",
+       "Unit": "Count"
+      },
+      "ReturnData": false
+     },
+     {
+      "Id": "m2",
+      "Label": "number_of_requests",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "ApiId",
+          "Value": {
+           "Ref": "HttpApiHttpAPI53748FB6"
+          }
+         }
+        ],
+        "MetricName": "Count",
+        "Namespace": "AWS/ApiGateway"
+       },
+       "Period": 300,
+       "Stat": "Sum",
+       "Unit": "Count"
+      },
+      "ReturnData": false
+     }
+    ],
+    "Threshold": 1,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "HttpApiApiGatewayCloudWatchAPIGateway5XXErrorsGreaterThan061175F19": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "HttpApiApiGatewayCloudWatchErrorTopicEDAFD698"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "Metrics": [
+     {
+      "Id": "m1",
+      "Label": "api_gateway_5XX_errors",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "ApiId",
+          "Value": {
+           "Ref": "HttpApiHttpAPI53748FB6"
+          }
+         }
+        ],
+        "MetricName": "5XXError",
+        "Namespace": "AWS/ApiGateway"
+       },
+       "Period": 900,
+       "Stat": "p99",
+       "Unit": "Count"
+      },
+      "ReturnData": true
+     }
+    ],
+    "Threshold": 0,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "HttpApiApiGatewayCloudWatchApiGatewayP99LatencyGreaterThan1s305D3AE2": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "HttpApiApiGatewayCloudWatchErrorTopicEDAFD698"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "Metrics": [
+     {
+      "Id": "m1",
+      "Label": "api_gateway_latency",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "ApiId",
+          "Value": {
+           "Ref": "HttpApiHttpAPI53748FB6"
+          }
+         }
+        ],
+        "MetricName": "Latency",
+        "Namespace": "AWS/ApiGateway"
+       },
+       "Period": 900,
+       "Stat": "p99",
+       "Unit": "Count"
+      },
+      "ReturnData": true
+     }
+    ],
+    "Threshold": 1000,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "HttpApiApiGatewayCloudWatchCloudWatchDashBoard708CFF5B": {
+   "Type": "AWS::CloudWatch::Dashboard",
+   "Properties": {
+    "DashboardBody": {
+     "Fn::Join": [
+      "",
+      [
+       "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Requests\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":false,\"metrics\":[[\"AWS/ApiGateway\",\"Count\",\"ApiId\",\"",
+       {
+        "Ref": "HttpApiHttpAPI53748FB6"
+       },
+       "\",{\"label\":\"# Requests\",\"period\":900,\"stat\":\"Sum\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"api_gateway_latency\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":true,\"metrics\":[[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
+       {
+        "Ref": "HttpApiHttpAPI53748FB6"
+       },
+       "\",{\"label\":\"api_gateway_latency_p50\",\"period\":900,\"stat\":\"p50\"}],[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
+       {
+        "Ref": "HttpApiHttpAPI53748FB6"
+       },
+       "\",{\"label\":\"api_gateway_latency_p90\",\"period\":900,\"stat\":\"p90\"}],[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
+       {
+        "Ref": "HttpApiHttpAPI53748FB6"
+       },
+       "\",{\"label\":\"api_gateway_latency_p99\",\"period\":900,\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"api_gateway_errors\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":true,\"metrics\":[[\"AWS/ApiGateway\",\"4XXError\",\"ApiId\",\"",
+       {
+        "Ref": "HttpApiHttpAPI53748FB6"
+       },
+       "\",{\"label\":\"api_gateway_4XXErrors\",\"period\":900,\"stat\":\"Sum\"}],[\"AWS/ApiGateway\",\"5XXError\",\"ApiId\",\"",
+       {
+        "Ref": "HttpApiHttpAPI53748FB6"
+       },
+       "\",{\"label\":\"api_gateway_5XXErrors\",\"period\":900,\"stat\":\"Sum\"}]],\"yAxis\":{}}}]}"
+      ]
+     ]
+    }
+   }
+  }
+ },
+ "Outputs": {
+  "HttpApiHTTPAPIUrl35A90695": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "HttpApiHttpAPI53748FB6"
+      },
+      ".execute-api.",
+      {
+       "Ref": "AWS::Region"
+      },
+      ".",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/"
+     ]
+    ]
+   }
+  }
+ }
+}

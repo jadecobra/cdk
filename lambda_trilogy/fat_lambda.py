@@ -1,6 +1,6 @@
 import aws_cdk
 import constructs
-import lambda_function
+import well_architected_lambda
 
 from aws_cdk import (
     aws_lambda as aws_lambda,

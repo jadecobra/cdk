@@ -29,14 +29,14 @@ class TestWellArchitectedPatterns(tests.utilities.TestTemplates):
             # 'SnsRestApi',
             # 'SNSTopic',
             # 'SqsFlow',
-            'HttpApiLambdaFunction',
-            'HttpApiStateMachine',
-            'HttpApiLambdaFunctionDynamoDb',
-            'WebApplicationFirewall',
+            # 'HttpApiLambdaFunction',
+            # 'HttpApiStateMachine',
+            'HttpApiLambdaDynamodb',
+            # 'WebApplicationFirewall',
             # 'XRayTracerSnsFanOutTopic',
         )
 
     def test_well_architected_cdk_patterns(self):
-        for pattern in self.patterns():s
+        for pattern in self.patterns():
             with self.subTest(i=pattern):
                 self.assert_template_equal(pattern)

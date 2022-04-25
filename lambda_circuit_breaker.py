@@ -1,6 +1,6 @@
 import aws_cdk
 import constructs
-import dynamodb_table
+import well_architected_dynamodb_table
 import aws_cdk.aws_apigatewayv2_integrations_alpha as integrations
 import aws_cdk.aws_apigatewayv2_alpha
 
@@ -11,7 +11,7 @@ class LambdaCircuitBreaker(aws_cdk.Stack):
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        table = dynamodb_table.DynamoDBTableConstruct(
+        table = well_architected_dynamodb_table.DynamoDBTableConstruct(
             self, "CircuitBreakerTable",
             partition_key=aws_cdk.aws_dynamodb.Attribute(
                 name="id",

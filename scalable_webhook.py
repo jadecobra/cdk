@@ -1,6 +1,6 @@
 import aws_cdk
 import constructs
-import lambda_function
+import well_architected_lambda
 
 from aws_cdk import (
     aws_lambda as aws_lambda,
@@ -28,14 +28,14 @@ class ScalableWebhook(aws_cdk.Stack):
             visibility_timeout=aws_cdk.Duration.seconds(300)
         )
 
-        publisher = lambda_function.create_python_lambda_function(
+        publisher = well_architected_lambda.create_python_lambda_function(
             self, function_name='publisher',
             environment_variables={
                 'queueURL': queue.queue_url
             }
         )
 
-        subscriber = lambda_function.create_python_lambda_function(
+        subscriber = well_architected_lambda.create_python_lambda_function(
             self, function_name='subscriber',
             environment_variables={
                 'queueURL': queue.queue_url,

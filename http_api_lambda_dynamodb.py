@@ -1,0 +1,61 @@
+import aws_cdk
+import aws_cdk.aws_apigatewayv2_integrations_alpha
+import constructs
+import well_architected
+import well_architected_dynamodb_table
+import well_architected_lambda
+import well_architected_http_api
+import well_architected_rest_api
+
+class HttpApiLambdaDynamodb(well_architected.WellArchitectedFrameworkStack):
+
+    def __init__(
+        self, scope: constructs.Construct, id: str,
+        partition_key='path',
+        sort_key=None,
+        time_to_live_attribute=None,
+        lambda_function_name=None,
+        **kwargs
+    ):
+        super().__init__(scope, id, **kwargs)
+        self.error_topic = aws_cdk.aws_sns.Topic(
+            self, 'SnsTopic',
+            display_name=id
+        )
+        self.dynamodb_table = well_architected_dynamodb_table.DynamoDBTableConstruct(
+            self, 'DynamoDbTable',
+            error_topic=self.error_topic,
+            partition_key=aws_cdk.aws_dynamodb.Attribute(
+                name=partition_key,
+                type=aws_cdk.aws_dynamodb.AttributeType.STRING,
+            ),
+            sort_key=sort_key,
+            time_to_live_attribute=time_to_live_attribute,
+        ).dynamodb_table
+        self.lambda_function = well_architected_lambda.LambdaFunctionConstruct(
+            self, 'LambdaFunction',
+            function_name=lambda_function_name,
+            environment_variables={
+                'DYNAMODB_TABLE_NAME': self.dynamodb_table.table_name
+            },
+            error_topic=self.error_topic,
+        ).lambda_function
+        self.dynamodb_table.grant_read_write_data(self.lambda_function)
+
+        self.http_api = well_architected_http_api.HttpApi(
+            self, 'HttpApi',
+            default_integration=aws_cdk.aws_apigatewayv2_integrations_alpha.HttpLambdaIntegration(
+                'HttpApiLambdaIntegration',
+                handler=self.lambda_function
+            )
+        ).http_api
+
+        self.rest_api = well_architected_rest_api.LambdaRestAPIGatewayConstruct(
+            self, 'RestApi',
+            lambda_function=self.lambda_function,
+            error_topic=self.error_topic,
+        ).rest_api
+        # web_application_firewall.WebApplicationFirewall(
+        #     self, 'WebApplicationFirewall',
+        #     target_arn=self.rest_api.resource_arn,
+        # )
