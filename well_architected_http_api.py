@@ -6,7 +6,7 @@ import aws_cdk.aws_apigatewayv2_integrations_alpha
 import well_architected
 
 
-class HttpApi(well_architected.WellArchitectedFrameworkConstruct):
+class HttpApi(well_architected.WellArchitectedConstruct):
 
     def __init__(
         self, scope: constructs.Construct, id: str,
@@ -15,16 +15,20 @@ class HttpApi(well_architected.WellArchitectedFrameworkConstruct):
         default_integration=None,
         **kwargs
     ) -> None:
-        super().__init__(scope, id, **kwargs)
+        super().__init__(
+            scope, id,
+            error_topic=error_topic,
+            **kwargs
+        )
 
         self.http_api = aws_cdk.aws_apigatewayv2_alpha.HttpApi(
-            self, 'HttpAPI',
+            self, 'HttpApi',
             create_default_stage=create_default_stage,
             default_integration=default_integration,
         )
 
         api_gateway_cloudwatch.ApiGatewayCloudWatch(
-            self, 'ApiGatewayCloudWatch',
+            self, 'HttpApiCloudWatch',
             api_id=self.http_api.http_api_id,
             error_topic=error_topic,
         )
@@ -43,7 +47,7 @@ class LambdaHttpApiGateway(well_architected.WellArchitectedFrameworkStack):
         super().__init__(scope, id, **kwargs)
 
         self.http_api = HttpApi(
-            self, 'HttpApi',
+            self, id,
             default_integration=aws_cdk.aws_apigatewayv2_integrations_alpha.HttpLambdaIntegration(
                 'HTTPLambdaIntegration',
                 handler=lambda_function

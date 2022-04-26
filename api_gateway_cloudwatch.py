@@ -2,9 +2,9 @@ import aws_cdk
 import constructs
 
 from aws_cdk.aws_cloudwatch import Metric, Unit
-from well_architected import WellArchitectedFrameworkConstruct
+from well_architected import WellArchitectedConstruct
 
-class ApiGatewayCloudWatch(WellArchitectedFrameworkConstruct):
+class ApiGatewayCloudWatch(WellArchitectedConstruct):
 
     def __init__(self,
         scope: constructs.Construct, id: str, api_id=None,

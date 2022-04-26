@@ -34,16 +34,17 @@ class HttpApiLambdaDynamodb(well_architected.WellArchitectedFrameworkStack):
         ).dynamodb_table
         self.lambda_function = well_architected_lambda.LambdaFunctionConstruct(
             self, 'LambdaFunction',
+            error_topic=self.error_topic,
             function_name=lambda_function_name,
             environment_variables={
                 'DYNAMODB_TABLE_NAME': self.dynamodb_table.table_name
             },
-            error_topic=self.error_topic,
         ).lambda_function
         self.dynamodb_table.grant_read_write_data(self.lambda_function)
 
         self.http_api = well_architected_http_api.HttpApi(
             self, 'HttpApi',
+            error_topic=self.error_topic,
             default_integration=aws_cdk.aws_apigatewayv2_integrations_alpha.HttpLambdaIntegration(
                 'HttpApiLambdaIntegration',
                 handler=self.lambda_function
@@ -52,8 +53,8 @@ class HttpApiLambdaDynamodb(well_architected.WellArchitectedFrameworkStack):
 
         self.rest_api = well_architected_rest_api.LambdaRestAPIGatewayConstruct(
             self, 'RestApi',
-            lambda_function=self.lambda_function,
             error_topic=self.error_topic,
+            lambda_function=self.lambda_function,
         ).rest_api
         # web_application_firewall.WebApplicationFirewall(
         #     self, 'WebApplicationFirewall',

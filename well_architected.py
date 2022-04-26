@@ -2,7 +2,7 @@ import aws_cdk
 import constructs
 
 
-class WellArchitectedFrameworkConstruct(constructs.Construct):
+class WellArchitectedConstruct(constructs.Construct):
 
     def __init__(self, scope: constructs.Construct, id: str, error_topic=None, **kwargs):
         super().__init__(scope, id, **kwargs)
@@ -10,7 +10,7 @@ class WellArchitectedFrameworkConstruct(constructs.Construct):
 
     def create_error_topic(self):
         return aws_cdk.aws_sns.Topic(
-            self, "ErrorTopic",
+            self, f"{id}ErrorTopic",
             display_name="ErrorTopic",
         )
 

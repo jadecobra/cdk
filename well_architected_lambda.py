@@ -2,7 +2,7 @@ import constructs
 import aws_cdk
 import well_architected
 
-class LambdaFunctionConstruct(well_architected.WellArchitectedFrameworkConstruct):
+class LambdaFunctionConstruct(well_architected.WellArchitectedConstruct):
 
     def __init__(self, scope: constructs.Construct, id: str,
         function_name=None, handler_name=None,
@@ -13,7 +13,11 @@ class LambdaFunctionConstruct(well_architected.WellArchitectedFrameworkConstruct
         duration=60, vpc=None,
         **kwargs
     ) -> None:
-        super().__init__(scope, id, error_topic=error_topic, **kwargs)
+        super().__init__(
+            scope, id,
+            error_topic=error_topic,
+            **kwargs
+        )
         handler_name = 'handler' if handler_name is None else handler_name
         self.lambda_function = aws_cdk.aws_lambda.Function(
             self, 'LambdaFunction', # can we use id as function_name

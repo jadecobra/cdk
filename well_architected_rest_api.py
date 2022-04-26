@@ -2,16 +2,21 @@ import api_gateway_cloudwatch
 import aws_cdk.aws_apigateway as api_gateway
 import constructs
 import aws_cdk
+import well_architected
 
 from aws_cdk.aws_logs import LogGroup
 from aws_cdk.aws_lambda import Function
 from aws_cdk.aws_sns import ITopic
 
 
-class LambdaRestAPIGatewayConstruct(constructs.Construct):
+class LambdaRestAPIGatewayConstruct(well_architected.WellArchitectedConstruct):
 
     def __init__(self, scope: constructs.Construct, id: str, lambda_function: Function, error_topic:ITopic=None, **kwargs) -> None:
-        super().__init__(scope, id, **kwargs)
+        super().__init__(
+            scope, id,
+            error_topic=error_topic,
+            **kwargs
+        )
 
         self.rest_api = self.create_rest_api()
         self.error_topic = error_topic
