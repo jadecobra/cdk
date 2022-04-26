@@ -3,7 +3,7 @@ import constructs
 import well_architected
 import well_architected_api
 
-class ALambdaRestAPIGatewayConstruct(well_architected.WellArchitectedConstruct):
+class RestApiLambdaConstruct(well_architected.WellArchitectedConstruct):
 
     def __init__(self, scope: constructs.Construct, id: str, lambda_function: aws_cdk.aws_lambda.Function, error_topic:aws_cdk.aws_sns.Topic=None, **kwargs) -> None:
         super().__init__(
