@@ -56,22 +56,11 @@ class HttpApiLambdaDynamodb(well_architected.WellArchitectedStack):
             )
         ).api
 
-        # self.rest_api = well_architected_rest_api.LambdaRestAPIGatewayConstruct(
-        #     self, 'RestApiLambdaIntegration',
-        #     error_topic=self.error_topic,
-        #     lambda_function=self.lambda_function,
-        # ).rest_api
-        # self.http_api = well_architected_api.WellArchitectedApi(
-        #     self, 'RestApiGateway',
-        #     error_topic=self.error_topic,
-        #     api=aws_cdk.aws_apigatewayv2_alpha.HttpApi(
-        #         self, 'RestApi',
-        #         default_integration=aws_cdk.aws_apigatewayv2_integrations_alpha.HttpLambdaIntegration(
-        #             'LambdaFunction',
-        #             handler=self.lambda_function
-        #         ),
-        #     )
-        # ).api
+        self.rest_api = well_architected_rest_api.LambdaRestAPIGatewayConstruct(
+            self, 'RestApiLambdaIntegration',
+            error_topic=self.error_topic,
+            lambda_function=self.lambda_function,
+        ).rest_api
         # web_application_firewall.WebApplicationFirewall(
         #     self, 'WebApplicationFirewall',
         #     target_arn=self.rest_api.resource_arn,

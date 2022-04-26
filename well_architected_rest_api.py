@@ -32,7 +32,8 @@ class LambdaRestAPIGatewayConstruct(well_architected.WellArchitectedConstruct):
 
         well_architected_api.WellArchitectedApi(
             self, 'ApiGatewayCloudWatch',
-            api_id=self.api_id,
+            api=self.rest_api,
+            # api_id=self.api_id,
             error_topic=self.error_topic,
         )
 
