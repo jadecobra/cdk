@@ -45,10 +45,10 @@ class HttpApiLambdaDynamodb(well_architected.WellArchitectedStack):
         self.dynamodb_table.grant_read_write_data(self.lambda_function)
 
         self.http_api = well_architected_api.WellArchitectedApi(
-            scope, 'HttpApi',
+            self, 'ApiGateway',
             error_topic=self.error_topic,
             api=aws_cdk.aws_apigatewayv2_alpha.HttpApi(
-                self, 'LambdaFunctionIntegration',
+                self, 'HttpApi',
                 default_integration=aws_cdk.aws_apigatewayv2_integrations_alpha.HttpLambdaIntegration(
                     'LambdaFunction',
                     handler=self.lambda_function
