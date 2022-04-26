@@ -65,7 +65,7 @@ class HttpApiLambdaDynamodb(well_architected.WellArchitectedStack):
             self, 'RestApi',
             error_topic=self.error_topic,
             lambda_function=self.lambda_function,
-        ).rest_api
+        ).api
         # web_application_firewall.WebApplicationFirewall(
         #     self, 'WebApplicationFirewall',
         #     target_arn=self.rest_api.resource_arn,
