@@ -18818,3 +18818,7 @@
 2022-04-25 23:06:19.870613::Time taken to synthesize stack: HttpApiLambdaDynamodb::  4.6771 seconds
 2022-04-25 23:06:28.407361::Time taken to synthesize stack: HttpApiLambdaDynamodb::  4.6842 seconds
 2022-04-25 23:07:11.400307::Time taken to synthesize stack: HttpApiLambdaDynamodb::  4.6754 seconds
+2022-04-25 23:07:57.148876::Time taken to synthesize stack: HttpApiLambdaDynamodb::  4.7567 seconds
+2022-04-25 23:08:07.155840::Time taken to synthesize stack: HttpApiLambdaDynamodb::  4.8266 seconds
+2022-04-25 23:08:15.993942::Time taken to synthesize stack: HttpApiLambdaDynamodb::  4.6812 seconds
+2022-04-25 23:08:40.100937::Time taken to synthesize stack: HttpApiLambdaDynamodb::  4.5434 seconds
