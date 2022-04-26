@@ -1,28 +1,22 @@
 import aws_cdk
-import aws_cdk.aws_apigateway as api_gateway
 import constructs
 import well_architected
 import well_architected_api
 
-class ALambdaRestAPIGatewayConstruct(well_architected_api.WellArchitectedApi):
+class ALambdaRestAPIGatewayConstruct(well_architected.WellArchitectedConstruct):
 
-    def __init__(
-        self, scope: constructs.Construct, id: str,
-        lambda_function: aws_cdk.aws_lambda.Function,
-        error_topic:aws_cdk.aws_sns.Topic=None,
-        **kwargs
-    ) -> None:
+    def __init__(self, scope: constructs.Construct, id: str, lambda_function: aws_cdk.aws_lambda.Function, error_topic:aws_cdk.aws_sns.Topic=None, **kwargs) -> None:
         super().__init__(
             scope, id,
             error_topic=error_topic,
-            api=self.create_rest_api(),
             **kwargs
         )
 
-        # self.error_topic = error_topic
-        # self.api_id = self.api.rest_api_id
+        self.rest_api = self.create_rest_api()
+        self.error_topic = error_topic
+        self.api_id = self.rest_api.rest_api_id
         self.create_api_method(
-            resource=self.create_api_resource(self.api),
+            resource=self.create_api_resource(self.rest_api),
             lambda_function=lambda_function,
         )
 
@@ -30,12 +24,12 @@ class ALambdaRestAPIGatewayConstruct(well_architected_api.WellArchitectedApi):
         # self.resource_arn = f"arn:aws:apigateway:{self.region}::/restapis/{self.api_id}/stages/{self.rest_api.deployment_stage.stage_name}"
         self.resource_arn = "arn:aws:apigateway:{self.region}::/restapis/{self.api_id}/stages/{self.rest_api.deployment_stage.stage_name}"
 
-        # well_architected_api.WellArchitectedApi(
-        #     self, 'ApiGatewayCloudWatch',
-        #     api=self.api,
-        #     # api_id=self.api_id,
-        #     error_topic=self.error_topic,
-        # )
+        well_architected_api.WellArchitectedApi(
+            self, 'ApiGatewayCloudWatch',
+            api=self.rest_api,
+            # api_id=self.api_id,
+            error_topic=self.error_topic,
+        )
 
     def method_origin(self):
         return 'method.response.header.Access-Control-Allow-Origin'
@@ -45,7 +39,7 @@ class ALambdaRestAPIGatewayConstruct(well_architected_api.WellArchitectedApi):
 
     def create_method_responses(self):
         return [
-            api_gateway.MethodResponse(
+            aws_cdk.aws_apigateway.MethodResponse(
                 status_code=self.status_code(),
                 response_parameters={
                     self.method_origin(): True
@@ -61,7 +55,7 @@ class ALambdaRestAPIGatewayConstruct(well_architected_api.WellArchitectedApi):
 
     def create_integration_responses(self):
         return [
-            api_gateway.IntegrationResponse(
+            aws_cdk.aws_apigateway.IntegrationResponse(
                 status_code=self.status_code(),
                 response_parameters={
                     self.method_origin(): "'*'"
@@ -70,7 +64,7 @@ class ALambdaRestAPIGatewayConstruct(well_architected_api.WellArchitectedApi):
         ]
 
     def create_lambda_integration(self, lambda_function):
-        return api_gateway.LambdaIntegration(
+        return aws_cdk.aws_apigateway.LambdaIntegration(
             lambda_function,
             proxy=False,
             integration_responses=self.create_integration_responses()
@@ -85,26 +79,26 @@ class ALambdaRestAPIGatewayConstruct(well_architected_api.WellArchitectedApi):
     def method_deployment_options(self):
         return {
             # This special path applies to all resource paths and all HTTP methods
-            "/*/*": api_gateway.MethodDeploymentOptions(
+            "/*/*": aws_cdk.aws_apigateway.MethodDeploymentOptions(
                 throttling_rate_limit=100,
                 throttling_burst_limit=200
             )
         }
 
     def deploy_options(self):
-        return api_gateway.StageOptions(
+        return aws_cdk.aws_apigateway.StageOptions(
             method_options=self.method_deployment_options(),
-            access_log_format=api_gateway.AccessLogFormat.clf(),
-            access_log_destination=api_gateway.LogGroupLogDestination(
+            access_log_format=aws_cdk.aws_apigateway.AccessLogFormat.clf(),
+            access_log_destination=aws_cdk.aws_apigateway.LogGroupLogDestination(
                 self.create_log_group()
             ),
         )
 
     def create_rest_api(self):
-        return api_gateway.RestApi(
+        return aws_cdk.aws_apigateway.RestApi(
             self, 'LambdaAPIGateway',
             rest_api_name='hello',
-            endpoint_types=[api_gateway.EndpointType.REGIONAL],
+            endpoint_types=[aws_cdk.aws_apigateway.EndpointType.REGIONAL],
             deploy_options=self.deploy_options(),
         )
 
@@ -145,7 +139,7 @@ class LambdaRestAPIGatewayConstruct(well_architected.WellArchitectedConstruct):
 
     def create_method_responses(self):
         return [
-            api_gateway.MethodResponse(
+            aws_cdk.aws_apigateway.MethodResponse(
                 status_code=self.status_code(),
                 response_parameters={
                     self.method_origin(): True
@@ -161,7 +155,7 @@ class LambdaRestAPIGatewayConstruct(well_architected.WellArchitectedConstruct):
 
     def create_integration_responses(self):
         return [
-            api_gateway.IntegrationResponse(
+            aws_cdk.aws_apigateway.IntegrationResponse(
                 status_code=self.status_code(),
                 response_parameters={
                     self.method_origin(): "'*'"
@@ -170,7 +164,7 @@ class LambdaRestAPIGatewayConstruct(well_architected.WellArchitectedConstruct):
         ]
 
     def create_lambda_integration(self, lambda_function):
-        return api_gateway.LambdaIntegration(
+        return aws_cdk.aws_apigateway.LambdaIntegration(
             lambda_function,
             proxy=False,
             integration_responses=self.create_integration_responses()
@@ -185,26 +179,26 @@ class LambdaRestAPIGatewayConstruct(well_architected.WellArchitectedConstruct):
     def method_deployment_options(self):
         return {
             # This special path applies to all resource paths and all HTTP methods
-            "/*/*": api_gateway.MethodDeploymentOptions(
+            "/*/*": aws_cdk.aws_apigateway.MethodDeploymentOptions(
                 throttling_rate_limit=100,
                 throttling_burst_limit=200
             )
         }
 
     def deploy_options(self):
-        return api_gateway.StageOptions(
+        return aws_cdk.aws_apigateway.StageOptions(
             method_options=self.method_deployment_options(),
-            access_log_format=api_gateway.AccessLogFormat.clf(),
-            access_log_destination=api_gateway.LogGroupLogDestination(
+            access_log_format=aws_cdk.aws_apigateway.AccessLogFormat.clf(),
+            access_log_destination=aws_cdk.aws_apigateway.LogGroupLogDestination(
                 self.create_log_group()
             ),
         )
 
     def create_rest_api(self):
-        return api_gateway.RestApi(
+        return aws_cdk.aws_apigateway.RestApi(
             self, 'LambdaAPIGateway',
             rest_api_name='hello',
-            endpoint_types=[api_gateway.EndpointType.REGIONAL],
+            endpoint_types=[aws_cdk.aws_apigateway.EndpointType.REGIONAL],
             deploy_options=self.deploy_options(),
         )
 

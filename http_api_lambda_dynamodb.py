@@ -62,7 +62,7 @@ class HttpApiLambdaDynamodb(well_architected.WellArchitectedStack):
         #     lambda_function=self.lambda_function,
         # ).rest_api
         self.rest_api = well_architected_rest_api.ALambdaRestAPIGatewayConstruct(
-            self, 'RestApiLambdaIntegration',
+            self, 'RestApi',
             error_topic=self.error_topic,
             lambda_function=self.lambda_function,
         ).api

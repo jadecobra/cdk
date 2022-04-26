@@ -18,6 +18,8 @@ class WellArchitectedApi(well_architected.WellArchitectedConstruct):
             **kwargs
         )
         self.api = api
+        print('I got here')
+        print(type(self.api))
         self.api_id = self.get_api_id(api)
         self.create_api_gateway_4xx_alarm()
         self.create_api_gateway_5xx_alarm()
