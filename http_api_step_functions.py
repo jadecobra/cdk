@@ -7,7 +7,7 @@ import well_architected
 
 # TODO:
 # abstract HTTP API
-class HttpApiStateMachine(well_architected.WellArchitectedFrameworkStack):
+class HttpApiStateMachine(well_architected.WellArchitectedStack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)

@@ -58,11 +58,7 @@ class WellArchitectedConstruct(constructs.Construct):
         )
 
 
-class WellArchitectedApi(WellArchitectedConstruct):
-    pass
-
-
-class WellArchitectedFrameworkStack(aws_cdk.Stack):
+class WellArchitectedStack(aws_cdk.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs):
         super().__init__(

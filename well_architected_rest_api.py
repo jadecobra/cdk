@@ -1,4 +1,4 @@
-import api_gateway_cloudwatch
+import well_architected_api
 import aws_cdk.aws_apigateway as api_gateway
 import constructs
 import aws_cdk
@@ -30,7 +30,7 @@ class LambdaRestAPIGatewayConstruct(well_architected.WellArchitectedConstruct):
         # self.resource_arn = f"arn:aws:apigateway:{self.region}::/restapis/{self.api_id}/stages/{self.rest_api.deployment_stage.stage_name}"
         self.resource_arn = "arn:aws:apigateway:{self.region}::/restapis/{self.api_id}/stages/{self.rest_api.deployment_stage.stage_name}"
 
-        api_gateway_cloudwatch.ApiGatewayCloudWatch(
+        well_architected_api.WellArchitectedApi(
             self, 'ApiGatewayCloudWatch',
             api_id=self.api_id,
             error_topic=self.error_topic,

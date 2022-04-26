@@ -1,13 +1,15 @@
 import aws_cdk
 import aws_cdk.aws_apigatewayv2_integrations_alpha
+import aws_cdk.aws_apigatewayv2_alpha
 import constructs
 import well_architected
+import well_architected_api
 import well_architected_dynamodb_table
 import well_architected_lambda
 import well_architected_http_api
 import well_architected_rest_api
 
-class HttpApiLambdaDynamodb(well_architected.WellArchitectedFrameworkStack):
+class HttpApiLambdaDynamodb(well_architected.WellArchitectedStack):
 
     def __init__(
         self, scope: constructs.Construct, id: str,
@@ -42,20 +44,23 @@ class HttpApiLambdaDynamodb(well_architected.WellArchitectedFrameworkStack):
         ).lambda_function
         self.dynamodb_table.grant_read_write_data(self.lambda_function)
 
-        self.http_api = well_architected_http_api.HttpApi(
-            self, 'HttpApi',
+        self.http_api = well_architected_api.WellArchitectedApi(
+            scope, 'HttpApi',
             error_topic=self.error_topic,
-            default_integration=aws_cdk.aws_apigatewayv2_integrations_alpha.HttpLambdaIntegration(
-                'LambdaFunctionIntegration',
-                handler=self.lambda_function
+            api=aws_cdk.aws_apigatewayv2_alpha.HttpApi(
+                self, 'LambdaFunctionIntegration',
+                default_integration=aws_cdk.aws_apigatewayv2_integrations_alpha.HttpLambdaIntegration(
+                    'LambdaFunction',
+                    handler=self.lambda_function
+                ),
             )
-        ).http_api
+        ).api
 
-        self.rest_api = well_architected_rest_api.LambdaRestAPIGatewayConstruct(
-            self, 'RestApiLambdaIntegration',
-            error_topic=self.error_topic,
-            lambda_function=self.lambda_function,
-        ).rest_api
+        # self.rest_api = well_architected_rest_api.LambdaRestAPIGatewayConstruct(
+        #     self, 'RestApiLambdaIntegration',
+        #     error_topic=self.error_topic,
+        #     lambda_function=self.lambda_function,
+        # ).rest_api
         # web_application_firewall.WebApplicationFirewall(
         #     self, 'WebApplicationFirewall',
         #     target_arn=self.rest_api.resource_arn,
