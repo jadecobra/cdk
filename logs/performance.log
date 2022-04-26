@@ -18700,3 +18700,13 @@
 2022-04-25 21:41:28.786459::Time taken to synthesize stack: HttpApiLambdaDynamodb::  4.6612 seconds
 2022-04-25 21:41:39.294720::Time taken to synthesize stack: HttpApiLambdaDynamodb::  4.6800 seconds
 2022-04-25 21:42:47.094287::Time taken to synthesize stack: HttpApiLambdaDynamodb::  4.6434 seconds
+2022-04-25 21:50:14.503549::Time taken to synthesize stack: HttpApiLambdaDynamodb::  4.8652 seconds
+2022-04-25 21:50:25.219589::Time taken to synthesize stack: HttpApiLambdaDynamodb::  4.7503 seconds
+2022-04-25 21:50:33.704137::Time taken to synthesize stack: HttpApiLambdaDynamodb::  4.5824 seconds
+2022-04-25 21:50:42.043363::Time taken to synthesize stack: HttpApiLambdaDynamodb::  4.5271 seconds
+2022-04-25 21:50:52.456618::Time taken to synthesize stack: HttpApiLambdaDynamodb::  4.5703 seconds
+2022-04-25 21:51:02.856225::Time taken to synthesize stack: HttpApiLambdaDynamodb::  4.5590 seconds
+2022-04-25 21:51:11.290265::Time taken to synthesize stack: HttpApiLambdaDynamodb::  4.6154 seconds
+2022-04-25 21:54:47.773800::Time taken to synthesize stack: HttpApiLambdaDynamodb::  4.8250 seconds
+2022-04-25 21:54:58.395107::Time taken to synthesize stack: HttpApiLambdaDynamodb::  4.6974 seconds
+2022-04-25 21:55:50.720993::Time taken to synthesize stack: HttpApiLambdaDynamodb::  4.6657 seconds

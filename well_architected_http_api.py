@@ -26,9 +26,9 @@ class HttpApi(well_architected.WellArchitectedConstruct):
             create_default_stage=create_default_stage,
             default_integration=default_integration,
         )
-
+        self.api_id = self.http_api.http_api_id
         api_gateway_cloudwatch.ApiGatewayCloudWatch(
-            self, 'HttpApiCloudWatch',
+            self, 'CloudWatch',
             api_id=self.http_api.http_api_id,
             error_topic=error_topic,
         )
@@ -49,7 +49,7 @@ class LambdaHttpApiGateway(well_architected.WellArchitectedFrameworkStack):
         self.http_api = HttpApi(
             self, id,
             default_integration=aws_cdk.aws_apigatewayv2_integrations_alpha.HttpLambdaIntegration(
-                'HTTPLambdaIntegration',
+                'HttpApiLambdaIntegration',
                 handler=lambda_function
             )
         ).http_api

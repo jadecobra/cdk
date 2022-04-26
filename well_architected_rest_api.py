@@ -24,7 +24,6 @@ class LambdaRestAPIGatewayConstruct(well_architected.WellArchitectedConstruct):
         self.create_api_method(
             resource=self.create_api_resource(self.rest_api),
             lambda_function=lambda_function,
-
         )
 
         # fix resource_arn

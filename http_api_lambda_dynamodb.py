@@ -46,13 +46,13 @@ class HttpApiLambdaDynamodb(well_architected.WellArchitectedFrameworkStack):
             self, 'HttpApi',
             error_topic=self.error_topic,
             default_integration=aws_cdk.aws_apigatewayv2_integrations_alpha.HttpLambdaIntegration(
-                'HttpApiLambdaIntegration',
+                'LambdaFunctionIntegration',
                 handler=self.lambda_function
             )
         ).http_api
 
         self.rest_api = well_architected_rest_api.LambdaRestAPIGatewayConstruct(
-            self, 'RestApi',
+            self, 'RestApiLambdaIntegration',
             error_topic=self.error_topic,
             lambda_function=self.lambda_function,
         ).rest_api
