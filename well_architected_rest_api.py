@@ -19,9 +19,8 @@ class ALambdaRestAPIGatewayConstruct(well_architected_api.WellArchitectedApi):
             **kwargs
         )
 
-        # self.api = self.create_rest_api()
-        self.error_topic = error_topic
-        self.api_id = self.api.rest_api_id
+        # self.error_topic = error_topic
+        # self.api_id = self.api.rest_api_id
         self.create_api_method(
             resource=self.create_api_resource(self.api),
             lambda_function=lambda_function,
@@ -31,12 +30,12 @@ class ALambdaRestAPIGatewayConstruct(well_architected_api.WellArchitectedApi):
         # self.resource_arn = f"arn:aws:apigateway:{self.region}::/restapis/{self.api_id}/stages/{self.rest_api.deployment_stage.stage_name}"
         self.resource_arn = "arn:aws:apigateway:{self.region}::/restapis/{self.api_id}/stages/{self.rest_api.deployment_stage.stage_name}"
 
-        well_architected_api.WellArchitectedApi(
-            self, 'ApiGatewayCloudWatch',
-            api=self.api,
-            # api_id=self.api_id,
-            error_topic=self.error_topic,
-        )
+        # well_architected_api.WellArchitectedApi(
+        #     self, 'ApiGatewayCloudWatch',
+        #     api=self.api,
+        #     # api_id=self.api_id,
+        #     error_topic=self.error_topic,
+        # )
 
     def method_origin(self):
         return 'method.response.header.Access-Control-Allow-Origin'
