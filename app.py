@@ -39,7 +39,6 @@ class WellArchitected(aws_cdk.App):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # self.create_webservice()
         # self.create_xray_tracer()
 
         # big_fan.BigFan(self, "BigFan")
@@ -65,45 +64,6 @@ class WellArchitected(aws_cdk.App):
         # lambda_power_tuner.LambdaPowerTuner(self, "LambdaPowerTuner", )
         waf_api_lambda_dynamodb.WafApiLambdaDynamodb(self, 'WafApiLambdaDynamodb')
         # http_api_step_functions.HttpApiStateMachine(self, "HttpApiStateMachine")
-
-    def create_webservice(self):
-
-        error_sns_topic = sns_topic.SnsTopic(self, 'SnsTopic').topic
-        hits_record = well_architected_dynamodb_table.DynamoDBTableStack(
-            self, 'DynamoDBTable',
-            error_topic=error_sns_topic,
-            partition_key=aws_dynamodb.Attribute(
-                name="path",
-                type=aws_dynamodb.AttributeType.STRING,
-            )
-        ).dynamodb_table
-        hits_counter = well_architected_lambda.LambdaFunctionStack(
-            self, 'HitCounter',
-            function_name='hit_counter',
-            error_topic=error_sns_topic,
-            environment_variables={
-                'HITS_TABLE_NAME': hits_record.table_name
-            },
-        )
-        hits_record.grant_read_write_data(hits_counter.lambda_function)
-        well_architected_api.LambdaHttpApiGateway(
-            self, 'HttpApiLambdaFunction',
-            lambda_function=hits_counter.lambda_function,
-            error_topic=error_sns_topic,
-        )
-        self.rest_api = well_architected_rest_api.LambdaRestAPIGatewayStack(
-            self, 'RestAPILambdaFunction',
-            lambda_function=hits_counter.lambda_function,
-            error_topic=error_sns_topic,
-        ).rest_api
-        web_application_firewall.WebApplicationFirewall(
-            self, 'WebApplicationFirewall',
-            target_arn=self.rest_api.resource_arn,
-        )
-        # web_application_firewall.WebApplicationFirewall(
-        #     self, 'WebApplicationFirewall',
-        #     target_arn=http_api.ref
-        # )
 
     def create_xray_tracer(self):
         xray_tracer_sns_topic = sns_topic.SnsTopic(

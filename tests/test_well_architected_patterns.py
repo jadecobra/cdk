@@ -31,9 +31,9 @@ class TestWellArchitectedPatterns(tests.utilities.TestTemplates):
             # 'SqsFlow',
             # 'HttpApiLambdaFunction',
             # 'HttpApiStateMachine',
-            'ApiLambdaDynamodb',
             # 'WebApplicationFirewall',
             # 'XRayTracerSnsFanOutTopic',
+            'WafApiLambdaDynamodb',
         )
 
     def test_well_architected_cdk_patterns(self):
