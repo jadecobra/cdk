@@ -34,6 +34,7 @@ class TestWellArchitectedPatterns(tests.utilities.TestTemplates):
             # 'WebApplicationFirewall',
             # 'XRayTracerSnsFanOutTopic',
             "ApiStepFunctions",
+            "ApiDynamodb",
             'WafApiLambdaDynamodb',
         )
 

@@ -18963,3 +18963,5 @@
 2022-04-26 22:29:10.928442::Time taken to synthesize stack: ApiStepFunctions::  4.8407 seconds
 2022-04-26 22:30:46.069043::Time taken to synthesize stack: ApiStepFunctions::  4.9487 seconds
 2022-04-26 22:30:50.910605::Time taken to synthesize stack: WafApiLambdaDynamodb::  4.8353 seconds
+2022-04-26 22:31:42.914889::Time taken to synthesize stack: ApiStepFunctions::  5.0001 seconds
+2022-04-26 22:31:47.765981::Time taken to synthesize stack: WafApiLambdaDynamodb::  4.8443 seconds

@@ -8,7 +8,7 @@ try:
     import event_bridge_atm
     import event_bridge_circuit_breaker
     import event_bridge_etl
-    import http_api_dynamodb
+    import api_dynamodb
     import api_step_functions
     import waf_api_lambda_dynamodb
     import lambda_circuit_breaker
@@ -60,8 +60,8 @@ class WellArchitected(aws_cdk.App):
         # saga_step_function.SagaStepFunction(self, "SagaStepFunction", )
         # scalable_webhook.ScalableWebhook(self, "ScalableWebhook", )
         # simple_graphql_service.SimpleGraphQlService(self, "SimpleGraphqlService", )
-        # dynamo_streamer.DynamoStreamer(self, "DynamoStreamer", )
         # lambda_power_tuner.LambdaPowerTuner(self, "LambdaPowerTuner", )
+        api_dynamodb.ApiDynamodb(self, "ApiDynamodb")
         api_step_functions.ApiStepFunctions(self, "ApiStepFunctions")
         waf_api_lambda_dynamodb.WafApiLambdaDynamodb(self, 'WafApiLambdaDynamodb')
 
