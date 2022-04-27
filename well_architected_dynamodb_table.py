@@ -18,6 +18,7 @@ class DynamoDBTableConstruct(well_architected.WellArchitectedConstruct):
             error_topic=error_topic,
             **kwargs
         )
+
         self.dynamodb_table = aws_cdk.aws_dynamodb.Table(
             self, id,
             table_name=table_name,

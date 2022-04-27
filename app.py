@@ -63,10 +63,7 @@ class WellArchitected(aws_cdk.App):
         # simple_graphql_service.SimpleGraphQlService(self, "SimpleGraphqlService", )
         # dynamo_streamer.DynamoStreamer(self, "DynamoStreamer", )
         # lambda_power_tuner.LambdaPowerTuner(self, "LambdaPowerTuner", )
-        api_lambda_dynamodb.HttpApiLambdaDynamodb(
-            self, 'ApiLambdaDynamodb',
-            lambda_function_name='hit_counter'
-        )
+        api_lambda_dynamodb.HttpApiLambdaDynamodb(self, 'ApiLambdaDynamodb')
         # http_api_step_functions.HttpApiStateMachine(self, "HttpApiStateMachine")
 
     def create_webservice(self):
