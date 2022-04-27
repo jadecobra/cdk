@@ -5,18 +5,23 @@ import well_architected_api
 
 class RestApiLambdaConstruct(well_architected.WellArchitectedConstruct):
 
-    def __init__(self, scope: constructs.Construct, id: str, lambda_function: aws_cdk.aws_lambda.Function, error_topic:aws_cdk.aws_sns.Topic=None, **kwargs) -> None:
+    def __init__(
+        self, scope: constructs.Construct, id: str,
+        lambda_function: aws_cdk.aws_lambda.Function,
+        error_topic:aws_cdk.aws_sns.Topic=None,
+        **kwargs
+        ) -> None:
         super().__init__(
             scope, id,
             error_topic=error_topic,
             **kwargs
         )
 
-        self.rest_api = self.create_rest_api()
+        self.api = self.create_rest_api()
         self.error_topic = error_topic
-        self.api_id = self.rest_api.rest_api_id
-        self.create_api_method(
-            resource=self.create_api_resource(self.rest_api),
+        self.api_id = self.api.rest_api_id
+        self.connect_api_to_lambda_function(
+            resource=self.create_api_resource(self.api),
             lambda_function=lambda_function,
         )
 
@@ -26,8 +31,7 @@ class RestApiLambdaConstruct(well_architected.WellArchitectedConstruct):
 
         well_architected_api.WellArchitectedApi(
             self, 'ApiGatewayCloudWatch',
-            api=self.rest_api,
-            # api_id=self.api_id,
+            api=self.api,
             error_topic=self.error_topic,
         )
 
@@ -47,7 +51,7 @@ class RestApiLambdaConstruct(well_architected.WellArchitectedConstruct):
             )
         ]
 
-    def create_api_method(self, resource=None, lambda_function=None):
+    def connect_api_to_lambda_function(self, resource=None, lambda_function=None):
         return resource.add_method(
             'GET', self.create_lambda_integration(lambda_function),
             method_responses=self.create_method_responses()

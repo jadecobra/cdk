@@ -6,8 +6,8 @@ import well_architected
 
 class WellArchitectedApi(well_architected.WellArchitectedConstruct):
 
-    def __init__(self,
-        scope: constructs.Construct, id: str, api_id=None,
+    def __init__(
+        self,scope: constructs.Construct, id: str, api_id=None,
         error_topic=None,
         api=None,
         **kwargs
