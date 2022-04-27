@@ -64,7 +64,7 @@ class WellArchitected(aws_cdk.App):
         # dynamo_streamer.DynamoStreamer(self, "DynamoStreamer", )
         # lambda_power_tuner.LambdaPowerTuner(self, "LambdaPowerTuner", )
         api_lambda_dynamodb.HttpApiLambdaDynamodb(
-            self, 'HttpApiLambdaDynamodb',
+            self, 'ApiLambdaDynamodb',
             lambda_function_name='hit_counter'
         )
         # http_api_step_functions.HttpApiStateMachine(self, "HttpApiStateMachine")
