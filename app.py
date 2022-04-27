@@ -23,7 +23,7 @@ try:
     import xray_tracer
     import web_application_firewall
     import simple_graphql_service
-    import well_architected_http_api
+    import well_architected_api
     import well_architected_rest_api
     import well_architected_lambda
 except ImportError as error:
@@ -89,7 +89,7 @@ class WellArchitected(aws_cdk.App):
             },
         )
         hits_record.grant_read_write_data(hits_counter.lambda_function)
-        well_architected_http_api.LambdaHttpApiGateway(
+        well_architected_api.LambdaHttpApiGateway(
             self, 'HttpApiLambdaFunction',
             lambda_function=hits_counter.lambda_function,
             error_topic=error_sns_topic,

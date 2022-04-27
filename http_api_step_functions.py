@@ -2,7 +2,7 @@ import aws_cdk
 import aws_cdk.aws_apigatewayv2_alpha
 import constructs
 import well_architected_lambda
-import well_architected_http_api
+import well_architected_api
 import well_architected
 
 # TODO:
@@ -114,7 +114,7 @@ class HttpApiStateMachine(well_architected.WellArchitectedStack):
         )
 
     def create_http_api(self, error_topic):
-        return well_architected_http_api.HttpApi(
+        return well_architected_api.HttpApi(
             self, 'StateMachineHttpApi',
             create_default_stage=True
         ).http_api

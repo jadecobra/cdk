@@ -31,7 +31,7 @@ class TestWellArchitectedPatterns(tests.utilities.TestTemplates):
             # 'SqsFlow',
             # 'HttpApiLambdaFunction',
             # 'HttpApiStateMachine',
-            'HttpApiLambdaDynamodb',
+            'ApiLambdaDynamodb',
             # 'WebApplicationFirewall',
             # 'XRayTracerSnsFanOutTopic',
         )
