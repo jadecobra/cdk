@@ -5,7 +5,9 @@ import well_architected
 class DynamoDBTableConstruct(well_architected.WellArchitectedConstruct):
 
     def __init__(
-        self, scope: constructs.Construct, id: str, error_topic=None,
+        self, scope: constructs.Construct, id: str,
+            table_name=None,
+            error_topic=None,
             partition_key: aws_cdk.aws_dynamodb.Attribute=None,
             sort_key: aws_cdk.aws_dynamodb.Attribute=None,
             time_to_live_attribute=None,
@@ -18,6 +20,7 @@ class DynamoDBTableConstruct(well_architected.WellArchitectedConstruct):
         )
         self.dynamodb_table = aws_cdk.aws_dynamodb.Table(
             self, id,
+            table_name=table_name,
             billing_mode=aws_cdk.aws_dynamodb.BillingMode.PAY_PER_REQUEST,
             partition_key=partition_key,
             sort_key=sort_key,
