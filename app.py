@@ -10,7 +10,7 @@ try:
     import event_bridge_etl
     import http_api_dynamodb
     import http_api_step_functions
-    import http_api_lambda_dynamodb
+    import api_lambda_dynamodb
     import lambda_circuit_breaker
     import lambda_power_tuner
     import lambda_trilogy.lambda_lith
@@ -63,7 +63,7 @@ class WellArchitected(aws_cdk.App):
         # simple_graphql_service.SimpleGraphQlService(self, "SimpleGraphqlService", )
         # dynamo_streamer.DynamoStreamer(self, "DynamoStreamer", )
         # lambda_power_tuner.LambdaPowerTuner(self, "LambdaPowerTuner", )
-        http_api_lambda_dynamodb.HttpApiLambdaDynamodb(
+        api_lambda_dynamodb.HttpApiLambdaDynamodb(
             self, 'HttpApiLambdaDynamodb',
             lambda_function_name='hit_counter'
         )
