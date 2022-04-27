@@ -23,6 +23,11 @@ class ApiStepFunctions(well_architected.WellArchitectedStack):
                 state_machine_arn=state_machine.state_machine_arn,
             ),
         )
+        rest_api = aws_cdk.aws_apigateway.StepFunctionsRestApi(
+            self, 'RestApiStepFunctions',
+            state_machine=state_machine,
+            deploy=True,
+        )
 
     def create_error_topic(self):
         return aws_cdk.aws_sns.Topic(
