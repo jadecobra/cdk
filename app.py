@@ -9,7 +9,7 @@ try:
     import event_bridge_circuit_breaker
     import event_bridge_etl
     import http_api_dynamodb
-    import http_api_step_functions
+    import api_step_functions
     import waf_api_lambda_dynamodb
     import lambda_circuit_breaker
     import lambda_power_tuner
@@ -63,7 +63,7 @@ class WellArchitected(aws_cdk.App):
         # dynamo_streamer.DynamoStreamer(self, "DynamoStreamer", )
         # lambda_power_tuner.LambdaPowerTuner(self, "LambdaPowerTuner", )
         waf_api_lambda_dynamodb.WafApiLambdaDynamodb(self, 'WafApiLambdaDynamodb')
-        # http_api_step_functions.HttpApiStateMachine(self, "HttpApiStateMachine")
+        api_step_functions.ApiStepFunctions(self, "ApiStepFunctions")
 
     def create_xray_tracer(self):
         xray_tracer_sns_topic = sns_topic.SnsTopic(

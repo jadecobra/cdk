@@ -38,9 +38,13 @@ class LambdaFunctionConstruct(well_architected.WellArchitectedConstruct):
             self.create_cloudwatch_widgets()
         )
 
+    @staticmethod
+    def to_camel_case(text):
+        return ''.join(text.title().split('-'))
+
     def create_layer(self, layer):
         return aws_cdk.aws_lambda.LayerVersion(
-            self, f'{layer}LambdaLayer',
+            self, f'{self.to_camel_case(layer)}LambdaLayer',
             code=aws_cdk.aws_lambda.Code.from_asset(f"lambda_layers/{layer}"),
             description=f"{layer} Lambda Layer"
         )
