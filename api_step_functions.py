@@ -12,21 +12,20 @@ class ApiStepFunctions(well_architected.WellArchitectedStack):
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
         self.result_path = '$.resultPath'
-        error_topic = self.create_error_topic()
-        state_machine = self.create_state_machine(self.create_lambda_function(error_topic))
-        http_api = self.create_http_api(error_topic)
+        self.error_topic = self.create_error_topic()
+        self.state_machine = self.create_state_machine(self.create_lambda_function(self.error_topic))
+        self.http_api = self.create_http_api(self.error_topic)
         self.create_api_gateway_route(
-            api_id=http_api.http_api_id,
+            api_id=self.http_api.http_api_id,
             target=self.create_stepfunctions_api_gateway_integration(
-                http_api_id=http_api.http_api_id,
-                iam_role_arn=self.get_iam_service_role_arn(state_machine.state_machine_arn),
-                state_machine_arn=state_machine.state_machine_arn,
+                http_api_id=self.http_api.http_api_id,
+                iam_role_arn=self.get_iam_service_role_arn(self.state_machine.state_machine_arn),
+                state_machine_arn=self.state_machine.state_machine_arn,
             ),
         )
-        rest_api = aws_cdk.aws_apigateway.StepFunctionsRestApi(
-            self, 'RestApiStepFunctions',
-            state_machine=state_machine,
-            deploy=True,
+        self.rest_api = self.create_rest_api(
+            error_topic=self.error_topic,
+            state_machine=self.state_machine,
         )
 
     def create_error_topic(self):
@@ -120,10 +119,22 @@ class ApiStepFunctions(well_architected.WellArchitectedStack):
 
     def create_http_api(self, error_topic):
         return well_architected_api.WellArchitectedApi(
-            self, 'StateMachineHttpApi',
+            self, 'HttpApi',
+            error_topic=error_topic,
             api=aws_cdk.aws_apigatewayv2_alpha.HttpApi(
                 self, 'HttpApiStepFunctions',
                 create_default_stage=True
+            )
+        ).api
+
+    def create_rest_api(self, error_topic=None, state_machine=None):
+        return well_architected_api.WellArchitectedApi(
+            self, 'RestApi',
+            error_topic=error_topic,
+            api=aws_cdk.aws_apigateway.StepFunctionsRestApi(
+                self, 'RestApiStepFunctions',
+                state_machine=state_machine,
+                deploy=True,
             )
         ).api
 
