@@ -42,7 +42,7 @@ class DynamoDBTableConstruct(well_architected.WellArchitectedConstruct):
 
     def create_throttles_alarm(self):
         return self.create_cloudwatch_alarm(
-            id="DynamodbReadsWritesThrottled",
+            id="ReadsWritesThrottled",
             metric=self.cloudwatch_math_sum(
                 label="dynamodb_throttles",
                 m1=self.create_throttles_metric(),
@@ -52,7 +52,7 @@ class DynamoDBTableConstruct(well_architected.WellArchitectedConstruct):
 
     def create_user_errors_alarm(self):
         return self.create_cloudwatch_alarm(
-            id='DynamodbUserErrorsGreaterThanZero',
+            id='UserErrorsGreaterThanZero',
             metric=self.dynamodb_table.metric_user_errors(),
             threshold=0,
         )
@@ -60,7 +60,7 @@ class DynamoDBTableConstruct(well_architected.WellArchitectedConstruct):
     def create_system_errors_alarm(self):
         # creates jsii.errors.JSIIError: Alarms on math expressions cannot contain more than 10 individual metrics
         return self.create_cloudwatch_alarm(
-            id='DynamodbSystemErrorsGreaterThanZero',
+            id='SystemErrorsGreaterThanZero',
             metric=self.dynamodb_table.metric_system_errors_for_operations(),
             threshold=0,
         )
