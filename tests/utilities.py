@@ -25,6 +25,10 @@ def time_it(function, *args, description='run process', **kwargs):
     log_performance(log(result))
 
 
+def load_json(filepath):
+    with open(filepath) as f:
+        return json.load(f)
+
 class TestTemplates(unittest.TestCase):
 
     maxDiff = None
@@ -34,6 +38,7 @@ class TestTemplates(unittest.TestCase):
         time_it(os.system, f'cdk ls {stack_name} --version-reporting=false --path-metadata=false --asset-metadata=false', description=f'synthesize stack: {stack_name}')
         # time_it(os.system, f'cdk ls {stack_name}', description=f'synthesize stack: {stack_name}')
 
-        with open(f'cdk.out/{stack_name}.template.json') as template:
-            with open(f'tests/templates/{stack_name}.template.json') as fixture:
-                return self.assertEqual(json.load(template), json.load(fixture))
+        return self.assertEqual(
+            load_json(f'cdk.out/{stack_name}.template.json'),
+            load_json(f'tests/templates/{stack_name}.template.json')
+        )

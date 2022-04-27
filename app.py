@@ -62,8 +62,8 @@ class WellArchitected(aws_cdk.App):
         # simple_graphql_service.SimpleGraphQlService(self, "SimpleGraphqlService", )
         # dynamo_streamer.DynamoStreamer(self, "DynamoStreamer", )
         # lambda_power_tuner.LambdaPowerTuner(self, "LambdaPowerTuner", )
-        waf_api_lambda_dynamodb.WafApiLambdaDynamodb(self, 'WafApiLambdaDynamodb')
         api_step_functions.ApiStepFunctions(self, "ApiStepFunctions")
+        waf_api_lambda_dynamodb.WafApiLambdaDynamodb(self, 'WafApiLambdaDynamodb')
 
     def create_xray_tracer(self):
         xray_tracer_sns_topic = sns_topic.SnsTopic(
