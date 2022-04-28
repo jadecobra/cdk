@@ -38,8 +38,7 @@ class WellArchitected(aws_cdk.App):
     )
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # self.create_xray_tracer()
+        super().__init__(*args, **kwargs)        # self.create_xray_tracer()
 
         # big_fan.BigFan(self, "BigFan")
 
@@ -61,7 +60,10 @@ class WellArchitected(aws_cdk.App):
         # scalable_webhook.ScalableWebhook(self, "ScalableWebhook", )
         # simple_graphql_service.SimpleGraphQlService(self, "SimpleGraphqlService", )
         # lambda_power_tuner.LambdaPowerTuner(self, "LambdaPowerTuner", )
-        api_dynamodb.ApiDynamodb(self, "ApiDynamodb")
+        api_dynamodb.ApiDynamodb(
+            self, 'ApiDynamodb',
+            partition_key='message',
+        )
         api_step_functions.ApiStepFunctions(self, "ApiStepFunctions")
         waf_api_lambda_dynamodb.WafApiLambdaDynamodb(self, 'WafApiLambdaDynamodb')
 

@@ -11,20 +11,23 @@ import json
 
 class ApiDynamodb(well_architected.WellArchitectedStack):
 
-    def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
+    def __init__(
+        self, scope: constructs.Construct, id: str,
+        partition_key:str,
+        **kwargs
+    ) -> None:
         super().__init__(scope, id, **kwargs)
 
         rest_api = self.create_rest_api()
         api_gateway_service_role = self.create_api_gateway_service_role()
 
-        dynamodb_partition_key = 'message'
-        dynamodb_table = self.create_dynamodb_table(dynamodb_partition_key)
+        dynamodb_table = self.create_dynamodb_table(partition_key)
         dynamodb_table.grant_read_write_data(api_gateway_service_role)
         self.add_method_to_rest_api(
             rest_api=rest_api,
             api_gateway_service_role=api_gateway_service_role,
             dynamodb_table_name=dynamodb_table.table_name,
-            dynamodb_partition_key=dynamodb_partition_key
+            dynamodb_partition_key=partition_key
         )
         self.create_lambda_function_with_dynamodb_event_source(dynamodb_table)
 
