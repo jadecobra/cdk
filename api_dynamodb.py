@@ -1,13 +1,15 @@
 import aws_cdk
-import aws_cdk.aws_lambda
-import aws_cdk.aws_lambda_event_sources
-import aws_cdk.aws_dynamodb
-import aws_cdk.aws_apigateway
-import aws_cdk.aws_iam
 import constructs
+import well_architected
+# import aws_cdk.aws_lambda
+# import aws_cdk.aws_lambda_event_sources
+# import aws_cdk.aws_dynamodb
+# import aws_cdk.aws_apigateway
+# import aws_cdk.aws_iam
 import json
 
-class ApiDynamodb(aws_cdk.Stack):
+
+class ApiDynamodb(well_architected.WellArchitectedStack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
