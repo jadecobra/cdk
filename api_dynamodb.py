@@ -1,11 +1,6 @@
 import aws_cdk
 import constructs
 import well_architected
-# import aws_cdk.aws_lambda
-# import aws_cdk.aws_lambda_event_sources
-# import aws_cdk.aws_dynamodb
-# import aws_cdk.aws_apigateway
-# import aws_cdk.aws_iam
 import json
 
 
