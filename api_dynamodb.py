@@ -72,25 +72,31 @@ class ApiDynamodb(well_architected.WellArchitectedStack):
             }
         })
 
+    def success_response_model(self, dynamodb_partition_key):
+        return dict(
+            model_name='ResponseModel',
+            response_type='pollResponse',
+            response_templates=self.success_response_template(dynamodb_partition_key),
+        )
+
+    def error_response_model(self):
+        return dict(
+            model_name='ErrorResponseModel',
+            response_type='errorResponse',
+            additional_properties='state',
+            response_templates=self.error_response_template(),
+            selection_pattern="^\[BadRequest\].*",
+            response_parameters=self.create_response_parameters(
+                content_type="'application/json'",
+                origin="'*'",
+                credentials="'true'",
+            )
+        )
+
     def create_response_status_mappings(self, dynamodb_partition_key):
         return {
-            '200': dict(
-                model_name='ResponseModel',
-                response_type='pollResponse',
-                response_templates=self.success_response_template(dynamodb_partition_key),
-            ),
-            '400': dict(
-                model_name='ErrorResponseModel',
-                response_type='errorResponse',
-                additional_properties='state',
-                response_templates=self.error_response_template(),
-                selection_pattern="^\[BadRequest\].*",
-                response_parameters=self.create_response_parameters(
-                    content_type="'application/json'",
-                    origin="'*'",
-                    credentials="'true'",
-                )
-            ),
+            '200': self.success_response_model(dynamodb_partition_key),
+            '400': self.error_response_model(),
         }
 
     def get_integration_responses(self, dynamodb_partition_key):
@@ -100,7 +106,10 @@ class ApiDynamodb(well_architected.WellArchitectedStack):
                 response_templates=values['response_templates'],
                 response_parameters=values.get('response_parameters'),
                 selection_pattern=values.get('selection_pattern'),
-            ) for status_code, values in self.create_response_status_mappings(dynamodb_partition_key).items()
+            ) for status_code, values in {
+                '200': self.success_response_model(dynamodb_partition_key),
+                '400': self.error_response_model(),
+            }
         ]
 
     def create_api_integration_options(self, api_gateway_service_role=None, dynamodb_table_name=None, dynamodb_partition_key=None):
