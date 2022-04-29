@@ -1,6 +1,7 @@
 import aws_cdk
 import constructs
 import well_architected
+import well_architected_api
 import json
 
 
@@ -12,7 +13,7 @@ class ApiDynamodb(well_architected.WellArchitectedStack):
         **kwargs
     ) -> None:
         super().__init__(scope, id, **kwargs)
-
+        self.error_topic = self.create_error_topic(id)
         rest_api = self.create_rest_api()
         api_gateway_service_role = self.create_api_gateway_service_role()
 
@@ -25,6 +26,9 @@ class ApiDynamodb(well_architected.WellArchitectedStack):
             dynamodb_partition_key=partition_key
         )
         self.create_lambda_function_with_dynamodb_event_source(dynamodb_table)
+
+    def create_error_topic(self, id):
+        return aws_cdk.aws_sns.Topic(self, 'SnsTopic', display_name=id)
 
     def add_method_to_rest_api(
         self, rest_api=None, api_gateway_service_role=None,
@@ -93,7 +97,7 @@ class ApiDynamodb(well_architected.WellArchitectedStack):
             )
         )
 
-    def create_response_status_mappings(self, dynamodb_partition_key):
+    def get_response_status_mappings(self, dynamodb_partition_key):
         return {
             '200': self.success_response_model(dynamodb_partition_key),
             '400': self.error_response_model(),
@@ -106,10 +110,7 @@ class ApiDynamodb(well_architected.WellArchitectedStack):
                 response_templates=values['response_templates'],
                 response_parameters=values.get('response_parameters'),
                 selection_pattern=values.get('selection_pattern'),
-            ) for status_code, values in {
-                '200': self.success_response_model(dynamodb_partition_key),
-                '400': self.error_response_model(),
-            }
+            ) for status_code, values in self.get_response_status_mappings(dynamodb_partition_key).items()
         ]
 
     def create_api_integration_options(self, api_gateway_service_role=None, dynamodb_table_name=None, dynamodb_partition_key=None):
@@ -142,7 +143,9 @@ class ApiDynamodb(well_architected.WellArchitectedStack):
 
     @staticmethod
     def json_string():
-        return aws_cdk.aws_apigateway.JsonSchema(type=aws_cdk.aws_apigateway.JsonSchemaType.STRING)
+        return aws_cdk.aws_apigateway.JsonSchema(
+            type=aws_cdk.aws_apigateway.JsonSchemaType.STRING
+        )
 
     def create_json_schema(self, dynamodb_partition_key=None, response_type=None, additional_properties=None):
         properties = [dynamodb_partition_key]
@@ -169,7 +172,7 @@ class ApiDynamodb(well_architected.WellArchitectedStack):
                     )
                 )
             ) for status_code, response
-            in self.create_response_status_mappings(dynamodb_partition_key).items()
+            in self.get_response_status_mappings(dynamodb_partition_key).items()
         )
 
     def create_method_responses(self, rest_api=None, dynamodb_partition_key=None):
@@ -208,6 +211,19 @@ class ApiDynamodb(well_architected.WellArchitectedStack):
         )
 
     def create_rest_api(self):
+        return well_architected_api.WellArchitectedApi(
+            self, 'RestApiGateway',
+            error_topic=self.error_topic,
+            api=aws_cdk.aws_apigateway.RestApi(
+                self, 'ApiGateway',
+                deploy_options=aws_cdk.aws_apigateway.StageOptions(
+                    metrics_enabled=True,
+                    logging_level=aws_cdk.aws_apigateway.MethodLoggingLevel.INFO,
+                    data_trace_enabled=True,
+                    stage_name='prod',
+                )
+            )
+        ).api
         return aws_cdk.aws_apigateway.RestApi(
             self, 'ApiGateway',
             deploy_options=aws_cdk.aws_apigateway.StageOptions(
