@@ -11,6 +11,7 @@ class DynamoDBTableConstruct(well_architected.WellArchitectedConstruct):
             partition_key: aws_cdk.aws_dynamodb.Attribute=None,
             sort_key: aws_cdk.aws_dynamodb.Attribute=None,
             time_to_live_attribute=None,
+            stream=None,
             **kwargs
     ) -> None:
         super().__init__(
@@ -25,6 +26,7 @@ class DynamoDBTableConstruct(well_architected.WellArchitectedConstruct):
             billing_mode=aws_cdk.aws_dynamodb.BillingMode.PAY_PER_REQUEST,
             partition_key=partition_key,
             sort_key=sort_key,
+            stream=stream,
             removal_policy=aws_cdk.RemovalPolicy.DESTROY,
             time_to_live_attribute=time_to_live_attribute,
         )

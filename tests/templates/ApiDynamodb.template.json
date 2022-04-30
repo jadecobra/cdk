@@ -57,7 +57,7 @@
     "ApiGateway11E7F47B"
    ]
   },
-  "ApiGatewayDeploymentA26796E898d9748778d4d95121f6395ecc763723": {
+  "ApiGatewayDeploymentA26796E821961e34c58da90afe87749c34f6ad92": {
    "Type": "AWS::ApiGateway::Deployment",
    "Properties": {
     "RestApiId": {
@@ -79,7 +79,7 @@
      "Ref": "ApiGateway11E7F47B"
     },
     "DeploymentId": {
-     "Ref": "ApiGatewayDeploymentA26796E898d9748778d4d95121f6395ecc763723"
+     "Ref": "ApiGatewayDeploymentA26796E821961e34c58da90afe87749c34f6ad92"
     },
     "MethodSettings": [
      {
@@ -158,7 +158,7 @@
         [
          "{\"TableName\":\"",
          {
-          "Ref": "DynamoDbTable6316879D"
+          "Ref": "DynamoDbTable328C754E"
          },
          "\",\"Item\":{\"message\":{\"S\":\"$input.path('$.message')\"}}}"
         ]
@@ -475,7 +475,7 @@
        "Resource": [
         {
          "Fn::GetAtt": [
-          "DynamoDbTable6316879D",
+          "DynamoDbTable328C754E",
           "Arn"
          ]
         },
@@ -495,7 +495,7 @@
     ]
    }
   },
-  "DynamoDbTable6316879D": {
+  "DynamoDbTable328C754E": {
    "Type": "AWS::DynamoDB::Table",
    "Properties": {
     "KeySchema": [
@@ -510,16 +510,155 @@
       "AttributeType": "S"
      }
     ],
-    "ProvisionedThroughput": {
-     "ReadCapacityUnits": 5,
-     "WriteCapacityUnits": 5
-    },
+    "BillingMode": "PAY_PER_REQUEST",
     "StreamSpecification": {
      "StreamViewType": "NEW_IMAGE"
     }
    },
-   "UpdateReplacePolicy": "Retain",
-   "DeletionPolicy": "Retain"
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete"
+  },
+  "DynamoDbTableUserErrorsGreaterThanZeroC76B823D": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "SnsTopic2C1570A4"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "MetricName": "UserErrors",
+    "Namespace": "AWS/DynamoDB",
+    "Period": 300,
+    "Statistic": "Sum",
+    "Threshold": 0,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "DynamoDbTableReadsWritesThrottled8542A2AF": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "SnsTopic2C1570A4"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "Metrics": [
+     {
+      "Expression": "m1 + m2",
+      "Id": "expr_1",
+      "Label": "dynamodb_throttles"
+     },
+     {
+      "Id": "m1",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "TableName",
+          "Value": {
+           "Ref": "DynamoDbTable328C754E"
+          }
+         }
+        ],
+        "MetricName": "ReadThrottleEvents",
+        "Namespace": "AWS/DynamoDB"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     },
+     {
+      "Id": "m2",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "TableName",
+          "Value": {
+           "Ref": "DynamoDbTable328C754E"
+          }
+         }
+        ],
+        "MetricName": "WriteThrottleEvents",
+        "Namespace": "AWS/DynamoDB"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     }
+    ],
+    "Threshold": 1,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "DynamoDbTableCloudWatchDashBoardEB9B1B0A": {
+   "Type": "AWS::CloudWatch::Dashboard",
+   "Properties": {
+    "DashboardBody": {
+     "Fn::Join": [
+      "",
+      [
+       "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"dynamodb_latency\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":true,\"metrics\":[[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"GetItem\",\"TableName\",\"",
+       {
+        "Ref": "DynamoDbTable328C754E"
+       },
+       "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"UpdateItem\",\"TableName\",\"",
+       {
+        "Ref": "DynamoDbTable328C754E"
+       },
+       "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"PutItem\",\"TableName\",\"",
+       {
+        "Ref": "DynamoDbTable328C754E"
+       },
+       "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"DeleteItem\",\"TableName\",\"",
+       {
+        "Ref": "DynamoDbTable328C754E"
+       },
+       "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"Query\",\"TableName\",\"",
+       {
+        "Ref": "DynamoDbTable328C754E"
+       },
+       "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"dynamodb_consumed_read_write_units\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":false,\"metrics\":[[\"AWS/DynamoDB\",\"ConsumedReadCapacityUnits\",\"TableName\",\"",
+       {
+        "Ref": "DynamoDbTable328C754E"
+       },
+       "\"],[\"AWS/DynamoDB\",\"ConsumedWriteCapacityUnits\",\"TableName\",\"",
+       {
+        "Ref": "DynamoDbTable328C754E"
+       },
+       "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"dynamodb_throttles\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":true,\"metrics\":[[\"AWS/DynamoDB\",\"ReadThrottleEvents\",\"TableName\",\"",
+       {
+        "Ref": "DynamoDbTable328C754E"
+       },
+       "\",{\"stat\":\"Sum\"}],[\"AWS/DynamoDB\",\"WriteThrottleEvents\",\"TableName\",\"",
+       {
+        "Ref": "DynamoDbTable328C754E"
+       },
+       "\",{\"stat\":\"Sum\"}]],\"yAxis\":{}}}]}"
+      ]
+     ]
+    }
+   }
   },
   "LambdaFunctionAwsXraySdkLambdaLayer05BEC3A3": {
    "Type": "AWS::Lambda::LayerVersion",
@@ -623,7 +762,7 @@
        "Effect": "Allow",
        "Resource": {
         "Fn::GetAtt": [
-         "DynamoDbTable6316879D",
+         "DynamoDbTable328C754E",
          "StreamArn"
         ]
        }
@@ -703,7 +842,7 @@
     "LambdaFunctionServiceRoleD6E423C9"
    ]
   },
-  "LambdaFunctionDynamoDBEventSourceApiDynamodbDynamoDbTableBEFDC8FAE9A3E32A": {
+  "LambdaFunctionDynamoDBEventSourceApiDynamodbDynamoDbTable26F6D3ED1F49608F": {
    "Type": "AWS::Lambda::EventSourceMapping",
    "Properties": {
     "FunctionName": {
@@ -712,7 +851,7 @@
     "BatchSize": 100,
     "EventSourceArn": {
      "Fn::GetAtt": [
-      "DynamoDbTable6316879D",
+      "DynamoDbTable328C754E",
       "StreamArn"
      ]
     },

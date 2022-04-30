@@ -17,7 +17,7 @@ class ApiStepFunctions(well_architected.WellArchitectedStack):
         self.http_api = self.create_http_api(self.error_topic)
         self.create_api_gateway_route(
             api_id=self.http_api.http_api_id,
-            target=self.create_stepfunctions_api_gateway_integration(
+            target=self.create_http_api_stepfunctions_integration(
                 http_api_id=self.http_api.http_api_id,
                 iam_role_arn=self.get_iam_service_role_arn(self.state_machine.state_machine_arn),
                 state_machine_arn=self.state_machine.state_machine_arn,
@@ -138,7 +138,7 @@ class ApiStepFunctions(well_architected.WellArchitectedStack):
             )
         ).api
 
-    def create_stepfunctions_api_gateway_integration(self, http_api_id=None, iam_role_arn=None, state_machine_arn=None):
+    def create_http_api_stepfunctions_integration(self, http_api_id=None, iam_role_arn=None, state_machine_arn=None):
         return aws_cdk.aws_apigatewayv2.CfnIntegration(
             self, 'StateMachineHttpApiIntegration',
             api_id=http_api_id,

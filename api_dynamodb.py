@@ -1,4 +1,5 @@
 import aws_cdk
+import aws_cdk.aws_apigatewayv2_alpha
 import constructs
 import well_architected
 import well_architected_api
@@ -16,7 +17,10 @@ class ApiDynamodb(well_architected.WellArchitectedStack):
     ) -> None:
         super().__init__(scope, id, **kwargs)
         self.error_topic = self.create_error_topic(id)
-        rest_api = self.create_rest_api()
+        rest_api = self.create_rest_api(
+
+        )
+        http_api = self.create_http_api(self.error_topic)
         api_gateway_service_role = self.create_api_gateway_service_role()
 
         dynamodb_table = self.create_dynamodb_table(partition_key)
@@ -27,7 +31,10 @@ class ApiDynamodb(well_architected.WellArchitectedStack):
             dynamodb_table_name=dynamodb_table.table_name,
             dynamodb_partition_key=partition_key
         )
-        self.create_lambda_function_with_dynamodb_event_source(dynamodb_table)
+        self.create_lambda_function_with_dynamodb_event_source(
+            dynamodb_table=dynamodb_table,
+            error_topic=self.error_topic,
+        )
 
     def create_error_topic(self, id):
         return aws_cdk.aws_sns.Topic(self, 'SnsTopic', display_name=id)
@@ -115,7 +122,10 @@ class ApiDynamodb(well_architected.WellArchitectedStack):
             ) for status_code, values in self.get_response_status_mappings(dynamodb_partition_key).items()
         ]
 
-    def create_api_integration_options(self, api_gateway_service_role=None, dynamodb_table_name=None, dynamodb_partition_key=None):
+    def create_api_integration_options(
+        self, api_gateway_service_role=None, dynamodb_table_name=None,
+        dynamodb_partition_key=None
+    ):
         return aws_cdk.aws_apigateway.IntegrationOptions(
             credentials_role=api_gateway_service_role,
             request_templates=self.request_template(dynamodb_table_name),
@@ -123,7 +133,10 @@ class ApiDynamodb(well_architected.WellArchitectedStack):
             integration_responses=self.get_integration_responses(dynamodb_partition_key)
         )
 
-    def integrate_rest_api_with_dynamodb_put_item(self, api_gateway_service_role=None, dynamodb_table_name=None, dynamodb_partition_key=None):
+    def integrate_rest_api_with_dynamodb_put_item(
+        self, api_gateway_service_role=None, dynamodb_table_name=None,
+        dynamodb_partition_key=None
+    ):
         return aws_cdk.aws_apigateway.Integration(
             type=aws_cdk.aws_apigateway.IntegrationType.AWS,
             integration_http_method='POST',
@@ -149,7 +162,10 @@ class ApiDynamodb(well_architected.WellArchitectedStack):
             type=aws_cdk.aws_apigateway.JsonSchemaType.STRING
         )
 
-    def create_json_schema(self, dynamodb_partition_key=None, response_type=None, additional_properties=None):
+    def create_json_schema(
+        self, dynamodb_partition_key=None, response_type=None,
+        additional_properties=None
+    ):
         properties = [dynamodb_partition_key]
         properties.append(additional_properties) if additional_properties else None
         return aws_cdk.aws_apigateway.JsonSchema(
@@ -190,19 +206,21 @@ class ApiDynamodb(well_architected.WellArchitectedStack):
         ]
 
     def create_dynamodb_table(self, partition_key):
-        return aws_cdk.aws_dynamodb.Table(
-            self, "DynamoDbTable",
+        return well_architected_dynamodb_table.DynamoDBTableConstruct(
+            self, 'DynamoDbTable',
+            # table_name=name,
             stream=aws_cdk.aws_dynamodb.StreamViewType.NEW_IMAGE,
+            error_topic=self.error_topic,
             partition_key=aws_cdk.aws_dynamodb.Attribute(
                 name=partition_key,
                 type=aws_cdk.aws_dynamodb.AttributeType.STRING,
             ),
-        )
+        ).dynamodb_table
 
-    def create_lambda_function_with_dynamodb_event_source(self, dynamodb_table):
+    def create_lambda_function_with_dynamodb_event_source(self, dynamodb_table=None, error_topic=None):
         return well_architected_lambda.LambdaFunctionConstruct(
             self, 'LambdaFunction',
-            error_topic=self.error_topic,
+            error_topic=error_topic,
             function_name='subscribe',
         ).lambda_function.add_event_source(
             aws_cdk.aws_lambda_event_sources.DynamoEventSource(
@@ -211,12 +229,22 @@ class ApiDynamodb(well_architected.WellArchitectedStack):
             )
         )
 
-    def create_rest_api(self):
+    def create_http_api(self, error_topic):
         return well_architected_api.WellArchitectedApi(
-            self, 'RestApiGateway',
-            error_topic=self.error_topic,
+            self, 'HttpApi',
+            error_topic=error_topic,
+            api=aws_cdk.aws_apigatewayv2_alpha.HttpApi(
+                self, 'HttpApiStepFunctions',
+                create_default_stage=True
+            )
+        ).api
+
+    def create_rest_api(self, error_topic):
+        return well_architected_api.WellArchitectedApi(
+            self, 'RestApi',
+            error_topic=error_topic,
             api=aws_cdk.aws_apigateway.RestApi(
-                self, 'ApiGateway',
+                self, 'RestApiDynamodb',
                 deploy_options=aws_cdk.aws_apigateway.StageOptions(
                     metrics_enabled=True,
                     logging_level=aws_cdk.aws_apigateway.MethodLoggingLevel.INFO,
