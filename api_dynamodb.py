@@ -3,6 +3,7 @@ import constructs
 import well_architected
 import well_architected_api
 import well_architected_lambda
+import well_architected_dynamodb_table
 import json
 
 
@@ -202,22 +203,8 @@ class ApiDynamodb(well_architected.WellArchitectedStack):
         return well_architected_lambda.LambdaFunctionConstruct(
             self, 'LambdaFunction',
             error_topic=self.error_topic,
-            function_name=name,
-            environment_variables={
-                'DYNAMODB_TABLE_NAME': name
-            },
+            function_name='subscribe',
         ).lambda_function.add_event_source(
-            aws_cdk.aws_lambda_event_sources.DynamoEventSource(
-                table=dynamodb_table,
-                starting_position=aws_cdk.aws_lambda.StartingPosition.LATEST,
-            )
-        )
-        return aws_cdk.aws_lambda.Function(
-            self, 'LambdaFunction',
-            runtime=aws_cdk.aws_lambda.Runtime.PYTHON_3_8,
-            handler="subscribe.handler",
-            code=aws_cdk.aws_lambda.Code.from_asset("lambda_functions/subscribe")
-        ).add_event_source(
             aws_cdk.aws_lambda_event_sources.DynamoEventSource(
                 table=dynamodb_table,
                 starting_position=aws_cdk.aws_lambda.StartingPosition.LATEST,
