@@ -2,6 +2,7 @@ import aws_cdk
 import constructs
 import well_architected
 import well_architected_api
+import well_architected_lambda
 import json
 
 
@@ -198,6 +199,19 @@ class ApiDynamodb(well_architected.WellArchitectedStack):
         )
 
     def create_lambda_function_with_dynamodb_event_source(self, dynamodb_table):
+        return well_architected_lambda.LambdaFunctionConstruct(
+            self, 'LambdaFunction',
+            error_topic=self.error_topic,
+            function_name=name,
+            environment_variables={
+                'DYNAMODB_TABLE_NAME': name
+            },
+        ).lambda_function.add_event_source(
+            aws_cdk.aws_lambda_event_sources.DynamoEventSource(
+                table=dynamodb_table,
+                starting_position=aws_cdk.aws_lambda.StartingPosition.LATEST,
+            )
+        )
         return aws_cdk.aws_lambda.Function(
             self, 'LambdaFunction',
             runtime=aws_cdk.aws_lambda.Runtime.PYTHON_3_8,
@@ -224,15 +238,6 @@ class ApiDynamodb(well_architected.WellArchitectedStack):
                 )
             )
         ).api
-        return aws_cdk.aws_apigateway.RestApi(
-            self, 'ApiGateway',
-            deploy_options=aws_cdk.aws_apigateway.StageOptions(
-                metrics_enabled=True,
-                logging_level=aws_cdk.aws_apigateway.MethodLoggingLevel.INFO,
-                data_trace_enabled=True,
-                stage_name='prod',
-            )
-        )
 
     def create_api_gateway_service_role(self):
         return aws_cdk.aws_iam.Role(
