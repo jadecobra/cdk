@@ -120,7 +120,7 @@
        "Resource": [
         {
          "Fn::GetAtt": [
-          "DynamoDBTable59784FC0",
+          "DynamodbTable3CF1FC96",
           "Arn"
          ]
         },
@@ -156,7 +156,7 @@
       "Ref": "AWS::Region"
      },
      "TableName": {
-      "Ref": "DynamoDBTable59784FC0"
+      "Ref": "DynamodbTable3CF1FC96"
      }
     },
     "ServiceRoleArn": {
@@ -400,7 +400,7 @@
     "GraphQlApiSchema687DE4FD"
    ]
   },
-  "DynamoDBTable59784FC0": {
+  "DynamodbTable3CF1FC96": {
    "Type": "AWS::DynamoDB::Table",
    "Properties": {
     "KeySchema": [
@@ -415,13 +415,152 @@
       "AttributeType": "S"
      }
     ],
-    "ProvisionedThroughput": {
-     "ReadCapacityUnits": 5,
-     "WriteCapacityUnits": 5
-    }
+    "BillingMode": "PAY_PER_REQUEST"
    },
-   "UpdateReplacePolicy": "Retain",
-   "DeletionPolicy": "Retain"
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete"
+  },
+  "DynamodbTableUserErrorsGreaterThanZero01137B18": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "SnsTopic2C1570A4"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "MetricName": "UserErrors",
+    "Namespace": "AWS/DynamoDB",
+    "Period": 300,
+    "Statistic": "Sum",
+    "Threshold": 0,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "DynamodbTableReadsWritesThrottled1D5291C4": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "SnsTopic2C1570A4"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "Metrics": [
+     {
+      "Expression": "m1 + m2",
+      "Id": "expr_1",
+      "Label": "dynamodb_throttles"
+     },
+     {
+      "Id": "m1",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "TableName",
+          "Value": {
+           "Ref": "DynamodbTable3CF1FC96"
+          }
+         }
+        ],
+        "MetricName": "ReadThrottleEvents",
+        "Namespace": "AWS/DynamoDB"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     },
+     {
+      "Id": "m2",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "TableName",
+          "Value": {
+           "Ref": "DynamodbTable3CF1FC96"
+          }
+         }
+        ],
+        "MetricName": "WriteThrottleEvents",
+        "Namespace": "AWS/DynamoDB"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     }
+    ],
+    "Threshold": 1,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "DynamodbTableCloudWatchDashBoard0DD5760D": {
+   "Type": "AWS::CloudWatch::Dashboard",
+   "Properties": {
+    "DashboardBody": {
+     "Fn::Join": [
+      "",
+      [
+       "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"dynamodb_latency\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":true,\"metrics\":[[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"GetItem\",\"TableName\",\"",
+       {
+        "Ref": "DynamodbTable3CF1FC96"
+       },
+       "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"UpdateItem\",\"TableName\",\"",
+       {
+        "Ref": "DynamodbTable3CF1FC96"
+       },
+       "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"PutItem\",\"TableName\",\"",
+       {
+        "Ref": "DynamodbTable3CF1FC96"
+       },
+       "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"DeleteItem\",\"TableName\",\"",
+       {
+        "Ref": "DynamodbTable3CF1FC96"
+       },
+       "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"Query\",\"TableName\",\"",
+       {
+        "Ref": "DynamodbTable3CF1FC96"
+       },
+       "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"dynamodb_consumed_read_write_units\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":false,\"metrics\":[[\"AWS/DynamoDB\",\"ConsumedReadCapacityUnits\",\"TableName\",\"",
+       {
+        "Ref": "DynamodbTable3CF1FC96"
+       },
+       "\"],[\"AWS/DynamoDB\",\"ConsumedWriteCapacityUnits\",\"TableName\",\"",
+       {
+        "Ref": "DynamodbTable3CF1FC96"
+       },
+       "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"dynamodb_throttles\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":true,\"metrics\":[[\"AWS/DynamoDB\",\"ReadThrottleEvents\",\"TableName\",\"",
+       {
+        "Ref": "DynamodbTable3CF1FC96"
+       },
+       "\",{\"stat\":\"Sum\"}],[\"AWS/DynamoDB\",\"WriteThrottleEvents\",\"TableName\",\"",
+       {
+        "Ref": "DynamodbTable3CF1FC96"
+       },
+       "\",{\"stat\":\"Sum\"}]],\"yAxis\":{}}}]}"
+      ]
+     ]
+    }
+   }
   },
   "LambdaFunctionAwsXraySdkLambdaLayer05BEC3A3": {
    "Type": "AWS::Lambda::LayerVersion",

@@ -66,3 +66,9 @@ class WellArchitectedStack(aws_cdk.Stack):
             synthesizer=aws_cdk.LegacyStackSynthesizer(),
             **kwargs,
         )
+
+    def create_error_topic(self):
+        return aws_cdk.aws_sns.Topic(
+            self, f"{id}ErrorTopic",
+            display_name="ErrorTopic",
+        )

@@ -25,13 +25,6 @@ class SimpleGraphQlService(well_architected.WellArchitectedStack):
                         type=aws_cdk.aws_dynamodb.AttributeType.STRING
                     )
                 ).dynamodb_table
-                # aws_cdk.aws_dynamodb.Table(
-                #     self, "DynamoDBTable",
-                #     partition_key=aws_cdk.aws_dynamodb.Attribute(
-                #         name="id",
-                #         type=aws_cdk.aws_dynamodb.AttributeType.STRING
-                #     )
-                # )
             )
         )
         self.add_lambda_function_data_source(
@@ -50,9 +43,6 @@ class SimpleGraphQlService(well_architected.WellArchitectedStack):
             ('API_Key', self.create_graphql_api_key(graphql_api.api_id).attr_api_key),
         ):
             aws_cdk.CfnOutput(self, logical_id, value=value)
-
-    def create_error_topic(self, id):
-        return aws_cdk.aws_sns.Topic(self, 'SnsTopic', display_name=id)
 
     def create_graphql_api(self):
         return aws_cdk.aws_appsync_alpha.GraphqlApi(
