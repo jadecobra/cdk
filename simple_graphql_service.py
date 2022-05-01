@@ -75,7 +75,7 @@ class SimpleGraphQlService(well_architected.WellArchitectedStack):
 
     def create_mutation_resolver(
         self, data_source=None, field_name=None,
-        request_mapping_template=None, response_mapping_template=None
+        request_mapping_template=None,
     ):
         return data_source.create_resolver(
             type_name='Mutation',
