@@ -19065,3 +19065,8 @@
 2022-05-01 08:47:55.330045::Time taken to synthesize stack: ApiStepFunctions::  4.9116 seconds
 2022-05-01 08:48:00.212239::Time taken to synthesize stack: ApiDynamodb::  4.8750 seconds
 2022-05-01 08:48:05.107367::Time taken to synthesize stack: WafApiLambdaDynamodb::  4.8900 seconds
+2022-05-01 08:49:23.562695::Time taken to synthesize stack: SimpleGraphqlService::  5.2932 seconds
+2022-05-01 08:50:12.844288::Time taken to synthesize stack: SimpleGraphqlService::  5.3305 seconds
+2022-05-01 08:50:18.091109::Time taken to synthesize stack: ApiStepFunctions::  5.2401 seconds
+2022-05-01 08:50:23.523124::Time taken to synthesize stack: ApiDynamodb::  5.4260 seconds
+2022-05-01 08:50:29.196175::Time taken to synthesize stack: WafApiLambdaDynamodb::  5.6690 seconds
