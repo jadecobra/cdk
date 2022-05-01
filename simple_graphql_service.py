@@ -11,6 +11,7 @@ class SimpleGraphQlService(well_architected.WellArchitectedStack):
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
+        self.error_topic = self.create_error_topic(id)
         graphql_api = self.create_graphql_api()
         self.add_dynamodb_data_source(
             graphql_api.add_dynamo_db_data_source(
@@ -27,12 +28,11 @@ class SimpleGraphQlService(well_architected.WellArchitectedStack):
         self.add_lambda_function_data_source(
             graphql_api.add_lambda_data_source(
                 'LambdaDataSource',
-                aws_cdk.aws_lambda.Function(
-                    self, "LambdaFunction",
-                    runtime=aws_cdk.aws_lambda.Runtime.PYTHON_3_9,
-                    handler="loyalty.handler",
-                    code=aws_cdk.aws_lambda.Code.from_asset("lambda_functions/loyalty"),
-                )
+                well_architected_lambda.LambdaFunctionConstruct(
+                    self, 'LambdaFunction',
+                    error_topic=self.error_topic,
+                    function_name='loyalty',
+                ).lambda_function
             )
         )
 
@@ -41,6 +41,9 @@ class SimpleGraphQlService(well_architected.WellArchitectedStack):
             ('API_Key', self.create_graphql_api_key(graphql_api.api_id).attr_api_key),
         ):
             aws_cdk.CfnOutput(self, logical_id, value=value)
+
+    def create_error_topic(self, id):
+        return aws_cdk.aws_sns.Topic(self, 'SnsTopic', display_name=id)
 
     def create_graphql_api(self):
         return aws_cdk.aws_appsync_alpha.GraphqlApi(
