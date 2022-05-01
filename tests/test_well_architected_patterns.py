@@ -21,7 +21,7 @@ class TestWellArchitectedPatterns(tests.utilities.TestTemplates):
             # 'LambdaLith',
             # 'LambdaRestAPIGateway',
             # 'RdsProxy',
-            # 'SagaStepFunction',
+            'SagaStepFunction',
             # 'ScalableWebhook', # deprecated by RdsProxy
             # 'SinglePurposeLambda',
             'SimpleGraphqlService',
@@ -31,7 +31,6 @@ class TestWellArchitectedPatterns(tests.utilities.TestTemplates):
             # 'SqsFlow',
             # 'HttpApiLambdaFunction',
             # 'HttpApiStateMachine',
-            # 'WebApplicationFirewall',
             # 'XRayTracerSnsFanOutTopic',
             "ApiStepFunctions",
             "ApiDynamodb",

@@ -56,8 +56,7 @@ class WellArchitected(aws_cdk.App):
         # lambda_circuit_breaker.LambdaCircuitBreaker(self, "LambdaCircuitBreaker", )
 
         # rds_proxy.RdsProxy(self, "RdsProxy", )
-        # saga_step_function.SagaStepFunction(self, "SagaStepFunction", )
-        # scalable_webhook.ScalableWebhook(self, "ScalableWebhook", )
+        saga_step_function.SagaStepFunction(self, "SagaStepFunction", )
         # lambda_power_tuner.LambdaPowerTuner(self, "LambdaPowerTuner", )
         simple_graphql_service.SimpleGraphQlService(self, "SimpleGraphqlService", )
         api_dynamodb.ApiDynamodb(
