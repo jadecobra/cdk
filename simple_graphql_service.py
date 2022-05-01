@@ -2,7 +2,7 @@ import aws_cdk
 import aws_cdk.aws_appsync_alpha
 import well_architected
 import well_architected_lambda
-import well_architecetd_dynamodb_table
+import well_architected_dynamodb_table
 import constructs
 import os
 
@@ -17,7 +17,7 @@ class SimpleGraphQlService(well_architected.WellArchitectedStack):
         self.add_dynamodb_data_source(
             graphql_api.add_dynamo_db_data_source(
                 'DynamoDbDataSource',
-                well_architected_dynamodb_table.DynamodbTableConstruct(
+                well_architected_dynamodb_table.DynamoDBTableConstruct(
                     self, 'DynamodbTable',
                     error_topic=self.error_topic,
                     partition_key=aws_cdk.aws_dynamodb.Attribute(
