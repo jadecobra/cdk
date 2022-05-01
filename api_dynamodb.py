@@ -16,7 +16,7 @@ class ApiDynamodb(well_architected.WellArchitectedStack):
         **kwargs
     ) -> None:
         super().__init__(scope, id, **kwargs)
-        self.error_topic = self.create_error_topic(id)
+
         rest_api = self.create_rest_api(self.error_topic)
         api_gateway_service_role = self.create_api_gateway_service_role()
 
@@ -32,9 +32,6 @@ class ApiDynamodb(well_architected.WellArchitectedStack):
             dynamodb_table=dynamodb_table,
             error_topic=self.error_topic,
         )
-
-    def create_error_topic(self, id):
-        return aws_cdk.aws_sns.Topic(self, 'SnsTopic', display_name=id)
 
     def add_method_to_rest_api(
         self, rest_api=None, api_gateway_service_role=None,

@@ -29,7 +29,7 @@ class WafApiLambdaDynamodb(well_architected.WellArchitectedStack):
     ):
         super().__init__(scope, id, **kwargs)
         self.name = self.camel_to_snake(id)
-        self.error_topic = self.create_error_topic(id)
+
         self.dynamodb_table = self.create_dynamodb_table(
             name=self.name,
             partition_key=partition_key,
@@ -57,9 +57,6 @@ class WafApiLambdaDynamodb(well_architected.WellArchitectedStack):
             error_topic=self.error_topic,
             target_arn= f"arn:aws:apigateway:region::/restapis/{self.rest_api.rest_api_id}/stages/{self.rest_api.deployment_stage.stage_name}",
         )
-
-    def create_error_topic(self, id):
-        return aws_cdk.aws_sns.Topic(self, 'SnsTopic', display_name=id)
 
     def create_dynamodb_table(self, error_topic=None, name=None, partition_key=None, sort_key=None):
         return well_architected_dynamodb_table.DynamoDBTableConstruct(
