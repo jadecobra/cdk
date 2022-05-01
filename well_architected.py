@@ -67,8 +67,8 @@ class WellArchitectedStack(aws_cdk.Stack):
             **kwargs,
         )
 
-    def create_error_topic(self):
+    def create_error_topic(self, display_name):
         return aws_cdk.aws_sns.Topic(
-            self, f"{id}ErrorTopic",
-            display_name="ErrorTopic",
+            self, "SnsTopic",
+            display_name=f"{display_name}ErrorTopic",
         )
