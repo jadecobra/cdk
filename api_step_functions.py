@@ -11,8 +11,8 @@ class ApiStepFunctions(well_architected.WellArchitectedStack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
+
         self.result_path = '$.resultPath'
-        self.error_topic = self.create_error_topic()
         self.state_machine = self.create_state_machine(self.create_lambda_function(self.error_topic))
         self.http_api = self.create_http_api(self.error_topic)
         self.create_api_gateway_route(
@@ -26,12 +26,6 @@ class ApiStepFunctions(well_architected.WellArchitectedStack):
         self.rest_api = self.create_rest_api(
             error_topic=self.error_topic,
             state_machine=self.state_machine,
-        )
-
-    def create_error_topic(self):
-        return aws_cdk.aws_sns.Topic(
-            self, 'StateMachineErrorTopic',
-            display_name='StateMachineError'
         )
 
     def failure_message(self):
