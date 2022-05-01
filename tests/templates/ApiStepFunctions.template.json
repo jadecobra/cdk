@@ -1,9 +1,9 @@
 {
  "Resources": {
-  "StateMachineErrorTopic38C39788": {
+  "SnsTopic2C1570A4": {
    "Type": "AWS::SNS::Topic",
    "Properties": {
-    "DisplayName": "StateMachineError"
+    "DisplayName": "ApiStepFunctionsErrorTopic"
    }
   },
   "lambdafunctionAwsXraySdkLambdaLayer697B62E5": {
@@ -176,7 +176,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "StateMachineErrorTopic38C39788"
+      "Ref": "SnsTopic2C1570A4"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -238,7 +238,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "StateMachineErrorTopic38C39788"
+      "Ref": "SnsTopic2C1570A4"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -265,7 +265,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "StateMachineErrorTopic38C39788"
+      "Ref": "SnsTopic2C1570A4"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -508,7 +508,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "StateMachineErrorTopic38C39788"
+      "Ref": "SnsTopic2C1570A4"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -574,7 +574,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "StateMachineErrorTopic38C39788"
+      "Ref": "SnsTopic2C1570A4"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -613,7 +613,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "StateMachineErrorTopic38C39788"
+      "Ref": "SnsTopic2C1570A4"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -997,7 +997,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "StateMachineErrorTopic38C39788"
+      "Ref": "SnsTopic2C1570A4"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -1063,7 +1063,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "StateMachineErrorTopic38C39788"
+      "Ref": "SnsTopic2C1570A4"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -1102,7 +1102,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "StateMachineErrorTopic38C39788"
+      "Ref": "SnsTopic2C1570A4"
      }
     ],
     "DatapointsToAlarm": 1,

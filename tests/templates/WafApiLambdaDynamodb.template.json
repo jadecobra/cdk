@@ -3,7 +3,7 @@
   "SnsTopic2C1570A4": {
    "Type": "AWS::SNS::Topic",
    "Properties": {
-    "DisplayName": "WafApiLambdaDynamodb"
+    "DisplayName": "WafApiLambdaDynamodbErrorTopic"
    }
   },
   "DynamoDbTable328C754E": {

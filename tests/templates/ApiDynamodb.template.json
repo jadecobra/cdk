@@ -3,7 +3,7 @@
   "SnsTopic2C1570A4": {
    "Type": "AWS::SNS::Topic",
    "Properties": {
-    "DisplayName": "ApiDynamodb"
+    "DisplayName": "ApiDynamodbErrorTopic"
    }
   },
   "RestApiDynamodbE4D5AF2C": {
