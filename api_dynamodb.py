@@ -17,10 +17,7 @@ class ApiDynamodb(well_architected.WellArchitectedStack):
     ) -> None:
         super().__init__(scope, id, **kwargs)
         self.error_topic = self.create_error_topic(id)
-        rest_api = self.create_rest_api(
-
-        )
-        http_api = self.create_http_api(self.error_topic)
+        rest_api = self.create_rest_api(self.error_topic)
         api_gateway_service_role = self.create_api_gateway_service_role()
 
         dynamodb_table = self.create_dynamodb_table(partition_key)
@@ -228,16 +225,6 @@ class ApiDynamodb(well_architected.WellArchitectedStack):
                 starting_position=aws_cdk.aws_lambda.StartingPosition.LATEST,
             )
         )
-
-    def create_http_api(self, error_topic):
-        return well_architected_api.WellArchitectedApi(
-            self, 'HttpApi',
-            error_topic=error_topic,
-            api=aws_cdk.aws_apigatewayv2_alpha.HttpApi(
-                self, 'HttpApiStepFunctions',
-                create_default_stage=True
-            )
-        ).api
 
     def create_rest_api(self, error_topic):
         return well_architected_api.WellArchitectedApi(

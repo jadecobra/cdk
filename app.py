@@ -58,8 +58,8 @@ class WellArchitected(aws_cdk.App):
         # rds_proxy.RdsProxy(self, "RdsProxy", )
         # saga_step_function.SagaStepFunction(self, "SagaStepFunction", )
         # scalable_webhook.ScalableWebhook(self, "ScalableWebhook", )
-        # simple_graphql_service.SimpleGraphQlService(self, "SimpleGraphqlService", )
         # lambda_power_tuner.LambdaPowerTuner(self, "LambdaPowerTuner", )
+        simple_graphql_service.SimpleGraphQlService(self, "SimpleGraphqlService", )
         api_dynamodb.ApiDynamodb(
             self, 'ApiDynamodb',
             partition_key='message',

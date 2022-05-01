@@ -6,13 +6,13 @@
     "DisplayName": "ApiDynamodb"
    }
   },
-  "ApiGateway11E7F47B": {
+  "RestApiDynamodbE4D5AF2C": {
    "Type": "AWS::ApiGateway::RestApi",
    "Properties": {
-    "Name": "ApiGateway"
+    "Name": "RestApiDynamodb"
    }
   },
-  "ApiGatewayCloudWatchRoleA41EF9FE": {
+  "RestApiDynamodbCloudWatchRole73037F83": {
    "Type": "AWS::IAM::Role",
    "Properties": {
     "AssumeRolePolicyDocument": {
@@ -43,43 +43,43 @@
     ]
    }
   },
-  "ApiGatewayAccountBC7F34C1": {
+  "RestApiDynamodbAccount7A7FEBA5": {
    "Type": "AWS::ApiGateway::Account",
    "Properties": {
     "CloudWatchRoleArn": {
      "Fn::GetAtt": [
-      "ApiGatewayCloudWatchRoleA41EF9FE",
+      "RestApiDynamodbCloudWatchRole73037F83",
       "Arn"
      ]
     }
    },
    "DependsOn": [
-    "ApiGateway11E7F47B"
+    "RestApiDynamodbE4D5AF2C"
    ]
   },
-  "ApiGatewayDeploymentA26796E821961e34c58da90afe87749c34f6ad92": {
+  "RestApiDynamodbDeployment789617D98faa1cf1608e3b516485cd40f0d11556": {
    "Type": "AWS::ApiGateway::Deployment",
    "Properties": {
     "RestApiId": {
-     "Ref": "ApiGateway11E7F47B"
+     "Ref": "RestApiDynamodbE4D5AF2C"
     },
     "Description": "Automatically created by the RestApi construct"
    },
    "DependsOn": [
-    "ApiGatewayInsertItemPOST3D4259A4",
-    "ApiGatewayInsertItemF3D948B5",
-    "ApiGatewayErrorResponseModel3E7A8FB0",
-    "ApiGatewayResponseModel1332A0E1"
+    "RestApiDynamodbInsertItemPOSTA98B66B4",
+    "RestApiDynamodbInsertItemDD823FFA",
+    "RestApiDynamodbErrorResponseModelB3F0856E",
+    "RestApiDynamodbResponseModel72FCC6AB"
    ]
   },
-  "ApiGatewayDeploymentStageprod1C6D5CD6": {
+  "RestApiDynamodbDeploymentStageprodB57AABC0": {
    "Type": "AWS::ApiGateway::Stage",
    "Properties": {
     "RestApiId": {
-     "Ref": "ApiGateway11E7F47B"
+     "Ref": "RestApiDynamodbE4D5AF2C"
     },
     "DeploymentId": {
-     "Ref": "ApiGatewayDeploymentA26796E821961e34c58da90afe87749c34f6ad92"
+     "Ref": "RestApiDynamodbDeployment789617D98faa1cf1608e3b516485cd40f0d11556"
     },
     "MethodSettings": [
      {
@@ -93,33 +93,33 @@
     "StageName": "prod"
    },
    "DependsOn": [
-    "ApiGatewayAccountBC7F34C1"
+    "RestApiDynamodbAccount7A7FEBA5"
    ]
   },
-  "ApiGatewayInsertItemF3D948B5": {
+  "RestApiDynamodbInsertItemDD823FFA": {
    "Type": "AWS::ApiGateway::Resource",
    "Properties": {
     "ParentId": {
      "Fn::GetAtt": [
-      "ApiGateway11E7F47B",
+      "RestApiDynamodbE4D5AF2C",
       "RootResourceId"
      ]
     },
     "PathPart": "InsertItem",
     "RestApiId": {
-     "Ref": "ApiGateway11E7F47B"
+     "Ref": "RestApiDynamodbE4D5AF2C"
     }
    }
   },
-  "ApiGatewayInsertItemPOST3D4259A4": {
+  "RestApiDynamodbInsertItemPOSTA98B66B4": {
    "Type": "AWS::ApiGateway::Method",
    "Properties": {
     "HttpMethod": "POST",
     "ResourceId": {
-     "Ref": "ApiGatewayInsertItemF3D948B5"
+     "Ref": "RestApiDynamodbInsertItemDD823FFA"
     },
     "RestApiId": {
-     "Ref": "ApiGateway11E7F47B"
+     "Ref": "RestApiDynamodbE4D5AF2C"
     },
     "AuthorizationType": "NONE",
     "Integration": {
@@ -172,7 +172,7 @@
      {
       "ResponseModels": {
        "application/json": {
-        "Ref": "ApiGatewayResponseModel1332A0E1"
+        "Ref": "RestApiDynamodbResponseModel72FCC6AB"
        }
       },
       "ResponseParameters": {
@@ -185,7 +185,7 @@
      {
       "ResponseModels": {
        "application/json": {
-        "Ref": "ApiGatewayErrorResponseModel3E7A8FB0"
+        "Ref": "RestApiDynamodbErrorResponseModelB3F0856E"
        }
       },
       "ResponseParameters": {
@@ -198,11 +198,11 @@
     ]
    }
   },
-  "ApiGatewayResponseModel1332A0E1": {
+  "RestApiDynamodbResponseModel72FCC6AB": {
    "Type": "AWS::ApiGateway::Model",
    "Properties": {
     "RestApiId": {
-     "Ref": "ApiGateway11E7F47B"
+     "Ref": "RestApiDynamodbE4D5AF2C"
     },
     "ContentType": "application/json",
     "Name": "ResponseModel",
@@ -218,11 +218,11 @@
     }
    }
   },
-  "ApiGatewayErrorResponseModel3E7A8FB0": {
+  "RestApiDynamodbErrorResponseModelB3F0856E": {
    "Type": "AWS::ApiGateway::Model",
    "Properties": {
     "RestApiId": {
-     "Ref": "ApiGateway11E7F47B"
+     "Ref": "RestApiDynamodbE4D5AF2C"
     },
     "ContentType": "application/json",
     "Name": "ErrorResponseModel",
@@ -241,7 +241,7 @@
     }
    }
   },
-  "RestApiGateway4XXErrorsGreaterThanOnePercentA8477924": {
+  "RestApi4XXErrorsGreaterThanOnePercentC77F0B92": {
    "Type": "AWS::CloudWatch::Alarm",
    "Properties": {
     "ComparisonOperator": "GreaterThanOrEqualToThreshold",
@@ -267,7 +267,7 @@
          {
           "Name": "ApiId",
           "Value": {
-           "Ref": "ApiGateway11E7F47B"
+           "Ref": "RestApiDynamodbE4D5AF2C"
           }
          }
         ],
@@ -289,7 +289,7 @@
          {
           "Name": "ApiId",
           "Value": {
-           "Ref": "ApiGateway11E7F47B"
+           "Ref": "RestApiDynamodbE4D5AF2C"
           }
          }
         ],
@@ -307,7 +307,7 @@
     "TreatMissingData": "notBreaching"
    }
   },
-  "RestApiGateway5XXErrorsGreaterThanZeroC95A0181": {
+  "RestApi5XXErrorsGreaterThanZeroDBDEB694": {
    "Type": "AWS::CloudWatch::Alarm",
    "Properties": {
     "ComparisonOperator": "GreaterThanOrEqualToThreshold",
@@ -328,7 +328,7 @@
          {
           "Name": "ApiId",
           "Value": {
-           "Ref": "ApiGateway11E7F47B"
+           "Ref": "RestApiDynamodbE4D5AF2C"
           }
          }
         ],
@@ -346,7 +346,7 @@
     "TreatMissingData": "notBreaching"
    }
   },
-  "RestApiGatewayP99LatencyGreaterThanOneSecond049A3BA0": {
+  "RestApiP99LatencyGreaterThanOneSecond373BB52C": {
    "Type": "AWS::CloudWatch::Alarm",
    "Properties": {
     "ComparisonOperator": "GreaterThanOrEqualToThreshold",
@@ -367,7 +367,7 @@
          {
           "Name": "ApiId",
           "Value": {
-           "Ref": "ApiGateway11E7F47B"
+           "Ref": "RestApiDynamodbE4D5AF2C"
           }
          }
         ],
@@ -385,7 +385,7 @@
     "TreatMissingData": "notBreaching"
    }
   },
-  "RestApiGatewayCloudWatchDashBoard1A9E4EB0": {
+  "RestApiCloudWatchDashBoard2449E23D": {
    "Type": "AWS::CloudWatch::Dashboard",
    "Properties": {
     "DashboardBody": {
@@ -398,7 +398,7 @@
        },
        "\",\"stacked\":false,\"metrics\":[[\"AWS/ApiGateway\",\"Count\",\"ApiId\",\"",
        {
-        "Ref": "ApiGateway11E7F47B"
+        "Ref": "RestApiDynamodbE4D5AF2C"
        },
        "\",{\"label\":\"# Requests\",\"period\":900,\"stat\":\"Sum\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"api_gateway_latency\",\"region\":\"",
        {
@@ -406,15 +406,15 @@
        },
        "\",\"stacked\":true,\"metrics\":[[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
        {
-        "Ref": "ApiGateway11E7F47B"
+        "Ref": "RestApiDynamodbE4D5AF2C"
        },
        "\",{\"label\":\"api_gateway_latency_p50\",\"period\":900,\"stat\":\"p50\"}],[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
        {
-        "Ref": "ApiGateway11E7F47B"
+        "Ref": "RestApiDynamodbE4D5AF2C"
        },
        "\",{\"label\":\"api_gateway_latency_p90\",\"period\":900,\"stat\":\"p90\"}],[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
        {
-        "Ref": "ApiGateway11E7F47B"
+        "Ref": "RestApiDynamodbE4D5AF2C"
        },
        "\",{\"label\":\"api_gateway_latency_p99\",\"period\":900,\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"api_gateway_errors\",\"region\":\"",
        {
@@ -422,11 +422,11 @@
        },
        "\",\"stacked\":true,\"metrics\":[[\"AWS/ApiGateway\",\"4XXError\",\"ApiId\",\"",
        {
-        "Ref": "ApiGateway11E7F47B"
+        "Ref": "RestApiDynamodbE4D5AF2C"
        },
        "\",{\"label\":\"api_gateway_4XXErrors\",\"period\":900,\"stat\":\"Sum\"}],[\"AWS/ApiGateway\",\"5XXError\",\"ApiId\",\"",
        {
-        "Ref": "ApiGateway11E7F47B"
+        "Ref": "RestApiDynamodbE4D5AF2C"
        },
        "\",{\"label\":\"api_gateway_5XXErrors\",\"period\":900,\"stat\":\"Sum\"}]],\"yAxis\":{}}}]}"
       ]
@@ -1064,14 +1064,14 @@
   }
  },
  "Outputs": {
-  "ApiGatewayEndpoint5AA8EC3A": {
+  "RestApiDynamodbEndpoint5AD05DEC": {
    "Value": {
     "Fn::Join": [
      "",
      [
       "https://",
       {
-       "Ref": "ApiGateway11E7F47B"
+       "Ref": "RestApiDynamodbE4D5AF2C"
       },
       ".execute-api.",
       {
@@ -1083,21 +1083,21 @@
       },
       "/",
       {
-       "Ref": "ApiGatewayDeploymentStageprod1C6D5CD6"
+       "Ref": "RestApiDynamodbDeploymentStageprodB57AABC0"
       },
       "/"
      ]
     ]
    }
   },
-  "RestApiGatewayRestApiGatewayURLF2A41928": {
+  "RestApiRestApiURL02BC346F": {
    "Value": {
     "Fn::Join": [
      "",
      [
       "https://",
       {
-       "Ref": "ApiGateway11E7F47B"
+       "Ref": "RestApiDynamodbE4D5AF2C"
       },
       ".execute-api.",
       {
@@ -1109,7 +1109,7 @@
       },
       "/",
       {
-       "Ref": "ApiGatewayDeploymentStageprod1C6D5CD6"
+       "Ref": "RestApiDynamodbDeploymentStageprodB57AABC0"
       },
       "/"
      ]

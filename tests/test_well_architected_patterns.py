@@ -24,7 +24,7 @@ class TestWellArchitectedPatterns(tests.utilities.TestTemplates):
             # 'SagaStepFunction',
             # 'ScalableWebhook', # deprecated by RdsProxy
             # 'SinglePurposeLambda',
-            # 'SimpleGraphQLService',
+            'SimpleGraphqlService',
             # 'SnsFlow',
             # 'SnsRestApi',
             # 'SNSTopic',

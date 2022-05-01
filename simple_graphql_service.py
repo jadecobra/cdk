@@ -1,16 +1,18 @@
 import aws_cdk
 import aws_cdk.aws_appsync_alpha
+import well_architected
+import well_architected_lambda
 import constructs
 import os
 
 
-class SimpleGraphQlService(aws_cdk.Stack):
+class SimpleGraphQlService(well_architected.WellArchitectedStack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         graphql_api = self.create_graphql_api()
-        self.add_dynamodb_data_source_resolvers(
+        self.add_dynamodb_data_source(
             graphql_api.add_dynamo_db_data_source(
                 'DynamoDbDataSource',
                 aws_cdk.aws_dynamodb.Table(
@@ -22,7 +24,7 @@ class SimpleGraphQlService(aws_cdk.Stack):
                 )
             )
         )
-        self.add_get_customers_query_resolver_lambda(
+        self.add_lambda_function_data_source(
             graphql_api.add_lambda_data_source(
                 'LambdaDataSource',
                 aws_cdk.aws_lambda.Function(
@@ -81,7 +83,7 @@ class SimpleGraphQlService(aws_cdk.Stack):
             response_mapping_template=aws_cdk.aws_appsync_alpha.MappingTemplate.dynamo_db_result_item(),
         )
 
-    def add_get_customers_query_resolver_lambda(self, data_source):
+    def add_lambda_function_data_source(self, data_source):
         self.create_query_resolver(
             data_source=data_source,
             field_name='getLoyaltyLevel',
@@ -144,7 +146,7 @@ class SimpleGraphQlService(aws_cdk.Stack):
             request_mapping_template=aws_cdk.aws_appsync_alpha.MappingTemplate.dynamo_db_delete_item('id', 'id'),
         )
 
-    def add_dynamodb_data_source_resolvers(self, dynamodb_data_source):
+    def add_dynamodb_data_source(self, dynamodb_data_source):
         for method in (
             self.add_get_customers_query_resolver_dynamodb,
             self.add_get_customer_query_resolver,
