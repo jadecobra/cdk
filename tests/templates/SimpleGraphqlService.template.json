@@ -3,7 +3,7 @@
   "SnsTopic2C1570A4": {
    "Type": "AWS::SNS::Topic",
    "Properties": {
-    "DisplayName": "SimpleGraphqlService"
+    "DisplayName": "SimpleGraphqlServiceErrorTopic"
    }
   },
   "GraphQlApiApiLogsRoleC9DDACBE": {
