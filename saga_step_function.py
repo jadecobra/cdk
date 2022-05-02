@@ -1,5 +1,8 @@
 import aws_cdk
 import constructs
+import well_architected
+import well_architected_lambda
+import well_architected_dynamodb_table
 
 from aws_cdk import (
     aws_lambda,
@@ -10,24 +13,27 @@ from aws_cdk import (
 )
 
 
-class SagaStepFunction(aws_cdk.Stack):
+class SagaStepFunction(well_architected.WellArchitectedStack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        bookings = dynamo_db.Table(
-            self, "Bookings",
-            partition_key=dynamo_db.Attribute(name="booking_id", type=dynamo_db.AttributeType.STRING),
-            sort_key=dynamo_db.Attribute(name="booking_type", type=dynamo_db.AttributeType.STRING)
-        )
+        # bookings = aws_cdk.aws_dynamodb.Table(
+        #     self, "Bookings",
+        #     partition_key=aws_cdk.aws_dynamodb.Attribute(
+        #         name="booking_id", type=dynamo_db.AttributeType.STRING
+        #     ),
+        #     sort_key=aws_cdk.aws_dynamodb.Attribute(
+        #         name="booking_type", type=dynamo_db.AttributeType.STRING
+        #     )
+        # )
 
-        ###
-        # Lambda Functions
-        ###
-        # We need Booking and Cancellation functions for our 3 services
-        #
-        # All functions need access to our DynamoDB table above.
-        # We also need to take payment for this trip
+        bookings = well_architected_dynamodb_table.DynamoDBTableConstruct(
+            self, 'DynamodbTable',
+            partition_key='booking_id',
+            sort_key='booking_type',
+            error_topic=self.error_topic,
+        )
 
         flight_reservation_function = self.create_lambda_function(
             self,

@@ -24,8 +24,8 @@ class DynamoDBTableConstruct(well_architected.WellArchitectedConstruct):
             self, id,
             table_name=table_name,
             billing_mode=aws_cdk.aws_dynamodb.BillingMode.PAY_PER_REQUEST,
-            partition_key=partition_key,
-            sort_key=sort_key,
+            partition_key=self.get_dynamodb_key(partition_key),
+            sort_key=self.get_dynamodb_key(sort_key),
             stream=stream,
             removal_policy=aws_cdk.RemovalPolicy.DESTROY,
             time_to_live_attribute=time_to_live_attribute,
@@ -35,6 +35,14 @@ class DynamoDBTableConstruct(well_architected.WellArchitectedConstruct):
         self.create_cloudwatch_dashboard(
             self.create_cloudwatch_widgets()
         )
+
+    @staticmethod
+    def get_dynamodb_key(key):
+        if not isinstance(key, aws_cdk.aws_dynamodb.AttributeType.STRING):
+            return aws_cdk.aws_dynamodb.Attribute(
+                name=key,
+                type=aws_cdk.aws_dynamodb.AttributeType.STRING,
+            )
 
     def get_dynamodb_metric(self, metric_name, statistic='sum'):
         return self.dynamodb_table.metric(metric_name=metric_name, statistic=statistic)
