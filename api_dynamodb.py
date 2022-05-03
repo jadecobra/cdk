@@ -202,13 +202,9 @@ class ApiDynamodb(well_architected.WellArchitectedStack):
     def create_dynamodb_table(self, partition_key):
         return well_architected_dynamodb_table.DynamoDBTableConstruct(
             self, 'DynamoDbTable',
-            # table_name=name,
             stream=aws_cdk.aws_dynamodb.StreamViewType.NEW_IMAGE,
             error_topic=self.error_topic,
-            partition_key=aws_cdk.aws_dynamodb.Attribute(
-                name=partition_key,
-                type=aws_cdk.aws_dynamodb.AttributeType.STRING,
-            ),
+            partition_key=partition_key,
         ).dynamodb_table
 
     def create_lambda_function_with_dynamodb_event_source(self, dynamodb_table=None, error_topic=None):

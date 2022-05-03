@@ -38,13 +38,12 @@ class DynamoDBTableConstruct(well_architected.WellArchitectedConstruct):
 
     @staticmethod
     def get_dynamodb_key(key):
-        try:
+        if key is not None:
             return aws_cdk.aws_dynamodb.Attribute(
                 name=key,
                 type=aws_cdk.aws_dynamodb.AttributeType.STRING,
             )
-        except AssertionError:
-            return key
+        return None
 
     def get_dynamodb_metric(self, metric_name, statistic='sum'):
         return self.dynamodb_table.metric(metric_name=metric_name, statistic=statistic)
