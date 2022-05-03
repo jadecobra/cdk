@@ -33,7 +33,7 @@ class SagaStepFunction(well_architected.WellArchitectedStack):
             partition_key='booking_id',
             sort_key='booking_type',
             error_topic=self.error_topic,
-        )
+        ).dynamodb_table
 
         flight_reservation_function = self.create_lambda_function(
             self,

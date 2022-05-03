@@ -8,8 +8,8 @@ class DynamoDBTableConstruct(well_architected.WellArchitectedConstruct):
         self, scope: constructs.Construct, id: str,
             table_name=None,
             error_topic=None,
-            partition_key: aws_cdk.aws_dynamodb.Attribute=None,
-            sort_key: aws_cdk.aws_dynamodb.Attribute=None,
+            partition_key: str=None,
+            sort_key: str=None,
             time_to_live_attribute=None,
             stream=None,
             **kwargs

@@ -19,10 +19,7 @@ class SimpleGraphQlService(well_architected.WellArchitectedStack):
                 well_architected_dynamodb_table.DynamoDBTableConstruct(
                     self, 'DynamodbTable',
                     error_topic=self.error_topic,
-                    partition_key=aws_cdk.aws_dynamodb.Attribute(
-                        name="id",
-                        type=aws_cdk.aws_dynamodb.AttributeType.STRING
-                    )
+                    partition_key="id",
                 ).dynamodb_table
             )
         )
