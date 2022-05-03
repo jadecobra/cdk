@@ -1,4 +1,3 @@
-from distutils.log import error
 import aws_cdk
 import aws_cdk.aws_apigatewayv2_integrations_alpha
 import aws_cdk.aws_apigatewayv2_alpha

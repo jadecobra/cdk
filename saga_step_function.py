@@ -18,16 +18,6 @@ class SagaStepFunction(well_architected.WellArchitectedStack):
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        # bookings = aws_cdk.aws_dynamodb.Table(
-        #     self, "Bookings",
-        #     partition_key=aws_cdk.aws_dynamodb.Attribute(
-        #         name="booking_id", type=dynamo_db.AttributeType.STRING
-        #     ),
-        #     sort_key=aws_cdk.aws_dynamodb.Attribute(
-        #         name="booking_type", type=dynamo_db.AttributeType.STRING
-        #     )
-        # )
-
         bookings = well_architected_dynamodb_table.DynamoDBTableConstruct(
             self, 'DynamodbTable',
             partition_key='booking_id',
@@ -168,6 +158,13 @@ class SagaStepFunction(well_architected.WellArchitectedStack):
                 'statemachine_arn': saga_state_machine.state_machine_arn
             }
         )
+
+        saga_lambda = well_architected_lambda.LambdaFunctionConstruct(
+            self, 'SagaLambda',
+            error_topic=self.error_topic,
+            function_name='saga_lambda',
+        ).lambda_function
+
         saga_state_machine.grant_start_execution(saga_lambda)
 
         aws_apigateway.LambdaRestApi(
