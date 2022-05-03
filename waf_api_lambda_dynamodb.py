@@ -70,7 +70,7 @@ class WafApiLambdaDynamodb(well_architected.WellArchitectedStack):
     def create_lambda_function(self, error_topic=None, name=None):
         return well_architected_lambda.LambdaFunctionConstruct(
             self, 'LambdaFunction',
-            error_topic=self.error_topic,
+            error_topic=error_topic,
             function_name=name,
             environment_variables={
                 'DYNAMODB_TABLE_NAME': name
@@ -80,7 +80,7 @@ class WafApiLambdaDynamodb(well_architected.WellArchitectedStack):
     def create_http_api(self, name=None, lambda_function=None, error_topic=None):
         return well_architected_api.WellArchitectedApi(
             self, 'HttpApiGateway',
-            error_topic=self.error_topic,
+            error_topic=error_topic,
             api=aws_cdk.aws_apigatewayv2_alpha.HttpApi(
                 self, 'HttpApi',
                 api_name=name,
