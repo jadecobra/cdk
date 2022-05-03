@@ -38,11 +38,10 @@ class DynamoDBTableConstruct(well_architected.WellArchitectedConstruct):
 
     @staticmethod
     def get_dynamodb_key(key):
-        if not isinstance(key, aws_cdk.aws_dynamodb.AttributeType.STRING):
-            return aws_cdk.aws_dynamodb.Attribute(
-                name=key,
-                type=aws_cdk.aws_dynamodb.AttributeType.STRING,
-            )
+        return aws_cdk.aws_dynamodb.Attribute(
+            name=key,
+            type=aws_cdk.aws_dynamodb.AttributeType.STRING,
+        )
 
     def get_dynamodb_metric(self, metric_name, statistic='sum'):
         return self.dynamodb_table.metric(metric_name=metric_name, statistic=statistic)
