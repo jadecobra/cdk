@@ -63,10 +63,7 @@ class WafApiLambdaDynamodb(well_architected.WellArchitectedStack):
             self, 'DynamoDbTable',
             table_name=name,
             error_topic=self.error_topic,
-            partition_key=aws_cdk.aws_dynamodb.Attribute(
-                name=partition_key,
-                type=aws_cdk.aws_dynamodb.AttributeType.STRING,
-            ),
+            partition_key=partition_key,
             sort_key=sort_key, # refactor this
         ).dynamodb_table
 
