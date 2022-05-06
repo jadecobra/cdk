@@ -149,20 +149,23 @@ class SagaStepFunction(well_architected.WellArchitectedStack):
             timeout=aws_cdk.Duration.minutes(5)
         )
 
-        saga_lambda = aws_lambda.Function(
-            self, "sagaLambdaHandler",
-            runtime=aws_lambda.Runtime.PYTHON_3_9,
-            handler="saga_lambda.handler",
-            code=aws_lambda.Code.from_asset("lambda_functions/saga_lambda"),
-            environment={
-                'statemachine_arn': saga_state_machine.state_machine_arn
-            }
-        )
+        # saga_lambda = aws_lambda.Function(
+        #     self, "sagaLambdaHandler",
+        #     runtime=aws_lambda.Runtime.PYTHON_3_9,
+        #     handler="saga_lambda.handler",
+        #     code=aws_lambda.Code.from_asset("lambda_functions/saga_lambda"),
+        #     environment={
+        #         'statemachine_arn': saga_state_machine.state_machine_arn
+        #     }
+        # )
 
         saga_lambda = well_architected_lambda.LambdaFunctionConstruct(
             self, 'SagaLambda',
             error_topic=self.error_topic,
             function_name='saga_lambda',
+            environment_variables={
+                'statemachine_arn': saga_state_machine.state_machine_arn
+            },
         ).lambda_function
 
         saga_state_machine.grant_start_execution(saga_lambda)
