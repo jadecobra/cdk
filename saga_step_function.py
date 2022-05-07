@@ -97,12 +97,6 @@ class SagaStepFunction(well_architected.WellArchitectedStack):
             next_step=cancel_hotel_reservation,
         )
 
-        # reserve_flight = aws_stepfunctions_tasks.LambdaInvoke(
-        #     self, 'ReserveFlight',
-        #     lambda_function=flight_reservation_function,
-        #     result_path='$.ReserveFlightResult'
-        # ).add_catch(cancel_flight_reservation, result_path="$.ReserveFlightError")
-
         reserve_flight = self.create_step_function_task_with_error_handler(
             task_name='ReserveFlight',
             lambda_function=flight_reservation_function,
@@ -116,11 +110,16 @@ class SagaStepFunction(well_architected.WellArchitectedStack):
             result_path='$.RefundPaymentResult'
         ).add_retry(max_attempts=3).next(cancel_flight_reservation)
 
-        process_payment = aws_stepfunctions_tasks.LambdaInvoke(
-            self, 'TakePayment',
+        # process_payment = aws_stepfunctions_tasks.LambdaInvoke(
+        #     self, 'TakePayment',
+        #     lambda_function=payment_processing_function,
+        #     result_path='$.TakePaymentResult'
+        # ).add_catch(refund_payment, result_path="$.TakePaymentError")
+        process_payment = self.create_step_function_task_with_error_handler(
+            task_name='TakePayment',
             lambda_function=payment_processing_function,
-            result_path='$.TakePaymentResult'
-        ).add_catch(refund_payment, result_path="$.TakePaymentError")
+            error_handler=refund_payment,
+        )
 
         # 3) Confirm Flight and Hotel Booking
         confirm_hotel = aws_stepfunctions_tasks.LambdaInvoke(
