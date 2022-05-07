@@ -176,7 +176,51 @@
     }
    }
   },
-  "flightsreserveflightServiceRole459CF800": {
+  "flightsreserveflightAwsXraySdkLambdaLayer4A816B88": {
+   "Type": "AWS::Lambda::LayerVersion",
+   "Properties": {
+    "Content": {
+     "S3Bucket": {
+      "Ref": "AssetParameters1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0S3Bucket5EA66AEF"
+     },
+     "S3Key": {
+      "Fn::Join": [
+       "",
+       [
+        {
+         "Fn::Select": [
+          0,
+          {
+           "Fn::Split": [
+            "||",
+            {
+             "Ref": "AssetParameters1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0S3VersionKeyD171B821"
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "Fn::Select": [
+          1,
+          {
+           "Fn::Split": [
+            "||",
+            {
+             "Ref": "AssetParameters1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0S3VersionKeyD171B821"
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      ]
+     }
+    },
+    "Description": "aws-xray-sdk Lambda Layer"
+   }
+  },
+  "flightsreserveflightLambdaFunctionServiceRoleE41B827E": {
    "Type": "AWS::IAM::Role",
    "Properties": {
     "AssumeRolePolicyDocument": {
@@ -207,11 +251,19 @@
     ]
    }
   },
-  "flightsreserveflightServiceRoleDefaultPolicy1B185C71": {
+  "flightsreserveflightLambdaFunctionServiceRoleDefaultPolicy9E2234F1": {
    "Type": "AWS::IAM::Policy",
    "Properties": {
     "PolicyDocument": {
      "Statement": [
+      {
+       "Action": [
+        "xray:PutTraceSegments",
+        "xray:PutTelemetryRecords"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      },
       {
        "Action": [
         "dynamodb:BatchGetItem",
@@ -243,15 +295,15 @@
      ],
      "Version": "2012-10-17"
     },
-    "PolicyName": "flightsreserveflightServiceRoleDefaultPolicy1B185C71",
+    "PolicyName": "flightsreserveflightLambdaFunctionServiceRoleDefaultPolicy9E2234F1",
     "Roles": [
      {
-      "Ref": "flightsreserveflightServiceRole459CF800"
+      "Ref": "flightsreserveflightLambdaFunctionServiceRoleE41B827E"
      }
     ]
    }
   },
-  "flightsreserveflight7BBF8BFB": {
+  "flightsreserveflightLambdaFunction19627A6E": {
    "Type": "AWS::Lambda::Function",
    "Properties": {
     "Code": {
@@ -294,7 +346,7 @@
     },
     "Role": {
      "Fn::GetAtt": [
-      "flightsreserveflightServiceRole459CF800",
+      "flightsreserveflightLambdaFunctionServiceRoleE41B827E",
       "Arn"
      ]
     },
@@ -306,14 +358,271 @@
      }
     },
     "Handler": "flights/reserve_flight.handler",
-    "Runtime": "python3.9"
+    "Layers": [
+     {
+      "Ref": "flightsreserveflightAwsXraySdkLambdaLayer4A816B88"
+     }
+    ],
+    "Runtime": "python3.9",
+    "Timeout": 60,
+    "TracingConfig": {
+     "Mode": "Active"
+    }
    },
    "DependsOn": [
-    "flightsreserveflightServiceRoleDefaultPolicy1B185C71",
-    "flightsreserveflightServiceRole459CF800"
+    "flightsreserveflightLambdaFunctionServiceRoleDefaultPolicy9E2234F1",
+    "flightsreserveflightLambdaFunctionServiceRoleE41B827E"
    ]
   },
-  "flightsconfirmflightServiceRole8EE7591E": {
+  "flightsreserveflightLambdaInvocationsErrorsGreaterThan2Percent3F6CF2E2": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "SnsTopic2C1570A4"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "Metrics": [
+     {
+      "Expression": "(errors / invocations) * 100",
+      "Id": "expr_1",
+      "Label": "invocations_errored_percentage_last_5_mins"
+     },
+     {
+      "Id": "invocations",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "FunctionName",
+          "Value": {
+           "Ref": "flightsreserveflightLambdaFunction19627A6E"
+          }
+         }
+        ],
+        "MetricName": "Invocations",
+        "Namespace": "AWS/Lambda"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     },
+     {
+      "Id": "errors",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "FunctionName",
+          "Value": {
+           "Ref": "flightsreserveflightLambdaFunction19627A6E"
+          }
+         }
+        ],
+        "MetricName": "Errors",
+        "Namespace": "AWS/Lambda"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     }
+    ],
+    "Threshold": 2,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "flightsreserveflightLambdaP99LongDurationGreaterThan1sCF3B380C": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "SnsTopic2C1570A4"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "Dimensions": [
+     {
+      "Name": "FunctionName",
+      "Value": {
+       "Ref": "flightsreserveflightLambdaFunction19627A6E"
+      }
+     }
+    ],
+    "ExtendedStatistic": "p99",
+    "MetricName": "Duration",
+    "Namespace": "AWS/Lambda",
+    "Period": 300,
+    "Threshold": 1000,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "flightsreserveflightLambdaThrottledInvocationsGreaterThan2Percent773FC123": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "SnsTopic2C1570A4"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "Metrics": [
+     {
+      "Expression": "(throttles * 100) / (invocations + throttles)",
+      "Id": "expr_1",
+      "Label": "throttled_requests_percentage_last_30_mins"
+     },
+     {
+      "Id": "invocations",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "FunctionName",
+          "Value": {
+           "Ref": "flightsreserveflightLambdaFunction19627A6E"
+          }
+         }
+        ],
+        "MetricName": "Invocations",
+        "Namespace": "AWS/Lambda"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     },
+     {
+      "Id": "throttles",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "FunctionName",
+          "Value": {
+           "Ref": "flightsreserveflightLambdaFunction19627A6E"
+          }
+         }
+        ],
+        "MetricName": "Throttles",
+        "Namespace": "AWS/Lambda"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     }
+    ],
+    "Threshold": 2,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "flightsreserveflightCloudWatchDashBoard3E59EB7A": {
+   "Type": "AWS::CloudWatch::Dashboard",
+   "Properties": {
+    "DashboardBody": {
+     "Fn::Join": [
+      "",
+      [
+       "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_error_percentage\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":false,\"metrics\":[[{\"label\":\"invocations_errored_percentage_last_5_mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+       {
+        "Ref": "flightsreserveflightLambdaFunction19627A6E"
+       },
+       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
+       {
+        "Ref": "flightsreserveflightLambdaFunction19627A6E"
+       },
+       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_duration\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+       {
+        "Ref": "flightsreserveflightLambdaFunction19627A6E"
+       },
+       "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+       {
+        "Ref": "flightsreserveflightLambdaFunction19627A6E"
+       },
+       "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+       {
+        "Ref": "flightsreserveflightLambdaFunction19627A6E"
+       },
+       "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_throttle_percentage\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled_requests_percentage_last_30_mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+       {
+        "Ref": "flightsreserveflightLambdaFunction19627A6E"
+       },
+       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
+       {
+        "Ref": "flightsreserveflightLambdaFunction19627A6E"
+       },
+       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
+      ]
+     ]
+    }
+   }
+  },
+  "flightsconfirmflightAwsXraySdkLambdaLayerBAE8FA20": {
+   "Type": "AWS::Lambda::LayerVersion",
+   "Properties": {
+    "Content": {
+     "S3Bucket": {
+      "Ref": "AssetParameters1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0S3Bucket5EA66AEF"
+     },
+     "S3Key": {
+      "Fn::Join": [
+       "",
+       [
+        {
+         "Fn::Select": [
+          0,
+          {
+           "Fn::Split": [
+            "||",
+            {
+             "Ref": "AssetParameters1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0S3VersionKeyD171B821"
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "Fn::Select": [
+          1,
+          {
+           "Fn::Split": [
+            "||",
+            {
+             "Ref": "AssetParameters1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0S3VersionKeyD171B821"
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      ]
+     }
+    },
+    "Description": "aws-xray-sdk Lambda Layer"
+   }
+  },
+  "flightsconfirmflightLambdaFunctionServiceRole496F5C2E": {
    "Type": "AWS::IAM::Role",
    "Properties": {
     "AssumeRolePolicyDocument": {
@@ -344,11 +653,19 @@
     ]
    }
   },
-  "flightsconfirmflightServiceRoleDefaultPolicy7D2EFC6B": {
+  "flightsconfirmflightLambdaFunctionServiceRoleDefaultPolicy771F556B": {
    "Type": "AWS::IAM::Policy",
    "Properties": {
     "PolicyDocument": {
      "Statement": [
+      {
+       "Action": [
+        "xray:PutTraceSegments",
+        "xray:PutTelemetryRecords"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      },
       {
        "Action": [
         "dynamodb:BatchGetItem",
@@ -380,15 +697,15 @@
      ],
      "Version": "2012-10-17"
     },
-    "PolicyName": "flightsconfirmflightServiceRoleDefaultPolicy7D2EFC6B",
+    "PolicyName": "flightsconfirmflightLambdaFunctionServiceRoleDefaultPolicy771F556B",
     "Roles": [
      {
-      "Ref": "flightsconfirmflightServiceRole8EE7591E"
+      "Ref": "flightsconfirmflightLambdaFunctionServiceRole496F5C2E"
      }
     ]
    }
   },
-  "flightsconfirmflightB34E7CA3": {
+  "flightsconfirmflightLambdaFunctionC69AADBE": {
    "Type": "AWS::Lambda::Function",
    "Properties": {
     "Code": {
@@ -431,7 +748,7 @@
     },
     "Role": {
      "Fn::GetAtt": [
-      "flightsconfirmflightServiceRole8EE7591E",
+      "flightsconfirmflightLambdaFunctionServiceRole496F5C2E",
       "Arn"
      ]
     },
@@ -443,14 +760,271 @@
      }
     },
     "Handler": "flights/confirm_flight.handler",
-    "Runtime": "python3.9"
+    "Layers": [
+     {
+      "Ref": "flightsconfirmflightAwsXraySdkLambdaLayerBAE8FA20"
+     }
+    ],
+    "Runtime": "python3.9",
+    "Timeout": 60,
+    "TracingConfig": {
+     "Mode": "Active"
+    }
    },
    "DependsOn": [
-    "flightsconfirmflightServiceRoleDefaultPolicy7D2EFC6B",
-    "flightsconfirmflightServiceRole8EE7591E"
+    "flightsconfirmflightLambdaFunctionServiceRoleDefaultPolicy771F556B",
+    "flightsconfirmflightLambdaFunctionServiceRole496F5C2E"
    ]
   },
-  "flightscancelflightServiceRole603CBD39": {
+  "flightsconfirmflightLambdaInvocationsErrorsGreaterThan2Percent65153D85": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "SnsTopic2C1570A4"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "Metrics": [
+     {
+      "Expression": "(errors / invocations) * 100",
+      "Id": "expr_1",
+      "Label": "invocations_errored_percentage_last_5_mins"
+     },
+     {
+      "Id": "invocations",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "FunctionName",
+          "Value": {
+           "Ref": "flightsconfirmflightLambdaFunctionC69AADBE"
+          }
+         }
+        ],
+        "MetricName": "Invocations",
+        "Namespace": "AWS/Lambda"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     },
+     {
+      "Id": "errors",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "FunctionName",
+          "Value": {
+           "Ref": "flightsconfirmflightLambdaFunctionC69AADBE"
+          }
+         }
+        ],
+        "MetricName": "Errors",
+        "Namespace": "AWS/Lambda"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     }
+    ],
+    "Threshold": 2,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "flightsconfirmflightLambdaP99LongDurationGreaterThan1s11C2BE36": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "SnsTopic2C1570A4"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "Dimensions": [
+     {
+      "Name": "FunctionName",
+      "Value": {
+       "Ref": "flightsconfirmflightLambdaFunctionC69AADBE"
+      }
+     }
+    ],
+    "ExtendedStatistic": "p99",
+    "MetricName": "Duration",
+    "Namespace": "AWS/Lambda",
+    "Period": 300,
+    "Threshold": 1000,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "flightsconfirmflightLambdaThrottledInvocationsGreaterThan2Percent2683474D": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "SnsTopic2C1570A4"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "Metrics": [
+     {
+      "Expression": "(throttles * 100) / (invocations + throttles)",
+      "Id": "expr_1",
+      "Label": "throttled_requests_percentage_last_30_mins"
+     },
+     {
+      "Id": "invocations",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "FunctionName",
+          "Value": {
+           "Ref": "flightsconfirmflightLambdaFunctionC69AADBE"
+          }
+         }
+        ],
+        "MetricName": "Invocations",
+        "Namespace": "AWS/Lambda"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     },
+     {
+      "Id": "throttles",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "FunctionName",
+          "Value": {
+           "Ref": "flightsconfirmflightLambdaFunctionC69AADBE"
+          }
+         }
+        ],
+        "MetricName": "Throttles",
+        "Namespace": "AWS/Lambda"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     }
+    ],
+    "Threshold": 2,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "flightsconfirmflightCloudWatchDashBoardF0BB8ADD": {
+   "Type": "AWS::CloudWatch::Dashboard",
+   "Properties": {
+    "DashboardBody": {
+     "Fn::Join": [
+      "",
+      [
+       "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_error_percentage\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":false,\"metrics\":[[{\"label\":\"invocations_errored_percentage_last_5_mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+       {
+        "Ref": "flightsconfirmflightLambdaFunctionC69AADBE"
+       },
+       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
+       {
+        "Ref": "flightsconfirmflightLambdaFunctionC69AADBE"
+       },
+       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_duration\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+       {
+        "Ref": "flightsconfirmflightLambdaFunctionC69AADBE"
+       },
+       "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+       {
+        "Ref": "flightsconfirmflightLambdaFunctionC69AADBE"
+       },
+       "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+       {
+        "Ref": "flightsconfirmflightLambdaFunctionC69AADBE"
+       },
+       "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_throttle_percentage\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled_requests_percentage_last_30_mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+       {
+        "Ref": "flightsconfirmflightLambdaFunctionC69AADBE"
+       },
+       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
+       {
+        "Ref": "flightsconfirmflightLambdaFunctionC69AADBE"
+       },
+       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
+      ]
+     ]
+    }
+   }
+  },
+  "flightscancelflightAwsXraySdkLambdaLayerEE61C62E": {
+   "Type": "AWS::Lambda::LayerVersion",
+   "Properties": {
+    "Content": {
+     "S3Bucket": {
+      "Ref": "AssetParameters1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0S3Bucket5EA66AEF"
+     },
+     "S3Key": {
+      "Fn::Join": [
+       "",
+       [
+        {
+         "Fn::Select": [
+          0,
+          {
+           "Fn::Split": [
+            "||",
+            {
+             "Ref": "AssetParameters1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0S3VersionKeyD171B821"
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "Fn::Select": [
+          1,
+          {
+           "Fn::Split": [
+            "||",
+            {
+             "Ref": "AssetParameters1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0S3VersionKeyD171B821"
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      ]
+     }
+    },
+    "Description": "aws-xray-sdk Lambda Layer"
+   }
+  },
+  "flightscancelflightLambdaFunctionServiceRole26991E5E": {
    "Type": "AWS::IAM::Role",
    "Properties": {
     "AssumeRolePolicyDocument": {
@@ -481,11 +1055,19 @@
     ]
    }
   },
-  "flightscancelflightServiceRoleDefaultPolicy18C7A4AA": {
+  "flightscancelflightLambdaFunctionServiceRoleDefaultPolicy871C5B25": {
    "Type": "AWS::IAM::Policy",
    "Properties": {
     "PolicyDocument": {
      "Statement": [
+      {
+       "Action": [
+        "xray:PutTraceSegments",
+        "xray:PutTelemetryRecords"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      },
       {
        "Action": [
         "dynamodb:BatchGetItem",
@@ -517,15 +1099,15 @@
      ],
      "Version": "2012-10-17"
     },
-    "PolicyName": "flightscancelflightServiceRoleDefaultPolicy18C7A4AA",
+    "PolicyName": "flightscancelflightLambdaFunctionServiceRoleDefaultPolicy871C5B25",
     "Roles": [
      {
-      "Ref": "flightscancelflightServiceRole603CBD39"
+      "Ref": "flightscancelflightLambdaFunctionServiceRole26991E5E"
      }
     ]
    }
   },
-  "flightscancelflight9A89BA1E": {
+  "flightscancelflightLambdaFunction691A19FC": {
    "Type": "AWS::Lambda::Function",
    "Properties": {
     "Code": {
@@ -568,7 +1150,7 @@
     },
     "Role": {
      "Fn::GetAtt": [
-      "flightscancelflightServiceRole603CBD39",
+      "flightscancelflightLambdaFunctionServiceRole26991E5E",
       "Arn"
      ]
     },
@@ -580,14 +1162,271 @@
      }
     },
     "Handler": "flights/cancel_flight.handler",
-    "Runtime": "python3.9"
+    "Layers": [
+     {
+      "Ref": "flightscancelflightAwsXraySdkLambdaLayerEE61C62E"
+     }
+    ],
+    "Runtime": "python3.9",
+    "Timeout": 60,
+    "TracingConfig": {
+     "Mode": "Active"
+    }
    },
    "DependsOn": [
-    "flightscancelflightServiceRoleDefaultPolicy18C7A4AA",
-    "flightscancelflightServiceRole603CBD39"
+    "flightscancelflightLambdaFunctionServiceRoleDefaultPolicy871C5B25",
+    "flightscancelflightLambdaFunctionServiceRole26991E5E"
    ]
   },
-  "hotelsreservehotelServiceRole1ACFB547": {
+  "flightscancelflightLambdaInvocationsErrorsGreaterThan2Percent9274B349": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "SnsTopic2C1570A4"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "Metrics": [
+     {
+      "Expression": "(errors / invocations) * 100",
+      "Id": "expr_1",
+      "Label": "invocations_errored_percentage_last_5_mins"
+     },
+     {
+      "Id": "invocations",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "FunctionName",
+          "Value": {
+           "Ref": "flightscancelflightLambdaFunction691A19FC"
+          }
+         }
+        ],
+        "MetricName": "Invocations",
+        "Namespace": "AWS/Lambda"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     },
+     {
+      "Id": "errors",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "FunctionName",
+          "Value": {
+           "Ref": "flightscancelflightLambdaFunction691A19FC"
+          }
+         }
+        ],
+        "MetricName": "Errors",
+        "Namespace": "AWS/Lambda"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     }
+    ],
+    "Threshold": 2,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "flightscancelflightLambdaP99LongDurationGreaterThan1s46575248": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "SnsTopic2C1570A4"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "Dimensions": [
+     {
+      "Name": "FunctionName",
+      "Value": {
+       "Ref": "flightscancelflightLambdaFunction691A19FC"
+      }
+     }
+    ],
+    "ExtendedStatistic": "p99",
+    "MetricName": "Duration",
+    "Namespace": "AWS/Lambda",
+    "Period": 300,
+    "Threshold": 1000,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "flightscancelflightLambdaThrottledInvocationsGreaterThan2PercentEA1F4530": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "SnsTopic2C1570A4"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "Metrics": [
+     {
+      "Expression": "(throttles * 100) / (invocations + throttles)",
+      "Id": "expr_1",
+      "Label": "throttled_requests_percentage_last_30_mins"
+     },
+     {
+      "Id": "invocations",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "FunctionName",
+          "Value": {
+           "Ref": "flightscancelflightLambdaFunction691A19FC"
+          }
+         }
+        ],
+        "MetricName": "Invocations",
+        "Namespace": "AWS/Lambda"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     },
+     {
+      "Id": "throttles",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "FunctionName",
+          "Value": {
+           "Ref": "flightscancelflightLambdaFunction691A19FC"
+          }
+         }
+        ],
+        "MetricName": "Throttles",
+        "Namespace": "AWS/Lambda"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     }
+    ],
+    "Threshold": 2,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "flightscancelflightCloudWatchDashBoardF52E6E53": {
+   "Type": "AWS::CloudWatch::Dashboard",
+   "Properties": {
+    "DashboardBody": {
+     "Fn::Join": [
+      "",
+      [
+       "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_error_percentage\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":false,\"metrics\":[[{\"label\":\"invocations_errored_percentage_last_5_mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+       {
+        "Ref": "flightscancelflightLambdaFunction691A19FC"
+       },
+       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
+       {
+        "Ref": "flightscancelflightLambdaFunction691A19FC"
+       },
+       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_duration\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+       {
+        "Ref": "flightscancelflightLambdaFunction691A19FC"
+       },
+       "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+       {
+        "Ref": "flightscancelflightLambdaFunction691A19FC"
+       },
+       "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+       {
+        "Ref": "flightscancelflightLambdaFunction691A19FC"
+       },
+       "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_throttle_percentage\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled_requests_percentage_last_30_mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+       {
+        "Ref": "flightscancelflightLambdaFunction691A19FC"
+       },
+       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
+       {
+        "Ref": "flightscancelflightLambdaFunction691A19FC"
+       },
+       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
+      ]
+     ]
+    }
+   }
+  },
+  "hotelsreservehotelAwsXraySdkLambdaLayerF38F97E0": {
+   "Type": "AWS::Lambda::LayerVersion",
+   "Properties": {
+    "Content": {
+     "S3Bucket": {
+      "Ref": "AssetParameters1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0S3Bucket5EA66AEF"
+     },
+     "S3Key": {
+      "Fn::Join": [
+       "",
+       [
+        {
+         "Fn::Select": [
+          0,
+          {
+           "Fn::Split": [
+            "||",
+            {
+             "Ref": "AssetParameters1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0S3VersionKeyD171B821"
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "Fn::Select": [
+          1,
+          {
+           "Fn::Split": [
+            "||",
+            {
+             "Ref": "AssetParameters1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0S3VersionKeyD171B821"
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      ]
+     }
+    },
+    "Description": "aws-xray-sdk Lambda Layer"
+   }
+  },
+  "hotelsreservehotelLambdaFunctionServiceRole553DA1E1": {
    "Type": "AWS::IAM::Role",
    "Properties": {
     "AssumeRolePolicyDocument": {
@@ -618,11 +1457,19 @@
     ]
    }
   },
-  "hotelsreservehotelServiceRoleDefaultPolicyFB075FCE": {
+  "hotelsreservehotelLambdaFunctionServiceRoleDefaultPolicy22412EC4": {
    "Type": "AWS::IAM::Policy",
    "Properties": {
     "PolicyDocument": {
      "Statement": [
+      {
+       "Action": [
+        "xray:PutTraceSegments",
+        "xray:PutTelemetryRecords"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      },
       {
        "Action": [
         "dynamodb:BatchGetItem",
@@ -654,15 +1501,15 @@
      ],
      "Version": "2012-10-17"
     },
-    "PolicyName": "hotelsreservehotelServiceRoleDefaultPolicyFB075FCE",
+    "PolicyName": "hotelsreservehotelLambdaFunctionServiceRoleDefaultPolicy22412EC4",
     "Roles": [
      {
-      "Ref": "hotelsreservehotelServiceRole1ACFB547"
+      "Ref": "hotelsreservehotelLambdaFunctionServiceRole553DA1E1"
      }
     ]
    }
   },
-  "hotelsreservehotelA484A091": {
+  "hotelsreservehotelLambdaFunction2441920F": {
    "Type": "AWS::Lambda::Function",
    "Properties": {
     "Code": {
@@ -705,7 +1552,7 @@
     },
     "Role": {
      "Fn::GetAtt": [
-      "hotelsreservehotelServiceRole1ACFB547",
+      "hotelsreservehotelLambdaFunctionServiceRole553DA1E1",
       "Arn"
      ]
     },
@@ -717,14 +1564,271 @@
      }
     },
     "Handler": "hotels/reserve_hotel.handler",
-    "Runtime": "python3.9"
+    "Layers": [
+     {
+      "Ref": "hotelsreservehotelAwsXraySdkLambdaLayerF38F97E0"
+     }
+    ],
+    "Runtime": "python3.9",
+    "Timeout": 60,
+    "TracingConfig": {
+     "Mode": "Active"
+    }
    },
    "DependsOn": [
-    "hotelsreservehotelServiceRoleDefaultPolicyFB075FCE",
-    "hotelsreservehotelServiceRole1ACFB547"
+    "hotelsreservehotelLambdaFunctionServiceRoleDefaultPolicy22412EC4",
+    "hotelsreservehotelLambdaFunctionServiceRole553DA1E1"
    ]
   },
-  "hotelsconfirmhotelServiceRole597261A7": {
+  "hotelsreservehotelLambdaInvocationsErrorsGreaterThan2PercentF095698E": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "SnsTopic2C1570A4"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "Metrics": [
+     {
+      "Expression": "(errors / invocations) * 100",
+      "Id": "expr_1",
+      "Label": "invocations_errored_percentage_last_5_mins"
+     },
+     {
+      "Id": "invocations",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "FunctionName",
+          "Value": {
+           "Ref": "hotelsreservehotelLambdaFunction2441920F"
+          }
+         }
+        ],
+        "MetricName": "Invocations",
+        "Namespace": "AWS/Lambda"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     },
+     {
+      "Id": "errors",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "FunctionName",
+          "Value": {
+           "Ref": "hotelsreservehotelLambdaFunction2441920F"
+          }
+         }
+        ],
+        "MetricName": "Errors",
+        "Namespace": "AWS/Lambda"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     }
+    ],
+    "Threshold": 2,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "hotelsreservehotelLambdaP99LongDurationGreaterThan1s808CB327": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "SnsTopic2C1570A4"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "Dimensions": [
+     {
+      "Name": "FunctionName",
+      "Value": {
+       "Ref": "hotelsreservehotelLambdaFunction2441920F"
+      }
+     }
+    ],
+    "ExtendedStatistic": "p99",
+    "MetricName": "Duration",
+    "Namespace": "AWS/Lambda",
+    "Period": 300,
+    "Threshold": 1000,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "hotelsreservehotelLambdaThrottledInvocationsGreaterThan2Percent99B16793": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "SnsTopic2C1570A4"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "Metrics": [
+     {
+      "Expression": "(throttles * 100) / (invocations + throttles)",
+      "Id": "expr_1",
+      "Label": "throttled_requests_percentage_last_30_mins"
+     },
+     {
+      "Id": "invocations",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "FunctionName",
+          "Value": {
+           "Ref": "hotelsreservehotelLambdaFunction2441920F"
+          }
+         }
+        ],
+        "MetricName": "Invocations",
+        "Namespace": "AWS/Lambda"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     },
+     {
+      "Id": "throttles",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "FunctionName",
+          "Value": {
+           "Ref": "hotelsreservehotelLambdaFunction2441920F"
+          }
+         }
+        ],
+        "MetricName": "Throttles",
+        "Namespace": "AWS/Lambda"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     }
+    ],
+    "Threshold": 2,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "hotelsreservehotelCloudWatchDashBoard4CA2598F": {
+   "Type": "AWS::CloudWatch::Dashboard",
+   "Properties": {
+    "DashboardBody": {
+     "Fn::Join": [
+      "",
+      [
+       "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_error_percentage\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":false,\"metrics\":[[{\"label\":\"invocations_errored_percentage_last_5_mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+       {
+        "Ref": "hotelsreservehotelLambdaFunction2441920F"
+       },
+       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
+       {
+        "Ref": "hotelsreservehotelLambdaFunction2441920F"
+       },
+       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_duration\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+       {
+        "Ref": "hotelsreservehotelLambdaFunction2441920F"
+       },
+       "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+       {
+        "Ref": "hotelsreservehotelLambdaFunction2441920F"
+       },
+       "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+       {
+        "Ref": "hotelsreservehotelLambdaFunction2441920F"
+       },
+       "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_throttle_percentage\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled_requests_percentage_last_30_mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+       {
+        "Ref": "hotelsreservehotelLambdaFunction2441920F"
+       },
+       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
+       {
+        "Ref": "hotelsreservehotelLambdaFunction2441920F"
+       },
+       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
+      ]
+     ]
+    }
+   }
+  },
+  "hotelsconfirmhotelAwsXraySdkLambdaLayer99AA4695": {
+   "Type": "AWS::Lambda::LayerVersion",
+   "Properties": {
+    "Content": {
+     "S3Bucket": {
+      "Ref": "AssetParameters1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0S3Bucket5EA66AEF"
+     },
+     "S3Key": {
+      "Fn::Join": [
+       "",
+       [
+        {
+         "Fn::Select": [
+          0,
+          {
+           "Fn::Split": [
+            "||",
+            {
+             "Ref": "AssetParameters1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0S3VersionKeyD171B821"
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "Fn::Select": [
+          1,
+          {
+           "Fn::Split": [
+            "||",
+            {
+             "Ref": "AssetParameters1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0S3VersionKeyD171B821"
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      ]
+     }
+    },
+    "Description": "aws-xray-sdk Lambda Layer"
+   }
+  },
+  "hotelsconfirmhotelLambdaFunctionServiceRoleA1AF48EB": {
    "Type": "AWS::IAM::Role",
    "Properties": {
     "AssumeRolePolicyDocument": {
@@ -755,11 +1859,19 @@
     ]
    }
   },
-  "hotelsconfirmhotelServiceRoleDefaultPolicy245DE7C3": {
+  "hotelsconfirmhotelLambdaFunctionServiceRoleDefaultPolicy085ED204": {
    "Type": "AWS::IAM::Policy",
    "Properties": {
     "PolicyDocument": {
      "Statement": [
+      {
+       "Action": [
+        "xray:PutTraceSegments",
+        "xray:PutTelemetryRecords"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      },
       {
        "Action": [
         "dynamodb:BatchGetItem",
@@ -791,15 +1903,15 @@
      ],
      "Version": "2012-10-17"
     },
-    "PolicyName": "hotelsconfirmhotelServiceRoleDefaultPolicy245DE7C3",
+    "PolicyName": "hotelsconfirmhotelLambdaFunctionServiceRoleDefaultPolicy085ED204",
     "Roles": [
      {
-      "Ref": "hotelsconfirmhotelServiceRole597261A7"
+      "Ref": "hotelsconfirmhotelLambdaFunctionServiceRoleA1AF48EB"
      }
     ]
    }
   },
-  "hotelsconfirmhotelFEB4E4E0": {
+  "hotelsconfirmhotelLambdaFunctionB5A02D42": {
    "Type": "AWS::Lambda::Function",
    "Properties": {
     "Code": {
@@ -842,7 +1954,7 @@
     },
     "Role": {
      "Fn::GetAtt": [
-      "hotelsconfirmhotelServiceRole597261A7",
+      "hotelsconfirmhotelLambdaFunctionServiceRoleA1AF48EB",
       "Arn"
      ]
     },
@@ -854,14 +1966,271 @@
      }
     },
     "Handler": "hotels/confirm_hotel.handler",
-    "Runtime": "python3.9"
+    "Layers": [
+     {
+      "Ref": "hotelsconfirmhotelAwsXraySdkLambdaLayer99AA4695"
+     }
+    ],
+    "Runtime": "python3.9",
+    "Timeout": 60,
+    "TracingConfig": {
+     "Mode": "Active"
+    }
    },
    "DependsOn": [
-    "hotelsconfirmhotelServiceRoleDefaultPolicy245DE7C3",
-    "hotelsconfirmhotelServiceRole597261A7"
+    "hotelsconfirmhotelLambdaFunctionServiceRoleDefaultPolicy085ED204",
+    "hotelsconfirmhotelLambdaFunctionServiceRoleA1AF48EB"
    ]
   },
-  "hotelscancelhotelServiceRoleF9095220": {
+  "hotelsconfirmhotelLambdaInvocationsErrorsGreaterThan2Percent6BBF4A22": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "SnsTopic2C1570A4"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "Metrics": [
+     {
+      "Expression": "(errors / invocations) * 100",
+      "Id": "expr_1",
+      "Label": "invocations_errored_percentage_last_5_mins"
+     },
+     {
+      "Id": "invocations",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "FunctionName",
+          "Value": {
+           "Ref": "hotelsconfirmhotelLambdaFunctionB5A02D42"
+          }
+         }
+        ],
+        "MetricName": "Invocations",
+        "Namespace": "AWS/Lambda"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     },
+     {
+      "Id": "errors",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "FunctionName",
+          "Value": {
+           "Ref": "hotelsconfirmhotelLambdaFunctionB5A02D42"
+          }
+         }
+        ],
+        "MetricName": "Errors",
+        "Namespace": "AWS/Lambda"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     }
+    ],
+    "Threshold": 2,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "hotelsconfirmhotelLambdaP99LongDurationGreaterThan1s88B17594": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "SnsTopic2C1570A4"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "Dimensions": [
+     {
+      "Name": "FunctionName",
+      "Value": {
+       "Ref": "hotelsconfirmhotelLambdaFunctionB5A02D42"
+      }
+     }
+    ],
+    "ExtendedStatistic": "p99",
+    "MetricName": "Duration",
+    "Namespace": "AWS/Lambda",
+    "Period": 300,
+    "Threshold": 1000,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "hotelsconfirmhotelLambdaThrottledInvocationsGreaterThan2PercentA47BC4D8": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "SnsTopic2C1570A4"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "Metrics": [
+     {
+      "Expression": "(throttles * 100) / (invocations + throttles)",
+      "Id": "expr_1",
+      "Label": "throttled_requests_percentage_last_30_mins"
+     },
+     {
+      "Id": "invocations",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "FunctionName",
+          "Value": {
+           "Ref": "hotelsconfirmhotelLambdaFunctionB5A02D42"
+          }
+         }
+        ],
+        "MetricName": "Invocations",
+        "Namespace": "AWS/Lambda"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     },
+     {
+      "Id": "throttles",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "FunctionName",
+          "Value": {
+           "Ref": "hotelsconfirmhotelLambdaFunctionB5A02D42"
+          }
+         }
+        ],
+        "MetricName": "Throttles",
+        "Namespace": "AWS/Lambda"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     }
+    ],
+    "Threshold": 2,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "hotelsconfirmhotelCloudWatchDashBoard3B4CAAD0": {
+   "Type": "AWS::CloudWatch::Dashboard",
+   "Properties": {
+    "DashboardBody": {
+     "Fn::Join": [
+      "",
+      [
+       "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_error_percentage\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":false,\"metrics\":[[{\"label\":\"invocations_errored_percentage_last_5_mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+       {
+        "Ref": "hotelsconfirmhotelLambdaFunctionB5A02D42"
+       },
+       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
+       {
+        "Ref": "hotelsconfirmhotelLambdaFunctionB5A02D42"
+       },
+       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_duration\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+       {
+        "Ref": "hotelsconfirmhotelLambdaFunctionB5A02D42"
+       },
+       "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+       {
+        "Ref": "hotelsconfirmhotelLambdaFunctionB5A02D42"
+       },
+       "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+       {
+        "Ref": "hotelsconfirmhotelLambdaFunctionB5A02D42"
+       },
+       "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_throttle_percentage\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled_requests_percentage_last_30_mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+       {
+        "Ref": "hotelsconfirmhotelLambdaFunctionB5A02D42"
+       },
+       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
+       {
+        "Ref": "hotelsconfirmhotelLambdaFunctionB5A02D42"
+       },
+       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
+      ]
+     ]
+    }
+   }
+  },
+  "hotelscancelhotelAwsXraySdkLambdaLayer306C3C56": {
+   "Type": "AWS::Lambda::LayerVersion",
+   "Properties": {
+    "Content": {
+     "S3Bucket": {
+      "Ref": "AssetParameters1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0S3Bucket5EA66AEF"
+     },
+     "S3Key": {
+      "Fn::Join": [
+       "",
+       [
+        {
+         "Fn::Select": [
+          0,
+          {
+           "Fn::Split": [
+            "||",
+            {
+             "Ref": "AssetParameters1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0S3VersionKeyD171B821"
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "Fn::Select": [
+          1,
+          {
+           "Fn::Split": [
+            "||",
+            {
+             "Ref": "AssetParameters1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0S3VersionKeyD171B821"
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      ]
+     }
+    },
+    "Description": "aws-xray-sdk Lambda Layer"
+   }
+  },
+  "hotelscancelhotelLambdaFunctionServiceRoleD4E9269E": {
    "Type": "AWS::IAM::Role",
    "Properties": {
     "AssumeRolePolicyDocument": {
@@ -892,11 +2261,19 @@
     ]
    }
   },
-  "hotelscancelhotelServiceRoleDefaultPolicyA153E70B": {
+  "hotelscancelhotelLambdaFunctionServiceRoleDefaultPolicy39ED55D2": {
    "Type": "AWS::IAM::Policy",
    "Properties": {
     "PolicyDocument": {
      "Statement": [
+      {
+       "Action": [
+        "xray:PutTraceSegments",
+        "xray:PutTelemetryRecords"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      },
       {
        "Action": [
         "dynamodb:BatchGetItem",
@@ -928,15 +2305,15 @@
      ],
      "Version": "2012-10-17"
     },
-    "PolicyName": "hotelscancelhotelServiceRoleDefaultPolicyA153E70B",
+    "PolicyName": "hotelscancelhotelLambdaFunctionServiceRoleDefaultPolicy39ED55D2",
     "Roles": [
      {
-      "Ref": "hotelscancelhotelServiceRoleF9095220"
+      "Ref": "hotelscancelhotelLambdaFunctionServiceRoleD4E9269E"
      }
     ]
    }
   },
-  "hotelscancelhotelC5FA4E93": {
+  "hotelscancelhotelLambdaFunction962553D4": {
    "Type": "AWS::Lambda::Function",
    "Properties": {
     "Code": {
@@ -979,7 +2356,7 @@
     },
     "Role": {
      "Fn::GetAtt": [
-      "hotelscancelhotelServiceRoleF9095220",
+      "hotelscancelhotelLambdaFunctionServiceRoleD4E9269E",
       "Arn"
      ]
     },
@@ -991,14 +2368,271 @@
      }
     },
     "Handler": "hotels/cancel_hotel.handler",
-    "Runtime": "python3.9"
+    "Layers": [
+     {
+      "Ref": "hotelscancelhotelAwsXraySdkLambdaLayer306C3C56"
+     }
+    ],
+    "Runtime": "python3.9",
+    "Timeout": 60,
+    "TracingConfig": {
+     "Mode": "Active"
+    }
    },
    "DependsOn": [
-    "hotelscancelhotelServiceRoleDefaultPolicyA153E70B",
-    "hotelscancelhotelServiceRoleF9095220"
+    "hotelscancelhotelLambdaFunctionServiceRoleDefaultPolicy39ED55D2",
+    "hotelscancelhotelLambdaFunctionServiceRoleD4E9269E"
    ]
   },
-  "paymentsprocesspaymentServiceRoleBB5F393F": {
+  "hotelscancelhotelLambdaInvocationsErrorsGreaterThan2PercentF560E6DE": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "SnsTopic2C1570A4"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "Metrics": [
+     {
+      "Expression": "(errors / invocations) * 100",
+      "Id": "expr_1",
+      "Label": "invocations_errored_percentage_last_5_mins"
+     },
+     {
+      "Id": "invocations",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "FunctionName",
+          "Value": {
+           "Ref": "hotelscancelhotelLambdaFunction962553D4"
+          }
+         }
+        ],
+        "MetricName": "Invocations",
+        "Namespace": "AWS/Lambda"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     },
+     {
+      "Id": "errors",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "FunctionName",
+          "Value": {
+           "Ref": "hotelscancelhotelLambdaFunction962553D4"
+          }
+         }
+        ],
+        "MetricName": "Errors",
+        "Namespace": "AWS/Lambda"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     }
+    ],
+    "Threshold": 2,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "hotelscancelhotelLambdaP99LongDurationGreaterThan1s72989815": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "SnsTopic2C1570A4"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "Dimensions": [
+     {
+      "Name": "FunctionName",
+      "Value": {
+       "Ref": "hotelscancelhotelLambdaFunction962553D4"
+      }
+     }
+    ],
+    "ExtendedStatistic": "p99",
+    "MetricName": "Duration",
+    "Namespace": "AWS/Lambda",
+    "Period": 300,
+    "Threshold": 1000,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "hotelscancelhotelLambdaThrottledInvocationsGreaterThan2Percent27F01935": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "SnsTopic2C1570A4"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "Metrics": [
+     {
+      "Expression": "(throttles * 100) / (invocations + throttles)",
+      "Id": "expr_1",
+      "Label": "throttled_requests_percentage_last_30_mins"
+     },
+     {
+      "Id": "invocations",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "FunctionName",
+          "Value": {
+           "Ref": "hotelscancelhotelLambdaFunction962553D4"
+          }
+         }
+        ],
+        "MetricName": "Invocations",
+        "Namespace": "AWS/Lambda"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     },
+     {
+      "Id": "throttles",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "FunctionName",
+          "Value": {
+           "Ref": "hotelscancelhotelLambdaFunction962553D4"
+          }
+         }
+        ],
+        "MetricName": "Throttles",
+        "Namespace": "AWS/Lambda"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     }
+    ],
+    "Threshold": 2,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "hotelscancelhotelCloudWatchDashBoard18BED7DF": {
+   "Type": "AWS::CloudWatch::Dashboard",
+   "Properties": {
+    "DashboardBody": {
+     "Fn::Join": [
+      "",
+      [
+       "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_error_percentage\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":false,\"metrics\":[[{\"label\":\"invocations_errored_percentage_last_5_mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+       {
+        "Ref": "hotelscancelhotelLambdaFunction962553D4"
+       },
+       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
+       {
+        "Ref": "hotelscancelhotelLambdaFunction962553D4"
+       },
+       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_duration\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+       {
+        "Ref": "hotelscancelhotelLambdaFunction962553D4"
+       },
+       "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+       {
+        "Ref": "hotelscancelhotelLambdaFunction962553D4"
+       },
+       "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+       {
+        "Ref": "hotelscancelhotelLambdaFunction962553D4"
+       },
+       "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_throttle_percentage\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled_requests_percentage_last_30_mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+       {
+        "Ref": "hotelscancelhotelLambdaFunction962553D4"
+       },
+       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
+       {
+        "Ref": "hotelscancelhotelLambdaFunction962553D4"
+       },
+       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
+      ]
+     ]
+    }
+   }
+  },
+  "paymentsprocesspaymentAwsXraySdkLambdaLayerD494B75F": {
+   "Type": "AWS::Lambda::LayerVersion",
+   "Properties": {
+    "Content": {
+     "S3Bucket": {
+      "Ref": "AssetParameters1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0S3Bucket5EA66AEF"
+     },
+     "S3Key": {
+      "Fn::Join": [
+       "",
+       [
+        {
+         "Fn::Select": [
+          0,
+          {
+           "Fn::Split": [
+            "||",
+            {
+             "Ref": "AssetParameters1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0S3VersionKeyD171B821"
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "Fn::Select": [
+          1,
+          {
+           "Fn::Split": [
+            "||",
+            {
+             "Ref": "AssetParameters1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0S3VersionKeyD171B821"
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      ]
+     }
+    },
+    "Description": "aws-xray-sdk Lambda Layer"
+   }
+  },
+  "paymentsprocesspaymentLambdaFunctionServiceRoleB87E1D02": {
    "Type": "AWS::IAM::Role",
    "Properties": {
     "AssumeRolePolicyDocument": {
@@ -1029,11 +2663,19 @@
     ]
    }
   },
-  "paymentsprocesspaymentServiceRoleDefaultPolicy8E1EEEF2": {
+  "paymentsprocesspaymentLambdaFunctionServiceRoleDefaultPolicyED16F4ED": {
    "Type": "AWS::IAM::Policy",
    "Properties": {
     "PolicyDocument": {
      "Statement": [
+      {
+       "Action": [
+        "xray:PutTraceSegments",
+        "xray:PutTelemetryRecords"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      },
       {
        "Action": [
         "dynamodb:BatchGetItem",
@@ -1065,15 +2707,15 @@
      ],
      "Version": "2012-10-17"
     },
-    "PolicyName": "paymentsprocesspaymentServiceRoleDefaultPolicy8E1EEEF2",
+    "PolicyName": "paymentsprocesspaymentLambdaFunctionServiceRoleDefaultPolicyED16F4ED",
     "Roles": [
      {
-      "Ref": "paymentsprocesspaymentServiceRoleBB5F393F"
+      "Ref": "paymentsprocesspaymentLambdaFunctionServiceRoleB87E1D02"
      }
     ]
    }
   },
-  "paymentsprocesspayment7E58198E": {
+  "paymentsprocesspaymentLambdaFunction372E68BA": {
    "Type": "AWS::Lambda::Function",
    "Properties": {
     "Code": {
@@ -1116,7 +2758,7 @@
     },
     "Role": {
      "Fn::GetAtt": [
-      "paymentsprocesspaymentServiceRoleBB5F393F",
+      "paymentsprocesspaymentLambdaFunctionServiceRoleB87E1D02",
       "Arn"
      ]
     },
@@ -1128,14 +2770,271 @@
      }
     },
     "Handler": "payments/process_payment.handler",
-    "Runtime": "python3.9"
+    "Layers": [
+     {
+      "Ref": "paymentsprocesspaymentAwsXraySdkLambdaLayerD494B75F"
+     }
+    ],
+    "Runtime": "python3.9",
+    "Timeout": 60,
+    "TracingConfig": {
+     "Mode": "Active"
+    }
    },
    "DependsOn": [
-    "paymentsprocesspaymentServiceRoleDefaultPolicy8E1EEEF2",
-    "paymentsprocesspaymentServiceRoleBB5F393F"
+    "paymentsprocesspaymentLambdaFunctionServiceRoleDefaultPolicyED16F4ED",
+    "paymentsprocesspaymentLambdaFunctionServiceRoleB87E1D02"
    ]
   },
-  "paymentsrefundpaymentServiceRole1B32383A": {
+  "paymentsprocesspaymentLambdaInvocationsErrorsGreaterThan2Percent8B152EE5": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "SnsTopic2C1570A4"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "Metrics": [
+     {
+      "Expression": "(errors / invocations) * 100",
+      "Id": "expr_1",
+      "Label": "invocations_errored_percentage_last_5_mins"
+     },
+     {
+      "Id": "invocations",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "FunctionName",
+          "Value": {
+           "Ref": "paymentsprocesspaymentLambdaFunction372E68BA"
+          }
+         }
+        ],
+        "MetricName": "Invocations",
+        "Namespace": "AWS/Lambda"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     },
+     {
+      "Id": "errors",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "FunctionName",
+          "Value": {
+           "Ref": "paymentsprocesspaymentLambdaFunction372E68BA"
+          }
+         }
+        ],
+        "MetricName": "Errors",
+        "Namespace": "AWS/Lambda"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     }
+    ],
+    "Threshold": 2,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "paymentsprocesspaymentLambdaP99LongDurationGreaterThan1s0DF1FA25": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "SnsTopic2C1570A4"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "Dimensions": [
+     {
+      "Name": "FunctionName",
+      "Value": {
+       "Ref": "paymentsprocesspaymentLambdaFunction372E68BA"
+      }
+     }
+    ],
+    "ExtendedStatistic": "p99",
+    "MetricName": "Duration",
+    "Namespace": "AWS/Lambda",
+    "Period": 300,
+    "Threshold": 1000,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "paymentsprocesspaymentLambdaThrottledInvocationsGreaterThan2Percent5658755F": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "SnsTopic2C1570A4"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "Metrics": [
+     {
+      "Expression": "(throttles * 100) / (invocations + throttles)",
+      "Id": "expr_1",
+      "Label": "throttled_requests_percentage_last_30_mins"
+     },
+     {
+      "Id": "invocations",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "FunctionName",
+          "Value": {
+           "Ref": "paymentsprocesspaymentLambdaFunction372E68BA"
+          }
+         }
+        ],
+        "MetricName": "Invocations",
+        "Namespace": "AWS/Lambda"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     },
+     {
+      "Id": "throttles",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "FunctionName",
+          "Value": {
+           "Ref": "paymentsprocesspaymentLambdaFunction372E68BA"
+          }
+         }
+        ],
+        "MetricName": "Throttles",
+        "Namespace": "AWS/Lambda"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     }
+    ],
+    "Threshold": 2,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "paymentsprocesspaymentCloudWatchDashBoard13554B05": {
+   "Type": "AWS::CloudWatch::Dashboard",
+   "Properties": {
+    "DashboardBody": {
+     "Fn::Join": [
+      "",
+      [
+       "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_error_percentage\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":false,\"metrics\":[[{\"label\":\"invocations_errored_percentage_last_5_mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+       {
+        "Ref": "paymentsprocesspaymentLambdaFunction372E68BA"
+       },
+       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
+       {
+        "Ref": "paymentsprocesspaymentLambdaFunction372E68BA"
+       },
+       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_duration\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+       {
+        "Ref": "paymentsprocesspaymentLambdaFunction372E68BA"
+       },
+       "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+       {
+        "Ref": "paymentsprocesspaymentLambdaFunction372E68BA"
+       },
+       "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+       {
+        "Ref": "paymentsprocesspaymentLambdaFunction372E68BA"
+       },
+       "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_throttle_percentage\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled_requests_percentage_last_30_mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+       {
+        "Ref": "paymentsprocesspaymentLambdaFunction372E68BA"
+       },
+       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
+       {
+        "Ref": "paymentsprocesspaymentLambdaFunction372E68BA"
+       },
+       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
+      ]
+     ]
+    }
+   }
+  },
+  "paymentsrefundpaymentAwsXraySdkLambdaLayerF1CDD2EB": {
+   "Type": "AWS::Lambda::LayerVersion",
+   "Properties": {
+    "Content": {
+     "S3Bucket": {
+      "Ref": "AssetParameters1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0S3Bucket5EA66AEF"
+     },
+     "S3Key": {
+      "Fn::Join": [
+       "",
+       [
+        {
+         "Fn::Select": [
+          0,
+          {
+           "Fn::Split": [
+            "||",
+            {
+             "Ref": "AssetParameters1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0S3VersionKeyD171B821"
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "Fn::Select": [
+          1,
+          {
+           "Fn::Split": [
+            "||",
+            {
+             "Ref": "AssetParameters1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0S3VersionKeyD171B821"
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      ]
+     }
+    },
+    "Description": "aws-xray-sdk Lambda Layer"
+   }
+  },
+  "paymentsrefundpaymentLambdaFunctionServiceRole76649073": {
    "Type": "AWS::IAM::Role",
    "Properties": {
     "AssumeRolePolicyDocument": {
@@ -1166,11 +3065,19 @@
     ]
    }
   },
-  "paymentsrefundpaymentServiceRoleDefaultPolicy91B6B6D7": {
+  "paymentsrefundpaymentLambdaFunctionServiceRoleDefaultPolicyEA6E9D41": {
    "Type": "AWS::IAM::Policy",
    "Properties": {
     "PolicyDocument": {
      "Statement": [
+      {
+       "Action": [
+        "xray:PutTraceSegments",
+        "xray:PutTelemetryRecords"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      },
       {
        "Action": [
         "dynamodb:BatchGetItem",
@@ -1202,15 +3109,15 @@
      ],
      "Version": "2012-10-17"
     },
-    "PolicyName": "paymentsrefundpaymentServiceRoleDefaultPolicy91B6B6D7",
+    "PolicyName": "paymentsrefundpaymentLambdaFunctionServiceRoleDefaultPolicyEA6E9D41",
     "Roles": [
      {
-      "Ref": "paymentsrefundpaymentServiceRole1B32383A"
+      "Ref": "paymentsrefundpaymentLambdaFunctionServiceRole76649073"
      }
     ]
    }
   },
-  "paymentsrefundpaymentA1B2703D": {
+  "paymentsrefundpaymentLambdaFunction2B93D030": {
    "Type": "AWS::Lambda::Function",
    "Properties": {
     "Code": {
@@ -1253,7 +3160,7 @@
     },
     "Role": {
      "Fn::GetAtt": [
-      "paymentsrefundpaymentServiceRole1B32383A",
+      "paymentsrefundpaymentLambdaFunctionServiceRole76649073",
       "Arn"
      ]
     },
@@ -1265,12 +3172,225 @@
      }
     },
     "Handler": "payments/refund_payment.handler",
-    "Runtime": "python3.9"
+    "Layers": [
+     {
+      "Ref": "paymentsrefundpaymentAwsXraySdkLambdaLayerF1CDD2EB"
+     }
+    ],
+    "Runtime": "python3.9",
+    "Timeout": 60,
+    "TracingConfig": {
+     "Mode": "Active"
+    }
    },
    "DependsOn": [
-    "paymentsrefundpaymentServiceRoleDefaultPolicy91B6B6D7",
-    "paymentsrefundpaymentServiceRole1B32383A"
+    "paymentsrefundpaymentLambdaFunctionServiceRoleDefaultPolicyEA6E9D41",
+    "paymentsrefundpaymentLambdaFunctionServiceRole76649073"
    ]
+  },
+  "paymentsrefundpaymentLambdaInvocationsErrorsGreaterThan2Percent1454DCC1": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "SnsTopic2C1570A4"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "Metrics": [
+     {
+      "Expression": "(errors / invocations) * 100",
+      "Id": "expr_1",
+      "Label": "invocations_errored_percentage_last_5_mins"
+     },
+     {
+      "Id": "invocations",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "FunctionName",
+          "Value": {
+           "Ref": "paymentsrefundpaymentLambdaFunction2B93D030"
+          }
+         }
+        ],
+        "MetricName": "Invocations",
+        "Namespace": "AWS/Lambda"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     },
+     {
+      "Id": "errors",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "FunctionName",
+          "Value": {
+           "Ref": "paymentsrefundpaymentLambdaFunction2B93D030"
+          }
+         }
+        ],
+        "MetricName": "Errors",
+        "Namespace": "AWS/Lambda"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     }
+    ],
+    "Threshold": 2,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "paymentsrefundpaymentLambdaP99LongDurationGreaterThan1sF517C417": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "SnsTopic2C1570A4"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "Dimensions": [
+     {
+      "Name": "FunctionName",
+      "Value": {
+       "Ref": "paymentsrefundpaymentLambdaFunction2B93D030"
+      }
+     }
+    ],
+    "ExtendedStatistic": "p99",
+    "MetricName": "Duration",
+    "Namespace": "AWS/Lambda",
+    "Period": 300,
+    "Threshold": 1000,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "paymentsrefundpaymentLambdaThrottledInvocationsGreaterThan2Percent90C22EC4": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "SnsTopic2C1570A4"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "Metrics": [
+     {
+      "Expression": "(throttles * 100) / (invocations + throttles)",
+      "Id": "expr_1",
+      "Label": "throttled_requests_percentage_last_30_mins"
+     },
+     {
+      "Id": "invocations",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "FunctionName",
+          "Value": {
+           "Ref": "paymentsrefundpaymentLambdaFunction2B93D030"
+          }
+         }
+        ],
+        "MetricName": "Invocations",
+        "Namespace": "AWS/Lambda"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     },
+     {
+      "Id": "throttles",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "FunctionName",
+          "Value": {
+           "Ref": "paymentsrefundpaymentLambdaFunction2B93D030"
+          }
+         }
+        ],
+        "MetricName": "Throttles",
+        "Namespace": "AWS/Lambda"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     }
+    ],
+    "Threshold": 2,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "paymentsrefundpaymentCloudWatchDashBoard6F279BDF": {
+   "Type": "AWS::CloudWatch::Dashboard",
+   "Properties": {
+    "DashboardBody": {
+     "Fn::Join": [
+      "",
+      [
+       "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_error_percentage\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":false,\"metrics\":[[{\"label\":\"invocations_errored_percentage_last_5_mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+       {
+        "Ref": "paymentsrefundpaymentLambdaFunction2B93D030"
+       },
+       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
+       {
+        "Ref": "paymentsrefundpaymentLambdaFunction2B93D030"
+       },
+       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_duration\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+       {
+        "Ref": "paymentsrefundpaymentLambdaFunction2B93D030"
+       },
+       "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+       {
+        "Ref": "paymentsrefundpaymentLambdaFunction2B93D030"
+       },
+       "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+       {
+        "Ref": "paymentsrefundpaymentLambdaFunction2B93D030"
+       },
+       "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_throttle_percentage\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled_requests_percentage_last_30_mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+       {
+        "Ref": "paymentsrefundpaymentLambdaFunction2B93D030"
+       },
+       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
+       {
+        "Ref": "paymentsrefundpaymentLambdaFunction2B93D030"
+       },
+       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
+      ]
+     ]
+    }
+   }
   },
   "BookingSagaRole82982544": {
    "Type": "AWS::IAM::Role",
@@ -1308,7 +3428,7 @@
        "Resource": [
         {
          "Fn::GetAtt": [
-          "hotelsreservehotelA484A091",
+          "hotelsreservehotelLambdaFunction2441920F",
           "Arn"
          ]
         },
@@ -1318,7 +3438,7 @@
           [
            {
             "Fn::GetAtt": [
-             "hotelsreservehotelA484A091",
+             "hotelsreservehotelLambdaFunction2441920F",
              "Arn"
             ]
            },
@@ -1334,7 +3454,7 @@
        "Resource": [
         {
          "Fn::GetAtt": [
-          "flightsreserveflight7BBF8BFB",
+          "flightsreserveflightLambdaFunction19627A6E",
           "Arn"
          ]
         },
@@ -1344,7 +3464,7 @@
           [
            {
             "Fn::GetAtt": [
-             "flightsreserveflight7BBF8BFB",
+             "flightsreserveflightLambdaFunction19627A6E",
              "Arn"
             ]
            },
@@ -1360,7 +3480,7 @@
        "Resource": [
         {
          "Fn::GetAtt": [
-          "paymentsprocesspayment7E58198E",
+          "paymentsprocesspaymentLambdaFunction372E68BA",
           "Arn"
          ]
         },
@@ -1370,7 +3490,7 @@
           [
            {
             "Fn::GetAtt": [
-             "paymentsprocesspayment7E58198E",
+             "paymentsprocesspaymentLambdaFunction372E68BA",
              "Arn"
             ]
            },
@@ -1386,7 +3506,7 @@
        "Resource": [
         {
          "Fn::GetAtt": [
-          "hotelsconfirmhotelFEB4E4E0",
+          "hotelsconfirmhotelLambdaFunctionB5A02D42",
           "Arn"
          ]
         },
@@ -1396,7 +3516,7 @@
           [
            {
             "Fn::GetAtt": [
-             "hotelsconfirmhotelFEB4E4E0",
+             "hotelsconfirmhotelLambdaFunctionB5A02D42",
              "Arn"
             ]
            },
@@ -1412,7 +3532,7 @@
        "Resource": [
         {
          "Fn::GetAtt": [
-          "flightsconfirmflightB34E7CA3",
+          "flightsconfirmflightLambdaFunctionC69AADBE",
           "Arn"
          ]
         },
@@ -1422,7 +3542,7 @@
           [
            {
             "Fn::GetAtt": [
-             "flightsconfirmflightB34E7CA3",
+             "flightsconfirmflightLambdaFunctionC69AADBE",
              "Arn"
             ]
            },
@@ -1438,7 +3558,7 @@
        "Resource": [
         {
          "Fn::GetAtt": [
-          "paymentsrefundpaymentA1B2703D",
+          "paymentsrefundpaymentLambdaFunction2B93D030",
           "Arn"
          ]
         },
@@ -1448,7 +3568,7 @@
           [
            {
             "Fn::GetAtt": [
-             "paymentsrefundpaymentA1B2703D",
+             "paymentsrefundpaymentLambdaFunction2B93D030",
              "Arn"
             ]
            },
@@ -1464,7 +3584,7 @@
        "Resource": [
         {
          "Fn::GetAtt": [
-          "flightscancelflight9A89BA1E",
+          "flightscancelflightLambdaFunction691A19FC",
           "Arn"
          ]
         },
@@ -1474,7 +3594,7 @@
           [
            {
             "Fn::GetAtt": [
-             "flightscancelflight9A89BA1E",
+             "flightscancelflightLambdaFunction691A19FC",
              "Arn"
             ]
            },
@@ -1490,7 +3610,7 @@
        "Resource": [
         {
          "Fn::GetAtt": [
-          "hotelscancelhotelC5FA4E93",
+          "hotelscancelhotelLambdaFunction962553D4",
           "Arn"
          ]
         },
@@ -1500,7 +3620,7 @@
           [
            {
             "Fn::GetAtt": [
-             "hotelscancelhotelC5FA4E93",
+             "hotelscancelhotelLambdaFunction962553D4",
              "Arn"
             ]
            },
@@ -1541,7 +3661,7 @@
        ":states:::lambda:invoke\",\"Parameters\":{\"FunctionName\":\"",
        {
         "Fn::GetAtt": [
-         "hotelsreservehotelA484A091",
+         "hotelsreservehotelLambdaFunction2441920F",
          "Arn"
         ]
        },
@@ -1552,7 +3672,7 @@
        ":states:::lambda:invoke\",\"Parameters\":{\"FunctionName\":\"",
        {
         "Fn::GetAtt": [
-         "flightsreserveflight7BBF8BFB",
+         "flightsreserveflightLambdaFunction19627A6E",
          "Arn"
         ]
        },
@@ -1563,7 +3683,7 @@
        ":states:::lambda:invoke\",\"Parameters\":{\"FunctionName\":\"",
        {
         "Fn::GetAtt": [
-         "paymentsprocesspayment7E58198E",
+         "paymentsprocesspaymentLambdaFunction372E68BA",
          "Arn"
         ]
        },
@@ -1574,7 +3694,7 @@
        ":states:::lambda:invoke\",\"Parameters\":{\"FunctionName\":\"",
        {
         "Fn::GetAtt": [
-         "hotelsconfirmhotelFEB4E4E0",
+         "hotelsconfirmhotelLambdaFunctionB5A02D42",
          "Arn"
         ]
        },
@@ -1585,7 +3705,7 @@
        ":states:::lambda:invoke\",\"Parameters\":{\"FunctionName\":\"",
        {
         "Fn::GetAtt": [
-         "flightsconfirmflightB34E7CA3",
+         "flightsconfirmflightLambdaFunctionC69AADBE",
          "Arn"
         ]
        },
@@ -1596,7 +3716,7 @@
        ":states:::lambda:invoke\",\"Parameters\":{\"FunctionName\":\"",
        {
         "Fn::GetAtt": [
-         "paymentsrefundpaymentA1B2703D",
+         "paymentsrefundpaymentLambdaFunction2B93D030",
          "Arn"
         ]
        },
@@ -1607,7 +3727,7 @@
        ":states:::lambda:invoke\",\"Parameters\":{\"FunctionName\":\"",
        {
         "Fn::GetAtt": [
-         "flightscancelflight9A89BA1E",
+         "flightscancelflightLambdaFunction691A19FC",
          "Arn"
         ]
        },
@@ -1618,7 +3738,7 @@
        ":states:::lambda:invoke\",\"Parameters\":{\"FunctionName\":\"",
        {
         "Fn::GetAtt": [
-         "hotelscancelhotelC5FA4E93",
+         "hotelscancelhotelLambdaFunction962553D4",
          "Arn"
         ]
        },
@@ -2349,6 +4469,18 @@
   }
  },
  "Parameters": {
+  "AssetParameters1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0S3Bucket5EA66AEF": {
+   "Type": "String",
+   "Description": "S3 bucket for asset \"1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0\""
+  },
+  "AssetParameters1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0S3VersionKeyD171B821": {
+   "Type": "String",
+   "Description": "S3 key for asset version \"1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0\""
+  },
+  "AssetParameters1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0ArtifactHash4A934180": {
+   "Type": "String",
+   "Description": "Artifact hash for asset \"1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0\""
+  },
   "AssetParameters0920db5902dee0cc223b5bcc6f7524a70cfa28c6fb16099277bdfed9b9a80bb7S3Bucket8B13D972": {
    "Type": "String",
    "Description": "S3 bucket for asset \"0920db5902dee0cc223b5bcc6f7524a70cfa28c6fb16099277bdfed9b9a80bb7\""
@@ -2444,18 +4576,6 @@
   "AssetParametersaabda447a687a02596ebcbbb477a0b7e1c879d3cc5bb033aa5644e438203957cArtifactHash736055BD": {
    "Type": "String",
    "Description": "Artifact hash for asset \"aabda447a687a02596ebcbbb477a0b7e1c879d3cc5bb033aa5644e438203957c\""
-  },
-  "AssetParameters1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0S3Bucket5EA66AEF": {
-   "Type": "String",
-   "Description": "S3 bucket for asset \"1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0\""
-  },
-  "AssetParameters1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0S3VersionKeyD171B821": {
-   "Type": "String",
-   "Description": "S3 key for asset version \"1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0\""
-  },
-  "AssetParameters1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0ArtifactHash4A934180": {
-   "Type": "String",
-   "Description": "Artifact hash for asset \"1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0\""
   },
   "AssetParameters01f751a6c39ed462637dcea654a99f9bb37de58bc5296d943df7d734fce9925eS3Bucket0D3529A5": {
    "Type": "String",

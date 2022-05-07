@@ -28,47 +28,55 @@ class SagaStepFunction(well_architected.WellArchitectedStack):
         flight_reservation_function = self.create_lambda_function(
             self,
             function_name='flights/reserve_flight',
-            table=bookings
+            table=bookings,
+            error_topic=self.error_topic,
         )
         flight_confirmation_function = self.create_lambda_function(
             self,
             function_name='flights/confirm_flight',
-            table=bookings
+            table=bookings,
+            error_topic=self.error_topic,
         )
         flight_cancellation_function = self.create_lambda_function(
             self,
             function_name='flights/cancel_flight',
-            table=bookings
+            table=bookings,
+            error_topic=self.error_topic,
         )
 
         hotel_reservation_function = self.create_lambda_function(
             self,
             function_name="hotels/reserve_hotel",
-            table=bookings
+            table=bookings,
+            error_topic=self.error_topic,
         )
 
         hotel_confirmation_function = self.create_lambda_function(
             self,
             function_name='hotels/confirm_hotel',
-            table=bookings
+            table=bookings,
+            error_topic=self.error_topic,
         )
 
         hotel_cancellation_function = self.create_lambda_function(
             self,
             function_name="hotels/cancel_hotel",
-            table=bookings
+            table=bookings,
+            error_topic=self.error_topic,
         )
 
         payment_processing_function = self.create_lambda_function(
             self,
             function_name="payments/process_payment",
-            table=bookings
+            table=bookings,
+            error_topic=self.error_topic,
         )
 
         payment_refund_function = self.create_lambda_function(
             self,
             function_name="payments/refund_payment",
-            table=bookings
+            table=bookings,
+            error_topic=self.error_topic,
         )
 
         ###
@@ -149,16 +157,6 @@ class SagaStepFunction(well_architected.WellArchitectedStack):
             timeout=aws_cdk.Duration.minutes(5)
         )
 
-        # saga_lambda = aws_lambda.Function(
-        #     self, "sagaLambdaHandler",
-        #     runtime=aws_lambda.Runtime.PYTHON_3_9,
-        #     handler="saga_lambda.handler",
-        #     code=aws_lambda.Code.from_asset("lambda_functions/saga_lambda"),
-        #     environment={
-        #         'statemachine_arn': saga_state_machine.state_machine_arn
-        #     }
-        # )
-
         saga_lambda = well_architected_lambda.LambdaFunctionConstruct(
             self, 'SagaLambda',
             error_topic=self.error_topic,
@@ -175,15 +173,23 @@ class SagaStepFunction(well_architected.WellArchitectedStack):
             handler=saga_lambda
         )
 
-    def create_lambda_function(self, scope: aws_cdk.Stack, table: dynamo_db.Table=None, function_name=None):
-        function = aws_lambda.Function(
-            scope, function_name,
-            runtime=aws_lambda.Runtime.PYTHON_3_9,
-            handler=f'{function_name}.handler',
-            code=aws_lambda.Code.from_asset(f"lambda_functions/{function_name}"),
-            environment={
+    def create_lambda_function(self, scope: aws_cdk.Stack, table: dynamo_db.Table=None, function_name=None, error_topic=None):
+        function = well_architected_lambda.LambdaFunctionConstruct(
+            self, function_name,
+            function_name=function_name,
+            error_topic=error_topic,
+            environment_variables={
                 'TABLE_NAME': table.table_name
             }
-        )
+        ).lambda_function
+        # function = aws_lambda.Function(
+        #     scope, function_name,
+        #     runtime=aws_lambda.Runtime.PYTHON_3_9,
+        #     handler=f'{function_name}.handler',
+        #     code=aws_lambda.Code.from_asset(f"lambda_functions/{function_name}"),
+        #     environment={
+        #         'TABLE_NAME': table.table_name
+        #     }
+        # )
         table.grant_read_write_data(function)
         return function
