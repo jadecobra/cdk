@@ -88,9 +88,6 @@ class SagaStepFunction(well_architected.WellArchitectedStack):
         # 3) Confirm Flight and Hotel booking
 
         # 1) Reserve Flights and Hotel
-        # cancel_hotel_reservation = self.create_hotel_reservation_cancellation(
-        #     hotel_cancellation_function,
-        # )
         cancel_hotel_reservation = self.create_cancellation_task(
             task_name='CancelHotelReservation',
             lambda_function=hotel_cancellation_function,
@@ -105,15 +102,14 @@ class SagaStepFunction(well_architected.WellArchitectedStack):
             next_step=cancel_hotel_reservation,
         )
 
-        # 2) Take Payment
-        refund_payment = aws_stepfunctions_tasks.LambdaInvoke(
-            self, 'RefundPayment',
+        refund_payment = self.create_cancellation_task(
+            task_name='RefundPayment',
             lambda_function=payment_refund_function,
-            result_path='$.RefundPaymentResult'
-        ).add_retry(max_attempts=3).next(cancel_flight_reservation)
+            next_step=cancel_flight_reservation
+        )
 
         saga_state_machine = aws_stepfunctions.StateMachine(
-            self, 'BookingSaga',
+            self, 'StateMachine',
             definition=(
                 aws_stepfunctions
                     .Chain
@@ -160,7 +156,7 @@ class SagaStepFunction(well_architected.WellArchitectedStack):
         )
 
         saga_lambda = well_architected_lambda.LambdaFunctionConstruct(
-            self, 'SagaLambda',
+            self, 'SagaLambdaFUnction',
             error_topic=self.error_topic,
             function_name='saga_lambda',
             environment_variables={
@@ -171,19 +167,8 @@ class SagaStepFunction(well_architected.WellArchitectedStack):
         saga_state_machine.grant_start_execution(saga_lambda)
 
         aws_apigateway.LambdaRestApi(
-            self, 'SagaPatternSingleTable',
+            self, 'StepFunctionsRestApi',
             handler=saga_lambda
-        )
-
-    def create_hotel_reservation_cancellation(self, lambda_function):
-        return aws_stepfunctions_tasks.LambdaInvoke(
-            self, 'CancelHotelReservation',
-            lambda_function=lambda_function,
-            result_path='$.CancelHotelReservationResult'
-        ).add_retry(
-            max_attempts=3
-        ).next(
-            aws_stepfunctions.Fail(self, "Sorry, We Couldn't make the booking")
         )
 
     def create_cancellation_task(self, task_name=None, lambda_function=None, next_step=None):
