@@ -88,11 +88,19 @@ class SagaStepFunction(well_architected.WellArchitectedStack):
         # 3) Confirm Flight and Hotel booking
 
         # 1) Reserve Flights and Hotel
-        cancel_hotel_reservation = self.create_hotel_reservation_cancellation(
-            hotel_cancellation_function,
+        # cancel_hotel_reservation = self.create_hotel_reservation_cancellation(
+        #     hotel_cancellation_function,
+        # )
+        cancel_hotel_reservation = self.create_cancellation_task(
+            task_name='CancelHotelReservation',
+            lambda_function=hotel_cancellation_function,
+            next_step=aws_stepfunctions.Fail(
+                self, "Sorry, We Couldn't make the booking"
+            )
         )
 
-        cancel_flight_reservation = self.create_flight_reservation_cancellation(
+        cancel_flight_reservation = self.create_cancellation_task(
+            task_name='CancelFlightReservation',
             lambda_function=flight_cancellation_function,
             next_step=cancel_hotel_reservation,
         )
@@ -176,13 +184,6 @@ class SagaStepFunction(well_architected.WellArchitectedStack):
             max_attempts=3
         ).next(
             aws_stepfunctions.Fail(self, "Sorry, We Couldn't make the booking")
-        )
-
-    def create_flight_reservation_cancellation(self, lambda_function=None, next_step=None):
-        return self.create_cancellation_task(
-            task_name='CancelFlightReservation',
-            lambda_function=lambda_function,
-            next_step=next_step,
         )
 
     def create_cancellation_task(self, task_name=None, lambda_function=None, next_step=None):
