@@ -88,28 +88,22 @@ class SagaStepFunction(well_architected.WellArchitectedStack):
         # 3) Confirm Flight and Hotel booking
 
         # 1) Reserve Flights and Hotel
-        # cancel_hotel_reservation = aws_stepfunctions_tasks.LambdaInvoke(
-        #     self, 'CancelHotelReservation',
-        #     lambda_function=hotel_cancellation_function,
-        #     result_path='$.CancelHotelReservationResult'
-        # ).add_retry(
-        #     max_attempts=3
-        # ).next(
-        #     aws_stepfunctions.Fail(self, "Sorry, We Couldn't make the booking")
-        # )
-
         cancel_hotel_reservation = self.create_hotel_reservation_cancellation(
             hotel_cancellation_function,
         )
 
-        cancel_flight_reservation = aws_stepfunctions_tasks.LambdaInvoke(
-            self, 'CancelFlightReservation',
+        # cancel_flight_reservation = aws_stepfunctions_tasks.LambdaInvoke(
+        #     self, 'CancelFlightReservation',
+        #     lambda_function=flight_cancellation_function,
+        #     result_path='$.CancelFlightReservationResult'
+        # ).add_retry(
+        #     max_attempts=3
+        # ).next(
+        #     cancel_hotel_reservation
+        # )
+        cancel_flight_reservation = self.create_flight_reservation_cancellation(
             lambda_function=flight_cancellation_function,
-            result_path='$.CancelFlightReservationResult'
-        ).add_retry(
-            max_attempts=3
-        ).next(
-            cancel_hotel_reservation
+            next_step=cancel_hotel_reservation,
         )
 
         reserve_flight = aws_stepfunctions_tasks.LambdaInvoke(
@@ -198,6 +192,17 @@ class SagaStepFunction(well_architected.WellArchitectedStack):
             max_attempts=3
         ).next(
             aws_stepfunctions.Fail(self, "Sorry, We Couldn't make the booking")
+        )
+
+    def create_flight_reservation_cancellation(self, lambda_function=None, next_step=None):
+        return aws_stepfunctions_tasks.LambdaInvoke(
+            self, 'CancelFlightReservation',
+            lambda_function=lambda_function,
+            result_path='$.CancelFlightReservationResult'
+        ).add_retry(
+            max_attempts=3
+        ).next(
+            next_step
         )
 
     def create_lambda_function(self, scope: aws_cdk.Stack, table: dynamo_db.Table=None, function_name=None, error_topic=None):
