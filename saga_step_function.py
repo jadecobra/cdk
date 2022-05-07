@@ -87,16 +87,16 @@ class SagaStepFunction(well_architected.WellArchitectedStack):
         # 2) Take Payment
         # 3) Confirm Flight and Hotel booking
 
-        # Our two end states
-        booking_succeeded = aws_stepfunctions.Succeed(self, 'We have made your booking!')
-        booking_failed = aws_stepfunctions.Fail(self, "Sorry, We Couldn't make the booking")
-
         # 1) Reserve Flights and Hotel
         cancel_hotel_reservation = aws_stepfunctions_tasks.LambdaInvoke(
             self, 'CancelHotelReservation',
             lambda_function=hotel_cancellation_function,
             result_path='$.CancelHotelReservationResult'
-        ).add_retry(max_attempts=3).next(booking_failed)
+        ).add_retry(
+            max_attempts=3
+        ).next(
+            aws_stepfunctions.Fail(self, "Sorry, We Couldn't make the booking")
+        )
 
         reserve_hotel = aws_stepfunctions_tasks.LambdaInvoke(
             self, 'ReserveHotel',
@@ -152,7 +152,7 @@ class SagaStepFunction(well_architected.WellArchitectedStack):
                     .next(process_payment)
                     .next(confirm_hotel)
                     .next(confirm_flight)
-                    .next(booking_succeeded)
+                    .next(aws_stepfunctions.Succeed(self, 'We have made your booking!'))
             ),
             timeout=aws_cdk.Duration.minutes(5)
         )
