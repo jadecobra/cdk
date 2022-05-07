@@ -92,25 +92,22 @@ class SagaStepFunction(well_architected.WellArchitectedStack):
             hotel_cancellation_function,
         )
 
-        # cancel_flight_reservation = aws_stepfunctions_tasks.LambdaInvoke(
-        #     self, 'CancelFlightReservation',
-        #     lambda_function=flight_cancellation_function,
-        #     result_path='$.CancelFlightReservationResult'
-        # ).add_retry(
-        #     max_attempts=3
-        # ).next(
-        #     cancel_hotel_reservation
-        # )
         cancel_flight_reservation = self.create_flight_reservation_cancellation(
             lambda_function=flight_cancellation_function,
             next_step=cancel_hotel_reservation,
         )
 
-        reserve_flight = aws_stepfunctions_tasks.LambdaInvoke(
-            self, 'ReserveFlight',
+        # reserve_flight = aws_stepfunctions_tasks.LambdaInvoke(
+        #     self, 'ReserveFlight',
+        #     lambda_function=flight_reservation_function,
+        #     result_path='$.ReserveFlightResult'
+        # ).add_catch(cancel_flight_reservation, result_path="$.ReserveFlightError")
+
+        reserve_flight = self.create_step_function_task_with_error_handler(
+            task_name='ReserveFlight',
             lambda_function=flight_reservation_function,
-            result_path='$.ReserveFlightResult'
-        ).add_catch(cancel_flight_reservation, result_path="$.ReserveFlightError")
+            error_handler=cancel_flight_reservation,
+        )
 
         # 2) Take Payment
         refund_payment = aws_stepfunctions_tasks.LambdaInvoke(
@@ -203,6 +200,16 @@ class SagaStepFunction(well_architected.WellArchitectedStack):
             max_attempts=3
         ).next(
             next_step
+        )
+
+    def create_step_function_task_with_error_handler(self, task_name=None, lambda_function=None, error_handler=None):
+        return aws_stepfunctions_tasks.LambdaInvoke(
+            self, task_name,
+            lambda_function=lambda_function,
+            result_path=f'$.{task_name}Result'
+        ).add_catch(
+            error_handler,
+            result_path=f"$.{task_name}Error"
         )
 
     def create_lambda_function(self, scope: aws_cdk.Stack, table: dynamo_db.Table=None, function_name=None, error_topic=None):
