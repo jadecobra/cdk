@@ -98,17 +98,23 @@ class SagaStepFunction(well_architected.WellArchitectedStack):
             aws_stepfunctions.Fail(self, "Sorry, We Couldn't make the booking")
         )
 
-        reserve_hotel = aws_stepfunctions_tasks.LambdaInvoke(
-            self, 'ReserveHotel',
-            lambda_function=hotel_reservation_function,
-            result_path='$.ReserveHotelResult'
-        ).add_catch(cancel_hotel_reservation, result_path="$.ReserveHotelError")
+        # reserve_hotel = aws_stepfunctions_tasks.LambdaInvoke(
+        #     self, 'ReserveHotel',
+        #     lambda_function=hotel_reservation_function,
+        #     result_path='$.ReserveHotelResult'
+        # ).add_catch(
+        #     cancel_hotel_reservation, result_path="$.ReserveHotelError"
+        # )
 
         cancel_flight_reservation = aws_stepfunctions_tasks.LambdaInvoke(
             self, 'CancelFlightReservation',
             lambda_function=flight_cancellation_function,
             result_path='$.CancelFlightReservationResult'
-        ).add_retry(max_attempts=3).next(cancel_hotel_reservation)
+        ).add_retry(
+            max_attempts=3
+        ).next(
+            cancel_hotel_reservation
+        )
 
         reserve_flight = aws_stepfunctions_tasks.LambdaInvoke(
             self, 'ReserveFlight',
@@ -147,7 +153,12 @@ class SagaStepFunction(well_architected.WellArchitectedStack):
             definition=(
                 aws_stepfunctions
                     .Chain
-                    .start(reserve_hotel)
+                    .start(
+                        self.reserve_hotel(
+                            lambda_function=hotel_reservation_function,
+                            error_handler=cancel_hotel_reservation
+                        )
+                    )
                     .next(reserve_flight)
                     .next(process_payment)
                     .next(confirm_hotel)
@@ -171,6 +182,15 @@ class SagaStepFunction(well_architected.WellArchitectedStack):
         aws_apigateway.LambdaRestApi(
             self, 'SagaPatternSingleTable',
             handler=saga_lambda
+        )
+
+    def reserve_hotel(self, lambda_function=None, error_handler=None):
+        return aws_stepfunctions_tasks.LambdaInvoke(
+            self, 'ReserveHotel',
+            lambda_function=lambda_function,
+            result_path='$.ReserveHotelResult'
+        ).add_catch(
+            error_handler, result_path="$.ReserveHotelError"
         )
 
     def create_lambda_function(self, scope: aws_cdk.Stack, table: dynamo_db.Table=None, function_name=None, error_topic=None):
