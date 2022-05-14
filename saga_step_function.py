@@ -167,7 +167,7 @@ class SagaStepFunction(well_architected.WellArchitectedStack):
         saga_state_machine.grant_start_execution(saga_lambda)
 
         aws_apigateway.LambdaRestApi(
-            self, 'StepFunctionsRestApi',
+            self, 'SagaLambdaFunctionRestApi',
             handler=saga_lambda
         )
 

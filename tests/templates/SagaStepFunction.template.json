@@ -3392,7 +3392,7 @@
     }
    }
   },
-  "BookingSagaRole82982544": {
+  "StateMachineRoleB840431D": {
    "Type": "AWS::IAM::Role",
    "Properties": {
     "AssumeRolePolicyDocument": {
@@ -3417,7 +3417,7 @@
     }
    }
   },
-  "BookingSagaRoleDefaultPolicy6595FE9E": {
+  "StateMachineRoleDefaultPolicyDF1E6607": {
    "Type": "AWS::IAM::Policy",
    "Properties": {
     "PolicyDocument": {
@@ -3633,20 +3633,20 @@
      ],
      "Version": "2012-10-17"
     },
-    "PolicyName": "BookingSagaRoleDefaultPolicy6595FE9E",
+    "PolicyName": "StateMachineRoleDefaultPolicyDF1E6607",
     "Roles": [
      {
-      "Ref": "BookingSagaRole82982544"
+      "Ref": "StateMachineRoleB840431D"
      }
     ]
    }
   },
-  "BookingSagaFA991213": {
+  "StateMachine2E01A3A5": {
    "Type": "AWS::StepFunctions::StateMachine",
    "Properties": {
     "RoleArn": {
      "Fn::GetAtt": [
-      "BookingSagaRole82982544",
+      "StateMachineRoleB840431D",
       "Arn"
      ]
     },
@@ -3748,11 +3748,11 @@
     }
    },
    "DependsOn": [
-    "BookingSagaRoleDefaultPolicy6595FE9E",
-    "BookingSagaRole82982544"
+    "StateMachineRoleDefaultPolicyDF1E6607",
+    "StateMachineRoleB840431D"
    ]
   },
-  "SagaLambdaAwsXraySdkLambdaLayer93A8BA75": {
+  "SagaLambdaFUnctionAwsXraySdkLambdaLayer0B2634CC": {
    "Type": "AWS::Lambda::LayerVersion",
    "Properties": {
     "Content": {
@@ -3796,7 +3796,7 @@
     "Description": "aws-xray-sdk Lambda Layer"
    }
   },
-  "SagaLambdaLambdaFunctionServiceRoleE4FE9D0D": {
+  "SagaLambdaFUnctionLambdaFunctionServiceRole44853CC8": {
    "Type": "AWS::IAM::Role",
    "Properties": {
     "AssumeRolePolicyDocument": {
@@ -3827,7 +3827,7 @@
     ]
    }
   },
-  "SagaLambdaLambdaFunctionServiceRoleDefaultPolicy9AF6C84B": {
+  "SagaLambdaFUnctionLambdaFunctionServiceRoleDefaultPolicyAB6DB18F": {
    "Type": "AWS::IAM::Policy",
    "Properties": {
     "PolicyDocument": {
@@ -3844,21 +3844,21 @@
        "Action": "states:StartExecution",
        "Effect": "Allow",
        "Resource": {
-        "Ref": "BookingSagaFA991213"
+        "Ref": "StateMachine2E01A3A5"
        }
       }
      ],
      "Version": "2012-10-17"
     },
-    "PolicyName": "SagaLambdaLambdaFunctionServiceRoleDefaultPolicy9AF6C84B",
+    "PolicyName": "SagaLambdaFUnctionLambdaFunctionServiceRoleDefaultPolicyAB6DB18F",
     "Roles": [
      {
-      "Ref": "SagaLambdaLambdaFunctionServiceRoleE4FE9D0D"
+      "Ref": "SagaLambdaFUnctionLambdaFunctionServiceRole44853CC8"
      }
     ]
    }
   },
-  "SagaLambdaLambdaFunction30FF2AC7": {
+  "SagaLambdaFUnctionLambdaFunctionCD0D59B0": {
    "Type": "AWS::Lambda::Function",
    "Properties": {
     "Code": {
@@ -3901,21 +3901,21 @@
     },
     "Role": {
      "Fn::GetAtt": [
-      "SagaLambdaLambdaFunctionServiceRoleE4FE9D0D",
+      "SagaLambdaFUnctionLambdaFunctionServiceRole44853CC8",
       "Arn"
      ]
     },
     "Environment": {
      "Variables": {
       "statemachine_arn": {
-       "Ref": "BookingSagaFA991213"
+       "Ref": "StateMachine2E01A3A5"
       }
      }
     },
     "Handler": "saga_lambda.handler",
     "Layers": [
      {
-      "Ref": "SagaLambdaAwsXraySdkLambdaLayer93A8BA75"
+      "Ref": "SagaLambdaFUnctionAwsXraySdkLambdaLayer0B2634CC"
      }
     ],
     "Runtime": "python3.9",
@@ -3925,11 +3925,11 @@
     }
    },
    "DependsOn": [
-    "SagaLambdaLambdaFunctionServiceRoleDefaultPolicy9AF6C84B",
-    "SagaLambdaLambdaFunctionServiceRoleE4FE9D0D"
+    "SagaLambdaFUnctionLambdaFunctionServiceRoleDefaultPolicyAB6DB18F",
+    "SagaLambdaFUnctionLambdaFunctionServiceRole44853CC8"
    ]
   },
-  "SagaLambdaLambdaInvocationsErrorsGreaterThan2Percent0E0BDC3B": {
+  "SagaLambdaFUnctionLambdaInvocationsErrorsGreaterThan2PercentD1B5F583": {
    "Type": "AWS::CloudWatch::Alarm",
    "Properties": {
     "ComparisonOperator": "GreaterThanOrEqualToThreshold",
@@ -3954,7 +3954,7 @@
          {
           "Name": "FunctionName",
           "Value": {
-           "Ref": "SagaLambdaLambdaFunction30FF2AC7"
+           "Ref": "SagaLambdaFUnctionLambdaFunctionCD0D59B0"
           }
          }
         ],
@@ -3974,7 +3974,7 @@
          {
           "Name": "FunctionName",
           "Value": {
-           "Ref": "SagaLambdaLambdaFunction30FF2AC7"
+           "Ref": "SagaLambdaFUnctionLambdaFunctionCD0D59B0"
           }
          }
         ],
@@ -3991,7 +3991,7 @@
     "TreatMissingData": "notBreaching"
    }
   },
-  "SagaLambdaLambdaP99LongDurationGreaterThan1s3AC92B6D": {
+  "SagaLambdaFUnctionLambdaP99LongDurationGreaterThan1sF41DFE65": {
    "Type": "AWS::CloudWatch::Alarm",
    "Properties": {
     "ComparisonOperator": "GreaterThanOrEqualToThreshold",
@@ -4006,7 +4006,7 @@
      {
       "Name": "FunctionName",
       "Value": {
-       "Ref": "SagaLambdaLambdaFunction30FF2AC7"
+       "Ref": "SagaLambdaFUnctionLambdaFunctionCD0D59B0"
       }
      }
     ],
@@ -4018,7 +4018,7 @@
     "TreatMissingData": "notBreaching"
    }
   },
-  "SagaLambdaLambdaThrottledInvocationsGreaterThan2Percent36D3B935": {
+  "SagaLambdaFUnctionLambdaThrottledInvocationsGreaterThan2Percent5A2BAF7F": {
    "Type": "AWS::CloudWatch::Alarm",
    "Properties": {
     "ComparisonOperator": "GreaterThanOrEqualToThreshold",
@@ -4043,7 +4043,7 @@
          {
           "Name": "FunctionName",
           "Value": {
-           "Ref": "SagaLambdaLambdaFunction30FF2AC7"
+           "Ref": "SagaLambdaFUnctionLambdaFunctionCD0D59B0"
           }
          }
         ],
@@ -4063,7 +4063,7 @@
          {
           "Name": "FunctionName",
           "Value": {
-           "Ref": "SagaLambdaLambdaFunction30FF2AC7"
+           "Ref": "SagaLambdaFUnctionLambdaFunctionCD0D59B0"
           }
          }
         ],
@@ -4080,7 +4080,7 @@
     "TreatMissingData": "notBreaching"
    }
   },
-  "SagaLambdaCloudWatchDashBoard8670A854": {
+  "SagaLambdaFUnctionCloudWatchDashBoard4A9B6AEE": {
    "Type": "AWS::CloudWatch::Dashboard",
    "Properties": {
     "DashboardBody": {
@@ -4093,11 +4093,11 @@
        },
        "\",\"stacked\":false,\"metrics\":[[{\"label\":\"invocations_errored_percentage_last_5_mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
        {
-        "Ref": "SagaLambdaLambdaFunction30FF2AC7"
+        "Ref": "SagaLambdaFUnctionLambdaFunctionCD0D59B0"
        },
        "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
        {
-        "Ref": "SagaLambdaLambdaFunction30FF2AC7"
+        "Ref": "SagaLambdaFUnctionLambdaFunctionCD0D59B0"
        },
        "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_duration\",\"region\":\"",
        {
@@ -4105,15 +4105,15 @@
        },
        "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
        {
-        "Ref": "SagaLambdaLambdaFunction30FF2AC7"
+        "Ref": "SagaLambdaFUnctionLambdaFunctionCD0D59B0"
        },
        "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
        {
-        "Ref": "SagaLambdaLambdaFunction30FF2AC7"
+        "Ref": "SagaLambdaFUnctionLambdaFunctionCD0D59B0"
        },
        "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
        {
-        "Ref": "SagaLambdaLambdaFunction30FF2AC7"
+        "Ref": "SagaLambdaFUnctionLambdaFunctionCD0D59B0"
        },
        "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_throttle_percentage\",\"region\":\"",
        {
@@ -4121,11 +4121,11 @@
        },
        "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled_requests_percentage_last_30_mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
        {
-        "Ref": "SagaLambdaLambdaFunction30FF2AC7"
+        "Ref": "SagaLambdaFUnctionLambdaFunctionCD0D59B0"
        },
        "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
        {
-        "Ref": "SagaLambdaLambdaFunction30FF2AC7"
+        "Ref": "SagaLambdaFUnctionLambdaFunctionCD0D59B0"
        },
        "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
       ]
@@ -4133,13 +4133,13 @@
     }
    }
   },
-  "SagaPatternSingleTable288D85B3": {
+  "SagaLambdaFunctionRestApi923FD352": {
    "Type": "AWS::ApiGateway::RestApi",
    "Properties": {
-    "Name": "SagaPatternSingleTable"
+    "Name": "SagaLambdaFunctionRestApi"
    }
   },
-  "SagaPatternSingleTableCloudWatchRole130684F0": {
+  "SagaLambdaFunctionRestApiCloudWatchRoleBECA4945": {
    "Type": "AWS::IAM::Role",
    "Properties": {
     "AssumeRolePolicyDocument": {
@@ -4170,71 +4170,71 @@
     ]
    }
   },
-  "SagaPatternSingleTableAccount4A29EC28": {
+  "SagaLambdaFunctionRestApiAccount2E37A3F9": {
    "Type": "AWS::ApiGateway::Account",
    "Properties": {
     "CloudWatchRoleArn": {
      "Fn::GetAtt": [
-      "SagaPatternSingleTableCloudWatchRole130684F0",
+      "SagaLambdaFunctionRestApiCloudWatchRoleBECA4945",
       "Arn"
      ]
     }
    },
    "DependsOn": [
-    "SagaPatternSingleTable288D85B3"
+    "SagaLambdaFunctionRestApi923FD352"
    ]
   },
-  "SagaPatternSingleTableDeployment96972FE7ab90b37a053363ed133a752da3e3b999": {
+  "SagaLambdaFunctionRestApiDeployment7C8B227C3079e1a65098c7b8f40c3590f96e944a": {
    "Type": "AWS::ApiGateway::Deployment",
    "Properties": {
     "RestApiId": {
-     "Ref": "SagaPatternSingleTable288D85B3"
+     "Ref": "SagaLambdaFunctionRestApi923FD352"
     },
     "Description": "Automatically created by the RestApi construct"
    },
    "DependsOn": [
-    "SagaPatternSingleTableproxyANY8778A55C",
-    "SagaPatternSingleTableproxy9F7D6084",
-    "SagaPatternSingleTableANYFE1A7CB0"
+    "SagaLambdaFunctionRestApiproxyANYE186C195",
+    "SagaLambdaFunctionRestApiproxy86382F9C",
+    "SagaLambdaFunctionRestApiANYF7E8F934"
    ]
   },
-  "SagaPatternSingleTableDeploymentStageprod92F0690D": {
+  "SagaLambdaFunctionRestApiDeploymentStageprod512B4E0A": {
    "Type": "AWS::ApiGateway::Stage",
    "Properties": {
     "RestApiId": {
-     "Ref": "SagaPatternSingleTable288D85B3"
+     "Ref": "SagaLambdaFunctionRestApi923FD352"
     },
     "DeploymentId": {
-     "Ref": "SagaPatternSingleTableDeployment96972FE7ab90b37a053363ed133a752da3e3b999"
+     "Ref": "SagaLambdaFunctionRestApiDeployment7C8B227C3079e1a65098c7b8f40c3590f96e944a"
     },
     "StageName": "prod"
    },
    "DependsOn": [
-    "SagaPatternSingleTableAccount4A29EC28"
+    "SagaLambdaFunctionRestApiAccount2E37A3F9"
    ]
   },
-  "SagaPatternSingleTableproxy9F7D6084": {
+  "SagaLambdaFunctionRestApiproxy86382F9C": {
    "Type": "AWS::ApiGateway::Resource",
    "Properties": {
     "ParentId": {
      "Fn::GetAtt": [
-      "SagaPatternSingleTable288D85B3",
+      "SagaLambdaFunctionRestApi923FD352",
       "RootResourceId"
      ]
     },
     "PathPart": "{proxy+}",
     "RestApiId": {
-     "Ref": "SagaPatternSingleTable288D85B3"
+     "Ref": "SagaLambdaFunctionRestApi923FD352"
     }
    }
   },
-  "SagaPatternSingleTableproxyANYApiPermissionSagaStepFunctionSagaPatternSingleTable865F4F4DANYproxy4B878BCB": {
+  "SagaLambdaFunctionRestApiproxyANYApiPermissionSagaStepFunctionSagaLambdaFunctionRestApi582290ABANYproxy337C9FBD": {
    "Type": "AWS::Lambda::Permission",
    "Properties": {
     "Action": "lambda:InvokeFunction",
     "FunctionName": {
      "Fn::GetAtt": [
-      "SagaLambdaLambdaFunction30FF2AC7",
+      "SagaLambdaFUnctionLambdaFunctionCD0D59B0",
       "Arn"
      ]
     },
@@ -4257,11 +4257,11 @@
        },
        ":",
        {
-        "Ref": "SagaPatternSingleTable288D85B3"
+        "Ref": "SagaLambdaFunctionRestApi923FD352"
        },
        "/",
        {
-        "Ref": "SagaPatternSingleTableDeploymentStageprod92F0690D"
+        "Ref": "SagaLambdaFunctionRestApiDeploymentStageprod512B4E0A"
        },
        "/*/*"
       ]
@@ -4269,13 +4269,13 @@
     }
    }
   },
-  "SagaPatternSingleTableproxyANYApiPermissionTestSagaStepFunctionSagaPatternSingleTable865F4F4DANYproxy35A08972": {
+  "SagaLambdaFunctionRestApiproxyANYApiPermissionTestSagaStepFunctionSagaLambdaFunctionRestApi582290ABANYproxyA6EB10C5": {
    "Type": "AWS::Lambda::Permission",
    "Properties": {
     "Action": "lambda:InvokeFunction",
     "FunctionName": {
      "Fn::GetAtt": [
-      "SagaLambdaLambdaFunction30FF2AC7",
+      "SagaLambdaFUnctionLambdaFunctionCD0D59B0",
       "Arn"
      ]
     },
@@ -4298,7 +4298,7 @@
        },
        ":",
        {
-        "Ref": "SagaPatternSingleTable288D85B3"
+        "Ref": "SagaLambdaFunctionRestApi923FD352"
        },
        "/test-invoke-stage/*/*"
       ]
@@ -4306,15 +4306,15 @@
     }
    }
   },
-  "SagaPatternSingleTableproxyANY8778A55C": {
+  "SagaLambdaFunctionRestApiproxyANYE186C195": {
    "Type": "AWS::ApiGateway::Method",
    "Properties": {
     "HttpMethod": "ANY",
     "ResourceId": {
-     "Ref": "SagaPatternSingleTableproxy9F7D6084"
+     "Ref": "SagaLambdaFunctionRestApiproxy86382F9C"
     },
     "RestApiId": {
-     "Ref": "SagaPatternSingleTable288D85B3"
+     "Ref": "SagaLambdaFunctionRestApi923FD352"
     },
     "AuthorizationType": "NONE",
     "Integration": {
@@ -4335,7 +4335,7 @@
         ":lambda:path/2015-03-31/functions/",
         {
          "Fn::GetAtt": [
-          "SagaLambdaLambdaFunction30FF2AC7",
+          "SagaLambdaFUnctionLambdaFunctionCD0D59B0",
           "Arn"
          ]
         },
@@ -4346,13 +4346,13 @@
     }
    }
   },
-  "SagaPatternSingleTableANYApiPermissionSagaStepFunctionSagaPatternSingleTable865F4F4DANY0DD5F6DB": {
+  "SagaLambdaFunctionRestApiANYApiPermissionSagaStepFunctionSagaLambdaFunctionRestApi582290ABANYDD56E751": {
    "Type": "AWS::Lambda::Permission",
    "Properties": {
     "Action": "lambda:InvokeFunction",
     "FunctionName": {
      "Fn::GetAtt": [
-      "SagaLambdaLambdaFunction30FF2AC7",
+      "SagaLambdaFUnctionLambdaFunctionCD0D59B0",
       "Arn"
      ]
     },
@@ -4375,11 +4375,11 @@
        },
        ":",
        {
-        "Ref": "SagaPatternSingleTable288D85B3"
+        "Ref": "SagaLambdaFunctionRestApi923FD352"
        },
        "/",
        {
-        "Ref": "SagaPatternSingleTableDeploymentStageprod92F0690D"
+        "Ref": "SagaLambdaFunctionRestApiDeploymentStageprod512B4E0A"
        },
        "/*/"
       ]
@@ -4387,13 +4387,13 @@
     }
    }
   },
-  "SagaPatternSingleTableANYApiPermissionTestSagaStepFunctionSagaPatternSingleTable865F4F4DANY4FBFDAA8": {
+  "SagaLambdaFunctionRestApiANYApiPermissionTestSagaStepFunctionSagaLambdaFunctionRestApi582290ABANY634C299D": {
    "Type": "AWS::Lambda::Permission",
    "Properties": {
     "Action": "lambda:InvokeFunction",
     "FunctionName": {
      "Fn::GetAtt": [
-      "SagaLambdaLambdaFunction30FF2AC7",
+      "SagaLambdaFUnctionLambdaFunctionCD0D59B0",
       "Arn"
      ]
     },
@@ -4416,7 +4416,7 @@
        },
        ":",
        {
-        "Ref": "SagaPatternSingleTable288D85B3"
+        "Ref": "SagaLambdaFunctionRestApi923FD352"
        },
        "/test-invoke-stage/*/"
       ]
@@ -4424,18 +4424,18 @@
     }
    }
   },
-  "SagaPatternSingleTableANYFE1A7CB0": {
+  "SagaLambdaFunctionRestApiANYF7E8F934": {
    "Type": "AWS::ApiGateway::Method",
    "Properties": {
     "HttpMethod": "ANY",
     "ResourceId": {
      "Fn::GetAtt": [
-      "SagaPatternSingleTable288D85B3",
+      "SagaLambdaFunctionRestApi923FD352",
       "RootResourceId"
      ]
     },
     "RestApiId": {
-     "Ref": "SagaPatternSingleTable288D85B3"
+     "Ref": "SagaLambdaFunctionRestApi923FD352"
     },
     "AuthorizationType": "NONE",
     "Integration": {
@@ -4456,7 +4456,7 @@
         ":lambda:path/2015-03-31/functions/",
         {
          "Fn::GetAtt": [
-          "SagaLambdaLambdaFunction30FF2AC7",
+          "SagaLambdaFUnctionLambdaFunctionCD0D59B0",
           "Arn"
          ]
         },
@@ -4591,14 +4591,14 @@
   }
  },
  "Outputs": {
-  "SagaPatternSingleTableEndpoint3B912404": {
+  "SagaLambdaFunctionRestApiEndpoint688641F2": {
    "Value": {
     "Fn::Join": [
      "",
      [
       "https://",
       {
-       "Ref": "SagaPatternSingleTable288D85B3"
+       "Ref": "SagaLambdaFunctionRestApi923FD352"
       },
       ".execute-api.",
       {
@@ -4610,7 +4610,7 @@
       },
       "/",
       {
-       "Ref": "SagaPatternSingleTableDeploymentStageprod92F0690D"
+       "Ref": "SagaLambdaFunctionRestApiDeploymentStageprod512B4E0A"
       },
       "/"
      ]
