@@ -77,13 +77,13 @@ class DestinedLambda(well_architected.WellArchitectedStack):
         # Notice how it includes the message that came into destined lambda to make it fail so you have
         # everything you need to do retries or manually investigate
         ###
-        failure_lambda = aws_cdk.aws_lambda.Function(
-            self, "failureLambda",
-            runtime=aws_cdk.aws_lambda.Runtime.NODEJS_12_X,
-            handler="failure.handler",
-            code=aws_cdk.aws_lambda.Code.from_asset("lambda_functions"),
-            timeout=aws_cdk.Duration.seconds(3)
-        )
+        # failure_lambda = aws_cdk.aws_lambda.Function(
+        #     self, "failureLambda",
+        #     runtime=aws_cdk.aws_lambda.Runtime.NODEJS_12_X,
+        #     handler="failure.handler",
+        #     code=aws_cdk.aws_lambda.Code.from_asset("lambda_functions"),
+        #     timeout=aws_cdk.Duration.seconds(3)
+        # )
 
         ###
         # EventBridge Rule to send events to our failure lambda
@@ -100,7 +100,14 @@ class DestinedLambda(well_architected.WellArchitectedStack):
                 }
             )
         )
-        failure_rule.add_target(aws_cdk.aws_events_targets.LambdaFunction(failure_lambda))
+        failure_rule.add_target(
+            aws_cdk.aws_events_targets.LambdaFunction(
+                self.create_lambda_function(
+                    function_name="failure_lambda",
+                    timeout=3
+                )
+            )
+        )
 
         ###
         # API Gateway Creation
