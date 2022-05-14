@@ -13,7 +13,10 @@ class DestinedLambda(well_architected.WellArchitectedStack):
             self, 'EventBus',
             event_bus_name='the-destined-lambda',
         )
-        sns_topic = aws_cdk.aws_sns.Topic(self, 'theDestinedLambdaTopic', display_name='The Destined Lambda CDK Pattern Topic')
+        sns_topic = aws_cdk.aws_sns.Topic(
+            self, 'SNSTopic',
+            display_name='The Destined Lambda CDK Pattern Topic'
+        )
 
         ###
         # Lambda configured with success and failure destinations

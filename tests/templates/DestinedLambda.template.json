@@ -6,7 +6,7 @@
     "DisplayName": "DestinedLambdaErrorTopic"
    }
   },
-  "DestinedEventBus14820B65": {
+  "EventBus7B8748AA": {
    "Type": "AWS::Events::EventBus",
    "Properties": {
     "Name": "the-destined-lambda"
@@ -59,7 +59,7 @@
        "Effect": "Allow",
        "Resource": {
         "Fn::GetAtt": [
-         "DestinedEventBus14820B65",
+         "EventBus7B8748AA",
          "Arn"
         ]
        }
@@ -141,7 +141,7 @@
      "OnFailure": {
       "Destination": {
        "Fn::GetAtt": [
-        "DestinedEventBus14820B65",
+        "EventBus7B8748AA",
         "Arn"
        ]
       }
@@ -149,7 +149,7 @@
      "OnSuccess": {
       "Destination": {
        "Fn::GetAtt": [
-        "DestinedEventBus14820B65",
+        "EventBus7B8748AA",
         "Arn"
        ]
       }
@@ -280,7 +280,7 @@
    "Properties": {
     "Description": "all success events are caught here and logged centrally",
     "EventBusName": {
-     "Ref": "DestinedEventBus14820B65"
+     "Ref": "EventBus7B8748AA"
     },
     "EventPattern": {
      "detail": {
@@ -423,7 +423,7 @@
    "Properties": {
     "Description": "all failure events are caught here and logged centrally",
     "EventBusName": {
-     "Ref": "DestinedEventBus14820B65"
+     "Ref": "EventBus7B8748AA"
     },
     "EventPattern": {
      "detail": {
@@ -467,13 +467,13 @@
     }
    }
   },
-  "theDestinedLambdaAPIBAB2789B": {
+  "RestApi0C43BF4B": {
    "Type": "AWS::ApiGateway::RestApi",
    "Properties": {
-    "Name": "theDestinedLambdaAPI"
+    "Name": "RestApi"
    }
   },
-  "theDestinedLambdaAPICloudWatchRoleCDF408DA": {
+  "RestApiCloudWatchRoleE3ED6605": {
    "Type": "AWS::IAM::Role",
    "Properties": {
     "AssumeRolePolicyDocument": {
@@ -504,43 +504,43 @@
     ]
    }
   },
-  "theDestinedLambdaAPIAccount1A39207B": {
+  "RestApiAccount7C83CF5A": {
    "Type": "AWS::ApiGateway::Account",
    "Properties": {
     "CloudWatchRoleArn": {
      "Fn::GetAtt": [
-      "theDestinedLambdaAPICloudWatchRoleCDF408DA",
+      "RestApiCloudWatchRoleE3ED6605",
       "Arn"
      ]
     }
    },
    "DependsOn": [
-    "theDestinedLambdaAPIBAB2789B"
+    "RestApi0C43BF4B"
    ]
   },
-  "theDestinedLambdaAPIDeploymentC364859E7dd6298e4581f75f4f4b4d743506bb76": {
+  "RestApiDeployment180EC503c6b18b2c12cebcbdd43a88f8e25fbf78": {
    "Type": "AWS::ApiGateway::Deployment",
    "Properties": {
     "RestApiId": {
-     "Ref": "theDestinedLambdaAPIBAB2789B"
+     "Ref": "RestApi0C43BF4B"
     },
     "Description": "Automatically created by the RestApi construct"
    },
    "DependsOn": [
-    "theDestinedLambdaAPISendEventGETC3F11CCE",
-    "theDestinedLambdaAPISendEventC20585CF",
-    "theDestinedLambdaAPIErrorResponseModel5F76D2FC",
-    "theDestinedLambdaAPIResponseModel7D59062C"
+    "RestApiSendEventGET9ED8AC30",
+    "RestApiSendEvent02C4F03F",
+    "RestApiErrorResponseModelA6C9DD94",
+    "RestApiResponseModel056B6183"
    ]
   },
-  "theDestinedLambdaAPIDeploymentStageprodD67BDFB2": {
+  "RestApiDeploymentStageprod3855DE66": {
    "Type": "AWS::ApiGateway::Stage",
    "Properties": {
     "RestApiId": {
-     "Ref": "theDestinedLambdaAPIBAB2789B"
+     "Ref": "RestApi0C43BF4B"
     },
     "DeploymentId": {
-     "Ref": "theDestinedLambdaAPIDeploymentC364859E7dd6298e4581f75f4f4b4d743506bb76"
+     "Ref": "RestApiDeployment180EC503c6b18b2c12cebcbdd43a88f8e25fbf78"
     },
     "MethodSettings": [
      {
@@ -554,33 +554,33 @@
     "StageName": "prod"
    },
    "DependsOn": [
-    "theDestinedLambdaAPIAccount1A39207B"
+    "RestApiAccount7C83CF5A"
    ]
   },
-  "theDestinedLambdaAPISendEventC20585CF": {
+  "RestApiSendEvent02C4F03F": {
    "Type": "AWS::ApiGateway::Resource",
    "Properties": {
     "ParentId": {
      "Fn::GetAtt": [
-      "theDestinedLambdaAPIBAB2789B",
+      "RestApi0C43BF4B",
       "RootResourceId"
      ]
     },
     "PathPart": "SendEvent",
     "RestApiId": {
-     "Ref": "theDestinedLambdaAPIBAB2789B"
+     "Ref": "RestApi0C43BF4B"
     }
    }
   },
-  "theDestinedLambdaAPISendEventGETC3F11CCE": {
+  "RestApiSendEventGET9ED8AC30": {
    "Type": "AWS::ApiGateway::Method",
    "Properties": {
     "HttpMethod": "GET",
     "ResourceId": {
-     "Ref": "theDestinedLambdaAPISendEventC20585CF"
+     "Ref": "RestApiSendEvent02C4F03F"
     },
     "RestApiId": {
-     "Ref": "theDestinedLambdaAPIBAB2789B"
+     "Ref": "RestApi0C43BF4B"
     },
     "AuthorizationType": "NONE",
     "Integration": {
@@ -636,7 +636,7 @@
      {
       "ResponseModels": {
        "application/json": {
-        "Ref": "theDestinedLambdaAPIResponseModel7D59062C"
+        "Ref": "RestApiResponseModel056B6183"
        }
       },
       "ResponseParameters": {
@@ -649,7 +649,7 @@
      {
       "ResponseModels": {
        "application/json": {
-        "Ref": "theDestinedLambdaAPIErrorResponseModel5F76D2FC"
+        "Ref": "RestApiErrorResponseModelA6C9DD94"
        }
       },
       "ResponseParameters": {
@@ -662,11 +662,11 @@
     ]
    }
   },
-  "theDestinedLambdaAPIResponseModel7D59062C": {
+  "RestApiResponseModel056B6183": {
    "Type": "AWS::ApiGateway::Model",
    "Properties": {
     "RestApiId": {
-     "Ref": "theDestinedLambdaAPIBAB2789B"
+     "Ref": "RestApi0C43BF4B"
     },
     "ContentType": "application/json",
     "Name": "ResponseModel",
@@ -682,11 +682,11 @@
     }
    }
   },
-  "theDestinedLambdaAPIErrorResponseModel5F76D2FC": {
+  "RestApiErrorResponseModelA6C9DD94": {
    "Type": "AWS::ApiGateway::Model",
    "Properties": {
     "RestApiId": {
-     "Ref": "theDestinedLambdaAPIBAB2789B"
+     "Ref": "RestApi0C43BF4B"
     },
     "ContentType": "application/json",
     "Name": "ErrorResponseModel",
@@ -773,14 +773,14 @@
   }
  },
  "Outputs": {
-  "theDestinedLambdaAPIEndpointA1D03662": {
+  "RestApiEndpoint0551178A": {
    "Value": {
     "Fn::Join": [
      "",
      [
       "https://",
       {
-       "Ref": "theDestinedLambdaAPIBAB2789B"
+       "Ref": "RestApi0C43BF4B"
       },
       ".execute-api.",
       {
@@ -792,7 +792,7 @@
       },
       "/",
       {
-       "Ref": "theDestinedLambdaAPIDeploymentStageprodD67BDFB2"
+       "Ref": "RestApiDeploymentStageprod3855DE66"
       },
       "/"
      ]
