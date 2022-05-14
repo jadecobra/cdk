@@ -7,12 +7,22 @@ import well_architected_lambda
 
 class DestinedLambda(well_architected.WellArchitectedStack):
 
-    def create_lambda_function(self, on_failure=None, on_success=None, function_name=None, timeout=None, retry_attempts=2):
+    def create_lambda_function(
+        self, on_failure=None, on_success=None,
+        function_name=None, timeout=2, retry_attempts=2
+    ):
         return aws_cdk.aws_lambda.Function(
             self, function_name,
             runtime=aws_cdk.aws_lambda.Runtime.NODEJS_12_X,
             handler=f"{function_name}.handler",
             code=aws_cdk.aws_lambda.Code.from_asset(f"lambda_functions/{function_name}"),
+            retry_attempts=retry_attempts,
+            on_success=on_success,
+            on_failure=on_failure,
+            timeout=timeout if not timeout else aws_cdk.Duration.seconds(timeout)
+        )
+        return well_architected_lambda.LambdaFunctionConstruct(
+            self, function_name,
             retry_attempts=retry_attempts,
             on_success=on_success,
             on_failure=on_failure,
@@ -37,7 +47,8 @@ class DestinedLambda(well_architected.WellArchitectedStack):
                     function_name="destined_lambda",
                     retry_attempts=0,
                     on_success=aws_cdk.aws_lambda_destinations.EventBridgeDestination(event_bus=event_bus),
-                    on_failure=aws_cdk.aws_lambda_destinations.EventBridgeDestination(event_bus=event_bus)
+                    on_failure=aws_cdk.aws_lambda_destinations.EventBridgeDestination(event_bus=event_bus),
+                    timeout=None
                 )
             )
         )
@@ -66,7 +77,7 @@ class DestinedLambda(well_architected.WellArchitectedStack):
             aws_cdk.aws_events_targets.LambdaFunction(
                 self.create_lambda_function(
                     function_name="success_lambda",
-                    timeout=3
+                    # timeout=3
                 )
             )
         )
@@ -77,13 +88,6 @@ class DestinedLambda(well_architected.WellArchitectedStack):
         # Notice how it includes the message that came into destined lambda to make it fail so you have
         # everything you need to do retries or manually investigate
         ###
-        # failure_lambda = aws_cdk.aws_lambda.Function(
-        #     self, "failureLambda",
-        #     runtime=aws_cdk.aws_lambda.Runtime.NODEJS_12_X,
-        #     handler="failure.handler",
-        #     code=aws_cdk.aws_lambda.Code.from_asset("lambda_functions"),
-        #     timeout=aws_cdk.Duration.seconds(3)
-        # )
 
         ###
         # EventBridge Rule to send events to our failure lambda
@@ -104,7 +108,7 @@ class DestinedLambda(well_architected.WellArchitectedStack):
             aws_cdk.aws_events_targets.LambdaFunction(
                 self.create_lambda_function(
                     function_name="failure_lambda",
-                    timeout=3
+                    # timeout=3
                 )
             )
         )
