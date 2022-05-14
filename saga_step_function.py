@@ -201,14 +201,5 @@ class SagaStepFunction(well_architected.WellArchitectedStack):
                 'TABLE_NAME': table.table_name
             }
         ).lambda_function
-        # function = aws_lambda.Function(
-        #     scope, function_name,
-        #     runtime=aws_lambda.Runtime.PYTHON_3_9,
-        #     handler=f'{function_name}.handler',
-        #     code=aws_lambda.Code.from_asset(f"lambda_functions/{function_name}"),
-        #     environment={
-        #         'TABLE_NAME': table.table_name
-        #     }
-        # )
         table.grant_read_write_data(function)
         return function
