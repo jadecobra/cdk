@@ -9,8 +9,11 @@ class DestinedLambda(well_architected.WellArchitectedStack):
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        bus = aws_cdk.aws_events.EventBus(self, 'DestinedEventBus', event_bus_name='the-destined-lambda')
-        topic = aws_cdk.aws_sns.Topic(self, 'theDestinedLambdaTopic', display_name='The Destined Lambda CDK Pattern Topic')
+        event_bus = aws_cdk.aws_events.EventBus(
+            self, 'EventBus',
+            event_bus_name='the-destined-lambda',
+        )
+        sns_topic = aws_cdk.aws_sns.Topic(self, 'theDestinedLambdaTopic', display_name='The Destined Lambda CDK Pattern Topic')
 
         ###
         # Lambda configured with success and failure destinations
@@ -22,10 +25,10 @@ class DestinedLambda(well_architected.WellArchitectedStack):
             handler="destinedLambda.handler",
             code=aws_cdk.aws_lambda.Code.from_asset("lambda_functions/destined_lambda"),
             retry_attempts=0,
-            on_success=aws_cdk.aws_lambda_destinations.EventBridgeDestination(event_bus=bus),
-            on_failure=aws_cdk.aws_lambda_destinations.EventBridgeDestination(event_bus=bus)
+            on_success=aws_cdk.aws_lambda_destinations.EventBridgeDestination(event_bus=event_bus),
+            on_failure=aws_cdk.aws_lambda_destinations.EventBridgeDestination(event_bus=event_bus)
         )
-        topic.add_subscription(aws_cdk.aws_sns_subscriptions.LambdaSubscription(destined_lambda))
+        sns_topic.add_subscription(aws_cdk.aws_sns_subscriptions.LambdaSubscription(destined_lambda))
 
         ###
         # This is a lambda that will be called by onSuccess for destinedLambda
@@ -44,7 +47,7 @@ class DestinedLambda(well_architected.WellArchitectedStack):
         ###
         success_rule = aws_cdk.aws_events.Rule(
             self, 'successRule',
-            event_bus=bus,
+            event_bus=event_bus,
             description='all success events are caught here and logged centrally',
             event_pattern=aws_cdk.aws_events.EventPattern(
                 detail={
@@ -79,7 +82,7 @@ class DestinedLambda(well_architected.WellArchitectedStack):
         ###
         failure_rule = aws_cdk.aws_events.Rule(
             self, 'failureRule',
-            event_bus=bus,
+            event_bus=event_bus,
             description='all failure events are caught here and logged centrally',
             event_pattern=aws_cdk.aws_events.EventPattern(
                 detail={
@@ -98,7 +101,7 @@ class DestinedLambda(well_architected.WellArchitectedStack):
         ###
 
         gateway = aws_cdk.aws_apigateway.RestApi(
-            self, 'theDestinedLambdaAPI',
+            self, 'RestApi',
             deploy_options=aws_cdk.aws_apigateway.StageOptions(
                 metrics_enabled=True,
                 logging_level=aws_cdk.aws_apigateway.MethodLoggingLevel.INFO,
@@ -111,7 +114,7 @@ class DestinedLambda(well_architected.WellArchitectedStack):
             self, 'ApiGatewaySNSRole',
             assumed_by=aws_cdk.aws_iam.ServicePrincipal('apigateway.amazonaws.com')
         )
-        topic.grant_publish(api_gw_sns_role)
+        sns_topic.grant_publish(api_gw_sns_role)
 
         # shortening the lines of later code
         schema = aws_cdk.aws_apigateway.JsonSchema
@@ -142,7 +145,7 @@ class DestinedLambda(well_architected.WellArchitectedStack):
                         }))
 
         request_template = "Action=Publish&" + \
-                           "TargetArn=$util.urlEncode('" + topic.topic_arn + "')&" + \
+                           "TargetArn=$util.urlEncode('" + sns_topic.topic_arn + "')&" + \
                            "Message=please $input.params().querystring.get('mode')&" + \
                            "Version=2010-03-31"
 
