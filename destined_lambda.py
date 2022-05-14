@@ -16,7 +16,7 @@ class DestinedLambda(well_architected.WellArchitectedStack):
             retry_attempts=retry_attempts,
             on_success=on_success,
             on_failure=on_failure,
-            timeout=timeout
+            timeout=timeout if not timeout else aws_cdk.Duration.seconds(timeout)
         )
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
@@ -30,13 +30,6 @@ class DestinedLambda(well_architected.WellArchitectedStack):
             self, 'SNSTopic',
             display_name='The Destined Lambda CDK Pattern Topic'
         )
-
-        # destined_lambda = self.create_lambda_function(
-        #     function_name="destined_lambda",
-        #     retry_attempts=0,
-        #     on_success=aws_cdk.aws_lambda_destinations.EventBridgeDestination(event_bus=event_bus),
-        #     on_failure=aws_cdk.aws_lambda_destinations.EventBridgeDestination(event_bus=event_bus)
-        # )
 
         sns_topic.add_subscription(
             aws_cdk.aws_sns_subscriptions.LambdaSubscription(
@@ -53,12 +46,16 @@ class DestinedLambda(well_architected.WellArchitectedStack):
         # This is a lambda that will be called by onSuccess for destinedLambda
         # It simply prints the event it receives to the cloudwatch logs
         ###
-        success_lambda = aws_cdk.aws_lambda.Function(
-            self, "successLambda",
-            runtime=aws_cdk.aws_lambda.Runtime.NODEJS_12_X,
-            handler="success.handler",
-            code=aws_cdk.aws_lambda.Code.from_asset("lambda_functions"),
-            timeout=aws_cdk.Duration.seconds(3)
+        # success_lambda = aws_cdk.aws_lambda.Function(
+        #     self, "successLambda",
+        #     runtime=aws_cdk.aws_lambda.Runtime.NODEJS_12_X,
+        #     handler="success.handler",
+        #     code=aws_cdk.aws_lambda.Code.from_asset("lambda_functions"),
+        #     timeout=aws_cdk.Duration.seconds(3)
+        # )
+        success_lambda = self.create_lambda_function(
+            function_name="success_lambda",
+            timeout=3
         )
         ###
         # EventBridge Rule to send events to our success lambda
