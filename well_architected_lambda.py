@@ -11,6 +11,7 @@ class LambdaFunctionConstruct(well_architected.WellArchitectedConstruct):
         layers:list[str]=None,
         concurrent_executions=None,
         duration=60, vpc=None,
+        retry_attempts=None,
         **kwargs
     ) -> None:
         super().__init__(
@@ -30,6 +31,7 @@ class LambdaFunctionConstruct(well_architected.WellArchitectedConstruct):
             vpc=vpc,
             reserved_concurrent_executions=concurrent_executions,
             environment=environment_variables,
+            retry_attempts=retry_attempts,
         )
         self.create_invocations_error_greater_than_2_percent_alarm()
         self.create_invocation_longer_than_1_second_alarmration_alarm()
