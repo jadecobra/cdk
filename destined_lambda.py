@@ -31,27 +31,23 @@ class DestinedLambda(well_architected.WellArchitectedStack):
             display_name='The Destined Lambda CDK Pattern Topic'
         )
 
-        ###
-        # Lambda configured with success and failure destinations
-        # Note the actual lambda has no EventBridge code inside it
-        ###
-        # destined_lambda = aws_cdk.aws_lambda.Function(
-        #     self, "destinedLambda",
-        #     runtime=aws_cdk.aws_lambda.Runtime.NODEJS_12_X,
-        #     handler="destinedLambda.handler",
-        #     code=aws_cdk.aws_lambda.Code.from_asset("lambda_functions/destined_lambda"),
+        # destined_lambda = self.create_lambda_function(
+        #     function_name="destined_lambda",
         #     retry_attempts=0,
         #     on_success=aws_cdk.aws_lambda_destinations.EventBridgeDestination(event_bus=event_bus),
         #     on_failure=aws_cdk.aws_lambda_destinations.EventBridgeDestination(event_bus=event_bus)
         # )
-        destined_lambda = self.create_lambda_function(
-            function_name="destined_lambda",
-            retry_attempts=0,
-            on_success=aws_cdk.aws_lambda_destinations.EventBridgeDestination(event_bus=event_bus),
-            on_failure=aws_cdk.aws_lambda_destinations.EventBridgeDestination(event_bus=event_bus)
-        )
 
-        sns_topic.add_subscription(aws_cdk.aws_sns_subscriptions.LambdaSubscription(destined_lambda))
+        sns_topic.add_subscription(
+            aws_cdk.aws_sns_subscriptions.LambdaSubscription(
+                self.create_lambda_function(
+                    function_name="destined_lambda",
+                    retry_attempts=0,
+                    on_success=aws_cdk.aws_lambda_destinations.EventBridgeDestination(event_bus=event_bus),
+                    on_failure=aws_cdk.aws_lambda_destinations.EventBridgeDestination(event_bus=event_bus)
+                )
+            )
+        )
 
         ###
         # This is a lambda that will be called by onSuccess for destinedLambda
