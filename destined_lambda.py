@@ -9,7 +9,7 @@ class DestinedLambda(well_architected.WellArchitectedStack):
 
     def create_lambda_function(
         self, on_failure=None, on_success=None,
-        function_name=None, timeout=3, retry_attempts=2
+        function_name=None, duration=3, retry_attempts=2
     ):
         # return aws_cdk.aws_lambda.Function(
         #     self, function_name,
@@ -26,7 +26,7 @@ class DestinedLambda(well_architected.WellArchitectedStack):
             retry_attempts=retry_attempts,
             on_success=on_success,
             on_failure=on_failure,
-            timeout=timeout if not timeout else aws_cdk.Duration.seconds(timeout)
+            duration=duration
         )
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
@@ -48,7 +48,7 @@ class DestinedLambda(well_architected.WellArchitectedStack):
                     retry_attempts=0,
                     on_success=aws_cdk.aws_lambda_destinations.EventBridgeDestination(event_bus=event_bus),
                     on_failure=aws_cdk.aws_lambda_destinations.EventBridgeDestination(event_bus=event_bus),
-                    timeout=None
+                    duration=None
                 )
             )
         )
