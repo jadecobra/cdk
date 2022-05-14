@@ -2,9 +2,22 @@ import aws_cdk
 import constructs
 import json
 import well_architected
+import well_architected_lambda
 
 
 class DestinedLambda(well_architected.WellArchitectedStack):
+
+    def create_lambda_function(self, on_failure=None, on_success=None, function_name=None, timeout=None, retry_attempts=2):
+        return aws_cdk.aws_lambda.Function(
+            self, function_name,
+            runtime=aws_cdk.aws_lambda.Runtime.NODEJS_12_X,
+            handler=f"{function_name}.handler",
+            code=aws_cdk.aws_lambda.Code.from_asset(f"lambda_functions/{function_name}"),
+            retry_attempts=retry_attempts,
+            on_success=on_success,
+            on_failure=on_failure,
+            timeout=timeout
+        )
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
@@ -22,15 +35,22 @@ class DestinedLambda(well_architected.WellArchitectedStack):
         # Lambda configured with success and failure destinations
         # Note the actual lambda has no EventBridge code inside it
         ###
-        destined_lambda = aws_cdk.aws_lambda.Function(
-            self, "destinedLambda",
-            runtime=aws_cdk.aws_lambda.Runtime.NODEJS_12_X,
-            handler="destinedLambda.handler",
-            code=aws_cdk.aws_lambda.Code.from_asset("lambda_functions/destined_lambda"),
+        # destined_lambda = aws_cdk.aws_lambda.Function(
+        #     self, "destinedLambda",
+        #     runtime=aws_cdk.aws_lambda.Runtime.NODEJS_12_X,
+        #     handler="destinedLambda.handler",
+        #     code=aws_cdk.aws_lambda.Code.from_asset("lambda_functions/destined_lambda"),
+        #     retry_attempts=0,
+        #     on_success=aws_cdk.aws_lambda_destinations.EventBridgeDestination(event_bus=event_bus),
+        #     on_failure=aws_cdk.aws_lambda_destinations.EventBridgeDestination(event_bus=event_bus)
+        # )
+        destined_lambda = self.create_lambda_function(
+            function_name="destined_lambda",
             retry_attempts=0,
             on_success=aws_cdk.aws_lambda_destinations.EventBridgeDestination(event_bus=event_bus),
             on_failure=aws_cdk.aws_lambda_destinations.EventBridgeDestination(event_bus=event_bus)
         )
+
         sns_topic.add_subscription(aws_cdk.aws_sns_subscriptions.LambdaSubscription(destined_lambda))
 
         ###

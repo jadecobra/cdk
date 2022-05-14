@@ -12,7 +12,7 @@
     "Name": "the-destined-lambda"
    }
   },
-  "theDestinedLambdaTopic8F2C8FB6": {
+  "SNSTopicBCCC5DD8": {
    "Type": "AWS::SNS::Topic",
    "Properties": {
     "DisplayName": "The Destined Lambda CDK Pattern Topic"
@@ -158,7 +158,7 @@
     "MaximumRetryAttempts": 0
    }
   },
-  "destinedLambdaAllowInvokeDestinedLambdatheDestinedLambdaTopic6DB9768054248051": {
+  "destinedLambdaAllowInvokeDestinedLambdaSNSTopicC5F38E0660B46CDC": {
    "Type": "AWS::Lambda::Permission",
    "Properties": {
     "Action": "lambda:InvokeFunction",
@@ -170,16 +170,16 @@
     },
     "Principal": "sns.amazonaws.com",
     "SourceArn": {
-     "Ref": "theDestinedLambdaTopic8F2C8FB6"
+     "Ref": "SNSTopicBCCC5DD8"
     }
    }
   },
-  "destinedLambdatheDestinedLambdaTopic8E937C7F": {
+  "destinedLambdaSNSTopicC0D2EA68": {
    "Type": "AWS::SNS::Subscription",
    "Properties": {
     "Protocol": "lambda",
     "TopicArn": {
-     "Ref": "theDestinedLambdaTopic8F2C8FB6"
+     "Ref": "SNSTopicBCCC5DD8"
     },
     "Endpoint": {
      "Fn::GetAtt": [
@@ -518,7 +518,7 @@
     "RestApi0C43BF4B"
    ]
   },
-  "RestApiDeployment180EC503c6b18b2c12cebcbdd43a88f8e25fbf78": {
+  "RestApiDeployment180EC503fe0525134635a46830eaae8e9c13c779": {
    "Type": "AWS::ApiGateway::Deployment",
    "Properties": {
     "RestApiId": {
@@ -540,7 +540,7 @@
      "Ref": "RestApi0C43BF4B"
     },
     "DeploymentId": {
-     "Ref": "RestApiDeployment180EC503c6b18b2c12cebcbdd43a88f8e25fbf78"
+     "Ref": "RestApiDeployment180EC503fe0525134635a46830eaae8e9c13c779"
     },
     "MethodSettings": [
      {
@@ -622,7 +622,7 @@
         [
          "Action=Publish&TargetArn=$util.urlEncode('",
          {
-          "Ref": "theDestinedLambdaTopic8F2C8FB6"
+          "Ref": "SNSTopicBCCC5DD8"
          },
          "')&Message=please $input.params().querystring.get('mode')&Version=2010-03-31"
         ]
@@ -731,7 +731,7 @@
        "Action": "sns:Publish",
        "Effect": "Allow",
        "Resource": {
-        "Ref": "theDestinedLambdaTopic8F2C8FB6"
+        "Ref": "SNSTopicBCCC5DD8"
        }
       }
      ],
