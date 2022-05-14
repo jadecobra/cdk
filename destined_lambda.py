@@ -42,17 +42,6 @@ class DestinedLambda(well_architected.WellArchitectedStack):
             )
         )
 
-        ###
-        # This is a lambda that will be called by onSuccess for destinedLambda
-        # It simply prints the event it receives to the cloudwatch logs
-        ###
-        # success_lambda = aws_cdk.aws_lambda.Function(
-        #     self, "successLambda",
-        #     runtime=aws_cdk.aws_lambda.Runtime.NODEJS_12_X,
-        #     handler="success.handler",
-        #     code=aws_cdk.aws_lambda.Code.from_asset("lambda_functions"),
-        #     timeout=aws_cdk.Duration.seconds(3)
-        # )
         success_lambda = self.create_lambda_function(
             function_name="success_lambda",
             timeout=3
