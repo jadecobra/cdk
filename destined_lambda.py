@@ -9,7 +9,7 @@ class DestinedLambda(well_architected.WellArchitectedStack):
 
     def create_lambda_function(
         self, on_failure=None, on_success=None,
-        function_name=None, timeout=2, retry_attempts=2
+        function_name=None, timeout=3, retry_attempts=2
     ):
         return aws_cdk.aws_lambda.Function(
             self, function_name,
@@ -77,7 +77,6 @@ class DestinedLambda(well_architected.WellArchitectedStack):
             aws_cdk.aws_events_targets.LambdaFunction(
                 self.create_lambda_function(
                     function_name="success_lambda",
-                    # timeout=3
                 )
             )
         )
@@ -108,7 +107,6 @@ class DestinedLambda(well_architected.WellArchitectedStack):
             aws_cdk.aws_events_targets.LambdaFunction(
                 self.create_lambda_function(
                     function_name="failure_lambda",
-                    # timeout=3
                 )
             )
         )
