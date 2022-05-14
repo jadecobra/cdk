@@ -189,7 +189,7 @@
     }
    }
   },
-  "successLambdaServiceRole5B4C1628": {
+  "successlambdaServiceRole6B256543": {
    "Type": "AWS::IAM::Role",
    "Properties": {
     "AssumeRolePolicyDocument": {
@@ -220,12 +220,12 @@
     ]
    }
   },
-  "successLambdaA03E870D": {
+  "successlambda56266F96": {
    "Type": "AWS::Lambda::Function",
    "Properties": {
     "Code": {
      "S3Bucket": {
-      "Ref": "AssetParameters6f8b67768334509095eb3e5304caa5e172cad69532b15920323552a262bfca2dS3Bucket6579F980"
+      "Ref": "AssetParametersdd0eec858888b0a7484187fbcd3aff043553a724b1f5f5989a287cfa94c13bc2S3BucketFC8C1AAD"
      },
      "S3Key": {
       "Fn::Join": [
@@ -238,7 +238,7 @@
            "Fn::Split": [
             "||",
             {
-             "Ref": "AssetParameters6f8b67768334509095eb3e5304caa5e172cad69532b15920323552a262bfca2dS3VersionKey513796FF"
+             "Ref": "AssetParametersdd0eec858888b0a7484187fbcd3aff043553a724b1f5f5989a287cfa94c13bc2S3VersionKey8F030D75"
             }
            ]
           }
@@ -251,7 +251,7 @@
            "Fn::Split": [
             "||",
             {
-             "Ref": "AssetParameters6f8b67768334509095eb3e5304caa5e172cad69532b15920323552a262bfca2dS3VersionKey513796FF"
+             "Ref": "AssetParametersdd0eec858888b0a7484187fbcd3aff043553a724b1f5f5989a287cfa94c13bc2S3VersionKey8F030D75"
             }
            ]
           }
@@ -263,17 +263,27 @@
     },
     "Role": {
      "Fn::GetAtt": [
-      "successLambdaServiceRole5B4C1628",
+      "successlambdaServiceRole6B256543",
       "Arn"
      ]
     },
-    "Handler": "success.handler",
+    "Handler": "success_lambda.handler",
     "Runtime": "nodejs12.x",
     "Timeout": 3
    },
    "DependsOn": [
-    "successLambdaServiceRole5B4C1628"
+    "successlambdaServiceRole6B256543"
    ]
+  },
+  "successlambdaEventInvokeConfig9EF4B3AB": {
+   "Type": "AWS::Lambda::EventInvokeConfig",
+   "Properties": {
+    "FunctionName": {
+     "Ref": "successlambda56266F96"
+    },
+    "Qualifier": "$LATEST",
+    "MaximumRetryAttempts": 2
+   }
   },
   "successRuleE9E88056": {
    "Type": "AWS::Events::Rule",
@@ -304,7 +314,7 @@
      {
       "Arn": {
        "Fn::GetAtt": [
-        "successLambdaA03E870D",
+        "successlambda56266F96",
         "Arn"
        ]
       },
@@ -313,13 +323,13 @@
     ]
    }
   },
-  "successRuleAllowEventRuleDestinedLambdasuccessLambda13B48E2BD80191EA": {
+  "successRuleAllowEventRuleDestinedLambdasuccesslambdaCC82E9E0290E321E": {
    "Type": "AWS::Lambda::Permission",
    "Properties": {
     "Action": "lambda:InvokeFunction",
     "FunctionName": {
      "Fn::GetAtt": [
-      "successLambdaA03E870D",
+      "successlambda56266F96",
       "Arn"
      ]
     },
@@ -368,7 +378,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": {
-      "Ref": "AssetParameters6f8b67768334509095eb3e5304caa5e172cad69532b15920323552a262bfca2dS3Bucket6579F980"
+      "Ref": "AssetParametersd404512d8c298a0e943f7a62d1cb9950a04d0b94464a044b2b2f3890bb3d8d44S3Bucket1AC3D7ED"
      },
      "S3Key": {
       "Fn::Join": [
@@ -381,7 +391,7 @@
            "Fn::Split": [
             "||",
             {
-             "Ref": "AssetParameters6f8b67768334509095eb3e5304caa5e172cad69532b15920323552a262bfca2dS3VersionKey513796FF"
+             "Ref": "AssetParametersd404512d8c298a0e943f7a62d1cb9950a04d0b94464a044b2b2f3890bb3d8d44S3VersionKey3CBB632B"
             }
            ]
           }
@@ -394,7 +404,7 @@
            "Fn::Split": [
             "||",
             {
-             "Ref": "AssetParameters6f8b67768334509095eb3e5304caa5e172cad69532b15920323552a262bfca2dS3VersionKey513796FF"
+             "Ref": "AssetParametersd404512d8c298a0e943f7a62d1cb9950a04d0b94464a044b2b2f3890bb3d8d44S3VersionKey3CBB632B"
             }
            ]
           }
@@ -759,17 +769,29 @@
    "Type": "String",
    "Description": "Artifact hash for asset \"f47fa4e7e6b1d5913417c6467c61575075a617867274095a1e8f114b410a0791\""
   },
-  "AssetParameters6f8b67768334509095eb3e5304caa5e172cad69532b15920323552a262bfca2dS3Bucket6579F980": {
+  "AssetParametersdd0eec858888b0a7484187fbcd3aff043553a724b1f5f5989a287cfa94c13bc2S3BucketFC8C1AAD": {
    "Type": "String",
-   "Description": "S3 bucket for asset \"6f8b67768334509095eb3e5304caa5e172cad69532b15920323552a262bfca2d\""
+   "Description": "S3 bucket for asset \"dd0eec858888b0a7484187fbcd3aff043553a724b1f5f5989a287cfa94c13bc2\""
   },
-  "AssetParameters6f8b67768334509095eb3e5304caa5e172cad69532b15920323552a262bfca2dS3VersionKey513796FF": {
+  "AssetParametersdd0eec858888b0a7484187fbcd3aff043553a724b1f5f5989a287cfa94c13bc2S3VersionKey8F030D75": {
    "Type": "String",
-   "Description": "S3 key for asset version \"6f8b67768334509095eb3e5304caa5e172cad69532b15920323552a262bfca2d\""
+   "Description": "S3 key for asset version \"dd0eec858888b0a7484187fbcd3aff043553a724b1f5f5989a287cfa94c13bc2\""
   },
-  "AssetParameters6f8b67768334509095eb3e5304caa5e172cad69532b15920323552a262bfca2dArtifactHash52BEAF36": {
+  "AssetParametersdd0eec858888b0a7484187fbcd3aff043553a724b1f5f5989a287cfa94c13bc2ArtifactHash0FFBFAD2": {
    "Type": "String",
-   "Description": "Artifact hash for asset \"6f8b67768334509095eb3e5304caa5e172cad69532b15920323552a262bfca2d\""
+   "Description": "Artifact hash for asset \"dd0eec858888b0a7484187fbcd3aff043553a724b1f5f5989a287cfa94c13bc2\""
+  },
+  "AssetParametersd404512d8c298a0e943f7a62d1cb9950a04d0b94464a044b2b2f3890bb3d8d44S3Bucket1AC3D7ED": {
+   "Type": "String",
+   "Description": "S3 bucket for asset \"d404512d8c298a0e943f7a62d1cb9950a04d0b94464a044b2b2f3890bb3d8d44\""
+  },
+  "AssetParametersd404512d8c298a0e943f7a62d1cb9950a04d0b94464a044b2b2f3890bb3d8d44S3VersionKey3CBB632B": {
+   "Type": "String",
+   "Description": "S3 key for asset version \"d404512d8c298a0e943f7a62d1cb9950a04d0b94464a044b2b2f3890bb3d8d44\""
+  },
+  "AssetParametersd404512d8c298a0e943f7a62d1cb9950a04d0b94464a044b2b2f3890bb3d8d44ArtifactHash8D003B3F": {
+   "Type": "String",
+   "Description": "Artifact hash for asset \"d404512d8c298a0e943f7a62d1cb9950a04d0b94464a044b2b2f3890bb3d8d44\""
   }
  },
  "Outputs": {

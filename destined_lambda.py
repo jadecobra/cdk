@@ -42,10 +42,6 @@ class DestinedLambda(well_architected.WellArchitectedStack):
             )
         )
 
-        success_lambda = self.create_lambda_function(
-            function_name="success_lambda",
-            timeout=3
-        )
         ###
         # EventBridge Rule to send events to our success lambda
         # Notice how we can still do event filtering based on the json payload returned by the destined lambda
@@ -66,7 +62,14 @@ class DestinedLambda(well_architected.WellArchitectedStack):
                 }
             )
         )
-        success_rule.add_target(aws_cdk.aws_events_targets.LambdaFunction(success_lambda))
+        success_rule.add_target(
+            aws_cdk.aws_events_targets.LambdaFunction(
+                self.create_lambda_function(
+                    function_name="success_lambda",
+                    timeout=3
+                )
+            )
+        )
 
         ###
         # This is a lambda that will be called by onFailure for destinedLambda
