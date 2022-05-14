@@ -1,797 +1,803 @@
 {
-  "Resources": {
-    "DestinedEventBus14820B65": {
-      "Type": "AWS::Events::EventBus",
-      "Properties": {
-        "Name": "the-destined-lambda"
-      }
-    },
-    "theDestinedLambdaTopic8F2C8FB6": {
-      "Type": "AWS::SNS::Topic",
-      "Properties": {
-        "DisplayName": "The Destined Lambda CDK Pattern Topic"
-      }
-    },
-    "destinedLambdaServiceRole87608B6F": {
-      "Type": "AWS::IAM::Role",
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com"
-              }
-            }
-          ],
-          "Version": "2012-10-17"
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition"
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-              ]
-            ]
-          }
-        ]
-      }
-    },
-    "destinedLambdaServiceRoleDefaultPolicy9D15647D": {
-      "Type": "AWS::IAM::Policy",
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": "events:PutEvents",
-              "Effect": "Allow",
-              "Resource": {
-                "Fn::GetAtt": [
-                  "DestinedEventBus14820B65",
-                  "Arn"
-                ]
-              }
-            }
-          ],
-          "Version": "2012-10-17"
-        },
-        "PolicyName": "destinedLambdaServiceRoleDefaultPolicy9D15647D",
-        "Roles": [
-          {
-            "Ref": "destinedLambdaServiceRole87608B6F"
-          }
-        ]
-      }
-    },
-    "destinedLambda8DF776BB": {
-      "Type": "AWS::Lambda::Function",
-      "Properties": {
-        "Code": {
-          "S3Bucket": {
-            "Ref": "AssetParametersf47fa4e7e6b1d5913417c6467c61575075a617867274095a1e8f114b410a0791S3BucketD62F84EE"
-          },
-          "S3Key": {
-            "Fn::Join": [
-              "",
-              [
-                {
-                  "Fn::Select": [
-                    0,
-                    {
-                      "Fn::Split": [
-                        "||",
-                        {
-                          "Ref": "AssetParametersf47fa4e7e6b1d5913417c6467c61575075a617867274095a1e8f114b410a0791S3VersionKey75761FB5"
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "Fn::Select": [
-                    1,
-                    {
-                      "Fn::Split": [
-                        "||",
-                        {
-                          "Ref": "AssetParametersf47fa4e7e6b1d5913417c6467c61575075a617867274095a1e8f114b410a0791S3VersionKey75761FB5"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            ]
-          }
-        },
-        "Role": {
-          "Fn::GetAtt": [
-            "destinedLambdaServiceRole87608B6F",
-            "Arn"
-          ]
-        },
-        "Handler": "destinedLambda.handler",
-        "Runtime": "nodejs12.x"
-      },
-      "DependsOn": [
-        "destinedLambdaServiceRoleDefaultPolicy9D15647D",
-        "destinedLambdaServiceRole87608B6F"
-      ]
-    },
-    "destinedLambdaEventInvokeConfig3CA2AF7E": {
-      "Type": "AWS::Lambda::EventInvokeConfig",
-      "Properties": {
-        "FunctionName": {
-          "Ref": "destinedLambda8DF776BB"
-        },
-        "Qualifier": "$LATEST",
-        "DestinationConfig": {
-          "OnFailure": {
-            "Destination": {
-              "Fn::GetAtt": [
-                "DestinedEventBus14820B65",
-                "Arn"
-              ]
-            }
-          },
-          "OnSuccess": {
-            "Destination": {
-              "Fn::GetAtt": [
-                "DestinedEventBus14820B65",
-                "Arn"
-              ]
-            }
-          }
-        },
-        "MaximumRetryAttempts": 0
-      }
-    },
-    "destinedLambdaAllowInvokeDestinedLambdatheDestinedLambdaTopic6DB9768054248051": {
-      "Type": "AWS::Lambda::Permission",
-      "Properties": {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": {
-          "Fn::GetAtt": [
-            "destinedLambda8DF776BB",
-            "Arn"
-          ]
-        },
-        "Principal": "sns.amazonaws.com",
-        "SourceArn": {
-          "Ref": "theDestinedLambdaTopic8F2C8FB6"
-        }
-      }
-    },
-    "destinedLambdatheDestinedLambdaTopic8E937C7F": {
-      "Type": "AWS::SNS::Subscription",
-      "Properties": {
-        "Protocol": "lambda",
-        "TopicArn": {
-          "Ref": "theDestinedLambdaTopic8F2C8FB6"
-        },
-        "Endpoint": {
-          "Fn::GetAtt": [
-            "destinedLambda8DF776BB",
-            "Arn"
-          ]
-        }
-      }
-    },
-    "successLambdaServiceRole5B4C1628": {
-      "Type": "AWS::IAM::Role",
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com"
-              }
-            }
-          ],
-          "Version": "2012-10-17"
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition"
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-              ]
-            ]
-          }
-        ]
-      }
-    },
-    "successLambdaA03E870D": {
-      "Type": "AWS::Lambda::Function",
-      "Properties": {
-        "Code": {
-          "S3Bucket": {
-            "Ref": "AssetParameters6a789911902ea36d36895887b2e1e84a36019f2f04fd2dc94e0759c2ac4acaecS3BucketBFEF41F0"
-          },
-          "S3Key": {
-            "Fn::Join": [
-              "",
-              [
-                {
-                  "Fn::Select": [
-                    0,
-                    {
-                      "Fn::Split": [
-                        "||",
-                        {
-                          "Ref": "AssetParameters6a789911902ea36d36895887b2e1e84a36019f2f04fd2dc94e0759c2ac4acaecS3VersionKeyDE91D535"
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "Fn::Select": [
-                    1,
-                    {
-                      "Fn::Split": [
-                        "||",
-                        {
-                          "Ref": "AssetParameters6a789911902ea36d36895887b2e1e84a36019f2f04fd2dc94e0759c2ac4acaecS3VersionKeyDE91D535"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            ]
-          }
-        },
-        "Role": {
-          "Fn::GetAtt": [
-            "successLambdaServiceRole5B4C1628",
-            "Arn"
-          ]
-        },
-        "Handler": "success.handler",
-        "Runtime": "nodejs12.x",
-        "Timeout": 3
-      },
-      "DependsOn": [
-        "successLambdaServiceRole5B4C1628"
-      ]
-    },
-    "successRuleE9E88056": {
-      "Type": "AWS::Events::Rule",
-      "Properties": {
-        "Description": "all success events are caught here and logged centrally",
-        "EventBusName": {
-          "Ref": "DestinedEventBus14820B65"
-        },
-        "EventPattern": {
-          "detail": {
-            "requestContext": {
-              "condition": [
-                "Success"
-              ]
-            },
-            "responsePayload": {
-              "source": [
-                "cdkpatterns.the-destined-lambda"
-              ],
-              "action": [
-                "message"
-              ]
-            }
-          }
-        },
-        "State": "ENABLED",
-        "Targets": [
-          {
-            "Arn": {
-              "Fn::GetAtt": [
-                "successLambdaA03E870D",
-                "Arn"
-              ]
-            },
-            "Id": "Target0"
-          }
-        ]
-      }
-    },
-    "successRuleAllowEventRuleDestinedLambdasuccessLambda13B48E2BD80191EA": {
-      "Type": "AWS::Lambda::Permission",
-      "Properties": {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": {
-          "Fn::GetAtt": [
-            "successLambdaA03E870D",
-            "Arn"
-          ]
-        },
-        "Principal": "events.amazonaws.com",
-        "SourceArn": {
-          "Fn::GetAtt": [
-            "successRuleE9E88056",
-            "Arn"
-          ]
-        }
-      }
-    },
-    "failureLambdaServiceRoleE30368A3": {
-      "Type": "AWS::IAM::Role",
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com"
-              }
-            }
-          ],
-          "Version": "2012-10-17"
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition"
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-              ]
-            ]
-          }
-        ]
-      }
-    },
-    "failureLambda7FD808BA": {
-      "Type": "AWS::Lambda::Function",
-      "Properties": {
-        "Code": {
-          "S3Bucket": {
-            "Ref": "AssetParameters6a789911902ea36d36895887b2e1e84a36019f2f04fd2dc94e0759c2ac4acaecS3BucketBFEF41F0"
-          },
-          "S3Key": {
-            "Fn::Join": [
-              "",
-              [
-                {
-                  "Fn::Select": [
-                    0,
-                    {
-                      "Fn::Split": [
-                        "||",
-                        {
-                          "Ref": "AssetParameters6a789911902ea36d36895887b2e1e84a36019f2f04fd2dc94e0759c2ac4acaecS3VersionKeyDE91D535"
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "Fn::Select": [
-                    1,
-                    {
-                      "Fn::Split": [
-                        "||",
-                        {
-                          "Ref": "AssetParameters6a789911902ea36d36895887b2e1e84a36019f2f04fd2dc94e0759c2ac4acaecS3VersionKeyDE91D535"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            ]
-          }
-        },
-        "Role": {
-          "Fn::GetAtt": [
-            "failureLambdaServiceRoleE30368A3",
-            "Arn"
-          ]
-        },
-        "Handler": "failure.handler",
-        "Runtime": "nodejs12.x",
-        "Timeout": 3
-      },
-      "DependsOn": [
-        "failureLambdaServiceRoleE30368A3"
-      ]
-    },
-    "failureRule10D0B2E4": {
-      "Type": "AWS::Events::Rule",
-      "Properties": {
-        "Description": "all failure events are caught here and logged centrally",
-        "EventBusName": {
-          "Ref": "DestinedEventBus14820B65"
-        },
-        "EventPattern": {
-          "detail": {
-            "responsePayload": {
-              "errorType": [
-                "Error"
-              ]
-            }
-          }
-        },
-        "State": "ENABLED",
-        "Targets": [
-          {
-            "Arn": {
-              "Fn::GetAtt": [
-                "failureLambda7FD808BA",
-                "Arn"
-              ]
-            },
-            "Id": "Target0"
-          }
-        ]
-      }
-    },
-    "failureRuleAllowEventRuleDestinedLambdafailureLambda678883AA3951A111": {
-      "Type": "AWS::Lambda::Permission",
-      "Properties": {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": {
-          "Fn::GetAtt": [
-            "failureLambda7FD808BA",
-            "Arn"
-          ]
-        },
-        "Principal": "events.amazonaws.com",
-        "SourceArn": {
-          "Fn::GetAtt": [
-            "failureRule10D0B2E4",
-            "Arn"
-          ]
-        }
-      }
-    },
-    "theDestinedLambdaAPIBAB2789B": {
-      "Type": "AWS::ApiGateway::RestApi",
-      "Properties": {
-        "Name": "theDestinedLambdaAPI"
-      }
-    },
-    "theDestinedLambdaAPICloudWatchRoleCDF408DA": {
-      "Type": "AWS::IAM::Role",
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "apigateway.amazonaws.com"
-              }
-            }
-          ],
-          "Version": "2012-10-17"
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition"
-                },
-                ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
-              ]
-            ]
-          }
-        ]
-      }
-    },
-    "theDestinedLambdaAPIAccount1A39207B": {
-      "Type": "AWS::ApiGateway::Account",
-      "Properties": {
-        "CloudWatchRoleArn": {
-          "Fn::GetAtt": [
-            "theDestinedLambdaAPICloudWatchRoleCDF408DA",
-            "Arn"
-          ]
-        }
-      },
-      "DependsOn": [
-        "theDestinedLambdaAPIBAB2789B"
-      ]
-    },
-    "theDestinedLambdaAPIDeploymentC364859E7dd6298e4581f75f4f4b4d743506bb76": {
-      "Type": "AWS::ApiGateway::Deployment",
-      "Properties": {
-        "RestApiId": {
-          "Ref": "theDestinedLambdaAPIBAB2789B"
-        },
-        "Description": "Automatically created by the RestApi construct"
-      },
-      "DependsOn": [
-        "theDestinedLambdaAPISendEventGETC3F11CCE",
-        "theDestinedLambdaAPISendEventC20585CF",
-        "theDestinedLambdaAPIErrorResponseModel5F76D2FC",
-        "theDestinedLambdaAPIResponseModel7D59062C"
-      ]
-    },
-    "theDestinedLambdaAPIDeploymentStageprodD67BDFB2": {
-      "Type": "AWS::ApiGateway::Stage",
-      "Properties": {
-        "RestApiId": {
-          "Ref": "theDestinedLambdaAPIBAB2789B"
-        },
-        "DeploymentId": {
-          "Ref": "theDestinedLambdaAPIDeploymentC364859E7dd6298e4581f75f4f4b4d743506bb76"
-        },
-        "MethodSettings": [
-          {
-            "DataTraceEnabled": true,
-            "HttpMethod": "*",
-            "LoggingLevel": "INFO",
-            "MetricsEnabled": true,
-            "ResourcePath": "/*"
-          }
-        ],
-        "StageName": "prod"
-      },
-      "DependsOn": [
-        "theDestinedLambdaAPIAccount1A39207B"
-      ]
-    },
-    "theDestinedLambdaAPISendEventC20585CF": {
-      "Type": "AWS::ApiGateway::Resource",
-      "Properties": {
-        "ParentId": {
-          "Fn::GetAtt": [
-            "theDestinedLambdaAPIBAB2789B",
-            "RootResourceId"
-          ]
-        },
-        "PathPart": "SendEvent",
-        "RestApiId": {
-          "Ref": "theDestinedLambdaAPIBAB2789B"
-        }
-      }
-    },
-    "theDestinedLambdaAPISendEventGETC3F11CCE": {
-      "Type": "AWS::ApiGateway::Method",
-      "Properties": {
-        "HttpMethod": "GET",
-        "ResourceId": {
-          "Ref": "theDestinedLambdaAPISendEventC20585CF"
-        },
-        "RestApiId": {
-          "Ref": "theDestinedLambdaAPIBAB2789B"
-        },
-        "AuthorizationType": "NONE",
-        "Integration": {
-          "Credentials": {
-            "Fn::GetAtt": [
-              "ApiGatewaySNSRole1BAAAE75",
-              "Arn"
-            ]
-          },
-          "IntegrationHttpMethod": "POST",
-          "IntegrationResponses": [
-            {
-              "ResponseTemplates": {
-                "application/json": "{\"message\": \"Message added to SNS topic\"}"
-              },
-              "StatusCode": "200"
-            },
-            {
-              "ResponseParameters": {
-                "method.response.header.Content-Type": "'application/json'",
-                "method.response.header.Access-Control-Allow-Origin": "'*'",
-                "method.response.header.Access-Control-Allow-Credentials": "'true'"
-              },
-              "ResponseTemplates": {
-                "application/json": "{\"state\":\"error\",\"message\":\"$util.escapeJavaScript($input.path('$.errorMessage'))\"}"
-              },
-              "SelectionPattern": "^\\[Error\\].*",
-              "StatusCode": "400"
-            }
-          ],
-          "PassthroughBehavior": "NEVER",
-          "RequestParameters": {
-            "integration.request.header.Content-Type": "'application/x-www-form-urlencoded'"
-          },
-          "RequestTemplates": {
-            "application/json": {
-              "Fn::Join": [
-                "",
-                [
-                  "Action=Publish&TargetArn=$util.urlEncode('",
-                  {
-                    "Ref": "theDestinedLambdaTopic8F2C8FB6"
-                  },
-                  "')&Message=please $input.params().querystring.get('mode')&Version=2010-03-31"
-                ]
-              ]
-            }
-          },
-          "Type": "AWS",
-          "Uri": "arn:aws:apigateway:us-east-1:sns:path//"
-        },
-        "MethodResponses": [
-          {
-            "ResponseModels": {
-              "application/json": {
-                "Ref": "theDestinedLambdaAPIResponseModel7D59062C"
-              }
-            },
-            "ResponseParameters": {
-              "method.response.header.Content-Type": true,
-              "method.response.header.Access-Control-Allow-Origin": true,
-              "method.response.header.Access-Control-Allow-Credentials": true
-            },
-            "StatusCode": "200"
-          },
-          {
-            "ResponseModels": {
-              "application/json": {
-                "Ref": "theDestinedLambdaAPIErrorResponseModel5F76D2FC"
-              }
-            },
-            "ResponseParameters": {
-              "method.response.header.Content-Type": true,
-              "method.response.header.Access-Control-Allow-Origin": true,
-              "method.response.header.Access-Control-Allow-Credentials": true
-            },
-            "StatusCode": "400"
-          }
-        ]
-      }
-    },
-    "theDestinedLambdaAPIResponseModel7D59062C": {
-      "Type": "AWS::ApiGateway::Model",
-      "Properties": {
-        "RestApiId": {
-          "Ref": "theDestinedLambdaAPIBAB2789B"
-        },
-        "ContentType": "application/json",
-        "Name": "ResponseModel",
-        "Schema": {
-          "properties": {
-            "message": {
-              "type": "string"
-            }
-          },
-          "$schema": "http://json-schema.org/draft-04/schema#",
-          "title": "pollResponse",
-          "type": "object"
-        }
-      }
-    },
-    "theDestinedLambdaAPIErrorResponseModel5F76D2FC": {
-      "Type": "AWS::ApiGateway::Model",
-      "Properties": {
-        "RestApiId": {
-          "Ref": "theDestinedLambdaAPIBAB2789B"
-        },
-        "ContentType": "application/json",
-        "Name": "ErrorResponseModel",
-        "Schema": {
-          "properties": {
-            "state": {
-              "type": "string"
-            },
-            "message": {
-              "type": "string"
-            }
-          },
-          "$schema": "http://json-schema.org/draft-04/schema#",
-          "title": "errorResponse",
-          "type": "object"
-        }
-      }
-    },
-    "ApiGatewaySNSRole1BAAAE75": {
-      "Type": "AWS::IAM::Role",
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "apigateway.amazonaws.com"
-              }
-            }
-          ],
-          "Version": "2012-10-17"
-        }
-      }
-    },
-    "ApiGatewaySNSRoleDefaultPolicyCA5D0260": {
-      "Type": "AWS::IAM::Policy",
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sns:Publish",
-              "Effect": "Allow",
-              "Resource": {
-                "Ref": "theDestinedLambdaTopic8F2C8FB6"
-              }
-            }
-          ],
-          "Version": "2012-10-17"
-        },
-        "PolicyName": "ApiGatewaySNSRoleDefaultPolicyCA5D0260",
-        "Roles": [
-          {
-            "Ref": "ApiGatewaySNSRole1BAAAE75"
-          }
-        ]
-      }
-    }
+ "Resources": {
+  "SnsTopic2C1570A4": {
+   "Type": "AWS::SNS::Topic",
+   "Properties": {
+    "DisplayName": "DestinedLambdaErrorTopic"
+   }
   },
-  "Parameters": {
-    "AssetParametersf47fa4e7e6b1d5913417c6467c61575075a617867274095a1e8f114b410a0791S3BucketD62F84EE": {
-      "Type": "String",
-      "Description": "S3 bucket for asset \"f47fa4e7e6b1d5913417c6467c61575075a617867274095a1e8f114b410a0791\""
-    },
-    "AssetParametersf47fa4e7e6b1d5913417c6467c61575075a617867274095a1e8f114b410a0791S3VersionKey75761FB5": {
-      "Type": "String",
-      "Description": "S3 key for asset version \"f47fa4e7e6b1d5913417c6467c61575075a617867274095a1e8f114b410a0791\""
-    },
-    "AssetParametersf47fa4e7e6b1d5913417c6467c61575075a617867274095a1e8f114b410a0791ArtifactHashFB2D3477": {
-      "Type": "String",
-      "Description": "Artifact hash for asset \"f47fa4e7e6b1d5913417c6467c61575075a617867274095a1e8f114b410a0791\""
-    },
-    "AssetParameters6a789911902ea36d36895887b2e1e84a36019f2f04fd2dc94e0759c2ac4acaecS3BucketBFEF41F0": {
-      "Type": "String",
-      "Description": "S3 bucket for asset \"6a789911902ea36d36895887b2e1e84a36019f2f04fd2dc94e0759c2ac4acaec\""
-    },
-    "AssetParameters6a789911902ea36d36895887b2e1e84a36019f2f04fd2dc94e0759c2ac4acaecS3VersionKeyDE91D535": {
-      "Type": "String",
-      "Description": "S3 key for asset version \"6a789911902ea36d36895887b2e1e84a36019f2f04fd2dc94e0759c2ac4acaec\""
-    },
-    "AssetParameters6a789911902ea36d36895887b2e1e84a36019f2f04fd2dc94e0759c2ac4acaecArtifactHash8FFF6FB4": {
-      "Type": "String",
-      "Description": "Artifact hash for asset \"6a789911902ea36d36895887b2e1e84a36019f2f04fd2dc94e0759c2ac4acaec\""
-    }
+  "DestinedEventBus14820B65": {
+   "Type": "AWS::Events::EventBus",
+   "Properties": {
+    "Name": "the-destined-lambda"
+   }
   },
-  "Outputs": {
-    "theDestinedLambdaAPIEndpointA1D03662": {
-      "Value": {
-        "Fn::Join": [
-          "",
-          [
-            "https://",
-            {
-              "Ref": "theDestinedLambdaAPIBAB2789B"
-            },
-            ".execute-api.",
-            {
-              "Ref": "AWS::Region"
-            },
-            ".",
-            {
-              "Ref": "AWS::URLSuffix"
-            },
-            "/",
-            {
-              "Ref": "theDestinedLambdaAPIDeploymentStageprodD67BDFB2"
-            },
-            "/"
-          ]
-        ]
+  "theDestinedLambdaTopic8F2C8FB6": {
+   "Type": "AWS::SNS::Topic",
+   "Properties": {
+    "DisplayName": "The Destined Lambda CDK Pattern Topic"
+   }
+  },
+  "destinedLambdaServiceRole87608B6F": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
       }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   }
+  },
+  "destinedLambdaServiceRoleDefaultPolicy9D15647D": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "events:PutEvents",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "DestinedEventBus14820B65",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "destinedLambdaServiceRoleDefaultPolicy9D15647D",
+    "Roles": [
+     {
+      "Ref": "destinedLambdaServiceRole87608B6F"
+     }
+    ]
+   }
+  },
+  "destinedLambda8DF776BB": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Ref": "AssetParametersf47fa4e7e6b1d5913417c6467c61575075a617867274095a1e8f114b410a0791S3BucketD62F84EE"
+     },
+     "S3Key": {
+      "Fn::Join": [
+       "",
+       [
+        {
+         "Fn::Select": [
+          0,
+          {
+           "Fn::Split": [
+            "||",
+            {
+             "Ref": "AssetParametersf47fa4e7e6b1d5913417c6467c61575075a617867274095a1e8f114b410a0791S3VersionKey75761FB5"
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "Fn::Select": [
+          1,
+          {
+           "Fn::Split": [
+            "||",
+            {
+             "Ref": "AssetParametersf47fa4e7e6b1d5913417c6467c61575075a617867274095a1e8f114b410a0791S3VersionKey75761FB5"
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      ]
+     }
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "destinedLambdaServiceRole87608B6F",
+      "Arn"
+     ]
+    },
+    "Handler": "destinedLambda.handler",
+    "Runtime": "nodejs12.x"
+   },
+   "DependsOn": [
+    "destinedLambdaServiceRoleDefaultPolicy9D15647D",
+    "destinedLambdaServiceRole87608B6F"
+   ]
+  },
+  "destinedLambdaEventInvokeConfig3CA2AF7E": {
+   "Type": "AWS::Lambda::EventInvokeConfig",
+   "Properties": {
+    "FunctionName": {
+     "Ref": "destinedLambda8DF776BB"
+    },
+    "Qualifier": "$LATEST",
+    "DestinationConfig": {
+     "OnFailure": {
+      "Destination": {
+       "Fn::GetAtt": [
+        "DestinedEventBus14820B65",
+        "Arn"
+       ]
+      }
+     },
+     "OnSuccess": {
+      "Destination": {
+       "Fn::GetAtt": [
+        "DestinedEventBus14820B65",
+        "Arn"
+       ]
+      }
+     }
+    },
+    "MaximumRetryAttempts": 0
+   }
+  },
+  "destinedLambdaAllowInvokeDestinedLambdatheDestinedLambdaTopic6DB9768054248051": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "destinedLambda8DF776BB",
+      "Arn"
+     ]
+    },
+    "Principal": "sns.amazonaws.com",
+    "SourceArn": {
+     "Ref": "theDestinedLambdaTopic8F2C8FB6"
     }
+   }
+  },
+  "destinedLambdatheDestinedLambdaTopic8E937C7F": {
+   "Type": "AWS::SNS::Subscription",
+   "Properties": {
+    "Protocol": "lambda",
+    "TopicArn": {
+     "Ref": "theDestinedLambdaTopic8F2C8FB6"
+    },
+    "Endpoint": {
+     "Fn::GetAtt": [
+      "destinedLambda8DF776BB",
+      "Arn"
+     ]
+    }
+   }
+  },
+  "successLambdaServiceRole5B4C1628": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   }
+  },
+  "successLambdaA03E870D": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Ref": "AssetParameters6f8b67768334509095eb3e5304caa5e172cad69532b15920323552a262bfca2dS3Bucket6579F980"
+     },
+     "S3Key": {
+      "Fn::Join": [
+       "",
+       [
+        {
+         "Fn::Select": [
+          0,
+          {
+           "Fn::Split": [
+            "||",
+            {
+             "Ref": "AssetParameters6f8b67768334509095eb3e5304caa5e172cad69532b15920323552a262bfca2dS3VersionKey513796FF"
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "Fn::Select": [
+          1,
+          {
+           "Fn::Split": [
+            "||",
+            {
+             "Ref": "AssetParameters6f8b67768334509095eb3e5304caa5e172cad69532b15920323552a262bfca2dS3VersionKey513796FF"
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      ]
+     }
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "successLambdaServiceRole5B4C1628",
+      "Arn"
+     ]
+    },
+    "Handler": "success.handler",
+    "Runtime": "nodejs12.x",
+    "Timeout": 3
+   },
+   "DependsOn": [
+    "successLambdaServiceRole5B4C1628"
+   ]
+  },
+  "successRuleE9E88056": {
+   "Type": "AWS::Events::Rule",
+   "Properties": {
+    "Description": "all success events are caught here and logged centrally",
+    "EventBusName": {
+     "Ref": "DestinedEventBus14820B65"
+    },
+    "EventPattern": {
+     "detail": {
+      "requestContext": {
+       "condition": [
+        "Success"
+       ]
+      },
+      "responsePayload": {
+       "source": [
+        "cdkpatterns.the-destined-lambda"
+       ],
+       "action": [
+        "message"
+       ]
+      }
+     }
+    },
+    "State": "ENABLED",
+    "Targets": [
+     {
+      "Arn": {
+       "Fn::GetAtt": [
+        "successLambdaA03E870D",
+        "Arn"
+       ]
+      },
+      "Id": "Target0"
+     }
+    ]
+   }
+  },
+  "successRuleAllowEventRuleDestinedLambdasuccessLambda13B48E2BD80191EA": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "successLambdaA03E870D",
+      "Arn"
+     ]
+    },
+    "Principal": "events.amazonaws.com",
+    "SourceArn": {
+     "Fn::GetAtt": [
+      "successRuleE9E88056",
+      "Arn"
+     ]
+    }
+   }
+  },
+  "failureLambdaServiceRoleE30368A3": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   }
+  },
+  "failureLambda7FD808BA": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Ref": "AssetParameters6f8b67768334509095eb3e5304caa5e172cad69532b15920323552a262bfca2dS3Bucket6579F980"
+     },
+     "S3Key": {
+      "Fn::Join": [
+       "",
+       [
+        {
+         "Fn::Select": [
+          0,
+          {
+           "Fn::Split": [
+            "||",
+            {
+             "Ref": "AssetParameters6f8b67768334509095eb3e5304caa5e172cad69532b15920323552a262bfca2dS3VersionKey513796FF"
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "Fn::Select": [
+          1,
+          {
+           "Fn::Split": [
+            "||",
+            {
+             "Ref": "AssetParameters6f8b67768334509095eb3e5304caa5e172cad69532b15920323552a262bfca2dS3VersionKey513796FF"
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      ]
+     }
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "failureLambdaServiceRoleE30368A3",
+      "Arn"
+     ]
+    },
+    "Handler": "failure.handler",
+    "Runtime": "nodejs12.x",
+    "Timeout": 3
+   },
+   "DependsOn": [
+    "failureLambdaServiceRoleE30368A3"
+   ]
+  },
+  "failureRule10D0B2E4": {
+   "Type": "AWS::Events::Rule",
+   "Properties": {
+    "Description": "all failure events are caught here and logged centrally",
+    "EventBusName": {
+     "Ref": "DestinedEventBus14820B65"
+    },
+    "EventPattern": {
+     "detail": {
+      "responsePayload": {
+       "errorType": [
+        "Error"
+       ]
+      }
+     }
+    },
+    "State": "ENABLED",
+    "Targets": [
+     {
+      "Arn": {
+       "Fn::GetAtt": [
+        "failureLambda7FD808BA",
+        "Arn"
+       ]
+      },
+      "Id": "Target0"
+     }
+    ]
+   }
+  },
+  "failureRuleAllowEventRuleDestinedLambdafailureLambda678883AA3951A111": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "failureLambda7FD808BA",
+      "Arn"
+     ]
+    },
+    "Principal": "events.amazonaws.com",
+    "SourceArn": {
+     "Fn::GetAtt": [
+      "failureRule10D0B2E4",
+      "Arn"
+     ]
+    }
+   }
+  },
+  "theDestinedLambdaAPIBAB2789B": {
+   "Type": "AWS::ApiGateway::RestApi",
+   "Properties": {
+    "Name": "theDestinedLambdaAPI"
+   }
+  },
+  "theDestinedLambdaAPICloudWatchRoleCDF408DA": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "apigateway.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+       ]
+      ]
+     }
+    ]
+   }
+  },
+  "theDestinedLambdaAPIAccount1A39207B": {
+   "Type": "AWS::ApiGateway::Account",
+   "Properties": {
+    "CloudWatchRoleArn": {
+     "Fn::GetAtt": [
+      "theDestinedLambdaAPICloudWatchRoleCDF408DA",
+      "Arn"
+     ]
+    }
+   },
+   "DependsOn": [
+    "theDestinedLambdaAPIBAB2789B"
+   ]
+  },
+  "theDestinedLambdaAPIDeploymentC364859E7dd6298e4581f75f4f4b4d743506bb76": {
+   "Type": "AWS::ApiGateway::Deployment",
+   "Properties": {
+    "RestApiId": {
+     "Ref": "theDestinedLambdaAPIBAB2789B"
+    },
+    "Description": "Automatically created by the RestApi construct"
+   },
+   "DependsOn": [
+    "theDestinedLambdaAPISendEventGETC3F11CCE",
+    "theDestinedLambdaAPISendEventC20585CF",
+    "theDestinedLambdaAPIErrorResponseModel5F76D2FC",
+    "theDestinedLambdaAPIResponseModel7D59062C"
+   ]
+  },
+  "theDestinedLambdaAPIDeploymentStageprodD67BDFB2": {
+   "Type": "AWS::ApiGateway::Stage",
+   "Properties": {
+    "RestApiId": {
+     "Ref": "theDestinedLambdaAPIBAB2789B"
+    },
+    "DeploymentId": {
+     "Ref": "theDestinedLambdaAPIDeploymentC364859E7dd6298e4581f75f4f4b4d743506bb76"
+    },
+    "MethodSettings": [
+     {
+      "DataTraceEnabled": true,
+      "HttpMethod": "*",
+      "LoggingLevel": "INFO",
+      "MetricsEnabled": true,
+      "ResourcePath": "/*"
+     }
+    ],
+    "StageName": "prod"
+   },
+   "DependsOn": [
+    "theDestinedLambdaAPIAccount1A39207B"
+   ]
+  },
+  "theDestinedLambdaAPISendEventC20585CF": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "theDestinedLambdaAPIBAB2789B",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "SendEvent",
+    "RestApiId": {
+     "Ref": "theDestinedLambdaAPIBAB2789B"
+    }
+   }
+  },
+  "theDestinedLambdaAPISendEventGETC3F11CCE": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "HttpMethod": "GET",
+    "ResourceId": {
+     "Ref": "theDestinedLambdaAPISendEventC20585CF"
+    },
+    "RestApiId": {
+     "Ref": "theDestinedLambdaAPIBAB2789B"
+    },
+    "AuthorizationType": "NONE",
+    "Integration": {
+     "Credentials": {
+      "Fn::GetAtt": [
+       "ApiGatewaySNSRole1BAAAE75",
+       "Arn"
+      ]
+     },
+     "IntegrationHttpMethod": "POST",
+     "IntegrationResponses": [
+      {
+       "ResponseTemplates": {
+        "application/json": "{\"message\": \"Message added to SNS topic\"}"
+       },
+       "StatusCode": "200"
+      },
+      {
+       "ResponseParameters": {
+        "method.response.header.Content-Type": "'application/json'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'"
+       },
+       "ResponseTemplates": {
+        "application/json": "{\"state\":\"error\",\"message\":\"$util.escapeJavaScript($input.path('$.errorMessage'))\"}"
+       },
+       "SelectionPattern": "^\\[Error\\].*",
+       "StatusCode": "400"
+      }
+     ],
+     "PassthroughBehavior": "NEVER",
+     "RequestParameters": {
+      "integration.request.header.Content-Type": "'application/x-www-form-urlencoded'"
+     },
+     "RequestTemplates": {
+      "application/json": {
+       "Fn::Join": [
+        "",
+        [
+         "Action=Publish&TargetArn=$util.urlEncode('",
+         {
+          "Ref": "theDestinedLambdaTopic8F2C8FB6"
+         },
+         "')&Message=please $input.params().querystring.get('mode')&Version=2010-03-31"
+        ]
+       ]
+      }
+     },
+     "Type": "AWS",
+     "Uri": "arn:aws:apigateway:us-east-1:sns:path//"
+    },
+    "MethodResponses": [
+     {
+      "ResponseModels": {
+       "application/json": {
+        "Ref": "theDestinedLambdaAPIResponseModel7D59062C"
+       }
+      },
+      "ResponseParameters": {
+       "method.response.header.Content-Type": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Credentials": true
+      },
+      "StatusCode": "200"
+     },
+     {
+      "ResponseModels": {
+       "application/json": {
+        "Ref": "theDestinedLambdaAPIErrorResponseModel5F76D2FC"
+       }
+      },
+      "ResponseParameters": {
+       "method.response.header.Content-Type": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Credentials": true
+      },
+      "StatusCode": "400"
+     }
+    ]
+   }
+  },
+  "theDestinedLambdaAPIResponseModel7D59062C": {
+   "Type": "AWS::ApiGateway::Model",
+   "Properties": {
+    "RestApiId": {
+     "Ref": "theDestinedLambdaAPIBAB2789B"
+    },
+    "ContentType": "application/json",
+    "Name": "ResponseModel",
+    "Schema": {
+     "properties": {
+      "message": {
+       "type": "string"
+      }
+     },
+     "$schema": "http://json-schema.org/draft-04/schema#",
+     "title": "pollResponse",
+     "type": "object"
+    }
+   }
+  },
+  "theDestinedLambdaAPIErrorResponseModel5F76D2FC": {
+   "Type": "AWS::ApiGateway::Model",
+   "Properties": {
+    "RestApiId": {
+     "Ref": "theDestinedLambdaAPIBAB2789B"
+    },
+    "ContentType": "application/json",
+    "Name": "ErrorResponseModel",
+    "Schema": {
+     "properties": {
+      "state": {
+       "type": "string"
+      },
+      "message": {
+       "type": "string"
+      }
+     },
+     "$schema": "http://json-schema.org/draft-04/schema#",
+     "title": "errorResponse",
+     "type": "object"
+    }
+   }
+  },
+  "ApiGatewaySNSRole1BAAAE75": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "apigateway.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   }
+  },
+  "ApiGatewaySNSRoleDefaultPolicyCA5D0260": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sns:Publish",
+       "Effect": "Allow",
+       "Resource": {
+        "Ref": "theDestinedLambdaTopic8F2C8FB6"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "ApiGatewaySNSRoleDefaultPolicyCA5D0260",
+    "Roles": [
+     {
+      "Ref": "ApiGatewaySNSRole1BAAAE75"
+     }
+    ]
+   }
   }
+ },
+ "Parameters": {
+  "AssetParametersf47fa4e7e6b1d5913417c6467c61575075a617867274095a1e8f114b410a0791S3BucketD62F84EE": {
+   "Type": "String",
+   "Description": "S3 bucket for asset \"f47fa4e7e6b1d5913417c6467c61575075a617867274095a1e8f114b410a0791\""
+  },
+  "AssetParametersf47fa4e7e6b1d5913417c6467c61575075a617867274095a1e8f114b410a0791S3VersionKey75761FB5": {
+   "Type": "String",
+   "Description": "S3 key for asset version \"f47fa4e7e6b1d5913417c6467c61575075a617867274095a1e8f114b410a0791\""
+  },
+  "AssetParametersf47fa4e7e6b1d5913417c6467c61575075a617867274095a1e8f114b410a0791ArtifactHashFB2D3477": {
+   "Type": "String",
+   "Description": "Artifact hash for asset \"f47fa4e7e6b1d5913417c6467c61575075a617867274095a1e8f114b410a0791\""
+  },
+  "AssetParameters6f8b67768334509095eb3e5304caa5e172cad69532b15920323552a262bfca2dS3Bucket6579F980": {
+   "Type": "String",
+   "Description": "S3 bucket for asset \"6f8b67768334509095eb3e5304caa5e172cad69532b15920323552a262bfca2d\""
+  },
+  "AssetParameters6f8b67768334509095eb3e5304caa5e172cad69532b15920323552a262bfca2dS3VersionKey513796FF": {
+   "Type": "String",
+   "Description": "S3 key for asset version \"6f8b67768334509095eb3e5304caa5e172cad69532b15920323552a262bfca2d\""
+  },
+  "AssetParameters6f8b67768334509095eb3e5304caa5e172cad69532b15920323552a262bfca2dArtifactHash52BEAF36": {
+   "Type": "String",
+   "Description": "Artifact hash for asset \"6f8b67768334509095eb3e5304caa5e172cad69532b15920323552a262bfca2d\""
+  }
+ },
+ "Outputs": {
+  "theDestinedLambdaAPIEndpointA1D03662": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "theDestinedLambdaAPIBAB2789B"
+      },
+      ".execute-api.",
+      {
+       "Ref": "AWS::Region"
+      },
+      ".",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "theDestinedLambdaAPIDeploymentStageprodD67BDFB2"
+      },
+      "/"
+     ]
+    ]
+   }
+  }
+ }
 }

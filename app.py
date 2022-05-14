@@ -42,7 +42,7 @@ class WellArchitected(aws_cdk.App):
 
         # big_fan.BigFan(self, "BigFan")
 
-        # destined_lambda.DestinedLambda(self, "DestinedLambda")
+        destined_lambda.DestinedLambda(self, "DestinedLambda")
 
         # event_bridge_atm.EventBridgeAtm(self, "EventBridgeAtm")
         # event_bridge_circuit_breaker.EventBridgeCircuitBreaker(
@@ -55,8 +55,7 @@ class WellArchitected(aws_cdk.App):
         # lambda_trilogy.single_purpose_lambda.TheSinglePurposeFunctionStack(self, "SinglePurposeLambda", )
         # lambda_circuit_breaker.LambdaCircuitBreaker(self, "LambdaCircuitBreaker", )
 
-        # rds_proxy.RdsProxy(self, "RdsProxy", )
-        saga_step_function.SagaStepFunction(self, "SagaStepFunction", )
+        saga_step_function.SagaStepFunction(self, "SagaStepFunction",)
         # lambda_power_tuner.LambdaPowerTuner(self, "LambdaPowerTuner", )
         simple_graphql_service.SimpleGraphQlService(self, "SimpleGraphqlService", )
         api_dynamodb.ApiDynamodb(
