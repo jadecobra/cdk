@@ -30,17 +30,16 @@ class DestinedLambda(well_architected.WellArchitectedStack):
             self, 'SNSTopic',
             display_name='The Destined Lambda CDK Pattern Topic'
         )
-        test = self.create_lambda_function(
-            function_name="destined_lambda",
-            retry_attempts=0,
-            on_success=aws_cdk.aws_lambda_destinations.EventBridgeDestination(event_bus=event_bus),
-            on_failure=aws_cdk.aws_lambda_destinations.EventBridgeDestination(event_bus=event_bus),
-            duration=None,
-        )
 
         sns_topic.add_subscription(
             aws_cdk.aws_sns_subscriptions.LambdaSubscription(
-                test
+                self.create_lambda_function(
+                    function_name="destined_lambda",
+                    retry_attempts=0,
+                    on_success=aws_cdk.aws_lambda_destinations.EventBridgeDestination(event_bus=event_bus),
+                    on_failure=aws_cdk.aws_lambda_destinations.EventBridgeDestination(event_bus=event_bus),
+                    duration=None,
+                )
             )
         )
 
