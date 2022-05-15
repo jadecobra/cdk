@@ -140,17 +140,11 @@ class DestinedLambda(well_architected.WellArchitectedStack):
                             'message': schema(type=schema_type.STRING)
                         }))
 
-        request_template = "Action=Publish&" + \
-                           "TargetArn=$util.urlEncode('" + sns_topic.topic_arn + "')&" + \
-                           "Message=please $input.params().querystring.get('mode')&" + \
-                           "Version=2010-03-31"
-
         # This is the VTL to transform the error response
         error_template = {
             "state": 'error',
             "message": "$util.escapeJavaScript($input.path('$.errorMessage'))"
         }
-        error_template_string = json.dumps(error_template, separators=(',', ':'))
 
         # This is how our gateway chooses what response to send based on selection_pattern
         integration_options = aws_cdk.aws_apigateway.IntegrationOptions(
@@ -159,22 +153,19 @@ class DestinedLambda(well_architected.WellArchitectedStack):
                 'integration.request.header.Content-Type': "'application/x-www-form-urlencoded'"
             },
             request_templates={
-                "application/json": request_template
+                "application/json": f"""Action=Publish&TargetArn=$util.urlEncode('{sns_topic.topic_arn}')&Message=please $input.params().querystring.get('mode')&Version=2010-03-31"""
             },
             passthrough_behavior=aws_cdk.aws_apigateway.PassthroughBehavior.NEVER,
             integration_responses=[
-                aws_cdk.aws_apigateway.IntegrationResponse(
+                self.create_integration_response(
                     status_code='200',
-                    response_templates={
-                        "application/json": json.dumps(
-                            {"message": 'Message added to SNS topic'})
-                    }),
-                aws_cdk.aws_apigateway.IntegrationResponse(
+                    response_templates={"message": 'Message added to SNS topic'}
+                ),
+                self.create_integration_response(
                     selection_pattern="^\[Error\].*",
                     status_code='400',
-                    response_templates={
-                        "application/json": error_template_string
-                    },
+                    response_templates=error_template,
+                    separators=(',', ':'),
                     response_parameters=self.create_response_parameters(
                         content_type="'application/json'",
                         allow_origin="'*'",
@@ -210,6 +201,18 @@ class DestinedLambda(well_architected.WellArchitectedStack):
         )
 
     @staticmethod
+    def create_integration_response(
+        status_code=None, response_templates=None, response_parameters=None,
+        selection_pattern=None, separators=None
+    ):
+        return aws_cdk.aws_apigateway.IntegrationResponse(
+            status_code=status_code,
+            selection_pattern=selection_pattern,
+            response_templates={"application/json": json.dumps(response_templates, separators=separators)},
+            response_parameters=response_parameters,
+        )
+
+    @staticmethod
     def create_response_parameters(content_type=True, allow_origin=True, allow_credentials=True):
         return {
             'method.response.header.Content-Type': content_type,
@@ -221,9 +224,7 @@ class DestinedLambda(well_architected.WellArchitectedStack):
         return aws_cdk.aws_apigateway.MethodResponse(
             status_code=status_code,
             response_parameters=self.create_response_parameters(),
-            response_models={
-                'application/json': response_model
-            }
+            response_models={'application/json': response_model}
         )
 
     def create_lambda_function(
