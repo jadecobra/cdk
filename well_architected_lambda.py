@@ -4,8 +4,10 @@ import well_architected
 
 class LambdaFunctionConstruct(well_architected.WellArchitectedConstruct):
 
-    def __init__(self, scope: constructs.Construct, id: str,
-        function_name=None, handler_name=None,
+    def __init__(
+        self, scope: constructs.Construct, id: str,
+        function_name=None,
+        handler_name=None,
         environment_variables=None,
         error_topic:aws_cdk.aws_sns.Topic=None,
         layers:list[str]=None,
@@ -22,12 +24,13 @@ class LambdaFunctionConstruct(well_architected.WellArchitectedConstruct):
             **kwargs
         )
         handler_name = 'handler' if handler_name is None else handler_name
+        function_name = function_name if function_name is not None else id
         self.lambda_function = aws_cdk.aws_lambda.Function(
             self, 'LambdaFunction', # can we use id as function_name
             runtime=aws_cdk.aws_lambda.Runtime.PYTHON_3_9,
             handler=f'{function_name}.{handler_name}',
             code=aws_cdk.aws_lambda.Code.from_asset(f"lambda_functions/{function_name}"),
-            timeout=aws_cdk.Duration.seconds(duration) if duration else None, 
+            timeout=aws_cdk.Duration.seconds(duration) if duration else None,
             tracing=aws_cdk.aws_lambda.Tracing.ACTIVE,
             layers=self.create_layers(layers),
             vpc=vpc,
