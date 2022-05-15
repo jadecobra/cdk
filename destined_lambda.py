@@ -1,3 +1,4 @@
+from os import symlink
 import aws_cdk
 import constructs
 import json
@@ -6,18 +7,6 @@ import well_architected_lambda
 
 
 class DestinedLambda(well_architected.WellArchitectedStack):
-
-    def create_lambda_function(
-        self, on_failure=None, on_success=None,
-        function_name=None, duration=3, retry_attempts=2
-    ):
-        return well_architected_lambda.LambdaFunctionConstruct(
-            self, function_name,
-            retry_attempts=retry_attempts,
-            on_success=on_success,
-            on_failure=on_failure,
-            duration=duration
-        ).lambda_function
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
@@ -196,34 +185,52 @@ class DestinedLambda(well_architected.WellArchitectedStack):
         )
 
         # Add an SendEvent endpoint onto the gateway
-        gateway.root.add_resource('SendEvent') \
-            .add_method(
-                'GET', aws_cdk.aws_apigateway.Integration(
+        (
+            gateway.root.add_resource(
+                'SendEvent'
+            ).add_method(
+                'GET',
+                aws_cdk.aws_apigateway.Integration(
                     type=aws_cdk.aws_apigateway.IntegrationType.AWS,
                     integration_http_method='POST',
                     uri='arn:aws:apigateway:us-east-1:sns:path//',
                     options=integration_options
                 ),
                 method_responses=[
-                    aws_cdk.aws_apigateway.MethodResponse(
+                    self.create_method_response(
                         status_code='200',
-                        response_parameters={
-                            'method.response.header.Content-Type': True,
-                            'method.response.header.Access-Control-Allow-Origin': True,
-                            'method.response.header.Access-Control-Allow-Credentials': True
-                        },
-                        response_models={
-                            'application/json': response_model
-                        }),
-                    aws_cdk.aws_apigateway.MethodResponse(
+                        response_model=response_model
+                    ),
+                    self.create_method_response(
                         status_code='400',
-                        response_parameters={
-                            'method.response.header.Content-Type': True,
-                            'method.response.header.Access-Control-Allow-Origin': True,
-                            'method.response.header.Access-Control-Allow-Credentials': True
-                        },
-                        response_models={
-                            'application/json': error_response_model
-                        }),
+                        response_model=error_response_model
+                    ),
                 ]
+            )
         )
+
+    @staticmethod
+    def create_method_response(status_code=None, response_model=None):
+        return aws_cdk.aws_apigateway.MethodResponse(
+            status_code=status_code,
+            response_parameters={
+                'method.response.header.Content-Type': True,
+                'method.response.header.Access-Control-Allow-Origin': True,
+                'method.response.header.Access-Control-Allow-Credentials': True
+            },
+            response_models={
+                'application/json': response_model
+            }
+        )
+
+    def create_lambda_function(
+        self, on_failure=None, on_success=None,
+        function_name=None, duration=3, retry_attempts=2
+    ):
+        return well_architected_lambda.LambdaFunctionConstruct(
+            self, function_name,
+            retry_attempts=retry_attempts,
+            on_success=on_success,
+            on_failure=on_failure,
+            duration=duration
+        ).lambda_function
