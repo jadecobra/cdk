@@ -175,11 +175,11 @@ class DestinedLambda(well_architected.WellArchitectedStack):
                     response_templates={
                         "application/json": error_template_string
                     },
-                    response_parameters={
-                        'method.response.header.Content-Type': "'application/json'",
-                        'method.response.header.Access-Control-Allow-Origin': "'*'",
-                        'method.response.header.Access-Control-Allow-Credentials': "'true'"
-                    }
+                    response_parameters=self.create_response_parameters(
+                        content_type="'application/json'",
+                        allow_origin="'*'",
+                        allow_credentials="'true'",
+                    )
                 )
             ]
         )
@@ -210,14 +210,17 @@ class DestinedLambda(well_architected.WellArchitectedStack):
         )
 
     @staticmethod
-    def create_method_response(status_code=None, response_model=None):
+    def create_response_parameters(content_type=True, allow_origin=True, allow_credentials=True):
+        return {
+            'method.response.header.Content-Type': content_type,
+            'method.response.header.Access-Control-Allow-Origin': allow_origin,
+            'method.response.header.Access-Control-Allow-Credentials': allow_credentials,
+        }
+
+    def create_method_response(self, status_code=None, response_model=None):
         return aws_cdk.aws_apigateway.MethodResponse(
             status_code=status_code,
-            response_parameters={
-                'method.response.header.Content-Type': True,
-                'method.response.header.Access-Control-Allow-Origin': True,
-                'method.response.header.Access-Control-Allow-Credentials': True
-            },
+            response_parameters=self.create_response_parameters(),
             response_models={
                 'application/json': response_model
             }
