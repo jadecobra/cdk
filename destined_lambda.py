@@ -140,12 +140,6 @@ class DestinedLambda(well_architected.WellArchitectedStack):
                             'message': schema(type=schema_type.STRING)
                         }))
 
-        # This is the VTL to transform the error response
-        error_template = {
-            "state": 'error',
-            "message": "$util.escapeJavaScript($input.path('$.errorMessage'))"
-        }
-
         # This is how our gateway chooses what response to send based on selection_pattern
         integration_options = aws_cdk.aws_apigateway.IntegrationOptions(
             credentials_role=api_gw_sns_role,
@@ -164,7 +158,10 @@ class DestinedLambda(well_architected.WellArchitectedStack):
                 self.create_integration_response(
                     selection_pattern="^\[Error\].*",
                     status_code='400',
-                    response_templates=error_template,
+                    response_templates={
+                        "message": "$util.escapeJavaScript($input.path('$.errorMessage'))"
+                        "state": 'error',
+                    },
                     separators=(',', ':'),
                     response_parameters=self.create_response_parameters(
                         content_type="'application/json'",
