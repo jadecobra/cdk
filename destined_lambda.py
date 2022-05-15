@@ -11,16 +11,6 @@ class DestinedLambda(well_architected.WellArchitectedStack):
         self, on_failure=None, on_success=None,
         function_name=None, duration=3, retry_attempts=2
     ):
-        # return aws_cdk.aws_lambda.Function(
-        #     self, function_name,
-        #     runtime=aws_cdk.aws_lambda.Runtime.NODEJS_12_X,
-        #     handler=f"{function_name}.handler",
-        #     code=aws_cdk.aws_lambda.Code.from_asset(f"lambda_functions/{function_name}"),
-        #     retry_attempts=retry_attempts,
-        #     on_success=on_success,
-        #     on_failure=on_failure,
-        #     timeout=timeout if not timeout else aws_cdk.Duration.seconds(timeout)
-        # )
         return well_architected_lambda.LambdaFunctionConstruct(
             self, function_name,
             retry_attempts=retry_attempts,

@@ -6,7 +6,7 @@ class WellArchitectedConstruct(constructs.Construct):
 
     def __init__(self, scope: constructs.Construct, id: str, error_topic=None, **kwargs):
         super().__init__(scope, id, **kwargs)
-        self.error_topic = error_topic if error_topic else self.create_error_topic()
+        self.error_topic = error_topic if error_topic else self.create_error_topic(id)
 
     def create_error_topic(self, display_name):
         return aws_cdk.aws_sns.Topic(

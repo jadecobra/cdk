@@ -27,7 +27,7 @@ class LambdaFunctionConstruct(well_architected.WellArchitectedConstruct):
             runtime=aws_cdk.aws_lambda.Runtime.PYTHON_3_9,
             handler=f'{function_name}.{handler_name}',
             code=aws_cdk.aws_lambda.Code.from_asset(f"lambda_functions/{function_name}"),
-            timeout=aws_cdk.Duration.seconds(duration),
+            timeout=aws_cdk.Duration.seconds(duration) if duration else None, 
             tracing=aws_cdk.aws_lambda.Tracing.ACTIVE,
             layers=self.create_layers(layers),
             vpc=vpc,
