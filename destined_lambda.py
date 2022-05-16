@@ -106,43 +106,42 @@ class DestinedLambda(well_architected.WellArchitectedStack):
             )
         )
         # Give our gateway permissions to interact with SNS
-        api_gw_sns_role = aws_cdk.aws_iam.Role(
-            self, 'ApiGatewaySNSRole',
-            assumed_by=aws_cdk.aws_iam.ServicePrincipal('apigateway.amazonaws.com')
+        api_gateway_sns_role = aws_cdk.aws_iam.Role(
+            self, 'IamRole',
+            assumed_by=aws_cdk.aws_iam.ServicePrincipal(
+                'apigateway.amazonaws.com'
+            )
         )
-        sns_topic.grant_publish(api_gw_sns_role)
+        sns_topic.grant_publish(api_gateway_sns_role)
 
-        # shortening the lines of later code
-        schema = aws_cdk.aws_apigateway.JsonSchema
-        schema_type = aws_cdk.aws_apigateway.JsonSchemaType
-
-        # Because this isn't a proxy integration, we need to define our response model
         response_model = gateway.add_model(
             'ResponseModel',
             content_type='application/json',
             model_name='ResponseModel',
-            schema=schema(schema=aws_cdk.aws_apigateway.JsonSchemaVersion.DRAFT4,
-                            title='pollResponse',
-                            type=schema_type.OBJECT,
-                            properties={
-                                'message': schema(type=schema_type.STRING)
-                            }))
+            schema=self.create_schema(
+                title='pollResponse',
+                properties={
+                    'message': self.string_schema_type()
+                }
+            )
+        )
 
         error_response_model = gateway.add_model(
             'ErrorResponseModel',
             content_type='application/json',
             model_name='ErrorResponseModel',
-            schema=schema(schema=aws_cdk.aws_apigateway.JsonSchemaVersion.DRAFT4,
-                        title='errorResponse',
-                        type=schema_type.OBJECT,
-                        properties={
-                            'state': schema(type=schema_type.STRING),
-                            'message': schema(type=schema_type.STRING)
-                        }))
+            schema=self.create_schema(
+                title='errorResponse',
+                properties={
+                    'state': self.string_schema_type(),
+                    'message': self.string_schema_type(),
+                }
+            )
+        )
 
         # This is how our gateway chooses what response to send based on selection_pattern
         integration_options = aws_cdk.aws_apigateway.IntegrationOptions(
-            credentials_role=api_gw_sns_role,
+            credentials_role=api_gateway_sns_role,
             request_parameters={
                 'integration.request.header.Content-Type': "'application/x-www-form-urlencoded'"
             },
@@ -159,7 +158,7 @@ class DestinedLambda(well_architected.WellArchitectedStack):
                     selection_pattern="^\[Error\].*",
                     status_code='400',
                     response_templates={
-                        "message": "$util.escapeJavaScript($input.path('$.errorMessage'))"
+                        "message": "$util.escapeJavaScript($input.path('$.errorMessage'))",
                         "state": 'error',
                     },
                     separators=(',', ':'),
@@ -195,6 +194,21 @@ class DestinedLambda(well_architected.WellArchitectedStack):
                     ),
                 ]
             )
+        )
+
+    @staticmethod
+    def string_schema_type():
+        return aws_cdk.aws_apigateway.JsonSchema(
+            type=aws_cdk.aws_apigateway.JsonSchemaType.STRING
+        )
+
+    @staticmethod
+    def create_schema(title=None, properties=None):
+        return aws_cdk.aws_apigateway.JsonSchema(
+            schema=aws_cdk.aws_apigateway.JsonSchemaVersion.DRAFT4,
+            title=title,
+            type=aws_cdk.aws_apigateway.JsonSchemaType.OBJECT,
+            properties=properties
         )
 
     @staticmethod

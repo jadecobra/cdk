@@ -1382,7 +1382,7 @@
     "RestApi0C43BF4B"
    ]
   },
-  "RestApiDeployment180EC503fe0525134635a46830eaae8e9c13c779": {
+  "RestApiDeployment180EC503428df437e4cb90c4a920fb6f51505cbf": {
    "Type": "AWS::ApiGateway::Deployment",
    "Properties": {
     "RestApiId": {
@@ -1404,7 +1404,7 @@
      "Ref": "RestApi0C43BF4B"
     },
     "DeploymentId": {
-     "Ref": "RestApiDeployment180EC503fe0525134635a46830eaae8e9c13c779"
+     "Ref": "RestApiDeployment180EC503428df437e4cb90c4a920fb6f51505cbf"
     },
     "MethodSettings": [
      {
@@ -1450,7 +1450,7 @@
     "Integration": {
      "Credentials": {
       "Fn::GetAtt": [
-       "ApiGatewaySNSRole1BAAAE75",
+       "IamRoleA750FF82",
        "Arn"
       ]
      },
@@ -1469,7 +1469,7 @@
         "method.response.header.Access-Control-Allow-Credentials": "'true'"
        },
        "ResponseTemplates": {
-        "application/json": "{\"state\":\"error\",\"message\":\"$util.escapeJavaScript($input.path('$.errorMessage'))\"}"
+        "application/json": "{\"message\":\"$util.escapeJavaScript($input.path('$.errorMessage'))\",\"state\":\"error\"}"
        },
        "SelectionPattern": "^\\[Error\\].*",
        "StatusCode": "400"
@@ -1569,7 +1569,7 @@
     }
    }
   },
-  "ApiGatewaySNSRole1BAAAE75": {
+  "IamRoleA750FF82": {
    "Type": "AWS::IAM::Role",
    "Properties": {
     "AssumeRolePolicyDocument": {
@@ -1586,7 +1586,7 @@
     }
    }
   },
-  "ApiGatewaySNSRoleDefaultPolicyCA5D0260": {
+  "IamRoleDefaultPolicy72C722F4": {
    "Type": "AWS::IAM::Policy",
    "Properties": {
     "PolicyDocument": {
@@ -1601,10 +1601,10 @@
      ],
      "Version": "2012-10-17"
     },
-    "PolicyName": "ApiGatewaySNSRoleDefaultPolicyCA5D0260",
+    "PolicyName": "IamRoleDefaultPolicy72C722F4",
     "Roles": [
      {
-      "Ref": "ApiGatewaySNSRole1BAAAE75"
+      "Ref": "IamRoleA750FF82"
      }
     ]
    }
