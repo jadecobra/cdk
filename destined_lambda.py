@@ -114,9 +114,8 @@ class DestinedLambda(well_architected.WellArchitectedStack):
         )
         sns_topic.grant_publish(api_gateway_sns_role)
 
-        response_model = gateway.add_model(
-            'ResponseModel',
-            content_type='application/json',
+        response_model = self.create_response_model(
+            rest_api=gateway,
             model_name='ResponseModel',
             schema=self.create_schema(
                 title='pollResponse',
@@ -126,9 +125,8 @@ class DestinedLambda(well_architected.WellArchitectedStack):
             )
         )
 
-        error_response_model = gateway.add_model(
-            'ErrorResponseModel',
-            content_type='application/json',
+        error_response_model = self.create_response_model(
+            rest_api=gateway,
             model_name='ErrorResponseModel',
             schema=self.create_schema(
                 title='errorResponse',
@@ -194,6 +192,17 @@ class DestinedLambda(well_architected.WellArchitectedStack):
                     ),
                 ]
             )
+        )
+
+    @staticmethod
+    def create_response_model(
+        rest_api=None, model_name=None, schema=None,
+    ):
+        return rest_api.add_model(
+            model_name,
+            content_type='application/json',
+            model_name=model_name,
+            schema=schema
         )
 
     @staticmethod
