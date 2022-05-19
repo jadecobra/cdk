@@ -3,7 +3,7 @@ import aws_cdk.aws_dynamodb as aws_dynamodb
 import os
 try:
     import big_fan
-    import destined_lambda
+    import api_sns_lambda_eventbridge_lambda
     import well_architected_dynamodb_table
     import event_bridge_atm
     import event_bridge_circuit_breaker
@@ -42,7 +42,7 @@ class WellArchitected(aws_cdk.App):
 
         # big_fan.BigFan(self, "BigFan")
 
-        destined_lambda.DestinedLambda(self, "DestinedLambda")
+        api_sns_lambda_eventbridge_lambda.ApiSnsLambdaEventBridgeLambda(self, "ApiSnsLambdaEventBridgeLambda")
 
         # event_bridge_atm.EventBridgeAtm(self, "EventBridgeAtm")
         # event_bridge_circuit_breaker.EventBridgeCircuitBreaker(
