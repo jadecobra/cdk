@@ -76,13 +76,8 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.WellArchitectedStack):
             )
         )
         # Give our gateway permissions to interact with SNS
-        api_gateway_sns_role = aws_cdk.aws_iam.Role(
-            self, 'IamRole',
-            assumed_by=aws_cdk.aws_iam.ServicePrincipal(
-                'apigateway.amazonaws.com'
-            )
-        )
-        sns_topic.grant_publish(api_gateway_sns_role)
+        api_gateway_service_role = self.create_iam_service_role()
+        sns_topic.grant_publish(api_gateway_service_role)
 
         # Add an SendEvent endpoint onto the gateway
         (
@@ -90,14 +85,9 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.WellArchitectedStack):
                 'SendEvent'
             ).add_method(
                 'GET',
-                aws_cdk.aws_apigateway.Integration(
-                    type=aws_cdk.aws_apigateway.IntegrationType.AWS,
-                    integration_http_method='POST',
-                    uri='arn:aws:apigateway:us-east-1:sns:path//',
-                    options=self.get_integration_options(
-                        credentials_role=api_gateway_sns_role,
-                        sns_topic_arn=sns_topic.topic_arn,
-                    ),
+                self.create_api_sns_integration(
+                    credentials_role=api_gateway_service_role,
+                    sns_topic_arn=sns_topic.topic_arn,
                 ),
                 method_responses=[
                     self.create_method_response(
@@ -129,6 +119,25 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.WellArchitectedStack):
                     ),
                 ]
             )
+        )
+
+    def create_iam_service_role(self):
+        return aws_cdk.aws_iam.Role(
+            self, 'IamRole',
+            assumed_by=aws_cdk.aws_iam.ServicePrincipal(
+                'apigateway.amazonaws.com'
+            )
+        )
+
+    def create_api_sns_integration(self, credentials_role=None, sns_topic_arn=None):
+        return aws_cdk.aws_apigateway.Integration(
+            type=aws_cdk.aws_apigateway.IntegrationType.AWS,
+            integration_http_method='POST',
+            uri='arn:aws:apigateway:us-east-1:sns:path//',
+            options=self.get_integration_options(
+                credentials_role=credentials_role,
+                sns_topic_arn=sns_topic_arn,
+            ),
         )
 
     def get_integration_options(self, credentials_role=None, sns_topic_arn=None):

@@ -19505,3 +19505,6 @@
 2022-05-18 21:27:59.844930::Time taken to synthesize stack: ApiSnsLambdaEventBridgeLambda::  5.7787 seconds
 2022-05-18 21:29:45.931013::Time taken to synthesize stack: ApiSnsLambdaEventBridgeLambda::  5.9272 seconds
 2022-05-18 21:30:07.417073::Time taken to synthesize stack: ApiSnsLambdaEventBridgeLambda::  5.7923 seconds
+2022-05-18 21:30:41.810105::Time taken to synthesize stack: ApiSnsLambdaEventBridgeLambda::  5.7024 seconds
+2022-05-18 21:34:50.750702::Time taken to synthesize stack: ApiSnsLambdaEventBridgeLambda::  5.1747 seconds
+2022-05-18 21:35:09.061026::Time taken to synthesize stack: ApiSnsLambdaEventBridgeLambda::  5.7731 seconds
