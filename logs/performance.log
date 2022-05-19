@@ -19498,3 +19498,6 @@
 2022-05-18 21:20:06.427963::Time taken to synthesize stack: DestinedLambda::  5.0812 seconds
 2022-05-18 21:20:20.332291::Time taken to synthesize stack: DestinedLambda::  5.4408 seconds
 2022-05-18 21:21:08.127646::Time taken to synthesize stack: DestinedLambda::  5.9058 seconds
+2022-05-18 21:22:51.194799::Time taken to synthesize stack: ApiSnsLambdaEventBridgeLambda::  5.8794 seconds
+2022-05-18 21:23:01.265363::Time taken to synthesize stack: ApiSnsLambdaEventBridgeLambda::  5.7997 seconds
+2022-05-18 21:23:13.342559::Time taken to synthesize stack: ApiSnsLambdaEventBridgeLambda::  5.7392 seconds
