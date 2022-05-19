@@ -66,7 +66,7 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.WellArchitectedStack):
         # this url is used to post the payload to sns without a lambda inbetween
         ###
 
-        gateway = aws_cdk.aws_apigateway.RestApi(
+        rest_api = aws_cdk.aws_apigateway.RestApi(
             self, 'RestApi',
             deploy_options=aws_cdk.aws_apigateway.StageOptions(
                 metrics_enabled=True,
@@ -75,25 +75,21 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.WellArchitectedStack):
                 stage_name='prod'
             )
         )
-        # Give our gateway permissions to interact with SNS
-        api_gateway_service_role = self.create_iam_service_role()
-        sns_topic.grant_publish(api_gateway_service_role)
 
-        # Add an SendEvent endpoint onto the gateway
         (
-            gateway.root.add_resource(
+            rest_api.root.add_resource(
                 'SendEvent'
             ).add_method(
                 'GET',
                 self.create_api_sns_integration(
-                    credentials_role=api_gateway_service_role,
+                    credentials_role=self.create_iam_service_role_for(sns_topic),
                     sns_topic_arn=sns_topic.topic_arn,
                 ),
                 method_responses=[
                     self.create_method_response(
                         status_code='200',
                         response_model=self.create_response_model(
-                            rest_api=gateway,
+                            rest_api=rest_api,
                             model_name='ResponseModel',
                             schema=self.create_schema(
                                 title='pollResponse',
@@ -106,7 +102,7 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.WellArchitectedStack):
                     self.create_method_response(
                         status_code='400',
                         response_model=self.create_response_model(
-                            rest_api=gateway,
+                            rest_api=rest_api,
                             model_name='ErrorResponseModel',
                             schema=self.create_schema(
                                 title='errorResponse',
@@ -121,13 +117,15 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.WellArchitectedStack):
             )
         )
 
-    def create_iam_service_role(self):
-        return aws_cdk.aws_iam.Role(
+    def create_iam_service_role_for(self, sns_topic):
+        role = aws_cdk.aws_iam.Role(
             self, 'IamRole',
             assumed_by=aws_cdk.aws_iam.ServicePrincipal(
                 'apigateway.amazonaws.com'
             )
         )
+        sns_topic.grant_publish(role)
+        return role
 
     def create_api_sns_integration(self, credentials_role=None, sns_topic_arn=None):
         return aws_cdk.aws_apigateway.Integration(
