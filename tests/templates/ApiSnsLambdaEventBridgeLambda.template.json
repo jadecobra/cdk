@@ -3,7 +3,7 @@
   "SnsTopic2C1570A4": {
    "Type": "AWS::SNS::Topic",
    "Properties": {
-    "DisplayName": "DestinedLambdaErrorTopic"
+    "DisplayName": "ApiSnsLambdaEventBridgeLambdaErrorTopic"
    }
   },
   "EventBus7B8748AA": {
@@ -224,7 +224,7 @@
     "MaximumRetryAttempts": 0
    }
   },
-  "destinedlambdaLambdaFunctionAllowInvokeDestinedLambdaSNSTopicC5F38E06C8A31B35": {
+  "destinedlambdaLambdaFunctionAllowInvokeApiSnsLambdaEventBridgeLambdaSNSTopicCEDF2A6F8A75D4F3": {
    "Type": "AWS::Lambda::Permission",
    "Properties": {
     "Action": "lambda:InvokeFunction",
@@ -497,7 +497,7 @@
     ]
    }
   },
-  "eventbridgerulesuccesslambdaAllowEventRuleDestinedLambdasuccesslambdaLambdaFunctionCF0E4383F81DE50D": {
+  "eventbridgerulesuccesslambdaAllowEventRuleApiSnsLambdaEventBridgeLambdasuccesslambdaLambdaFunction5C7928F6525C0436": {
    "Type": "AWS::Lambda::Permission",
    "Properties": {
     "Action": "lambda:InvokeFunction",
@@ -923,7 +923,7 @@
     ]
    }
   },
-  "eventbridgerulefailurelambdaAllowEventRuleDestinedLambdafailurelambdaLambdaFunction28C89BD17EE62AA9": {
+  "eventbridgerulefailurelambdaAllowEventRuleApiSnsLambdaEventBridgeLambdafailurelambdaLambdaFunction7DB043B9D6BB46A4": {
    "Type": "AWS::Lambda::Permission",
    "Properties": {
     "Action": "lambda:InvokeFunction",

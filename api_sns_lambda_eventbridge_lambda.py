@@ -84,61 +84,6 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.WellArchitectedStack):
         )
         sns_topic.grant_publish(api_gateway_sns_role)
 
-        # response_model = self.create_response_model(
-        #     rest_api=gateway,
-        #     model_name='ResponseModel',
-        #     schema=self.create_schema(
-        #         title='pollResponse',
-        #         properties={
-        #             'message': self.string_schema_type()
-        #         }
-        #     )
-        # )
-
-        # error_response_model = self.create_response_model(
-        #     rest_api=gateway,
-        #     model_name='ErrorResponseModel',
-        #     schema=self.create_schema(
-        #         title='errorResponse',
-        #         properties={
-        #             'state': self.string_schema_type(),
-        #             'message': self.string_schema_type(),
-        #         }
-        #     )
-        # )
-
-        # This is how our gateway chooses what response to send based on selection_pattern
-        integration_options = aws_cdk.aws_apigateway.IntegrationOptions(
-            credentials_role=api_gateway_sns_role,
-            request_parameters={
-                'integration.request.header.Content-Type': "'application/x-www-form-urlencoded'"
-            },
-            request_templates={
-                "application/json": f"""Action=Publish&TargetArn=$util.urlEncode('{sns_topic.topic_arn}')&Message=please $input.params().querystring.get('mode')&Version=2010-03-31"""
-            },
-            passthrough_behavior=aws_cdk.aws_apigateway.PassthroughBehavior.NEVER,
-            integration_responses=[
-                self.create_integration_response(
-                    status_code='200',
-                    response_templates={"message": 'Message added to SNS topic'}
-                ),
-                self.create_integration_response(
-                    selection_pattern="^\[Error\].*",
-                    status_code='400',
-                    response_templates={
-                        "message": "$util.escapeJavaScript($input.path('$.errorMessage'))",
-                        "state": 'error',
-                    },
-                    separators=(',', ':'),
-                    response_parameters=self.create_response_parameters(
-                        content_type="'application/json'",
-                        allow_origin="'*'",
-                        allow_credentials="'true'",
-                    )
-                )
-            ]
-        )
-
         # Add an SendEvent endpoint onto the gateway
         (
             gateway.root.add_resource(
@@ -149,12 +94,14 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.WellArchitectedStack):
                     type=aws_cdk.aws_apigateway.IntegrationType.AWS,
                     integration_http_method='POST',
                     uri='arn:aws:apigateway:us-east-1:sns:path//',
-                    options=integration_options
+                    options=self.get_integration_options(
+                        credentials_role=api_gateway_sns_role,
+                        sns_topic_arn=sns_topic.topic_arn,
+                    ),
                 ),
                 method_responses=[
                     self.create_method_response(
                         status_code='200',
-                        # response_model=response_model,
                         response_model=self.create_response_model(
                             rest_api=gateway,
                             model_name='ResponseModel',
@@ -184,6 +131,37 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.WellArchitectedStack):
             )
         )
 
+    def get_integration_options(self, credentials_role=None, sns_topic_arn=None):
+        return aws_cdk.aws_apigateway.IntegrationOptions(
+            credentials_role=credentials_role,
+            request_parameters={
+                'integration.request.header.Content-Type': "'application/x-www-form-urlencoded'"
+            },
+            request_templates={
+                "application/json": f"""Action=Publish&TargetArn=$util.urlEncode('{sns_topic_arn}')&Message=please $input.params().querystring.get('mode')&Version=2010-03-31"""
+            },
+            passthrough_behavior=aws_cdk.aws_apigateway.PassthroughBehavior.NEVER,
+            integration_responses=[
+                self.create_integration_response(
+                    status_code='200',
+                    response_templates={"message": 'Message added to SNS topic'}
+                ),
+                self.create_integration_response(
+                    selection_pattern="^\[Error\].*",
+                    status_code='400',
+                    response_templates={
+                        "message": "$util.escapeJavaScript($input.path('$.errorMessage'))",
+                        "state": 'error',
+                    },
+                    separators=(',', ':'),
+                    response_parameters=self.create_response_parameters(
+                        content_type="'application/json'",
+                        allow_origin="'*'",
+                        allow_credentials="'true'",
+                    )
+                )
+            ]
+        )
 
     def create_event_driven_lambda_function(self, event_bus=None, description=None, detail=None, function_name=None, error_topic=None,
     ):
