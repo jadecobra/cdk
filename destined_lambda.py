@@ -8,6 +8,26 @@ import well_architected_lambda
 
 class DestinedLambda(well_architected.WellArchitectedStack):
 
+    def create_event_driven_lambda_function(self, event_bus=None, description=None, detail=None, function_name=None, error_topic=None,
+    ):
+        event_bridge_rule = aws_cdk.aws_events.Rule(
+            self, f'event_bridge_rule_{function_name}',
+            event_bus=event_bus,
+            description=description,
+            event_pattern=aws_cdk.aws_events.EventPattern(
+                detail=detail
+            )
+        )
+        event_bridge_rule.add_target(
+            aws_cdk.aws_events_targets.LambdaFunction(
+                self.create_lambda_function(
+                    function_name=function_name,
+                    error_topic=error_topic,
+                )
+            )
+        )
+        return event_bridge_rule
+
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
@@ -32,62 +52,32 @@ class DestinedLambda(well_architected.WellArchitectedStack):
             )
         )
 
-        ###
-        # EventBridge Rule to send events to our success lambda
-        # Notice how we can still do event filtering based on the json payload returned by the destined lambda
-        ###
-        success_rule = aws_cdk.aws_events.Rule(
-            self, 'successRule',
+        self.create_event_driven_lambda_function(
+            function_name="success_lambda",
+            error_topic=self.error_topic,
             event_bus=event_bus,
             description='all success events are caught here and logged centrally',
-            event_pattern=aws_cdk.aws_events.EventPattern(
-                detail={
-                    "requestContext": {
-                        "condition": ["Success"]
-                    },
-                    "responsePayload": {
-                        "source": ["cdkpatterns.the-destined-lambda"],
-                        "action": ["message"]
-                    }
+            detail={
+                "requestContext": {
+                    "condition": ["Success"]
+                },
+                "responsePayload": {
+                    "source": ["cdkpatterns.the-destined-lambda"],
+                    "action": ["message"]
                 }
-            )
-        )
-        success_rule.add_target(
-            aws_cdk.aws_events_targets.LambdaFunction(
-                self.create_lambda_function(
-                    function_name="success_lambda",
-                )
-            )
+            }
         )
 
-        ###
-        # This is a lambda that will be called by onFailure for destinedLambda
-        # It simply prints the event it receives to the cloudwatch logs.
-        # Notice how it includes the message that came into destined lambda to make it fail so you have
-        # everything you need to do retries or manually investigate
-        ###
-
-        ###
-        # EventBridge Rule to send events to our failure lambda
-        ###
-        failure_rule = aws_cdk.aws_events.Rule(
-            self, 'failureRule',
+        self.create_event_driven_lambda_function(
+            function_name="failure_lambda",
+            error_topic=self.error_topic,
             event_bus=event_bus,
             description='all failure events are caught here and logged centrally',
-            event_pattern=aws_cdk.aws_events.EventPattern(
-                detail={
-                    "responsePayload": {
-                        "errorType": ["Error"]
-                    }
+            detail={
+                "responsePayload": {
+                    "errorType": ["Error"]
                 }
-            )
-        )
-        failure_rule.add_target(
-            aws_cdk.aws_events_targets.LambdaFunction(
-                self.create_lambda_function(
-                    function_name="failure_lambda",
-                )
-            )
+            }
         )
 
         ###
@@ -249,11 +239,13 @@ class DestinedLambda(well_architected.WellArchitectedStack):
 
     def create_lambda_function(
         self, on_failure=None, on_success=None,
-        function_name=None, duration=3, retry_attempts=2
+        function_name=None, duration=3, retry_attempts=2,
+        error_topic=None,
     ):
         return well_architected_lambda.LambdaFunctionConstruct(
             self, function_name,
             retry_attempts=retry_attempts,
+            error_topic=error_topic,
             on_success=on_success,
             on_failure=on_failure,
             duration=duration

@@ -459,7 +459,7 @@
     }
    }
   },
-  "successRuleE9E88056": {
+  "eventbridgerulesuccesslambda092BF544": {
    "Type": "AWS::Events::Rule",
    "Properties": {
     "Description": "all success events are caught here and logged centrally",
@@ -497,7 +497,7 @@
     ]
    }
   },
-  "successRuleAllowEventRuleDestinedLambdasuccesslambdaLambdaFunctionCF0E4383D4A83E06": {
+  "eventbridgerulesuccesslambdaAllowEventRuleDestinedLambdasuccesslambdaLambdaFunctionCF0E4383F81DE50D": {
    "Type": "AWS::Lambda::Permission",
    "Properties": {
     "Action": "lambda:InvokeFunction",
@@ -510,16 +510,10 @@
     "Principal": "events.amazonaws.com",
     "SourceArn": {
      "Fn::GetAtt": [
-      "successRuleE9E88056",
+      "eventbridgerulesuccesslambda092BF544",
       "Arn"
      ]
     }
-   }
-  },
-  "successlambdaSnsTopicF7E30FAD": {
-   "Type": "AWS::SNS::Topic",
-   "Properties": {
-    "DisplayName": "success_lambdaErrorTopic"
    }
   },
   "successlambdaAwsXraySdkLambdaLayer83C4AB73": {
@@ -702,7 +696,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "successlambdaSnsTopicF7E30FAD"
+      "Ref": "SnsTopic2C1570A4"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -764,7 +758,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "successlambdaSnsTopicF7E30FAD"
+      "Ref": "SnsTopic2C1570A4"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -791,7 +785,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "successlambdaSnsTopicF7E30FAD"
+      "Ref": "SnsTopic2C1570A4"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -899,7 +893,7 @@
     }
    }
   },
-  "failureRule10D0B2E4": {
+  "eventbridgerulefailurelambda5A3E7099": {
    "Type": "AWS::Events::Rule",
    "Properties": {
     "Description": "all failure events are caught here and logged centrally",
@@ -929,7 +923,7 @@
     ]
    }
   },
-  "failureRuleAllowEventRuleDestinedLambdafailurelambdaLambdaFunction28C89BD168DBB8B4": {
+  "eventbridgerulefailurelambdaAllowEventRuleDestinedLambdafailurelambdaLambdaFunction28C89BD17EE62AA9": {
    "Type": "AWS::Lambda::Permission",
    "Properties": {
     "Action": "lambda:InvokeFunction",
@@ -942,16 +936,10 @@
     "Principal": "events.amazonaws.com",
     "SourceArn": {
      "Fn::GetAtt": [
-      "failureRule10D0B2E4",
+      "eventbridgerulefailurelambda5A3E7099",
       "Arn"
      ]
     }
-   }
-  },
-  "failurelambdaSnsTopic51C275CF": {
-   "Type": "AWS::SNS::Topic",
-   "Properties": {
-    "DisplayName": "failure_lambdaErrorTopic"
    }
   },
   "failurelambdaAwsXraySdkLambdaLayer4E9AA41C": {
@@ -1134,7 +1122,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "failurelambdaSnsTopic51C275CF"
+      "Ref": "SnsTopic2C1570A4"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -1196,7 +1184,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "failurelambdaSnsTopic51C275CF"
+      "Ref": "SnsTopic2C1570A4"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -1223,7 +1211,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "failurelambdaSnsTopic51C275CF"
+      "Ref": "SnsTopic2C1570A4"
      }
     ],
     "DatapointsToAlarm": 1,
