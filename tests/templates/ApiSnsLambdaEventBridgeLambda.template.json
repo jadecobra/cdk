@@ -1370,7 +1370,7 @@
     "RestApi0C43BF4B"
    ]
   },
-  "RestApiDeployment180EC5033bdad050064c16853a889e987f7cf591": {
+  "RestApiDeployment180EC503e57c7d3889a3dd312f68586a0bc403d9": {
    "Type": "AWS::ApiGateway::Deployment",
    "Properties": {
     "RestApiId": {
@@ -1381,8 +1381,8 @@
    "DependsOn": [
     "RestApiSendEventGET9ED8AC30",
     "RestApiSendEvent02C4F03F",
-    "RestApiErrorResponseModelA6C9DD94",
-    "RestApiResponseModel056B6183"
+    "RestApierrorResponse2EE521BA",
+    "RestApipollResponse8796EA23"
    ]
   },
   "RestApiDeploymentStageprod3855DE66": {
@@ -1392,7 +1392,7 @@
      "Ref": "RestApi0C43BF4B"
     },
     "DeploymentId": {
-     "Ref": "RestApiDeployment180EC5033bdad050064c16853a889e987f7cf591"
+     "Ref": "RestApiDeployment180EC503e57c7d3889a3dd312f68586a0bc403d9"
     },
     "MethodSettings": [
      {
@@ -1488,7 +1488,7 @@
      {
       "ResponseModels": {
        "application/json": {
-        "Ref": "RestApiResponseModel056B6183"
+        "Ref": "RestApipollResponse8796EA23"
        }
       },
       "ResponseParameters": {
@@ -1501,7 +1501,7 @@
      {
       "ResponseModels": {
        "application/json": {
-        "Ref": "RestApiErrorResponseModelA6C9DD94"
+        "Ref": "RestApierrorResponse2EE521BA"
        }
       },
       "ResponseParameters": {
@@ -1514,14 +1514,14 @@
     ]
    }
   },
-  "RestApiResponseModel056B6183": {
+  "RestApipollResponse8796EA23": {
    "Type": "AWS::ApiGateway::Model",
    "Properties": {
     "RestApiId": {
      "Ref": "RestApi0C43BF4B"
     },
     "ContentType": "application/json",
-    "Name": "ResponseModel",
+    "Name": "pollResponse",
     "Schema": {
      "properties": {
       "message": {
@@ -1534,20 +1534,20 @@
     }
    }
   },
-  "RestApiErrorResponseModelA6C9DD94": {
+  "RestApierrorResponse2EE521BA": {
    "Type": "AWS::ApiGateway::Model",
    "Properties": {
     "RestApiId": {
      "Ref": "RestApi0C43BF4B"
     },
     "ContentType": "application/json",
-    "Name": "ErrorResponseModel",
+    "Name": "errorResponse",
     "Schema": {
      "properties": {
-      "state": {
+      "message": {
        "type": "string"
       },
-      "message": {
+      "state": {
        "type": "string"
       }
      },

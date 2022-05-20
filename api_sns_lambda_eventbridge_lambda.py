@@ -90,27 +90,15 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.WellArchitectedStack):
                         status_code='200',
                         response_model=self.create_response_model(
                             rest_api=rest_api,
-                            model_name='ResponseModel',
-                            schema=self.create_schema(
-                                title='pollResponse',
-                                properties={
-                                    'message': self.string_schema_type()
-                                }
-                            )
+                            model_name='pollResponse',
                         ),
                     ),
                     self.create_method_response(
                         status_code='400',
                         response_model=self.create_response_model(
                             rest_api=rest_api,
-                            model_name='ErrorResponseModel',
-                            schema=self.create_schema(
-                                title='errorResponse',
-                                properties={
-                                    'state': self.string_schema_type(),
-                                    'message': self.string_schema_type(),
-                                }
-                            )
+                            model_name='errorResponse',
+                            properties='state',
                         )
                     ),
                 ]
@@ -190,15 +178,19 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.WellArchitectedStack):
         )
         return event_bridge_rule
 
-    @staticmethod
     def create_response_model(
-        rest_api=None, model_name=None, schema=None,
+        self, rest_api=None, model_name=None, properties=None
     ):
+        property_keys = ['message']
+        property_keys.append(properties) if properties else None
         return rest_api.add_model(
             model_name,
             content_type='application/json',
             model_name=model_name,
-            schema=schema
+            schema=self.create_schema(
+                title=model_name,
+                properties={key: self.string_schema_type() for key in property_keys},
+            )
         )
 
     @staticmethod
