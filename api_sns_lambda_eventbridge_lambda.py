@@ -3,6 +3,7 @@ import aws_cdk
 import constructs
 import json
 import well_architected
+import well_architected_api
 import well_architected_lambda
 
 
@@ -38,13 +39,13 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.WellArchitectedStack):
             event_bus=event_bus,
             description='all success events are caught here and logged centrally',
             detail={
-                "requestContext": {
-                    "condition": ["Success"]
-                },
                 "responsePayload": {
                     "source": ["cdkpatterns.the-destined-lambda"],
                     "action": ["message"]
-                }
+                },
+                "requestContext": {
+                    "condition": ["Success"]
+                },
             }
         )
 
@@ -60,21 +61,7 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.WellArchitectedStack):
             }
         )
 
-        ###
-        # API Gateway Creation
-        # This is complicated because it transforms the incoming json payload into a query string url
-        # this url is used to post the payload to sns without a lambda inbetween
-        ###
-
-        rest_api = aws_cdk.aws_apigateway.RestApi(
-            self, 'RestApi',
-            deploy_options=aws_cdk.aws_apigateway.StageOptions(
-                metrics_enabled=True,
-                logging_level=aws_cdk.aws_apigateway.MethodLoggingLevel.INFO,
-                data_trace_enabled=True,
-                stage_name='prod'
-            )
-        )
+        rest_api = self.create_rest_api()
 
         (
             rest_api.root.add_resource(
@@ -104,6 +91,21 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.WellArchitectedStack):
                 ]
             )
         )
+
+    def create_rest_api(self):
+        return well_architected_api.WellArchitectedApi(
+            self, 'RestApi',
+            error_topic=self.error_topic,
+            api=aws_cdk.aws_apigateway.RestApi(
+                self, 'RestApiSns',
+                    deploy_options=aws_cdk.aws_apigateway.StageOptions(
+                    metrics_enabled=True,
+                    logging_level=aws_cdk.aws_apigateway.MethodLoggingLevel.INFO,
+                    data_trace_enabled=True,
+                    stage_name='prod'
+                )
+            )
+        ).api
 
     def create_iam_service_role_for(self, sns_topic):
         role = aws_cdk.aws_iam.Role(
@@ -159,13 +161,19 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.WellArchitectedStack):
         )
 
     def create_event_driven_lambda_function(self, event_bus=None, description=None, detail=None, function_name=None, error_topic=None,
+        response_payload=None, additional_details={}
     ):
+        alt_details = {
+            "responsePayload": response_payload
+        }
+        alt_details.update(additional_details)
         event_bridge_rule = aws_cdk.aws_events.Rule(
             self, f'event_bridge_rule_{function_name}',
             event_bus=event_bus,
             description=description,
             event_pattern=aws_cdk.aws_events.EventPattern(
-                detail=detail
+                # detail=detail
+                detail=8
             )
         )
         event_bridge_rule.add_target(
