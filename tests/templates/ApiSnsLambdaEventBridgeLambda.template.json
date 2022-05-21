@@ -468,17 +468,17 @@
     },
     "EventPattern": {
      "detail": {
-      "requestContext": {
-       "condition": [
-        "Success"
-       ]
-      },
       "responsePayload": {
        "source": [
         "cdkpatterns.the-destined-lambda"
        ],
        "action": [
         "message"
+       ]
+      },
+      "requestContext": {
+       "condition": [
+        "Success"
        ]
       }
      }

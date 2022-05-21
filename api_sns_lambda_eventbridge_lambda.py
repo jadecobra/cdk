@@ -35,15 +35,15 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.WellArchitectedStack):
             error_topic=self.error_topic,
             event_bus=event_bus,
             description='all success events are caught here and logged centrally',
-            detail={
-                "responsePayload": {
-                    "source": ["cdkpatterns.the-destined-lambda"],
-                    "action": ["message"]
-                },
+            response_payload={
+                "source": ["cdkpatterns.the-destined-lambda"],
+                "action": ["message"]
+            },
+            additional_details={
                 "requestContext": {
                     "condition": ["Success"]
-                },
-            }
+                }
+            },
         )
 
         self.create_event_driven_lambda_function(
@@ -51,11 +51,9 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.WellArchitectedStack):
             error_topic=self.error_topic,
             event_bus=event_bus,
             description='all failure events are caught here and logged centrally',
-            detail={
-                "responsePayload": {
-                    "errorType": ["Error"]
-                }
-            }
+            response_payload={
+                "errorType": ["Error"]
+            },
         )
 
         rest_api = self.create_rest_api()
@@ -163,20 +161,20 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.WellArchitectedStack):
             ]
         )
 
-    def create_event_driven_lambda_function(self, event_bus=None, description=None, detail=None, function_name=None, error_topic=None,
+    def create_event_driven_lambda_function(
+        self, event_bus=None, description=None, function_name=None, error_topic=None,
         response_payload=None, additional_details={}
     ):
-        alt_details = {
+        details = {
             "responsePayload": response_payload
         }
-        alt_details.update(additional_details)
+        details.update(additional_details)
         event_bridge_rule = aws_cdk.aws_events.Rule(
             self, f'event_bridge_rule_{function_name}',
             event_bus=event_bus,
             description=description,
             event_pattern=aws_cdk.aws_events.EventPattern(
-                # detail=detail
-                detail=alt_details,
+                detail=details,
             )
         )
         event_bridge_rule.add_target(

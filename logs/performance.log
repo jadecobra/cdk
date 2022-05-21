@@ -19554,3 +19554,12 @@
 2022-05-20 07:24:07.962779::Time taken to synthesize stack: ApiSnsLambdaEventBridgeLambda::  5.5586 seconds
 2022-05-21 13:58:09.753016::Time taken to synthesize stack: ApiSnsLambdaEventBridgeLambda::  5.9572 seconds
 2022-05-21 14:04:51.641370::Time taken to synthesize stack: ApiSnsLambdaEventBridgeLambda::  5.1216 seconds
+2022-05-21 14:11:03.340684::Time taken to synthesize stack: ApiSnsLambdaEventBridgeLambda::  5.8988 seconds
+2022-05-21 14:12:33.345936::Time taken to synthesize stack: ApiSnsLambdaEventBridgeLambda::  5.4855 seconds
+2022-05-21 14:12:43.757231::Time taken to synthesize stack: ApiSnsLambdaEventBridgeLambda::  6.0179 seconds
+2022-05-21 14:12:54.023988::Time taken to synthesize stack: ApiSnsLambdaEventBridgeLambda::  5.8558 seconds
+2022-05-21 14:13:16.904382::Time taken to synthesize stack: ApiSnsLambdaEventBridgeLambda::  5.7284 seconds
+2022-05-21 14:13:28.921925::Time taken to synthesize stack: ApiSnsLambdaEventBridgeLambda::  5.7124 seconds
+2022-05-21 14:14:03.725900::Time taken to synthesize stack: ApiSnsLambdaEventBridgeLambda::  5.2230 seconds
+2022-05-21 14:14:16.303204::Time taken to synthesize stack: ApiSnsLambdaEventBridgeLambda::  5.9293 seconds
+2022-05-21 14:15:18.182539::Time taken to synthesize stack: ApiSnsLambdaEventBridgeLambda::  5.8861 seconds
