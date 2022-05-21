@@ -13,10 +13,6 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.WellArchitectedStack):
         super().__init__(scope, id, **kwargs)
 
         event_bus = self.create_event_bus(id)
-        sns_topic = self.create_sns_triggered_lambda(
-            name='destined',
-            event_bus=event_bus
-        )
 
         self.create_success_lambda(
             error_topic=self.error_topic,
@@ -34,10 +30,7 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.WellArchitectedStack):
                 'SendEvent'
             ).add_method(
                 'GET',
-                self.create_api_sns_integration(
-                    credentials_role=self.create_iam_service_role_for(sns_topic),
-                    sns_topic_arn=sns_topic.topic_arn,
-                ),
+                self.create_api_sns_integration(event_bus),
                 method_responses=self.create_method_responses(rest_api)
             )
         )
@@ -136,14 +129,18 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.WellArchitectedStack):
         sns_topic.grant_publish(role)
         return role
 
-    def create_api_sns_integration(self, credentials_role=None, sns_topic_arn=None):
+    def create_api_sns_integration(self, event_bus):
+        sns_topic = self.create_sns_triggered_lambda(
+            name='destined',
+            event_bus=event_bus
+        )
         return aws_cdk.aws_apigateway.Integration(
             type=aws_cdk.aws_apigateway.IntegrationType.AWS,
             integration_http_method='POST',
             uri='arn:aws:apigateway:us-east-1:sns:path//',
             options=self.get_integration_options(
-                credentials_role=credentials_role,
-                sns_topic_arn=sns_topic_arn,
+                credentials_role=self.create_iam_service_role_for(sns_topic),
+                sns_topic_arn=sns_topic.topic_arn,
             ),
         )
 
