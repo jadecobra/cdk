@@ -1,12 +1,14 @@
 import aws_cdk
 import constructs
+import well_architected
 import well_architected_dynamodb_table
+import well_architected_lambda
 import aws_cdk.aws_apigatewayv2_integrations_alpha as integrations
 import aws_cdk.aws_apigatewayv2_alpha
 
 
 
-class LambdaCircuitBreaker(aws_cdk.Stack):
+class CircuitBreakerLambda(aws_cdk.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
@@ -34,6 +36,15 @@ class LambdaCircuitBreaker(aws_cdk.Stack):
                 'CIRCUITBREAKER_TABLE': table.table_name
             }
         )
+
+        unreliable_lambda = well_architected_lambda.LambdaFunctionConstruct(
+            self, 'LambdaFunction',
+            error_topic=error_topic,
+            function_name=name,
+            environment_variables={
+                'DYNAMODB_TABLE_NAME': name
+            },
+        ).lambda_function
 
         # grant the lambda role read/write permissions to our table'
         table.grant_read_write_data(unreliable_lambda)

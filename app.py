@@ -2,27 +2,27 @@ import aws_cdk
 import aws_cdk.aws_dynamodb as aws_dynamodb
 import os
 try:
-    import big_fan
-    import api_sns_lambda_eventbridge_lambda
-    import well_architected_dynamodb_table
-    import event_bridge_atm
-    import event_bridge_circuit_breaker
-    import event_bridge_etl
     import api_dynamodb
+    import api_sns_lambda_eventbridge_lambda
     import api_step_functions
+    import circuit_breaker_lambda
     import waf_api_lambda_dynamodb
-    import lambda_circuit_breaker
-    import lambda_power_tuner
-    import lambda_trilogy.lambda_lith
     import lambda_trilogy.fat_lambda
     import lambda_trilogy.single_purpose_lambda
+    import lambda_trilogy.lambda_lith
+    import big_fan
+    import event_bridge_atm
+    import circuit_breaker_event_bridge
+    import event_bridge_etl
+    import lambda_power_tuner
     import rds_proxy
-    import saga_step_function
     import scalable_webhook
+    import saga_step_function
+    import simple_graphql_service
     import sns_topic
     import xray_tracer
+    import well_architected_dynamodb_table
     import web_application_firewall
-    import simple_graphql_service
     import well_architected_api
     import well_architected_rest_api
     import well_architected_lambda
@@ -53,7 +53,7 @@ class WellArchitected(aws_cdk.App):
         # lambda_trilogy.lambda_lith.LambdaLith(self, "LambdaLith", )
         # lambda_trilogy.fat_lambda.TheFatLambdaStack(self, "FatLambda", )
         # lambda_trilogy.single_purpose_lambda.TheSinglePurposeFunctionStack(self, "SinglePurposeLambda", )
-        # lambda_circuit_breaker.LambdaCircuitBreaker(self, "LambdaCircuitBreaker", )
+        circuit_breaker_lambda.CircuitBreakerLambda(self, "CircuitBreakerLambda", )
 
         saga_step_function.SagaStepFunction(self, "SagaStepFunction",)
         # lambda_power_tuner.LambdaPowerTuner(self, "LambdaPowerTuner", )
@@ -82,6 +82,5 @@ class WellArchitected(aws_cdk.App):
 WellArchitected().synth()
 
 # TODO
-# Refactor Destined Lambda
 # Refactor Lambda Circuit Breaker
 # abstract Lambda Layers to stack

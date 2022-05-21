@@ -18,7 +18,7 @@ class TestWellArchitectedPatterns(tests.utilities.TestTemplates):
             # 'FatLambda',
             # 'HitCounter',
             # 'HttpFlow',
-            # 'LambdaCircuitBreaker',
+            'LambdaCircuitBreaker',
             # 'LambdaPowerTuner',
             # 'LambdaLith',
             # 'LambdaRestAPIGateway',
