@@ -1,6 +1,6 @@
 {
  "Resources": {
-  "SnsTopic2C1570A4": {
+  "SimpleGraphqlServiceErrorTopicDAC46A7C": {
    "Type": "AWS::SNS::Topic",
    "Properties": {
     "DisplayName": "SimpleGraphqlServiceErrorTopic"
@@ -427,7 +427,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "SnsTopic2C1570A4"
+      "Ref": "SimpleGraphqlServiceErrorTopicDAC46A7C"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -446,7 +446,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "SnsTopic2C1570A4"
+      "Ref": "SimpleGraphqlServiceErrorTopicDAC46A7C"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -732,7 +732,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "SnsTopic2C1570A4"
+      "Ref": "SimpleGraphqlServiceErrorTopicDAC46A7C"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -794,7 +794,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "SnsTopic2C1570A4"
+      "Ref": "SimpleGraphqlServiceErrorTopicDAC46A7C"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -821,7 +821,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "SnsTopic2C1570A4"
+      "Ref": "SimpleGraphqlServiceErrorTopicDAC46A7C"
      }
     ],
     "DatapointsToAlarm": 1,

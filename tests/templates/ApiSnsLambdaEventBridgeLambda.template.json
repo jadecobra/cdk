@@ -1,9 +1,9 @@
 {
  "Resources": {
-  "ApiSnsLambdaEventBridgeLambdaC168F757": {
+  "ApiSnsLambdaEventBridgeLambdaErrorTopic81E0EF98": {
    "Type": "AWS::SNS::Topic",
    "Properties": {
-    "DisplayName": "ApiSnsLambdaEventBridgeLambda"
+    "DisplayName": "ApiSnsLambdaEventBridgeLambdaErrorTopic"
    }
   },
   "EventBus7B8748AA": {
@@ -249,7 +249,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "ApiSnsLambdaEventBridgeLambdaC168F757"
+      "Ref": "ApiSnsLambdaEventBridgeLambdaErrorTopic81E0EF98"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -311,7 +311,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "ApiSnsLambdaEventBridgeLambdaC168F757"
+      "Ref": "ApiSnsLambdaEventBridgeLambdaErrorTopic81E0EF98"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -338,7 +338,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "ApiSnsLambdaEventBridgeLambdaC168F757"
+      "Ref": "ApiSnsLambdaEventBridgeLambdaErrorTopic81E0EF98"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -675,7 +675,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "ApiSnsLambdaEventBridgeLambdaC168F757"
+      "Ref": "ApiSnsLambdaEventBridgeLambdaErrorTopic81E0EF98"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -737,7 +737,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "ApiSnsLambdaEventBridgeLambdaC168F757"
+      "Ref": "ApiSnsLambdaEventBridgeLambdaErrorTopic81E0EF98"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -764,7 +764,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "ApiSnsLambdaEventBridgeLambdaC168F757"
+      "Ref": "ApiSnsLambdaEventBridgeLambdaErrorTopic81E0EF98"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -1117,7 +1117,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "ApiSnsLambdaEventBridgeLambdaC168F757"
+      "Ref": "ApiSnsLambdaEventBridgeLambdaErrorTopic81E0EF98"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -1183,7 +1183,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "ApiSnsLambdaEventBridgeLambdaC168F757"
+      "Ref": "ApiSnsLambdaEventBridgeLambdaErrorTopic81E0EF98"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -1222,7 +1222,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "ApiSnsLambdaEventBridgeLambdaC168F757"
+      "Ref": "ApiSnsLambdaEventBridgeLambdaErrorTopic81E0EF98"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -1547,7 +1547,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "ApiSnsLambdaEventBridgeLambdaC168F757"
+      "Ref": "ApiSnsLambdaEventBridgeLambdaErrorTopic81E0EF98"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -1609,7 +1609,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "ApiSnsLambdaEventBridgeLambdaC168F757"
+      "Ref": "ApiSnsLambdaEventBridgeLambdaErrorTopic81E0EF98"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -1636,7 +1636,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "ApiSnsLambdaEventBridgeLambdaC168F757"
+      "Ref": "ApiSnsLambdaEventBridgeLambdaErrorTopic81E0EF98"
      }
     ],
     "DatapointsToAlarm": 1,

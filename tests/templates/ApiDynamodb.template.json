@@ -1,6 +1,6 @@
 {
  "Resources": {
-  "SnsTopic2C1570A4": {
+  "ApiDynamodbErrorTopic93EDD3B3": {
    "Type": "AWS::SNS::Topic",
    "Properties": {
     "DisplayName": "ApiDynamodbErrorTopic"
@@ -248,7 +248,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "SnsTopic2C1570A4"
+      "Ref": "ApiDynamodbErrorTopic93EDD3B3"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -314,7 +314,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "SnsTopic2C1570A4"
+      "Ref": "ApiDynamodbErrorTopic93EDD3B3"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -353,7 +353,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "SnsTopic2C1570A4"
+      "Ref": "ApiDynamodbErrorTopic93EDD3B3"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -525,7 +525,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "SnsTopic2C1570A4"
+      "Ref": "ApiDynamodbErrorTopic93EDD3B3"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -544,7 +544,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "SnsTopic2C1570A4"
+      "Ref": "ApiDynamodbErrorTopic93EDD3B3"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -865,7 +865,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "SnsTopic2C1570A4"
+      "Ref": "ApiDynamodbErrorTopic93EDD3B3"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -927,7 +927,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "SnsTopic2C1570A4"
+      "Ref": "ApiDynamodbErrorTopic93EDD3B3"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -954,7 +954,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "SnsTopic2C1570A4"
+      "Ref": "ApiDynamodbErrorTopic93EDD3B3"
      }
     ],
     "DatapointsToAlarm": 1,

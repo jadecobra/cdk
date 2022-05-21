@@ -1,6 +1,6 @@
 {
  "Resources": {
-  "SnsTopic2C1570A4": {
+  "WafApiLambdaDynamodbErrorTopicA8AB4110": {
    "Type": "AWS::SNS::Topic",
    "Properties": {
     "DisplayName": "WafApiLambdaDynamodbErrorTopic"
@@ -34,7 +34,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "SnsTopic2C1570A4"
+      "Ref": "WafApiLambdaDynamodbErrorTopicA8AB4110"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -53,7 +53,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "SnsTopic2C1570A4"
+      "Ref": "WafApiLambdaDynamodbErrorTopicA8AB4110"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -372,7 +372,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "SnsTopic2C1570A4"
+      "Ref": "WafApiLambdaDynamodbErrorTopicA8AB4110"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -434,7 +434,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "SnsTopic2C1570A4"
+      "Ref": "WafApiLambdaDynamodbErrorTopicA8AB4110"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -461,7 +461,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "SnsTopic2C1570A4"
+      "Ref": "WafApiLambdaDynamodbErrorTopicA8AB4110"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -667,7 +667,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "SnsTopic2C1570A4"
+      "Ref": "WafApiLambdaDynamodbErrorTopicA8AB4110"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -733,7 +733,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "SnsTopic2C1570A4"
+      "Ref": "WafApiLambdaDynamodbErrorTopicA8AB4110"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -772,7 +772,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "SnsTopic2C1570A4"
+      "Ref": "WafApiLambdaDynamodbErrorTopicA8AB4110"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -1194,7 +1194,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "SnsTopic2C1570A4"
+      "Ref": "WafApiLambdaDynamodbErrorTopicA8AB4110"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -1260,7 +1260,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "SnsTopic2C1570A4"
+      "Ref": "WafApiLambdaDynamodbErrorTopicA8AB4110"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -1299,7 +1299,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "SnsTopic2C1570A4"
+      "Ref": "WafApiLambdaDynamodbErrorTopicA8AB4110"
      }
     ],
     "DatapointsToAlarm": 1,
