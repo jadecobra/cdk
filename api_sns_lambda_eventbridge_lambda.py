@@ -12,10 +12,7 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.WellArchitectedStack):
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        event_bus = aws_cdk.aws_events.EventBus(
-            self, 'EventBus',
-            event_bus_name='the-destined-lambda',
-        )
+        event_bus = self.create_event_bus('the-destined-lambda')
         sns_topic = aws_cdk.aws_sns.Topic(
             self, 'SNSTopic',
             display_name='The Destined Lambda CDK Pattern Topic'
@@ -90,6 +87,12 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.WellArchitectedStack):
                     ),
                 ]
             )
+        )
+
+    def create_event_bus(self, name):
+        return aws_cdk.aws_events.EventBus(
+            self, 'EventBus',
+            event_bus_name=name,
         )
 
     def create_rest_api(self):
@@ -173,7 +176,7 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.WellArchitectedStack):
             description=description,
             event_pattern=aws_cdk.aws_events.EventPattern(
                 # detail=detail
-                detail=8
+                detail=alt_details,
             )
         )
         event_bridge_rule.add_target(
