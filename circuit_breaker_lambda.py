@@ -14,34 +14,35 @@ class CircuitBreakerLambda(well_architected.WellArchitectedStack):
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        table = well_architected_dynamodb_table.DynamoDBTableConstruct(
+        dynamodb_table = well_architected_dynamodb_table.DynamoDBTableConstruct(
             self, id,
             partition_key="id",
+            error_topic=self.error_topic,
         ).dynamodb_table
 
-        unreliable = well_architected_lambda.LambdaFunctionConstruct(
+        lambda_function = well_architected_lambda.LambdaFunctionConstruct(
             self, 'LambdaFunction',
             error_topic=self.error_topic,
             function_name='circuit_breaker_lambda',
             environment_variables={
-                'CIRCUITBREAKER_TABLE': table.table_name
+                'CIRCUITBREAKER_TABLE': dynamodb_table.table_name
             }
         ).lambda_function
 
         # grant the lambda role read/write permissions to our table'
-        table.grant_read_write_data(unreliable)
+        dynamodb_table.grant_read_write_data(lambda_function)
 
 
-        api = well_architected_api.WellArchitectedApi(
+        http_api = well_architected_api.WellArchitectedApi(
             self, 'HttpApiGateway',
             error_topic=self.error_topic,
             api=aws_cdk.aws_apigatewayv2_alpha.HttpApi(
                 self, 'HttpApi',
                 default_integration=aws_cdk.aws_apigatewayv2_integrations_alpha.HttpLambdaIntegration(
                     'LambdaFunction',
-                    handler=unreliable
+                    handler=lambda_function
                 ),
             )
         ).api
 
-        aws_cdk.CfnOutput(self, 'HTTP API Url', value=api.url)
+        aws_cdk.CfnOutput(self, 'HTTP API Url', value=http_api.url)
