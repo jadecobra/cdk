@@ -1,9 +1,10 @@
 import aws_cdk
 import constructs
 import json
+import well_architected
 
 
-class BigFan(aws_cdk.Stack):
+class BigFan(well_architected.WellArchitectedStack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)

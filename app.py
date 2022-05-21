@@ -41,9 +41,13 @@ class WellArchitected(aws_cdk.App):
         super().__init__(*args, **kwargs)        # self.create_xray_tracer()
 
         # big_fan.BigFan(self, "BigFan")
-
         api_sns_lambda_eventbridge_lambda.ApiSnsLambdaEventBridgeLambda(self, "ApiSnsLambdaEventBridgeLambda")
-
+        api_dynamodb.ApiDynamodb(self, 'ApiDynamodb', partition_key='message')
+        api_step_functions.ApiStepFunctions(self, "ApiStepFunctions")
+        circuit_breaker_lambda.CircuitBreakerLambda(self, "CircuitBreakerLambda", )
+        saga_step_function.SagaStepFunction(self, "SagaStepFunction",)
+        simple_graphql_service.SimpleGraphQlService(self, "SimpleGraphqlService")
+        waf_api_lambda_dynamodb.WafApiLambdaDynamodb(self, 'WafApiLambdaDynamodb')
         # event_bridge_atm.EventBridgeAtm(self, "EventBridgeAtm")
         # event_bridge_circuit_breaker.EventBridgeCircuitBreaker(
         #     self, 'EventBridgeCircuitBreaker',
@@ -53,17 +57,7 @@ class WellArchitected(aws_cdk.App):
         # lambda_trilogy.lambda_lith.LambdaLith(self, "LambdaLith", )
         # lambda_trilogy.fat_lambda.TheFatLambdaStack(self, "FatLambda", )
         # lambda_trilogy.single_purpose_lambda.TheSinglePurposeFunctionStack(self, "SinglePurposeLambda", )
-        circuit_breaker_lambda.CircuitBreakerLambda(self, "CircuitBreakerLambda", )
-
-        saga_step_function.SagaStepFunction(self, "SagaStepFunction",)
         # lambda_power_tuner.LambdaPowerTuner(self, "LambdaPowerTuner", )
-        simple_graphql_service.SimpleGraphQlService(self, "SimpleGraphqlService", )
-        api_dynamodb.ApiDynamodb(
-            self, 'ApiDynamodb',
-            partition_key='message',
-        )
-        api_step_functions.ApiStepFunctions(self, "ApiStepFunctions")
-        waf_api_lambda_dynamodb.WafApiLambdaDynamodb(self, 'WafApiLambdaDynamodb')
 
     def create_xray_tracer(self):
         xray_tracer_sns_topic = sns_topic.SnsTopic(
@@ -80,7 +74,3 @@ class WellArchitected(aws_cdk.App):
         )
 
 WellArchitected().synth()
-
-# TODO
-# Refactor Lambda Circuit Breaker
-# abstract Lambda Layers to stack

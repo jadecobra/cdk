@@ -6,13 +6,12 @@ import well_architected_dynamodb_table
 import well_architected_lambda
 import aws_cdk.aws_apigatewayv2_integrations_alpha
 import aws_cdk.aws_apigatewayv2_alpha
-import subprocess
 
 
 class CircuitBreakerLambda(well_architected.WellArchitectedStack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
-        super().__init__(scope, id, **kwargs)\
+        super().__init__(scope, id, **kwargs)
         dynamodb_table = self.create_dynamodb_table(id)
         lambda_function = self.create_lambda_function(dynamodb_table.table_name)
         dynamodb_table.grant_read_write_data(lambda_function)
