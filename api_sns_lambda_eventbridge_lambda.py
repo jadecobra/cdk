@@ -13,48 +13,18 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.WellArchitectedStack):
         super().__init__(scope, id, **kwargs)
 
         event_bus = self.create_event_bus(id)
-        # sns_topic = self.create_sns_topic('destined_lambda')
-        # sns_topic.add_subscription(
-        #     aws_cdk.aws_sns_subscriptions.LambdaSubscription(
-        #         self.create_lambda_function(
-        #             function_name="destined",
-        #             retry_attempts=0,
-        #             on_success=aws_cdk.aws_lambda_destinations.EventBridgeDestination(event_bus=event_bus),
-        #             on_failure=aws_cdk.aws_lambda_destinations.EventBridgeDestination(event_bus=event_bus),
-        #             duration=None,
-        #             error_topic=self.error_topic
-        #         )
-        #     )
-        # )
         sns_topic = self.create_sns_triggered_lambda(
             name='destined',
             event_bus=event_bus
         )
 
-        self.create_event_driven_lambda_function(
-            function_name="success",
+        self.create_success_lambda(
             error_topic=self.error_topic,
             event_bus=event_bus,
-            description='all success events are caught here and logged centrally',
-            response_payload={
-                "source": ["cdkpatterns.the-destined-lambda"],
-                "action": ["message"]
-            },
-            additional_details={
-                "requestContext": {
-                    "condition": ["Success"]
-                }
-            },
         )
-
-        self.create_event_driven_lambda_function(
-            function_name="failure",
+        self.create_failure_lambda(
             error_topic=self.error_topic,
             event_bus=event_bus,
-            description='all failure events are caught here and logged centrally',
-            response_payload={
-                "errorType": ["Error"]
-            },
         )
 
         rest_api = self.create_rest_api()
@@ -86,6 +56,34 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.WellArchitectedStack):
                     ),
                 ]
             )
+        )
+
+    def create_success_lambda(self, event_bus=None, error_topic=None):
+        return self.create_event_driven_lambda_function(
+            function_name="success",
+            error_topic=error_topic,
+            event_bus=event_bus,
+            description='all success events are caught here and logged centrally',
+            response_payload={
+                "source": ["cdkpatterns.the-destined-lambda"],
+                "action": ["message"]
+            },
+            additional_details={
+                "requestContext": {
+                    "condition": ["Success"]
+                }
+            },
+        )
+
+    def create_failure_lambda(self, event_bus=None, error_topic=None):
+        return self.create_event_driven_lambda_function(
+            function_name="failure",
+            error_topic=error_topic,
+            event_bus=event_bus,
+            description='all failure events are caught here and logged centrally',
+            response_payload={
+                "errorType": ["Error"]
+            },
         )
 
     def create_sns_triggered_lambda(self, name=None, event_bus=None):
