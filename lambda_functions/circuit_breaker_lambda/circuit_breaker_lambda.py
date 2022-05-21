@@ -1,11 +1,10 @@
 import boto3
 import datetime
 import os
+import random
+import json
 
 ERROR_RECORDS = boto3.resource('dynamodb').Table(os.environ['CIRCUITBREAKER_TABLE'])
-
-def get_lambda_function_name():
-    return os.environ['AWS_LAMBDA_FUNCTION_NAME']
 
 
 class CircuitBreaker(object):
@@ -122,3 +121,30 @@ class CircuitBreaker(object):
             },
             ReturnValues='UPDATED_NEW'
         )
+
+def get_lambda_function_name():
+    return os.environ['AWS_LAMBDA_FUNCTION_NAME']
+
+def unreliable():
+    if random.random() < 0.6:
+        return 'Success'
+    return 'Failed'
+
+def fallback():
+    return 'Fallback'
+
+def handler(event=None, context=None):
+    message = CircuitBreaker(
+        request=unreliable,
+        fallback=fallback,
+        failure_threshold=3,
+        success_threshold=2,
+        timeout=10000
+    ).fire()
+
+    return {
+        'statusCode': 200,
+        'body': json.dumps({
+            message: message
+        })
+    }

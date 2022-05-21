@@ -1,6 +1,7 @@
 import aws_cdk
 import constructs
 import well_architected
+import well_architected_api
 import well_architected_dynamodb_table
 import well_architected_lambda
 import aws_cdk.aws_apigatewayv2_integrations_alpha as integrations
@@ -18,23 +19,34 @@ class CircuitBreakerLambda(well_architected.WellArchitectedStack):
             partition_key="id",
         ).dynamodb_table
 
-        unreliable_lambda = well_architected_lambda.LambdaFunctionConstruct(
+        unreliable = well_architected_lambda.LambdaFunctionConstruct(
             self, 'LambdaFunction',
             error_topic=self.error_topic,
-            function_name='circuit_breaker_lambda/unreliable',
+            function_name='circuit_breaker_lambda',
             environment_variables={
                 'CIRCUITBREAKER_TABLE': table.table_name
             }
         ).lambda_function
 
         # grant the lambda role read/write permissions to our table'
-        table.grant_read_write_data(unreliable_lambda)
+        table.grant_read_write_data(unreliable)
 
-        api = aws_cdk.aws_apigatewayv2_alpha.HttpApi(
-            self, 'CircuitBreakerGateway',
-            default_integration=integrations.HttpLambdaIntegration(
-                'HttpLambdaIntegration', handler=unreliable_lambda
+        # api = aws_cdk.aws_apigatewayv2_alpha.HttpApi(
+        #     self, 'HttpApi',
+        #     default_integration=integrations.HttpLambdaIntegration(
+        #         'HttpLambdaIntegration', handler=unreliable
+        #     )
+        # )
+        api = well_architected_api.WellArchitectedApi(
+            self, 'HttpApiGateway',
+            error_topic=self.error_topic,
+            api=aws_cdk.aws_apigatewayv2_alpha.HttpApi(
+                self, 'HttpApi',
+                default_integration=aws_cdk.aws_apigatewayv2_integrations_alpha.HttpLambdaIntegration(
+                    'LambdaFunction',
+                    handler=unreliable
+                ),
             )
-        )
+        ).api
 
         aws_cdk.CfnOutput(self, 'HTTP API Url', value=api.url)
