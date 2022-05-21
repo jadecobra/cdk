@@ -1,4 +1,3 @@
-from os import symlink
 import aws_cdk
 import constructs
 import json
@@ -13,7 +12,6 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.WellArchitectedStack):
         super().__init__(scope, id, **kwargs)
 
         event_bus = self.create_event_bus(id)
-
         self.create_success_lambda(
             error_topic=self.error_topic,
             event_bus=event_bus,
@@ -23,17 +21,7 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.WellArchitectedStack):
             event_bus=event_bus,
         )
 
-        rest_api = self.create_rest_api()
-
-        (
-            rest_api.root.add_resource(
-                'SendEvent'
-            ).add_method(
-                'GET',
-                self.create_api_sns_integration(event_bus),
-                method_responses=self.create_method_responses(rest_api)
-            )
-        )
+        self.create_rest_api(event_bus)
 
     def create_method_responses(self, rest_api):
         return [
@@ -104,8 +92,8 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.WellArchitectedStack):
             event_bus_name=name,
         )
 
-    def create_rest_api(self):
-        return well_architected_api.WellArchitectedApi(
+    def create_rest_api(self, event_bus):
+        rest_api = well_architected_api.WellArchitectedApi(
             self, 'RestApi',
             error_topic=self.error_topic,
             api=aws_cdk.aws_apigateway.RestApi(
@@ -118,6 +106,16 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.WellArchitectedStack):
                 )
             )
         ).api
+        (
+            rest_api.root.add_resource(
+                'SendEvent'
+            ).add_method(
+                'GET',
+                self.create_api_sns_integration(event_bus),
+                method_responses=self.create_method_responses(rest_api)
+            )
+        )
+        return rest_api
 
     def create_iam_service_role_for(self, sns_topic):
         role = aws_cdk.aws_iam.Role(
@@ -130,28 +128,25 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.WellArchitectedStack):
         return role
 
     def create_api_sns_integration(self, event_bus):
-        sns_topic = self.create_sns_triggered_lambda(
-            name='destined',
-            event_bus=event_bus
-        )
         return aws_cdk.aws_apigateway.Integration(
             type=aws_cdk.aws_apigateway.IntegrationType.AWS,
             integration_http_method='POST',
             uri='arn:aws:apigateway:us-east-1:sns:path//',
-            options=self.get_integration_options(
-                credentials_role=self.create_iam_service_role_for(sns_topic),
-                sns_topic_arn=sns_topic.topic_arn,
-            ),
+            options=self.get_integration_options(event_bus),
         )
 
-    def get_integration_options(self, credentials_role=None, sns_topic_arn=None):
+    def get_integration_options(self, event_bus):
+        sns_topic = self.create_sns_triggered_lambda(
+            name='destined',
+            event_bus=event_bus
+        )
         return aws_cdk.aws_apigateway.IntegrationOptions(
-            credentials_role=credentials_role,
+            credentials_role=self.create_iam_service_role_for(sns_topic),
             request_parameters={
                 'integration.request.header.Content-Type': "'application/x-www-form-urlencoded'"
             },
             request_templates={
-                "application/json": f"""Action=Publish&TargetArn=$util.urlEncode('{sns_topic_arn}')&Message=please $input.params().querystring.get('mode')&Version=2010-03-31"""
+                "application/json": f"""Action=Publish&TargetArn=$util.urlEncode('{sns_topic.topic_arn}')&Message=please $input.params().querystring.get('mode')&Version=2010-03-31"""
             },
             passthrough_behavior=aws_cdk.aws_apigateway.PassthroughBehavior.NEVER,
             integration_responses=[
@@ -160,12 +155,12 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.WellArchitectedStack):
                     response_templates={"message": 'Message added to SNS topic'}
                 ),
                 self.create_integration_response(
-                    selection_pattern="^\[Error\].*",
                     status_code='400',
                     response_templates={
                         "message": "$util.escapeJavaScript($input.path('$.errorMessage'))",
                         "state": 'error',
                     },
+                    selection_pattern="^\[Error\].*",
                     separators=(',', ':'),
                     response_parameters=self.create_response_parameters(
                         content_type="'application/json'",
