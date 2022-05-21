@@ -4,7 +4,7 @@ import well_architected
 import well_architected_api
 import well_architected_dynamodb_table
 import well_architected_lambda
-import aws_cdk.aws_apigatewayv2_integrations_alpha as integrations
+import aws_cdk.aws_apigatewayv2_integrations_alpha
 import aws_cdk.aws_apigatewayv2_alpha
 import subprocess
 
@@ -31,12 +31,7 @@ class CircuitBreakerLambda(well_architected.WellArchitectedStack):
         # grant the lambda role read/write permissions to our table'
         table.grant_read_write_data(unreliable)
 
-        # api = aws_cdk.aws_apigatewayv2_alpha.HttpApi(
-        #     self, 'HttpApi',
-        #     default_integration=integrations.HttpLambdaIntegration(
-        #         'HttpLambdaIntegration', handler=unreliable
-        #     )
-        # )
+
         api = well_architected_api.WellArchitectedApi(
             self, 'HttpApiGateway',
             error_topic=self.error_topic,
