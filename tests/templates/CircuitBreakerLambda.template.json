@@ -6,12 +6,6 @@
     "DisplayName": "CircuitBreakerLambdaErrorTopic"
    }
   },
-  "CircuitBreakerLambdaCircuitBreakerLambdaErrorTopic61404008": {
-   "Type": "AWS::SNS::Topic",
-   "Properties": {
-    "DisplayName": "CircuitBreakerLambdaErrorTopic"
-   }
-  },
   "CircuitBreakerLambda24CC3C2D": {
    "Type": "AWS::DynamoDB::Table",
    "Properties": {
@@ -39,7 +33,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "CircuitBreakerLambdaCircuitBreakerLambdaErrorTopic61404008"
+      "Ref": "CircuitBreakerLambdaErrorTopic0E38E684"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -58,7 +52,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "CircuitBreakerLambdaCircuitBreakerLambdaErrorTopic61404008"
+      "Ref": "CircuitBreakerLambdaErrorTopic0E38E684"
      }
     ],
     "DatapointsToAlarm": 1,
