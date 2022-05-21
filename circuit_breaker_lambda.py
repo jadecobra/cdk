@@ -19,21 +19,14 @@ class CircuitBreakerLambda(well_architected.WellArchitectedStack):
             partition_key="id",
         ).dynamodb_table
 
-        # install node dependencies for lambdas
-        # lambda_folder = os.path.dirname(os.path.realpath(__file__)) + "/lambda_functions"
-        # subprocess.check_call("npm i".split(), cwd=lambda_folder, stdout=subprocess.DEVNULL)
-        # subprocess.check_call("npm run build".split(), cwd=lambda_folder, stdout=subprocess.DEVNULL)
-
-        # defines an AWS Lambda resource with unreliable code
-        unreliable_lambda = aws_cdk.aws_lambda.Function(
-            self, "unreliable",
-            runtime=aws_cdk.aws_lambda.Runtime.NODEJS_12_X,
-            handler="unreliable.handler",
-            code=aws_cdk.aws_lambda.Code.from_asset("lambda_functions/unreliable"),
-            environment={
+        unreliable_lambda = well_architected_lambda.LambdaFunctionConstruct(
+            self, 'LambdaFunction',
+            error_topic=self.error_topic,
+            function_name='unreliable',
+            environment_variables={
                 'CIRCUITBREAKER_TABLE': table.table_name
             }
-        )
+        ).lambda_function
 
         # grant the lambda role read/write permissions to our table'
         table.grant_read_write_data(unreliable_lambda)
