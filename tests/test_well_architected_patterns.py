@@ -5,9 +5,12 @@ class TestWellArchitectedPatterns(tests.utilities.TestTemplates):
     @staticmethod
     def patterns():
         return (
-            'ApiSnsLambdaEventBridgeLambda',
-            "ApiDynamodb",
-            "ApiStepFunctions",
+            # 'ApiSnsLambdaEventBridgeLambda',
+            # "ApiDynamodb",
+            # "ApiStepFunctions",
+            'CircuitBreakerLambda',
+            # 'WafApiLambdaDynamodb',
+            # 'SimpleGraphqlService',
             # 'BigFan',
             # 'DynamoDBFlow',
             # 'DynamoDBTable',
@@ -18,22 +21,19 @@ class TestWellArchitectedPatterns(tests.utilities.TestTemplates):
             # 'FatLambda',
             # 'HitCounter',
             # 'HttpFlow',
-            'LambdaCircuitBreaker',
             # 'LambdaPowerTuner',
             # 'LambdaLith',
             # 'LambdaRestAPIGateway',
             # 'RdsProxy',
             # 'SagaStepFunction',
             # 'SinglePurposeLambda',
-            'SimpleGraphqlService',
             # 'SnsFlow',
             # 'SnsRestApi',
             # 'SNSTopic',
             # 'SqsFlow',
-            'HttpApiLambdaFunction',
-            'HttpApiStateMachine',
+            # 'HttpApiLambdaFunction',
+            # 'HttpApiStateMachine',
             # 'XRayTracerSnsFanOutTopic',
-            'WafApiLambdaDynamodb',
         )
 
     def test_well_architected_cdk_patterns(self):

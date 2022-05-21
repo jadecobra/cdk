@@ -5,20 +5,18 @@ import well_architected_dynamodb_table
 import well_architected_lambda
 import aws_cdk.aws_apigatewayv2_integrations_alpha as integrations
 import aws_cdk.aws_apigatewayv2_alpha
+import subprocess
 
 
 
-class CircuitBreakerLambda(aws_cdk.Stack):
+class CircuitBreakerLambda(well_architected.WellArchitectedStack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         table = well_architected_dynamodb_table.DynamoDBTableConstruct(
-            self, "CircuitBreakerTable",
-            partition_key=aws_cdk.aws_dynamodb.Attribute(
-                name="id",
-                type=aws_cdk.aws_dynamodb.AttributeType.STRING
-            ),
+            self, id,
+            partition_key="id",
         ).dynamodb_table
 
         # install node dependencies for lambdas
@@ -28,7 +26,7 @@ class CircuitBreakerLambda(aws_cdk.Stack):
 
         # defines an AWS Lambda resource with unreliable code
         unreliable_lambda = aws_cdk.aws_lambda.Function(
-            self, "UnreliableLambdaHandler",
+            self, "unreliable",
             runtime=aws_cdk.aws_lambda.Runtime.NODEJS_12_X,
             handler="unreliable.handler",
             code=aws_cdk.aws_lambda.Code.from_asset("lambda_functions/unreliable"),
@@ -36,15 +34,6 @@ class CircuitBreakerLambda(aws_cdk.Stack):
                 'CIRCUITBREAKER_TABLE': table.table_name
             }
         )
-
-        unreliable_lambda = well_architected_lambda.LambdaFunctionConstruct(
-            self, 'LambdaFunction',
-            error_topic=error_topic,
-            function_name=name,
-            environment_variables={
-                'DYNAMODB_TABLE_NAME': name
-            },
-        ).lambda_function
 
         # grant the lambda role read/write permissions to our table'
         table.grant_read_write_data(unreliable_lambda)
