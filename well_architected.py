@@ -6,12 +6,12 @@ class WellArchitectedConstruct(constructs.Construct):
 
     def __init__(self, scope: constructs.Construct, id: str, error_topic=None, **kwargs):
         super().__init__(scope, id, **kwargs)
-        self.error_topic = error_topic if error_topic else self.create_error_topic(id)
+        self.error_topic = error_topic if error_topic else self.create_sns_topic(f'{id}ErrorTopic')
 
-    def create_error_topic(self, display_name):
+    def create_sns_topic(self, display_name):
         return aws_cdk.aws_sns.Topic(
-            self, "SnsTopic",
-            display_name=f"{display_name}ErrorTopic",
+            self, display_name,
+            display_name=display_name,
         )
 
     @staticmethod
@@ -66,10 +66,10 @@ class WellArchitectedStack(aws_cdk.Stack):
             synthesizer=aws_cdk.LegacyStackSynthesizer(),
             **kwargs,
         )
-        self.error_topic = self.create_error_topic(id)
+        self.error_topic = self.create_sns_topic(id)
 
-    def create_error_topic(self, display_name):
+    def create_sns_topic(self, display_name):
         return aws_cdk.aws_sns.Topic(
-            self, "SnsTopic",
-            display_name=f"{display_name}ErrorTopic",
+            self, display_name,
+            display_name=display_name,
         )
