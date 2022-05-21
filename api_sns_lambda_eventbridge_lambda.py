@@ -38,25 +38,28 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.WellArchitectedStack):
                     credentials_role=self.create_iam_service_role_for(sns_topic),
                     sns_topic_arn=sns_topic.topic_arn,
                 ),
-                method_responses=[
-                    self.create_method_response(
-                        status_code='200',
-                        response_model=self.create_response_model(
-                            rest_api=rest_api,
-                            model_name='pollResponse',
-                        ),
-                    ),
-                    self.create_method_response(
-                        status_code='400',
-                        response_model=self.create_response_model(
-                            rest_api=rest_api,
-                            model_name='errorResponse',
-                            properties='state',
-                        )
-                    ),
-                ]
+                method_responses=self.create_method_responses(rest_api)
             )
         )
+
+    def create_method_responses(self, rest_api):
+        return [
+            self.create_method_response(
+                status_code='200',
+                response_model=self.create_response_model(
+                    rest_api=rest_api,
+                    model_name='pollResponse',
+                ),
+            ),
+            self.create_method_response(
+                status_code='400',
+                response_model=self.create_response_model(
+                    rest_api=rest_api,
+                    model_name='errorResponse',
+                    properties='state',
+                )
+            ),
+        ]
 
     def create_success_lambda(self, event_bus=None, error_topic=None):
         return self.create_event_driven_lambda_function(
