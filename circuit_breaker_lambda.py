@@ -8,7 +8,6 @@ import aws_cdk.aws_apigatewayv2_alpha
 import subprocess
 
 
-
 class CircuitBreakerLambda(well_architected.WellArchitectedStack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
@@ -22,7 +21,7 @@ class CircuitBreakerLambda(well_architected.WellArchitectedStack):
         unreliable_lambda = well_architected_lambda.LambdaFunctionConstruct(
             self, 'LambdaFunction',
             error_topic=self.error_topic,
-            function_name='unreliable',
+            function_name='circuit_breaker_lambda/unreliable',
             environment_variables={
                 'CIRCUITBREAKER_TABLE': table.table_name
             }
@@ -31,7 +30,6 @@ class CircuitBreakerLambda(well_architected.WellArchitectedStack):
         # grant the lambda role read/write permissions to our table'
         table.grant_read_write_data(unreliable_lambda)
 
-        # defines an API Gateway Http API resource backed by our "dynamoLambda" function.
         api = aws_cdk.aws_apigatewayv2_alpha.HttpApi(
             self, 'CircuitBreakerGateway',
             default_integration=integrations.HttpLambdaIntegration(
