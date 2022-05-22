@@ -6,23 +6,6 @@
     "DisplayName": "ApiSnsSqsLambdaErrorTopic"
    }
   },
-  "ApiGatewayServiceRole7D65739D": {
-   "Type": "AWS::IAM::Role",
-   "Properties": {
-    "AssumeRolePolicyDocument": {
-     "Statement": [
-      {
-       "Action": "sts:AssumeRole",
-       "Effect": "Allow",
-       "Principal": {
-        "Service": "apigateway.amazonaws.com"
-       }
-      }
-     ],
-     "Version": "2012-10-17"
-    }
-   }
-  },
   "TheBigFanCDKPatternTopicAAA4D267": {
    "Type": "AWS::SNS::Topic",
    "Properties": {
@@ -641,7 +624,7 @@
     "RestApiSnsF3296308"
    ]
   },
-  "RestApiSnsDeployment93BF40AD5fc951428db41adf8219c00049bd81eb": {
+  "RestApiSnsDeployment93BF40AD5fdb54ba8151f73dacf21d8ee20ff33b": {
    "Type": "AWS::ApiGateway::Deployment",
    "Properties": {
     "RestApiId": {
@@ -663,7 +646,7 @@
      "Ref": "RestApiSnsF3296308"
     },
     "DeploymentId": {
-     "Ref": "RestApiSnsDeployment93BF40AD5fc951428db41adf8219c00049bd81eb"
+     "Ref": "RestApiSnsDeployment93BF40AD5fdb54ba8151f73dacf21d8ee20ff33b"
     },
     "MethodSettings": [
      {
@@ -709,7 +692,7 @@
     "Integration": {
      "Credentials": {
       "Fn::GetAtt": [
-       "ApiGatewayServiceRole7D65739D",
+       "ApiGatewayApiGatewayServiceRoleA84B0BD7",
        "Arn"
       ]
      },
@@ -723,7 +706,7 @@
       },
       {
        "ResponseParameters": {
-        "method.response.header.Content-Type": "'application/json'",
+        "method.response.header.Content-Type": "application/json",
         "method.response.header.Access-Control-Allow-Origin": "'*'",
         "method.response.header.Access-Control-Allow-Credentials": "'true'"
        },
@@ -1018,6 +1001,23 @@
        "\",{\"label\":\"api_gateway_5XXErrors\",\"period\":900,\"stat\":\"Sum\"}]],\"yAxis\":{}}}]}"
       ]
      ]
+    }
+   }
+  },
+  "ApiGatewayApiGatewayServiceRoleA84B0BD7": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "apigateway.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
     }
    }
   }

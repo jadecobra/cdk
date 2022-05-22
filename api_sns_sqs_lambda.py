@@ -1,10 +1,11 @@
 import aws_cdk
 import constructs
+import well_architected
 import well_architected_lambda
 import well_architected_rest_api
 
 
-class ApiSnsSqsLambda(well_architected_rest_api.WellArchitectedRestApiSns):
+class ApiSnsSqsLambda(well_architected.WellArchitectedStack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
@@ -29,20 +30,24 @@ class ApiSnsSqsLambda(well_architected_rest_api.WellArchitectedRestApiSns):
                 sqs_queue=sqs_queue,
             )
 
-        rest_api=self.create_rest_api(self.error_topic)
-        self.create_rest_api_method(
-            rest_api=rest_api,
+        rest_api = well_architected_rest_api.RestApiSnsConstruct(
+            self, 'ApiGateway',
+            error_topic=self.error_topic,
+        )
+        rest_api.add_method(
+            # rest_api=rest_api,
             method='POST',
             path='SendEvent',
-            integration=self.create_api_sns_integration(
-                request_templates=self.get_request_templates(sns_topic.topic_arn),
-                iam_role=self.api_gateway_service_role
+            integration=rest_api.create_api_sns_integration(
+                request_templates=self.get_request_templates(
+                    rest_api=rest_api,
+                    sns_topic_arn=sns_topic.topic_arn),
+                iam_role=rest_api.api_gateway_service_role
             ),
-            # method_responses=self.create_method_responses(rest_api)
         )
 
-    def get_request_templates(self, sns_topic_arn):
-        return self.create_json_template(
+    def get_request_templates(self, rest_api=None, sns_topic_arn=None):
+        return rest_api.create_json_template(
             f"Action=Publish&TargetArn=$util.urlEncode('{sns_topic_arn}')&Message=$util.urlEncode($input.path('$.message'))&Version=2010-03-31&MessageAttributes.entry.1.Name=status&MessageAttributes.entry.1.Value.DataType=String&MessageAttributes.entry.1.Value.StringValue=$util.urlEncode($input.path('$.status'))"
         )
 

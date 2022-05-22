@@ -42,7 +42,7 @@ class WellArchitected(aws_cdk.App):
 
         api_sns_sqs_lambda.ApiSnsSqsLambda(self, 'ApiSnsSqsLambda')
         api_sns_lambda_eventbridge_lambda.ApiSnsLambdaEventBridgeLambda(self, "ApiSnsLambdaEventBridgeLambda")
-        api_dynamodb.ApiDynamodb(self, 'ApiDynamodb', partition_key='message')
+        api_dynamodb.RestApiDynamodb(self, 'ApiDynamodb', partition_key='message')
         api_step_functions.ApiStepFunctions(self, "ApiStepFunctions")
         circuit_breaker_lambda.CircuitBreakerLambda(self, "CircuitBreakerLambda", )
         saga_step_function.SagaStepFunction(self, "SagaStepFunction",)

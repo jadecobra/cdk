@@ -6,23 +6,6 @@
     "DisplayName": "ApiSnsLambdaEventBridgeLambdaErrorTopic"
    }
   },
-  "ApiGatewayServiceRole7D65739D": {
-   "Type": "AWS::IAM::Role",
-   "Properties": {
-    "AssumeRolePolicyDocument": {
-     "Statement": [
-      {
-       "Action": "sts:AssumeRole",
-       "Effect": "Allow",
-       "Principal": {
-        "Service": "apigateway.amazonaws.com"
-       }
-      }
-     ],
-     "Version": "2012-10-17"
-    }
-   }
-  },
   "EventBus7B8748AA": {
    "Type": "AWS::Events::EventBus",
    "Properties": {
@@ -940,7 +923,7 @@
     "RestApiSnsF3296308"
    ]
   },
-  "RestApiSnsDeployment93BF40AD632c6489e042a831e54948def36a7e90": {
+  "RestApiSnsDeployment93BF40AD6ea3ca70fbc3cbd1a567367a91430987": {
    "Type": "AWS::ApiGateway::Deployment",
    "Properties": {
     "RestApiId": {
@@ -962,7 +945,7 @@
      "Ref": "RestApiSnsF3296308"
     },
     "DeploymentId": {
-     "Ref": "RestApiSnsDeployment93BF40AD632c6489e042a831e54948def36a7e90"
+     "Ref": "RestApiSnsDeployment93BF40AD6ea3ca70fbc3cbd1a567367a91430987"
     },
     "MethodSettings": [
      {
@@ -1008,7 +991,7 @@
     "Integration": {
      "Credentials": {
       "Fn::GetAtt": [
-       "ApiGatewayServiceRole7D65739D",
+       "ApiGatewayApiGatewayServiceRoleA84B0BD7",
        "Arn"
       ]
      },
@@ -1022,7 +1005,7 @@
       },
       {
        "ResponseParameters": {
-        "method.response.header.Content-Type": "'application/json'",
+        "method.response.header.Content-Type": "application/json",
         "method.response.header.Access-Control-Allow-Origin": "'*'",
         "method.response.header.Access-Control-Allow-Credentials": "'true'"
        },
@@ -1317,6 +1300,23 @@
        "\",{\"label\":\"api_gateway_5XXErrors\",\"period\":900,\"stat\":\"Sum\"}]],\"yAxis\":{}}}]}"
       ]
      ]
+    }
+   }
+  },
+  "ApiGatewayApiGatewayServiceRoleA84B0BD7": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "apigateway.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
     }
    }
   },

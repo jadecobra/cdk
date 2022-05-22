@@ -1,11 +1,11 @@
 import aws_cdk
 import constructs
-import json
-import well_architected_rest_api
+import well_architected
 import well_architected_lambda
+import well_architected_rest_api
 
 
-class ApiSnsLambdaEventBridgeLambda(well_architected_rest_api.WellArchitectedRestApiSns):
+class ApiSnsLambdaEventBridgeLambda(well_architected.WellArchitectedStack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
@@ -19,21 +19,23 @@ class ApiSnsLambdaEventBridgeLambda(well_architected_rest_api.WellArchitectedRes
             error_topic=self.error_topic,
             event_bus=event_bus,
         )
-        rest_api=self.create_rest_api(self.error_topic)
-        self.create_rest_api_method(
-            rest_api=rest_api,
+        rest_api = well_architected_rest_api.RestApiSnsConstruct(
+            self, 'ApiGateway',
+            error_topic=self.error_topic,
+        )
+        rest_api.add_method(
             method='GET',
             path='SendEvent',
-            integration=self.create_api_sns_integration(
-                iam_role=self.api_gateway_service_role,
+            integration=rest_api.create_api_sns_integration(
+                iam_role=rest_api.api_gateway_service_role,
                 request_templates=self.get_request_templates(
-                    self.create_sns_triggered_lambda(
+                    rest_api=rest_api,
+                    sns_topic_arn=self.create_sns_triggered_lambda(
                         name='destined',
                         event_bus=event_bus
                     ).topic_arn
                 ),
             ),
-            # method_responses=self.create_method_responses(rest_api)
         )
 
     def create_success_lambda(self, event_bus=None, error_topic=None):
@@ -86,8 +88,8 @@ class ApiSnsLambdaEventBridgeLambda(well_architected_rest_api.WellArchitectedRes
             event_bus_name=name,
         )
 
-    def get_request_templates(self, sns_topic_arn):
-        return self.create_json_template(
+    def get_request_templates(self, sns_topic_arn=None, rest_api=None):
+        return rest_api.create_json_template(
             f"""Action=Publish&TargetArn=$util.urlEncode('{sns_topic_arn}')&Message=please $input.params().querystring.get('mode')&Version=2010-03-31"""
         )
 

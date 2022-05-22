@@ -3,6 +3,9 @@ import aws_cdk.aws_apigatewayv2_alpha
 import well_architected
 import well_architected_api_construct
 
+
+
+
 class WellArchitectedApiStack(well_architected.WellArchitectedStack):
 
     def __init__(self, scope, id, **kwargs):
@@ -101,15 +104,3 @@ class WellArchitectedApiStack(well_architected.WellArchitectedStack):
             error_topic=error_topic,
             api=api
         ).api
-
-    def create_rest_api_method(
-        self, rest_api=None, integration=None,
-        method='POST', path=None
-    ):
-        return rest_api.root.add_resource(
-            path
-        ).add_method(
-            method,
-            integration,
-            method_responses=self.create_method_responses(rest_api)
-        )

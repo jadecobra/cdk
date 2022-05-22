@@ -1,13 +1,14 @@
 import aws_cdk
 import aws_cdk.aws_apigatewayv2_alpha
 import constructs
-import well_architected_api_stack
-import well_architected_lambda
+import well_architected
 import well_architected_dynamodb_table
+import well_architected_lambda
+import well_architected_rest_api
 import json
 
 
-class ApiDynamodb(well_architected_api_stack.WellArchitectedApiStack):
+class RestApiDynamodb(well_architected.WellArchitectedStack):
 
     def __init__(
         self, scope: constructs.Construct, id: str,
@@ -16,18 +17,17 @@ class ApiDynamodb(well_architected_api_stack.WellArchitectedApiStack):
     ) -> None:
         super().__init__(scope, id, **kwargs)
 
+        rest_api = self.create_rest_api(self.error_topic)
         dynamodb_table = self.create_dynamodb_table(
             partition_key=partition_key,
             error_topic=self.error_topic,
         )
-        dynamodb_table.grant_read_write_data(self.api_gateway_service_role)
-        rest_api=self.create_rest_api(self.error_topic)
-        self.create_rest_api_method(
-            rest_api=rest_api,
+        dynamodb_table.grant_read_write_data(rest_api.api_gateway_service_role)
+        rest_api.add_method(
             method='POST',
             path='InsertItem',
             integration=self.integrate_rest_api_with_dynamodb_put_item(
-                api_gateway_service_role=self.api_gateway_service_role,
+                api_gateway_service_role=rest_api.api_gateway_service_role,
                 dynamodb_table_name=dynamodb_table.table_name,
                 dynamodb_partition_key=partition_key,
             ),
@@ -70,6 +70,14 @@ class ApiDynamodb(well_architected_api_stack.WellArchitectedApiStack):
             response_type='pollResponse',
             response_templates=self.success_response_template(dynamodb_partition_key),
         )
+
+    @staticmethod
+    def create_response_parameters(content_type=True, allow_origin=True, allow_credentials=True):
+        return {
+            'method.response.header.Content-Type': content_type,
+            'method.response.header.Access-Control-Allow-Origin': allow_origin,
+            'method.response.header.Access-Control-Allow-Credentials': allow_credentials,
+        }
 
     def error_response_model(self):
         return dict(
@@ -186,7 +194,8 @@ class ApiDynamodb(well_architected_api_stack.WellArchitectedApiStack):
         )
 
     def create_rest_api(self, error_topic):
-        return self.create_api(
+        return well_architected_rest_api.RestApiConstruct(
+            self, 'ApiGateway',
             error_topic=error_topic,
             api=aws_cdk.aws_apigateway.RestApi(
                 self, 'RestApiDynamodb',
