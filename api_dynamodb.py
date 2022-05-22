@@ -1,7 +1,6 @@
 import aws_cdk
 import aws_cdk.aws_apigatewayv2_alpha
 import constructs
-import well_architected
 import well_architected_api
 import well_architected_lambda
 import well_architected_dynamodb_table
@@ -17,14 +16,13 @@ class ApiDynamodb(well_architected_api.WellArchitectedApiStack):
     ) -> None:
         super().__init__(scope, id, **kwargs)
 
-        rest_api = self.create_rest_api(self.error_topic)
         dynamodb_table = self.create_dynamodb_table(
             partition_key=partition_key,
             error_topic=self.error_topic,
         )
         dynamodb_table.grant_read_write_data(self.api_gateway_service_role)
-        self.add_method_to_rest_api(
-            rest_api=rest_api,
+        self.create_rest_api_method(
+            rest_api=self.create_rest_api(self.error_topic),
             api_gateway_service_role=self.api_gateway_service_role,
             dynamodb_table_name=dynamodb_table.table_name,
             dynamodb_partition_key=partition_key,
@@ -34,7 +32,7 @@ class ApiDynamodb(well_architected_api.WellArchitectedApiStack):
             error_topic=self.error_topic,
         )
 
-    def add_method_to_rest_api(
+    def create_rest_api_method(
         self, rest_api=None, api_gateway_service_role=None,
         dynamodb_table_name=None, dynamodb_partition_key=None
     ):
@@ -221,8 +219,7 @@ class ApiDynamodb(well_architected_api.WellArchitectedApiStack):
         )
 
     def create_rest_api(self, error_topic):
-        return well_architected_api.WellArchitectedApi(
-            self, 'RestApi',
+        return self.create_api(
             error_topic=error_topic,
             api=aws_cdk.aws_apigateway.RestApi(
                 self, 'RestApiDynamodb',
@@ -233,4 +230,4 @@ class ApiDynamodb(well_architected_api.WellArchitectedApiStack):
                     stage_name='prod',
                 )
             )
-        ).api
+        )

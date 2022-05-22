@@ -87,14 +87,13 @@ class WellArchitectedRestApiSns(well_architected_api.WellArchitectedApiStack):
         )
 
     def create_rest_api(self, error_topic=None):
-        return well_architected_api.WellArchitectedApi(
-            self, 'RestApi',
+        return self.create_api(
             error_topic=error_topic,
             api=aws_cdk.aws_apigateway.RestApi(
                 self, 'RestApiSns',
                     deploy_options=self.get_stage_options()
                 )
-        ).api
+        )
 
     def create_rest_api_method(self, method=None, rest_api=None, integration=None):
         rest_api.root.add_resource(

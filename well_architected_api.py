@@ -6,7 +6,7 @@ import well_architected
 class WellArchitectedApi(well_architected.WellArchitectedConstruct):
 
     def __init__(
-        self,scope: constructs.Construct, id: str, api_id=None,
+        self,scope: constructs.Construct, id: str,
         error_topic=None,
         api=None,
         **kwargs
@@ -146,3 +146,10 @@ class WellArchitectedApiStack(well_architected.WellArchitectedStack):
             self, 'ApiGatewayServiceRole',
             assumed_by=aws_cdk.aws_iam.ServicePrincipal('apigateway.amazonaws.com'),
         )
+
+    def create_api(self, error_topic=None, api=None):
+        return WellArchitectedApi(
+            self, 'ApiGateway',
+            error_topic=error_topic,
+            api=api
+        ).api

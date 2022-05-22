@@ -1127,7 +1127,7 @@
     }
    }
   },
-  "RestApi4XXErrorsGreaterThanOnePercentC77F0B92": {
+  "ApiGateway4XXErrorsGreaterThanOnePercent5A1D3E83": {
    "Type": "AWS::CloudWatch::Alarm",
    "Properties": {
     "ComparisonOperator": "GreaterThanOrEqualToThreshold",
@@ -1193,7 +1193,7 @@
     "TreatMissingData": "notBreaching"
    }
   },
-  "RestApi5XXErrorsGreaterThanZeroDBDEB694": {
+  "ApiGateway5XXErrorsGreaterThanZero0315D4CD": {
    "Type": "AWS::CloudWatch::Alarm",
    "Properties": {
     "ComparisonOperator": "GreaterThanOrEqualToThreshold",
@@ -1232,7 +1232,7 @@
     "TreatMissingData": "notBreaching"
    }
   },
-  "RestApiP99LatencyGreaterThanOneSecond373BB52C": {
+  "ApiGatewayP99LatencyGreaterThanOneSecond9E39333D": {
    "Type": "AWS::CloudWatch::Alarm",
    "Properties": {
     "ComparisonOperator": "GreaterThanOrEqualToThreshold",
@@ -1271,7 +1271,7 @@
     "TreatMissingData": "notBreaching"
    }
   },
-  "RestApiCloudWatchDashBoard2449E23D": {
+  "ApiGatewayCloudWatchDashBoard57AC71E2": {
    "Type": "AWS::CloudWatch::Dashboard",
    "Properties": {
     "DashboardBody": {
@@ -1839,7 +1839,7 @@
     ]
    }
   },
-  "RestApiRestApiURL02BC346F": {
+  "ApiGatewayApiGatewayURL3BE59E45": {
    "Value": {
     "Fn::Join": [
      "",
