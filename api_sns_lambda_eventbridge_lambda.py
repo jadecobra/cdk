@@ -20,10 +20,15 @@ class ApiSnsLambdaEventBridgeLambda(well_architected_rest_api.WellArchitectedRes
             event_bus=event_bus,
         )
 
+        sns_topic = self.create_sns_triggered_lambda(
+            name='destined',
+            event_bus=event_bus
+        )
+
         self.create_rest_api_method(
             method='GET',
             rest_api=self.create_rest_api(self.error_topic),
-            integration=self.create_api_sns_integration(event_bus),
+            integration=self.create_api_sns_integration(sns_topic),
         )
 
     def create_success_lambda(self, event_bus=None, error_topic=None):
@@ -76,26 +81,14 @@ class ApiSnsLambdaEventBridgeLambda(well_architected_rest_api.WellArchitectedRes
             event_bus_name=name,
         )
 
-    def create_api_sns_integration(self, event_bus):
-        return aws_cdk.aws_apigateway.Integration(
-            type=aws_cdk.aws_apigateway.IntegrationType.AWS,
-            integration_http_method='POST',
-            uri='arn:aws:apigateway:us-east-1:sns:path//',
-            options=self.get_integration_options(event_bus),
-        )
-
-    def get_integration_options(self, event_bus):
-        sns_topic = self.create_sns_triggered_lambda(
-            name='destined',
-            event_bus=event_bus
-        )
+    def get_integration_options(self, iam_role=None, sns_topic_arn=None):
         return aws_cdk.aws_apigateway.IntegrationOptions(
-            credentials_role=self.create_iam_service_role(sns_topic),
+            credentials_role=iam_role,
             request_parameters={
                 'integration.request.header.Content-Type': "'application/x-www-form-urlencoded'"
             },
             request_templates={
-                "application/json": f"""Action=Publish&TargetArn=$util.urlEncode('{sns_topic.topic_arn}')&Message=please $input.params().querystring.get('mode')&Version=2010-03-31"""
+                "application/json": f"""Action=Publish&TargetArn=$util.urlEncode('{sns_topic_arn}')&Message=please $input.params().querystring.get('mode')&Version=2010-03-31"""
             },
             passthrough_behavior=aws_cdk.aws_apigateway.PassthroughBehavior.NEVER,
             integration_responses=[

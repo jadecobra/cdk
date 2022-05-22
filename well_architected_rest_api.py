@@ -104,7 +104,7 @@ class WellArchitectedRestApiSns(well_architected.WellArchitectedStack):
             method_responses=self.create_method_responses(rest_api)
         )
 
-    def create_iam_service_role(self, sns_topic):
+    def create_iam_service_role_for(self, sns_topic):
         role = aws_cdk.aws_iam.Role(
             self, 'IamRole',
             assumed_by=aws_cdk.aws_iam.ServicePrincipal(
@@ -113,6 +113,20 @@ class WellArchitectedRestApiSns(well_architected.WellArchitectedStack):
         )
         sns_topic.grant_publish(role)
         return role
+
+    def get_integration_options(self, iam_role=None, sns_topic_arn=None):
+        raise NotImplementedError
+
+    def create_api_sns_integration(self, sns_topic):
+        return aws_cdk.aws_apigateway.Integration(
+            type=aws_cdk.aws_apigateway.IntegrationType.AWS,
+            integration_http_method='POST',
+            uri='arn:aws:apigateway:us-east-1:sns:path//',
+            options=self.get_integration_options(
+                iam_role=self.create_iam_service_role_for(sns_topic),
+                sns_topic_arn=sns_topic.topic_arn,
+            ),
+        )
 
 class RestApiLambdaConstruct(well_architected.WellArchitectedConstruct):
 
