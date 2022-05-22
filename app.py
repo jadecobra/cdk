@@ -23,7 +23,7 @@ try:
     import xray_tracer
     import well_architected_dynamodb_table
     import web_application_firewall
-    import well_architected_api
+    import well_architected_api_construct
     import well_architected_rest_api
     import well_architected_lambda
 except ImportError as error:

@@ -2,7 +2,7 @@ import aws_cdk
 import aws_cdk.aws_apigatewayv2_alpha
 import constructs
 import well_architected_lambda
-import well_architected_api
+import well_architected_api_construct
 import well_architected
 
 # TODO:
@@ -112,7 +112,7 @@ class ApiStepFunctions(well_architected.WellArchitectedStack):
         )
 
     def create_http_api(self, error_topic):
-        return well_architected_api.WellArchitectedApi(
+        return well_architected_api_construct.WellArchitectedApi(
             self, 'HttpApi',
             error_topic=error_topic,
             api=aws_cdk.aws_apigatewayv2_alpha.HttpApi(
@@ -122,7 +122,7 @@ class ApiStepFunctions(well_architected.WellArchitectedStack):
         ).api
 
     def create_rest_api(self, error_topic=None, state_machine=None):
-        return well_architected_api.WellArchitectedApi(
+        return well_architected_api_construct.WellArchitectedApi(
             self, 'RestApi',
             error_topic=error_topic,
             api=aws_cdk.aws_apigateway.StepFunctionsRestApi(

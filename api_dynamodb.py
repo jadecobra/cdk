@@ -1,13 +1,13 @@
 import aws_cdk
 import aws_cdk.aws_apigatewayv2_alpha
 import constructs
-import well_architected_api
+import well_architected_api_stack
 import well_architected_lambda
 import well_architected_dynamodb_table
 import json
 
 
-class ApiDynamodb(well_architected_api.WellArchitectedApiStack):
+class ApiDynamodb(well_architected_api_stack.WellArchitectedApiStack):
 
     def __init__(
         self, scope: constructs.Construct, id: str,

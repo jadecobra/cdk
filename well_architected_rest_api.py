@@ -2,9 +2,9 @@ import aws_cdk
 import constructs
 import json
 import well_architected
-import well_architected_api
+import well_architected_api_stack
 
-class WellArchitectedRestApiSns(well_architected_api.WellArchitectedApiStack):
+class WellArchitectedRestApiSns(well_architected_api_stack.WellArchitectedApiStack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs):
         super().__init__(scope, id, **kwargs)
@@ -114,7 +114,7 @@ class RestApiLambdaConstruct(well_architected.WellArchitectedConstruct):
         # self.resource_arn = f"arn:aws:apigateway:{self.region}::/restapis/{self.api_id}/stages/{self.rest_api.deployment_stage.stage_name}"
         self.resource_arn = "arn:aws:apigateway:{self.region}::/restapis/{self.api_id}/stages/{self.rest_api.deployment_stage.stage_name}"
 
-        well_architected_api.WellArchitectedApi(
+        well_architected_api_construct.WellArchitectedApi(
             self, 'ApiGatewayCloudWatch',
             api=self.api,
             error_topic=self.error_topic,

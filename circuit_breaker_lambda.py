@@ -1,7 +1,7 @@
 import aws_cdk
 import constructs
 import well_architected
-import well_architected_api
+import well_architected_api_construct
 import well_architected_dynamodb_table
 import well_architected_lambda
 import aws_cdk.aws_apigatewayv2_integrations_alpha
@@ -35,7 +35,7 @@ class CircuitBreakerLambda(well_architected.WellArchitectedStack):
         ).lambda_function
 
     def create_http_api(self, lambda_function):
-        return well_architected_api.WellArchitectedApi(
+        return well_architected_api_construct.WellArchitectedApi(
             self, 'HttpApiGateway',
             error_topic=self.error_topic,
             api=aws_cdk.aws_apigatewayv2_alpha.HttpApi(

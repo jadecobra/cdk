@@ -4,7 +4,7 @@ import aws_cdk.aws_apigatewayv2_alpha
 import constructs
 import web_application_firewall
 import well_architected
-import well_architected_api
+import well_architected_api_construct
 import well_architected_dynamodb_table
 import well_architected_lambda
 
@@ -77,7 +77,7 @@ class WafApiLambdaDynamodb(well_architected.WellArchitectedStack):
         ).lambda_function
 
     def create_http_api(self, name=None, lambda_function=None, error_topic=None):
-        return well_architected_api.WellArchitectedApi(
+        return well_architected_api_construct.WellArchitectedApi(
             self, 'HttpApiGateway',
             error_topic=error_topic,
             api=aws_cdk.aws_apigatewayv2_alpha.HttpApi(
@@ -91,7 +91,7 @@ class WafApiLambdaDynamodb(well_architected.WellArchitectedStack):
         ).api
 
     def create_rest_api(self, lambda_function=None, error_topic=None):
-        return well_architected_api.WellArchitectedApi(
+        return well_architected_api_construct.WellArchitectedApi(
             self, 'RestApiGateway',
             error_topic=self.error_topic,
             api=aws_cdk.aws_apigateway.LambdaRestApi(
