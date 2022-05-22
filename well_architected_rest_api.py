@@ -4,7 +4,7 @@ import json
 import well_architected
 import well_architected_api
 
-class WellArchitectedRestApiSns(well_architected.WellArchitectedStack):
+class WellArchitectedRestApiSns(well_architected_api.WellArchitectedApiStack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs):
         super().__init__(scope, id, **kwargs)
@@ -105,16 +105,6 @@ class WellArchitectedRestApiSns(well_architected.WellArchitectedStack):
             method_responses=self.create_method_responses(rest_api)
         )
 
-    def create_iam_service_role_for(self, sns_topic):
-        role = aws_cdk.aws_iam.Role(
-            self, 'IamRole',
-            assumed_by=aws_cdk.aws_iam.ServicePrincipal(
-                'apigateway.amazonaws.com'
-            )
-        )
-        sns_topic.grant_publish(role)
-        return role
-
     def get_request_templates(self, sns_topic_arn):
         raise NotImplementedError
 
@@ -129,14 +119,14 @@ class WellArchitectedRestApiSns(well_architected.WellArchitectedStack):
             integration_responses=self.get_integration_responses(),
         )
 
-    def create_api_sns_integration(self, sns_topic):
+    def create_api_sns_integration(self, sns_topic=None, iam_role=None, request_templates=None):
         return aws_cdk.aws_apigateway.Integration(
             type=aws_cdk.aws_apigateway.IntegrationType.AWS,
             integration_http_method='POST',
             uri='arn:aws:apigateway:us-east-1:sns:path//',
             options=self.get_integration_options(
-                iam_role=self.create_iam_service_role_for(sns_topic),
-                request_templates=self.get_request_templates(sns_topic.topic_arn)
+                iam_role=iam_role,
+                request_templates=request_templates,
             ),
         )
 

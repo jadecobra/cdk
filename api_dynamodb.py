@@ -8,7 +8,7 @@ import well_architected_dynamodb_table
 import json
 
 
-class ApiDynamodb(well_architected.WellArchitectedStack):
+class ApiDynamodb(well_architected_api.WellArchitectedApiStack):
 
     def __init__(
         self, scope: constructs.Construct, id: str,
@@ -18,15 +18,16 @@ class ApiDynamodb(well_architected.WellArchitectedStack):
         super().__init__(scope, id, **kwargs)
 
         rest_api = self.create_rest_api(self.error_topic)
-        api_gateway_service_role = self.create_api_gateway_service_role()
-
-        dynamodb_table = self.create_dynamodb_table(partition_key)
-        dynamodb_table.grant_read_write_data(api_gateway_service_role)
+        dynamodb_table = self.create_dynamodb_table(
+            partition_key=partition_key,
+            error_topic=self.error_topic,
+        )
+        dynamodb_table.grant_read_write_data(self.api_gateway_service_role)
         self.add_method_to_rest_api(
             rest_api=rest_api,
-            api_gateway_service_role=api_gateway_service_role,
+            api_gateway_service_role=self.api_gateway_service_role,
             dynamodb_table_name=dynamodb_table.table_name,
-            dynamodb_partition_key=partition_key
+            dynamodb_partition_key=partition_key,
         )
         self.create_lambda_function_with_dynamodb_event_source(
             dynamodb_table=dynamodb_table,
@@ -199,11 +200,11 @@ class ApiDynamodb(well_architected.WellArchitectedStack):
             )
         ]
 
-    def create_dynamodb_table(self, partition_key):
+    def create_dynamodb_table(self, partition_key=None, error_topic=None):
         return well_architected_dynamodb_table.DynamoDBTableConstruct(
             self, 'DynamoDbTable',
             stream=aws_cdk.aws_dynamodb.StreamViewType.NEW_IMAGE,
-            error_topic=self.error_topic,
+            error_topic=error_topic,
             partition_key=partition_key,
         ).dynamodb_table
 
@@ -233,9 +234,3 @@ class ApiDynamodb(well_architected.WellArchitectedStack):
                 )
             )
         ).api
-
-    def create_api_gateway_service_role(self):
-        return aws_cdk.aws_iam.Role(
-            self, 'ApiGatewayServiceRole',
-            assumed_by=aws_cdk.aws_iam.ServicePrincipal('apigateway.amazonaws.com'),
-        )

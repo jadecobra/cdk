@@ -24,11 +24,14 @@ class ApiSnsLambdaEventBridgeLambda(well_architected_rest_api.WellArchitectedRes
             method='GET',
             rest_api=self.create_rest_api(self.error_topic),
             integration=self.create_api_sns_integration(
-                self.create_sns_triggered_lambda(
-                    name='destined',
-                    event_bus=event_bus
-                )
-            ),
+                iam_role=self.api_gateway_service_role,
+                request_templates=self.get_request_templates(
+                    self.create_sns_triggered_lambda(
+                        name='destined',
+                        event_bus=event_bus
+                    ).topic_arn
+                ),
+            )
         )
 
     def create_success_lambda(self, event_bus=None, error_topic=None):

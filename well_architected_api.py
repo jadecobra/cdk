@@ -133,3 +133,16 @@ class WellArchitectedApi(well_architected.WellArchitectedConstruct):
             self.create_api_gateway_latency_widget(),
             self.create_api_gateway_errors_widget(),
         )
+
+
+class WellArchitectedApiStack(well_architected.WellArchitectedStack):
+
+    def __init__(self, scope, id, **kwargs):
+        super().__init__(scope, id, **kwargs)
+        self.api_gateway_service_role = self.create_api_gateway_service_role()
+
+    def create_api_gateway_service_role(self):
+        return aws_cdk.aws_iam.Role(
+            self, 'ApiGatewayServiceRole',
+            assumed_by=aws_cdk.aws_iam.ServicePrincipal('apigateway.amazonaws.com'),
+        )

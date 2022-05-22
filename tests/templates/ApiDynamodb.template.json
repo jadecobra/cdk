@@ -6,6 +6,67 @@
     "DisplayName": "ApiDynamodbErrorTopic"
    }
   },
+  "ApiGatewayServiceRole7D65739D": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "apigateway.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   }
+  },
+  "ApiGatewayServiceRoleDefaultPolicy39C0BA58": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:Query",
+        "dynamodb:GetItem",
+        "dynamodb:Scan",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:PutItem",
+        "dynamodb:UpdateItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "DynamoDbTable328C754E",
+          "Arn"
+         ]
+        },
+        {
+         "Ref": "AWS::NoValue"
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "ApiGatewayServiceRoleDefaultPolicy39C0BA58",
+    "Roles": [
+     {
+      "Ref": "ApiGatewayServiceRole7D65739D"
+     }
+    ]
+   }
+  },
   "RestApiDynamodbE4D5AF2C": {
    "Type": "AWS::ApiGateway::RestApi",
    "Properties": {
@@ -432,67 +493,6 @@
       ]
      ]
     }
-   }
-  },
-  "ApiGatewayServiceRole7D65739D": {
-   "Type": "AWS::IAM::Role",
-   "Properties": {
-    "AssumeRolePolicyDocument": {
-     "Statement": [
-      {
-       "Action": "sts:AssumeRole",
-       "Effect": "Allow",
-       "Principal": {
-        "Service": "apigateway.amazonaws.com"
-       }
-      }
-     ],
-     "Version": "2012-10-17"
-    }
-   }
-  },
-  "ApiGatewayServiceRoleDefaultPolicy39C0BA58": {
-   "Type": "AWS::IAM::Policy",
-   "Properties": {
-    "PolicyDocument": {
-     "Statement": [
-      {
-       "Action": [
-        "dynamodb:BatchGetItem",
-        "dynamodb:GetRecords",
-        "dynamodb:GetShardIterator",
-        "dynamodb:Query",
-        "dynamodb:GetItem",
-        "dynamodb:Scan",
-        "dynamodb:ConditionCheckItem",
-        "dynamodb:BatchWriteItem",
-        "dynamodb:PutItem",
-        "dynamodb:UpdateItem",
-        "dynamodb:DeleteItem",
-        "dynamodb:DescribeTable"
-       ],
-       "Effect": "Allow",
-       "Resource": [
-        {
-         "Fn::GetAtt": [
-          "DynamoDbTable328C754E",
-          "Arn"
-         ]
-        },
-        {
-         "Ref": "AWS::NoValue"
-        }
-       ]
-      }
-     ],
-     "Version": "2012-10-17"
-    },
-    "PolicyName": "ApiGatewayServiceRoleDefaultPolicy39C0BA58",
-    "Roles": [
-     {
-      "Ref": "ApiGatewayServiceRole7D65739D"
-     }
-    ]
    }
   },
   "DynamoDbTable328C754E": {

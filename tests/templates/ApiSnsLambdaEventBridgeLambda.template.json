@@ -6,6 +6,23 @@
     "DisplayName": "ApiSnsLambdaEventBridgeLambdaErrorTopic"
    }
   },
+  "ApiGatewayServiceRole7D65739D": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "apigateway.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   }
+  },
   "EventBus7B8748AA": {
    "Type": "AWS::Events::EventBus",
    "Properties": {
@@ -923,7 +940,7 @@
     "RestApiSnsF3296308"
    ]
   },
-  "RestApiSnsDeployment93BF40AD3ca2aea27e48c4787b87a8f3612cf731": {
+  "RestApiSnsDeployment93BF40AD632c6489e042a831e54948def36a7e90": {
    "Type": "AWS::ApiGateway::Deployment",
    "Properties": {
     "RestApiId": {
@@ -945,7 +962,7 @@
      "Ref": "RestApiSnsF3296308"
     },
     "DeploymentId": {
-     "Ref": "RestApiSnsDeployment93BF40AD3ca2aea27e48c4787b87a8f3612cf731"
+     "Ref": "RestApiSnsDeployment93BF40AD632c6489e042a831e54948def36a7e90"
     },
     "MethodSettings": [
      {
@@ -991,7 +1008,7 @@
     "Integration": {
      "Credentials": {
       "Fn::GetAtt": [
-       "IamRoleA750FF82",
+       "ApiGatewayServiceRole7D65739D",
        "Arn"
       ]
      },
@@ -1742,46 +1759,6 @@
       ]
      ]
     }
-   }
-  },
-  "IamRoleA750FF82": {
-   "Type": "AWS::IAM::Role",
-   "Properties": {
-    "AssumeRolePolicyDocument": {
-     "Statement": [
-      {
-       "Action": "sts:AssumeRole",
-       "Effect": "Allow",
-       "Principal": {
-        "Service": "apigateway.amazonaws.com"
-       }
-      }
-     ],
-     "Version": "2012-10-17"
-    }
-   }
-  },
-  "IamRoleDefaultPolicy72C722F4": {
-   "Type": "AWS::IAM::Policy",
-   "Properties": {
-    "PolicyDocument": {
-     "Statement": [
-      {
-       "Action": "sns:Publish",
-       "Effect": "Allow",
-       "Resource": {
-        "Ref": "destinedSnsTopic10FF3CCB"
-       }
-      }
-     ],
-     "Version": "2012-10-17"
-    },
-    "PolicyName": "IamRoleDefaultPolicy72C722F4",
-    "Roles": [
-     {
-      "Ref": "IamRoleA750FF82"
-     }
-    ]
    }
   }
  },
