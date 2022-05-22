@@ -20,15 +20,15 @@ class ApiSnsLambdaEventBridgeLambda(well_architected_rest_api.WellArchitectedRes
             event_bus=event_bus,
         )
 
-        sns_topic = self.create_sns_triggered_lambda(
-            name='destined',
-            event_bus=event_bus
-        )
-
         self.create_rest_api_method(
             method='GET',
             rest_api=self.create_rest_api(self.error_topic),
-            integration=self.create_api_sns_integration(sns_topic),
+            integration=self.create_api_sns_integration(
+                self.create_sns_triggered_lambda(
+                    name='destined',
+                    event_bus=event_bus
+                )
+            ),
         )
 
     def create_success_lambda(self, event_bus=None, error_topic=None):
@@ -111,20 +111,6 @@ class ApiSnsLambdaEventBridgeLambda(well_architected_rest_api.WellArchitectedRes
             )
         )
         return event_bridge_rule
-
-    # @staticmethod
-    # def create_integration_response(
-    #     status_code=None, response_templates=None, response_parameters=None,
-    #     selection_pattern=None, separators=None
-    # ):
-    #     return aws_cdk.aws_apigateway.IntegrationResponse(
-    #         status_code=status_code,
-    #         selection_pattern=selection_pattern,
-    #         response_templates={"application/json": json.dumps(response_templates, separators=separators)},
-    #         response_parameters=response_parameters,
-    #     )
-
-
 
     def create_lambda_function(
         self, on_failure=None, on_success=None,

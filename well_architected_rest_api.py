@@ -118,7 +118,7 @@ class WellArchitectedRestApiSns(well_architected.WellArchitectedStack):
     def get_request_templates(self, sns_topic_arn):
         raise NotImplementedError
 
-    def get_integration_options(self, iam_role=None, sns_topic_arn=None, request_templates=None):
+    def get_integration_options(self, iam_role=None, request_templates=None):
         return aws_cdk.aws_apigateway.IntegrationOptions(
             credentials_role=iam_role,
             request_parameters={
@@ -136,7 +136,6 @@ class WellArchitectedRestApiSns(well_architected.WellArchitectedStack):
             uri='arn:aws:apigateway:us-east-1:sns:path//',
             options=self.get_integration_options(
                 iam_role=self.create_iam_service_role_for(sns_topic),
-                sns_topic_arn=sns_topic.topic_arn,
                 request_templates=self.get_request_templates(sns_topic.topic_arn)
             ),
         )
