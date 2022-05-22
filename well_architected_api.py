@@ -57,6 +57,25 @@ class WellArchitectedRestApi(well_architected.WellArchitectedStack):
             response_models=self.create_json_template(response_model)
         )
 
+    def create_method_responses(self, rest_api):
+        return [
+            self.create_method_response(
+                status_code=200,
+                response_model=self.create_response_model(
+                    rest_api=rest_api,
+                    model_name='pollResponse',
+                )
+            ),
+            self.create_method_response(
+                status_code=400,
+                response_model=self.create_response_model(
+                    rest_api=rest_api,
+                    model_name='errorResponse',
+                    properties='state',
+                )
+            )
+        ]
+
 class WellArchitectedApi(well_architected.WellArchitectedConstruct):
 
     def __init__(
