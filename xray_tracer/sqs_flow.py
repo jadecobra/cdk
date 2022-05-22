@@ -1,6 +1,6 @@
 import aws_cdk
 import constructs
-import well_architected_lambda
+import well_architected.constructs.lambda as lambda
 
 
 class SqsFlow(aws_cdk.Stack):
@@ -19,7 +19,7 @@ class SqsFlow(aws_cdk.Stack):
         self.sqs_subscriber = self.create_sqs_subscriber(self.sqs_queue)
 
     def create_sqs_publisher(self, sqs_queue: aws_cdk.aws_sqs.Queue=None, sns_topic: aws_cdk.aws_sns.ITopic=None):
-        sqs_publisher = well_architected_lambda.create_python_lambda_function(
+        sqs_publisher = lambda.create_python_lambda_function(
             self, function_name="sqs",
             environment_variables={ "SQS_URL": sqs_queue.queue_url }
         )
@@ -30,7 +30,7 @@ class SqsFlow(aws_cdk.Stack):
         return sqs_publisher
 
     def create_sqs_subscriber(self, sqs_queue: aws_cdk.aws_sqs.Queue=None):
-        sqs_subscriber = well_architected_lambda.create_python_lambda_function(
+        sqs_subscriber = lambda.create_python_lambda_function(
             self, function_name="sqs_subscribe"
         )
         sqs_subscriber.add_event_source(aws_cdk.aws_lambda_event_sources.SqsEventSource(sqs_queue))

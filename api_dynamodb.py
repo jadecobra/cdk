@@ -2,9 +2,9 @@ import aws_cdk
 import aws_cdk.aws_apigatewayv2_alpha
 import constructs
 import well_architected
-import well_architected_dynamodb_table
-import well_architected_lambda
-import well_architected_rest_api
+import well_architected.constructs.dynamodb_table as dynamodb_table
+import well_architected.constructs.lambda as lambda
+import well_architected.constructs.rest_api as rest_api
 import json
 
 
@@ -174,7 +174,7 @@ class RestApiDynamodb(well_architected.WellArchitectedStack):
         )
 
     def create_dynamodb_table(self, partition_key=None, error_topic=None):
-        return well_architected_dynamodb_table.DynamoDBTableConstruct(
+        return dynamodb_table.DynamoDBTableConstruct(
             self, 'DynamoDbTable',
             stream=aws_cdk.aws_dynamodb.StreamViewType.NEW_IMAGE,
             error_topic=error_topic,
@@ -182,7 +182,7 @@ class RestApiDynamodb(well_architected.WellArchitectedStack):
         ).dynamodb_table
 
     def create_lambda_function_with_dynamodb_event_source(self, dynamodb_table=None, error_topic=None):
-        return well_architected_lambda.LambdaFunctionConstruct(
+        return lambda.LambdaFunctionConstruct(
             self, 'LambdaFunction',
             error_topic=error_topic,
             function_name='subscribe',
@@ -194,7 +194,7 @@ class RestApiDynamodb(well_architected.WellArchitectedStack):
         )
 
     def create_rest_api(self, error_topic):
-        return well_architected_rest_api.RestApiConstruct(
+        return rest_api.RestApiConstruct(
             self, 'ApiGateway',
             error_topic=error_topic,
             api=aws_cdk.aws_apigateway.RestApi(

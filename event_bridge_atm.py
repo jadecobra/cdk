@@ -1,6 +1,6 @@
 import aws_cdk
 import constructs
-import well_architected_lambda
+import well_architected.constructs.lambda as lambda
 
 from aws_cdk import (
     aws_apigateway as api_gateway,
@@ -81,7 +81,7 @@ class EventBridgeAtm(aws_cdk.Stack):
         event_bridge_rule:events.Rule=None
     ):
         handler_name = 'handler' if not handler_name else handler_name
-        function = well_architected_lambda.LambdaFunctionConstruct(
+        function = lambda.LambdaFunctionConstruct(
             self, handler_name,
             handler_name=handler_name,
             function_name=function_name,

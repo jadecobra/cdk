@@ -1,8 +1,8 @@
 import aws_cdk
 import constructs
-import well_architected_lambda
-import well_architected_dynamodb_table
-import well_architected_rest_api
+import well_architected.constructs.lambda as lambda
+import well_architected.constructs.dynamodb_table as dynamodb_table
+import well_architected.constructs.rest_api as rest_api
 
 from aws_cdk import (
     aws_apigateway as api_gateway,
@@ -28,7 +28,7 @@ class EventBridgeCircuitBreaker(aws_cdk.Stack):
             type=dynamodb.AttributeType.NUMBER
         )
 
-        error_records = well_architected_dynamodb_table.DynamoDBTableConstruct(
+        error_records = dynamodb_table.DynamoDBTableConstruct(
             self, 'CircuitBreaker',
             error_topic=error_topic,
             partition_key=dynamodb.Attribute(
@@ -50,14 +50,14 @@ class EventBridgeCircuitBreaker(aws_cdk.Stack):
 
         environment_variables = dict(ERROR_RECORDS=error_records.table_name)
 
-        webservice = well_architected_lambda.create_python_lambda_function(
+        webservice = lambda.create_python_lambda_function(
             self, function_name='webservice',
             error_topic=error_topic,
             environment_variables=environment_variables,
             duration=20,
         )
 
-        error_lambda = well_architected_lambda.create_python_lambda_function(
+        error_lambda = lambda.create_python_lambda_function(
             self, function_name='error',
             error_topic=error_topic,
             environment_variables=environment_variables,
@@ -89,7 +89,7 @@ class EventBridgeCircuitBreaker(aws_cdk.Stack):
 
         error_rule.add_target(targets.LambdaFunction(handler=error_lambda))
 
-        well_architected_rest_api.LambdaRestAPIGatewayConstruct(
+        rest_api.LambdaRestAPIGatewayConstruct(
             self, 'CircuitBreakerGateway',
             lambda_function=webservice,
             error_topic=error_topic,

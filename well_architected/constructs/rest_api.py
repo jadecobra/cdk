@@ -1,15 +1,22 @@
 import aws_cdk
-import aws_cdk.aws_apigatewayv2_alpha
+import constructs
+import json
 import well_architected
 import well_architected.constructs.api as api
 
 
+class RestApiConstruct(api.WellArchitectedApi):
 
-
-class WellArchitectedApiStack(well_architected.WellArchitectedStack):
-
-    def __init__(self, scope, id, **kwargs):
-        super().__init__(scope, id, **kwargs)
+    def __init__(
+        self, scope: constructs.Construct, id: str,
+        error_topic=None, api=None, **kwargs,
+    ):
+        super().__init__(
+            scope, id,
+            error_topic=error_topic,
+            api=api,
+            **kwargs,
+        )
         self.api_gateway_service_role = self.create_api_gateway_service_role()
 
     def create_api_gateway_service_role(self):
@@ -27,8 +34,11 @@ class WellArchitectedApiStack(well_architected.WellArchitectedStack):
         }
 
     @staticmethod
-    def create_json_template(template):
-        return {'application/json': template}
+    def content_type():
+        return 'application/json'
+
+    def create_json_template(self, template):
+        return {self.content_type(): template}
 
     def create_method_response(self, status_code=None, response_model=None):
         return aws_cdk.aws_apigateway.MethodResponse(
@@ -52,6 +62,7 @@ class WellArchitectedApiStack(well_architected.WellArchitectedStack):
             type=aws_cdk.aws_apigateway.JsonSchemaType.STRING
         )
 
+
     def create_response_model(
         self, rest_api=None, model_name=None, properties=None
     ):
@@ -59,7 +70,7 @@ class WellArchitectedApiStack(well_architected.WellArchitectedStack):
         property_keys.append(properties) if properties else None
         return rest_api.add_model(
             model_name,
-            content_type='application/json',
+            content_type=self.content_type(),
             model_name=model_name,
             schema=self.create_schema(
                 title=model_name,
@@ -98,9 +109,26 @@ class WellArchitectedApiStack(well_architected.WellArchitectedStack):
             )
         ]
 
-    def create_api(self, error_topic=None, api=None):
-        return api.WellArchitectedApi(
-            self, 'ApiGateway',
+    def add_method(
+        self, integration=None,
+        method='POST', path=None
+    ):
+        return self.api.root.add_resource(
+            path
+        ).add_method(
+            method,
+            integration,
+            method_responses=self.create_method_responses(self.api)
+        )
+
+
+class RestApiLambdaStack(aws_cdk.Stack):
+
+    def __init__(self, scope: constructs.Construct, id: str, lambda_function: aws_cdk.aws_lambda.Function, error_topic:aws_cdk.aws_sns.Topic=None, **kwargs) -> None:
+        super().__init__(scope, id, **kwargs)
+        self.rest_api = LambdaRestAPIGatewayConstruct(
+            self, id,
+            lambda_function=lambda_function,
             error_topic=error_topic,
-            api=api
-        ).api
+            **kwargs
+        )

@@ -1,7 +1,7 @@
 import json
 import aws_cdk
 import constructs
-import well_architected_dynamodb_table
+import well_architected.constructs.dynamodb_table as dynamodb_table
 
 from aws_cdk import (
     aws_lambda as _lambda,
@@ -149,7 +149,7 @@ class EventbridgeEtl(aws_cdk.Stack):
         return lambda_function
 
     def create_dynamodb_table(self):
-        return well_architected_dynamodb_table.DynamoDBTableConstruct(
+        return dynamodb_table.DynamoDBTableConstruct(
             self, 'TransformedData',
             partition_key=dynamo_db.Attribute(
                 name="id",

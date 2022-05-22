@@ -2,7 +2,7 @@ import aws_cdk
 import aws_cdk.aws_apigatewayv2_alpha
 import aws_cdk.aws_apigatewayv2_integrations_alpha
 import constructs
-import well_architected_lambda
+import well_architected.constructs.lambda as lambda
 
 
 class RdsProxy(aws_cdk.Stack):
@@ -25,7 +25,7 @@ class RdsProxy(aws_cdk.Stack):
             vpc=vpc,
         )
 
-        rds_lambda = well_architected_lambda.create_python_lambda_function(
+        rds_lambda = lambda.create_python_lambda_function(
             self, function_name='rds',
             vpc=vpc,
             environment_variables={

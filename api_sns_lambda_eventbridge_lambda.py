@@ -1,8 +1,8 @@
 import aws_cdk
 import constructs
 import well_architected
-import well_architected_lambda
-import well_architected_rest_api
+import well_architected.constructs.lambda as lambda
+import well_architected.constructs.rest_api as rest_api
 
 
 class ApiSnsLambdaEventBridgeLambda(well_architected.WellArchitectedStack):
@@ -19,7 +19,7 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.WellArchitectedStack):
             error_topic=self.error_topic,
             event_bus=event_bus,
         )
-        rest_api = well_architected_rest_api.RestApiSnsConstruct(
+        rest_api = rest_api.RestApiSnsConstruct(
             self, 'ApiGateway',
             error_topic=self.error_topic,
         )
@@ -124,7 +124,7 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.WellArchitectedStack):
         function_name=None, duration=3, retry_attempts=2,
         error_topic=None,
     ):
-        return well_architected_lambda.LambdaFunctionConstruct(
+        return lambda.LambdaFunctionConstruct(
             self, function_name,
             retry_attempts=retry_attempts,
             error_topic=error_topic,

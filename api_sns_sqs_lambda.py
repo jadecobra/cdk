@@ -1,8 +1,8 @@
 import aws_cdk
 import constructs
 import well_architected
-import well_architected_lambda
-import well_architected_rest_api
+import well_architected.constructs.lambda as lambda
+import well_architected.constructs.rest_api as rest_api
 
 
 class ApiSnsSqsLambda(well_architected.WellArchitectedStack):
@@ -30,7 +30,7 @@ class ApiSnsSqsLambda(well_architected.WellArchitectedStack):
                 sqs_queue=sqs_queue,
             )
 
-        rest_api = well_architected_rest_api.RestApiSnsConstruct(
+        rest_api = rest_api.RestApiSnsConstruct(
             self, 'ApiGateway',
             error_topic=self.error_topic,
         )
@@ -82,7 +82,7 @@ class ApiSnsSqsLambda(well_architected.WellArchitectedStack):
             )
 
     def create_lambda_function(self, function_name=None, error_topic=None):
-        return well_architected_lambda.LambdaFunctionConstruct(
+        return lambda.LambdaFunctionConstruct(
             self, function_name,
             error_topic=error_topic,
         ).lambda_function

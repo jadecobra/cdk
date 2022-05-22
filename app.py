@@ -21,11 +21,11 @@ try:
     import simple_graphql_service
     import sns_topic
     import xray_tracer
-    import well_architected_dynamodb_table
-    import web_application_firewall
-    import well_architected_api_construct
-    import well_architected_rest_api
-    import well_architected_lambda
+    import well_architected.constructs.dynamodb_table as dynamodb_table
+    import well_architected.constructs.web_application_firewall as web_application_firewall
+    import well_architected.constructs.api as api
+    import well_architected.constructs.rest_api as rest_api
+    import well_architected.constructs.lambda as lambda
 except ImportError as error:
     print(error)
     os.system('pip install -r requirements.txt')

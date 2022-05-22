@@ -1,8 +1,8 @@
 import aws_cdk
 import aws_cdk.aws_appsync_alpha
 import well_architected
-import well_architected_lambda
-import well_architected_dynamodb_table
+import well_architected.constructs.lambda as lambda
+import well_architected.constructs.dynamodb_table as dynamodb_table
 import constructs
 import os
 
@@ -16,7 +16,7 @@ class SimpleGraphQlService(well_architected.WellArchitectedStack):
         self.add_dynamodb_data_source(
             graphql_api.add_dynamo_db_data_source(
                 'DynamoDbDataSource',
-                well_architected_dynamodb_table.DynamoDBTableConstruct(
+                dynamodb_table.DynamoDBTableConstruct(
                     self, 'DynamodbTable',
                     error_topic=self.error_topic,
                     partition_key="id",
@@ -26,7 +26,7 @@ class SimpleGraphQlService(well_architected.WellArchitectedStack):
         self.add_lambda_function_data_source(
             graphql_api.add_lambda_data_source(
                 'LambdaDataSource',
-                well_architected_lambda.LambdaFunctionConstruct(
+                lambda.LambdaFunctionConstruct(
                     self, 'LambdaFunction',
                     error_topic=self.error_topic,
                     function_name='loyalty',
