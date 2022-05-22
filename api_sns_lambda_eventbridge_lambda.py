@@ -20,15 +20,10 @@ class ApiSnsLambdaEventBridgeLambda(well_architected_rest_api.WellArchitectedRes
             event_bus=event_bus,
         )
 
-        rest_api = self.create_rest_api(self.error_topic)
-        (
-            rest_api.root.add_resource(
-                'SendEvent'
-            ).add_method(
-                'GET',
-                self.create_api_sns_integration(event_bus),
-                method_responses=self.create_method_responses(rest_api)
-            )
+        self.create_rest_api_method(
+            method='GET',
+            rest_api=self.create_rest_api(self.error_topic),
+            integration=self.create_api_sns_integration(event_bus),
         )
 
     def create_success_lambda(self, event_bus=None, error_topic=None):
@@ -79,15 +74,6 @@ class ApiSnsLambdaEventBridgeLambda(well_architected_rest_api.WellArchitectedRes
         return aws_cdk.aws_events.EventBus(
             self, 'EventBus',
             event_bus_name=name,
-        )
-
-    def add_resource_method(self, rest_api=None, iam_role=None, sns_topic_arn=None):
-        rest_api.root.add_resource(
-            'SendEvent'
-        ).add_method(
-            'GET',
-            self.create_api_sns_integration(event_bus),
-            method_responses=self.create_method_responses(rest_api)
         )
 
     def create_iam_service_role_for(self, sns_topic):

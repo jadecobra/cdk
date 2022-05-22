@@ -95,6 +95,15 @@ class WellArchitectedRestApiSns(well_architected.WellArchitectedStack):
                 )
         ).api
 
+    def create_rest_api_method(self, method=None, rest_api=None, integration=None):
+        rest_api.root.add_resource(
+            'SendEvent'
+        ).add_method(
+            method,
+            integration,
+            method_responses=self.create_method_responses(rest_api)
+        )
+
 class RestApiLambdaConstruct(well_architected.WellArchitectedConstruct):
 
     def __init__(
