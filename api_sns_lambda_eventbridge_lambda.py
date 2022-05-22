@@ -76,16 +76,6 @@ class ApiSnsLambdaEventBridgeLambda(well_architected_rest_api.WellArchitectedRes
             event_bus_name=name,
         )
 
-    def create_iam_service_role_for(self, sns_topic):
-        role = aws_cdk.aws_iam.Role(
-            self, 'IamRole',
-            assumed_by=aws_cdk.aws_iam.ServicePrincipal(
-                'apigateway.amazonaws.com'
-            )
-        )
-        sns_topic.grant_publish(role)
-        return role
-
     def create_api_sns_integration(self, event_bus):
         return aws_cdk.aws_apigateway.Integration(
             type=aws_cdk.aws_apigateway.IntegrationType.AWS,
@@ -100,7 +90,7 @@ class ApiSnsLambdaEventBridgeLambda(well_architected_rest_api.WellArchitectedRes
             event_bus=event_bus
         )
         return aws_cdk.aws_apigateway.IntegrationOptions(
-            credentials_role=self.create_iam_service_role_for(sns_topic),
+            credentials_role=self.create_iam_service_role(sns_topic),
             request_parameters={
                 'integration.request.header.Content-Type': "'application/x-www-form-urlencoded'"
             },

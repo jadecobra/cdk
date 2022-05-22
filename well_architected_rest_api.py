@@ -104,6 +104,16 @@ class WellArchitectedRestApiSns(well_architected.WellArchitectedStack):
             method_responses=self.create_method_responses(rest_api)
         )
 
+    def create_iam_service_role(self, sns_topic):
+        role = aws_cdk.aws_iam.Role(
+            self, 'IamRole',
+            assumed_by=aws_cdk.aws_iam.ServicePrincipal(
+                'apigateway.amazonaws.com'
+            )
+        )
+        sns_topic.grant_publish(role)
+        return role
+
 class RestApiLambdaConstruct(well_architected.WellArchitectedConstruct):
 
     def __init__(
