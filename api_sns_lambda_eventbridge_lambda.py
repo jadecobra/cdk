@@ -1,12 +1,11 @@
 import aws_cdk
 import constructs
 import json
-import well_architected
-import well_architected_api
+import well_architected_rest_api
 import well_architected_lambda
 
 
-class ApiSnsLambdaEventBridgeLambda(well_architected_api.WellArchitectedRestApiSns):
+class ApiSnsLambdaEventBridgeLambda(well_architected_rest_api.WellArchitectedRestApiSns):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
@@ -21,7 +20,16 @@ class ApiSnsLambdaEventBridgeLambda(well_architected_api.WellArchitectedRestApiS
             event_bus=event_bus,
         )
 
-        self.create_rest_api(event_bus)
+        rest_api = self.create_rest_api(self.error_topic)
+        (
+            rest_api.root.add_resource(
+                'SendEvent'
+            ).add_method(
+                'GET',
+                self.create_api_sns_integration(event_bus),
+                method_responses=self.create_method_responses(rest_api)
+            )
+        )
 
     def create_success_lambda(self, event_bus=None, error_topic=None):
         return self.create_event_driven_lambda_function(
@@ -73,25 +81,14 @@ class ApiSnsLambdaEventBridgeLambda(well_architected_api.WellArchitectedRestApiS
             event_bus_name=name,
         )
 
-    def create_rest_api(self, event_bus):
-        rest_api = well_architected_api.WellArchitectedApi(
-            self, 'RestApi',
-            error_topic=self.error_topic,
-            api=aws_cdk.aws_apigateway.RestApi(
-                self, 'RestApiSns',
-                    deploy_options=self.get_stage_options()
-                )
-        ).api
-        (
-            rest_api.root.add_resource(
-                'SendEvent'
-            ).add_method(
-                'GET',
-                self.create_api_sns_integration(event_bus),
-                method_responses=self.create_method_responses(rest_api)
-            )
+    def add_resource_method(self, rest_api=None, iam_role=None, sns_topic_arn=None):
+        rest_api.root.add_resource(
+            'SendEvent'
+        ).add_method(
+            'GET',
+            self.create_api_sns_integration(event_bus),
+            method_responses=self.create_method_responses(rest_api)
         )
-        return rest_api
 
     def create_iam_service_role_for(self, sns_topic):
         role = aws_cdk.aws_iam.Role(

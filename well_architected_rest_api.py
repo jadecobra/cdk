@@ -3,6 +3,98 @@ import constructs
 import well_architected
 import well_architected_api
 
+class WellArchitectedRestApiSns(well_architected.WellArchitectedStack):
+
+    def __init__(self, scope: constructs.Construct, id: str, **kwargs):
+        super().__init__(scope, id, **kwargs)
+
+    @staticmethod
+    def create_schema(title=None, properties=None):
+        return aws_cdk.aws_apigateway.JsonSchema(
+            schema=aws_cdk.aws_apigateway.JsonSchemaVersion.DRAFT4,
+            title=title,
+            type=aws_cdk.aws_apigateway.JsonSchemaType.OBJECT,
+            properties=properties
+        )
+
+    @staticmethod
+    def string_schema_type():
+        return aws_cdk.aws_apigateway.JsonSchema(
+            type=aws_cdk.aws_apigateway.JsonSchemaType.STRING
+        )
+
+    def create_response_model(
+        self, rest_api=None, model_name=None, properties=None
+    ):
+        property_keys = ['message']
+        property_keys.append(properties) if properties else None
+        return rest_api.add_model(
+            model_name,
+            content_type='application/json',
+            model_name=model_name,
+            schema=self.create_schema(
+                title=model_name,
+                properties={key: self.string_schema_type() for key in property_keys},
+            )
+        )
+
+    @staticmethod
+    def create_json_template(template):
+        return {'application/json': template}
+
+    @staticmethod
+    def create_response_parameters(content_type=True, allow_origin=True, allow_credentials=True):
+        return {
+            'method.response.header.Content-Type': content_type,
+            'method.response.header.Access-Control-Allow-Origin': allow_origin,
+            'method.response.header.Access-Control-Allow-Credentials': allow_credentials,
+        }
+
+    def create_method_response(self, status_code=None, response_model=None):
+        return aws_cdk.aws_apigateway.MethodResponse(
+            status_code=str(status_code),
+            response_parameters=self.create_response_parameters(),
+            response_models=self.create_json_template(response_model)
+        )
+
+    def create_method_responses(self, rest_api):
+        return [
+            self.create_method_response(
+                status_code=200,
+                response_model=self.create_response_model(
+                    rest_api=rest_api,
+                    model_name='pollResponse',
+                )
+            ),
+            self.create_method_response(
+                status_code=400,
+                response_model=self.create_response_model(
+                    rest_api=rest_api,
+                    model_name='errorResponse',
+                    properties='state',
+                )
+            )
+        ]
+
+    @staticmethod
+    def get_stage_options():
+        return aws_cdk.aws_apigateway.StageOptions(
+            metrics_enabled=True,
+            logging_level=aws_cdk.aws_apigateway.MethodLoggingLevel.INFO,
+            data_trace_enabled=True,
+            stage_name='prod'
+        )
+
+    def create_rest_api(self, error_topic=None):
+        return well_architected_api.WellArchitectedApi(
+            self, 'RestApi',
+            error_topic=error_topic,
+            api=aws_cdk.aws_apigateway.RestApi(
+                self, 'RestApiSns',
+                    deploy_options=self.get_stage_options()
+                )
+        ).api
+
 class RestApiLambdaConstruct(well_architected.WellArchitectedConstruct):
 
     def __init__(
@@ -105,8 +197,6 @@ class RestApiLambdaConstruct(well_architected.WellArchitectedConstruct):
             endpoint_types=[aws_cdk.aws_apigateway.EndpointType.REGIONAL],
             deploy_options=self.deploy_options(),
         )
-
-
 
 
 class LambdaRestAPIGatewayStack(aws_cdk.Stack):
