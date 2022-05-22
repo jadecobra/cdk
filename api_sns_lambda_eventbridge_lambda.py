@@ -6,7 +6,7 @@ import well_architected_api
 import well_architected_lambda
 
 
-class ApiSnsLambdaEventBridgeLambda(well_architected.WellArchitectedStack):
+class ApiSnsLambdaEventBridgeLambda(well_architected_api.WellArchitectedRestApi):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
@@ -26,14 +26,14 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.WellArchitectedStack):
     def create_method_responses(self, rest_api):
         return [
             self.create_method_response(
-                status_code='200',
+                status_code=200,
                 response_model=self.create_response_model(
                     rest_api=rest_api,
                     model_name='pollResponse',
                 ),
             ),
             self.create_method_response(
-                status_code='400',
+                status_code=400,
                 response_model=self.create_response_model(
                     rest_api=rest_api,
                     model_name='errorResponse',
@@ -197,35 +197,35 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.WellArchitectedStack):
         )
         return event_bridge_rule
 
-    def create_response_model(
-        self, rest_api=None, model_name=None, properties=None
-    ):
-        property_keys = ['message']
-        property_keys.append(properties) if properties else None
-        return rest_api.add_model(
-            model_name,
-            content_type='application/json',
-            model_name=model_name,
-            schema=self.create_schema(
-                title=model_name,
-                properties={key: self.string_schema_type() for key in property_keys},
-            )
-        )
+    # def create_response_model(
+    #     self, rest_api=None, model_name=None, properties=None
+    # ):
+    #     property_keys = ['message']
+    #     property_keys.append(properties) if properties else None
+    #     return rest_api.add_model(
+    #         model_name,
+    #         content_type='application/json',
+    #         model_name=model_name,
+    #         schema=self.create_schema(
+    #             title=model_name,
+    #             properties={key: self.string_schema_type() for key in property_keys},
+    #         )
+    #     )
 
-    @staticmethod
-    def string_schema_type():
-        return aws_cdk.aws_apigateway.JsonSchema(
-            type=aws_cdk.aws_apigateway.JsonSchemaType.STRING
-        )
+    # @staticmethod
+    # def string_schema_type():
+    #     return aws_cdk.aws_apigateway.JsonSchema(
+    #         type=aws_cdk.aws_apigateway.JsonSchemaType.STRING
+    #     )
 
-    @staticmethod
-    def create_schema(title=None, properties=None):
-        return aws_cdk.aws_apigateway.JsonSchema(
-            schema=aws_cdk.aws_apigateway.JsonSchemaVersion.DRAFT4,
-            title=title,
-            type=aws_cdk.aws_apigateway.JsonSchemaType.OBJECT,
-            properties=properties
-        )
+    # @staticmethod
+    # def create_schema(title=None, properties=None):
+    #     return aws_cdk.aws_apigateway.JsonSchema(
+    #         schema=aws_cdk.aws_apigateway.JsonSchemaVersion.DRAFT4,
+    #         title=title,
+    #         type=aws_cdk.aws_apigateway.JsonSchemaType.OBJECT,
+    #         properties=properties
+    #     )
 
     @staticmethod
     def create_integration_response(
@@ -239,20 +239,7 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.WellArchitectedStack):
             response_parameters=response_parameters,
         )
 
-    @staticmethod
-    def create_response_parameters(content_type=True, allow_origin=True, allow_credentials=True):
-        return {
-            'method.response.header.Content-Type': content_type,
-            'method.response.header.Access-Control-Allow-Origin': allow_origin,
-            'method.response.header.Access-Control-Allow-Credentials': allow_credentials,
-        }
 
-    def create_method_response(self, status_code=None, response_model=None):
-        return aws_cdk.aws_apigateway.MethodResponse(
-            status_code=status_code,
-            response_parameters=self.create_response_parameters(),
-            response_models={'application/json': response_model}
-        )
 
     def create_lambda_function(
         self, on_failure=None, on_success=None,

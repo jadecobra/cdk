@@ -3,6 +3,59 @@ import aws_cdk.aws_apigatewayv2_alpha
 import constructs
 import well_architected
 
+class WellArchitectedRestApi(well_architected.WellArchitectedStack):
+
+    def __init__(self, scope: constructs.Construct, id: str, **kwargs):
+        super().__init__(scope, id, **kwargs)
+
+    @staticmethod
+    def create_schema(title=None, properties=None):
+        return aws_cdk.aws_apigateway.JsonSchema(
+            schema=aws_cdk.aws_apigateway.JsonSchemaVersion.DRAFT4,
+            title=title,
+            type=aws_cdk.aws_apigateway.JsonSchemaType.OBJECT,
+            properties=properties
+        )
+
+    @staticmethod
+    def string_schema_type():
+        return aws_cdk.aws_apigateway.JsonSchema(
+            type=aws_cdk.aws_apigateway.JsonSchemaType.STRING
+        )
+
+    def create_response_model(
+        self, rest_api=None, model_name=None, properties=None
+    ):
+        property_keys = ['message']
+        property_keys.append(properties) if properties else None
+        return rest_api.add_model(
+            model_name,
+            content_type='application/json',
+            model_name=model_name,
+            schema=self.create_schema(
+                title=model_name,
+                properties={key: self.string_schema_type() for key in property_keys},
+            )
+        )
+
+    @staticmethod
+    def create_json_template(template):
+        return {'application/json': template}
+
+    @staticmethod
+    def create_response_parameters(content_type=True, allow_origin=True, allow_credentials=True):
+        return {
+            'method.response.header.Content-Type': content_type,
+            'method.response.header.Access-Control-Allow-Origin': allow_origin,
+            'method.response.header.Access-Control-Allow-Credentials': allow_credentials,
+        }
+
+    def create_method_response(self, status_code=None, response_model=None):
+        return aws_cdk.aws_apigateway.MethodResponse(
+            status_code=str(status_code),
+            response_parameters=self.create_response_parameters(),
+            response_models=self.create_json_template(response_model)
+        )
 
 class WellArchitectedApi(well_architected.WellArchitectedConstruct):
 
