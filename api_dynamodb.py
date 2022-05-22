@@ -31,10 +31,6 @@ class ApiDynamodb(well_architected_api.WellArchitectedApiStack):
                 dynamodb_table_name=dynamodb_table.table_name,
                 dynamodb_partition_key=partition_key,
             ),
-            method_responses=self.create_method_responses(
-                rest_api=rest_api,
-                dynamodb_partition_key=partition_key,
-            )
         )
         self.create_lambda_function_with_dynamodb_event_source(
             dynamodb_table=dynamodb_table,
@@ -70,22 +66,22 @@ class ApiDynamodb(well_architected_api.WellArchitectedApiStack):
 
     def success_response_model(self, dynamodb_partition_key):
         return dict(
-            model_name='ResponseModel',
+            model_name='pollResponse',
             response_type='pollResponse',
             response_templates=self.success_response_template(dynamodb_partition_key),
         )
 
     def error_response_model(self):
         return dict(
-            model_name='ErrorResponseModel',
+            model_name='errorResponse',
             response_type='errorResponse',
             additional_properties='state',
             response_templates=self.error_response_template(),
             selection_pattern="^\[BadRequest\].*",
             response_parameters=self.create_response_parameters(
                 content_type="'application/json'",
-                origin="'*'",
-                credentials="'true'",
+                allow_origin="'*'",
+                allow_credentials="'true'",
             )
         )
 
@@ -131,13 +127,6 @@ class ApiDynamodb(well_architected_api.WellArchitectedApiStack):
             )
         )
 
-    @staticmethod
-    def create_response_parameters(content_type=True, origin=True, credentials=True):
-        return {
-            'method.response.header.Content-Type': content_type,
-            'method.response.header.Access-Control-Allow-Origin': origin,
-            'method.response.header.Access-Control-Allow-Credentials': credentials,
-        }
 
     @staticmethod
     def json_string():
@@ -175,18 +164,6 @@ class ApiDynamodb(well_architected_api.WellArchitectedApiStack):
             ) for status_code, response
             in self.get_response_status_mappings(dynamodb_partition_key).items()
         )
-
-    def create_method_responses(self, rest_api=None, dynamodb_partition_key=None):
-        return [
-            aws_cdk.aws_apigateway.MethodResponse(
-                status_code=status_code,
-                response_parameters=self.create_response_parameters(),
-                response_models=self.create_api_request_template(response_model),
-            ) for status_code, response_model in self.create_response_models(
-                rest_api=rest_api,
-                dynamodb_partition_key=dynamodb_partition_key,
-            )
-        ]
 
     def create_dynamodb_table(self, partition_key=None, error_topic=None):
         return well_architected_dynamodb_table.DynamoDBTableConstruct(

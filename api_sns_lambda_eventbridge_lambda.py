@@ -33,7 +33,7 @@ class ApiSnsLambdaEventBridgeLambda(well_architected_rest_api.WellArchitectedRes
                     ).topic_arn
                 ),
             ),
-            method_responses=self.create_method_responses(rest_api)
+            # method_responses=self.create_method_responses(rest_api)
         )
 
     def create_success_lambda(self, event_bus=None, error_topic=None):

@@ -283,7 +283,7 @@
     "RestApiDynamodbE4D5AF2C"
    ]
   },
-  "RestApiDynamodbDeployment789617D992ab80b4208f365e0d9dfa5f013b2c3e": {
+  "RestApiDynamodbDeployment789617D95a1d7e289b49a0ab62092907614123a4": {
    "Type": "AWS::ApiGateway::Deployment",
    "Properties": {
     "RestApiId": {
@@ -294,8 +294,8 @@
    "DependsOn": [
     "RestApiDynamodbInsertItemPOSTA98B66B4",
     "RestApiDynamodbInsertItemDD823FFA",
-    "RestApiDynamodbErrorResponseModelB3F0856E",
-    "RestApiDynamodbResponseModel72FCC6AB"
+    "RestApiDynamodberrorResponse57FCF569",
+    "RestApiDynamodbpollResponse97CC0248"
    ]
   },
   "RestApiDynamodbDeploymentStageprodB57AABC0": {
@@ -305,7 +305,7 @@
      "Ref": "RestApiDynamodbE4D5AF2C"
     },
     "DeploymentId": {
-     "Ref": "RestApiDynamodbDeployment789617D992ab80b4208f365e0d9dfa5f013b2c3e"
+     "Ref": "RestApiDynamodbDeployment789617D95a1d7e289b49a0ab62092907614123a4"
     },
     "MethodSettings": [
      {
@@ -398,7 +398,7 @@
      {
       "ResponseModels": {
        "application/json": {
-        "Ref": "RestApiDynamodbResponseModel72FCC6AB"
+        "Ref": "RestApiDynamodbpollResponse97CC0248"
        }
       },
       "ResponseParameters": {
@@ -411,7 +411,7 @@
      {
       "ResponseModels": {
        "application/json": {
-        "Ref": "RestApiDynamodbErrorResponseModelB3F0856E"
+        "Ref": "RestApiDynamodberrorResponse57FCF569"
        }
       },
       "ResponseParameters": {
@@ -424,14 +424,14 @@
     ]
    }
   },
-  "RestApiDynamodbResponseModel72FCC6AB": {
+  "RestApiDynamodbpollResponse97CC0248": {
    "Type": "AWS::ApiGateway::Model",
    "Properties": {
     "RestApiId": {
      "Ref": "RestApiDynamodbE4D5AF2C"
     },
     "ContentType": "application/json",
-    "Name": "ResponseModel",
+    "Name": "pollResponse",
     "Schema": {
      "properties": {
       "message": {
@@ -444,14 +444,14 @@
     }
    }
   },
-  "RestApiDynamodbErrorResponseModelB3F0856E": {
+  "RestApiDynamodberrorResponse57FCF569": {
    "Type": "AWS::ApiGateway::Model",
    "Properties": {
     "RestApiId": {
      "Ref": "RestApiDynamodbE4D5AF2C"
     },
     "ContentType": "application/json",
-    "Name": "ErrorResponseModel",
+    "Name": "errorResponse",
     "Schema": {
      "properties": {
       "message": {
