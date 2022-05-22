@@ -10,7 +10,7 @@ try:
     import lambda_trilogy.fat_lambda
     import lambda_trilogy.single_purpose_lambda
     import lambda_trilogy.lambda_lith
-    import big_fan
+    import api_sns_sqs_lambda
     import event_bridge_atm
     import circuit_breaker_event_bridge
     import event_bridge_etl
@@ -40,7 +40,7 @@ class WellArchitected(aws_cdk.App):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)        # self.create_xray_tracer()
 
-        # big_fan.BigFan(self, "BigFan")
+        api_sns_sqs_lambda.ApiSnsSqsLambda(self, 'ApiSnsSqsLambda')
         api_sns_lambda_eventbridge_lambda.ApiSnsLambdaEventBridgeLambda(self, "ApiSnsLambdaEventBridgeLambda")
         api_dynamodb.ApiDynamodb(self, 'ApiDynamodb', partition_key='message')
         api_step_functions.ApiStepFunctions(self, "ApiStepFunctions")

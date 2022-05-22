@@ -7,11 +7,11 @@ class TestWellArchitectedPatterns(tests.utilities.TestTemplates):
         return (
             # 'ApiSnsLambdaEventBridgeLambda',
             # "ApiDynamodb",
+            'ApiSnsSqsLambda',
             # "ApiStepFunctions",
-            'CircuitBreakerLambda',
+            # 'CircuitBreakerLambda',
             # 'WafApiLambdaDynamodb',
             # 'SimpleGraphqlService',
-            # 'BigFan',
             # 'DynamoDBFlow',
             # 'DynamoDBTable',
             # 'DynamoStreamer',
