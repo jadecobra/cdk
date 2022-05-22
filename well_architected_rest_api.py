@@ -1,5 +1,6 @@
 import aws_cdk
 import constructs
+import json
 import well_architected
 import well_architected_api
 
@@ -114,8 +115,19 @@ class WellArchitectedRestApiSns(well_architected.WellArchitectedStack):
         sns_topic.grant_publish(role)
         return role
 
-    def get_integration_options(self, iam_role=None, sns_topic_arn=None):
+    def get_request_templates(self, sns_topic_arn):
         raise NotImplementedError
+
+    def get_integration_options(self, iam_role=None, sns_topic_arn=None, request_templates=None):
+        return aws_cdk.aws_apigateway.IntegrationOptions(
+            credentials_role=iam_role,
+            request_parameters={
+                'integration.request.header.Content-Type': "'application/x-www-form-urlencoded'"
+            },
+            request_templates=request_templates,
+            passthrough_behavior=aws_cdk.aws_apigateway.PassthroughBehavior.NEVER,
+            integration_responses=self.get_integration_responses(),
+        )
 
     def create_api_sns_integration(self, sns_topic):
         return aws_cdk.aws_apigateway.Integration(
@@ -125,8 +137,45 @@ class WellArchitectedRestApiSns(well_architected.WellArchitectedStack):
             options=self.get_integration_options(
                 iam_role=self.create_iam_service_role_for(sns_topic),
                 sns_topic_arn=sns_topic.topic_arn,
+                request_templates=self.get_request_templates(sns_topic.topic_arn)
             ),
         )
+
+    def create_integration_response(
+        self, status_code=None, response_templates=None, response_parameters=None,
+        selection_pattern=None, separators=None
+    ):
+        return aws_cdk.aws_apigateway.IntegrationResponse(
+            status_code=str(status_code),
+            selection_pattern=selection_pattern,
+            response_templates=self.create_json_template(
+                json.dumps(response_templates, separators=separators)
+            ),
+            response_parameters=response_parameters,
+        )
+
+    def get_integration_responses(self):
+        return [
+            self.create_integration_response(
+                status_code=200,
+                response_templates={"message": 'Message added to SNS topic'}
+            ),
+            self.create_integration_response(
+                status_code=400,
+                response_templates={
+                    "message": "$util.escapeJavaScript($input.path('$.errorMessage'))",
+                    "state": 'error',
+                },
+                selection_pattern="^\[Error\].*",
+                separators=(',', ':'),
+                response_parameters=self.create_response_parameters(
+                    content_type="'application/json'",
+                    allow_origin="'*'",
+                    allow_credentials="'true'",
+                )
+            )
+        ]
+
 
 class RestApiLambdaConstruct(well_architected.WellArchitectedConstruct):
 

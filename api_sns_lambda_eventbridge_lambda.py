@@ -81,36 +81,9 @@ class ApiSnsLambdaEventBridgeLambda(well_architected_rest_api.WellArchitectedRes
             event_bus_name=name,
         )
 
-    def get_integration_options(self, iam_role=None, sns_topic_arn=None):
-        return aws_cdk.aws_apigateway.IntegrationOptions(
-            credentials_role=iam_role,
-            request_parameters={
-                'integration.request.header.Content-Type': "'application/x-www-form-urlencoded'"
-            },
-            request_templates={
-                "application/json": f"""Action=Publish&TargetArn=$util.urlEncode('{sns_topic_arn}')&Message=please $input.params().querystring.get('mode')&Version=2010-03-31"""
-            },
-            passthrough_behavior=aws_cdk.aws_apigateway.PassthroughBehavior.NEVER,
-            integration_responses=[
-                self.create_integration_response(
-                    status_code='200',
-                    response_templates={"message": 'Message added to SNS topic'}
-                ),
-                self.create_integration_response(
-                    status_code='400',
-                    response_templates={
-                        "message": "$util.escapeJavaScript($input.path('$.errorMessage'))",
-                        "state": 'error',
-                    },
-                    selection_pattern="^\[Error\].*",
-                    separators=(',', ':'),
-                    response_parameters=self.create_response_parameters(
-                        content_type="'application/json'",
-                        allow_origin="'*'",
-                        allow_credentials="'true'",
-                    )
-                )
-            ]
+    def get_request_templates(self, sns_topic_arn):
+        return self.create_json_template(
+            f"""Action=Publish&TargetArn=$util.urlEncode('{sns_topic_arn}')&Message=please $input.params().querystring.get('mode')&Version=2010-03-31"""
         )
 
     def create_event_driven_lambda_function(
@@ -139,47 +112,17 @@ class ApiSnsLambdaEventBridgeLambda(well_architected_rest_api.WellArchitectedRes
         )
         return event_bridge_rule
 
-    # def create_response_model(
-    #     self, rest_api=None, model_name=None, properties=None
+    # @staticmethod
+    # def create_integration_response(
+    #     status_code=None, response_templates=None, response_parameters=None,
+    #     selection_pattern=None, separators=None
     # ):
-    #     property_keys = ['message']
-    #     property_keys.append(properties) if properties else None
-    #     return rest_api.add_model(
-    #         model_name,
-    #         content_type='application/json',
-    #         model_name=model_name,
-    #         schema=self.create_schema(
-    #             title=model_name,
-    #             properties={key: self.string_schema_type() for key in property_keys},
-    #         )
+    #     return aws_cdk.aws_apigateway.IntegrationResponse(
+    #         status_code=status_code,
+    #         selection_pattern=selection_pattern,
+    #         response_templates={"application/json": json.dumps(response_templates, separators=separators)},
+    #         response_parameters=response_parameters,
     #     )
-
-    # @staticmethod
-    # def string_schema_type():
-    #     return aws_cdk.aws_apigateway.JsonSchema(
-    #         type=aws_cdk.aws_apigateway.JsonSchemaType.STRING
-    #     )
-
-    # @staticmethod
-    # def create_schema(title=None, properties=None):
-    #     return aws_cdk.aws_apigateway.JsonSchema(
-    #         schema=aws_cdk.aws_apigateway.JsonSchemaVersion.DRAFT4,
-    #         title=title,
-    #         type=aws_cdk.aws_apigateway.JsonSchemaType.OBJECT,
-    #         properties=properties
-    #     )
-
-    @staticmethod
-    def create_integration_response(
-        status_code=None, response_templates=None, response_parameters=None,
-        selection_pattern=None, separators=None
-    ):
-        return aws_cdk.aws_apigateway.IntegrationResponse(
-            status_code=status_code,
-            selection_pattern=selection_pattern,
-            response_templates={"application/json": json.dumps(response_templates, separators=separators)},
-            response_parameters=response_parameters,
-        )
 
 
 
