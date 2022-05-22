@@ -3,7 +3,7 @@ import aws_cdk.aws_apigatewayv2_alpha
 import constructs
 import well_architected
 
-class WellArchitectedRestApi(well_architected.WellArchitectedStack):
+class WellArchitectedRestApiSns(well_architected.WellArchitectedStack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs):
         super().__init__(scope, id, **kwargs)
@@ -75,6 +75,15 @@ class WellArchitectedRestApi(well_architected.WellArchitectedStack):
                 )
             )
         ]
+
+    @staticmethod
+    def get_stage_options():
+        return aws_cdk.aws_apigateway.StageOptions(
+            metrics_enabled=True,
+            logging_level=aws_cdk.aws_apigateway.MethodLoggingLevel.INFO,
+            data_trace_enabled=True,
+            stage_name='prod'
+        )
 
 class WellArchitectedApi(well_architected.WellArchitectedConstruct):
 

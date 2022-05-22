@@ -6,7 +6,7 @@ import well_architected_api
 import well_architected_lambda
 
 
-class ApiSnsLambdaEventBridgeLambda(well_architected_api.WellArchitectedRestApi):
+class ApiSnsLambdaEventBridgeLambda(well_architected_api.WellArchitectedRestApiSns):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
@@ -22,25 +22,6 @@ class ApiSnsLambdaEventBridgeLambda(well_architected_api.WellArchitectedRestApi)
         )
 
         self.create_rest_api(event_bus)
-
-    # def create_method_responses(self, rest_api):
-    #     return [
-    #         self.create_method_response(
-    #             status_code=200,
-    #             response_model=self.create_response_model(
-    #                 rest_api=rest_api,
-    #                 model_name='pollResponse',
-    #             ),
-    #         ),
-    #         self.create_method_response(
-    #             status_code=400,
-    #             response_model=self.create_response_model(
-    #                 rest_api=rest_api,
-    #                 model_name='errorResponse',
-    #                 properties='state',
-    #             )
-    #         ),
-    #     ]
 
     def create_success_lambda(self, event_bus=None, error_topic=None):
         return self.create_event_driven_lambda_function(
@@ -98,13 +79,8 @@ class ApiSnsLambdaEventBridgeLambda(well_architected_api.WellArchitectedRestApi)
             error_topic=self.error_topic,
             api=aws_cdk.aws_apigateway.RestApi(
                 self, 'RestApiSns',
-                    deploy_options=aws_cdk.aws_apigateway.StageOptions(
-                    metrics_enabled=True,
-                    logging_level=aws_cdk.aws_apigateway.MethodLoggingLevel.INFO,
-                    data_trace_enabled=True,
-                    stage_name='prod'
+                    deploy_options=self.get_stage_options()
                 )
-            )
         ).api
         (
             rest_api.root.add_resource(
