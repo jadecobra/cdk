@@ -95,15 +95,6 @@ class WellArchitectedRestApiSns(well_architected_api.WellArchitectedApiStack):
                 )
         )
 
-    def create_rest_api_method(self, method=None, rest_api=None, integration=None):
-        rest_api.root.add_resource(
-            'SendEvent'
-        ).add_method(
-            method,
-            integration,
-            method_responses=self.create_method_responses(rest_api)
-        )
-
     def get_request_templates(self, sns_topic_arn):
         raise NotImplementedError
 

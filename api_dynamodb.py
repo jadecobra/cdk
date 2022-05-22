@@ -21,34 +21,24 @@ class ApiDynamodb(well_architected_api.WellArchitectedApiStack):
             error_topic=self.error_topic,
         )
         dynamodb_table.grant_read_write_data(self.api_gateway_service_role)
+        rest_api=self.create_rest_api(self.error_topic)
         self.create_rest_api_method(
-            rest_api=self.create_rest_api(self.error_topic),
-            api_gateway_service_role=self.api_gateway_service_role,
-            dynamodb_table_name=dynamodb_table.table_name,
-            dynamodb_partition_key=partition_key,
+            rest_api=rest_api,
+            method='POST',
+            path='InsertItem',
+            integration=self.integrate_rest_api_with_dynamodb_put_item(
+                api_gateway_service_role=self.api_gateway_service_role,
+                dynamodb_table_name=dynamodb_table.table_name,
+                dynamodb_partition_key=partition_key,
+            ),
+            method_responses=self.create_method_responses(
+                rest_api=rest_api,
+                dynamodb_partition_key=partition_key,
+            )
         )
         self.create_lambda_function_with_dynamodb_event_source(
             dynamodb_table=dynamodb_table,
             error_topic=self.error_topic,
-        )
-
-    def create_rest_api_method(
-        self, rest_api=None, api_gateway_service_role=None,
-        dynamodb_table_name=None, dynamodb_partition_key=None
-    ):
-        return rest_api.root.add_resource(
-            'InsertItem'
-        ).add_method(
-            'POST',
-            self.integrate_rest_api_with_dynamodb_put_item(
-                api_gateway_service_role=api_gateway_service_role,
-                dynamodb_table_name=dynamodb_table_name,
-                dynamodb_partition_key=dynamodb_partition_key,
-            ),
-            method_responses=self.create_method_responses(
-                rest_api=rest_api,
-                dynamodb_partition_key=dynamodb_partition_key
-            )
         )
 
     @staticmethod

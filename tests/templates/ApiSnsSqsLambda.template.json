@@ -641,7 +641,7 @@
     "RestApiSnsF3296308"
    ]
   },
-  "RestApiSnsDeployment93BF40AD5fc951428db41adf8219c00049bd81eb": {
+  "RestApiSnsDeployment93BF40ADc7c2ba215956c6488ce0659374daa427": {
    "Type": "AWS::ApiGateway::Deployment",
    "Properties": {
     "RestApiId": {
@@ -663,7 +663,7 @@
      "Ref": "RestApiSnsF3296308"
     },
     "DeploymentId": {
-     "Ref": "RestApiSnsDeployment93BF40AD5fc951428db41adf8219c00049bd81eb"
+     "Ref": "RestApiSnsDeployment93BF40ADc7c2ba215956c6488ce0659374daa427"
     },
     "MethodSettings": [
      {

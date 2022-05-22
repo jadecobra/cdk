@@ -153,3 +153,15 @@ class WellArchitectedApiStack(well_architected.WellArchitectedStack):
             error_topic=error_topic,
             api=api
         ).api
+
+    def create_rest_api_method(
+        self, rest_api=None, integration=None,
+        method_responses=None, method='POST', path=None
+    ):
+        return rest_api.root.add_resource(
+            path
+        ).add_method(
+            method,
+            integration,
+            method_responses=method_responses
+        )

@@ -19,10 +19,11 @@ class ApiSnsLambdaEventBridgeLambda(well_architected_rest_api.WellArchitectedRes
             error_topic=self.error_topic,
             event_bus=event_bus,
         )
-
+        rest_api=self.create_rest_api(self.error_topic)
         self.create_rest_api_method(
+            rest_api=rest_api,
             method='GET',
-            rest_api=self.create_rest_api(self.error_topic),
+            path='SendEvent',
             integration=self.create_api_sns_integration(
                 iam_role=self.api_gateway_service_role,
                 request_templates=self.get_request_templates(
@@ -31,7 +32,8 @@ class ApiSnsLambdaEventBridgeLambda(well_architected_rest_api.WellArchitectedRes
                         event_bus=event_bus
                     ).topic_arn
                 ),
-            )
+            ),
+            method_responses=self.create_method_responses(rest_api)
         )
 
     def create_success_lambda(self, event_bus=None, error_topic=None):
