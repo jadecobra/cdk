@@ -1,6 +1,6 @@
 import aws_cdk
 import constructs
-import well_architected.well_architected_constructs.lambda as lambda
+import well_architected_constructs.lambda_function
 
 
 class SqsFlow(aws_cdk.Stack):
