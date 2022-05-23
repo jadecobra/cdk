@@ -20703,3 +20703,6 @@
 2022-05-22 22:42:50.269158::Time taken to synthesize stack: ApiDynamodb::  5.5479 seconds
 2022-05-22 22:42:55.895875::Time taken to synthesize stack: ApiSnsLambdaEventBridgeLambda::  5.6219 seconds
 2022-05-22 22:43:01.425122::Time taken to synthesize stack: ApiSnsSqsLambda::  5.5244 seconds
+2022-05-22 22:43:21.917885::Time taken to synthesize stack: ApiDynamodb::  5.4565 seconds
+2022-05-22 22:43:27.548215::Time taken to synthesize stack: ApiSnsLambdaEventBridgeLambda::  5.6215 seconds
+2022-05-22 22:43:32.961473::Time taken to synthesize stack: ApiSnsSqsLambda::  5.4088 seconds
