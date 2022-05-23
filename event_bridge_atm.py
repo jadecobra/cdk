@@ -1,6 +1,6 @@
 import aws_cdk
 import constructs
-import well_architected.constructs.lambda as lambda
+import well_architected_constructs.lambda_function
 
 from aws_cdk import (
     aws_apigateway as api_gateway,

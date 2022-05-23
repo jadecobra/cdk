@@ -1,8 +1,8 @@
 import aws_cdk
 import constructs
-import well_architected.constructs.lambda as lambda
-import well_architected.constructs.dynamodb_table as dynamodb_table
-import well_architected.constructs.rest_api as rest_api
+import well_architected_constructs.lambda_function
+import well_architected_constructs.dynamodb_table as dynamodb_table
+import well_architected_constructs.rest_api as rest_api
 
 from aws_cdk import (
     aws_apigateway as api_gateway,

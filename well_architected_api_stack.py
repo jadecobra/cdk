@@ -1,12 +1,12 @@
 import aws_cdk
 import aws_cdk.aws_apigatewayv2_alpha
 import well_architected
-import well_architected.constructs.api as api
+import well_architected_constructs.api
 
 
 
 
-class WellArchitectedApiStack(well_architected.WellArchitectedStack):
+class WellArchitectedApiStack(well_architected.Stack):
 
     def __init__(self, scope, id, **kwargs):
         super().__init__(scope, id, **kwargs)

@@ -1,7 +1,7 @@
 import aws_cdk
 import constructs
-import well_architected.constructs.lambda as lambda
-import well_architected.constructs.rest_api as rest_api
+import well_architected.well_architected_constructs.lambda as lambda
+import well_architected.well_architected_constructs.rest_api as rest_api
 
 from aws_cdk import (
     aws_lambda as _lambda,

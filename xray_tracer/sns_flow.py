@@ -1,6 +1,6 @@
 import aws_cdk
 import constructs
-import well_architected.constructs.lambda as lambda
+import well_architected.well_architected_constructs.lambda as lambda
 
 
 class SnsFlow(aws_cdk.Stack):

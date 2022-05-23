@@ -1,34 +1,15 @@
 import aws_cdk
 import aws_cdk.aws_dynamodb as aws_dynamodb
-import os
-try:
-    import api_dynamodb
-    import api_sns_lambda_eventbridge_lambda
-    import api_step_functions
-    import circuit_breaker_lambda
-    import waf_api_lambda_dynamodb
-    import lambda_trilogy.fat_lambda
-    import lambda_trilogy.single_purpose_lambda
-    import lambda_trilogy.lambda_lith
-    import api_sns_sqs_lambda
-    import event_bridge_atm
-    import circuit_breaker_event_bridge
-    import event_bridge_etl
-    import lambda_power_tuner
-    import rds_proxy
-    import scalable_webhook
-    import saga_step_function
-    import simple_graphql_service
-    import sns_topic
-    import xray_tracer
-    import well_architected.constructs.dynamodb_table as dynamodb_table
-    import well_architected.constructs.web_application_firewall as web_application_firewall
-    import well_architected.constructs.api as api
-    import well_architected.constructs.rest_api as rest_api
-    import well_architected.constructs.lambda as lambda
-except ImportError as error:
-    print(error)
-    os.system('pip install -r requirements.txt')
+
+import well_architected
+import well_architected_stacks
+import well_architected_stacks.rest_api_sns_sqs_lambda
+import well_architected_stacks.rest_api_sns_lambda_eventbridge_lambda
+import well_architected_stacks.rest_api_dynamodb
+import well_architected_stacks.api_step_functions
+import well_architected_stacks.circuit_breaker_lambda
+
+import well_architected_constructs
 
 
 class WellArchitected(aws_cdk.App):
@@ -38,16 +19,17 @@ class WellArchitected(aws_cdk.App):
     )
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)        # self.create_xray_tracer()
+        super().__init__(*args, **kwargs)
+        # self.create_xray_tracer()
 
-        api_sns_sqs_lambda.ApiSnsSqsLambda(self, 'ApiSnsSqsLambda')
-        api_sns_lambda_eventbridge_lambda.ApiSnsLambdaEventBridgeLambda(self, "ApiSnsLambdaEventBridgeLambda")
-        api_dynamodb.RestApiDynamodb(self, 'ApiDynamodb', partition_key='message')
-        api_step_functions.ApiStepFunctions(self, "ApiStepFunctions")
-        circuit_breaker_lambda.CircuitBreakerLambda(self, "CircuitBreakerLambda", )
-        saga_step_function.SagaStepFunction(self, "SagaStepFunction",)
-        simple_graphql_service.SimpleGraphQlService(self, "SimpleGraphqlService")
-        waf_api_lambda_dynamodb.WafApiLambdaDynamodb(self, 'WafApiLambdaDynamodb')
+        well_architected_stacks.rest_api_sns_sqs_lambda.ApiSnsSqsLambda(self, 'ApiSnsSqsLambda')
+        well_architected_stacks.rest_api_sns_lambda_eventbridge_lambda.ApiSnsLambdaEventBridgeLambda(self, "ApiSnsLambdaEventBridgeLambda")
+        well_architected_stacks.rest_api_dynamodb.RestApiDynamodb(self, 'ApiDynamodb', partition_key='message')
+        well_architected_stacks.api_step_functions.ApiStepFunctions(self, "ApiStepFunctions")
+        well_architected_stacks.circuit_breaker_lambda.CircuitBreakerLambda(self, "CircuitBreakerLambda", )
+        # well_architected_stacks.waf_api_lambda_dynamodb.WafApiLambdaDynamodb(self, 'WafApiLambdaDynamodb')
+        # saga_step_function.SagaStepFunction(self, "SagaStepFunction",)
+        # simple_graphql_service.SimpleGraphQlService(self, "SimpleGraphqlService")
         # event_bridge_atm.EventBridgeAtm(self, "EventBridgeAtm")
         # event_bridge_circuit_breaker.EventBridgeCircuitBreaker(
         #     self, 'EventBridgeCircuitBreaker',

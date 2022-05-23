@@ -1,7 +1,7 @@
 import json
 import aws_cdk
 import constructs
-import well_architected.constructs.dynamodb_table as dynamodb_table
+import well_architected_constructs.dynamodb_table
 
 from aws_cdk import (
     aws_lambda as _lambda,

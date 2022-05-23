@@ -3,8 +3,8 @@ import constructs
 import aws_cdk.aws_sns as aws_sns
 import aws_cdk.aws_sns_subscriptions as aws_sns_subscriptions
 import aws_cdk.aws_dynamodb as aws_dynamodb
-import well_architected.constructs.lambda as lambda
-import well_architected.constructs.dynamodb_table as dynamodb_table
+import well_architected.well_architected_constructs.lambda as lambda
+import well_architected.well_architected_constructs.dynamodb_table as dynamodb_table
 
 class DynamoDBFlow(aws_cdk.Stack):
     def __init__(self, scope: constructs.Construct, id: str, sns_topic: aws_sns.ITopic = None, **kwargs) -> None:

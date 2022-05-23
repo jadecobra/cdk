@@ -1,8 +1,8 @@
 import aws_cdk
 import constructs
 import well_architected
-import well_architected.constructs.lambda as lambda
-import well_architected.constructs.dynamodb_table as dynamodb_table
+import well_architected_constructs.lambda_function
+import well_architected_constructs.dynamodb_table
 
 from aws_cdk import (
     aws_lambda,
@@ -13,12 +13,12 @@ from aws_cdk import (
 )
 
 
-class SagaStepFunction(well_architected.WellArchitectedStack):
+class SagaStepFunction(well_architected.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        bookings = dynamodb_table.DynamoDBTableConstruct(
+        bookings = well_architected_constructs.dynamodb_table.DynamoDBTableConstruct(
             self, 'DynamodbTable',
             partition_key='booking_id',
             sort_key='booking_type',
@@ -155,7 +155,7 @@ class SagaStepFunction(well_architected.WellArchitectedStack):
             timeout=aws_cdk.Duration.minutes(5)
         )
 
-        saga_lambda = lambda.LambdaFunctionConstruct(
+        saga_lambda = well_architected_constructs.lambda_function.LambdaFunctionConstruct(
             self, 'SagaLambdaFUnction',
             error_topic=self.error_topic,
             function_name='saga_lambda',
@@ -193,7 +193,7 @@ class SagaStepFunction(well_architected.WellArchitectedStack):
         )
 
     def create_lambda_function(self, scope: aws_cdk.Stack, table: dynamo_db.Table=None, function_name=None, error_topic=None):
-        function = lambda.LambdaFunctionConstruct(
+        function = well_architected_constructs.lambda_function.LambdaFunctionConstruct(
             self, function_name,
             function_name=function_name,
             error_topic=error_topic,
