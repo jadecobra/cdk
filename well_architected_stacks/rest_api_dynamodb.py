@@ -74,16 +74,3 @@ class RestApiDynamodb(well_architected.Stack):
             self, 'RestApiDynamodb',
             error_topic=error_topic,
         )
-        return well_architected_constructs.rest_api_sns.RestApiConstruct(
-            self, 'ApiGateway',
-            error_topic=error_topic,
-            api=aws_cdk.aws_apigateway.RestApi(
-                self, 'RestApiDynamodb',
-                deploy_options=aws_cdk.aws_apigateway.StageOptions(
-                    metrics_enabled=True,
-                    logging_level=aws_cdk.aws_apigateway.MethodLoggingLevel.INFO,
-                    data_trace_enabled=True,
-                    stage_name='prod',
-                )
-            )
-        )

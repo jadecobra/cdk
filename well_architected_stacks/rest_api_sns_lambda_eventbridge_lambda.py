@@ -20,12 +20,9 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.Stack):
             error_topic=self.error_topic,
             event_bus=event_bus,
         )
-        # rest_api = well_architected_constructs.rest_api_sns.RestApiSnsConstruct(
-        #     self, 'ApiGateway',
-        #     error_topic=self.error_topic,
-        # )
+
         rest_api = well_architected_constructs.rest_api.RestApiConstruct(
-            self, 'ApiGateway',
+            self, 'RestApiSns',
             error_topic=self.error_topic,
         )
         rest_api.add_method(

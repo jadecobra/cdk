@@ -923,7 +923,7 @@
     "RestApi0C43BF4B"
    ]
   },
-  "RestApiDeployment180EC503b852621f2815995dd61164523ded486c": {
+  "RestApiDeployment180EC503a1946a43e09c7b7acade21435de48c0d": {
    "Type": "AWS::ApiGateway::Deployment",
    "Properties": {
     "RestApiId": {
@@ -945,7 +945,7 @@
      "Ref": "RestApi0C43BF4B"
     },
     "DeploymentId": {
-     "Ref": "RestApiDeployment180EC503b852621f2815995dd61164523ded486c"
+     "Ref": "RestApiDeployment180EC503a1946a43e09c7b7acade21435de48c0d"
     },
     "MethodSettings": [
      {
@@ -991,7 +991,7 @@
     "Integration": {
      "Credentials": {
       "Fn::GetAtt": [
-       "ApiGatewayApiGatewayServiceRoleA84B0BD7",
+       "RestApiSnsApiGatewayServiceRole3F60FED6",
        "Arn"
       ]
      },
@@ -1110,7 +1110,7 @@
     }
    }
   },
-  "ApiGateway4XXErrorsGreaterThanOnePercent5A1D3E83": {
+  "RestApiSns4XXErrorsGreaterThanOnePercent198B4654": {
    "Type": "AWS::CloudWatch::Alarm",
    "Properties": {
     "ComparisonOperator": "GreaterThanOrEqualToThreshold",
@@ -1176,7 +1176,7 @@
     "TreatMissingData": "notBreaching"
    }
   },
-  "ApiGateway5XXErrorsGreaterThanZero0315D4CD": {
+  "RestApiSns5XXErrorsGreaterThanZero1FC921F5": {
    "Type": "AWS::CloudWatch::Alarm",
    "Properties": {
     "ComparisonOperator": "GreaterThanOrEqualToThreshold",
@@ -1215,7 +1215,7 @@
     "TreatMissingData": "notBreaching"
    }
   },
-  "ApiGatewayP99LatencyGreaterThanOneSecond9E39333D": {
+  "RestApiSnsP99LatencyGreaterThanOneSecondE00F8259": {
    "Type": "AWS::CloudWatch::Alarm",
    "Properties": {
     "ComparisonOperator": "GreaterThanOrEqualToThreshold",
@@ -1254,7 +1254,7 @@
     "TreatMissingData": "notBreaching"
    }
   },
-  "ApiGatewayCloudWatchDashBoard57AC71E2": {
+  "RestApiSnsCloudWatchDashBoard1B0D7822": {
    "Type": "AWS::CloudWatch::Dashboard",
    "Properties": {
     "DashboardBody": {
@@ -1303,7 +1303,7 @@
     }
    }
   },
-  "ApiGatewayApiGatewayServiceRoleA84B0BD7": {
+  "RestApiSnsApiGatewayServiceRole3F60FED6": {
    "Type": "AWS::IAM::Role",
    "Properties": {
     "AssumeRolePolicyDocument": {
@@ -1839,7 +1839,7 @@
     ]
    }
   },
-  "ApiGatewayApiGatewayURL3BE59E45": {
+  "RestApiSnsRestApiSnsURLF646A3A7": {
    "Value": {
     "Fn::Join": [
      "",
