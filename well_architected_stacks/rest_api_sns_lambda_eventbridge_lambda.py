@@ -28,8 +28,14 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.Stack):
             path='SendEvent',
             integration=rest_api.create_api_integration(
                 uri='arn:aws:apigateway:us-east-1:sns:path//',
-                api_gateway_service_role=rest_api.api_gateway_service_role,
-                integration_responses=rest_api.get_integration_responses(),
+                success_response_templates={
+                    "message": 'Message added to SNS topic'
+                },
+                error_response_templates={
+                    "message": "$util.escapeJavaScript($input.path('$.errorMessage'))",
+                    "state": 'error',
+                },
+                error_selection_pattern="^\[Error\].*",
                 request_parameters={
                     'integration.request.header.Content-Type': "'application/x-www-form-urlencoded'"
                 },

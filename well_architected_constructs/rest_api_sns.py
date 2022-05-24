@@ -30,40 +30,40 @@ class RestApiSnsConstruct(RestApiConstruct):
             stage_name='prod'
         )
 
-    def create_integration_response(
-        self, status_code=None, response_templates=None,
-        response_parameters=None, selection_pattern=None,
-        separators=None
-    ):
-        return aws_cdk.aws_apigateway.IntegrationResponse(
-            status_code=str(status_code),
-            selection_pattern=selection_pattern,
-            response_templates=self.create_json_template(
-                json.dumps(response_templates, separators=separators)
-            ),
-            response_parameters=response_parameters,
-        )
+    # def create_integration_response(
+    #     self, status_code=None, response_templates=None,
+    #     response_parameters=None, selection_pattern=None,
+    #     separators=None
+    # ):
+    #     return aws_cdk.aws_apigateway.IntegrationResponse(
+    #         status_code=str(status_code),
+    #         selection_pattern=selection_pattern,
+    #         response_templates=self.create_json_template(
+    #             json.dumps(response_templates, separators=separators)
+    #         ),
+    #         response_parameters=response_parameters,
+    #     )
 
-    def get_integration_responses(self):
-        return [
-            self.create_integration_response(
-                status_code=200,
-                response_templates={
-                    "message": 'Message added to SNS topic'
-                }
-            ),
-            self.create_integration_response(
-                status_code=400,
-                response_templates={
-                    "message": "$util.escapeJavaScript($input.path('$.errorMessage'))",
-                    "state": 'error',
-                },
-                selection_pattern="^\[Error\].*",
-                separators=(',', ':'),
-                response_parameters=self.create_response_parameters(
-                    content_type=f"{self.content_type()}",
-                    allow_origin="'*'",
-                    allow_credentials="'true'",
-                )
-            )
-        ]
+    # def get_integration_responses(self):
+    #     return [
+    #         self.create_integration_response(
+    #             status_code=200,
+    #             response_templates={
+    #                 "message": 'Message added to SNS topic'
+    #             }
+    #         ),
+    #         self.create_integration_response(
+    #             status_code=400,
+    #             response_templates={
+    #                 "message": "$util.escapeJavaScript($input.path('$.errorMessage'))",
+    #                 "state": 'error',
+    #             },
+    #             selection_pattern="^\[Error\].*",
+    #             separators=(',', ':'),
+    #             response_parameters=self.create_response_parameters(
+    #                 content_type=f"{self.json_content_type()}",
+    #                 allow_origin="'*'",
+    #                 allow_credentials="'true'",
+    #             )
+    #         )
+    #     ]

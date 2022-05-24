@@ -29,9 +29,10 @@ class RestApiDynamodb(well_architected.Stack):
             integration=rest_api.create_api_integration(
                 uri='arn:aws:apigateway:us-east-1:dynamodb:action/PutItem',
                 request_templates=self.get_request_template(dynamodb_table.table_name),
-                integration_responses=self.get_integration_responses(partition_key),
-                api_gateway_service_role=rest_api.api_gateway_service_role,
-            ),
+                success_response_templates=self.success_response_template(partition_key, rest_api=rest_api),
+                error_response_templates=self.error_response_template(rest_api),
+                error_selection_pattern="^\[BadRequest\].*",
+            )
         )
         self.create_lambda_function_with_dynamodb_event_source(
             dynamodb_table=dynamodb_table,
@@ -39,38 +40,35 @@ class RestApiDynamodb(well_architected.Stack):
         )
 
     @staticmethod
-    def create_api_request_template(template, separators=(',', ':')):
+    def create_json_template(template, separators=(',', ':')):
         return {
             'application/json': json.dumps(template, separators=separators)
             if not isinstance(template, aws_cdk.aws_apigateway.Model) else template
         }
 
-    def success_response_template(self, partition_key=None):
-        return self.create_api_request_template(
-            template={partition_key: 'item added to db'},
-            separators=None,
-        )
+    def success_response_template(self, partition_key=None, rest_api=None):
+        return {partition_key: 'item added to db'}
 
-    def error_response_template(self):
-        return self.create_api_request_template({
+    def error_response_template(self, rest_api):
+        return {
             "state": 'error',
             "message": "$util.escapeJavaScript($input.path('$.errorMessage'))"
-        })
+        }
 
     def get_request_template(self, table_name):
-        return self.create_api_request_template({
+        return self.create_json_template({
             "TableName": table_name,
             "Item": {
                 "message": { "S": "$input.path('$.message')" }
             }
         })
 
-    def success_response_model(self, dynamodb_partition_key):
-        return dict(
-            model_name='pollResponse',
-            response_type='pollResponse',
-            response_templates=self.success_response_template(dynamodb_partition_key),
-        )
+    # def success_response_model(self, dynamodb_partition_key):
+    #     return dict(
+    #         model_name='pollResponse',
+    #         response_type='pollResponse',
+    #         response_templates=self.success_response_template(dynamodb_partition_key),
+    #     )
 
     @staticmethod
     def create_response_parameters(content_type=True, allow_origin=True, allow_credentials=True):
@@ -94,54 +92,37 @@ class RestApiDynamodb(well_architected.Stack):
             )
         )
 
-    def get_response_status_mappings(self, dynamodb_partition_key):
-        return {
-            '200': self.success_response_model(dynamodb_partition_key),
-            '400': self.error_response_model(),
-        }
+    # def get_response_status_mappings(self, dynamodb_partition_key):
+    #     return {
+    #         '200': self.success_response_model(dynamodb_partition_key),
+    #         '400': self.error_response_model(),
+    #     }
 
-    def get_integration_responses(self, dynamodb_partition_key):
-        return [
-            aws_cdk.aws_apigateway.IntegrationResponse(
-                status_code=status_code,
-                response_templates=values['response_templates'],
-                response_parameters=values.get('response_parameters'),
-                selection_pattern=values.get('selection_pattern'),
-            ) for status_code, values in self.get_response_status_mappings(dynamodb_partition_key).items()
-        ]
-
-    def get_integration_options(
-        self, api_gateway_service_role=None,
-        request_templates=None,
-        integration_responses=None,
-        request_parameters=None
-    ):
-        return aws_cdk.aws_apigateway.IntegrationOptions(
-            credentials_role=api_gateway_service_role,
-            request_templates=request_templates,
-            passthrough_behavior=aws_cdk.aws_apigateway.PassthroughBehavior.NEVER,
-            integration_responses=integration_responses,
-            request_parameters=request_parameters,
-        )
-
-    def create_api_integration(
-        self, api_gateway_service_role=None, request_templates=None,
-        integration_responses=None,
-        request_parameters=None,
-        uri=None,
-    ):
-        return aws_cdk.aws_apigateway.Integration(
-            type=aws_cdk.aws_apigateway.IntegrationType.AWS,
-            integration_http_method='POST',
-            uri=uri,
-            options=self.get_integration_options(
-                api_gateway_service_role=api_gateway_service_role,
-                request_templates=request_templates,
-                integration_responses=integration_responses,
-                request_parameters=request_parameters,
-            )
-        )
-
+    # def get_integration_responses(self, dynamodb_partition_key):
+    #     return [
+    #         aws_cdk.aws_apigateway.IntegrationResponse(
+    #             status_code=status_code,
+    #             response_templates=values['response_templates'],
+    #             response_parameters=values.get('response_parameters'),
+    #             selection_pattern=values.get('selection_pattern'),
+    #         ) for status_code, values in {
+    #             '200': dict(
+    #                 model_name='pollResponse',
+    #                 response_templates=self.success_response_template(dynamodb_partition_key),
+    #             ),
+    #             '400': dict(
+    #                 model_name='errorResponse',
+    #                 additional_properties='state',
+    #                 response_templates=self.error_response_template(),
+    #                 selection_pattern="^\[BadRequest\].*",
+    #                 response_parameters=self.create_response_parameters(
+    #                     content_type="'application/json'",
+    #                     allow_origin="'*'",
+    #                     allow_credentials="'true'",
+    #                 )
+    #             ),
+    #         }.items()
+    #     ]
 
     @staticmethod
     def json_string():
