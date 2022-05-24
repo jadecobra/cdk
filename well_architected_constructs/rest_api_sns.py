@@ -30,35 +30,6 @@ class RestApiSnsConstruct(RestApiConstruct):
             stage_name='prod'
         )
 
-    def get_request_templates(self, sns_topic_arn):
-        raise NotImplementedError
-
-    def get_integration_options(
-        self, iam_role=None, request_templates=None
-    ):
-        return aws_cdk.aws_apigateway.IntegrationOptions(
-            credentials_role=iam_role,
-            request_parameters={
-                'integration.request.header.Content-Type': "'application/x-www-form-urlencoded'"
-            },
-            request_templates=request_templates,
-            passthrough_behavior=aws_cdk.aws_apigateway.PassthroughBehavior.NEVER,
-            integration_responses=self.get_integration_responses(),
-        )
-
-    def create_api_sns_integration(
-        self, iam_role=None, request_templates=None
-    ):
-        return aws_cdk.aws_apigateway.Integration(
-            type=aws_cdk.aws_apigateway.IntegrationType.AWS,
-            integration_http_method='POST',
-            uri='arn:aws:apigateway:us-east-1:sns:path//',
-            options=self.get_integration_options(
-                iam_role=iam_role,
-                request_templates=request_templates,
-            ),
-        )
-
     def create_integration_response(
         self, status_code=None, response_templates=None,
         response_parameters=None, selection_pattern=None,

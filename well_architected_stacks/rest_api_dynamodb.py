@@ -26,10 +26,11 @@ class RestApiDynamodb(well_architected.Stack):
         rest_api.add_method(
             method='POST',
             path='InsertItem',
-            integration=self.integrate_rest_api_with_dynamodb_put_item(
+            integration=rest_api.create_api_integration(
+                uri='arn:aws:apigateway:us-east-1:dynamodb:action/PutItem',
+                request_templates=self.get_request_template(dynamodb_table.table_name),
+                integration_responses=self.get_integration_responses(partition_key),
                 api_gateway_service_role=rest_api.api_gateway_service_role,
-                dynamodb_table_name=dynamodb_table.table_name,
-                dynamodb_partition_key=partition_key,
             ),
         )
         self.create_lambda_function_with_dynamodb_event_source(
@@ -56,7 +57,7 @@ class RestApiDynamodb(well_architected.Stack):
             "message": "$util.escapeJavaScript($input.path('$.errorMessage'))"
         })
 
-    def request_template(self, table_name):
+    def get_request_template(self, table_name):
         return self.create_api_request_template({
             "TableName": table_name,
             "Item": {
@@ -109,29 +110,35 @@ class RestApiDynamodb(well_architected.Stack):
             ) for status_code, values in self.get_response_status_mappings(dynamodb_partition_key).items()
         ]
 
-    def create_api_integration_options(
-        self, api_gateway_service_role=None, dynamodb_table_name=None,
-        dynamodb_partition_key=None
+    def get_integration_options(
+        self, api_gateway_service_role=None,
+        request_templates=None,
+        integration_responses=None,
+        request_parameters=None
     ):
         return aws_cdk.aws_apigateway.IntegrationOptions(
             credentials_role=api_gateway_service_role,
-            request_templates=self.request_template(dynamodb_table_name),
+            request_templates=request_templates,
             passthrough_behavior=aws_cdk.aws_apigateway.PassthroughBehavior.NEVER,
-            integration_responses=self.get_integration_responses(dynamodb_partition_key)
+            integration_responses=integration_responses,
+            request_parameters=request_parameters,
         )
 
-    def integrate_rest_api_with_dynamodb_put_item(
-        self, api_gateway_service_role=None, dynamodb_table_name=None,
-        dynamodb_partition_key=None
+    def create_api_integration(
+        self, api_gateway_service_role=None, request_templates=None,
+        integration_responses=None,
+        request_parameters=None,
+        uri=None,
     ):
         return aws_cdk.aws_apigateway.Integration(
             type=aws_cdk.aws_apigateway.IntegrationType.AWS,
             integration_http_method='POST',
-            uri='arn:aws:apigateway:us-east-1:dynamodb:action/PutItem',
-            options=self.create_api_integration_options(
+            uri=uri,
+            options=self.get_integration_options(
                 api_gateway_service_role=api_gateway_service_role,
-                dynamodb_table_name=dynamodb_table_name,
-                dynamodb_partition_key=dynamodb_partition_key,
+                request_templates=request_templates,
+                integration_responses=integration_responses,
+                request_parameters=request_parameters,
             )
         )
 

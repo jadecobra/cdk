@@ -7,7 +7,7 @@ import constructs
 import os
 
 
-class SimpleGraphQlService(well_architected.WellArchitectedStack):
+class SimpleGraphQlService(well_architected.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)

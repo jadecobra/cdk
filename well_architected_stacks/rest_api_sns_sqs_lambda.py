@@ -35,18 +35,23 @@ class ApiSnsSqsLambda(well_architected.Stack):
             error_topic=self.error_topic,
         )
         rest_api.add_method(
-            # rest_api=rest_api,
             method='POST',
             path='SendEvent',
-            integration=rest_api.create_api_sns_integration(
-                request_templates=self.get_request_templates(
+            integration=rest_api.create_api_integration(
+                uri='arn:aws:apigateway:us-east-1:sns:path//',
+                api_gateway_service_role=rest_api.api_gateway_service_role,
+                request_templates=self.get_request_template(
                     rest_api=rest_api,
-                    sns_topic_arn=sns_topic.topic_arn),
-                iam_role=rest_api.api_gateway_service_role
+                    sns_topic_arn=sns_topic.topic_arn
+                ),
+                integration_responses=rest_api.get_integration_responses(),
+                request_parameters={
+                    'integration.request.header.Content-Type': "'application/x-www-form-urlencoded'"
+                },
             ),
         )
 
-    def get_request_templates(self, rest_api=None, sns_topic_arn=None):
+    def get_request_template(self, rest_api=None, sns_topic_arn=None):
         return rest_api.create_json_template(
             f"Action=Publish&TargetArn=$util.urlEncode('{sns_topic_arn}')&Message=$util.urlEncode($input.path('$.message'))&Version=2010-03-31&MessageAttributes.entry.1.Name=status&MessageAttributes.entry.1.Value.DataType=String&MessageAttributes.entry.1.Value.StringValue=$util.urlEncode($input.path('$.status'))"
         )

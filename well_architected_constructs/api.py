@@ -133,3 +133,6 @@ class Api(well_architected.Construct):
             self.create_api_gateway_latency_widget(),
             self.create_api_gateway_errors_widget(),
         )
+
+    def get_request_template(self, sns_topic_arn):
+        raise NotImplementedError

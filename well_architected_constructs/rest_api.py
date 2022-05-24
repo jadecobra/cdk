@@ -119,14 +119,33 @@ class RestApiConstruct(Api):
             method_responses=self.create_method_responses(self.api)
         )
 
+    def get_integration_options(
+        self, api_gateway_service_role=None,
+        request_templates=None,
+        integration_responses=None,
+        request_parameters=None,
+    ):
+        return aws_cdk.aws_apigateway.IntegrationOptions(
+            credentials_role=api_gateway_service_role,
+            request_parameters=request_parameters,
+            request_templates=request_templates,
+            passthrough_behavior=aws_cdk.aws_apigateway.PassthroughBehavior.NEVER,
+            integration_responses=integration_responses,
+        )
 
-class RestApiLambdaStack(aws_cdk.Stack):
-
-    def __init__(self, scope: constructs.Construct, id: str, lambda_function: aws_cdk.aws_lambda.Function, error_topic:aws_cdk.aws_sns.Topic=None, **kwargs) -> None:
-        super().__init__(scope, id, **kwargs)
-        self.rest_api = LambdaRestAPIGatewayConstruct(
-            self, id,
-            lambda_function=lambda_function,
-            error_topic=error_topic,
-            **kwargs
+    def create_api_integration(
+        self, api_gateway_service_role=None, request_templates=None,
+        integration_responses=None, request_parameters=None,
+        uri=None,
+    ):
+        return aws_cdk.aws_apigateway.Integration(
+            type=aws_cdk.aws_apigateway.IntegrationType.AWS,
+            integration_http_method='POST',
+            uri=uri,
+            options=self.get_integration_options(
+                api_gateway_service_role=api_gateway_service_role,
+                request_templates=request_templates,
+                integration_responses=integration_responses,
+                request_parameters=request_parameters
+            ),
         )
