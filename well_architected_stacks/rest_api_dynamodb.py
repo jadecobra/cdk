@@ -71,6 +71,10 @@ class RestApiDynamodb(well_architected.Stack):
 
     def create_rest_api(self, error_topic):
         return well_architected_constructs.rest_api_sns.RestApiConstruct(
+            self, 'RestApiDynamodb',
+            error_topic=error_topic,
+        )
+        return well_architected_constructs.rest_api_sns.RestApiConstruct(
             self, 'ApiGateway',
             error_topic=error_topic,
             api=aws_cdk.aws_apigateway.RestApi(

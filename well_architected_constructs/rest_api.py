@@ -13,7 +13,10 @@ class RestApiConstruct(Api):
         super().__init__(
             scope, id,
             error_topic=error_topic,
-            api=api,
+            api=aws_cdk.aws_apigateway.RestApi(
+                scope, 'RestApi',
+                deploy_options=self.get_stage_options()
+            ),
             **kwargs,
         )
         self.api_gateway_service_role = self.create_api_gateway_service_role()
@@ -22,6 +25,15 @@ class RestApiConstruct(Api):
         return aws_cdk.aws_iam.Role(
             self, 'ApiGatewayServiceRole',
             assumed_by=aws_cdk.aws_iam.ServicePrincipal('apigateway.amazonaws.com'),
+        )
+
+    @staticmethod
+    def get_stage_options():
+        return aws_cdk.aws_apigateway.StageOptions(
+            metrics_enabled=True,
+            logging_level=aws_cdk.aws_apigateway.MethodLoggingLevel.INFO,
+            data_trace_enabled=True,
+            stage_name='prod'
         )
 
     @staticmethod
@@ -108,7 +120,7 @@ class RestApiConstruct(Api):
         ]
 
     def add_method(
-        self, integration=None,
+        self,
         method='POST', path=None,
         uri=None, request_templates=None,
         success_response_templates=None, error_selection_pattern=None,
@@ -118,10 +130,8 @@ class RestApiConstruct(Api):
             path
         ).add_method(
             method,
-            # integration,
             self.create_api_integration(
                 uri=uri,
-                # request_templates=request_templates,
                 request_templates=self.create_json_template(request_templates),
                 success_response_templates=success_response_templates,
                 error_selection_pattern=error_selection_pattern,

@@ -3,6 +3,7 @@ import constructs
 import well_architected
 import well_architected_constructs.lambda_function
 import well_architected_constructs.rest_api_sns
+import well_architected_constructs.rest_api
 
 
 class ApiSnsSqsLambda(well_architected.Stack):
@@ -30,8 +31,12 @@ class ApiSnsSqsLambda(well_architected.Stack):
                 sqs_queue=sqs_queue,
             )
 
-        rest_api = well_architected_constructs.rest_api_sns.RestApiSnsConstruct(
-            self, 'ApiGateway',
+        # rest_api = well_architected_constructs.rest_api_sns.RestApiSnsConstruct(
+        #     self, 'ApiGateway',
+        #     error_topic=self.error_topic,
+        # )
+        rest_api = well_architected_constructs.rest_api.RestApiConstruct(
+            self, 'RestApiSns',
             error_topic=self.error_topic,
         )
         rest_api.add_method(

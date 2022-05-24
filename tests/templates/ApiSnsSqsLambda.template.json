@@ -573,13 +573,13 @@
     "RawMessageDelivery": true
    }
   },
-  "RestApiSnsF3296308": {
+  "RestApi0C43BF4B": {
    "Type": "AWS::ApiGateway::RestApi",
    "Properties": {
-    "Name": "RestApiSns"
+    "Name": "RestApi"
    }
   },
-  "RestApiSnsCloudWatchRole92E39196": {
+  "RestApiCloudWatchRoleE3ED6605": {
    "Type": "AWS::IAM::Role",
    "Properties": {
     "AssumeRolePolicyDocument": {
@@ -610,43 +610,43 @@
     ]
    }
   },
-  "RestApiSnsAccount5648DF11": {
+  "RestApiAccount7C83CF5A": {
    "Type": "AWS::ApiGateway::Account",
    "Properties": {
     "CloudWatchRoleArn": {
      "Fn::GetAtt": [
-      "RestApiSnsCloudWatchRole92E39196",
+      "RestApiCloudWatchRoleE3ED6605",
       "Arn"
      ]
     }
    },
    "DependsOn": [
-    "RestApiSnsF3296308"
+    "RestApi0C43BF4B"
    ]
   },
-  "RestApiSnsDeployment93BF40AD6e3702f65ef095358aab904a5d217116": {
+  "RestApiDeployment180EC503f65e5212f5dc0c4e3c070bcbfa2c9576": {
    "Type": "AWS::ApiGateway::Deployment",
    "Properties": {
     "RestApiId": {
-     "Ref": "RestApiSnsF3296308"
+     "Ref": "RestApi0C43BF4B"
     },
     "Description": "Automatically created by the RestApi construct"
    },
    "DependsOn": [
-    "RestApiSnsSendEventPOSTF53AC0E4",
-    "RestApiSnsSendEvent6BCA018C",
-    "RestApiSnserrorResponse5612D0A5",
-    "RestApiSnspollResponse0BA50DB0"
+    "RestApiSendEventPOSTF343B427",
+    "RestApiSendEvent02C4F03F",
+    "RestApierrorResponse2EE521BA",
+    "RestApipollResponse8796EA23"
    ]
   },
-  "RestApiSnsDeploymentStageprod2063FF29": {
+  "RestApiDeploymentStageprod3855DE66": {
    "Type": "AWS::ApiGateway::Stage",
    "Properties": {
     "RestApiId": {
-     "Ref": "RestApiSnsF3296308"
+     "Ref": "RestApi0C43BF4B"
     },
     "DeploymentId": {
-     "Ref": "RestApiSnsDeployment93BF40AD6e3702f65ef095358aab904a5d217116"
+     "Ref": "RestApiDeployment180EC503f65e5212f5dc0c4e3c070bcbfa2c9576"
     },
     "MethodSettings": [
      {
@@ -660,39 +660,39 @@
     "StageName": "prod"
    },
    "DependsOn": [
-    "RestApiSnsAccount5648DF11"
+    "RestApiAccount7C83CF5A"
    ]
   },
-  "RestApiSnsSendEvent6BCA018C": {
+  "RestApiSendEvent02C4F03F": {
    "Type": "AWS::ApiGateway::Resource",
    "Properties": {
     "ParentId": {
      "Fn::GetAtt": [
-      "RestApiSnsF3296308",
+      "RestApi0C43BF4B",
       "RootResourceId"
      ]
     },
     "PathPart": "SendEvent",
     "RestApiId": {
-     "Ref": "RestApiSnsF3296308"
+     "Ref": "RestApi0C43BF4B"
     }
    }
   },
-  "RestApiSnsSendEventPOSTF53AC0E4": {
+  "RestApiSendEventPOSTF343B427": {
    "Type": "AWS::ApiGateway::Method",
    "Properties": {
     "HttpMethod": "POST",
     "ResourceId": {
-     "Ref": "RestApiSnsSendEvent6BCA018C"
+     "Ref": "RestApiSendEvent02C4F03F"
     },
     "RestApiId": {
-     "Ref": "RestApiSnsF3296308"
+     "Ref": "RestApi0C43BF4B"
     },
     "AuthorizationType": "NONE",
     "Integration": {
      "Credentials": {
       "Fn::GetAtt": [
-       "ApiGatewayApiGatewayServiceRoleA84B0BD7",
+       "RestApiSnsApiGatewayServiceRole3F60FED6",
        "Arn"
       ]
      },
@@ -742,7 +742,7 @@
      {
       "ResponseModels": {
        "application/json": {
-        "Ref": "RestApiSnspollResponse0BA50DB0"
+        "Ref": "RestApipollResponse8796EA23"
        }
       },
       "ResponseParameters": {
@@ -755,7 +755,7 @@
      {
       "ResponseModels": {
        "application/json": {
-        "Ref": "RestApiSnserrorResponse5612D0A5"
+        "Ref": "RestApierrorResponse2EE521BA"
        }
       },
       "ResponseParameters": {
@@ -768,11 +768,11 @@
     ]
    }
   },
-  "RestApiSnspollResponse0BA50DB0": {
+  "RestApipollResponse8796EA23": {
    "Type": "AWS::ApiGateway::Model",
    "Properties": {
     "RestApiId": {
-     "Ref": "RestApiSnsF3296308"
+     "Ref": "RestApi0C43BF4B"
     },
     "ContentType": "application/json",
     "Name": "pollResponse",
@@ -788,11 +788,11 @@
     }
    }
   },
-  "RestApiSnserrorResponse5612D0A5": {
+  "RestApierrorResponse2EE521BA": {
    "Type": "AWS::ApiGateway::Model",
    "Properties": {
     "RestApiId": {
-     "Ref": "RestApiSnsF3296308"
+     "Ref": "RestApi0C43BF4B"
     },
     "ContentType": "application/json",
     "Name": "errorResponse",
@@ -811,7 +811,7 @@
     }
    }
   },
-  "ApiGateway4XXErrorsGreaterThanOnePercent5A1D3E83": {
+  "RestApiSns4XXErrorsGreaterThanOnePercent198B4654": {
    "Type": "AWS::CloudWatch::Alarm",
    "Properties": {
     "ComparisonOperator": "GreaterThanOrEqualToThreshold",
@@ -837,7 +837,7 @@
          {
           "Name": "ApiId",
           "Value": {
-           "Ref": "RestApiSnsF3296308"
+           "Ref": "RestApi0C43BF4B"
           }
          }
         ],
@@ -859,7 +859,7 @@
          {
           "Name": "ApiId",
           "Value": {
-           "Ref": "RestApiSnsF3296308"
+           "Ref": "RestApi0C43BF4B"
           }
          }
         ],
@@ -877,7 +877,7 @@
     "TreatMissingData": "notBreaching"
    }
   },
-  "ApiGateway5XXErrorsGreaterThanZero0315D4CD": {
+  "RestApiSns5XXErrorsGreaterThanZero1FC921F5": {
    "Type": "AWS::CloudWatch::Alarm",
    "Properties": {
     "ComparisonOperator": "GreaterThanOrEqualToThreshold",
@@ -898,7 +898,7 @@
          {
           "Name": "ApiId",
           "Value": {
-           "Ref": "RestApiSnsF3296308"
+           "Ref": "RestApi0C43BF4B"
           }
          }
         ],
@@ -916,7 +916,7 @@
     "TreatMissingData": "notBreaching"
    }
   },
-  "ApiGatewayP99LatencyGreaterThanOneSecond9E39333D": {
+  "RestApiSnsP99LatencyGreaterThanOneSecondE00F8259": {
    "Type": "AWS::CloudWatch::Alarm",
    "Properties": {
     "ComparisonOperator": "GreaterThanOrEqualToThreshold",
@@ -937,7 +937,7 @@
          {
           "Name": "ApiId",
           "Value": {
-           "Ref": "RestApiSnsF3296308"
+           "Ref": "RestApi0C43BF4B"
           }
          }
         ],
@@ -955,7 +955,7 @@
     "TreatMissingData": "notBreaching"
    }
   },
-  "ApiGatewayCloudWatchDashBoard57AC71E2": {
+  "RestApiSnsCloudWatchDashBoard1B0D7822": {
    "Type": "AWS::CloudWatch::Dashboard",
    "Properties": {
     "DashboardBody": {
@@ -968,7 +968,7 @@
        },
        "\",\"stacked\":false,\"metrics\":[[\"AWS/ApiGateway\",\"Count\",\"ApiId\",\"",
        {
-        "Ref": "RestApiSnsF3296308"
+        "Ref": "RestApi0C43BF4B"
        },
        "\",{\"label\":\"# Requests\",\"period\":900,\"stat\":\"Sum\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"api_gateway_latency\",\"region\":\"",
        {
@@ -976,15 +976,15 @@
        },
        "\",\"stacked\":true,\"metrics\":[[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
        {
-        "Ref": "RestApiSnsF3296308"
+        "Ref": "RestApi0C43BF4B"
        },
        "\",{\"label\":\"api_gateway_latency_p50\",\"period\":900,\"stat\":\"p50\"}],[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
        {
-        "Ref": "RestApiSnsF3296308"
+        "Ref": "RestApi0C43BF4B"
        },
        "\",{\"label\":\"api_gateway_latency_p90\",\"period\":900,\"stat\":\"p90\"}],[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
        {
-        "Ref": "RestApiSnsF3296308"
+        "Ref": "RestApi0C43BF4B"
        },
        "\",{\"label\":\"api_gateway_latency_p99\",\"period\":900,\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"api_gateway_errors\",\"region\":\"",
        {
@@ -992,11 +992,11 @@
        },
        "\",\"stacked\":true,\"metrics\":[[\"AWS/ApiGateway\",\"4XXError\",\"ApiId\",\"",
        {
-        "Ref": "RestApiSnsF3296308"
+        "Ref": "RestApi0C43BF4B"
        },
        "\",{\"label\":\"api_gateway_4XXErrors\",\"period\":900,\"stat\":\"Sum\"}],[\"AWS/ApiGateway\",\"5XXError\",\"ApiId\",\"",
        {
-        "Ref": "RestApiSnsF3296308"
+        "Ref": "RestApi0C43BF4B"
        },
        "\",{\"label\":\"api_gateway_5XXErrors\",\"period\":900,\"stat\":\"Sum\"}]],\"yAxis\":{}}}]}"
       ]
@@ -1004,7 +1004,7 @@
     }
    }
   },
-  "ApiGatewayApiGatewayServiceRoleA84B0BD7": {
+  "RestApiSnsApiGatewayServiceRole3F60FED6": {
    "Type": "AWS::IAM::Role",
    "Properties": {
     "AssumeRolePolicyDocument": {
@@ -1049,14 +1049,14 @@
   }
  },
  "Outputs": {
-  "RestApiSnsEndpoint0290AFA1": {
+  "RestApiEndpoint0551178A": {
    "Value": {
     "Fn::Join": [
      "",
      [
       "https://",
       {
-       "Ref": "RestApiSnsF3296308"
+       "Ref": "RestApi0C43BF4B"
       },
       ".execute-api.",
       {
@@ -1068,21 +1068,21 @@
       },
       "/",
       {
-       "Ref": "RestApiSnsDeploymentStageprod2063FF29"
+       "Ref": "RestApiDeploymentStageprod3855DE66"
       },
       "/"
      ]
     ]
    }
   },
-  "ApiGatewayApiGatewayURL3BE59E45": {
+  "RestApiSnsRestApiSnsURLF646A3A7": {
    "Value": {
     "Fn::Join": [
      "",
      [
       "https://",
       {
-       "Ref": "RestApiSnsF3296308"
+       "Ref": "RestApi0C43BF4B"
       },
       ".execute-api.",
       {
@@ -1094,7 +1094,7 @@
       },
       "/",
       {
-       "Ref": "RestApiSnsDeploymentStageprod2063FF29"
+       "Ref": "RestApiDeploymentStageprod3855DE66"
       },
       "/"
      ]

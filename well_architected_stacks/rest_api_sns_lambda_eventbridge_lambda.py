@@ -3,6 +3,7 @@ import constructs
 import well_architected
 import well_architected_constructs.lambda_function
 import well_architected_constructs.rest_api_sns
+import well_architected_constructs.rest_api
 
 
 class ApiSnsLambdaEventBridgeLambda(well_architected.Stack):
@@ -19,7 +20,11 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.Stack):
             error_topic=self.error_topic,
             event_bus=event_bus,
         )
-        rest_api = well_architected_constructs.rest_api_sns.RestApiSnsConstruct(
+        # rest_api = well_architected_constructs.rest_api_sns.RestApiSnsConstruct(
+        #     self, 'ApiGateway',
+        #     error_topic=self.error_topic,
+        # )
+        rest_api = well_architected_constructs.rest_api.RestApiConstruct(
             self, 'ApiGateway',
             error_topic=self.error_topic,
         )
