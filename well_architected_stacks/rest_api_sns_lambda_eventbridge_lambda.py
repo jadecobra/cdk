@@ -31,10 +31,6 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.Stack):
                 success_response_templates={
                     "message": 'Message added to SNS topic'
                 },
-                error_response_templates={
-                    "message": "$util.escapeJavaScript($input.path('$.errorMessage'))",
-                    "state": 'error',
-                },
                 error_selection_pattern="^\[Error\].*",
                 request_parameters={
                     'integration.request.header.Content-Type': "'application/x-www-form-urlencoded'"

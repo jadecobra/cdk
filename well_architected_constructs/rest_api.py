@@ -137,7 +137,6 @@ class RestApiConstruct(Api):
         self,
         success_response_templates=None,
         error_selection_pattern=None,
-        error_response_templates=None,
     ):
         return [
             self.create_integration_response(
@@ -146,7 +145,10 @@ class RestApiConstruct(Api):
             ),
             self.create_integration_response(
                 status_code=400,
-                response_templates=error_response_templates,
+                response_templates={
+                    "state": 'error',
+                    "message": "$util.escapeJavaScript($input.path('$.errorMessage'))"
+                },
                 selection_pattern=error_selection_pattern,
                 separators=(',', ':'),
                 response_parameters=self.create_response_parameters(
@@ -160,7 +162,7 @@ class RestApiConstruct(Api):
     def create_api_integration(
         self, request_templates=None,
         request_parameters=None,
-        success_response_templates=None, error_response_templates=None,
+        success_response_templates=None,
         error_selection_pattern=None,
         uri=None,
     ):
@@ -172,7 +174,6 @@ class RestApiConstruct(Api):
                 request_templates=request_templates,
                 integration_responses=self.get_integration_responses(
                     success_response_templates=success_response_templates,
-                    error_response_templates=error_response_templates,
                     error_selection_pattern=error_selection_pattern,
                 ),
                 request_parameters=request_parameters

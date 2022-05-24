@@ -923,7 +923,7 @@
     "RestApiSnsF3296308"
    ]
   },
-  "RestApiSnsDeployment93BF40AD6ea3ca70fbc3cbd1a567367a91430987": {
+  "RestApiSnsDeployment93BF40ADee3c00fc80762f7ba46ef2df4eb9811d": {
    "Type": "AWS::ApiGateway::Deployment",
    "Properties": {
     "RestApiId": {
@@ -945,7 +945,7 @@
      "Ref": "RestApiSnsF3296308"
     },
     "DeploymentId": {
-     "Ref": "RestApiSnsDeployment93BF40AD6ea3ca70fbc3cbd1a567367a91430987"
+     "Ref": "RestApiSnsDeployment93BF40ADee3c00fc80762f7ba46ef2df4eb9811d"
     },
     "MethodSettings": [
      {
@@ -1010,7 +1010,7 @@
         "method.response.header.Access-Control-Allow-Credentials": "'true'"
        },
        "ResponseTemplates": {
-        "application/json": "{\"message\":\"$util.escapeJavaScript($input.path('$.errorMessage'))\",\"state\":\"error\"}"
+        "application/json": "{\"state\":\"error\",\"message\":\"$util.escapeJavaScript($input.path('$.errorMessage'))\"}"
        },
        "SelectionPattern": "^\\[Error\\].*",
        "StatusCode": "400"

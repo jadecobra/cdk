@@ -30,7 +30,6 @@ class RestApiDynamodb(well_architected.Stack):
                 uri='arn:aws:apigateway:us-east-1:dynamodb:action/PutItem',
                 request_templates=self.get_request_template(dynamodb_table.table_name),
                 success_response_templates=self.success_response_template(partition_key, rest_api=rest_api),
-                error_response_templates=self.error_response_template(rest_api),
                 error_selection_pattern="^\[BadRequest\].*",
             )
         )
