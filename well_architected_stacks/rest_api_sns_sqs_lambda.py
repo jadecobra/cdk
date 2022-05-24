@@ -37,24 +37,19 @@ class ApiSnsSqsLambda(well_architected.Stack):
         rest_api.add_method(
             method='POST',
             path='SendEvent',
-            integration=rest_api.create_api_integration(
-                uri='arn:aws:apigateway:us-east-1:sns:path//',
-                request_templates=self.get_request_template(
-                    rest_api=rest_api,
-                    sns_topic_arn=sns_topic.topic_arn
-                ),
-                success_response_templates={
-                    "message": 'Message added to SNS topic'
-                },
-                error_selection_pattern="^\[Error\].*",
-                request_parameters={
-                    'integration.request.header.Content-Type': "'application/x-www-form-urlencoded'"
-                },
-            ),
+            uri='arn:aws:apigateway:us-east-1:sns:path//',
+            request_templates=self.get_request_template(sns_topic.topic_arn),
+            success_response_templates={
+                "message": 'Message added to SNS topic'
+            },
+            error_selection_pattern="Error",
+            request_parameters={
+                'integration.request.header.Content-Type': "'application/x-www-form-urlencoded'"
+            },
         )
 
-    def get_request_template(self, rest_api=None, sns_topic_arn=None):
-        return rest_api.create_json_template(
+    def get_request_template(self, sns_topic_arn):
+        return (
             f"Action=Publish&TargetArn=$util.urlEncode('{sns_topic_arn}')&Message=$util.urlEncode($input.path('$.message'))&Version=2010-03-31&MessageAttributes.entry.1.Name=status&MessageAttributes.entry.1.Value.DataType=String&MessageAttributes.entry.1.Value.StringValue=$util.urlEncode($input.path('$.status'))"
         )
 

@@ -26,22 +26,20 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.Stack):
         rest_api.add_method(
             method='GET',
             path='SendEvent',
-            integration=rest_api.create_api_integration(
-                uri='arn:aws:apigateway:us-east-1:sns:path//',
-                success_response_templates={
-                    "message": 'Message added to SNS topic'
-                },
-                error_selection_pattern="^\[Error\].*",
-                request_parameters={
-                    'integration.request.header.Content-Type': "'application/x-www-form-urlencoded'"
-                },
-                request_templates=self.get_request_template(
-                    rest_api=rest_api,
-                    sns_topic_arn=self.create_sns_triggered_lambda(
-                        name='destined',
-                        event_bus=event_bus
-                    ).topic_arn
-                ),
+            uri='arn:aws:apigateway:us-east-1:sns:path//',
+            success_response_templates={
+                "message": 'Message added to SNS topic'
+            },
+            error_selection_pattern="Error",
+            request_parameters={
+                'integration.request.header.Content-Type': "'application/x-www-form-urlencoded'"
+            },
+            request_templates=self.get_request_template(
+                rest_api=rest_api,
+                sns_topic_arn=self.create_sns_triggered_lambda(
+                    name='destined',
+                    event_bus=event_bus
+                ).topic_arn
             ),
         )
 
@@ -96,7 +94,7 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.Stack):
         )
 
     def get_request_template(self, sns_topic_arn=None, rest_api=None):
-        return rest_api.create_json_template(
+        return (
             f"""Action=Publish&TargetArn=$util.urlEncode('{sns_topic_arn}')&Message=please $input.params().querystring.get('mode')&Version=2010-03-31"""
         )
 

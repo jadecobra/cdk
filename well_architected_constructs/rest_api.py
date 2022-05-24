@@ -109,13 +109,24 @@ class RestApiConstruct(Api):
 
     def add_method(
         self, integration=None,
-        method='POST', path=None
+        method='POST', path=None,
+        uri=None, request_templates=None,
+        success_response_templates=None, error_selection_pattern=None,
+        request_parameters=None,
     ):
         return self.api.root.add_resource(
             path
         ).add_method(
             method,
-            integration,
+            # integration,
+            self.create_api_integration(
+                uri=uri,
+                # request_templates=request_templates,
+                request_templates=self.create_json_template(request_templates),
+                success_response_templates=success_response_templates,
+                error_selection_pattern=error_selection_pattern,
+                request_parameters=request_parameters,
+            ),
             method_responses=self.create_method_responses(self.api)
         )
 
@@ -149,7 +160,7 @@ class RestApiConstruct(Api):
                     "state": 'error',
                     "message": "$util.escapeJavaScript($input.path('$.errorMessage'))"
                 },
-                selection_pattern=error_selection_pattern,
+                selection_pattern=fr"^\[{error_selection_pattern}\].*",
                 separators=(',', ':'),
                 response_parameters=self.create_response_parameters(
                     content_type=f"{self.json_content_type()}",

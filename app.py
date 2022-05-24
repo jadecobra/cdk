@@ -41,18 +41,18 @@ class WellArchitected(aws_cdk.App):
         # lambda_trilogy.single_purpose_lambda.TheSinglePurposeFunctionStack(self, "SinglePurposeLambda", )
         # lambda_power_tuner.LambdaPowerTuner(self, "LambdaPowerTuner", )
 
-    def create_xray_tracer(self):
-        xray_tracer_sns_topic = sns_topic.SnsTopic(
-            self, 'XRayTracerSnsFanOutTopic', display_name='The XRay Tracer Fan Out Topic'
-        ).topic
-        xray_tracer.sns_rest_api.SnsRestApi(
-            self, 'SnsRestApi', sns_topic=xray_tracer_sns_topic
-        )
-        xray_tracer.sns_flow.SnsFlow(self, 'SnsFlow', sns_topic=xray_tracer_sns_topic)
-        xray_tracer.sqs_flow.SqsFlow(self, 'SqsFlow', sns_topic=xray_tracer_sns_topic)
-        xray_tracer.http_flow.HttpFlow(self, 'HttpFlow', sns_topic=xray_tracer_sns_topic)
-        xray_tracer.dynamodb_flow.DynamoDBFlow(
-            self, 'DynamoDBFlow', sns_topic=xray_tracer_sns_topic
-        )
+    # def create_xray_tracer(self):
+        # xray_tracer_sns_topic = sns_topic.SnsTopic(
+        #     self, 'XRayTracerSnsFanOutTopic', display_name='The XRay Tracer Fan Out Topic'
+        # ).topic
+        # xray_tracer.sns_rest_api.SnsRestApi(
+        #     self, 'SnsRestApi', sns_topic=xray_tracer_sns_topic
+        # )
+        # xray_tracer.sns_flow.SnsFlow(self, 'SnsFlow', sns_topic=xray_tracer_sns_topic)
+        # xray_tracer.sqs_flow.SqsFlow(self, 'SqsFlow', sns_topic=xray_tracer_sns_topic)
+        # xray_tracer.http_flow.HttpFlow(self, 'HttpFlow', sns_topic=xray_tracer_sns_topic)
+        # xray_tracer.dynamodb_flow.DynamoDBFlow(
+        #     self, 'DynamoDBFlow', sns_topic=xray_tracer_sns_topic
+        # )
 
 WellArchitected().synth()
