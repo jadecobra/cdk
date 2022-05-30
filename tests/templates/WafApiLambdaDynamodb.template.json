@@ -569,13 +569,13 @@
     }
    }
   },
-  "RestApi0C43BF4B": {
+  "RestApiLambdaFunction1C9F1F79": {
    "Type": "AWS::ApiGateway::RestApi",
    "Properties": {
-    "Name": "RestApi"
+    "Name": "RestApiLambdaFunction"
    }
   },
-  "RestApiCloudWatchRoleE3ED6605": {
+  "RestApiLambdaFunctionCloudWatchRoleC3D96D40": {
    "Type": "AWS::IAM::Role",
    "Properties": {
     "AssumeRolePolicyDocument": {
@@ -606,65 +606,65 @@
     ]
    }
   },
-  "RestApiAccount7C83CF5A": {
+  "RestApiLambdaFunctionAccount73A80E55": {
    "Type": "AWS::ApiGateway::Account",
    "Properties": {
     "CloudWatchRoleArn": {
      "Fn::GetAtt": [
-      "RestApiCloudWatchRoleE3ED6605",
+      "RestApiLambdaFunctionCloudWatchRoleC3D96D40",
       "Arn"
      ]
     }
    },
    "DependsOn": [
-    "RestApi0C43BF4B"
+    "RestApiLambdaFunction1C9F1F79"
    ]
   },
-  "RestApiDeployment180EC503de665daa236839c8524fd78ffeabb787": {
+  "RestApiLambdaFunctionDeployment91972A2D1bf5851eda3657c1481f9da83f5df772": {
    "Type": "AWS::ApiGateway::Deployment",
    "Properties": {
     "RestApiId": {
-     "Ref": "RestApi0C43BF4B"
+     "Ref": "RestApiLambdaFunction1C9F1F79"
     },
     "Description": "Automatically created by the RestApi construct"
    },
    "DependsOn": [
-    "RestApiproxyANY1786B242",
-    "RestApiproxyC95856DD",
-    "RestApiANYA7C1DC94"
+    "RestApiLambdaFunctionproxyANY436F3122",
+    "RestApiLambdaFunctionproxy632CE0BD",
+    "RestApiLambdaFunctionANY81BD6EF7"
    ]
   },
-  "RestApiDeploymentStageprod3855DE66": {
+  "RestApiLambdaFunctionDeploymentStageprodA456ADBA": {
    "Type": "AWS::ApiGateway::Stage",
    "Properties": {
     "RestApiId": {
-     "Ref": "RestApi0C43BF4B"
+     "Ref": "RestApiLambdaFunction1C9F1F79"
     },
     "DeploymentId": {
-     "Ref": "RestApiDeployment180EC503de665daa236839c8524fd78ffeabb787"
+     "Ref": "RestApiLambdaFunctionDeployment91972A2D1bf5851eda3657c1481f9da83f5df772"
     },
     "StageName": "prod"
    },
    "DependsOn": [
-    "RestApiAccount7C83CF5A"
+    "RestApiLambdaFunctionAccount73A80E55"
    ]
   },
-  "RestApiproxyC95856DD": {
+  "RestApiLambdaFunctionproxy632CE0BD": {
    "Type": "AWS::ApiGateway::Resource",
    "Properties": {
     "ParentId": {
      "Fn::GetAtt": [
-      "RestApi0C43BF4B",
+      "RestApiLambdaFunction1C9F1F79",
       "RootResourceId"
      ]
     },
     "PathPart": "{proxy+}",
     "RestApiId": {
-     "Ref": "RestApi0C43BF4B"
+     "Ref": "RestApiLambdaFunction1C9F1F79"
     }
    }
   },
-  "RestApiproxyANYApiPermissionWafApiLambdaDynamodbRestApiBEFE213BANYproxyA797B991": {
+  "RestApiLambdaFunctionproxyANYApiPermissionWafApiLambdaDynamodbRestApiLambdaFunctionAF605C39ANYproxy4B1A6162": {
    "Type": "AWS::Lambda::Permission",
    "Properties": {
     "Action": "lambda:InvokeFunction",
@@ -693,11 +693,11 @@
        },
        ":",
        {
-        "Ref": "RestApi0C43BF4B"
+        "Ref": "RestApiLambdaFunction1C9F1F79"
        },
        "/",
        {
-        "Ref": "RestApiDeploymentStageprod3855DE66"
+        "Ref": "RestApiLambdaFunctionDeploymentStageprodA456ADBA"
        },
        "/*/*"
       ]
@@ -705,7 +705,7 @@
     }
    }
   },
-  "RestApiproxyANYApiPermissionTestWafApiLambdaDynamodbRestApiBEFE213BANYproxyDD515FFB": {
+  "RestApiLambdaFunctionproxyANYApiPermissionTestWafApiLambdaDynamodbRestApiLambdaFunctionAF605C39ANYproxy610120D2": {
    "Type": "AWS::Lambda::Permission",
    "Properties": {
     "Action": "lambda:InvokeFunction",
@@ -734,7 +734,7 @@
        },
        ":",
        {
-        "Ref": "RestApi0C43BF4B"
+        "Ref": "RestApiLambdaFunction1C9F1F79"
        },
        "/test-invoke-stage/*/*"
       ]
@@ -742,15 +742,15 @@
     }
    }
   },
-  "RestApiproxyANY1786B242": {
+  "RestApiLambdaFunctionproxyANY436F3122": {
    "Type": "AWS::ApiGateway::Method",
    "Properties": {
     "HttpMethod": "ANY",
     "ResourceId": {
-     "Ref": "RestApiproxyC95856DD"
+     "Ref": "RestApiLambdaFunctionproxy632CE0BD"
     },
     "RestApiId": {
-     "Ref": "RestApi0C43BF4B"
+     "Ref": "RestApiLambdaFunction1C9F1F79"
     },
     "AuthorizationType": "NONE",
     "Integration": {
@@ -782,7 +782,7 @@
     }
    }
   },
-  "RestApiANYApiPermissionWafApiLambdaDynamodbRestApiBEFE213BANYA27682BA": {
+  "RestApiLambdaFunctionANYApiPermissionWafApiLambdaDynamodbRestApiLambdaFunctionAF605C39ANYCC912E90": {
    "Type": "AWS::Lambda::Permission",
    "Properties": {
     "Action": "lambda:InvokeFunction",
@@ -811,11 +811,11 @@
        },
        ":",
        {
-        "Ref": "RestApi0C43BF4B"
+        "Ref": "RestApiLambdaFunction1C9F1F79"
        },
        "/",
        {
-        "Ref": "RestApiDeploymentStageprod3855DE66"
+        "Ref": "RestApiLambdaFunctionDeploymentStageprodA456ADBA"
        },
        "/*/"
       ]
@@ -823,7 +823,7 @@
     }
    }
   },
-  "RestApiANYApiPermissionTestWafApiLambdaDynamodbRestApiBEFE213BANY6922E961": {
+  "RestApiLambdaFunctionANYApiPermissionTestWafApiLambdaDynamodbRestApiLambdaFunctionAF605C39ANY08707F12": {
    "Type": "AWS::Lambda::Permission",
    "Properties": {
     "Action": "lambda:InvokeFunction",
@@ -852,7 +852,7 @@
        },
        ":",
        {
-        "Ref": "RestApi0C43BF4B"
+        "Ref": "RestApiLambdaFunction1C9F1F79"
        },
        "/test-invoke-stage/*/"
       ]
@@ -860,18 +860,18 @@
     }
    }
   },
-  "RestApiANYA7C1DC94": {
+  "RestApiLambdaFunctionANY81BD6EF7": {
    "Type": "AWS::ApiGateway::Method",
    "Properties": {
     "HttpMethod": "ANY",
     "ResourceId": {
      "Fn::GetAtt": [
-      "RestApi0C43BF4B",
+      "RestApiLambdaFunction1C9F1F79",
       "RootResourceId"
      ]
     },
     "RestApiId": {
-     "Ref": "RestApi0C43BF4B"
+     "Ref": "RestApiLambdaFunction1C9F1F79"
     },
     "AuthorizationType": "NONE",
     "Integration": {
@@ -929,7 +929,7 @@
          {
           "Name": "ApiId",
           "Value": {
-           "Ref": "RestApi0C43BF4B"
+           "Ref": "RestApiLambdaFunction1C9F1F79"
           }
          }
         ],
@@ -951,7 +951,7 @@
          {
           "Name": "ApiId",
           "Value": {
-           "Ref": "RestApi0C43BF4B"
+           "Ref": "RestApiLambdaFunction1C9F1F79"
           }
          }
         ],
@@ -990,7 +990,7 @@
          {
           "Name": "ApiId",
           "Value": {
-           "Ref": "RestApi0C43BF4B"
+           "Ref": "RestApiLambdaFunction1C9F1F79"
           }
          }
         ],
@@ -1029,7 +1029,7 @@
          {
           "Name": "ApiId",
           "Value": {
-           "Ref": "RestApi0C43BF4B"
+           "Ref": "RestApiLambdaFunction1C9F1F79"
           }
          }
         ],
@@ -1060,7 +1060,7 @@
        },
        "\",\"stacked\":false,\"metrics\":[[\"AWS/ApiGateway\",\"Count\",\"ApiId\",\"",
        {
-        "Ref": "RestApi0C43BF4B"
+        "Ref": "RestApiLambdaFunction1C9F1F79"
        },
        "\",{\"label\":\"# Requests\",\"period\":900,\"stat\":\"Sum\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"api_gateway_latency\",\"region\":\"",
        {
@@ -1068,15 +1068,15 @@
        },
        "\",\"stacked\":true,\"metrics\":[[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
        {
-        "Ref": "RestApi0C43BF4B"
+        "Ref": "RestApiLambdaFunction1C9F1F79"
        },
        "\",{\"label\":\"api_gateway_latency_p50\",\"period\":900,\"stat\":\"p50\"}],[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
        {
-        "Ref": "RestApi0C43BF4B"
+        "Ref": "RestApiLambdaFunction1C9F1F79"
        },
        "\",{\"label\":\"api_gateway_latency_p90\",\"period\":900,\"stat\":\"p90\"}],[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
        {
-        "Ref": "RestApi0C43BF4B"
+        "Ref": "RestApiLambdaFunction1C9F1F79"
        },
        "\",{\"label\":\"api_gateway_latency_p99\",\"period\":900,\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"api_gateway_errors\",\"region\":\"",
        {
@@ -1084,11 +1084,11 @@
        },
        "\",\"stacked\":true,\"metrics\":[[\"AWS/ApiGateway\",\"4XXError\",\"ApiId\",\"",
        {
-        "Ref": "RestApi0C43BF4B"
+        "Ref": "RestApiLambdaFunction1C9F1F79"
        },
        "\",{\"label\":\"api_gateway_4XXErrors\",\"period\":900,\"stat\":\"Sum\"}],[\"AWS/ApiGateway\",\"5XXError\",\"ApiId\",\"",
        {
-        "Ref": "RestApi0C43BF4B"
+        "Ref": "RestApiLambdaFunction1C9F1F79"
        },
        "\",{\"label\":\"api_gateway_5XXErrors\",\"period\":900,\"stat\":\"Sum\"}]],\"yAxis\":{}}}]}"
       ]
@@ -1096,137 +1096,14 @@
     }
    }
   },
-  "WebApplicationFirewall5B9A8CD2": {
-   "Type": "AWS::WAFv2::WebACL",
-   "Properties": {
-    "DefaultAction": {
-     "Allow": {}
-    },
-    "Scope": "REGIONAL",
-    "VisibilityConfig": {
-     "CloudWatchMetricsEnabled": true,
-     "MetricName": "webACL",
-     "SampledRequestsEnabled": true
-    },
-    "Name": "WebApplicationFirewall",
-    "Rules": [
-     {
-      "Name": "AWSManagedRulesCommonRuleSet",
-      "OverrideAction": {
-       "None": {}
-      },
-      "Priority": 1,
-      "Statement": {
-       "ManagedRuleGroupStatement": {
-        "ExcludedRules": [
-         {
-          "Name": "SizeRestrictions_BODY"
-         }
-        ],
-        "Name": "AWSManagedRulesCommonRuleSet",
-        "VendorName": "AWS"
-       }
-      },
-      "VisibilityConfig": {
-       "CloudWatchMetricsEnabled": true,
-       "MetricName": "AWSManagedRulesCommonRuleSet",
-       "SampledRequestsEnabled": true
-      }
-     },
-     {
-      "Name": "AWSManagedRulesAnonymousIpList",
-      "OverrideAction": {
-       "None": {}
-      },
-      "Priority": 2,
-      "Statement": {
-       "ManagedRuleGroupStatement": {
-        "ExcludedRules": [],
-        "Name": "AWSManagedRulesAnonymousIpList",
-        "VendorName": "AWS"
-       }
-      },
-      "VisibilityConfig": {
-       "CloudWatchMetricsEnabled": true,
-       "MetricName": "AWSManagedRulesAnonymousIpList",
-       "SampledRequestsEnabled": true
-      }
-     },
-     {
-      "Name": "AWSManagedRulesAmazonIpReputationList",
-      "OverrideAction": {
-       "None": {}
-      },
-      "Priority": 3,
-      "Statement": {
-       "ManagedRuleGroupStatement": {
-        "ExcludedRules": [],
-        "Name": "AWSManagedRulesAmazonIpReputationList",
-        "VendorName": "AWS"
-       }
-      },
-      "VisibilityConfig": {
-       "CloudWatchMetricsEnabled": true,
-       "MetricName": "AWSManagedRulesAmazonIpReputationList",
-       "SampledRequestsEnabled": true
-      }
-     },
-     {
-      "Action": {
-       "Block": {}
-      },
-      "Name": "GeoBlockingRule",
-      "Priority": 4,
-      "Statement": {
-       "GeoMatchStatement": {
-        "CountryCodes": [
-         "NZ"
-        ]
-       }
-      },
-      "VisibilityConfig": {
-       "CloudWatchMetricsEnabled": true,
-       "MetricName": "geoblock",
-       "SampledRequestsEnabled": true
-      }
-     }
-    ]
-   }
-  },
-  "WebApplicationFirewallWebApplicationFirewallAPIGatewayAssociation48156246": {
-   "Type": "AWS::WAFv2::WebACLAssociation",
-   "Properties": {
-    "ResourceArn": {
-     "Fn::Join": [
-      "",
-      [
-       "arn:aws:apigateway:region::/restapis/",
-       {
-        "Ref": "RestApi0C43BF4B"
-       },
-       "/stages/",
-       {
-        "Ref": "RestApiDeploymentStageprod3855DE66"
-       }
-      ]
-     ]
-    },
-    "WebACLArn": {
-     "Fn::GetAtt": [
-      "WebApplicationFirewall5B9A8CD2",
-      "Arn"
-     ]
-    }
-   }
-  },
   "HttpApiF5A9A8A7": {
    "Type": "AWS::ApiGatewayV2::Api",
    "Properties": {
-    "Name": "waf_api_lambda_dynamodb",
+    "Name": "HttpApi",
     "ProtocolType": "HTTP"
    }
   },
-  "HttpApiDefaultRouteLambdaFunction2B7E6185": {
+  "HttpApiDefaultRouteHttpApiLambdaFunction10324BA7": {
    "Type": "AWS::ApiGatewayV2::Integration",
    "Properties": {
     "ApiId": {
@@ -1242,7 +1119,7 @@
     "PayloadFormatVersion": "2.0"
    }
   },
-  "HttpApiDefaultRouteLambdaFunctionPermission9EEA15C5": {
+  "HttpApiDefaultRouteHttpApiLambdaFunctionPermissionBCEEE709": {
    "Type": "AWS::Lambda::Permission",
    "Properties": {
     "Action": "lambda:InvokeFunction",
@@ -1293,7 +1170,7 @@
       [
        "integrations/",
        {
-        "Ref": "HttpApiDefaultRouteLambdaFunction2B7E6185"
+        "Ref": "HttpApiDefaultRouteHttpApiLambdaFunction10324BA7"
        }
       ]
      ]
@@ -1502,6 +1379,129 @@
      ]
     }
    }
+  },
+  "WebApplicationFirewall5B9A8CD2": {
+   "Type": "AWS::WAFv2::WebACL",
+   "Properties": {
+    "DefaultAction": {
+     "Allow": {}
+    },
+    "Scope": "REGIONAL",
+    "VisibilityConfig": {
+     "CloudWatchMetricsEnabled": true,
+     "MetricName": "webACL",
+     "SampledRequestsEnabled": true
+    },
+    "Name": "WebApplicationFirewall",
+    "Rules": [
+     {
+      "Name": "AWSManagedRulesCommonRuleSet",
+      "OverrideAction": {
+       "None": {}
+      },
+      "Priority": 1,
+      "Statement": {
+       "ManagedRuleGroupStatement": {
+        "ExcludedRules": [
+         {
+          "Name": "SizeRestrictions_BODY"
+         }
+        ],
+        "Name": "AWSManagedRulesCommonRuleSet",
+        "VendorName": "AWS"
+       }
+      },
+      "VisibilityConfig": {
+       "CloudWatchMetricsEnabled": true,
+       "MetricName": "AWSManagedRulesCommonRuleSet",
+       "SampledRequestsEnabled": true
+      }
+     },
+     {
+      "Name": "AWSManagedRulesAnonymousIpList",
+      "OverrideAction": {
+       "None": {}
+      },
+      "Priority": 2,
+      "Statement": {
+       "ManagedRuleGroupStatement": {
+        "ExcludedRules": [],
+        "Name": "AWSManagedRulesAnonymousIpList",
+        "VendorName": "AWS"
+       }
+      },
+      "VisibilityConfig": {
+       "CloudWatchMetricsEnabled": true,
+       "MetricName": "AWSManagedRulesAnonymousIpList",
+       "SampledRequestsEnabled": true
+      }
+     },
+     {
+      "Name": "AWSManagedRulesAmazonIpReputationList",
+      "OverrideAction": {
+       "None": {}
+      },
+      "Priority": 3,
+      "Statement": {
+       "ManagedRuleGroupStatement": {
+        "ExcludedRules": [],
+        "Name": "AWSManagedRulesAmazonIpReputationList",
+        "VendorName": "AWS"
+       }
+      },
+      "VisibilityConfig": {
+       "CloudWatchMetricsEnabled": true,
+       "MetricName": "AWSManagedRulesAmazonIpReputationList",
+       "SampledRequestsEnabled": true
+      }
+     },
+     {
+      "Action": {
+       "Block": {}
+      },
+      "Name": "GeoBlockingRule",
+      "Priority": 4,
+      "Statement": {
+       "GeoMatchStatement": {
+        "CountryCodes": [
+         "NZ"
+        ]
+       }
+      },
+      "VisibilityConfig": {
+       "CloudWatchMetricsEnabled": true,
+       "MetricName": "geoblock",
+       "SampledRequestsEnabled": true
+      }
+     }
+    ]
+   }
+  },
+  "WebApplicationFirewallWebApplicationFirewallAPIGatewayAssociation48156246": {
+   "Type": "AWS::WAFv2::WebACLAssociation",
+   "Properties": {
+    "ResourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:apigateway:region::/restapis/",
+       {
+        "Ref": "RestApiLambdaFunction1C9F1F79"
+       },
+       "/stages/",
+       {
+        "Ref": "RestApiLambdaFunctionDeploymentStageprodA456ADBA"
+       }
+      ]
+     ]
+    },
+    "WebACLArn": {
+     "Fn::GetAtt": [
+      "WebApplicationFirewall5B9A8CD2",
+      "Arn"
+     ]
+    }
+   }
   }
  },
  "Parameters": {
@@ -1531,14 +1531,14 @@
   }
  },
  "Outputs": {
-  "RestApiEndpoint0551178A": {
+  "RestApiLambdaFunctionEndpointDBD15E6B": {
    "Value": {
     "Fn::Join": [
      "",
      [
       "https://",
       {
-       "Ref": "RestApi0C43BF4B"
+       "Ref": "RestApiLambdaFunction1C9F1F79"
       },
       ".execute-api.",
       {
@@ -1550,7 +1550,7 @@
       },
       "/",
       {
-       "Ref": "RestApiDeploymentStageprod3855DE66"
+       "Ref": "RestApiLambdaFunctionDeploymentStageprodA456ADBA"
       },
       "/"
      ]
@@ -1564,7 +1564,7 @@
      [
       "https://",
       {
-       "Ref": "RestApi0C43BF4B"
+       "Ref": "RestApiLambdaFunction1C9F1F79"
       },
       ".execute-api.",
       {
@@ -1576,7 +1576,7 @@
       },
       "/",
       {
-       "Ref": "RestApiDeploymentStageprod3855DE66"
+       "Ref": "RestApiLambdaFunctionDeploymentStageprodA456ADBA"
       },
       "/"
      ]

@@ -44,7 +44,7 @@ class ApiSnsSqsLambda(well_architected.Stack):
             },
             error_selection_pattern="Error",
             request_parameters={
-                'integration.request.header.Content-Type': "'application/x-www-form-urlencoded'"
+                'integration.reque    st.header.Content-Type': "'application/x-www-form-urlencoded'"
             },
         )
 

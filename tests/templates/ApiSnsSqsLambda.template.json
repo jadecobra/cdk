@@ -624,7 +624,7 @@
     "RestApi0C43BF4B"
    ]
   },
-  "RestApiDeployment180EC503f65e5212f5dc0c4e3c070bcbfa2c9576": {
+  "RestApiDeployment180EC5035d7b74cdcee9fc8201688c1f2b8763da": {
    "Type": "AWS::ApiGateway::Deployment",
    "Properties": {
     "RestApiId": {
@@ -646,7 +646,7 @@
      "Ref": "RestApi0C43BF4B"
     },
     "DeploymentId": {
-     "Ref": "RestApiDeployment180EC503f65e5212f5dc0c4e3c070bcbfa2c9576"
+     "Ref": "RestApiDeployment180EC5035d7b74cdcee9fc8201688c1f2b8763da"
     },
     "MethodSettings": [
      {
@@ -719,7 +719,7 @@
      ],
      "PassthroughBehavior": "NEVER",
      "RequestParameters": {
-      "integration.request.header.Content-Type": "'application/x-www-form-urlencoded'"
+      "integration.reque    st.header.Content-Type": "'application/x-www-form-urlencoded'"
      },
      "RequestTemplates": {
       "application/json": {
@@ -808,6 +808,23 @@
      "$schema": "http://json-schema.org/draft-04/schema#",
      "title": "errorResponse",
      "type": "object"
+    }
+   }
+  },
+  "RestApiSnsApiGatewayServiceRole3F60FED6": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "apigateway.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
     }
    }
   },
@@ -1001,23 +1018,6 @@
        "\",{\"label\":\"api_gateway_5XXErrors\",\"period\":900,\"stat\":\"Sum\"}]],\"yAxis\":{}}}]}"
       ]
      ]
-    }
-   }
-  },
-  "RestApiSnsApiGatewayServiceRole3F60FED6": {
-   "Type": "AWS::IAM::Role",
-   "Properties": {
-    "AssumeRolePolicyDocument": {
-     "Statement": [
-      {
-       "Action": "sts:AssumeRole",
-       "Effect": "Allow",
-       "Principal": {
-        "Service": "apigateway.amazonaws.com"
-       }
-      }
-     ],
-     "Version": "2012-10-17"
     }
    }
   }

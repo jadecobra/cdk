@@ -1,11 +1,6 @@
-import aws_cdk
-import aws_cdk.aws_apigatewayv2_integrations_alpha
-import aws_cdk.aws_apigatewayv2_alpha
 import constructs
 import well_architected
-import well_architected_constructs.api
 import well_architected_constructs.api_lambda
-import well_architected_constructs
 import well_architected_constructs.dynamodb_table
 import well_architected_constructs.lambda_function
 import well_architected_constructs.web_application_firewall
@@ -49,15 +44,16 @@ class WafApiLambdaDynamodb(well_architected.Stack):
             error_topic=self.error_topic,
         )
 
+        self.http_api = well_architected_constructs.api_lambda.create_http_api_lambda(
+            self,
+            error_topic=self.error_topic,
+            lambda_function=self.lambda_function,
+        )
+
         self.web_application_firewall = well_architected_constructs.web_application_firewall.WebApplicationFirewall(
             self, 'WebApplicationFirewall',
             error_topic=self.error_topic,
             target_arn= f"arn:aws:apigateway:region::/restapis/{self.rest_api.api_id}/stages/{self.rest_api.api.deployment_stage.stage_name}",
-        )
-        self.http_api = self.create_http_api(
-            error_topic=self.error_topic,
-            name=self.name,
-            lambda_function=self.lambda_function,
         )
 
     def create_dynamodb_table(self, error_topic=None, name=None, partition_key=None, sort_key=None):
@@ -78,21 +74,3 @@ class WafApiLambdaDynamodb(well_architected.Stack):
                 'DYNAMODB_TABLE_NAME': name
             },
         ).lambda_function
-
-    def create_http_api(
-        self, name=None, lambda_function=None,
-        error_topic=None
-        ):
-        return well_architected_constructs.api.Api(
-            self, 'HttpApiGateway',
-            error_topic=error_topic,
-            api_gateway_service_role=False,
-            api=aws_cdk.aws_apigatewayv2_alpha.HttpApi(
-                self, 'HttpApi',
-                api_name=name,
-                default_integration=aws_cdk.aws_apigatewayv2_integrations_alpha.HttpLambdaIntegration(
-                    'LambdaFunction',
-                    handler=lambda_function
-                ),
-            )
-        )

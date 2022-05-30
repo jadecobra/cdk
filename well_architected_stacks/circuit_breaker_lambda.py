@@ -2,6 +2,7 @@ import aws_cdk
 import constructs
 import well_architected
 import well_architected_constructs.api
+import well_architected_constructs.api_lambda
 import well_architected_constructs.dynamodb_table
 import well_architected_constructs.lambda_function
 import aws_cdk.aws_apigatewayv2_integrations_alpha
@@ -15,7 +16,10 @@ class CircuitBreakerLambda(well_architected.Stack):
         dynamodb_table = self.create_dynamodb_table(id)
         lambda_function = self.create_lambda_function(dynamodb_table.table_name)
         dynamodb_table.grant_read_write_data(lambda_function)
-        aws_cdk.CfnOutput(self, 'HTTP API Url', value=self.create_http_api(lambda_function).url)
+
+        well_architected_constructs.api_lambda.create_http_api_lambda(
+            self, lambda_function=lambda_function
+        )
 
     def create_dynamodb_table(self, id):
         return well_architected_constructs.dynamodb_table.DynamoDBTableConstruct(
@@ -33,16 +37,3 @@ class CircuitBreakerLambda(well_architected.Stack):
                 'CIRCUITBREAKER_TABLE': table_name
             }
         ).lambda_function
-
-    def create_http_api(self, lambda_function):
-        return well_architected_constructs.api.Api(
-            self, 'HttpApiGateway',
-            error_topic=self.error_topic,
-            api=aws_cdk.aws_apigatewayv2_alpha.HttpApi(
-                self, 'HttpApi',
-                default_integration=aws_cdk.aws_apigatewayv2_integrations_alpha.HttpLambdaIntegration(
-                    'LambdaFunction',
-                    handler=lambda_function
-                ),
-            )
-        ).api

@@ -661,6 +661,23 @@
     "AutoDeploy": true
    }
   },
+  "HttpApiGatewayApiGatewayServiceRole2156230E": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "apigateway.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   }
+  },
   "HttpApiGateway4XXErrorsGreaterThanOnePercentB2B213D3": {
    "Type": "AWS::CloudWatch::Alarm",
    "Properties": {
@@ -883,28 +900,6 @@
  },
  "Outputs": {
   "HttpApiGatewayHttpApiGatewayURL5CBA7CEA": {
-   "Value": {
-    "Fn::Join": [
-     "",
-     [
-      "https://",
-      {
-       "Ref": "HttpApiF5A9A8A7"
-      },
-      ".execute-api.",
-      {
-       "Ref": "AWS::Region"
-      },
-      ".",
-      {
-       "Ref": "AWS::URLSuffix"
-      },
-      "/"
-     ]
-    ]
-   }
-  },
-  "HTTPAPIUrl": {
    "Value": {
     "Fn::Join": [
      "",

@@ -5,12 +5,12 @@ class TestWellArchitectedPatterns(tests.utilities.TestTemplates):
     @staticmethod
     def patterns():
         return (
-            'RestApiDynamodb',
             'ApiSnsLambdaEventBridgeLambda',
             'ApiSnsSqsLambda',
             'ApiStepFunctions',
+            'CircuitBreakerLambda',
+            'RestApiDynamodb',
             'WafApiLambdaDynamodb',
-            # 'CircuitBreakerLambda',
             # 'SimpleGraphqlService',
             # 'DynamoDBFlow',
             # 'DynamoDBTable',
