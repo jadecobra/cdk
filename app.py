@@ -7,6 +7,7 @@ import well_architected_stacks.rest_api_sns_lambda_eventbridge_lambda
 import well_architected_stacks.rest_api_dynamodb
 import well_architected_stacks.api_step_functions
 import well_architected_stacks.circuit_breaker_lambda
+import well_architected_stacks.waf_api_lambda_dynamodb
 import well_architected_constructs
 
 

@@ -41,27 +41,28 @@ class WafApiLambdaDynamodb(well_architected.Stack):
         )
         self.dynamodb_table.grant_read_write_data(self.lambda_function)
 
-        self.http_api = self.create_http_api(
-            error_topic=self.error_topic,
-            name=self.name,
-            lambda_function=self.lambda_function,
-        )
-
         self.rest_api = self.create_rest_api(
             lambda_function=self.lambda_function,
             error_topic=self.error_topic,
         )
+
         self.web_application_firewall = well_architected_constructs.web_application_firewall.WebApplicationFirewall(
             self, 'WebApplicationFirewall',
             error_topic=self.error_topic,
-            target_arn= f"arn:aws:apigateway:region::/restapis/{self.rest_api.rest_api_id}/stages/{self.rest_api.deployment_stage.stage_name}",
+            target_arn= f"arn:aws:apigateway:region::/restapis/{self.rest_api.api_id}/stages/{self.rest_api.api.deployment_stage.stage_name}",
+        )
+        self.http_api = self.create_http_api(
+            error_topic=self.error_topic,
+            name=self.name,
+            lambda_function=self.lambda_function,
+            api_gateway_service_role=self.rest_api.api_gateway_service_role
         )
 
     def create_dynamodb_table(self, error_topic=None, name=None, partition_key=None, sort_key=None):
         return well_architected_constructs.dynamodb_table.DynamoDBTableConstruct(
             self, 'DynamoDbTable',
             table_name=name,
-            error_topic=self.error_topic,
+            error_topic=error_topic,
             partition_key=partition_key,
             sort_key=sort_key, # refactor this
         ).dynamodb_table
@@ -76,10 +77,14 @@ class WafApiLambdaDynamodb(well_architected.Stack):
             },
         ).lambda_function
 
-    def create_http_api(self, name=None, lambda_function=None, error_topic=None):
+    def create_http_api(
+        self, name=None, lambda_function=None,
+        error_topic=None, api_gateway_service_role=None,
+        ):
         return well_architected_constructs.api.Api(
             self, 'HttpApiGateway',
             error_topic=error_topic,
+            api_gateway_service_role=api_gateway_service_role,
             api=aws_cdk.aws_apigatewayv2_alpha.HttpApi(
                 self, 'HttpApi',
                 api_name=name,
@@ -88,14 +93,14 @@ class WafApiLambdaDynamodb(well_architected.Stack):
                     handler=lambda_function
                 ),
             )
-        ).api
+        )
 
     def create_rest_api(self, lambda_function=None, error_topic=None):
         return well_architected_constructs.api.Api(
             self, 'RestApiGateway',
-            error_topic=self.error_topic,
+            error_topic=error_topic,
             api=aws_cdk.aws_apigateway.LambdaRestApi(
                 self, 'RestApi',
                 handler=lambda_function,
             )
-        ).api
+        )
