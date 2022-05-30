@@ -2,9 +2,10 @@ import aws_cdk
 import constructs
 import well_architected
 import well_architected_constructs.api
+from .rest_api import RestApiConstruct
 
 
-class RestApiLambda(well_architected.Construct):
+class RestApiLambda(RestApiConstruct):
 
     def __init__(
         self, scope: constructs.Construct, id: str,

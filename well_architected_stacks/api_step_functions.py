@@ -1,24 +1,31 @@
 import aws_cdk
 import aws_cdk.aws_apigatewayv2_alpha
 import constructs
+import well_architected_constructs.http_api_step_functions
 import well_architected_constructs.lambda_function
 import well_architected_constructs.api
 import well_architected
 
-# TODO:
-# abstract HTTP API
 class ApiStepFunctions(well_architected.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         self.result_path = '$.resultPath'
-        self.state_machine = self.create_state_machine(self.create_lambda_function(self.error_topic))
-        self.http_api = self.create_http_api(self.error_topic)
-        self.create_api_gateway_route(
-            api_id=self.http_api.http_api_id,
+        self.state_machine = self.create_state_machine(
+            self.create_lambda_function(
+                self.error_topic
+            )
+        )
+
+        self.http_api = well_architected_constructs.http_api_step_functions.HttpApiStepFunctionsConstruct(
+            self, 'HttpApiStepFunctions',
+            error_topic=self.error_topic,
+            state_machine=self.state_machine,
+        )
+        self.http_api.create_http_api_step_functions_integration(
             target=self.create_http_api_stepfunctions_integration(
-                http_api_id=self.http_api.http_api_id,
+                http_api_id=self.http_api.api_id,
                 iam_role_arn=self.get_iam_service_role_arn(self.state_machine.state_machine_arn),
                 state_machine_arn=self.state_machine.state_machine_arn,
             ),
@@ -111,17 +118,16 @@ class ApiStepFunctions(well_architected.Stack):
             state_machine_type=aws_cdk.aws_stepfunctions.StateMachineType.EXPRESS
         )
 
-    def create_http_api(self, error_topic):
-        return well_architected_constructs.api.Api(
+    def create_http_api(self, error_topic=None, state_machine=None):
+        return well_architected_constructs.http_api_step_functions.HttpApiStepFunctionsConstruct(
             self, 'HttpApi',
             error_topic=error_topic,
-            api=aws_cdk.aws_apigatewayv2_alpha.HttpApi(
-                self, 'HttpApiStepFunctions',
-                create_default_stage=True
-            )
+            state_machine=state_machine,
         ).api
 
-    def create_rest_api(self, error_topic=None, state_machine=None):
+    def create_rest_api(
+        self, error_topic=None, state_machine=None
+    ):
         return well_architected_constructs.api.Api(
             self, 'RestApi',
             error_topic=error_topic,
@@ -132,7 +138,10 @@ class ApiStepFunctions(well_architected.Stack):
             )
         ).api
 
-    def create_http_api_stepfunctions_integration(self, http_api_id=None, iam_role_arn=None, state_machine_arn=None):
+    def create_http_api_stepfunctions_integration(
+        self, http_api_id=None, iam_role_arn=None,
+        state_machine_arn=None
+    ):
         return aws_cdk.aws_apigatewayv2.CfnIntegration(
             self, 'StateMachineHttpApiIntegration',
             api_id=http_api_id,
@@ -147,11 +156,3 @@ class ApiStepFunctions(well_architected.Stack):
             payload_format_version="1.0",
             timeout_in_millis=10000
         ).ref
-
-    def create_api_gateway_route(self, api_id=None, target=None):
-        return aws_cdk.aws_apigatewayv2.CfnRoute(
-            self, 'StateMachineHttpApiDefaultRoute',
-            api_id=api_id,
-            route_key=aws_cdk.aws_apigatewayv2_alpha.HttpRouteKey.DEFAULT.key,
-            target=f'integrations/{target}'
-        )

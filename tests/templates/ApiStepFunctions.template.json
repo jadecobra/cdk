@@ -484,24 +484,41 @@
     "StateMachineRoleB840431D"
    ]
   },
-  "HttpApiStepFunctions3131E892": {
+  "HttpApiF5A9A8A7": {
    "Type": "AWS::ApiGatewayV2::Api",
    "Properties": {
-    "Name": "HttpApiStepFunctions",
+    "Name": "HttpApi",
     "ProtocolType": "HTTP"
    }
   },
-  "HttpApiStepFunctionsDefaultStage55CCF3D4": {
+  "HttpApiDefaultStage3EEB07D6": {
    "Type": "AWS::ApiGatewayV2::Stage",
    "Properties": {
     "ApiId": {
-     "Ref": "HttpApiStepFunctions3131E892"
+     "Ref": "HttpApiF5A9A8A7"
     },
     "StageName": "$default",
     "AutoDeploy": true
    }
   },
-  "HttpApi4XXErrorsGreaterThanOnePercent9A4C9220": {
+  "HttpApiStepFunctionsApiGatewayServiceRole133EC5D5": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "apigateway.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   }
+  },
+  "HttpApiStepFunctions4XXErrorsGreaterThanOnePercent0BC8D4BD": {
    "Type": "AWS::CloudWatch::Alarm",
    "Properties": {
     "ComparisonOperator": "GreaterThanOrEqualToThreshold",
@@ -527,7 +544,7 @@
          {
           "Name": "ApiId",
           "Value": {
-           "Ref": "HttpApiStepFunctions3131E892"
+           "Ref": "HttpApiF5A9A8A7"
           }
          }
         ],
@@ -549,7 +566,7 @@
          {
           "Name": "ApiId",
           "Value": {
-           "Ref": "HttpApiStepFunctions3131E892"
+           "Ref": "HttpApiF5A9A8A7"
           }
          }
         ],
@@ -567,7 +584,7 @@
     "TreatMissingData": "notBreaching"
    }
   },
-  "HttpApi5XXErrorsGreaterThanZero0B1AFDCA": {
+  "HttpApiStepFunctions5XXErrorsGreaterThanZero303471D3": {
    "Type": "AWS::CloudWatch::Alarm",
    "Properties": {
     "ComparisonOperator": "GreaterThanOrEqualToThreshold",
@@ -588,7 +605,7 @@
          {
           "Name": "ApiId",
           "Value": {
-           "Ref": "HttpApiStepFunctions3131E892"
+           "Ref": "HttpApiF5A9A8A7"
           }
          }
         ],
@@ -606,7 +623,7 @@
     "TreatMissingData": "notBreaching"
    }
   },
-  "HttpApiP99LatencyGreaterThanOneSecondEEE23411": {
+  "HttpApiStepFunctionsP99LatencyGreaterThanOneSecond18B79B43": {
    "Type": "AWS::CloudWatch::Alarm",
    "Properties": {
     "ComparisonOperator": "GreaterThanOrEqualToThreshold",
@@ -627,7 +644,7 @@
          {
           "Name": "ApiId",
           "Value": {
-           "Ref": "HttpApiStepFunctions3131E892"
+           "Ref": "HttpApiF5A9A8A7"
           }
          }
         ],
@@ -645,7 +662,7 @@
     "TreatMissingData": "notBreaching"
    }
   },
-  "HttpApiCloudWatchDashBoard4D68CEAA": {
+  "HttpApiStepFunctionsCloudWatchDashBoard30677D3C": {
    "Type": "AWS::CloudWatch::Dashboard",
    "Properties": {
     "DashboardBody": {
@@ -658,7 +675,7 @@
        },
        "\",\"stacked\":false,\"metrics\":[[\"AWS/ApiGateway\",\"Count\",\"ApiId\",\"",
        {
-        "Ref": "HttpApiStepFunctions3131E892"
+        "Ref": "HttpApiF5A9A8A7"
        },
        "\",{\"label\":\"# Requests\",\"period\":900,\"stat\":\"Sum\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"api_gateway_latency\",\"region\":\"",
        {
@@ -666,15 +683,15 @@
        },
        "\",\"stacked\":true,\"metrics\":[[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
        {
-        "Ref": "HttpApiStepFunctions3131E892"
+        "Ref": "HttpApiF5A9A8A7"
        },
        "\",{\"label\":\"api_gateway_latency_p50\",\"period\":900,\"stat\":\"p50\"}],[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
        {
-        "Ref": "HttpApiStepFunctions3131E892"
+        "Ref": "HttpApiF5A9A8A7"
        },
        "\",{\"label\":\"api_gateway_latency_p90\",\"period\":900,\"stat\":\"p90\"}],[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
        {
-        "Ref": "HttpApiStepFunctions3131E892"
+        "Ref": "HttpApiF5A9A8A7"
        },
        "\",{\"label\":\"api_gateway_latency_p99\",\"period\":900,\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"api_gateway_errors\",\"region\":\"",
        {
@@ -682,13 +699,33 @@
        },
        "\",\"stacked\":true,\"metrics\":[[\"AWS/ApiGateway\",\"4XXError\",\"ApiId\",\"",
        {
-        "Ref": "HttpApiStepFunctions3131E892"
+        "Ref": "HttpApiF5A9A8A7"
        },
        "\",{\"label\":\"api_gateway_4XXErrors\",\"period\":900,\"stat\":\"Sum\"}],[\"AWS/ApiGateway\",\"5XXError\",\"ApiId\",\"",
        {
-        "Ref": "HttpApiStepFunctions3131E892"
+        "Ref": "HttpApiF5A9A8A7"
        },
        "\",{\"label\":\"api_gateway_5XXErrors\",\"period\":900,\"stat\":\"Sum\"}]],\"yAxis\":{}}}]}"
+      ]
+     ]
+    }
+   }
+  },
+  "HttpApiStepFunctionsHttpApiStateMachineDefaultRouteB778457E": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "HttpApiF5A9A8A7"
+    },
+    "RouteKey": "$default",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "StateMachineHttpApiIntegration"
+       }
       ]
      ]
     }
@@ -732,7 +769,7 @@
    "Type": "AWS::ApiGatewayV2::Integration",
    "Properties": {
     "ApiId": {
-     "Ref": "HttpApiStepFunctions3131E892"
+     "Ref": "HttpApiF5A9A8A7"
     },
     "IntegrationType": "AWS_PROXY",
     "ConnectionType": "INTERNET",
@@ -751,26 +788,6 @@
      }
     },
     "TimeoutInMillis": 10000
-   }
-  },
-  "StateMachineHttpApiDefaultRoute": {
-   "Type": "AWS::ApiGatewayV2::Route",
-   "Properties": {
-    "ApiId": {
-     "Ref": "HttpApiStepFunctions3131E892"
-    },
-    "RouteKey": "$default",
-    "Target": {
-     "Fn::Join": [
-      "",
-      [
-       "integrations/",
-       {
-        "Ref": "StateMachineHttpApiIntegration"
-       }
-      ]
-     ]
-    }
    }
   },
   "RestApiStepFunctionsE288C47E": {
@@ -988,6 +1005,23 @@
       "StatusCode": "500"
      }
     ]
+   }
+  },
+  "RestApiApiGatewayServiceRole666C4604": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "apigateway.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
    }
   },
   "RestApi4XXErrorsGreaterThanOnePercentC77F0B92": {
@@ -1211,14 +1245,14 @@
   }
  },
  "Outputs": {
-  "HttpApiHttpApiURL41EDD6E9": {
+  "HttpApiStepFunctionsHttpApiStepFunctionsURL71E7234D": {
    "Value": {
     "Fn::Join": [
      "",
      [
       "https://",
       {
-       "Ref": "HttpApiStepFunctions3131E892"
+       "Ref": "HttpApiF5A9A8A7"
       },
       ".execute-api.",
       {

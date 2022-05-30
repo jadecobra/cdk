@@ -8,23 +8,19 @@ class RestApiConstruct(Api):
 
     def __init__(
         self, scope: constructs.Construct, id: str,
-        error_topic=None, api=None, **kwargs,
+        error_topic=None,
+        rest_api_name=None, api=None,
+        **kwargs,
     ):
         super().__init__(
             scope, id,
             error_topic=error_topic,
             api=aws_cdk.aws_apigateway.RestApi(
                 scope, 'RestApi',
-                deploy_options=self.get_stage_options()
-            ),
+                rest_api_name=rest_api_name,
+                deploy_options=self.get_stage_options(),
+            ) if api is None else api,
             **kwargs,
-        )
-        self.api_gateway_service_role = self.create_api_gateway_service_role()
-
-    def create_api_gateway_service_role(self):
-        return aws_cdk.aws_iam.Role(
-            self, 'ApiGatewayServiceRole',
-            assumed_by=aws_cdk.aws_iam.ServicePrincipal('apigateway.amazonaws.com'),
         )
 
     @staticmethod

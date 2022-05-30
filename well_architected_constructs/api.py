@@ -18,6 +18,7 @@ class Api(well_architected.Construct):
         )
         self.api = api
         self.api_id = self.get_api_id(api)
+        self.api_gateway_service_role = self.create_api_gateway_service_role()
         self.create_api_gateway_4xx_alarm()
         self.create_api_gateway_5xx_alarm()
         self.create_api_gateway_latency_alarm()
@@ -29,6 +30,12 @@ class Api(well_architected.Construct):
             return api.api_id
         except AttributeError:
             return api.rest_api_id
+
+    def create_api_gateway_service_role(self):
+        return aws_cdk.aws_iam.Role(
+            self, 'ApiGatewayServiceRole',
+            assumed_by=aws_cdk.aws_iam.ServicePrincipal('apigateway.amazonaws.com'),
+        )
 
     def add_api_gateway_metric(self, metric_name: str = None, label: str = None,
             period=aws_cdk.Duration.seconds(900), statistic: str = 'sum',
@@ -133,6 +140,3 @@ class Api(well_architected.Construct):
             self.create_api_gateway_latency_widget(),
             self.create_api_gateway_errors_widget(),
         )
-
-    def get_request_template(self, sns_topic_arn):
-        raise NotImplementedError

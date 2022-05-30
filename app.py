@@ -8,6 +8,7 @@ import well_architected_stacks.rest_api_sns_lambda_eventbridge_lambda
 import well_architected_stacks.rest_api_dynamodb
 import well_architected_stacks.api_step_functions
 import well_architected_stacks.circuit_breaker_lambda
+import well_architected_stacks.rest_api_lambda
 
 import well_architected_constructs
 
@@ -27,6 +28,7 @@ class WellArchitected(aws_cdk.App):
         well_architected_stacks.rest_api_dynamodb.RestApiDynamodb(self, 'RestApiDynamodb', partition_key='message')
         well_architected_stacks.api_step_functions.ApiStepFunctions(self, "ApiStepFunctions")
         well_architected_stacks.circuit_breaker_lambda.CircuitBreakerLambda(self, "CircuitBreakerLambda")
+        # well_architected_stacks.rest_api_lambda.RestApiLambdaStack(self, 'RestApiLambda')
         # well_architected_stacks.waf_api_lambda_dynamodb.WafApiLambdaDynamodb(self, 'WafApiLambdaDynamodb')
         # saga_step_function.SagaStepFunction(self, "SagaStepFunction",)
         # simple_graphql_service.SimpleGraphQlService(self, "SimpleGraphqlService")

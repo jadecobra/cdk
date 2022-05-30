@@ -2,7 +2,6 @@ import aws_cdk
 import constructs
 import well_architected
 import well_architected_constructs.lambda_function
-import well_architected_constructs.rest_api_sns
 import well_architected_constructs.rest_api
 
 
@@ -37,7 +36,6 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.Stack):
                 'integration.request.header.Content-Type': "'application/x-www-form-urlencoded'"
             },
             request_templates=self.get_request_template(
-                rest_api=rest_api,
                 sns_topic_arn=self.create_sns_triggered_lambda(
                     name='destined',
                     event_bus=event_bus
@@ -95,7 +93,7 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.Stack):
             event_bus_name=name,
         )
 
-    def get_request_template(self, sns_topic_arn=None, rest_api=None):
+    def get_request_template(self, sns_topic_arn):
         return (
             f"""Action=Publish&TargetArn=$util.urlEncode('{sns_topic_arn}')&Message=please $input.params().querystring.get('mode')&Version=2010-03-31"""
         )

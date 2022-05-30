@@ -4,7 +4,7 @@ import constructs
 import well_architected
 import well_architected_constructs.dynamodb_table
 import well_architected_constructs.lambda_function
-import well_architected_constructs.rest_api_sns
+import well_architected_constructs.rest_api
 import json
 
 
@@ -57,7 +57,9 @@ class RestApiDynamodb(well_architected.Stack):
             partition_key=partition_key,
         ).dynamodb_table
 
-    def create_lambda_function_with_dynamodb_event_source(self, dynamodb_table=None, error_topic=None):
+    def create_lambda_function_with_dynamodb_event_source(
+        self, dynamodb_table=None, error_topic=None
+    ):
         return well_architected_constructs.lambda_function.LambdaFunctionConstruct(
             self, 'LambdaFunction',
             error_topic=error_topic,
@@ -70,7 +72,7 @@ class RestApiDynamodb(well_architected.Stack):
         )
 
     def create_rest_api(self, error_topic):
-        return well_architected_constructs.rest_api_sns.RestApiConstruct(
+        return well_architected_constructs.rest_api.RestApiConstruct(
             self, 'RestApiDynamodb',
             error_topic=error_topic,
         )

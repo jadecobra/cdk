@@ -2,7 +2,6 @@ import aws_cdk
 import constructs
 import well_architected
 import well_architected_constructs.lambda_function
-import well_architected_constructs.rest_api_sns
 import well_architected_constructs.rest_api
 
 
