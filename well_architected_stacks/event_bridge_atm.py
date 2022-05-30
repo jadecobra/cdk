@@ -10,7 +10,7 @@ class EventBridgeAtm(well_architected.Stack):
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        self.create_lambda_function_with_event_bridge_rule(
+        self.create_lambda_function(
             handler_name="approved_transaction_handler",
             function_name="atm_consumer",
             event_bridge_rule=self.create_event_bridge_rule(
@@ -22,7 +22,7 @@ class EventBridgeAtm(well_architected.Stack):
             ),
         )
 
-        self.create_lambda_function_with_event_bridge_rule(
+        self.create_lambda_function(
             handler_name="ny_prefix_transaction_handler",
             function_name="atm_consumer",
             event_bridge_rule=self.create_event_bridge_rule(
@@ -33,7 +33,7 @@ class EventBridgeAtm(well_architected.Stack):
             ),
         )
 
-        self.create_lambda_function_with_event_bridge_rule(
+        self.create_lambda_function(
             handler_name="not_approved_transaction_handler",
             function_name="atm_consumer",
             event_bridge_rule=self.create_event_bridge_rule(
@@ -44,7 +44,7 @@ class EventBridgeAtm(well_architected.Stack):
             ),
         )
 
-        atm_producer_lambda = self.create_lambda_function_with_event_bridge_rule(
+        atm_producer_lambda = self.create_lambda_function(
             function_name="atm_producer"
         )
 
@@ -76,7 +76,7 @@ class EventBridgeAtm(well_architected.Stack):
             )
         )
 
-    def create_lambda_function_with_event_bridge_rule(
+    def create_lambda_function(
         self, handler_name='handler', function_name=None,
         event_bridge_rule:aws_cdk.aws_events.Rule=None
     ):
@@ -84,6 +84,6 @@ class EventBridgeAtm(well_architected.Stack):
             self, handler_name,
             handler_name=handler_name,
             function_name=function_name,
+            event_bridge_rule=event_bridge_rule,
         )
-        lambda_function.add_event_bridge_rule(event_bridge_rule)
         return lambda_function.lambda_function

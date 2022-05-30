@@ -42,6 +42,7 @@ class LambdaFunctionConstruct(well_architected.Construct):
             on_success=on_success,
             on_failure=on_failure,
         )
+        self.add_event_bridge_rule(event_bridge_rule)
         self.create_invocations_error_greater_than_2_percent_alarm()
         self.create_invocation_longer_than_1_second_alarmration_alarm()
         self.create_throttled_invocations_greater_than_2_percent_alarm()
