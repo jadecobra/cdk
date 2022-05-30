@@ -145,9 +145,12 @@ class LambdaFunctionConstruct(well_architected.Construct):
         )
 
     def add_event_bridge_rule(self, event_bridge_rule):
-        event_bridge_rule.add_target(
-            aws_cdk.aws_events_targets.LambdaFunction(self.lambda_function)
-        )
+        try:
+            event_bridge_rule.add_target(
+                aws_cdk.aws_events_targets.LambdaFunction(self.lambda_function)
+            )
+        except AttributeError:
+            return
 
 def create_python_lambda_function(
         stack,

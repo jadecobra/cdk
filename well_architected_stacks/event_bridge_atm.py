@@ -85,6 +85,5 @@ class EventBridgeAtm(well_architected.Stack):
             handler_name=handler_name,
             function_name=function_name,
         )
-        if event_bridge_rule:
-            lambda_function.add_event_bridge_rule(event_bridge_rule)
+        lambda_function.add_event_bridge_rule(event_bridge_rule)
         return lambda_function.lambda_function
