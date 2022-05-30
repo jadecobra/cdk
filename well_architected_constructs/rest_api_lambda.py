@@ -5,7 +5,7 @@ import well_architected_constructs.api
 from .rest_api import RestApiConstruct
 
 
-class RestApiLambda(RestApiConstruct):
+class RestApiLambdaConstruct(RestApiConstruct):
 
     def __init__(
         self, scope: constructs.Construct, id: str,
@@ -19,7 +19,7 @@ class RestApiLambda(RestApiConstruct):
             **kwargs
         )
 
-        self.api = self.create_rest_api()
+        # self.api = self.create_rest_api()
         self.error_topic = error_topic
         self.api_id = self.api.rest_api_id
         self.connect_api_to_lambda_function(
@@ -91,7 +91,7 @@ class RestApiLambda(RestApiConstruct):
             )
         }
 
-    def deploy_options(self):
+    def get_stage_options(self):
         return aws_cdk.aws_apigateway.StageOptions(
             method_options=self.method_deployment_options(),
             access_log_format=aws_cdk.aws_apigateway.AccessLogFormat.clf(),
@@ -105,5 +105,5 @@ class RestApiLambda(RestApiConstruct):
             self, 'LambdaAPIGateway',
             rest_api_name='hello',
             endpoint_types=[aws_cdk.aws_apigateway.EndpointType.REGIONAL],
-            deploy_options=self.deploy_options(),
+            deploy_options=self.get_stage_options(),
         )

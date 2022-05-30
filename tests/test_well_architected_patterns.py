@@ -6,12 +6,11 @@ class TestWellArchitectedPatterns(tests.utilities.TestTemplates):
     def patterns():
         return (
             'RestApiDynamodb',
-            # 'RestApiLambda',
             'ApiSnsLambdaEventBridgeLambda',
             'ApiSnsSqsLambda',
-            "ApiStepFunctions",
+            'ApiStepFunctions',
+            'WafApiLambdaDynamodb',
             # 'CircuitBreakerLambda',
-            # 'WafApiLambdaDynamodb',
             # 'SimpleGraphqlService',
             # 'DynamoDBFlow',
             # 'DynamoDBTable',
