@@ -1110,6 +1110,23 @@
     }
    }
   },
+  "RestApiSnsApiGatewayServiceRole3F60FED6": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "apigateway.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   }
+  },
   "RestApiSns4XXErrorsGreaterThanOnePercent198B4654": {
    "Type": "AWS::CloudWatch::Alarm",
    "Properties": {
@@ -1300,23 +1317,6 @@
        "\",{\"label\":\"api_gateway_5XXErrors\",\"period\":900,\"stat\":\"Sum\"}]],\"yAxis\":{}}}]}"
       ]
      ]
-    }
-   }
-  },
-  "RestApiSnsApiGatewayServiceRole3F60FED6": {
-   "Type": "AWS::IAM::Role",
-   "Properties": {
-    "AssumeRolePolicyDocument": {
-     "Statement": [
-      {
-       "Action": "sts:AssumeRole",
-       "Effect": "Allow",
-       "Principal": {
-        "Service": "apigateway.amazonaws.com"
-       }
-      }
-     ],
-     "Version": "2012-10-17"
     }
    }
   },

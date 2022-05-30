@@ -12,7 +12,7 @@ class LambdaFunctionConstruct(well_architected.Construct):
         error_topic:aws_cdk.aws_sns.Topic=None,
         event_bridge_rule=None,
         function_name=None,
-        handler_name=None,
+        handler_name='handler',
         layers:list[str]=None,
         on_success=None,
         on_failure=None,
@@ -25,10 +25,10 @@ class LambdaFunctionConstruct(well_architected.Construct):
             error_topic=error_topic,
             **kwargs
         )
-        handler_name = 'handler' if handler_name is None else handler_name
+        # handler_name = 'handler' if handler_name is None else handler_name
         function_name = function_name if function_name is not None else id
         self.lambda_function = aws_cdk.aws_lambda.Function(
-            self, 'LambdaFunction', # can we use id as function_name
+            self, 'LambdaFunction',
             runtime=aws_cdk.aws_lambda.Runtime.PYTHON_3_9,
             handler=f'{function_name}.{handler_name}',
             code=aws_cdk.aws_lambda.Code.from_asset(f"lambda_functions/{function_name}"),
@@ -155,7 +155,7 @@ class LambdaFunctionConstruct(well_architected.Construct):
 
 def create_python_lambda_function(
         stack,
-        function_name=None, handler_name=None,
+        function_name=None,
         environment_variables=None,
         duration=60, error_topic=None, vpc=None,
         concurrent_executions=None,
@@ -163,7 +163,6 @@ def create_python_lambda_function(
     return LambdaFunctionConstruct(
         stack, function_name,
         function_name=function_name,
-        handler_name=handler_name,
         environment_variables=environment_variables,
         duration=duration,
         error_topic=error_topic,

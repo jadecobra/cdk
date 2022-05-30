@@ -80,10 +80,9 @@ class EventBridgeAtm(well_architected.Stack):
         self, handler_name='handler', function_name=None,
         event_bridge_rule:aws_cdk.aws_events.Rule=None
     ):
-        lambda_function = well_architected_constructs.lambda_function.LambdaFunctionConstruct(
+        return well_architected_constructs.lambda_function.LambdaFunctionConstruct(
             self, handler_name,
             handler_name=handler_name,
             function_name=function_name,
             event_bridge_rule=event_bridge_rule,
-        )
-        return lambda_function.lambda_function
+        ).lambda_function
