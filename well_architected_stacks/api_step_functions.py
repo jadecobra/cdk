@@ -17,22 +17,18 @@ class ApiStepFunctions(well_architected.Stack):
                 self.error_topic
             )
         )
+        self.api_gateway_service_role = self.create_api_gateway_service_role(self.state_machine.state_machine_arn)
 
-        self.http_api = well_architected_constructs.http_api_step_functions.HttpApiStepFunctionsConstruct(
-            self, 'HttpApiStepFunctions',
-            error_topic=self.error_topic,
-            state_machine=self.state_machine,
-        )
-        self.http_api.create_http_api_step_functions_integration(
-            target=self.create_http_api_stepfunctions_integration(
-                http_api_id=self.http_api.api_id,
-                iam_role_arn=self.get_iam_service_role_arn(self.state_machine.state_machine_arn),
-                state_machine_arn=self.state_machine.state_machine_arn,
-            ),
-        )
         self.rest_api = self.create_rest_api(
             error_topic=self.error_topic,
             state_machine=self.state_machine,
+            api_gateway_service_role=self.api_gateway_service_role,
+        )
+
+        self.http_api = self.create_http_api(
+            error_topic=self.error_topic,
+            api_gateway_service_role=self.api_gateway_service_role,
+            state_machine_arn=self.state_machine.state_machine_arn,
         )
 
     def failure_message(self):
@@ -100,14 +96,14 @@ class ApiStepFunctions(well_architected.Stack):
             ]
         )
 
-    def get_iam_service_role_arn(self, state_machine_arn):
+    def create_api_gateway_service_role(self, state_machine_arn):
         return aws_cdk.aws_iam.Role(
-            self, 'StateMachineHttpApiIamRole',
+            self, 'StateMachineApiGatewayIamServiceRole',
             assumed_by=aws_cdk.aws_iam.ServicePrincipal('apigateway.amazonaws.com'),
             inline_policies={
                 "AllowSFNExec": self.state_machine_execution_permissions(state_machine_arn)
             }
-        ).role_arn
+        )
 
     def create_state_machine(self, lambda_function):
         return aws_cdk.aws_stepfunctions.StateMachine(
@@ -118,41 +114,24 @@ class ApiStepFunctions(well_architected.Stack):
             state_machine_type=aws_cdk.aws_stepfunctions.StateMachineType.EXPRESS
         )
 
-    def create_http_api(self, error_topic=None, state_machine=None):
-        return well_architected_constructs.http_api_step_functions.HttpApiStepFunctionsConstruct(
-            self, 'HttpApi',
+    def create_http_api(self, error_topic=None, state_machine_arn=None, api_gateway_service_role=None):
+        well_architected_constructs.http_api_step_functions.HttpApiStepFunctionsConstruct(
+            self, 'HttpApiStepFunctions',
             error_topic=error_topic,
-            state_machine=state_machine,
-        ).api
+            api_gateway_service_role=api_gateway_service_role,
+            state_machine_arn=state_machine_arn,
+        )
 
     def create_rest_api(
-        self, error_topic=None, state_machine=None
+        self, error_topic=None, state_machine=None, api_gateway_service_role=None
     ):
         return well_architected_constructs.api.Api(
             self, 'RestApi',
             error_topic=error_topic,
+            api_gateway_service_role=api_gateway_service_role,
             api=aws_cdk.aws_apigateway.StepFunctionsRestApi(
                 self, 'RestApiStepFunctions',
                 state_machine=state_machine,
                 deploy=True,
             )
-        ).api
-
-    def create_http_api_stepfunctions_integration(
-        self, http_api_id=None, iam_role_arn=None,
-        state_machine_arn=None
-    ):
-        return aws_cdk.aws_apigatewayv2.CfnIntegration(
-            self, 'StateMachineHttpApiIntegration',
-            api_id=http_api_id,
-            integration_type='AWS_PROXY',
-            connection_type='INTERNET',
-            integration_subtype='StepFunctions-StartSyncExecution',
-            credentials_arn=iam_role_arn,
-            request_parameters={
-                "Input": "$request.body",
-                "StateMachineArn": state_machine_arn,
-            },
-            payload_format_version="1.0",
-            timeout_in_millis=10000
-        ).ref
+        )

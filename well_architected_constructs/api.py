@@ -9,6 +9,7 @@ class Api(well_architected.Construct):
         self,scope: constructs.Construct, id: str,
         error_topic=None,
         api=None,
+        api_gateway_service_role=None,
         **kwargs
     ) -> None:
         super().__init__(
@@ -18,7 +19,7 @@ class Api(well_architected.Construct):
         )
         self.api = api
         self.api_id = self.get_api_id(api)
-        self.api_gateway_service_role = self.create_api_gateway_service_role()
+        self.api_gateway_service_role = self.create_api_gateway_service_role(api_gateway_service_role)
         self.create_api_gateway_4xx_alarm()
         self.create_api_gateway_5xx_alarm()
         self.create_api_gateway_latency_alarm()
@@ -31,7 +32,9 @@ class Api(well_architected.Construct):
         except AttributeError:
             return api.rest_api_id
 
-    def create_api_gateway_service_role(self):
+    def create_api_gateway_service_role(self, iam_role):
+        if iam_role:
+            return iam_role
         return aws_cdk.aws_iam.Role(
             self, 'ApiGatewayServiceRole',
             assumed_by=aws_cdk.aws_iam.ServicePrincipal('apigateway.amazonaws.com'),
