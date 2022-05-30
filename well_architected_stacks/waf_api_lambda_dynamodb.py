@@ -4,6 +4,8 @@ import aws_cdk.aws_apigatewayv2_alpha
 import constructs
 import well_architected
 import well_architected_constructs.api
+import well_architected_constructs.api_lambda
+import well_architected_constructs
 import well_architected_constructs.dynamodb_table
 import well_architected_constructs.lambda_function
 import well_architected_constructs.web_application_firewall
@@ -41,7 +43,8 @@ class WafApiLambdaDynamodb(well_architected.Stack):
         )
         self.dynamodb_table.grant_read_write_data(self.lambda_function)
 
-        self.rest_api = self.create_rest_api(
+        self.rest_api = well_architected_constructs.api_lambda.create_rest_api_lambda(
+            self,
             lambda_function=self.lambda_function,
             error_topic=self.error_topic,
         )
@@ -91,16 +94,5 @@ class WafApiLambdaDynamodb(well_architected.Stack):
                     'LambdaFunction',
                     handler=lambda_function
                 ),
-            )
-        )
-
-    def create_rest_api(self, lambda_function=None, error_topic=None):
-        return well_architected_constructs.api.Api(
-            self, 'RestApiGateway',
-            error_topic=error_topic,
-            api_gateway_service_role=False,
-            api=aws_cdk.aws_apigateway.LambdaRestApi(
-                self, 'RestApi',
-                handler=lambda_function,
             )
         )
