@@ -1,13 +1,14 @@
 import aws_cdk
 
+import well_architected_stacks.api_step_functions
+import well_architected_stacks.circuit_breaker_lambda
 import well_architected_stacks.rest_api_sns_sqs_lambda
 import well_architected_stacks.rest_api_sns_lambda_eventbridge_lambda
 import well_architected_stacks.rest_api_dynamodb
-import well_architected_stacks.simple_graphql_service.simple_graphql_service
-import well_architected_stacks.api_step_functions
-import well_architected_stacks.circuit_breaker_lambda
-import well_architected_stacks.waf_api_lambda_dynamodb
 import well_architected_stacks.saga_step_function
+import well_architected_stacks.simple_graphql_service.simple_graphql_service
+import well_architected_stacks.waf_api_lambda_dynamodb
+import well_architected_stacks.circuit_breaker_event_bridge
 
 
 class WellArchitected(aws_cdk.App):
@@ -24,10 +25,10 @@ class WellArchitected(aws_cdk.App):
         well_architected_stacks.saga_step_function.SagaStepFunction(self, "SagaStepFunction",)
         well_architected_stacks.simple_graphql_service.simple_graphql_service.SimpleGraphQlService(self, "SimpleGraphqlService")
         well_architected_stacks.waf_api_lambda_dynamodb.WafApiLambdaDynamodb(self, 'WafApiLambdaDynamodb')
-        # event_bridge_atm.EventBridgeAtm(self, "EventBridgeAtm")
-        # event_bridge_circuit_breaker.EventBridgeCircuitBreaker(
-        #     self, 'EventBridgeCircuitBreaker',
-        # )
+        well_architected_stacks.circuit_breaker_event_bridge.CircuitBreakerEventBridge(
+            self, 'CircuitBreakerEventBridge',
+        )
+        well_architected_stacks.event_bridge_atm.EventBridgeAtm(self, "EventBridgeAtm")
         # event_bridge_etl.EventbridgeEtl(self, 'EventBridgeEtl', )
 
         # lambda_trilogy.lambda_lith.LambdaLith(self, "LambdaLith", )
