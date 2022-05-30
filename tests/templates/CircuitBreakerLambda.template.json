@@ -577,7 +577,7 @@
     "ProtocolType": "HTTP"
    }
   },
-  "HttpApiDefaultRouteLambdaFunction2B7E6185": {
+  "HttpApiDefaultRouteHttpApiLambdaFunction10324BA7": {
    "Type": "AWS::ApiGatewayV2::Integration",
    "Properties": {
     "ApiId": {
@@ -593,7 +593,7 @@
     "PayloadFormatVersion": "2.0"
    }
   },
-  "HttpApiDefaultRouteLambdaFunctionPermission9EEA15C5": {
+  "HttpApiDefaultRouteHttpApiLambdaFunctionPermissionBCEEE709": {
    "Type": "AWS::Lambda::Permission",
    "Properties": {
     "Action": "lambda:InvokeFunction",
@@ -644,7 +644,7 @@
       [
        "integrations/",
        {
-        "Ref": "HttpApiDefaultRouteLambdaFunction2B7E6185"
+        "Ref": "HttpApiDefaultRouteHttpApiLambdaFunction10324BA7"
        }
       ]
      ]
@@ -661,21 +661,10 @@
     "AutoDeploy": true
    }
   },
-  "HttpApiGatewayApiGatewayServiceRole2156230E": {
-   "Type": "AWS::IAM::Role",
+  "HttpApiGatewayHttpApiGatewayErrorTopicD480707D": {
+   "Type": "AWS::SNS::Topic",
    "Properties": {
-    "AssumeRolePolicyDocument": {
-     "Statement": [
-      {
-       "Action": "sts:AssumeRole",
-       "Effect": "Allow",
-       "Principal": {
-        "Service": "apigateway.amazonaws.com"
-       }
-      }
-     ],
-     "Version": "2012-10-17"
-    }
+    "DisplayName": "HttpApiGatewayErrorTopic"
    }
   },
   "HttpApiGateway4XXErrorsGreaterThanOnePercentB2B213D3": {
@@ -685,7 +674,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "CircuitBreakerLambdaErrorTopic0E38E684"
+      "Ref": "HttpApiGatewayHttpApiGatewayErrorTopicD480707D"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -751,7 +740,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "CircuitBreakerLambdaErrorTopic0E38E684"
+      "Ref": "HttpApiGatewayHttpApiGatewayErrorTopicD480707D"
      }
     ],
     "DatapointsToAlarm": 1,
@@ -790,7 +779,7 @@
     "EvaluationPeriods": 6,
     "AlarmActions": [
      {
-      "Ref": "CircuitBreakerLambdaErrorTopic0E38E684"
+      "Ref": "HttpApiGatewayHttpApiGatewayErrorTopicD480707D"
      }
     ],
     "DatapointsToAlarm": 1,

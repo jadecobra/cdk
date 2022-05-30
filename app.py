@@ -21,11 +21,11 @@ class WellArchitected(aws_cdk.App):
         super().__init__(*args, **kwargs)
         # self.create_xray_tracer()
 
+        well_architected_stacks.api_step_functions.ApiStepFunctions(self, "ApiStepFunctions")
+        well_architected_stacks.circuit_breaker_lambda.CircuitBreakerLambda(self, "CircuitBreakerLambda")
         well_architected_stacks.rest_api_sns_sqs_lambda.ApiSnsSqsLambda(self, 'ApiSnsSqsLambda')
         well_architected_stacks.rest_api_sns_lambda_eventbridge_lambda.ApiSnsLambdaEventBridgeLambda(self, "ApiSnsLambdaEventBridgeLambda")
         well_architected_stacks.rest_api_dynamodb.RestApiDynamodb(self, 'RestApiDynamodb', partition_key='message')
-        well_architected_stacks.api_step_functions.ApiStepFunctions(self, "ApiStepFunctions")
-        well_architected_stacks.circuit_breaker_lambda.CircuitBreakerLambda(self, "CircuitBreakerLambda")
         well_architected_stacks.waf_api_lambda_dynamodb.WafApiLambdaDynamodb(self, 'WafApiLambdaDynamodb')
         # saga_step_function.SagaStepFunction(self, "SagaStepFunction",)
         # simple_graphql_service.SimpleGraphQlService(self, "SimpleGraphqlService")
