@@ -6,16 +6,18 @@ class LambdaFunctionConstruct(well_architected.Construct):
 
     def __init__(
         self, scope: constructs.Construct, id: str,
-        function_name=None,
-        handler_name=None,
+        concurrent_executions=None,
+        duration=60,
         environment_variables=None,
         error_topic:aws_cdk.aws_sns.Topic=None,
+        event_bridge_rule=None,
+        function_name=None,
+        handler_name=None,
         layers:list[str]=None,
-        concurrent_executions=None,
-        duration=60, vpc=None,
-        retry_attempts=None,
         on_success=None,
         on_failure=None,
+        retry_attempts=None,
+        vpc=None,
         **kwargs
     ) -> None:
         super().__init__(
@@ -141,6 +143,12 @@ class LambdaFunctionConstruct(well_architected.Construct):
             self.create_lambda_duration_widget(),
             self.create_lambda_throttled_percentage_widget(),
         )
+
+    def add_event_brdige_rule(self, event_bridge_rule):
+        event_bridge_rule.add_target(
+            aws_cdk.aws_events_targets.LambdaFunction(self.lambda_function)
+        )
+
 
 
 def create_python_lambda_function(

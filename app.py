@@ -9,6 +9,7 @@ import well_architected_stacks.saga_step_function
 import well_architected_stacks.simple_graphql_service.simple_graphql_service
 import well_architected_stacks.waf_api_lambda_dynamodb
 import well_architected_stacks.circuit_breaker_event_bridge
+import well_architected_stacks.event_bridge_atm
 
 
 class WellArchitected(aws_cdk.App):
