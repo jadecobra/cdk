@@ -144,12 +144,10 @@ class LambdaFunctionConstruct(well_architected.Construct):
             self.create_lambda_throttled_percentage_widget(),
         )
 
-    def add_event_brdige_rule(self, event_bridge_rule):
+    def add_event_bridge_rule(self, event_bridge_rule):
         event_bridge_rule.add_target(
             aws_cdk.aws_events_targets.LambdaFunction(self.lambda_function)
         )
-
-
 
 def create_python_lambda_function(
         stack,

@@ -77,21 +77,14 @@ class EventBridgeAtm(well_architected.Stack):
         )
 
     def create_lambda_function_with_event_bridge_rule(
-        self, handler_name=None, function_name=None,
+        self, handler_name='handler', function_name=None,
         event_bridge_rule:aws_cdk.aws_events.Rule=None
     ):
-        handler_name = 'handler' if not handler_name else handler_name
         lambda_function = well_architected_constructs.lambda_function.LambdaFunctionConstruct(
             self, handler_name,
             handler_name=handler_name,
             function_name=function_name,
-        ).lambda_function
-
-        if event_bridge_rule:
-            event_bridge_rule.add_target(
-                aws_cdk.aws_events_targets.LambdaFunction(lambda_function)
-            )
+        )
         if event_bridge_rule:
             lambda_function.add_event_bridge_rule(event_bridge_rule)
-
-        return lambda_function
+        return lambda_function.lambda_function
