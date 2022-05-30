@@ -55,7 +55,6 @@ class WafApiLambdaDynamodb(well_architected.Stack):
             error_topic=self.error_topic,
             name=self.name,
             lambda_function=self.lambda_function,
-            api_gateway_service_role=self.rest_api.api_gateway_service_role
         )
 
     def create_dynamodb_table(self, error_topic=None, name=None, partition_key=None, sort_key=None):
@@ -79,12 +78,12 @@ class WafApiLambdaDynamodb(well_architected.Stack):
 
     def create_http_api(
         self, name=None, lambda_function=None,
-        error_topic=None, api_gateway_service_role=None,
+        error_topic=None
         ):
         return well_architected_constructs.api.Api(
             self, 'HttpApiGateway',
             error_topic=error_topic,
-            api_gateway_service_role=api_gateway_service_role,
+            api_gateway_service_role=False,
             api=aws_cdk.aws_apigatewayv2_alpha.HttpApi(
                 self, 'HttpApi',
                 api_name=name,
@@ -99,6 +98,7 @@ class WafApiLambdaDynamodb(well_architected.Stack):
         return well_architected_constructs.api.Api(
             self, 'RestApiGateway',
             error_topic=error_topic,
+            api_gateway_service_role=False,
             api=aws_cdk.aws_apigateway.LambdaRestApi(
                 self, 'RestApi',
                 handler=lambda_function,

@@ -903,23 +903,6 @@
     }
    }
   },
-  "RestApiGatewayApiGatewayServiceRole97D37028": {
-   "Type": "AWS::IAM::Role",
-   "Properties": {
-    "AssumeRolePolicyDocument": {
-     "Statement": [
-      {
-       "Action": "sts:AssumeRole",
-       "Effect": "Allow",
-       "Principal": {
-        "Service": "apigateway.amazonaws.com"
-       }
-      }
-     ],
-     "Version": "2012-10-17"
-    }
-   }
-  },
   "RestApiGateway4XXErrorsGreaterThanOnePercentA8477924": {
    "Type": "AWS::CloudWatch::Alarm",
    "Properties": {

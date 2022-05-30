@@ -35,10 +35,13 @@ class Api(well_architected.Construct):
     def create_api_gateway_service_role(self, iam_role):
         if iam_role:
             return iam_role
-        return aws_cdk.aws_iam.Role(
-            self, 'ApiGatewayServiceRole',
-            assumed_by=aws_cdk.aws_iam.ServicePrincipal('apigateway.amazonaws.com'),
-        )
+        if iam_role == False:
+            return
+        if iam_role is None:
+            return aws_cdk.aws_iam.Role(
+                self, 'ApiGatewayServiceRole',
+                assumed_by=aws_cdk.aws_iam.ServicePrincipal('apigateway.amazonaws.com'),
+            )
 
     def add_api_gateway_metric(self, metric_name: str = None, label: str = None,
             period=aws_cdk.Duration.seconds(900), statistic: str = 'sum',
