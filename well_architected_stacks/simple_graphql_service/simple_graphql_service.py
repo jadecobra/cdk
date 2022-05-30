@@ -26,11 +26,10 @@ class SimpleGraphQlService(well_architected.Stack):
         self.add_lambda_function_data_source(
             graphql_api.add_lambda_data_source(
                 'LambdaDataSource',
-                well_architected_constructs.lambda_function.LambdaFunctionConstruct(
-                    self, 'LambdaFunction',
+                self.create_lambda_function(
                     error_topic=self.error_topic,
                     function_name='loyalty',
-                ).lambda_function
+                )
             )
         )
 
@@ -40,6 +39,20 @@ class SimpleGraphQlService(well_architected.Stack):
         ):
             aws_cdk.CfnOutput(self, logical_id, value=value)
 
+    def create_dynamodb_table(self, partition_key=None, error_topic=None):
+        return well_architected_constructs.dynamodb_table.DynamoDBTableConstruct(
+            self, 'DynamodbTable',
+            error_topic=error_topic,
+            partition_key=partition_key,
+        ).dynamodb_table
+
+    def create_lambda_function(self, function_name=None, error_topic=None):
+        return well_architected_constructs.lambda_function.LambdaFunctionConstruct(
+            self, 'LambdaFunction',
+            error_topic=error_topic,
+            function_name=function_name,
+        ).lambda_function
+
     def create_graphql_api(self):
         return aws_cdk.aws_appsync_alpha.GraphqlApi(
             self, 'GraphQlApi',
@@ -48,7 +61,7 @@ class SimpleGraphQlService(well_architected.Stack):
                 field_log_level=aws_cdk.aws_appsync_alpha.FieldLogLevel.ALL
             ),
             schema=aws_cdk.aws_appsync_alpha.Schema.from_asset(
-                f'{os.path.dirname(os.path.realpath(__file__))}/schema/schema.graphql'
+                f'{os.path.dirname(os.path.realpath(__file__))}/graphql_schema/schema.graphql'
             )
         )
 

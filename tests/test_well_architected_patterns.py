@@ -11,7 +11,7 @@ class TestWellArchitectedPatterns(tests.utilities.TestTemplates):
             'CircuitBreakerLambda',
             'RestApiDynamodb',
             'WafApiLambdaDynamodb',
-            # 'SimpleGraphqlService',
+            'SimpleGraphqlService',
             # 'DynamoDBFlow',
             # 'DynamoDBTable',
             # 'DynamoStreamer',

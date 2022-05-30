@@ -1,21 +1,15 @@
 import aws_cdk
 
-import well_architected
-import well_architected_stacks
 import well_architected_stacks.rest_api_sns_sqs_lambda
 import well_architected_stacks.rest_api_sns_lambda_eventbridge_lambda
 import well_architected_stacks.rest_api_dynamodb
+import well_architected_stacks.simple_graphql_service.simple_graphql_service
 import well_architected_stacks.api_step_functions
 import well_architected_stacks.circuit_breaker_lambda
 import well_architected_stacks.waf_api_lambda_dynamodb
-import well_architected_constructs
 
 
 class WellArchitected(aws_cdk.App):
-
-    stack_synthesizer = aws_cdk.DefaultStackSynthesizer(
-        generate_bootstrap_version_rule=False,
-    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -26,9 +20,9 @@ class WellArchitected(aws_cdk.App):
         well_architected_stacks.rest_api_sns_sqs_lambda.ApiSnsSqsLambda(self, 'ApiSnsSqsLambda')
         well_architected_stacks.rest_api_sns_lambda_eventbridge_lambda.ApiSnsLambdaEventBridgeLambda(self, "ApiSnsLambdaEventBridgeLambda")
         well_architected_stacks.rest_api_dynamodb.RestApiDynamodb(self, 'RestApiDynamodb', partition_key='message')
+        well_architected_stacks.simple_graphql_service.simple_graphql_service.SimpleGraphQlService(self, "SimpleGraphqlService")
         well_architected_stacks.waf_api_lambda_dynamodb.WafApiLambdaDynamodb(self, 'WafApiLambdaDynamodb')
         # saga_step_function.SagaStepFunction(self, "SagaStepFunction",)
-        # simple_graphql_service.SimpleGraphQlService(self, "SimpleGraphqlService")
         # event_bridge_atm.EventBridgeAtm(self, "EventBridgeAtm")
         # event_bridge_circuit_breaker.EventBridgeCircuitBreaker(
         #     self, 'EventBridgeCircuitBreaker',
