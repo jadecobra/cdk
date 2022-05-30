@@ -1,25 +1,16 @@
 import aws_cdk
 import constructs
 import well_architected
-import well_architected_constructs.lambda_function
-import well_architected_constructs.dynamodb_table
 import well_architected_constructs.api_lambda
-
-from aws_cdk import (
-    aws_lambda,
-    aws_apigateway,
-    aws_dynamodb as dynamo_db,
-    aws_stepfunctions,
-    aws_stepfunctions_tasks,
-)
-
+import well_architected_constructs.dynamodb_table
+import well_architected_constructs.lambda_function
 
 class SagaStepFunction(well_architected.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        bookings = well_architected_constructs.dynamodb_table.DynamoDBTableConstruct(
+        bookings_record = well_architected_constructs.dynamodb_table.DynamoDBTableConstruct(
             self, 'DynamodbTable',
             partition_key='booking_id',
             sort_key='booking_type',
@@ -28,63 +19,62 @@ class SagaStepFunction(well_architected.Stack):
 
         flight_reservation_function = self.create_bookings_lambda_function(
             function_name='flights/reserve_flight',
-            table=bookings,
+            table=bookings_record,
             error_topic=self.error_topic,
         )
         flight_confirmation_function = self.create_bookings_lambda_function(
             function_name='flights/confirm_flight',
-            table=bookings,
+            table=bookings_record,
             error_topic=self.error_topic,
         )
         flight_cancellation_function = self.create_bookings_lambda_function(
             function_name='flights/cancel_flight',
-            table=bookings,
+            table=bookings_record,
             error_topic=self.error_topic,
         )
 
         hotel_reservation_function = self.create_bookings_lambda_function(
             function_name="hotels/reserve_hotel",
-            table=bookings,
+            table=bookings_record,
             error_topic=self.error_topic,
         )
 
         hotel_confirmation_function = self.create_bookings_lambda_function(
             function_name='hotels/confirm_hotel',
-            table=bookings,
+            table=bookings_record,
             error_topic=self.error_topic,
         )
 
         hotel_cancellation_function = self.create_bookings_lambda_function(
             function_name="hotels/cancel_hotel",
-            table=bookings,
+            table=bookings_record,
             error_topic=self.error_topic,
         )
 
         payment_processing_function = self.create_bookings_lambda_function(
             function_name="payments/process_payment",
-            table=bookings,
+            table=bookings_record,
             error_topic=self.error_topic,
         )
 
         payment_refund_function = self.create_bookings_lambda_function(
             function_name="payments/refund_payment",
-            table=bookings,
+            table=bookings_record,
             error_topic=self.error_topic,
         )
 
-        ###
-        # Saga Pattern Step Function
-        ###
-        # Follows a strict order:
-        # 1) Reserve Flights and Hotel
-        # 2) Take Payment
-        # 3) Confirm Flight and Hotel booking
+        '''
+        Saga Step Function Follows a strict order:
+        1) Reserve Flights and Hotel
+        2) Take Payment
+        3) Confirm Flight and Hotel booking
+        '''
 
         # 1) Reserve Flights and Hotel
         cancel_hotel_reservation = self.create_cancellation_task(
             task_name='CancelHotelReservation',
             lambda_function=hotel_cancellation_function,
-            next_step=aws_stepfunctions.Fail(
+            next_step=aws_cdk.aws_stepfunctions.Fail(
                 self, "Sorry, We Couldn't make the booking"
             )
         )
@@ -101,11 +91,10 @@ class SagaStepFunction(well_architected.Stack):
             next_step=cancel_flight_reservation
         )
 
-        saga_state_machine = aws_stepfunctions.StateMachine(
+        saga_state_machine = aws_cdk.aws_stepfunctions.StateMachine(
             self, 'StateMachine',
             definition=(
-                aws_stepfunctions
-                    .Chain
+                aws_cdk.aws_stepfunctions.Chain
                     .start(
                         self.create_step_function_task_with_error_handler(
                             task_name='ReserveHotel',
@@ -142,7 +131,7 @@ class SagaStepFunction(well_architected.Stack):
                         )
                     )
                     .next(
-                        aws_stepfunctions.Succeed(self, 'We have made your booking!')
+                        aws_cdk.aws_stepfunctions.Succeed(self, 'We have made your booking!')
                     )
             ),
             timeout=aws_cdk.Duration.minutes(5)
@@ -169,22 +158,33 @@ class SagaStepFunction(well_architected.Stack):
             lambda_function=saga_lambda
         )
 
-    def create_cancellation_task(self, task_name=None, lambda_function=None, next_step=None):
-        return aws_stepfunctions_tasks.LambdaInvoke(
+    def create_stepfunctions_task(
+        self, task_name=None, lambda_function=None
+    ):
+        return aws_cdk.aws_stepfunctions_tasks.LambdaInvoke(
             self, task_name,
             lambda_function=lambda_function,
             result_path=f'$.{task_name}Result'
+        )
+
+    def create_cancellation_task(
+        self, task_name=None, lambda_function=None, next_step=None
+    ):
+        return self.create_stepfunctions_task(
+            task_name=task_name,
+            lambda_function=lambda_function,
         ).add_retry(
             max_attempts=3
         ).next(
             next_step
         )
 
-    def create_step_function_task_with_error_handler(self, task_name=None, lambda_function=None, error_handler=None):
-        return aws_stepfunctions_tasks.LambdaInvoke(
-            self, task_name,
+    def create_step_function_task_with_error_handler(
+        self, task_name=None, lambda_function=None, error_handler=None
+    ):
+        return self.create_stepfunctions_task(
+            task_name=task_name,
             lambda_function=lambda_function,
-            result_path=f'$.{task_name}Result'
         ).add_catch(
             error_handler,
             result_path=f"$.{task_name}Error"
@@ -202,7 +202,7 @@ class SagaStepFunction(well_architected.Stack):
         ).lambda_function
 
     def create_bookings_lambda_function(
-        self, table: dynamo_db.Table=None,
+        self, table: aws_cdk.aws_dynamodb.Table=None,
         function_name=None, error_topic=None
     ):
         function = self.create_lambda_function(
