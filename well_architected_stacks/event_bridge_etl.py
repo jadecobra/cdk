@@ -1,73 +1,58 @@
 import json
 import aws_cdk
 import constructs
+import well_architected
 import well_architected_constructs.dynamodb_table
-
-from aws_cdk import (
-    aws_lambda as _lambda,
-    aws_lambda_event_sources as lambda_event_sources,
-    aws_dynamodb as dynamo_db,
-    aws_s3 as s3,
-    aws_s3_notifications as s3_notifications,
-    aws_sqs as sqs,
-    aws_iam as iam,
-    aws_ec2 as ec2,
-    aws_ecs as ecs,
-    aws_logs as logs,
-    aws_events as events,
-    aws_events_targets as event_bridge_targets,
-)
+import well_architected_constructs.lambda_function
 
 
-class EventbridgeEtl(aws_cdk.Stack):
+# s3_sqs_lambda_ecs_eventbridge_lambda_dynamodb
+class EventbridgeEtl(well_architected.Stack):
 
-    def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
+    def __init__(
+        self, scope: constructs.Construct, id: str,
+        **kwargs
+    ) -> None:
         super().__init__(scope, id, **kwargs)
-        self.upload_bucket = s3.Bucket(self, "LandingBucket")
-
-        self.transformed_data = self.create_dynamodb_table()
-        self.upload_queue = self.create_sqs_queue()
-        self.create_s3_sqs_notification(
-            bucket=self.upload_bucket, sqs_queue=self.upload_queue
+        self.s3_bucket = self.create_s3_bucket()
+        self.dynamodb_table = self.create_dynamodb_table(self.error_topic)
+        self.sqs_queue = self.create_sqs_queue()
+        self.add_sqs_event_notification_to_bucket(
+            bucket=self.s3_bucket,
+            sqs_queue=self.sqs_queue,
         )
-        self.event_bridge_put_policy = self.create_event_bridge_iam_policy()
 
         ####
         # Fargate ECS Task Creation to pull data from S3
         ####
-        self.vpc = ec2.Vpc(self, "Vpc", max_azs=2)
-        self.ecs_cluster = ecs.Cluster(self, 'Ec2Cluster', vpc=self.vpc)
-        self.ecs_task_definition = ecs.TaskDefinition(
-            self, 'FargateTaskDefinition',
-            memory_mib="512",
-            cpu="256",
-            compatibility=ecs.Compatibility.FARGATE
-        )
-        self.ecs_task_definition.add_to_task_role_policy(self.event_bridge_put_policy)
-        self.upload_bucket.grant_read(self.ecs_task_definition.task_role)
-
-        self.extraction_task = self.ecs_task_definition.add_container(
-            'AppContainer',
-            image=ecs.ContainerImage.from_asset('containers/s3DataExtractionTask'),
-            logging=self.logging(),
-            environment={
-                'S3_BUCKET_NAME': self.upload_bucket.bucket_name,
-                'S3_OBJECT_KEY': ''
-            }
-        )
+        self.vpc = self.create_vpc()
+        self.ecs_cluster = self.create_ecs_cluster(self.vpc)
+        self.ecs_task_definition = self.create_ecs_task_definition()
+        self.ecs_task_definition.add_to_task_role_policy(self.event_bridge_iam_policy())
+        self.s3_bucket.grant_read(self.ecs_task_definition.task_role)
 
         self.extractor = self.create_lambda_function(
             function_name='extractor',
+            error_topic=self.error_topic,
             environment_variables={
                 "CLUSTER_NAME": self.ecs_cluster.cluster_name,
                 "TASK_DEFINITION": self.ecs_task_definition.task_definition_arn,
                 "SUBNETS": self.get_subnet_ids(self.vpc),
-                "CONTAINER_NAME": self.extraction_task.container_name
+                "CONTAINER_NAME": self.ecs_task_definition.add_container(
+                    'AppContainer',
+                    image=aws_cdk.aws_ecs.ContainerImage.from_asset('containers/s3DataExtractionTask'),
+                    logging=self.get_logging_configuration(),
+                    environment={
+                        'S3_BUCKET_NAME': self.s3_bucket.bucket_name,
+                        'S3_OBJECT_KEY': ''
+                    }
+                ).container_name
             }
         )
 
         self.transformer = self.create_lambda_function(
             function_name='transformer',
+            error_topic=self.error_topic,
             event_bridge_rule_description='Data extracted from S3, Needs transformation',
             event_bridge_detail_type='s3RecordExtraction',
             event_bridge_detail_status="extracted",
@@ -75,8 +60,9 @@ class EventbridgeEtl(aws_cdk.Stack):
 
         self.loader = self.create_lambda_function(
             function_name="loader",
+            error_topic=self.error_topic,
             environment_variables={
-                "TABLE_NAME": self.transformed_data.table_name
+                "TABLE_NAME": self.dynamodb_table.table_name
             },
             event_bridge_rule_description='Load Transformed Data to DynamoDB',
             event_bridge_detail_type='transform',
@@ -85,6 +71,7 @@ class EventbridgeEtl(aws_cdk.Stack):
 
         self.create_lambda_function(
             function_name="observer",
+            error_topic=self.error_topic,
             event_bridge_rule_description='observe and log all events'
         )
 
@@ -94,91 +81,106 @@ class EventbridgeEtl(aws_cdk.Stack):
             lambda_function=self.extractor
         )
         self.add_policies_to_lambda_functions(
-            self.extractor, self.transformer, self.loader,
-            policy=self.event_bridge_put_policy
+            self.extractor,
+            self.transformer,
+            self.loader,
+            policy=self.event_bridge_iam_policy()
         )
 
         self.extractor.add_event_source(
-            lambda_event_sources.SqsEventSource(queue=self.upload_queue)
+            aws_cdk.aws_lambda_event_sources.SqsEventSource(queue=self.sqs_queue)
         )
-        self.upload_queue.grant_consume_messages(self.extractor)
-        self.transformed_data.grant_read_write_data(self.loader)
+        self.sqs_queue.grant_consume_messages(self.extractor)
+        self.dynamodb_table.grant_read_write_data(self.loader)
+
+    def create_s3_bucket(self):
+        return aws_cdk.aws_s3.Bucket(self, "LandingBucket")
+
+    def create_vpc(self):
+        return aws_cdk.aws_ec2.Vpc(self, "Vpc", max_azs=2)
+
+    def create_ecs_cluster(self, vpc):
+        return aws_cdk.aws_ecs.Cluster(self, 'EcsCluster', vpc=vpc)
+
+    def create_ecs_task_definition(self):
+        return aws_cdk.aws_ecs.TaskDefinition(
+            self, 'FargateTaskDefinition',
+            memory_mib="512",
+            cpu="256",
+            compatibility=aws_cdk.aws_ecs.Compatibility.FARGATE
+        )
 
     def create_event_bridge_rule(
         self, name=None, description=None, detail_type=None, status=None,
-        lambda_function=None
     ):
-        rule = events.Rule(
+        return aws_cdk.aws_events.Rule(
             self, f'{name}Rule',
             description=description,
-            event_pattern=events.EventPattern(
+            event_pattern=aws_cdk.aws_events.EventPattern(
                 source=['cdkpatterns.the-eventbridge-etl'],
                 detail_type=[detail_type] if detail_type else None,
                 detail={"status": [status]} if status else None
             )
         )
-        rule.add_target(
-            event_bridge_targets.LambdaFunction(handler=lambda_function)
-        )
-        return rule
 
     def create_lambda_function(
-        self, function_name=None,
-        concurrent_executions=2, timeout=3, environment_variables=None,
+        self,
+        function_name=None,
+        error_topic=None,
+        concurrent_executions=2,
+        duration=3,
+        environment_variables=None,
         event_bridge_rule_description=None,
         event_bridge_detail_type=None,
         event_bridge_detail_status=None
     ):
-        lambda_function = _lambda.Function(
+        return well_architected_constructs.lambda_function.LambdaFunctionConstruct(
             self, function_name,
-            runtime=_lambda.Runtime.NODEJS_12_X,
-            handler=f'{function_name}.handler',
-            code=_lambda.Code.from_asset(f'lambda_functions/{function_name}'),
-            reserved_concurrent_executions=concurrent_executions,
-            timeout=aws_cdk.Duration.seconds(timeout),
-            environment=environment_variables,
-        )
-        if event_bridge_rule_description:
-            self.create_event_bridge_rule(
+            function_name=function_name,
+            error_topic=error_topic,
+            concurrent_executions=concurrent_executions,
+            duration=duration,
+            environment_variables=environment_variables,
+            event_bridge_rule=self.create_event_bridge_rule(
                 name=function_name,
                 description=event_bridge_rule_description,
                 detail_type=event_bridge_detail_type,
                 status=event_bridge_detail_status,
-                lambda_function=lambda_function,
             )
-        return lambda_function
+        ).lambda_function
 
-    def create_dynamodb_table(self):
-        return dynamodb_table.DynamoDBTableConstruct(
+    def create_dynamodb_table(self, error_topic):
+        return well_architected_constructs.dynamodb_table.DynamoDBTableConstruct(
             self, 'TransformedData',
-            partition_key=dynamo_db.Attribute(
-                name="id",
-                type=dynamo_db.AttributeType.STRING
-            )
+            error_topic=error_topic,
+            partition_key="id",
         ).dynamodb_table
 
     def create_sqs_queue(self):
-        return sqs.Queue(
-            self, 'newObjectInLandingBucketEventQueue',
+        return aws_cdk.aws_sqs.Queue(
+            self,
+            'newObjectInLandingBucketEventQueue',
             visibility_timeout=aws_cdk.Duration.seconds(300)
         )
 
     @staticmethod
-    def create_s3_sqs_notification(bucket=None, sqs_queue=None):
+    def add_sqs_event_notification_to_bucket(
+        bucket=None, sqs_queue=None
+    ):
         bucket.add_event_notification(
-            s3.EventType.OBJECT_CREATED,
-            s3_notifications.SqsDestination(sqs_queue)
+            aws_cdk.aws_s3.EventType.OBJECT_CREATED,
+            aws_cdk.aws_s3_notifications.SqsDestination(sqs_queue)
         )
 
     @staticmethod
     def create_iam_policy(resources=None, actions=None):
-        return iam.PolicyStatement(
-            effect=iam.Effect.ALLOW,
+        return aws_cdk.aws_iam.PolicyStatement(
+            effect=aws_cdk.aws_iam.Effect.ALLOW,
             resources=resources if resources else ["*"],
             actions=actions
         )
 
-    def create_event_bridge_iam_policy(self):
+    def event_bridge_iam_policy(self):
         return self.create_iam_policy(actions=['events:PutEvents'])
 
     def add_policies_to_lambda_functions(self, *lambda_functions, policy=None):
@@ -206,8 +208,8 @@ class EventbridgeEtl(aws_cdk.Stack):
         return json.dumps([subnet.subnet_id for subnet in vpc.private_subnets])
 
     @staticmethod
-    def logging():
-        return ecs.AwsLogDriver(
+    def get_logging_configuration():
+        return aws_cdk.aws_ecs.AwsLogDriver(
             stream_prefix='TheEventBridgeETL',
-            log_retention=logs.RetentionDays.ONE_WEEK
+            log_retention=aws_cdk.aws_logs.RetentionDays.ONE_WEEK
         )
