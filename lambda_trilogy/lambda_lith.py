@@ -1,19 +1,25 @@
 import aws_cdk
 import constructs
-import well_architected.well_architected_constructs.lambda as lambda
-import well_architected.well_architected_constructs.rest_api as rest_api
+import well_architected
+import well_architected_constructs.lambda_function
+import well_architected_constructs.rest_api
 
 from aws_cdk import (
     aws_lambda as _lambda,
     aws_apigateway as api_gw,
 )
 
-class LambdaLith(aws_cdk.Stack):
+class LambdaLith(well_architected.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        rest_api.LambdaRestAPIGatewayConstruct(
+        lambda_function = well_architected_constructs.lambda_function.create_python_lambda_function(
+                self,
+                function_name='lambda_lith'
+        )
+
+        well_architected_constructs.api_lambda.create_http_api(
             self, 'LambdaLithRestAPIGateway',
             lambda_function=lambda.create_python_lambda_function(
                 self, function_name='lambdalith'

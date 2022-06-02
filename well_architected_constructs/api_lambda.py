@@ -20,7 +20,8 @@ def create_http_api_lambda(
     )
 
 def create_rest_api_lambda(
-    stack, lambda_function=None, error_topic=None
+    stack, lambda_function=None, error_topic=None,
+    proxy=True
 ):
     return Api(
         stack, 'RestApiGateway',
@@ -29,5 +30,6 @@ def create_rest_api_lambda(
         api=aws_cdk.aws_apigateway.LambdaRestApi(
             stack, 'RestApiLambdaFunction',
             handler=lambda_function,
+            proxy=proxy,
         )
     )

@@ -29,7 +29,7 @@ class LambdaFunctionConstruct(well_architected.Construct):
         function_name = function_name if function_name is not None else id
         self.lambda_function = aws_cdk.aws_lambda.Function(
             self, 'LambdaFunction',
-            runtime=aws_cdk.aws_lambda.Runtime.PYTHON_3_9,
+            runtime=aws_cdk.aws_lambda.Runtime.PYTHON_3_9,  # type: ignore
             handler=f'{function_name}.{handler_name}',
             code=aws_cdk.aws_lambda.Code.from_asset(f"lambda_functions/{function_name}"),
             timeout=aws_cdk.Duration.seconds(duration) if duration else None,

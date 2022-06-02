@@ -3,7 +3,7 @@ import aws_cdk
 import well_architected_stacks.api_step_functions
 import well_architected_stacks.circuit_breaker_lambda
 import well_architected_stacks.event_bridge_atm
-import well_architected_stacks.s3_sqs_lambda_ecs_eventbridge_lambda_dynamodb
+import well_architected_stacks.event_bridge_etl
 import well_architected_stacks.rest_api_sns_sqs_lambda
 import well_architected_stacks.rest_api_sns_lambda_eventbridge_lambda
 import well_architected_stacks.rest_api_dynamodb
@@ -11,6 +11,8 @@ import well_architected_stacks.saga_step_function
 import well_architected_stacks.simple_graphql_service.simple_graphql_service
 import well_architected_stacks.waf_api_lambda_dynamodb
 import well_architected_stacks.circuit_breaker_event_bridge
+import lambda_trilogy.fat_lambda
+import lambda_trilogy.lambda_lith
 
 
 class WellArchitected(aws_cdk.App):
@@ -21,6 +23,8 @@ class WellArchitected(aws_cdk.App):
 
         well_architected_stacks.api_step_functions.ApiStepFunctions(self, "ApiStepFunctions")
         well_architected_stacks.circuit_breaker_lambda.CircuitBreakerLambda(self, "CircuitBreakerLambda")
+        well_architected_stacks.event_bridge_atm.EventBridgeAtm(self, "EventBridgeAtm")
+        well_architected_stacks.event_bridge_etl.EventbridgeEtl(self, 'EventBridgeEtl')
         well_architected_stacks.rest_api_sns_sqs_lambda.ApiSnsSqsLambda(self, 'ApiSnsSqsLambda')
         well_architected_stacks.rest_api_sns_lambda_eventbridge_lambda.ApiSnsLambdaEventBridgeLambda(self, "ApiSnsLambdaEventBridgeLambda")
         well_architected_stacks.rest_api_dynamodb.RestApiDynamodb(self, 'RestApiDynamodb', partition_key='message')
@@ -30,11 +34,9 @@ class WellArchitected(aws_cdk.App):
         well_architected_stacks.circuit_breaker_event_bridge.CircuitBreakerEventBridge(
             self, 'CircuitBreakerEventBridge',
         )
-        well_architected_stacks.event_bridge_atm.EventBridgeAtm(self, "EventBridgeAtm")
-        well_architected_stacks.s3_sqs_lambda_ecs_eventbridge_lambda_dynamodb.EventbridgeEtl(self, 'EventBridgeEtl')
 
-        # lambda_trilogy.lambda_lith.LambdaLith(self, "LambdaLith", )
-        # lambda_trilogy.fat_lambda.TheFatLambdaStack(self, "FatLambda", )
+        lambda_trilogy.fat_lambda.TheFatLambdaStack(self, "FatLambda", )
+        lambda_trilogy.lambda_lith.LambdaLith(self, "LambdaLith", )
         # lambda_trilogy.single_purpose_lambda.TheSinglePurposeFunctionStack(self, "SinglePurposeLambda", )
         # lambda_power_tuner.LambdaPowerTuner(self, "LambdaPowerTuner", )
 
