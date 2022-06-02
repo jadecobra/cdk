@@ -4,10 +4,6 @@ import well_architected
 import well_architected_constructs.lambda_function
 import well_architected_constructs.api_lambda
 
-from aws_cdk import (
-    aws_lambda as _lambda,
-    aws_apigateway as api_gw,
-)
 
 class LambdaLith(well_architected.Stack):
 
