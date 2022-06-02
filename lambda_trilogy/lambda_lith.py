@@ -2,7 +2,7 @@ import aws_cdk
 import constructs
 import well_architected
 import well_architected_constructs.lambda_function
-import well_architected_constructs.rest_api
+import well_architected_constructs.api_lambda
 
 from aws_cdk import (
     aws_lambda as _lambda,
@@ -19,9 +19,12 @@ class LambdaLith(well_architected.Stack):
                 function_name='lambda_lith'
         )
 
-        well_architected_constructs.api_lambda.create_http_api(
-            self, 'LambdaLithRestAPIGateway',
-            lambda_function=lambda.create_python_lambda_function(
-                self, function_name='lambdalith'
-            ),
+        well_architected_constructs.api_lambda.create_rest_api_lambda(
+            self, error_topic=self.error_topic,
+            lambda_function=lambda_function,
+        )
+
+        well_architected_constructs.api_lambda.create_http_api_lambda(
+            self, error_topic=self.error_topic,
+            lambda_function=lambda_function,
         )
