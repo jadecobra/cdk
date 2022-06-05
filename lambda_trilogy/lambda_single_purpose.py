@@ -9,7 +9,7 @@ import well_architected_constructs.api_lambda
 import well_architected_constructs.lambda_function
 
 
-class TheSinglePurposeFunctionStack(well_architected.Stack):
+class LambdaSinglePurpose(well_architected.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
