@@ -9,7 +9,7 @@ import well_architected_constructs.api_lambda
 import well_architected_constructs.lambda_function
 
 
-class TheFatLambdaStack(well_architected.Stack):
+class LambdaFat(well_architected.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
@@ -46,7 +46,7 @@ class TheFatLambdaStack(well_architected.Stack):
     def create_rest_api(self, error_topic=None, lambda_function=None):
         return well_architected_constructs.api_lambda.create_rest_api_lambda(
             self,
-            error_topic=self.error_topic,
+            error_topic=error_topic,
             lambda_function=lambda_function,
             proxy=False,
         ).api
@@ -65,6 +65,6 @@ class TheFatLambdaStack(well_architected.Stack):
         return well_architected_constructs.lambda_function.LambdaFunctionConstruct(
             self, handler_name,
             error_topic=self.error_topic,
-            function_name="fat_lambda",
+            function_name="lambda_fat",
             handler_name=handler_name,
         ).lambda_function

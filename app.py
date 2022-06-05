@@ -11,8 +11,9 @@ import well_architected_stacks.saga_step_function
 import well_architected_stacks.simple_graphql_service.simple_graphql_service
 import well_architected_stacks.waf_api_lambda_dynamodb
 import well_architected_stacks.circuit_breaker_event_bridge
-import lambda_trilogy.fat_lambda
+import lambda_trilogy.lambda_fat
 import lambda_trilogy.lambda_lith
+import lambda_trilogy.lambda_single_purpose
 
 
 class WellArchitected(aws_cdk.App):
@@ -35,9 +36,9 @@ class WellArchitected(aws_cdk.App):
             self, 'CircuitBreakerEventBridge',
         )
 
-        lambda_trilogy.fat_lambda.TheFatLambdaStack(self, "FatLambda", )
+        lambda_trilogy.lambda_fat.LambdaFat(self, "FatLambda", )
         lambda_trilogy.lambda_lith.LambdaLith(self, "LambdaLith", )
-        # lambda_trilogy.single_purpose_lambda.TheSinglePurposeFunctionStack(self, "SinglePurposeLambda", )
+        lambda_trilogy.lambda_single_purpose.TheSinglePurposeFunctionStack(self, "SinglePurposeLambda", )
         # lambda_power_tuner.LambdaPowerTuner(self, "LambdaPowerTuner", )
 
     # def create_xray_tracer(self):

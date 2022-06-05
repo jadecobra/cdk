@@ -1,4 +1,3 @@
-import aws_cdk
 import constructs
 import well_architected
 import well_architected_constructs.lambda_function
