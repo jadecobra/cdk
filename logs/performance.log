@@ -23342,3 +23342,5 @@
 2022-06-05 17:24:25.572062::Time taken to synthesize stack: ApiSnsSqsLambda::  5.1452 seconds
 2022-06-05 17:25:55.185688::Time taken to synthesize stack: ApiSnsLambdaEventBridgeLambda::  5.3390 seconds
 2022-06-05 17:26:00.518299::Time taken to synthesize stack: ApiSnsSqsLambda::  5.3257 seconds
+2022-06-05 17:26:45.990374::Time taken to synthesize stack: ApiSnsLambdaEventBridgeLambda::  5.2672 seconds
+2022-06-05 17:26:51.237453::Time taken to synthesize stack: ApiSnsSqsLambda::  5.2424 seconds
