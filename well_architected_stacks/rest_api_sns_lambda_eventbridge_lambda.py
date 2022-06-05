@@ -3,6 +3,7 @@ import constructs
 import well_architected
 import well_architected_constructs.lambda_function
 import well_architected_constructs.rest_api
+import well_architected_constructs.rest_api_sns
 
 
 class ApiSnsLambdaEventBridgeLambda(well_architected.Stack):
@@ -20,21 +21,10 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.Stack):
             event_bus=event_bus,
         )
 
-        rest_api = well_architected_constructs.rest_api.RestApiConstruct(
+        well_architected_constructs.rest_api_sns.RestApiSnsConstruct(
             self, 'RestApiSns',
             error_topic=self.error_topic,
-        )
-        rest_api.add_method(
             method='GET',
-            path='SendEvent',
-            uri='arn:aws:apigateway:us-east-1:sns:path//',
-            success_response_templates={
-                "message": 'Message added to SNS topic'
-            },
-            error_selection_pattern="Error",
-            request_parameters={
-                'integration.request.header.Content-Type': "'application/x-www-form-urlencoded'"
-            },
             request_templates=self.get_request_template(
                 sns_topic_arn=self.create_sns_triggered_lambda(
                     name='destined',

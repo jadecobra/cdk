@@ -14,6 +14,7 @@ import well_architected_stacks.circuit_breaker_event_bridge
 import well_architected_stacks.lambda_trilogy.lambda_fat
 import well_architected_stacks.lambda_trilogy.lambda_lith
 import well_architected_stacks.lambda_trilogy.lambda_single_purpose
+import xray_tracer
 
 
 class WellArchitected(aws_cdk.App):
@@ -49,8 +50,10 @@ class WellArchitected(aws_cdk.App):
         xray_tracer_sns_topic = sns_topic.SnsTopic(
             self, 'XRayTracerSnsFanOutTopic', display_name='The XRay Tracer Fan Out Topic'
         ).topic
+        well_architected_stacks.rest_api_sns.ApiSnsSqsLambda(self, 'ApiSnsSqsLambda')
         xray_tracer.sns_rest_api.SnsRestApi(
-            self, 'SnsRestApi', sns_topic=xray_tracer_sns_topic
+            self, 'SnsRestApi',
+            sns_topic=xray_tracer_sns_topic
         )
         xray_tracer.sns_flow.SnsFlow(self, 'SnsFlow', sns_topic=xray_tracer_sns_topic)
         xray_tracer.sqs_flow.SqsFlow(self, 'SqsFlow', sns_topic=xray_tracer_sns_topic)

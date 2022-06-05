@@ -3,6 +3,7 @@ import constructs
 import well_architected
 import well_architected_constructs.lambda_function
 import well_architected_constructs.rest_api
+import well_architected_constructs.rest_api_sns
 
 
 class ApiSnsSqsLambda(well_architected.Stack):
@@ -30,23 +31,13 @@ class ApiSnsSqsLambda(well_architected.Stack):
                 sqs_queue=sqs_queue,
             )
 
-        rest_api = well_architected_constructs.rest_api.RestApiConstruct(
+        well_architected_constructs.rest_api_sns.RestApiSnsConstruct(
             self, 'RestApiSns',
             error_topic=self.error_topic,
-        )
-        rest_api.add_method(
             method='POST',
-            path='SendEvent',
-            uri='arn:aws:apigateway:us-east-1:sns:path//',
             request_templates=self.get_request_template(sns_topic.topic_arn),
-            success_response_templates={
-                "message": 'Message added to SNS topic'
-            },
-            error_selection_pattern="Error",
-            request_parameters={
-                'integration.reque    st.header.Content-Type': "'application/x-www-form-urlencoded'"
-            },
         )
+
 
     def get_request_template(self, sns_topic_arn):
         return (
