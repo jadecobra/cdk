@@ -84,9 +84,6 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.Stack):
         )
 
     def get_request_template(self, sns_topic_arn):
-        # return (
-        #     f"""Action=Publish&TargetArn=$util.urlEncode('{sns_topic_arn}')&Message=please $input.params().querystring.get('mode')&Version=2010-03-31"""
-        # )
         return (
             'Action=Publish&'
             f"TargetArn=$util.urlEncode('{sns_topic_arn}')&"
