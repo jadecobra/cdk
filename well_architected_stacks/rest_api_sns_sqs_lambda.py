@@ -38,7 +38,6 @@ class ApiSnsSqsLambda(well_architected.Stack):
             request_templates=self.get_request_template(sns_topic.topic_arn),
         )
 
-
     def get_request_template(self, sns_topic_arn):
         return (
             f"Action=Publish&TargetArn=$util.urlEncode('{sns_topic_arn}')&Message=$util.urlEncode($input.path('$.message'))&Version=2010-03-31&MessageAttributes.entry.1.Name=status&MessageAttributes.entry.1.Value.DataType=String&MessageAttributes.entry.1.Value.StringValue=$util.urlEncode($input.path('$.status'))"
