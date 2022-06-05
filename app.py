@@ -11,9 +11,9 @@ import well_architected_stacks.saga_step_function
 import well_architected_stacks.simple_graphql_service.simple_graphql_service
 import well_architected_stacks.waf_api_lambda_dynamodb
 import well_architected_stacks.circuit_breaker_event_bridge
-import lambda_trilogy.lambda_fat
-import lambda_trilogy.lambda_lith
-import lambda_trilogy.lambda_single_purpose
+import well_architected_stacks.lambda_trilogy.lambda_fat
+import well_architected_stacks.lambda_trilogy.lambda_lith
+import well_architected_stacks.lambda_trilogy.lambda_single_purpose
 
 
 class WellArchitected(aws_cdk.App):
@@ -40,9 +40,9 @@ class WellArchitected(aws_cdk.App):
         # lambda_power_tuner.LambdaPowerTuner(self, "LambdaPowerTuner", )
 
     def lambda_trilogy(self):
-        lambda_trilogy.lambda_fat.LambdaFat(self, "LambdaFat", )
-        lambda_trilogy.lambda_lith.LambdaLith(self, "LambdaLith")
-        lambda_trilogy.lambda_single_purpose.LambdaSinglePurpose(self, "LambdaSinglePurpose")
+        well_architected_stacks.lambda_trilogy.lambda_fat.LambdaFat(self, "LambdaFat", )
+        well_architected_stacks.lambda_trilogy.lambda_lith.LambdaLith(self, "LambdaLith")
+        well_architected_stacks.lambda_trilogy.lambda_single_purpose.LambdaSinglePurpose(self, "LambdaSinglePurpose")
 
     def xray_tracer(self):
         return

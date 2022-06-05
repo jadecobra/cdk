@@ -23131,3 +23131,17 @@
 2022-06-05 16:41:21.171051::Time taken to synthesize stack: SagaStepFunction::  5.2745 seconds
 2022-06-05 16:41:26.357523::Time taken to synthesize stack: SimpleGraphqlService::  5.1810 seconds
 2022-06-05 16:41:31.642839::Time taken to synthesize stack: WafApiLambdaDynamodb::  5.2818 seconds
+2022-06-05 16:41:54.837633::Time taken to synthesize stack: ApiSnsLambdaEventBridgeLambda::  5.3840 seconds
+2022-06-05 16:42:00.232025::Time taken to synthesize stack: ApiSnsSqsLambda::  5.3906 seconds
+2022-06-05 16:42:05.743996::Time taken to synthesize stack: ApiStepFunctions::  5.5084 seconds
+2022-06-05 16:42:10.256787::Time taken to synthesize stack: CircuitBreakerEventBridge::  4.4990 seconds
+2022-06-05 16:42:14.667343::Time taken to synthesize stack: CircuitBreakerLambda::  4.4031 seconds
+2022-06-05 16:42:19.038119::Time taken to synthesize stack: EventBridgeAtm::  4.3667 seconds
+2022-06-05 16:42:23.355363::Time taken to synthesize stack: EventBridgeEtl::  4.3131 seconds
+2022-06-05 16:42:27.829096::Time taken to synthesize stack: LambdaFat::  4.4696 seconds
+2022-06-05 16:42:32.237986::Time taken to synthesize stack: LambdaLith::  4.4055 seconds
+2022-06-05 16:42:36.504517::Time taken to synthesize stack: LambdaSinglePurpose::  4.2622 seconds
+2022-06-05 16:42:40.869332::Time taken to synthesize stack: RestApiDynamodb::  4.3608 seconds
+2022-06-05 16:42:45.127995::Time taken to synthesize stack: SagaStepFunction::  4.2534 seconds
+2022-06-05 16:42:49.390128::Time taken to synthesize stack: SimpleGraphqlService::  4.2577 seconds
+2022-06-05 16:42:53.745962::Time taken to synthesize stack: WafApiLambdaDynamodb::  4.3521 seconds
