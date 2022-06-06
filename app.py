@@ -14,6 +14,7 @@ import well_architected_stacks.circuit_breaker_event_bridge
 import well_architected_stacks.lambda_trilogy.lambda_fat
 import well_architected_stacks.lambda_trilogy.lambda_lith
 import well_architected_stacks.lambda_trilogy.lambda_single_purpose
+import well_architected_stacks.lambda_trilogy.lambda_trilogy
 import xray_tracer
 
 
@@ -41,9 +42,17 @@ class WellArchitected(aws_cdk.App):
         # lambda_power_tuner.LambdaPowerTuner(self, "LambdaPowerTuner", )
 
     def lambda_trilogy(self):
-        well_architected_stacks.lambda_trilogy.lambda_fat.LambdaFat(self, "LambdaFat", )
+        # well_architected_stacks.lambda_trilogy.lambda_fat.LambdaFat(self, "LambdaFat", )
         well_architected_stacks.lambda_trilogy.lambda_lith.LambdaLith(self, "LambdaLith")
-        well_architected_stacks.lambda_trilogy.lambda_single_purpose.LambdaSinglePurpose(self, "LambdaSinglePurpose")
+        # well_architected_stacks.lambda_trilogy.lambda_single_purpose.LambdaSinglePurpose(self, "LambdaSinglePurpose")
+        well_architected_stacks.lambda_trilogy.lambda_trilogy.LambdaTrilogy(
+            self, 'LambdaFat',
+            function_name='lambda_fat',
+        )
+        well_architected_stacks.lambda_trilogy.lambda_trilogy.LambdaTrilogy(
+            self, 'LambdaSinglePurpose',
+            function_name='lambda_single_purpose',
+        )
 
     def xray_tracer(self):
         xray_tracer_sns = xray_tracer.sns_topic.SnsTopic(
