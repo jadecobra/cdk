@@ -35,7 +35,6 @@ class ApiSnsSqsLambda(well_architected.Stack):
             self, 'RestApiSns',
             error_topic=self.error_topic,
             sns_topic_arn=sns_topic.topic_arn,
-            # method='POST',
             message="$util.urlEncode($input.path('$.message'))",
             additional_parameters=self.get_additional_parameters(),
         )
