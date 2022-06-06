@@ -23756,3 +23756,12 @@
 2022-06-06 10:36:16.883119::Time taken to synthesize stack: LambdaFat::  5.5750 seconds
 2022-06-06 10:36:22.290975::Time taken to synthesize stack: LambdaLith::  5.4020 seconds
 2022-06-06 10:36:27.637088::Time taken to synthesize stack: LambdaSinglePurpose::  5.3427 seconds
+2022-06-06 10:37:30.919119::Time taken to synthesize stack: LambdaFat::  5.6775 seconds
+2022-06-06 10:37:36.478379::Time taken to synthesize stack: LambdaLith::  5.5536 seconds
+2022-06-06 10:37:41.785022::Time taken to synthesize stack: LambdaSinglePurpose::  5.3023 seconds
+2022-06-06 10:41:33.473916::Time taken to synthesize stack: LambdaFat::  5.0010 seconds
+2022-06-06 10:41:38.383174::Time taken to synthesize stack: LambdaLith::  4.9041 seconds
+2022-06-06 10:41:43.128085::Time taken to synthesize stack: LambdaSinglePurpose::  4.7402 seconds
+2022-06-06 10:42:20.064446::Time taken to synthesize stack: LambdaFat::  5.4986 seconds
+2022-06-06 10:42:25.568133::Time taken to synthesize stack: LambdaLith::  5.4969 seconds
+2022-06-06 10:42:30.816599::Time taken to synthesize stack: LambdaSinglePurpose::  5.2433 seconds

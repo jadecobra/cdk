@@ -14,10 +14,11 @@ class LambdaFat(well_architected.Stack):
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        adder = self.create_lambda_function('add')
-        subtracter = self.create_lambda_function('subtract')
-        multiplier = self.create_lambda_function('multiply')
+        add = 'add'
+        subtract = 'subtract'
+        multiply = 'multiply'
 
+        adder = self.create_lambda_function(add)
         rest_api = self.create_rest_api(
             error_topic=self.error_topic,
             lambda_function=adder,
@@ -25,23 +26,45 @@ class LambdaFat(well_architected.Stack):
 
         http_api = self.create_http_api(self.error_topic)
 
-        for path, lambda_function in {
-            'add': adder,
-            'subtract': subtracter,
-            'multiply': multiplier,
-        }.items():
-            rest_api.root.resource_for_path(path).add_method(
-                'GET',
-                aws_cdk.aws_apigateway.LambdaIntegration(lambda_function)
+        self.create_api_methods(
+            http_api=http_api,
+            rest_api=rest_api,
+            lambda_functions=(
+                (add, adder),
+                (subtract, self.create_lambda_function(subtract)),
+                (multiply, self.create_lambda_function(multiply)),
+            ),
+        )
+
+    def create_api_methods(self, lambda_functions=None, rest_api=None, http_api=None):
+        for path, lambda_function in lambda_functions:
+            self.create_rest_api_method(
+                rest_api=rest_api,
+                path=path,
+                lambda_function=lambda_function,
             )
-            http_api.add_routes(
-                path=f'/{path}',
-                methods=[aws_cdk.aws_apigatewayv2_alpha.HttpMethod.GET],
-                integration=aws_cdk.aws_apigatewayv2_integrations_alpha.HttpLambdaIntegration(
-                    f'HttpApi{path.title()}Integration',
-                    handler=lambda_function
-                ),
+            self.create_http_api_method(
+                http_api=http_api,
+                path=path,
+                lambda_function=lambda_function,
             )
+
+    @staticmethod
+    def create_http_api_method(http_api=None, path=None, lambda_function=None):
+        return http_api.add_routes(
+            path=f'/{path}',
+            methods=[aws_cdk.aws_apigatewayv2_alpha.HttpMethod.GET],
+            integration=aws_cdk.aws_apigatewayv2_integrations_alpha.HttpLambdaIntegration(
+                f'HttpApi{path.title()}Integration',
+                handler=lambda_function
+            ),
+        )
+
+    @staticmethod
+    def create_rest_api_method(rest_api=None, path=None, lambda_function=None):
+        return rest_api.root.resource_for_path(path).add_method(
+            'GET', aws_cdk.aws_apigateway.LambdaIntegration(lambda_function)
+        )
 
     def create_rest_api(self, error_topic=None, lambda_function=None):
         return well_architected_constructs.api_lambda.create_rest_api_lambda(

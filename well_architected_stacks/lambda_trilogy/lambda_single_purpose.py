@@ -26,11 +26,18 @@ class LambdaSinglePurpose(well_architected.Stack):
 
         http_api = self.create_http_api(self.error_topic)
 
-        for path, lambda_function in (
-            (add, adder),
-            (subtract, self.create_lambda_function(subtract)),
-            (multiply, self.create_lambda_function(multiply)),
-        ):
+        self.create_api_methods(
+            http_api=http_api,
+            rest_api=rest_api,
+            lambda_functions=(
+                (add, adder),
+                (subtract, self.create_lambda_function(subtract)),
+                (multiply, self.create_lambda_function(multiply)),
+            ),
+        )
+
+    def create_api_methods(self, lambda_functions=None, rest_api=None, http_api=None):
+        for path, lambda_function in lambda_functions:
             self.create_rest_api_method(
                 rest_api=rest_api,
                 path=path,
