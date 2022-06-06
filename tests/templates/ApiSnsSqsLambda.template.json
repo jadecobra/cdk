@@ -612,7 +612,7 @@
       },
       "DependsOn": ["RestApi0C43BF4B"]
     },
-    "RestApiDeployment180EC503f65e5212f5dc0c4e3c070bcbfa2c9576": {
+    "RestApiDeployment180EC503b3ae7b2505a22913f52993f53b46c138": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -634,7 +634,7 @@
           "Ref": "RestApi0C43BF4B"
         },
         "DeploymentId": {
-          "Ref": "RestApiDeployment180EC503f65e5212f5dc0c4e3c070bcbfa2c9576"
+          "Ref": "RestApiDeployment180EC503b3ae7b2505a22913f52993f53b46c138"
         },
         "MethodSettings": [
           {
@@ -706,11 +706,11 @@
               "Fn::Join": [
                 "",
                 [
-                  "Action=Publish&TargetArn=$util.urlEncode('",
+                  "Action=Publish&Version=2010-03-31&Message=$util.urlEncode($input.path('$.message'))&MessageAttributes.entry.1.Name=status&MessageAttributes.entry.1.Value.DataType=String&MessageAttributes.entry.1.Value.StringValue=$util.urlEncode($input.path('$.status'))&TargetArn=$util.urlEncode('",
                   {
                     "Ref": "TheBigFanCDKPatternTopicAAA4D267"
                   },
-                  "')&Message=$util.urlEncode($input.path('$.message'))&Version=2010-03-31&MessageAttributes.entry.1.Name=status&MessageAttributes.entry.1.Value.DataType=String&MessageAttributes.entry.1.Value.StringValue=$util.urlEncode($input.path('$.status'))"
+                  "')"
                 ]
               ]
             }

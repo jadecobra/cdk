@@ -34,13 +34,18 @@ class ApiSnsSqsLambda(well_architected.Stack):
         well_architected_constructs.rest_api_sns.RestApiSnsConstruct(
             self, 'RestApiSns',
             error_topic=self.error_topic,
+            sns_topic_arn=sns_topic.topic_arn,
             method='POST',
-            request_templates=self.get_request_template(sns_topic.topic_arn),
+            message="$util.urlEncode($input.path('$.message'))",
+            additional_parameters=self.get_additional_parameters(),
         )
 
-    def get_request_template(self, sns_topic_arn):
+    @staticmethod
+    def get_additional_parameters():
         return (
-            f"Action=Publish&TargetArn=$util.urlEncode('{sns_topic_arn}')&Message=$util.urlEncode($input.path('$.message'))&Version=2010-03-31&MessageAttributes.entry.1.Name=status&MessageAttributes.entry.1.Value.DataType=String&MessageAttributes.entry.1.Value.StringValue=$util.urlEncode($input.path('$.status'))"
+            "MessageAttributes.entry.1.Name=status&"
+            "MessageAttributes.entry.1.Value.DataType=String&"
+            "MessageAttributes.entry.1.Value.StringValue=$util.urlEncode($input.path('$.status'))"
         )
 
     def create_sqs_queue(self, queue_name):

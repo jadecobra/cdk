@@ -10,8 +10,10 @@ class RestApiSnsConstruct(RestApiConstruct):
         error_topic=None,
         rest_api_name=None,
         api=None,
-        request_templates=None,
+        message=None,
+        additional_parameters=None,
         method=None,
+        sns_topic_arn=None,
         **kwargs,
     ):
         super().__init__(
@@ -35,5 +37,29 @@ class RestApiSnsConstruct(RestApiConstruct):
             request_parameters={
                 'integration.request.header.Content-Type': "'application/x-www-form-urlencoded'"
             },
-            request_templates=request_templates,
+            request_templates=self.call_sns_publish_api(
+                sns_topic_arn=sns_topic_arn,
+                additional_parameters=additional_parameters,
+                message=message
+            ),
+        )
+
+    @staticmethod
+    def parse_additional_parameters(text):
+        if text:
+            return f"{text}&"
+        return ""
+
+    def call_sns_publish_api(
+        self,
+        additional_parameters=None,
+        sns_topic_arn=None,
+        message=None,
+    ):
+        return (
+            "Action=Publish&"
+            "Version=2010-03-31&"
+            f"Message={message}&"
+            f"{self.parse_additional_parameters(additional_parameters)}"
+            f"TargetArn=$util.urlEncode('{sns_topic_arn}')"
         )

@@ -25,12 +25,11 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.Stack):
             self, 'RestApiSns',
             error_topic=self.error_topic,
             method='GET',
-            request_templates=self.get_request_template(
-                sns_topic_arn=self.create_sns_triggered_lambda(
-                    name='destined',
-                    event_bus=event_bus
-                ).topic_arn
-            ),
+            message="please $input.params().querystring.get('mode')",
+            sns_topic_arn=self.create_sns_triggered_lambda(
+                name='destined',
+                event_bus=event_bus
+            ).topic_arn,
         )
 
     def create_success_lambda(self, event_bus=None, error_topic=None):
@@ -81,14 +80,6 @@ class ApiSnsLambdaEventBridgeLambda(well_architected.Stack):
         return aws_cdk.aws_events.EventBus(
             self, 'EventBus',
             event_bus_name=name,
-        )
-
-    def get_request_template(self, sns_topic_arn):
-        return (
-            'Action=Publish&'
-            f"TargetArn=$util.urlEncode('{sns_topic_arn}')&"
-            "Message=please $input.params().querystring.get('mode')&"
-            'Version=2010-03-31'
         )
 
     def create_event_driven_lambda_function(
