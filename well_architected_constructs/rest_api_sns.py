@@ -12,7 +12,7 @@ class RestApiSnsConstruct(RestApiConstruct):
         api=None,
         message=None,
         additional_parameters=None,
-        method=None,
+        method='POST',
         sns_topic_arn=None,
         **kwargs,
     ):

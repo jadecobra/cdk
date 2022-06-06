@@ -46,11 +46,9 @@ class WellArchitected(aws_cdk.App):
         well_architected_stacks.lambda_trilogy.lambda_single_purpose.LambdaSinglePurpose(self, "LambdaSinglePurpose")
 
     def xray_tracer(self):
-        return
-        xray_tracer_sns_topic = sns_topic.SnsTopic(
+        xray_tracer_sns_topic = xray_tracer.sns_topic.SnsTopic(
             self, 'XRayTracerSnsFanOutTopic', display_name='The XRay Tracer Fan Out Topic'
         ).topic
-        well_architected_stacks.rest_api_sns.ApiSnsSqsLambda(self, 'ApiSnsSqsLambda')
         xray_tracer.sns_rest_api.SnsRestApi(
             self, 'SnsRestApi',
             sns_topic=xray_tracer_sns_topic
