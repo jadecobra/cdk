@@ -1,5 +1,11 @@
 {
   "Resources": {
+    "SnsRestApiErrorTopicB9488D77": {
+      "Type": "AWS::SNS::Topic",
+      "Properties": {
+        "DisplayName": "SnsRestApiErrorTopic"
+      }
+    },
     "RestApi0C43BF4B": {
       "Type": "AWS::ApiGateway::RestApi",
       "Properties": {
@@ -41,17 +47,12 @@
       "Type": "AWS::ApiGateway::Account",
       "Properties": {
         "CloudWatchRoleArn": {
-          "Fn::GetAtt": [
-            "RestApiCloudWatchRoleE3ED6605",
-            "Arn"
-          ]
+          "Fn::GetAtt": ["RestApiCloudWatchRoleE3ED6605", "Arn"]
         }
       },
-      "DependsOn": [
-        "RestApi0C43BF4B"
-      ]
+      "DependsOn": ["RestApi0C43BF4B"]
     },
-    "RestApiDeployment180EC50310ca31bc7c64b136e655b95e390d9332": {
+    "RestApiDeployment180EC5035587b69cfa35c427b72e1f52b67f156d": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -60,11 +61,10 @@
         "Description": "Automatically created by the RestApi construct"
       },
       "DependsOn": [
-        "RestApiproxyGET3EA512AF",
-        "RestApiproxyC95856DD",
-        "RestApiGET0F59260B",
-        "RestApiErrorResponseModelA6C9DD94",
-        "RestApiResponseModel056B6183"
+        "RestApiSendEventPOSTF343B427",
+        "RestApiSendEvent02C4F03F",
+        "RestApierrorResponse2EE521BA",
+        "RestApipollResponse8796EA23"
       ]
     },
     "RestApiDeploymentStageprod3855DE66": {
@@ -74,7 +74,7 @@
           "Ref": "RestApi0C43BF4B"
         },
         "DeploymentId": {
-          "Ref": "RestApiDeployment180EC50310ca31bc7c64b136e655b95e390d9332"
+          "Ref": "RestApiDeployment180EC5035587b69cfa35c427b72e1f52b67f156d"
         },
         "MethodSettings": [
           {
@@ -85,138 +85,28 @@
             "ResourcePath": "/*"
           }
         ],
-        "StageName": "prod",
-        "TracingEnabled": true
+        "StageName": "prod"
       },
-      "DependsOn": [
-        "RestApiAccount7C83CF5A"
-      ]
+      "DependsOn": ["RestApiAccount7C83CF5A"]
     },
-    "RestApiGET0F59260B": {
-      "Type": "AWS::ApiGateway::Method",
-      "Properties": {
-        "HttpMethod": "GET",
-        "ResourceId": {
-          "Fn::GetAtt": [
-            "RestApi0C43BF4B",
-            "RootResourceId"
-          ]
-        },
-        "RestApiId": {
-          "Ref": "RestApi0C43BF4B"
-        },
-        "AuthorizationType": "NONE",
-        "Integration": {
-          "Credentials": {
-            "Fn::GetAtt": [
-              "ApiGatewaySNSRole1BAAAE75",
-              "Arn"
-            ]
-          },
-          "IntegrationHttpMethod": "POST",
-          "IntegrationResponses": [
-            {
-              "ResponseTemplates": {
-                "application/json": "{\"message\": \"message added to topic\"}"
-              },
-              "StatusCode": "200"
-            },
-            {
-              "ResponseParameters": {
-                "method.response.header.Content-Type": "'application/json'",
-                "method.response.header.Access-Control-Allow-Origin": "'*'",
-                "method.response.header.Access-Control-Allow-Credentials": "'true'"
-              },
-              "ResponseTemplates": {
-                "application/json": "{\"state\":\"error\",\"message\":\"$util.escapeJavaScript($input.path('$.errorMessage'))\"}"
-              },
-              "SelectionPattern": "^\\[Error\\].*",
-              "StatusCode": "400"
-            }
-          ],
-          "PassthroughBehavior": "NEVER",
-          "RequestParameters": {
-            "integration.request.header.Content-Type": "'application/x-www-form-urlencoded'"
-          },
-          "RequestTemplates": {
-            "application/json": {
-              "Fn::Join": [
-                "",
-                [
-                  "Action=Publish&TargetArn=$util.urlEncode('",
-                  {
-                    "Fn::ImportValue": "XRayTracerSnsFanOutTopic:ExportsOutputRefXRayTracerSnsFanOutTopic129D23A131FFD088"
-                  },
-                  "')&Message=$util.urlEncode($context.path)&Version=2010-03-31"
-                ]
-              ]
-            }
-          },
-          "Type": "AWS",
-          "Uri": {
-            "Fn::Join": [
-              "",
-              [
-                "arn:aws:apigateway:",
-                {
-                  "Ref": "AWS::Region"
-                },
-                ":sns:path//"
-              ]
-            ]
-          }
-        },
-        "MethodResponses": [
-          {
-            "ResponseModels": {
-              "application/json": {
-                "Ref": "RestApiResponseModel056B6183"
-              }
-            },
-            "ResponseParameters": {
-              "method.response.header.Content-Type": true,
-              "method.response.header.Access-Control-Allow-Origin": true,
-              "method.response.header.Access-Control-Allow-Credentials": true
-            },
-            "StatusCode": "200"
-          },
-          {
-            "ResponseModels": {
-              "application/json": {
-                "Ref": "RestApiErrorResponseModelA6C9DD94"
-              }
-            },
-            "ResponseParameters": {
-              "method.response.header.Content-Type": true,
-              "method.response.header.Access-Control-Allow-Origin": true,
-              "method.response.header.Access-Control-Allow-Credentials": true
-            },
-            "StatusCode": "400"
-          }
-        ]
-      }
-    },
-    "RestApiproxyC95856DD": {
+    "RestApiSendEvent02C4F03F": {
       "Type": "AWS::ApiGateway::Resource",
       "Properties": {
         "ParentId": {
-          "Fn::GetAtt": [
-            "RestApi0C43BF4B",
-            "RootResourceId"
-          ]
+          "Fn::GetAtt": ["RestApi0C43BF4B", "RootResourceId"]
         },
-        "PathPart": "{proxy+}",
+        "PathPart": "SendEvent",
         "RestApiId": {
           "Ref": "RestApi0C43BF4B"
         }
       }
     },
-    "RestApiproxyGET3EA512AF": {
+    "RestApiSendEventPOSTF343B427": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
-        "HttpMethod": "GET",
+        "HttpMethod": "POST",
         "ResourceId": {
-          "Ref": "RestApiproxyC95856DD"
+          "Ref": "RestApiSendEvent02C4F03F"
         },
         "RestApiId": {
           "Ref": "RestApi0C43BF4B"
@@ -224,22 +114,19 @@
         "AuthorizationType": "NONE",
         "Integration": {
           "Credentials": {
-            "Fn::GetAtt": [
-              "ApiGatewaySNSRole1BAAAE75",
-              "Arn"
-            ]
+            "Fn::GetAtt": ["SnsRestApiApiGatewayServiceRole6B3BFDDA", "Arn"]
           },
           "IntegrationHttpMethod": "POST",
           "IntegrationResponses": [
             {
               "ResponseTemplates": {
-                "application/json": "{\"message\": \"message added to topic\"}"
+                "application/json": "{\"message\": \"Message added to SNS topic\"}"
               },
               "StatusCode": "200"
             },
             {
               "ResponseParameters": {
-                "method.response.header.Content-Type": "'application/json'",
+                "method.response.header.Content-Type": "application/json",
                 "method.response.header.Access-Control-Allow-Origin": "'*'",
                 "method.response.header.Access-Control-Allow-Credentials": "'true'"
               },
@@ -255,38 +142,16 @@
             "integration.request.header.Content-Type": "'application/x-www-form-urlencoded'"
           },
           "RequestTemplates": {
-            "application/json": {
-              "Fn::Join": [
-                "",
-                [
-                  "Action=Publish&TargetArn=$util.urlEncode('",
-                  {
-                    "Fn::ImportValue": "XRayTracerSnsFanOutTopic:ExportsOutputRefXRayTracerSnsFanOutTopic129D23A131FFD088"
-                  },
-                  "')&Message=$util.urlEncode($context.path)&Version=2010-03-31"
-                ]
-              ]
-            }
+            "application/json": "Action=Publish&Version=2010-03-31&Message=$util.urlEncode($context.path)&TargetArn=$util.urlEncode('None')"
           },
           "Type": "AWS",
-          "Uri": {
-            "Fn::Join": [
-              "",
-              [
-                "arn:aws:apigateway:",
-                {
-                  "Ref": "AWS::Region"
-                },
-                ":sns:path//"
-              ]
-            ]
-          }
+          "Uri": "arn:aws:apigateway:us-east-1:sns:path//"
         },
         "MethodResponses": [
           {
             "ResponseModels": {
               "application/json": {
-                "Ref": "RestApiResponseModel056B6183"
+                "Ref": "RestApipollResponse8796EA23"
               }
             },
             "ResponseParameters": {
@@ -299,7 +164,7 @@
           {
             "ResponseModels": {
               "application/json": {
-                "Ref": "RestApiErrorResponseModelA6C9DD94"
+                "Ref": "RestApierrorResponse2EE521BA"
               }
             },
             "ResponseParameters": {
@@ -312,14 +177,14 @@
         ]
       }
     },
-    "RestApiResponseModel056B6183": {
+    "RestApipollResponse8796EA23": {
       "Type": "AWS::ApiGateway::Model",
       "Properties": {
         "RestApiId": {
           "Ref": "RestApi0C43BF4B"
         },
         "ContentType": "application/json",
-        "Name": "ResponseModel",
+        "Name": "pollResponse",
         "Schema": {
           "properties": {
             "message": {
@@ -332,14 +197,14 @@
         }
       }
     },
-    "RestApiErrorResponseModelA6C9DD94": {
+    "RestApierrorResponse2EE521BA": {
       "Type": "AWS::ApiGateway::Model",
       "Properties": {
         "RestApiId": {
           "Ref": "RestApi0C43BF4B"
         },
         "ContentType": "application/json",
-        "Name": "ErrorResponseModel",
+        "Name": "errorResponse",
         "Schema": {
           "properties": {
             "message": {
@@ -355,7 +220,13 @@
         }
       }
     },
-    "ApiGatewaySNSRole1BAAAE75": {
+    "SnsRestApiSnsRestApiErrorTopic96D5DB3A": {
+      "Type": "AWS::SNS::Topic",
+      "Properties": {
+        "DisplayName": "SnsRestApiErrorTopic"
+      }
+    },
+    "SnsRestApiApiGatewayServiceRole6B3BFDDA": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -372,32 +243,228 @@
         }
       }
     },
-    "ApiGatewaySNSRoleDefaultPolicyCA5D0260": {
-      "Type": "AWS::IAM::Policy",
+    "SnsRestApi4XXErrorsGreaterThanOnePercentB8424AF0": {
+      "Type": "AWS::CloudWatch::Alarm",
       "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sns:Publish",
-              "Effect": "Allow",
-              "Resource": {
-                "Fn::ImportValue": "XRayTracerSnsFanOutTopic:ExportsOutputRefXRayTracerSnsFanOutTopic129D23A131FFD088"
-              }
-            }
-          ],
-          "Version": "2012-10-17"
-        },
-        "PolicyName": "ApiGatewaySNSRoleDefaultPolicyCA5D0260",
-        "Roles": [
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": 6,
+        "AlarmActions": [
           {
-            "Ref": "ApiGatewaySNSRole1BAAAE75"
+            "Ref": "SnsRestApiSnsRestApiErrorTopic96D5DB3A"
           }
-        ]
+        ],
+        "DatapointsToAlarm": 1,
+        "Metrics": [
+          {
+            "Expression": "m1 / m2 * 100",
+            "Id": "expr_1",
+            "Label": "api_gateway_4XX_errors_percentage"
+          },
+          {
+            "Id": "m1",
+            "Label": "4XX_errors",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "ApiId",
+                    "Value": {
+                      "Ref": "RestApi0C43BF4B"
+                    }
+                  }
+                ],
+                "MetricName": "4XXError",
+                "Namespace": "AWS/ApiGateway"
+              },
+              "Period": 300,
+              "Stat": "Sum",
+              "Unit": "Count"
+            },
+            "ReturnData": false
+          },
+          {
+            "Id": "m2",
+            "Label": "number_of_requests",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "ApiId",
+                    "Value": {
+                      "Ref": "RestApi0C43BF4B"
+                    }
+                  }
+                ],
+                "MetricName": "Count",
+                "Namespace": "AWS/ApiGateway"
+              },
+              "Period": 300,
+              "Stat": "Sum",
+              "Unit": "Count"
+            },
+            "ReturnData": false
+          }
+        ],
+        "Threshold": 1,
+        "TreatMissingData": "notBreaching"
+      }
+    },
+    "SnsRestApi5XXErrorsGreaterThanZero920B4512": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": 6,
+        "AlarmActions": [
+          {
+            "Ref": "SnsRestApiSnsRestApiErrorTopic96D5DB3A"
+          }
+        ],
+        "DatapointsToAlarm": 1,
+        "Metrics": [
+          {
+            "Id": "m1",
+            "Label": "api_gateway_5XX_errors",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "ApiId",
+                    "Value": {
+                      "Ref": "RestApi0C43BF4B"
+                    }
+                  }
+                ],
+                "MetricName": "5XXError",
+                "Namespace": "AWS/ApiGateway"
+              },
+              "Period": 900,
+              "Stat": "p99",
+              "Unit": "Count"
+            },
+            "ReturnData": true
+          }
+        ],
+        "Threshold": 0,
+        "TreatMissingData": "notBreaching"
+      }
+    },
+    "SnsRestApiP99LatencyGreaterThanOneSecond3BD0E0BC": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": 6,
+        "AlarmActions": [
+          {
+            "Ref": "SnsRestApiSnsRestApiErrorTopic96D5DB3A"
+          }
+        ],
+        "DatapointsToAlarm": 1,
+        "Metrics": [
+          {
+            "Id": "m1",
+            "Label": "api_gateway_latency",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "ApiId",
+                    "Value": {
+                      "Ref": "RestApi0C43BF4B"
+                    }
+                  }
+                ],
+                "MetricName": "Latency",
+                "Namespace": "AWS/ApiGateway"
+              },
+              "Period": 900,
+              "Stat": "p99",
+              "Unit": "Count"
+            },
+            "ReturnData": true
+          }
+        ],
+        "Threshold": 1000,
+        "TreatMissingData": "notBreaching"
+      }
+    },
+    "SnsRestApiCloudWatchDashBoardE124436C": {
+      "Type": "AWS::CloudWatch::Dashboard",
+      "Properties": {
+        "DashboardBody": {
+          "Fn::Join": [
+            "",
+            [
+              "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Requests\",\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"stacked\":false,\"metrics\":[[\"AWS/ApiGateway\",\"Count\",\"ApiId\",\"",
+              {
+                "Ref": "RestApi0C43BF4B"
+              },
+              "\",{\"label\":\"# Requests\",\"period\":900,\"stat\":\"Sum\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"api_gateway_latency\",\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"stacked\":true,\"metrics\":[[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
+              {
+                "Ref": "RestApi0C43BF4B"
+              },
+              "\",{\"label\":\"api_gateway_latency_p50\",\"period\":900,\"stat\":\"p50\"}],[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
+              {
+                "Ref": "RestApi0C43BF4B"
+              },
+              "\",{\"label\":\"api_gateway_latency_p90\",\"period\":900,\"stat\":\"p90\"}],[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
+              {
+                "Ref": "RestApi0C43BF4B"
+              },
+              "\",{\"label\":\"api_gateway_latency_p99\",\"period\":900,\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"api_gateway_errors\",\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"stacked\":true,\"metrics\":[[\"AWS/ApiGateway\",\"4XXError\",\"ApiId\",\"",
+              {
+                "Ref": "RestApi0C43BF4B"
+              },
+              "\",{\"label\":\"api_gateway_4XXErrors\",\"period\":900,\"stat\":\"Sum\"}],[\"AWS/ApiGateway\",\"5XXError\",\"ApiId\",\"",
+              {
+                "Ref": "RestApi0C43BF4B"
+              },
+              "\",{\"label\":\"api_gateway_5XXErrors\",\"period\":900,\"stat\":\"Sum\"}]],\"yAxis\":{}}}]}"
+            ]
+          ]
+        }
       }
     }
   },
   "Outputs": {
     "RestApiEndpoint0551178A": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Ref": "RestApi0C43BF4B"
+            },
+            ".execute-api.",
+            {
+              "Ref": "AWS::Region"
+            },
+            ".",
+            {
+              "Ref": "AWS::URLSuffix"
+            },
+            "/",
+            {
+              "Ref": "RestApiDeploymentStageprod3855DE66"
+            },
+            "/"
+          ]
+        ]
+      }
+    },
+    "SnsRestApiSnsRestApiURL90807520": {
       "Value": {
         "Fn::Join": [
           "",

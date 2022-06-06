@@ -46,18 +46,37 @@ class WellArchitected(aws_cdk.App):
         well_architected_stacks.lambda_trilogy.lambda_single_purpose.LambdaSinglePurpose(self, "LambdaSinglePurpose")
 
     def xray_tracer(self):
-        xray_tracer_sns_topic = xray_tracer.sns_topic.SnsTopic(
-            self, 'XRayTracerSnsFanOutTopic', display_name='The XRay Tracer Fan Out Topic'
-        ).topic
+        xray_tracer_sns = xray_tracer.sns_topic.SnsTopic(
+            self, 'XRayTracerSnsFanOutTopic',
+            display_name='The XRay Tracer Fan Out Topic',
+        )
         xray_tracer.sns_rest_api.SnsRestApi(
             self, 'SnsRestApi',
-            sns_topic=xray_tracer_sns_topic
+            sns_topic=xray_tracer_sns.sns_topic,
+            error_topic=xray_tracer_sns.error_topic,
         )
-        xray_tracer.sns_flow.SnsFlow(self, 'SnsFlow', sns_topic=xray_tracer_sns_topic)
-        xray_tracer.sqs_flow.SqsFlow(self, 'SqsFlow', sns_topic=xray_tracer_sns_topic)
-        xray_tracer.http_flow.HttpFlow(self, 'HttpFlow', sns_topic=xray_tracer_sns_topic)
+        xray_tracer.sns_flow.SnsFlow(
+            self, 'SnsFlow',
+            sns_topic=xray_tracer_sns.sns_topic,
+            error_topic=xray_tracer_sns.error_topic,
+        )
+        xray_tracer.sqs_flow.SqsFlow(
+            self, 'SqsFlow',
+            sns_topic=xray_tracer_sns.sns_topic,
+            error_topic=xray_tracer_sns.error_topic,
+        )
+        xray_tracer.http_flow.HttpFlow(
+            self, 'HttpFlow',
+            sns_topic=xray_tracer_sns.sns_topic,
+            error_topic=xray_tracer_sns.error_topic,
+        )
         xray_tracer.dynamodb_flow.DynamoDBFlow(
-            self, 'DynamoDBFlow', sns_topic=xray_tracer_sns_topic
+            self, 'DynamoDBFlow',
+            sns_topic=xray_tracer_sns.sns_topic,
+            error_topic=xray_tracer_sns.error_topic,
         )
 
 WellArchitected().synth()
+
+# TODO
+# StateMachine examples - https://docs.aws.amazon.com/step-functions/latest/dg/create-sample-projects.html

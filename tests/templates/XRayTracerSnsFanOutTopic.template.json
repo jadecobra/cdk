@@ -1,5 +1,11 @@
 {
   "Resources": {
+    "XRayTracerSnsFanOutTopicErrorTopic86E44AC3": {
+      "Type": "AWS::SNS::Topic",
+      "Properties": {
+        "DisplayName": "XRayTracerSnsFanOutTopicErrorTopic"
+      }
+    },
     "XRayTracerSnsFanOutTopic129D23A1": {
       "Type": "AWS::SNS::Topic",
       "Properties": {
