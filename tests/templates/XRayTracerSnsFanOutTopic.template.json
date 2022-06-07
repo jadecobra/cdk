@@ -14,6 +14,14 @@
     }
   },
   "Outputs": {
+    "ExportsOutputRefXRayTracerSnsFanOutTopicErrorTopic86E44AC38D80127A": {
+      "Value": {
+        "Ref": "XRayTracerSnsFanOutTopicErrorTopic86E44AC3"
+      },
+      "Export": {
+        "Name": "XRayTracerSnsFanOutTopic:ExportsOutputRefXRayTracerSnsFanOutTopicErrorTopic86E44AC38D80127A"
+      }
+    },
     "ExportsOutputRefXRayTracerSnsFanOutTopic129D23A131FFD088": {
       "Value": {
         "Ref": "XRayTracerSnsFanOutTopic129D23A1"

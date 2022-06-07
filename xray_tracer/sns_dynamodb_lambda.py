@@ -8,28 +8,29 @@ import well_architected
 import well_architected_constructs.lambda_function
 import well_architected_constructs.dynamodb_table
 
-class DynamoDBFlow(well_architected.Stack):
-    def __init__(self, scope: constructs.Construct, id: str, sns_topic: aws_sns.ITopic = None, **kwargs) -> None:
+class SnsLambdaDynamoDb(well_architected.Stack):
+
+    def __init__(
+        self, scope: constructs.Construct, id: str,
+        sns_topic: aws_sns.ITopic = None, **kwargs
+    ) -> None:
         super().__init__(scope, id, **kwargs)
 
-        table = well_architected_constructs.dynamodb_table.DynamoDBTableConstruct(
-            self, "Hits",
-            partition_key=aws_dynamodb.Attribute(
-                name="path", type=aws_dynamodb.AttributeType.STRING
-            )
+
+        self.dynamodb_table = well_architected_constructs.dynamodb_table.DynamoDBTableConstruct(
+            self, "DynamoDbTable",
+            partition_key="path",
         ).dynamodb_table
 
         self.lambda_function = well_architected_constructs.lambda_function.create_python_lambda_function(
             self, function_name="hit_counter",
             environment_variables={
-                "HITS_TABLE_NAME": table.table_name
+                "HITS_TABLE_NAME": self.dynamodb_table.table_name
             }
         )
 
-        table.grant_read_write_data(self.lambda_function)
+        self.dynamodb_table.grant_read_write_data(self.lambda_function)
         sns_topic.add_subscription(
             aws_sns_subscriptions.LambdaSubscription(
-
                 self.lambda_function
-
         ))

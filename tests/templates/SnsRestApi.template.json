@@ -220,12 +220,6 @@
         }
       }
     },
-    "SnsRestApiSnsRestApiErrorTopic96D5DB3A": {
-      "Type": "AWS::SNS::Topic",
-      "Properties": {
-        "DisplayName": "SnsRestApiErrorTopic"
-      }
-    },
     "SnsRestApiApiGatewayServiceRole6B3BFDDA": {
       "Type": "AWS::IAM::Role",
       "Properties": {
@@ -250,7 +244,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "SnsRestApiSnsRestApiErrorTopic96D5DB3A"
+            "Fn::ImportValue": "XRayTracerSnsFanOutTopic:ExportsOutputRefXRayTracerSnsFanOutTopicErrorTopic86E44AC38D80127A"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -316,7 +310,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "SnsRestApiSnsRestApiErrorTopic96D5DB3A"
+            "Fn::ImportValue": "XRayTracerSnsFanOutTopic:ExportsOutputRefXRayTracerSnsFanOutTopicErrorTopic86E44AC38D80127A"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -355,7 +349,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "SnsRestApiSnsRestApiErrorTopic96D5DB3A"
+            "Fn::ImportValue": "XRayTracerSnsFanOutTopic:ExportsOutputRefXRayTracerSnsFanOutTopicErrorTopic86E44AC38D80127A"
           }
         ],
         "DatapointsToAlarm": 1,
