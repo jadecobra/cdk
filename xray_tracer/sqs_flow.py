@@ -6,16 +6,18 @@ import well_architected_constructs.lambda_function
 
 class SqsFlow(well_architected.Stack):
 
-    def __init__(self, scope: constructs.Construct, id: str, sns_topic: aws_cdk.aws_sns.ITopic = None, **kwargs) -> None:
+    def __init__(
+        self, scope: constructs.Construct, id: str,
+        sns_topic=None, **kwargs
+    ) -> None:
         super().__init__(scope, id, **kwargs)
-        self.sns_topic = sns_topic
         self.sqs_queue = aws_cdk.aws_sqs.Queue(
             self, 'RDSPublishQueue',
             visibility_timeout=aws_cdk.Duration.seconds(300)
         )
         self.sqs_publisher = self.create_sqs_publishing_lambda(
             sqs_queue=self.sqs_queue,
-            sns_topic=self.sns_topic
+            sns_topic=sns_topic
         )
         self.sqs_subscriber = self.create_sqs_subscribing_lambda(self.sqs_queue)
 

@@ -72,34 +72,34 @@ class WellArchitected(aws_cdk.App):
         )
 
     def xray_tracer(self):
-        xray_tracer_sns = xray_tracer.sns_topic.SnsTopic(
+        xray_tracer_sns_topic = xray_tracer.sns_topic.SnsTopic(
             self, 'XRayTracerSnsFanOutTopic',
             display_name='The XRay Tracer Fan Out Topic',
         )
         xray_tracer.sns_rest_api.SnsRestApi(
             self, 'SnsRestApi',
-            sns_topic=xray_tracer_sns.sns_topic,
-            error_topic=xray_tracer_sns.error_topic,
+            sns_topic=xray_tracer_sns_topic.sns_topic,
+            error_topic=xray_tracer_sns_topic.error_topic,
         )
         xray_tracer.sns_flow.SnsFlow(
             self, 'SnsFlow',
-            sns_topic=xray_tracer_sns.sns_topic,
-            error_topic=xray_tracer_sns.error_topic,
+            sns_topic=xray_tracer_sns_topic.sns_topic,
+            error_topic=xray_tracer_sns_topic.error_topic,
         )
         xray_tracer.sqs_flow.SqsFlow(
             self, 'SqsFlow',
-            sns_topic=xray_tracer_sns.sns_topic,
-            error_topic=xray_tracer_sns.error_topic,
+            sns_topic=xray_tracer_sns_topic.sns_topic,
+            error_topic=xray_tracer_sns_topic.error_topic,
         )
         xray_tracer.http_flow.HttpFlow(
             self, 'HttpFlow',
-            sns_topic=xray_tracer_sns.sns_topic,
-            error_topic=xray_tracer_sns.error_topic,
+            sns_topic=xray_tracer_sns_topic.sns_topic,
+            error_topic=xray_tracer_sns_topic.error_topic,
         )
-        xray_tracer.sns_dynamodb_lambda.SnsLambdaDynamoDb(
-            self, 'DynamoDBFlow',
-            sns_topic=xray_tracer_sns.sns_topic,
-            error_topic=xray_tracer_sns.error_topic,
+        xray_tracer.sns_lambda_dynamodb.SnsLambdaDynamodb(
+            self, 'SnsDynamodbLambda',
+            sns_topic=xray_tracer_sns_topic.sns_topic,
+            error_topic=xray_tracer_sns_topic.error_topic,
         )
 
 WellArchitected().synth()
