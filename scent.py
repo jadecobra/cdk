@@ -15,6 +15,7 @@ import os
 watch_paths = [
     '.',
     'tests/',
+    'tests/templates/',
 ]
 
 # this gets invoked on every file that gets changed in the directory. Return

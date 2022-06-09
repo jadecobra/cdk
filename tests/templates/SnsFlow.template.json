@@ -6,13 +6,13 @@
         "DisplayName": "The XRay Tracer CDK Pattern Topic"
       }
     },
-    "snspublishsnspublishErrorTopic39A56003": {
+    "snspublishersnspublisherErrorTopic2B379FB2": {
       "Type": "AWS::SNS::Topic",
       "Properties": {
-        "DisplayName": "sns_publishErrorTopic"
+        "DisplayName": "sns_publisherErrorTopic"
       }
     },
-    "snspublishAwsXraySdkLambdaLayer071B857B": {
+    "snspublisherAwsXraySdkLambdaLayer67605EB1": {
       "Type": "AWS::Lambda::LayerVersion",
       "Properties": {
         "Content": {
@@ -56,7 +56,7 @@
         "Description": "aws-xray-sdk Lambda Layer"
       }
     },
-    "snspublishLambdaFunctionServiceRoleBE8DA9C2": {
+    "snspublisherLambdaFunctionServiceRoleDC654582": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -87,7 +87,7 @@
         ]
       }
     },
-    "snspublishLambdaFunctionServiceRoleDefaultPolicyD927DA99": {
+    "snspublisherLambdaFunctionServiceRoleDefaultPolicyDA618087": {
       "Type": "AWS::IAM::Policy",
       "Properties": {
         "PolicyDocument": {
@@ -107,20 +107,20 @@
           ],
           "Version": "2012-10-17"
         },
-        "PolicyName": "snspublishLambdaFunctionServiceRoleDefaultPolicyD927DA99",
+        "PolicyName": "snspublisherLambdaFunctionServiceRoleDefaultPolicyDA618087",
         "Roles": [
           {
-            "Ref": "snspublishLambdaFunctionServiceRoleBE8DA9C2"
+            "Ref": "snspublisherLambdaFunctionServiceRoleDC654582"
           }
         ]
       }
     },
-    "snspublishLambdaFunctionE7ECD8FF": {
+    "snspublisherLambdaFunction52ABBD29": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": {
-            "Ref": "AssetParametersef7aa034d437b1c1976e69f919345dcddf4b4c9c6a6947d000d52902c30271cfS3Bucket81A6DB81"
+            "Ref": "AssetParameters07c9919aaa0ea66c82b6b489e9ad809349439d34a5557e2d024e5f0451d8a281S3Bucket23780A09"
           },
           "S3Key": {
             "Fn::Join": [
@@ -133,7 +133,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParametersef7aa034d437b1c1976e69f919345dcddf4b4c9c6a6947d000d52902c30271cfS3VersionKey99E114A0"
+                          "Ref": "AssetParameters07c9919aaa0ea66c82b6b489e9ad809349439d34a5557e2d024e5f0451d8a281S3VersionKey70EFC7B0"
                         }
                       ]
                     }
@@ -146,7 +146,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParametersef7aa034d437b1c1976e69f919345dcddf4b4c9c6a6947d000d52902c30271cfS3VersionKey99E114A0"
+                          "Ref": "AssetParameters07c9919aaa0ea66c82b6b489e9ad809349439d34a5557e2d024e5f0451d8a281S3VersionKey70EFC7B0"
                         }
                       ]
                     }
@@ -157,7 +157,10 @@
           }
         },
         "Role": {
-          "Fn::GetAtt": ["snspublishLambdaFunctionServiceRoleBE8DA9C2", "Arn"]
+          "Fn::GetAtt": [
+            "snspublisherLambdaFunctionServiceRoleDC654582",
+            "Arn"
+          ]
         },
         "Environment": {
           "Variables": {
@@ -166,10 +169,10 @@
             }
           }
         },
-        "Handler": "sns_publish.handler",
+        "Handler": "sns_publisher.handler",
         "Layers": [
           {
-            "Ref": "snspublishAwsXraySdkLambdaLayer071B857B"
+            "Ref": "snspublisherAwsXraySdkLambdaLayer67605EB1"
           }
         ],
         "Runtime": "python3.9",
@@ -179,16 +182,16 @@
         }
       },
       "DependsOn": [
-        "snspublishLambdaFunctionServiceRoleDefaultPolicyD927DA99",
-        "snspublishLambdaFunctionServiceRoleBE8DA9C2"
+        "snspublisherLambdaFunctionServiceRoleDefaultPolicyDA618087",
+        "snspublisherLambdaFunctionServiceRoleDC654582"
       ]
     },
-    "snspublishLambdaFunctionAllowInvokeSnsFlowSNSTopicACE071C85E8FF116": {
+    "snspublisherLambdaFunctionAllowInvokeXRayTracerSnsFanOutTopic4E706A0907A3C54F": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Fn::GetAtt": ["snspublishLambdaFunctionE7ECD8FF", "Arn"]
+          "Fn::GetAtt": ["snspublisherLambdaFunction52ABBD29", "Arn"]
         },
         "Principal": "sns.amazonaws.com",
         "SourceArn": {
@@ -196,7 +199,7 @@
         }
       }
     },
-    "snspublishLambdaFunctionSNSTopic766E3B5D": {
+    "snspublisherLambdaFunctionXRayTracerSnsFanOutTopicA0365C17": {
       "Type": "AWS::SNS::Subscription",
       "Properties": {
         "Protocol": "lambda",
@@ -204,31 +207,18 @@
           "Fn::ImportValue": "XRayTracerSnsFanOutTopic:ExportsOutputRefXRayTracerSnsFanOutTopic129D23A131FFD088"
         },
         "Endpoint": {
-          "Fn::GetAtt": ["snspublishLambdaFunctionE7ECD8FF", "Arn"]
-        },
-        "Region": {
-          "Fn::Select": [
-            3,
-            {
-              "Fn::Split": [
-                ":",
-                {
-                  "Fn::ImportValue": "XRayTracerSnsFanOutTopic:ExportsOutputRefXRayTracerSnsFanOutTopic129D23A131FFD088"
-                }
-              ]
-            }
-          ]
+          "Fn::GetAtt": ["snspublisherLambdaFunction52ABBD29", "Arn"]
         }
       }
     },
-    "snspublishLambdaInvocationsErrorsGreaterThan2Percent0AD93E8E": {
+    "snspublisherLambdaInvocationsErrorsGreaterThan2Percent35E4736E": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "snspublishsnspublishErrorTopic39A56003"
+            "Ref": "snspublishersnspublisherErrorTopic2B379FB2"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -246,7 +236,7 @@
                   {
                     "Name": "FunctionName",
                     "Value": {
-                      "Ref": "snspublishLambdaFunctionE7ECD8FF"
+                      "Ref": "snspublisherLambdaFunction52ABBD29"
                     }
                   }
                 ],
@@ -266,7 +256,7 @@
                   {
                     "Name": "FunctionName",
                     "Value": {
-                      "Ref": "snspublishLambdaFunctionE7ECD8FF"
+                      "Ref": "snspublisherLambdaFunction52ABBD29"
                     }
                   }
                 ],
@@ -283,14 +273,14 @@
         "TreatMissingData": "notBreaching"
       }
     },
-    "snspublishLambdaP99LongDurationGreaterThan1s6EBABEE2": {
+    "snspublisherLambdaP99LongDurationGreaterThan1s4CB71B21": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "snspublishsnspublishErrorTopic39A56003"
+            "Ref": "snspublishersnspublisherErrorTopic2B379FB2"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -298,7 +288,7 @@
           {
             "Name": "FunctionName",
             "Value": {
-              "Ref": "snspublishLambdaFunctionE7ECD8FF"
+              "Ref": "snspublisherLambdaFunction52ABBD29"
             }
           }
         ],
@@ -310,14 +300,14 @@
         "TreatMissingData": "notBreaching"
       }
     },
-    "snspublishLambdaThrottledInvocationsGreaterThan2Percent65F39F69": {
+    "snspublisherLambdaThrottledInvocationsGreaterThan2PercentA7540C1A": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "snspublishsnspublishErrorTopic39A56003"
+            "Ref": "snspublishersnspublisherErrorTopic2B379FB2"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -335,7 +325,7 @@
                   {
                     "Name": "FunctionName",
                     "Value": {
-                      "Ref": "snspublishLambdaFunctionE7ECD8FF"
+                      "Ref": "snspublisherLambdaFunction52ABBD29"
                     }
                   }
                 ],
@@ -355,7 +345,7 @@
                   {
                     "Name": "FunctionName",
                     "Value": {
-                      "Ref": "snspublishLambdaFunctionE7ECD8FF"
+                      "Ref": "snspublisherLambdaFunction52ABBD29"
                     }
                   }
                 ],
@@ -372,7 +362,7 @@
         "TreatMissingData": "notBreaching"
       }
     },
-    "snspublishCloudWatchDashBoard5DA9CB77": {
+    "snspublisherCloudWatchDashBoard9B7997BE": {
       "Type": "AWS::CloudWatch::Dashboard",
       "Properties": {
         "DashboardBody": {
@@ -385,11 +375,11 @@
               },
               "\",\"stacked\":false,\"metrics\":[[{\"label\":\"invocations_errored_percentage_last_5_mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
               {
-                "Ref": "snspublishLambdaFunctionE7ECD8FF"
+                "Ref": "snspublisherLambdaFunction52ABBD29"
               },
               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
               {
-                "Ref": "snspublishLambdaFunctionE7ECD8FF"
+                "Ref": "snspublisherLambdaFunction52ABBD29"
               },
               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_duration\",\"region\":\"",
               {
@@ -397,15 +387,15 @@
               },
               "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
               {
-                "Ref": "snspublishLambdaFunctionE7ECD8FF"
+                "Ref": "snspublisherLambdaFunction52ABBD29"
               },
               "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
               {
-                "Ref": "snspublishLambdaFunctionE7ECD8FF"
+                "Ref": "snspublisherLambdaFunction52ABBD29"
               },
               "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
               {
-                "Ref": "snspublishLambdaFunctionE7ECD8FF"
+                "Ref": "snspublisherLambdaFunction52ABBD29"
               },
               "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_throttle_percentage\",\"region\":\"",
               {
@@ -413,11 +403,11 @@
               },
               "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled_requests_percentage_last_30_mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
               {
-                "Ref": "snspublishLambdaFunctionE7ECD8FF"
+                "Ref": "snspublisherLambdaFunction52ABBD29"
               },
               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
               {
-                "Ref": "snspublishLambdaFunctionE7ECD8FF"
+                "Ref": "snspublisherLambdaFunction52ABBD29"
               },
               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
             ]
@@ -425,13 +415,13 @@
         }
       }
     },
-    "snssubscribesnssubscribeErrorTopic5A9C507B": {
+    "snssubscribersnssubscriberErrorTopicC97D0B7A": {
       "Type": "AWS::SNS::Topic",
       "Properties": {
-        "DisplayName": "sns_subscribeErrorTopic"
+        "DisplayName": "sns_subscriberErrorTopic"
       }
     },
-    "snssubscribeAwsXraySdkLambdaLayer5CD46409": {
+    "snssubscriberAwsXraySdkLambdaLayerB19B9A98": {
       "Type": "AWS::Lambda::LayerVersion",
       "Properties": {
         "Content": {
@@ -475,7 +465,7 @@
         "Description": "aws-xray-sdk Lambda Layer"
       }
     },
-    "snssubscribeLambdaFunctionServiceRole6068C33F": {
+    "snssubscriberLambdaFunctionServiceRoleE61D3DE4": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -506,7 +496,7 @@
         ]
       }
     },
-    "snssubscribeLambdaFunctionServiceRoleDefaultPolicy7C3E54A8": {
+    "snssubscriberLambdaFunctionServiceRoleDefaultPolicyCBA42569": {
       "Type": "AWS::IAM::Policy",
       "Properties": {
         "PolicyDocument": {
@@ -519,20 +509,20 @@
           ],
           "Version": "2012-10-17"
         },
-        "PolicyName": "snssubscribeLambdaFunctionServiceRoleDefaultPolicy7C3E54A8",
+        "PolicyName": "snssubscriberLambdaFunctionServiceRoleDefaultPolicyCBA42569",
         "Roles": [
           {
-            "Ref": "snssubscribeLambdaFunctionServiceRole6068C33F"
+            "Ref": "snssubscriberLambdaFunctionServiceRoleE61D3DE4"
           }
         ]
       }
     },
-    "snssubscribeLambdaFunctionE84E36B6": {
+    "snssubscriberLambdaFunction1AFFC230": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": {
-            "Ref": "AssetParameters974996a9096d42156ceb01e12ea154d428b9b643131593d6d5dbc4dc9d11918fS3Bucket69F99350"
+            "Ref": "AssetParameters3d42620290f1423384e13f128bc3b5aaaf7be4788c358b037a4ef3cd8eae816fS3Bucket886C2428"
           },
           "S3Key": {
             "Fn::Join": [
@@ -545,7 +535,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters974996a9096d42156ceb01e12ea154d428b9b643131593d6d5dbc4dc9d11918fS3VersionKey160115D9"
+                          "Ref": "AssetParameters3d42620290f1423384e13f128bc3b5aaaf7be4788c358b037a4ef3cd8eae816fS3VersionKeyEA0A672C"
                         }
                       ]
                     }
@@ -558,7 +548,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters974996a9096d42156ceb01e12ea154d428b9b643131593d6d5dbc4dc9d11918fS3VersionKey160115D9"
+                          "Ref": "AssetParameters3d42620290f1423384e13f128bc3b5aaaf7be4788c358b037a4ef3cd8eae816fS3VersionKeyEA0A672C"
                         }
                       ]
                     }
@@ -570,14 +560,14 @@
         },
         "Role": {
           "Fn::GetAtt": [
-            "snssubscribeLambdaFunctionServiceRole6068C33F",
+            "snssubscriberLambdaFunctionServiceRoleE61D3DE4",
             "Arn"
           ]
         },
-        "Handler": "sns_subscribe.handler",
+        "Handler": "sns_subscriber.handler",
         "Layers": [
           {
-            "Ref": "snssubscribeAwsXraySdkLambdaLayer5CD46409"
+            "Ref": "snssubscriberAwsXraySdkLambdaLayerB19B9A98"
           }
         ],
         "Runtime": "python3.9",
@@ -587,16 +577,16 @@
         }
       },
       "DependsOn": [
-        "snssubscribeLambdaFunctionServiceRoleDefaultPolicy7C3E54A8",
-        "snssubscribeLambdaFunctionServiceRole6068C33F"
+        "snssubscriberLambdaFunctionServiceRoleDefaultPolicyCBA42569",
+        "snssubscriberLambdaFunctionServiceRoleE61D3DE4"
       ]
     },
-    "snssubscribeLambdaFunctionAllowInvokeSnsFlowTheXRayTracerSnsTopic2E3ECD150E3B6B47": {
+    "snssubscriberLambdaFunctionAllowInvokeSnsFlowTheXRayTracerSnsTopic2E3ECD15BE66C1E4": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Fn::GetAtt": ["snssubscribeLambdaFunctionE84E36B6", "Arn"]
+          "Fn::GetAtt": ["snssubscriberLambdaFunction1AFFC230", "Arn"]
         },
         "Principal": "sns.amazonaws.com",
         "SourceArn": {
@@ -604,7 +594,7 @@
         }
       }
     },
-    "snssubscribeLambdaFunctionTheXRayTracerSnsTopicC8EDB3DC": {
+    "snssubscriberLambdaFunctionTheXRayTracerSnsTopic98A68EBF": {
       "Type": "AWS::SNS::Subscription",
       "Properties": {
         "Protocol": "lambda",
@@ -612,18 +602,18 @@
           "Ref": "TheXRayTracerSnsTopicCCE2005E"
         },
         "Endpoint": {
-          "Fn::GetAtt": ["snssubscribeLambdaFunctionE84E36B6", "Arn"]
+          "Fn::GetAtt": ["snssubscriberLambdaFunction1AFFC230", "Arn"]
         }
       }
     },
-    "snssubscribeLambdaInvocationsErrorsGreaterThan2Percent1942FAB1": {
+    "snssubscriberLambdaInvocationsErrorsGreaterThan2Percent9ED904D6": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "snssubscribesnssubscribeErrorTopic5A9C507B"
+            "Ref": "snssubscribersnssubscriberErrorTopicC97D0B7A"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -641,7 +631,7 @@
                   {
                     "Name": "FunctionName",
                     "Value": {
-                      "Ref": "snssubscribeLambdaFunctionE84E36B6"
+                      "Ref": "snssubscriberLambdaFunction1AFFC230"
                     }
                   }
                 ],
@@ -661,7 +651,7 @@
                   {
                     "Name": "FunctionName",
                     "Value": {
-                      "Ref": "snssubscribeLambdaFunctionE84E36B6"
+                      "Ref": "snssubscriberLambdaFunction1AFFC230"
                     }
                   }
                 ],
@@ -678,14 +668,14 @@
         "TreatMissingData": "notBreaching"
       }
     },
-    "snssubscribeLambdaP99LongDurationGreaterThan1sE7AB38C9": {
+    "snssubscriberLambdaP99LongDurationGreaterThan1s27504019": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "snssubscribesnssubscribeErrorTopic5A9C507B"
+            "Ref": "snssubscribersnssubscriberErrorTopicC97D0B7A"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -693,7 +683,7 @@
           {
             "Name": "FunctionName",
             "Value": {
-              "Ref": "snssubscribeLambdaFunctionE84E36B6"
+              "Ref": "snssubscriberLambdaFunction1AFFC230"
             }
           }
         ],
@@ -705,14 +695,14 @@
         "TreatMissingData": "notBreaching"
       }
     },
-    "snssubscribeLambdaThrottledInvocationsGreaterThan2Percent939E3163": {
+    "snssubscriberLambdaThrottledInvocationsGreaterThan2PercentAF93AC4A": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "snssubscribesnssubscribeErrorTopic5A9C507B"
+            "Ref": "snssubscribersnssubscriberErrorTopicC97D0B7A"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -730,7 +720,7 @@
                   {
                     "Name": "FunctionName",
                     "Value": {
-                      "Ref": "snssubscribeLambdaFunctionE84E36B6"
+                      "Ref": "snssubscriberLambdaFunction1AFFC230"
                     }
                   }
                 ],
@@ -750,7 +740,7 @@
                   {
                     "Name": "FunctionName",
                     "Value": {
-                      "Ref": "snssubscribeLambdaFunctionE84E36B6"
+                      "Ref": "snssubscriberLambdaFunction1AFFC230"
                     }
                   }
                 ],
@@ -767,7 +757,7 @@
         "TreatMissingData": "notBreaching"
       }
     },
-    "snssubscribeCloudWatchDashBoard0367AF74": {
+    "snssubscriberCloudWatchDashBoardCF55F938": {
       "Type": "AWS::CloudWatch::Dashboard",
       "Properties": {
         "DashboardBody": {
@@ -780,11 +770,11 @@
               },
               "\",\"stacked\":false,\"metrics\":[[{\"label\":\"invocations_errored_percentage_last_5_mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
               {
-                "Ref": "snssubscribeLambdaFunctionE84E36B6"
+                "Ref": "snssubscriberLambdaFunction1AFFC230"
               },
               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
               {
-                "Ref": "snssubscribeLambdaFunctionE84E36B6"
+                "Ref": "snssubscriberLambdaFunction1AFFC230"
               },
               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_duration\",\"region\":\"",
               {
@@ -792,15 +782,15 @@
               },
               "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
               {
-                "Ref": "snssubscribeLambdaFunctionE84E36B6"
+                "Ref": "snssubscriberLambdaFunction1AFFC230"
               },
               "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
               {
-                "Ref": "snssubscribeLambdaFunctionE84E36B6"
+                "Ref": "snssubscriberLambdaFunction1AFFC230"
               },
               "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
               {
-                "Ref": "snssubscribeLambdaFunctionE84E36B6"
+                "Ref": "snssubscriberLambdaFunction1AFFC230"
               },
               "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_throttle_percentage\",\"region\":\"",
               {
@@ -808,11 +798,11 @@
               },
               "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled_requests_percentage_last_30_mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
               {
-                "Ref": "snssubscribeLambdaFunctionE84E36B6"
+                "Ref": "snssubscriberLambdaFunction1AFFC230"
               },
               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
               {
-                "Ref": "snssubscribeLambdaFunctionE84E36B6"
+                "Ref": "snssubscriberLambdaFunction1AFFC230"
               },
               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
             ]
@@ -834,29 +824,29 @@
       "Type": "String",
       "Description": "Artifact hash for asset \"1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0\""
     },
-    "AssetParametersef7aa034d437b1c1976e69f919345dcddf4b4c9c6a6947d000d52902c30271cfS3Bucket81A6DB81": {
+    "AssetParameters07c9919aaa0ea66c82b6b489e9ad809349439d34a5557e2d024e5f0451d8a281S3Bucket23780A09": {
       "Type": "String",
-      "Description": "S3 bucket for asset \"ef7aa034d437b1c1976e69f919345dcddf4b4c9c6a6947d000d52902c30271cf\""
+      "Description": "S3 bucket for asset \"07c9919aaa0ea66c82b6b489e9ad809349439d34a5557e2d024e5f0451d8a281\""
     },
-    "AssetParametersef7aa034d437b1c1976e69f919345dcddf4b4c9c6a6947d000d52902c30271cfS3VersionKey99E114A0": {
+    "AssetParameters07c9919aaa0ea66c82b6b489e9ad809349439d34a5557e2d024e5f0451d8a281S3VersionKey70EFC7B0": {
       "Type": "String",
-      "Description": "S3 key for asset version \"ef7aa034d437b1c1976e69f919345dcddf4b4c9c6a6947d000d52902c30271cf\""
+      "Description": "S3 key for asset version \"07c9919aaa0ea66c82b6b489e9ad809349439d34a5557e2d024e5f0451d8a281\""
     },
-    "AssetParametersef7aa034d437b1c1976e69f919345dcddf4b4c9c6a6947d000d52902c30271cfArtifactHashD148D3CB": {
+    "AssetParameters07c9919aaa0ea66c82b6b489e9ad809349439d34a5557e2d024e5f0451d8a281ArtifactHash6948628B": {
       "Type": "String",
-      "Description": "Artifact hash for asset \"ef7aa034d437b1c1976e69f919345dcddf4b4c9c6a6947d000d52902c30271cf\""
+      "Description": "Artifact hash for asset \"07c9919aaa0ea66c82b6b489e9ad809349439d34a5557e2d024e5f0451d8a281\""
     },
-    "AssetParameters974996a9096d42156ceb01e12ea154d428b9b643131593d6d5dbc4dc9d11918fS3Bucket69F99350": {
+    "AssetParameters3d42620290f1423384e13f128bc3b5aaaf7be4788c358b037a4ef3cd8eae816fS3Bucket886C2428": {
       "Type": "String",
-      "Description": "S3 bucket for asset \"974996a9096d42156ceb01e12ea154d428b9b643131593d6d5dbc4dc9d11918f\""
+      "Description": "S3 bucket for asset \"3d42620290f1423384e13f128bc3b5aaaf7be4788c358b037a4ef3cd8eae816f\""
     },
-    "AssetParameters974996a9096d42156ceb01e12ea154d428b9b643131593d6d5dbc4dc9d11918fS3VersionKey160115D9": {
+    "AssetParameters3d42620290f1423384e13f128bc3b5aaaf7be4788c358b037a4ef3cd8eae816fS3VersionKeyEA0A672C": {
       "Type": "String",
-      "Description": "S3 key for asset version \"974996a9096d42156ceb01e12ea154d428b9b643131593d6d5dbc4dc9d11918f\""
+      "Description": "S3 key for asset version \"3d42620290f1423384e13f128bc3b5aaaf7be4788c358b037a4ef3cd8eae816f\""
     },
-    "AssetParameters974996a9096d42156ceb01e12ea154d428b9b643131593d6d5dbc4dc9d11918fArtifactHash41F53E92": {
+    "AssetParameters3d42620290f1423384e13f128bc3b5aaaf7be4788c358b037a4ef3cd8eae816fArtifactHash613A4ECF": {
       "Type": "String",
-      "Description": "Artifact hash for asset \"974996a9096d42156ceb01e12ea154d428b9b643131593d6d5dbc4dc9d11918f\""
+      "Description": "Artifact hash for asset \"3d42620290f1423384e13f128bc3b5aaaf7be4788c358b037a4ef3cd8eae816f\""
     }
   }
 }
