@@ -106,3 +106,4 @@ WellArchitected().synth()
 
 # TODO
 # StateMachine examples - https://docs.aws.amazon.com/step-functions/latest/dg/create-sample-projects.html
+# EventBridge examples - https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-service-event.html
