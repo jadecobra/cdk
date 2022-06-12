@@ -581,7 +581,7 @@
         "snssubscriberLambdaFunctionServiceRoleE61D3DE4"
       ]
     },
-    "snssubscriberLambdaFunctionAllowInvokeSnsFlowSnsLambdaA7E9ACA20430A061": {
+    "snssubscriberLambdaFunctionAllowInvokeSnsLambdaSnsSnsLambdaAACC2616663F80F5": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:InvokeFunction",

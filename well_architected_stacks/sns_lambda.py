@@ -14,9 +14,11 @@ class SnsLambda(well_architected.Stack):
         **kwargs
     ) -> None:
         super().__init__(scope, id, **kwargs)
-        well_architected_constructs.sns_lambda(
+        well_architected_constructs.sns_lambda.SnsLambdaConstruct(
+            self, "SnsLambda",
             function_name="sns_lambda",
             sns_topic=sns_topic,
+            error_topic=self.error_topic,
         )
         # sns_topic.add_subscription(
         #     aws_cdk.aws_sns_subscriptions.LambdaSubscription(

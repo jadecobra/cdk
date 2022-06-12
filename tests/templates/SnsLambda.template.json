@@ -1,11 +1,5 @@
 {
   "Resources": {
-    "snslambdasnslambdaErrorTopicDAA9B4A7": {
-      "Type": "AWS::SNS::Topic",
-      "Properties": {
-        "DisplayName": "sns_lambdaErrorTopic"
-      }
-    },
     "snslambdaAwsXraySdkLambdaLayer9A506C71": {
       "Type": "AWS::Lambda::LayerVersion",
       "Properties": {
@@ -195,7 +189,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "snslambdasnslambdaErrorTopicDAA9B4A7"
+            "Fn::ImportValue": "XRayTracerSnsFanOutTopic:ExportsOutputRefXRayTracerSnsFanOutTopicErrorTopic86E44AC38D80127A"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -257,7 +251,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "snslambdasnslambdaErrorTopicDAA9B4A7"
+            "Fn::ImportValue": "XRayTracerSnsFanOutTopic:ExportsOutputRefXRayTracerSnsFanOutTopicErrorTopic86E44AC38D80127A"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -284,7 +278,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "snslambdasnslambdaErrorTopicDAA9B4A7"
+            "Fn::ImportValue": "XRayTracerSnsFanOutTopic:ExportsOutputRefXRayTracerSnsFanOutTopicErrorTopic86E44AC38D80127A"
           }
         ],
         "DatapointsToAlarm": 1,
