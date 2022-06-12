@@ -4,8 +4,6 @@ import well_architected_constructs.api
 import well_architected_constructs.api_lambda
 import well_architected_constructs.dynamodb_table
 import well_architected_constructs.lambda_function
-import aws_cdk.aws_apigatewayv2_integrations_alpha
-import aws_cdk.aws_apigatewayv2_alpha
 
 
 class CircuitBreakerLambda(well_architected.Stack):

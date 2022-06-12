@@ -2,6 +2,7 @@ import aws_cdk
 import constructs
 import well_architected
 import well_architected_constructs.lambda_function
+import well_architected_constructs.sns_lambda
 
 
 class SnsLambdaSns(well_architected.Stack):
@@ -21,7 +22,9 @@ class SnsLambdaSns(well_architected.Stack):
         topic.grant_publish(sns_publisher)
         topic.add_subscription(
             aws_cdk.aws_sns_subscriptions.LambdaSubscription(
-                well_architected_constructs.lambda_function.create_python_lambda_function(self, "sns_subscriber")
+                well_architected_constructs.lambda_function.create_python_lambda_function(
+                    self, "sns_subscriber"
+                )
             )
         )
 
