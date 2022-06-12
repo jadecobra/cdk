@@ -2,17 +2,19 @@ import aws_cdk
 
 import well_architected_stacks.api_step_functions
 import well_architected_stacks.circuit_breaker_lambda
-import well_architected_stacks.event_bridge_atm
-import well_architected_stacks.event_bridge_etl
+import well_architected_stacks.circuit_breaker_eventbridge
+import well_architected_stacks.eventbridge_atm
+import well_architected_stacks.eventbridge_etl
+import well_architected_stacks.lambda_trilogy.lambda_lith
+import well_architected_stacks.lambda_trilogy.lambda_trilogy
 import well_architected_stacks.rest_api_sns_sqs_lambda
 import well_architected_stacks.rest_api_sns_lambda_eventbridge_lambda
 import well_architected_stacks.rest_api_dynamodb
 import well_architected_stacks.saga_step_function
 import well_architected_stacks.simple_graphql_service.simple_graphql_service
+import well_architected_stacks.rest_api_sns
+import well_architected_stacks.sns_lambda_dynamodb
 import well_architected_stacks.waf_api_lambda_dynamodb
-import well_architected_stacks.circuit_breaker_event_bridge
-import well_architected_stacks.lambda_trilogy.lambda_lith
-import well_architected_stacks.lambda_trilogy.lambda_trilogy
 import xray_tracer
 
 
@@ -34,10 +36,10 @@ class WellArchitected(aws_cdk.App):
         well_architected_stacks.circuit_breaker_lambda.CircuitBreakerLambda(
             self, "CircuitBreakerLambda"
         )
-        well_architected_stacks.event_bridge_atm.EventBridgeAtm(
+        well_architected_stacks.eventbridge_atm.EventBridgeAtm(
             self, "EventBridgeAtm"
         )
-        well_architected_stacks.event_bridge_etl.EventbridgeEtl(
+        well_architected_stacks.eventbridge_etl.EventbridgeEtl(
             self, 'EventBridgeEtl'
         )
         well_architected_stacks.rest_api_sns_lambda_eventbridge_lambda.ApiSnsLambdaEventBridgeLambda(
@@ -52,7 +54,7 @@ class WellArchitected(aws_cdk.App):
         well_architected_stacks.waf_api_lambda_dynamodb.WafApiLambdaDynamodb(
             self, 'WafApiLambdaDynamodb'
         )
-        well_architected_stacks.circuit_breaker_event_bridge.CircuitBreakerEventBridge(
+        well_architected_stacks.circuit_breaker_eventbridge.CircuitBreakerEventBridge(
             self, 'CircuitBreakerEventBridge',
         )
         self.lambda_trilogy()
@@ -76,8 +78,8 @@ class WellArchitected(aws_cdk.App):
             self, 'XRayTracerSnsFanOutTopic',
             display_name='The XRay Tracer Fan Out Topic',
         )
-        xray_tracer.sns_rest_api.SnsRestApi(
-            self, 'SnsRestApi',
+        well_architected_stacks.rest_api_sns.RestApiSnsStack(
+            self, 'RestApiSns',
             sns_topic=xray_tracer_sns_topic.sns_topic,
             error_topic=xray_tracer_sns_topic.error_topic,
         )
@@ -91,12 +93,12 @@ class WellArchitected(aws_cdk.App):
             sns_topic=xray_tracer_sns_topic.sns_topic,
             error_topic=xray_tracer_sns_topic.error_topic,
         )
-        xray_tracer.http_flow.HttpFlow(
+        xray_tracer.sns_lambda.SnsLambda(
             self, 'HttpFlow',
             sns_topic=xray_tracer_sns_topic.sns_topic,
             error_topic=xray_tracer_sns_topic.error_topic,
         )
-        xray_tracer.sns_lambda_dynamodb.SnsLambdaDynamodb(
+        well_architected_stacks.sns_lambda_dynamodb.SnsLambdaDynamodb(
             self, 'SnsDynamodbLambda',
             sns_topic=xray_tracer_sns_topic.sns_topic,
             error_topic=xray_tracer_sns_topic.error_topic,

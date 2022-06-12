@@ -1,9 +1,9 @@
 {
   "Resources": {
-    "SnsRestApiErrorTopicB9488D77": {
+    "RestApiSnsErrorTopic1A5D75DD": {
       "Type": "AWS::SNS::Topic",
       "Properties": {
-        "DisplayName": "SnsRestApiErrorTopic"
+        "DisplayName": "RestApiSnsErrorTopic"
       }
     },
     "RestApi0C43BF4B": {
@@ -52,7 +52,7 @@
       },
       "DependsOn": ["RestApi0C43BF4B"]
     },
-    "RestApiDeployment180EC5035587b69cfa35c427b72e1f52b67f156d": {
+    "RestApiDeployment180EC503a4fc54c19fa4495c47bc14cf859f5454": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -74,7 +74,7 @@
           "Ref": "RestApi0C43BF4B"
         },
         "DeploymentId": {
-          "Ref": "RestApiDeployment180EC5035587b69cfa35c427b72e1f52b67f156d"
+          "Ref": "RestApiDeployment180EC503a4fc54c19fa4495c47bc14cf859f5454"
         },
         "MethodSettings": [
           {
@@ -114,7 +114,7 @@
         "AuthorizationType": "NONE",
         "Integration": {
           "Credentials": {
-            "Fn::GetAtt": ["SnsRestApiApiGatewayServiceRole6B3BFDDA", "Arn"]
+            "Fn::GetAtt": ["RestApiSnsApiGatewayServiceRole3F60FED6", "Arn"]
           },
           "IntegrationHttpMethod": "POST",
           "IntegrationResponses": [
@@ -220,7 +220,7 @@
         }
       }
     },
-    "SnsRestApiApiGatewayServiceRole6B3BFDDA": {
+    "RestApiSnsApiGatewayServiceRole3F60FED6": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -237,7 +237,7 @@
         }
       }
     },
-    "SnsRestApi4XXErrorsGreaterThanOnePercentB8424AF0": {
+    "RestApiSns4XXErrorsGreaterThanOnePercent198B4654": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
@@ -303,7 +303,7 @@
         "TreatMissingData": "notBreaching"
       }
     },
-    "SnsRestApi5XXErrorsGreaterThanZero920B4512": {
+    "RestApiSns5XXErrorsGreaterThanZero1FC921F5": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
@@ -342,7 +342,7 @@
         "TreatMissingData": "notBreaching"
       }
     },
-    "SnsRestApiP99LatencyGreaterThanOneSecond3BD0E0BC": {
+    "RestApiSnsP99LatencyGreaterThanOneSecondE00F8259": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
@@ -381,7 +381,7 @@
         "TreatMissingData": "notBreaching"
       }
     },
-    "SnsRestApiCloudWatchDashBoardE124436C": {
+    "RestApiSnsCloudWatchDashBoard1B0D7822": {
       "Type": "AWS::CloudWatch::Dashboard",
       "Properties": {
         "DashboardBody": {
@@ -458,7 +458,7 @@
         ]
       }
     },
-    "SnsRestApiSnsRestApiURL90807520": {
+    "RestApiSnsRestApiSnsURLF646A3A7": {
       "Value": {
         "Fn::Join": [
           "",

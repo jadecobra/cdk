@@ -1,8 +1,5 @@
 import aws_cdk
 import constructs
-import aws_cdk.aws_sns as aws_sns
-import aws_cdk.aws_sns_subscriptions as aws_sns_subscriptions
-import aws_cdk.aws_dynamodb as aws_dynamodb
 
 import well_architected
 import well_architected_constructs.lambda_function
@@ -34,7 +31,7 @@ class SnsLambdaDynamodb(well_architected.Stack):
 
         self.dynamodb_table.grant_read_write_data(self.lambda_function)
         sns_topic.add_subscription(
-            aws_sns_subscriptions.LambdaSubscription(
+            aws_cdk.aws_sns_subscriptions.LambdaSubscription(
                 self.lambda_function
             )
         )
