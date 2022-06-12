@@ -15,6 +15,7 @@ import well_architected_stacks.simple_graphql_service.simple_graphql_service
 import well_architected_stacks.rest_api_sns
 import well_architected_stacks.sns_lambda_dynamodb
 import well_architected_stacks.waf_api_lambda_dynamodb
+import well_architected_stacks.sns_lambda
 import xray_tracer
 
 
@@ -83,8 +84,8 @@ class WellArchitected(aws_cdk.App):
             sns_topic=xray_tracer_sns_topic.sns_topic,
             error_topic=xray_tracer_sns_topic.error_topic,
         )
-        xray_tracer.sns_flow.SnsFlow(
-            self, 'SnsFlow',
+        xray_tracer.sns_lambda_sns.SnsLambdaSns(
+            self, 'SnsLambdaSns',
             sns_topic=xray_tracer_sns_topic.sns_topic,
             error_topic=xray_tracer_sns_topic.error_topic,
         )
@@ -93,8 +94,8 @@ class WellArchitected(aws_cdk.App):
             sns_topic=xray_tracer_sns_topic.sns_topic,
             error_topic=xray_tracer_sns_topic.error_topic,
         )
-        xray_tracer.sns_lambda.SnsLambda(
-            self, 'HttpFlow',
+        well_architected_stacks.sns_lambda.SnsLambda(
+            self, 'SnsLambda',
             sns_topic=xray_tracer_sns_topic.sns_topic,
             error_topic=xray_tracer_sns_topic.error_topic,
         )
@@ -109,3 +110,4 @@ WellArchitected().synth()
 # TODO
 # StateMachine examples - https://docs.aws.amazon.com/step-functions/latest/dg/create-sample-projects.html
 # EventBridge examples - https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-service-event.html
+# Read Lambda Powertools docs
