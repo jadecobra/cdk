@@ -16,6 +16,7 @@ import well_architected_stacks.rest_api_sns
 import well_architected_stacks.sns_lambda_dynamodb
 import well_architected_stacks.waf_api_lambda_dynamodb
 import well_architected_stacks.sns_lambda
+import well_architected_stacks.sns_lambda_sns
 import xray_tracer
 
 
@@ -84,7 +85,7 @@ class WellArchitected(aws_cdk.App):
             sns_topic=xray_tracer_sns_topic.sns_topic,
             error_topic=xray_tracer_sns_topic.error_topic,
         )
-        xray_tracer.sns_lambda_sns.SnsLambdaSns(
+        well_architected_stacks.sns_lambda_sns.SnsLambdaSns(
             self, 'SnsLambdaSns',
             sns_topic=xray_tracer_sns_topic.sns_topic,
             error_topic=xray_tracer_sns_topic.error_topic,
