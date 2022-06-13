@@ -8,7 +8,7 @@ class SnsLambdaConstruct(well_architected.Construct):
 
     def __init__(
         self, scope: constructs.Construct, id: str,
-        sns_topic: aws_cdk.aws_sns.ITopic=None,
+        sns_topic: aws_cdk.aws_sns.Topic=None,
         error_topic=None,
         function_name=None,
         **kwargs
@@ -18,7 +18,7 @@ class SnsLambdaConstruct(well_architected.Construct):
             error_topic=error_topic,
             **kwargs
         )
-        self.sns_topic = sns_topic
+
         self.lambda_function = well_architected_constructs.lambda_function.create_python_lambda_function(
             scope,
             function_name=function_name,
