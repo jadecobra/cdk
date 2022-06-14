@@ -588,7 +588,7 @@
         "sqssubscriberLambdaFunctionServiceRole42508740"
       ]
     },
-    "sqssubscriberLambdaFunctionSqsEventSourceSqsFlowSqsQueueAE09BE6712E270EE": {
+    "sqssubscriberLambdaFunctionSqsEventSourceSqsLambdaSqsSqsQueue2EEE27026593B120": {
       "Type": "AWS::Lambda::EventSourceMapping",
       "Properties": {
         "FunctionName": {
