@@ -90,7 +90,7 @@ class WellArchitected(aws_cdk.App):
             sns_topic=xray_tracer_sns_topic.sns_topic,
             error_topic=xray_tracer_sns_topic.error_topic,
         )
-        xray_tracer.sqs_flow.SqsFlow(
+        xray_tracer.sqs_lambda_sqs.SqsLambdaSqs(
             self, 'SqsFlow',
             sns_topic=xray_tracer_sns_topic.sns_topic,
             error_topic=xray_tracer_sns_topic.error_topic,

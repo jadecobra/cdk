@@ -1,18 +1,12 @@
 {
   "Resources": {
-    "RDSPublishQueue2BEA1A7F": {
+    "SQSPublishQueue534C7A4E": {
       "Type": "AWS::SQS::Queue",
       "Properties": {
         "VisibilityTimeout": 300
       },
       "UpdateReplacePolicy": "Delete",
       "DeletionPolicy": "Delete"
-    },
-    "sqssqsErrorTopic9ED084B1": {
-      "Type": "AWS::SNS::Topic",
-      "Properties": {
-        "DisplayName": "sqsErrorTopic"
-      }
     },
     "sqsAwsXraySdkLambdaLayerB0FAE011": {
       "Type": "AWS::Lambda::LayerVersion",
@@ -107,7 +101,7 @@
               ],
               "Effect": "Allow",
               "Resource": {
-                "Fn::GetAtt": ["RDSPublishQueue2BEA1A7F", "Arn"]
+                "Fn::GetAtt": ["SQSPublishQueue534C7A4E", "Arn"]
               }
             }
           ],
@@ -168,7 +162,7 @@
         "Environment": {
           "Variables": {
             "SQS_URL": {
-              "Ref": "RDSPublishQueue2BEA1A7F"
+              "Ref": "SQSPublishQueue534C7A4E"
             }
           }
         },
@@ -221,7 +215,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "sqssqsErrorTopic9ED084B1"
+            "Fn::ImportValue": "XRayTracerSnsFanOutTopic:ExportsOutputRefXRayTracerSnsFanOutTopicErrorTopic86E44AC38D80127A"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -283,7 +277,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "sqssqsErrorTopic9ED084B1"
+            "Fn::ImportValue": "XRayTracerSnsFanOutTopic:ExportsOutputRefXRayTracerSnsFanOutTopicErrorTopic86E44AC38D80127A"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -310,7 +304,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "sqssqsErrorTopic9ED084B1"
+            "Fn::ImportValue": "XRayTracerSnsFanOutTopic:ExportsOutputRefXRayTracerSnsFanOutTopicErrorTopic86E44AC38D80127A"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -418,12 +412,6 @@
         }
       }
     },
-    "sqssubscribesqssubscribeErrorTopic8AEA07E4": {
-      "Type": "AWS::SNS::Topic",
-      "Properties": {
-        "DisplayName": "sqs_subscribeErrorTopic"
-      }
-    },
     "sqssubscribeAwsXraySdkLambdaLayer7DD1FF59": {
       "Type": "AWS::Lambda::LayerVersion",
       "Properties": {
@@ -519,7 +507,7 @@
               ],
               "Effect": "Allow",
               "Resource": {
-                "Fn::GetAtt": ["RDSPublishQueue2BEA1A7F", "Arn"]
+                "Fn::GetAtt": ["SQSPublishQueue534C7A4E", "Arn"]
               }
             }
           ],
@@ -597,14 +585,14 @@
         "sqssubscribeLambdaFunctionServiceRole7577D75B"
       ]
     },
-    "sqssubscribeLambdaFunctionSqsEventSourceSqsFlowRDSPublishQueueD1D2BBCF2F32E4E5": {
+    "sqssubscribeLambdaFunctionSqsEventSourceSqsFlowSQSPublishQueue9A314633625499CF": {
       "Type": "AWS::Lambda::EventSourceMapping",
       "Properties": {
         "FunctionName": {
           "Ref": "sqssubscribeLambdaFunction2B3EFD1F"
         },
         "EventSourceArn": {
-          "Fn::GetAtt": ["RDSPublishQueue2BEA1A7F", "Arn"]
+          "Fn::GetAtt": ["SQSPublishQueue534C7A4E", "Arn"]
         }
       }
     },
@@ -615,7 +603,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "sqssubscribesqssubscribeErrorTopic8AEA07E4"
+            "Fn::ImportValue": "XRayTracerSnsFanOutTopic:ExportsOutputRefXRayTracerSnsFanOutTopicErrorTopic86E44AC38D80127A"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -677,7 +665,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "sqssubscribesqssubscribeErrorTopic8AEA07E4"
+            "Fn::ImportValue": "XRayTracerSnsFanOutTopic:ExportsOutputRefXRayTracerSnsFanOutTopicErrorTopic86E44AC38D80127A"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -704,7 +692,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "sqssubscribesqssubscribeErrorTopic8AEA07E4"
+            "Fn::ImportValue": "XRayTracerSnsFanOutTopic:ExportsOutputRefXRayTracerSnsFanOutTopicErrorTopic86E44AC38D80127A"
           }
         ],
         "DatapointsToAlarm": 1,

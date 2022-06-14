@@ -20,11 +20,3 @@ class SnsLambda(well_architected.Stack):
             sns_topic=sns_topic,
             error_topic=self.error_topic,
         )
-        # sns_topic.add_subscription(
-        #     aws_cdk.aws_sns_subscriptions.LambdaSubscription(
-        #         well_architected_constructs.lambda_function.create_python_lambda_function(
-        #             self,
-        #             function_name="sns_lambda",
-        #         )
-        #     )
-        # )
