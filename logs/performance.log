@@ -25827,3 +25827,13 @@
 2022-06-13 22:54:34.309779::Time taken to synthesize stack: SqsFlow::  5.4345 seconds
 2022-06-13 22:54:39.806901::Time taken to synthesize stack: WafApiLambdaDynamodb::  5.4887 seconds
 2022-06-13 22:54:45.312119::Time taken to synthesize stack: XRayTracerSnsFanOutTopic::  5.4991 seconds
+2022-06-13 22:55:19.341779::Time taken to synthesize stack: ApiSnsLambdaEventBridgeLambda::  5.5885 seconds
+2022-06-13 22:55:25.291156::Time taken to synthesize stack: ApiSnsSqsLambda::  5.9432 seconds
+2022-06-13 22:55:30.656146::Time taken to synthesize stack: ApiStepFunctions::  5.3601 seconds
+2022-06-13 22:55:36.047290::Time taken to synthesize stack: CircuitBreakerEventBridge::  5.3870 seconds
+2022-06-13 22:55:41.692222::Time taken to synthesize stack: CircuitBreakerLambda::  5.6391 seconds
+2022-06-13 22:55:47.131266::Time taken to synthesize stack: EventBridgeAtm::  5.4332 seconds
+2022-06-13 22:55:52.510346::Time taken to synthesize stack: EventBridgeEtl::  5.3730 seconds
+2022-06-13 22:55:58.143042::Time taken to synthesize stack: LambdaFat::  5.6239 seconds
+2022-06-13 22:56:04.096501::Time taken to synthesize stack: LambdaLith::  5.9484 seconds
+2022-06-13 22:56:09.914611::Time taken to synthesize stack: LambdaSinglePurpose::  5.8136 seconds
