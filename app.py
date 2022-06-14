@@ -1,24 +1,24 @@
 import aws_cdk
-
-import well_architected_stacks.api_step_functions
-import well_architected_stacks.circuit_breaker_lambda
-import well_architected_stacks.circuit_breaker_eventbridge
-import well_architected_stacks.eventbridge_atm
-import well_architected_stacks.eventbridge_etl
-import well_architected_stacks.lambda_trilogy.lambda_lith
-import well_architected_stacks.lambda_trilogy.lambda_trilogy
-import well_architected_stacks.rest_api_dynamodb
-import well_architected_stacks.rest_api_sns
-import well_architected_stacks.rest_api_sns_sqs_lambda
-import well_architected_stacks.rest_api_sns_lambda_eventbridge_lambda
-import well_architected_stacks.saga_step_function
-import well_architected_stacks.simple_graphql_service.simple_graphql_service
-import well_architected_stacks.sns_lambda_dynamodb
-import well_architected_stacks.sns_lambda
-import well_architected_stacks.sns_lambda_sns
-import well_architected_stacks.sns_topic
-import well_architected_stacks.sqs_lambda_sqs
-import well_architected_stacks.waf_api_lambda_dynamodb
+import well_architected_stacks
+# import well_architected_stacks.api_step_functions
+# import well_architected_stacks.circuit_breaker_lambda
+# import well_architected_stacks.circuit_breaker_eventbridge
+# import well_architected_stacks.eventbridge_atm
+# import well_architected_stacks.eventbridge_etl
+# import well_architected_stacks.lambda_trilogy.lambda_lith
+# import well_architected_stacks.lambda_trilogy.lambda_trilogy
+# import well_architected_stacks.rest_api_dynamodb
+# import well_architected_stacks.rest_api_sns
+# import well_architected_stacks.rest_api_sns_sqs_lambda
+# import well_architected_stacks.rest_api_sns_lambda_eventbridge_lambda
+# import well_architected_stacks.saga_step_function
+# import well_architected_stacks.simple_graphql_service.simple_graphql_service
+# import well_architected_stacks.sns_lambda_dynamodb
+# import well_architected_stacks.sns_lambda
+# import well_architected_stacks.sns_lambda_sns
+# import well_architected_stacks.sns_topic
+# import well_architected_stacks.sqs_lambda_sqs
+# import well_architected_stacks.waf_api_lambda_dynamodb
 
 
 class WellArchitected(aws_cdk.App):
@@ -51,7 +51,8 @@ class WellArchitected(aws_cdk.App):
         well_architected_stacks.saga_step_function.SagaStepFunction(
             self, "SagaStepFunction",
         )
-        well_architected_stacks.simple_graphql_service.simple_graphql_service.SimpleGraphQlService(
+        well_architected_stacks.simple_graphql_service.SimpleGraphQlService(
+        # well_architected_stacks.simple_graphql_service.simple_graphql_service.SimpleGraphQlService(
             self, "SimpleGraphqlService"
         )
         well_architected_stacks.waf_api_lambda_dynamodb.WafApiLambdaDynamodb(
@@ -66,12 +67,12 @@ class WellArchitected(aws_cdk.App):
         # lambda_power_tuner.LambdaPowerTuner(self, "LambdaPowerTuner", )
 
     def lambda_trilogy(self):
-        well_architected_stacks.lambda_trilogy.lambda_lith.LambdaLith(self, "LambdaLith")
-        well_architected_stacks.lambda_trilogy.lambda_trilogy.LambdaTrilogy(
+        well_architected_stacks.lambda_trilogy.LambdaLith(self, "LambdaLith")
+        well_architected_stacks.lambda_trilogy.LambdaTrilogy(
             self, 'LambdaFat',
             function_name='lambda_fat',
         )
-        well_architected_stacks.lambda_trilogy.lambda_trilogy.LambdaTrilogy(
+        well_architected_stacks.lambda_trilogy.LambdaTrilogy(
             self, 'LambdaSinglePurpose',
             function_name='lambda_single_purpose',
         )
