@@ -7,17 +7,18 @@ import well_architected_stacks.eventbridge_atm
 import well_architected_stacks.eventbridge_etl
 import well_architected_stacks.lambda_trilogy.lambda_lith
 import well_architected_stacks.lambda_trilogy.lambda_trilogy
+import well_architected_stacks.rest_api_dynamodb
+import well_architected_stacks.rest_api_sns
 import well_architected_stacks.rest_api_sns_sqs_lambda
 import well_architected_stacks.rest_api_sns_lambda_eventbridge_lambda
-import well_architected_stacks.rest_api_dynamodb
 import well_architected_stacks.saga_step_function
 import well_architected_stacks.simple_graphql_service.simple_graphql_service
-import well_architected_stacks.rest_api_sns
 import well_architected_stacks.sns_lambda_dynamodb
-import well_architected_stacks.waf_api_lambda_dynamodb
 import well_architected_stacks.sns_lambda
 import well_architected_stacks.sns_lambda_sns
-import xray_tracer
+import well_architected_stacks.sns_topic
+import well_architected_stacks.sqs_lambda_sqs
+import well_architected_stacks.waf_api_lambda_dynamodb
 
 
 class WellArchitected(aws_cdk.App):
@@ -76,7 +77,7 @@ class WellArchitected(aws_cdk.App):
         )
 
     def xray_tracer(self):
-        xray_tracer_sns_topic = xray_tracer.sns_topic.SnsTopic(
+        xray_tracer_sns_topic = well_architected_stacks.sns_topic.SnsTopic(
             self, 'XRayTracerSnsFanOutTopic',
             display_name='The XRay Tracer Fan Out Topic',
         )
@@ -90,8 +91,8 @@ class WellArchitected(aws_cdk.App):
             sns_topic=xray_tracer_sns_topic.sns_topic,
             error_topic=xray_tracer_sns_topic.error_topic,
         )
-        xray_tracer.sqs_lambda_sqs.SqsLambdaSqs(
-            self, 'SqsFlow',
+        well_architected_stacks.sqs_lambda_sqs.SqsLambdaSqs(
+            self, 'SqsLambdaSqs',
             sns_topic=xray_tracer_sns_topic.sns_topic,
             error_topic=xray_tracer_sns_topic.error_topic,
         )

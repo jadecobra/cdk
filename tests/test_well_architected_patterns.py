@@ -22,7 +22,7 @@ class TestWellArchitectedPatterns(tests.utilities.TestTemplates):
             'SnsLambda',
             'SnsLambdaSns',
             'SnsLambdaDynamodb',
-            'SqsFlow',
+            'SqsLambdaSqs',
             'WafApiLambdaDynamodb',
             'XRayTracerSnsFanOutTopic',
             # 'DynamoDBTable',

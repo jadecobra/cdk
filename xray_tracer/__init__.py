@@ -1,2 +1,1 @@
-from . import sqs_lambda_sqs
-from . import sns_topic
+from ..well_architected_stacks import sns_topic

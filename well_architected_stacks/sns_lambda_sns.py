@@ -36,8 +36,4 @@ class SnsLambdaSns(well_architected.Stack):
             }
         ).lambda_function
 
-        # sns_publisher.add_environment(
-        #     key='TOPIC_ARN',
-        #     value=topic.topic_arn
-        # )
         topic.grant_publish(sns_publisher)
