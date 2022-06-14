@@ -9,7 +9,8 @@ class SnsLambdaSns(well_architected.Stack):
 
     def __init__(
         self, scope: constructs.Construct, id: str,
-        sns_topic=None, **kwargs
+        sns_topic=None,
+        **kwargs
     ) -> None:
         super().__init__(scope, id, **kwargs)
 
@@ -30,10 +31,13 @@ class SnsLambdaSns(well_architected.Stack):
             function_name='sns_publisher',
             sns_topic=sns_topic,
             error_topic=self.error_topic,
+            environment_variables={
+                'TOPIC_ARN': topic.topic_arn,
+            }
         ).lambda_function
 
-        sns_publisher.add_environment(
-            key='TOPIC_ARN',
-            value=topic.topic_arn
-        )
+        # sns_publisher.add_environment(
+        #     key='TOPIC_ARN',
+        #     value=topic.topic_arn
+        # )
         topic.grant_publish(sns_publisher)

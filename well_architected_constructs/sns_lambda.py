@@ -11,6 +11,7 @@ class SnsLambdaConstruct(well_architected.Construct):
         sns_topic: aws_cdk.aws_sns.Topic=None,
         error_topic=None,
         function_name=None,
+        environment_variables=None,
         **kwargs
     ) -> None:
         super().__init__(
@@ -23,6 +24,7 @@ class SnsLambdaConstruct(well_architected.Construct):
             scope,
             function_name=function_name,
             error_topic=error_topic,
+            environment_variables=environment_variables,
         )
         sns_topic.add_subscription(
             aws_cdk.aws_sns_subscriptions.LambdaSubscription(
