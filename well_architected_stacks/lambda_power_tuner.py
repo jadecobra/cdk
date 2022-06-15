@@ -2,9 +2,10 @@ import aws_cdk
 import aws_cdk.aws_lambda
 import aws_cdk.aws_sam
 import constructs
+import well_architected
 
 
-class LambdaPowerTuner(aws_cdk.Stack):
+class LambdaPowerTuner(well_architected.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
@@ -17,11 +18,8 @@ class LambdaPowerTuner(aws_cdk.Stack):
                 "def handler(event, context): return 'hi'"),
         )
 
-        # Output the Lambda function ARN in the deploy logs to ease testing
         aws_cdk.CfnOutput(self, 'LambdaARN', value=example_lambda_function.function_arn)
 
-        # Deploy the aws-lambda-powertuning application from the Serverless Application Repository
-        # https://serverlessrepo.aws.amazon.com/applications/arn:aws:serverlessrepo:us-east-1:451282441545:applications~aws-lambda-power-tuning
         aws_cdk.aws_sam.CfnApplication(
             self, 'powerTuner',
             location=self.get_lambda_power_tuner_location(),
@@ -37,14 +35,10 @@ class LambdaPowerTuner(aws_cdk.Stack):
 
     def get_parameters(self):
         return {
-            "lambdaResource": self.default_lambda_resources(),
+            "lambdaResource": '*',
             "PowerValues": self.power_values()
         }
 
     @staticmethod
     def power_values():
         return '128,256,512,1024,1536,3008'
-
-    @staticmethod
-    def default_lambda_resources():
-        return '*'

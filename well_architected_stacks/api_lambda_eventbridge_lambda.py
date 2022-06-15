@@ -5,7 +5,7 @@ import well_architected_constructs.lambda_function
 import well_architected_constructs.api_lambda
 
 
-class EventBridgeAtm(well_architected.Stack):
+class ApiLambdaEventBridgeLambda(well_architected.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)

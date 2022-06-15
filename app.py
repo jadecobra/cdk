@@ -7,48 +7,31 @@ class WellArchitected(aws_cdk.App):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        well_architected_stacks.ApiLambdaRds(
-            self, 'ApiLambdaRds',
+        well_architected_stacks.ApiLambdaRds(self, 'ApiLambdaRds')
+        well_architected_stacks.ApiLambdaEventBridgeLambda(
+            self, 'ApiLambdaEventBridgeLambda'
         )
-        well_architected_stacks.ApiStepFunctions(
-            self, "ApiStepFunctions"
-        )
-        well_architected_stacks.RestApiSnsSqsLambda(
-            self, 'RestApiSnsSqsLambda'
-        )
+        well_architected_stacks.ApiStepFunctions(self, 'ApiStepFunctions')
+        well_architected_stacks.RestApiSnsSqsLambda(self, 'RestApiSnsSqsLambda')
         well_architected_stacks.RestApiDynamodb(
             self, 'RestApiDynamodb',
             partition_key='message',
         )
-        well_architected_stacks.CircuitBreakerLambda(
-            self, "CircuitBreakerLambda"
-        )
-        well_architected_stacks.EventBridgeAtm(
-            self, "EventBridgeAtm"
-        )
-        well_architected_stacks.EventbridgeEtl(
-            self, 'EventBridgeEtl'
-        )
+        well_architected_stacks.CircuitBreakerLambda(self, 'CircuitBreakerLambda')
+        well_architected_stacks.EventBridgeEtl(self, 'EventBridgeEtl')
+        well_architected_stacks.LambdaPowerTuner(self, 'LambdaPowerTuner')
         well_architected_stacks.RestApiSnsLambdaEventBridgeLambda(
-            self, "RestApiSnsLambdaEventBridgeLambda"
+            self, 'RestApiSnsLambdaEventBridgeLambda'
         )
-        well_architected_stacks.SagaStepFunction(
-            self, "SagaStepFunction",
-        )
-        well_architected_stacks.SimpleGraphQlService(
-            self, "SimpleGraphqlService"
-        )
-        well_architected_stacks.WafApiLambdaDynamodb(
-            self, 'WafApiLambdaDynamodb'
-        )
+        well_architected_stacks.SagaStepFunction(self, 'SagaStepFunction')
+        well_architected_stacks.SimpleGraphQlService(self, 'SimpleGraphqlService')
+        well_architected_stacks.WafApiLambdaDynamodb(self, 'WafApiLambdaDynamodb')
         well_architected_stacks.CircuitBreakerEventBridge(
             self, 'CircuitBreakerEventBridge',
         )
 
         self.lambda_trilogy()
         self.xray_tracer()
-
-        # lambda_power_tuner.LambdaPowerTuner(self, "LambdaPowerTuner", )
 
     def lambda_trilogy(self):
         well_architected_stacks.lambda_trilogy.LambdaLith(self, "LambdaLith")

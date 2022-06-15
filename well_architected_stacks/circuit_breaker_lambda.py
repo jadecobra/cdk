@@ -17,6 +17,9 @@ class CircuitBreakerLambda(well_architected.Stack):
         well_architected_constructs.api_lambda.create_http_api_lambda(
             self, lambda_function=lambda_function
         )
+        well_architected_constructs.api_lambda.create_rest_api_lambda(
+            self, lambda_function=lambda_function
+        )
 
     def create_dynamodb_table(self, id):
         return well_architected_constructs.dynamodb_table.DynamoDBTableConstruct(

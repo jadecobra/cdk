@@ -2,8 +2,9 @@ from .api_step_functions import ApiStepFunctions
 from .api_lambda_rds import ApiLambdaRds
 from .circuit_breaker_lambda import CircuitBreakerLambda
 from .circuit_breaker_eventbridge import CircuitBreakerEventBridge
-from .eventbridge_atm import EventBridgeAtm
-from .eventbridge_etl import EventbridgeEtl
+from .api_lambda_eventbridge_lambda import ApiLambdaEventBridgeLambda
+from .eventbridge_etl import EventBridgeEtl
+from .lambda_power_tuner import LambdaPowerTuner
 from .rest_api_dynamodb import RestApiDynamodb
 from .rest_api_sns import RestApiSnsStack
 from .rest_api_sns_sqs_lambda import RestApiSnsSqsLambda

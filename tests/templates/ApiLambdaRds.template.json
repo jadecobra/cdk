@@ -1,174 +1,669 @@
 {
   "Resources": {
-    "CircuitBreakerLambdaErrorTopic0E38E684": {
+    "ApiLambdaRdsErrorTopic9A747EE3": {
       "Type": "AWS::SNS::Topic",
       "Properties": {
-        "DisplayName": "CircuitBreakerLambdaErrorTopic"
+        "DisplayName": "ApiLambdaRdsErrorTopic"
       }
     },
-    "CircuitBreakerLambda24CC3C2D": {
-      "Type": "AWS::DynamoDB::Table",
+    "Vpc8378EB38": {
+      "Type": "AWS::EC2::VPC",
       "Properties": {
-        "KeySchema": [
+        "CidrBlock": "10.0.0.0/16",
+        "EnableDnsHostnames": true,
+        "EnableDnsSupport": true,
+        "InstanceTenancy": "default",
+        "Tags": [
           {
-            "AttributeName": "id",
-            "KeyType": "HASH"
+            "Key": "Name",
+            "Value": "ApiLambdaRds/Vpc"
           }
-        ],
-        "AttributeDefinitions": [
+        ]
+      }
+    },
+    "VpcPublicSubnet1Subnet5C2D37C4": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "Vpc8378EB38"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            0,
+            {
+              "Fn::GetAZs": ""
+            }
+          ]
+        },
+        "CidrBlock": "10.0.0.0/18",
+        "MapPublicIpOnLaunch": true,
+        "Tags": [
           {
-            "AttributeName": "id",
-            "AttributeType": "S"
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Public"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public"
+          },
+          {
+            "Key": "Name",
+            "Value": "ApiLambdaRds/Vpc/PublicSubnet1"
           }
-        ],
-        "BillingMode": "PAY_PER_REQUEST"
+        ]
+      }
+    },
+    "VpcPublicSubnet1RouteTable6C95E38E": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "Vpc8378EB38"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "ApiLambdaRds/Vpc/PublicSubnet1"
+          }
+        ]
+      }
+    },
+    "VpcPublicSubnet1RouteTableAssociation97140677": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "VpcPublicSubnet1RouteTable6C95E38E"
+        },
+        "SubnetId": {
+          "Ref": "VpcPublicSubnet1Subnet5C2D37C4"
+        }
+      }
+    },
+    "VpcPublicSubnet1DefaultRoute3DA9E72A": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "VpcPublicSubnet1RouteTable6C95E38E"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "VpcIGWD7BA715C"
+        }
+      },
+      "DependsOn": ["VpcVPCGWBF912B6E"]
+    },
+    "VpcPublicSubnet1EIPD7E02669": {
+      "Type": "AWS::EC2::EIP",
+      "Properties": {
+        "Domain": "vpc",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "ApiLambdaRds/Vpc/PublicSubnet1"
+          }
+        ]
+      }
+    },
+    "VpcPublicSubnet1NATGateway4D7517AA": {
+      "Type": "AWS::EC2::NatGateway",
+      "Properties": {
+        "SubnetId": {
+          "Ref": "VpcPublicSubnet1Subnet5C2D37C4"
+        },
+        "AllocationId": {
+          "Fn::GetAtt": ["VpcPublicSubnet1EIPD7E02669", "AllocationId"]
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "ApiLambdaRds/Vpc/PublicSubnet1"
+          }
+        ]
+      }
+    },
+    "VpcPublicSubnet2Subnet691E08A3": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "Vpc8378EB38"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            1,
+            {
+              "Fn::GetAZs": ""
+            }
+          ]
+        },
+        "CidrBlock": "10.0.64.0/18",
+        "MapPublicIpOnLaunch": true,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Public"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public"
+          },
+          {
+            "Key": "Name",
+            "Value": "ApiLambdaRds/Vpc/PublicSubnet2"
+          }
+        ]
+      }
+    },
+    "VpcPublicSubnet2RouteTable94F7E489": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "Vpc8378EB38"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "ApiLambdaRds/Vpc/PublicSubnet2"
+          }
+        ]
+      }
+    },
+    "VpcPublicSubnet2RouteTableAssociationDD5762D8": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "VpcPublicSubnet2RouteTable94F7E489"
+        },
+        "SubnetId": {
+          "Ref": "VpcPublicSubnet2Subnet691E08A3"
+        }
+      }
+    },
+    "VpcPublicSubnet2DefaultRoute97F91067": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "VpcPublicSubnet2RouteTable94F7E489"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "VpcIGWD7BA715C"
+        }
+      },
+      "DependsOn": ["VpcVPCGWBF912B6E"]
+    },
+    "VpcPublicSubnet2EIP3C605A87": {
+      "Type": "AWS::EC2::EIP",
+      "Properties": {
+        "Domain": "vpc",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "ApiLambdaRds/Vpc/PublicSubnet2"
+          }
+        ]
+      }
+    },
+    "VpcPublicSubnet2NATGateway9182C01D": {
+      "Type": "AWS::EC2::NatGateway",
+      "Properties": {
+        "SubnetId": {
+          "Ref": "VpcPublicSubnet2Subnet691E08A3"
+        },
+        "AllocationId": {
+          "Fn::GetAtt": ["VpcPublicSubnet2EIP3C605A87", "AllocationId"]
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "ApiLambdaRds/Vpc/PublicSubnet2"
+          }
+        ]
+      }
+    },
+    "VpcPrivateSubnet1Subnet536B997A": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "Vpc8378EB38"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            0,
+            {
+              "Fn::GetAZs": ""
+            }
+          ]
+        },
+        "CidrBlock": "10.0.128.0/18",
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Private"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private"
+          },
+          {
+            "Key": "Name",
+            "Value": "ApiLambdaRds/Vpc/PrivateSubnet1"
+          }
+        ]
+      }
+    },
+    "VpcPrivateSubnet1RouteTableB2C5B500": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "Vpc8378EB38"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "ApiLambdaRds/Vpc/PrivateSubnet1"
+          }
+        ]
+      }
+    },
+    "VpcPrivateSubnet1RouteTableAssociation70C59FA6": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "VpcPrivateSubnet1RouteTableB2C5B500"
+        },
+        "SubnetId": {
+          "Ref": "VpcPrivateSubnet1Subnet536B997A"
+        }
+      }
+    },
+    "VpcPrivateSubnet1DefaultRouteBE02A9ED": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "VpcPrivateSubnet1RouteTableB2C5B500"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "NatGatewayId": {
+          "Ref": "VpcPublicSubnet1NATGateway4D7517AA"
+        }
+      }
+    },
+    "VpcPrivateSubnet2Subnet3788AAA1": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "Vpc8378EB38"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            1,
+            {
+              "Fn::GetAZs": ""
+            }
+          ]
+        },
+        "CidrBlock": "10.0.192.0/18",
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Private"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private"
+          },
+          {
+            "Key": "Name",
+            "Value": "ApiLambdaRds/Vpc/PrivateSubnet2"
+          }
+        ]
+      }
+    },
+    "VpcPrivateSubnet2RouteTableA678073B": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "Vpc8378EB38"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "ApiLambdaRds/Vpc/PrivateSubnet2"
+          }
+        ]
+      }
+    },
+    "VpcPrivateSubnet2RouteTableAssociationA89CAD56": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "VpcPrivateSubnet2RouteTableA678073B"
+        },
+        "SubnetId": {
+          "Ref": "VpcPrivateSubnet2Subnet3788AAA1"
+        }
+      }
+    },
+    "VpcPrivateSubnet2DefaultRoute060D2087": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "VpcPrivateSubnet2RouteTableA678073B"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "NatGatewayId": {
+          "Ref": "VpcPublicSubnet2NATGateway9182C01D"
+        }
+      }
+    },
+    "VpcIGWD7BA715C": {
+      "Type": "AWS::EC2::InternetGateway",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "ApiLambdaRds/Vpc"
+          }
+        ]
+      }
+    },
+    "VpcVPCGWBF912B6E": {
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+      "Properties": {
+        "VpcId": {
+          "Ref": "Vpc8378EB38"
+        },
+        "InternetGatewayId": {
+          "Ref": "VpcIGWD7BA715C"
+        }
+      }
+    },
+    "DBCredentialsSecretAFB45EA2": {
+      "Type": "AWS::SecretsManager::Secret",
+      "Properties": {
+        "GenerateSecretString": {
+          "ExcludePunctuation": true,
+          "GenerateStringKey": "password",
+          "IncludeSpace": false,
+          "SecretStringTemplate": "{\"username\":\"syscdk\"}"
+        },
+        "Name": "ApiLambdaRds-rds-credentials"
       },
       "UpdateReplacePolicy": "Delete",
       "DeletionPolicy": "Delete"
     },
-    "CircuitBreakerLambdaUserErrorsGreaterThanZeroA44BBF2D": {
-      "Type": "AWS::CloudWatch::Alarm",
+    "DBCredentialsSecretAttachment8D28662C": {
+      "Type": "AWS::SecretsManager::SecretTargetAttachment",
       "Properties": {
-        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
-        "EvaluationPeriods": 6,
-        "AlarmActions": [
-          {
-            "Ref": "CircuitBreakerLambdaErrorTopic0E38E684"
-          }
-        ],
-        "DatapointsToAlarm": 1,
-        "MetricName": "UserErrors",
-        "Namespace": "AWS/DynamoDB",
-        "Period": 300,
-        "Statistic": "Sum",
-        "Threshold": 0,
-        "TreatMissingData": "notBreaching"
+        "SecretId": {
+          "Ref": "DBCredentialsSecretAFB45EA2"
+        },
+        "TargetId": {
+          "Ref": "DBInstance46641A50"
+        },
+        "TargetType": "AWS::RDS::DBInstance"
       }
     },
-    "CircuitBreakerLambdaReadsWritesThrottled1F59A8C8": {
-      "Type": "AWS::CloudWatch::Alarm",
+    "DBCredentialsArn15122902": {
+      "Type": "AWS::SSM::Parameter",
       "Properties": {
-        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
-        "EvaluationPeriods": 6,
-        "AlarmActions": [
-          {
-            "Ref": "CircuitBreakerLambdaErrorTopic0E38E684"
-          }
-        ],
-        "DatapointsToAlarm": 1,
-        "Metrics": [
-          {
-            "Expression": "m1 + m2",
-            "Id": "expr_1",
-            "Label": "dynamodb_throttles"
-          },
-          {
-            "Id": "m1",
-            "MetricStat": {
-              "Metric": {
-                "Dimensions": [
-                  {
-                    "Name": "TableName",
-                    "Value": {
-                      "Ref": "CircuitBreakerLambda24CC3C2D"
-                    }
-                  }
-                ],
-                "MetricName": "ReadThrottleEvents",
-                "Namespace": "AWS/DynamoDB"
-              },
-              "Period": 300,
-              "Stat": "Sum"
-            },
-            "ReturnData": false
-          },
-          {
-            "Id": "m2",
-            "MetricStat": {
-              "Metric": {
-                "Dimensions": [
-                  {
-                    "Name": "TableName",
-                    "Value": {
-                      "Ref": "CircuitBreakerLambda24CC3C2D"
-                    }
-                  }
-                ],
-                "MetricName": "WriteThrottleEvents",
-                "Namespace": "AWS/DynamoDB"
-              },
-              "Period": 300,
-              "Stat": "Sum"
-            },
-            "ReturnData": false
-          }
-        ],
-        "Threshold": 1,
-        "TreatMissingData": "notBreaching"
+        "Type": "String",
+        "Value": {
+          "Ref": "DBCredentialsSecretAFB45EA2"
+        },
+        "Name": "rds-credentials-arn"
       }
     },
-    "CircuitBreakerLambdaCloudWatchDashBoard31AA671F": {
-      "Type": "AWS::CloudWatch::Dashboard",
+    "DBInstanceSubnetGroupF597B45B": {
+      "Type": "AWS::RDS::DBSubnetGroup",
       "Properties": {
-        "DashboardBody": {
-          "Fn::Join": [
-            "",
-            [
-              "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"dynamodb_latency\",\"region\":\"",
-              {
-                "Ref": "AWS::Region"
-              },
-              "\",\"stacked\":true,\"metrics\":[[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"GetItem\",\"TableName\",\"",
-              {
-                "Ref": "CircuitBreakerLambda24CC3C2D"
-              },
-              "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"UpdateItem\",\"TableName\",\"",
-              {
-                "Ref": "CircuitBreakerLambda24CC3C2D"
-              },
-              "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"PutItem\",\"TableName\",\"",
-              {
-                "Ref": "CircuitBreakerLambda24CC3C2D"
-              },
-              "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"DeleteItem\",\"TableName\",\"",
-              {
-                "Ref": "CircuitBreakerLambda24CC3C2D"
-              },
-              "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"Query\",\"TableName\",\"",
-              {
-                "Ref": "CircuitBreakerLambda24CC3C2D"
-              },
-              "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"dynamodb_consumed_read_write_units\",\"region\":\"",
-              {
-                "Ref": "AWS::Region"
-              },
-              "\",\"stacked\":false,\"metrics\":[[\"AWS/DynamoDB\",\"ConsumedReadCapacityUnits\",\"TableName\",\"",
-              {
-                "Ref": "CircuitBreakerLambda24CC3C2D"
-              },
-              "\"],[\"AWS/DynamoDB\",\"ConsumedWriteCapacityUnits\",\"TableName\",\"",
-              {
-                "Ref": "CircuitBreakerLambda24CC3C2D"
-              },
-              "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"dynamodb_throttles\",\"region\":\"",
-              {
-                "Ref": "AWS::Region"
-              },
-              "\",\"stacked\":true,\"metrics\":[[\"AWS/DynamoDB\",\"ReadThrottleEvents\",\"TableName\",\"",
-              {
-                "Ref": "CircuitBreakerLambda24CC3C2D"
-              },
-              "\",{\"stat\":\"Sum\"}],[\"AWS/DynamoDB\",\"WriteThrottleEvents\",\"TableName\",\"",
-              {
-                "Ref": "CircuitBreakerLambda24CC3C2D"
-              },
-              "\",{\"stat\":\"Sum\"}]],\"yAxis\":{}}}]}"
-            ]
-          ]
+        "DBSubnetGroupDescription": "Subnet group for DBInstance database",
+        "SubnetIds": [
+          {
+            "Ref": "VpcPrivateSubnet1Subnet536B997A"
+          },
+          {
+            "Ref": "VpcPrivateSubnet2Subnet3788AAA1"
+          }
+        ]
+      }
+    },
+    "DBInstanceSecurityGroup8BE42C36": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Security group for DBInstance database",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "VpcId": {
+          "Ref": "Vpc8378EB38"
         }
       }
     },
-    "LambdaFunctionAwsXraySdkLambdaLayer05BEC3A3": {
+    "DBInstanceSecurityGroupfromApiLambdaRdsDBInstanceApiLambdaRdsproxyProxySecurityGroup5DF180F1IndirectPort0F15E3D0": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "IpProtocol": "tcp",
+        "Description": "Allow connections to the database Instance from the Proxy",
+        "FromPort": {
+          "Fn::GetAtt": ["DBInstance46641A50", "Endpoint.Port"]
+        },
+        "GroupId": {
+          "Fn::GetAtt": ["DBInstanceSecurityGroup8BE42C36", "GroupId"]
+        },
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
+            "DBInstanceApiLambdaRdsproxyProxySecurityGroup8E99B102",
+            "GroupId"
+          ]
+        },
+        "ToPort": {
+          "Fn::GetAtt": ["DBInstance46641A50", "Endpoint.Port"]
+        }
+      }
+    },
+    "DBInstanceSecurityGroupfromApiLambdaRdsDBInstanceApiLambdaRdsproxyProxySecurityGroup5DF180F133064FA5615B": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "IpProtocol": "tcp",
+        "Description": "allow db connection",
+        "FromPort": 3306,
+        "GroupId": {
+          "Fn::GetAtt": ["DBInstanceSecurityGroup8BE42C36", "GroupId"]
+        },
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
+            "DBInstanceApiLambdaRdsproxyProxySecurityGroup8E99B102",
+            "GroupId"
+          ]
+        },
+        "ToPort": 3306
+      }
+    },
+    "DBInstanceSecurityGroupfromApiLambdaRdsrdsLambdaFunctionSecurityGroup0856F7FF33066C75FD40": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "IpProtocol": "tcp",
+        "Description": "allow lambda connection",
+        "FromPort": 3306,
+        "GroupId": {
+          "Fn::GetAtt": ["DBInstanceSecurityGroup8BE42C36", "GroupId"]
+        },
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": ["rdsLambdaFunctionSecurityGroupA5EB7662", "GroupId"]
+        },
+        "ToPort": 3306
+      }
+    },
+    "DBInstance46641A50": {
+      "Type": "AWS::RDS::DBInstance",
+      "Properties": {
+        "DBInstanceClass": "db.t2.small",
+        "AllocatedStorage": "100",
+        "CopyTagsToSnapshot": true,
+        "DBSubnetGroupName": {
+          "Ref": "DBInstanceSubnetGroupF597B45B"
+        },
+        "DeletionProtection": false,
+        "Engine": "mysql",
+        "EngineVersion": "5.7.30",
+        "MasterUsername": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:secretsmanager:",
+              {
+                "Ref": "DBCredentialsSecretAFB45EA2"
+              },
+              ":SecretString:username::}}"
+            ]
+          ]
+        },
+        "MasterUserPassword": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:secretsmanager:",
+              {
+                "Ref": "DBCredentialsSecretAFB45EA2"
+              },
+              ":SecretString:password::}}"
+            ]
+          ]
+        },
+        "StorageType": "gp2",
+        "VPCSecurityGroups": [
+          {
+            "Fn::GetAtt": ["DBInstanceSecurityGroup8BE42C36", "GroupId"]
+          }
+        ]
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete"
+    },
+    "DBInstanceApiLambdaRdsproxyIAMRoleFDFDF5A0": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "rds.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      }
+    },
+    "DBInstanceApiLambdaRdsproxyIAMRoleDefaultPolicy3EF22EC6": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "secretsmanager:GetSecretValue",
+                "secretsmanager:DescribeSecret"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Ref": "DBCredentialsSecretAFB45EA2"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "DBInstanceApiLambdaRdsproxyIAMRoleDefaultPolicy3EF22EC6",
+        "Roles": [
+          {
+            "Ref": "DBInstanceApiLambdaRdsproxyIAMRoleFDFDF5A0"
+          }
+        ]
+      }
+    },
+    "DBInstanceApiLambdaRdsproxyProxySecurityGroup8E99B102": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "SecurityGroup for Database Proxy",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "VpcId": {
+          "Ref": "Vpc8378EB38"
+        }
+      }
+    },
+    "DBInstanceApiLambdaRdsproxy29CAF4D6": {
+      "Type": "AWS::RDS::DBProxy",
+      "Properties": {
+        "Auth": [
+          {
+            "AuthScheme": "SECRETS",
+            "IAMAuth": "DISABLED",
+            "SecretArn": {
+              "Ref": "DBCredentialsSecretAFB45EA2"
+            }
+          }
+        ],
+        "DBProxyName": "ApiLambdaRds-proxy",
+        "EngineFamily": "MYSQL",
+        "RoleArn": {
+          "Fn::GetAtt": ["DBInstanceApiLambdaRdsproxyIAMRoleFDFDF5A0", "Arn"]
+        },
+        "VpcSubnetIds": [
+          {
+            "Ref": "VpcPrivateSubnet1Subnet536B997A"
+          },
+          {
+            "Ref": "VpcPrivateSubnet2Subnet3788AAA1"
+          }
+        ],
+        "DebugLogging": true,
+        "RequireTLS": true,
+        "VpcSecurityGroupIds": [
+          {
+            "Fn::GetAtt": [
+              "DBInstanceApiLambdaRdsproxyProxySecurityGroup8E99B102",
+              "GroupId"
+            ]
+          }
+        ]
+      }
+    },
+    "DBInstanceApiLambdaRdsproxyProxyTargetGroup5D55A5D6": {
+      "Type": "AWS::RDS::DBProxyTargetGroup",
+      "Properties": {
+        "DBProxyName": {
+          "Ref": "DBInstanceApiLambdaRdsproxy29CAF4D6"
+        },
+        "TargetGroupName": "default",
+        "ConnectionPoolConfigurationInfo": {},
+        "DBInstanceIdentifiers": [
+          {
+            "Ref": "DBInstance46641A50"
+          }
+        ]
+      }
+    },
+    "rdsrdsErrorTopic636DDA99": {
+      "Type": "AWS::SNS::Topic",
+      "Properties": {
+        "DisplayName": "rdsErrorTopic"
+      }
+    },
+    "rdsAwsXraySdkLambdaLayerE24CE9B4": {
       "Type": "AWS::Lambda::LayerVersion",
       "Properties": {
         "Content": {
@@ -212,7 +707,7 @@
         "Description": "aws-xray-sdk Lambda Layer"
       }
     },
-    "LambdaFunctionServiceRoleD6E423C9": {
+    "rdsLambdaFunctionServiceRole9B0C01C5": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -239,11 +734,23 @@
                 ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
               ]
             ]
+          },
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+              ]
+            ]
           }
         ]
       }
     },
-    "LambdaFunctionServiceRoleDefaultPolicyF01A7EDC": {
+    "rdsLambdaFunctionServiceRoleDefaultPolicyA5DADDA9": {
       "Type": "AWS::IAM::Policy",
       "Properties": {
         "PolicyDocument": {
@@ -255,46 +762,47 @@
             },
             {
               "Action": [
-                "dynamodb:BatchGetItem",
-                "dynamodb:GetRecords",
-                "dynamodb:GetShardIterator",
-                "dynamodb:Query",
-                "dynamodb:GetItem",
-                "dynamodb:Scan",
-                "dynamodb:ConditionCheckItem",
-                "dynamodb:BatchWriteItem",
-                "dynamodb:PutItem",
-                "dynamodb:UpdateItem",
-                "dynamodb:DeleteItem",
-                "dynamodb:DescribeTable"
+                "secretsmanager:GetSecretValue",
+                "secretsmanager:DescribeSecret"
               ],
               "Effect": "Allow",
-              "Resource": [
-                {
-                  "Fn::GetAtt": ["CircuitBreakerLambda24CC3C2D", "Arn"]
-                },
-                {
-                  "Ref": "AWS::NoValue"
-                }
-              ]
+              "Resource": {
+                "Ref": "DBCredentialsSecretAFB45EA2"
+              }
             }
           ],
           "Version": "2012-10-17"
         },
-        "PolicyName": "LambdaFunctionServiceRoleDefaultPolicyF01A7EDC",
+        "PolicyName": "rdsLambdaFunctionServiceRoleDefaultPolicyA5DADDA9",
         "Roles": [
           {
-            "Ref": "LambdaFunctionServiceRoleD6E423C9"
+            "Ref": "rdsLambdaFunctionServiceRole9B0C01C5"
           }
         ]
       }
     },
-    "LambdaFunction7804BD21": {
+    "rdsLambdaFunctionSecurityGroupA5EB7662": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Automatic security group for Lambda Function ApiLambdaRdsrdsLambdaFunction7E7A577B",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "VpcId": {
+          "Ref": "Vpc8378EB38"
+        }
+      }
+    },
+    "rdsLambdaFunction42F59D10": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": {
-            "Ref": "AssetParametersdef5530f50caa3edeac5c6f97844808f741434cf32efcfc4783dd9fec188a59cS3BucketB205FF6A"
+            "Ref": "AssetParameters5d088e278f20bac83aa4f9da1a01b643d35fb2d012fcd922d3a0926126985b97S3BucketEA4E8CA9"
           },
           "S3Key": {
             "Fn::Join": [
@@ -307,7 +815,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParametersdef5530f50caa3edeac5c6f97844808f741434cf32efcfc4783dd9fec188a59cS3VersionKeyACB47C97"
+                          "Ref": "AssetParameters5d088e278f20bac83aa4f9da1a01b643d35fb2d012fcd922d3a0926126985b97S3VersionKeyD3255680"
                         }
                       ]
                     }
@@ -320,7 +828,7 @@
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParametersdef5530f50caa3edeac5c6f97844808f741434cf32efcfc4783dd9fec188a59cS3VersionKeyACB47C97"
+                          "Ref": "AssetParameters5d088e278f20bac83aa4f9da1a01b643d35fb2d012fcd922d3a0926126985b97S3VersionKeyD3255680"
                         }
                       ]
                     }
@@ -331,40 +839,59 @@
           }
         },
         "Role": {
-          "Fn::GetAtt": ["LambdaFunctionServiceRoleD6E423C9", "Arn"]
+          "Fn::GetAtt": ["rdsLambdaFunctionServiceRole9B0C01C5", "Arn"]
         },
         "Environment": {
           "Variables": {
-            "CIRCUITBREAKER_TABLE": {
-              "Ref": "CircuitBreakerLambda24CC3C2D"
-            }
+            "PROXY_ENDPOINT": {
+              "Fn::GetAtt": ["DBInstanceApiLambdaRdsproxy29CAF4D6", "Endpoint"]
+            },
+            "RDS_SECRET_NAME": "ApiLambdaRds-rds-credentials"
           }
         },
-        "Handler": "circuit_breaker_lambda.handler",
+        "Handler": "rds.handler",
         "Layers": [
           {
-            "Ref": "LambdaFunctionAwsXraySdkLambdaLayer05BEC3A3"
+            "Ref": "rdsAwsXraySdkLambdaLayerE24CE9B4"
           }
         ],
         "Runtime": "python3.9",
         "Timeout": 60,
         "TracingConfig": {
           "Mode": "Active"
+        },
+        "VpcConfig": {
+          "SecurityGroupIds": [
+            {
+              "Fn::GetAtt": [
+                "rdsLambdaFunctionSecurityGroupA5EB7662",
+                "GroupId"
+              ]
+            }
+          ],
+          "SubnetIds": [
+            {
+              "Ref": "VpcPrivateSubnet1Subnet536B997A"
+            },
+            {
+              "Ref": "VpcPrivateSubnet2Subnet3788AAA1"
+            }
+          ]
         }
       },
       "DependsOn": [
-        "LambdaFunctionServiceRoleDefaultPolicyF01A7EDC",
-        "LambdaFunctionServiceRoleD6E423C9"
+        "rdsLambdaFunctionServiceRoleDefaultPolicyA5DADDA9",
+        "rdsLambdaFunctionServiceRole9B0C01C5"
       ]
     },
-    "LambdaFunctionLambdaInvocationsErrorsGreaterThan2Percent03205984": {
+    "rdsLambdaInvocationsErrorsGreaterThan2Percent44DE28E3": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "CircuitBreakerLambdaErrorTopic0E38E684"
+            "Ref": "rdsrdsErrorTopic636DDA99"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -382,7 +909,7 @@
                   {
                     "Name": "FunctionName",
                     "Value": {
-                      "Ref": "LambdaFunction7804BD21"
+                      "Ref": "rdsLambdaFunction42F59D10"
                     }
                   }
                 ],
@@ -402,7 +929,7 @@
                   {
                     "Name": "FunctionName",
                     "Value": {
-                      "Ref": "LambdaFunction7804BD21"
+                      "Ref": "rdsLambdaFunction42F59D10"
                     }
                   }
                 ],
@@ -419,14 +946,14 @@
         "TreatMissingData": "notBreaching"
       }
     },
-    "LambdaFunctionLambdaP99LongDurationGreaterThan1sC5F53A6D": {
+    "rdsLambdaP99LongDurationGreaterThan1sA9F8CC7B": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "CircuitBreakerLambdaErrorTopic0E38E684"
+            "Ref": "rdsrdsErrorTopic636DDA99"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -434,7 +961,7 @@
           {
             "Name": "FunctionName",
             "Value": {
-              "Ref": "LambdaFunction7804BD21"
+              "Ref": "rdsLambdaFunction42F59D10"
             }
           }
         ],
@@ -446,14 +973,14 @@
         "TreatMissingData": "notBreaching"
       }
     },
-    "LambdaFunctionLambdaThrottledInvocationsGreaterThan2PercentCA0DB882": {
+    "rdsLambdaThrottledInvocationsGreaterThan2Percent105A7D70": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "CircuitBreakerLambdaErrorTopic0E38E684"
+            "Ref": "rdsrdsErrorTopic636DDA99"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -471,7 +998,7 @@
                   {
                     "Name": "FunctionName",
                     "Value": {
-                      "Ref": "LambdaFunction7804BD21"
+                      "Ref": "rdsLambdaFunction42F59D10"
                     }
                   }
                 ],
@@ -491,7 +1018,7 @@
                   {
                     "Name": "FunctionName",
                     "Value": {
-                      "Ref": "LambdaFunction7804BD21"
+                      "Ref": "rdsLambdaFunction42F59D10"
                     }
                   }
                 ],
@@ -508,7 +1035,7 @@
         "TreatMissingData": "notBreaching"
       }
     },
-    "LambdaFunctionCloudWatchDashBoard06416ADE": {
+    "rdsCloudWatchDashBoard074EBA8E": {
       "Type": "AWS::CloudWatch::Dashboard",
       "Properties": {
         "DashboardBody": {
@@ -521,11 +1048,11 @@
               },
               "\",\"stacked\":false,\"metrics\":[[{\"label\":\"invocations_errored_percentage_last_5_mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
               {
-                "Ref": "LambdaFunction7804BD21"
+                "Ref": "rdsLambdaFunction42F59D10"
               },
               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
               {
-                "Ref": "LambdaFunction7804BD21"
+                "Ref": "rdsLambdaFunction42F59D10"
               },
               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_duration\",\"region\":\"",
               {
@@ -533,15 +1060,15 @@
               },
               "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
               {
-                "Ref": "LambdaFunction7804BD21"
+                "Ref": "rdsLambdaFunction42F59D10"
               },
               "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
               {
-                "Ref": "LambdaFunction7804BD21"
+                "Ref": "rdsLambdaFunction42F59D10"
               },
               "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
               {
-                "Ref": "LambdaFunction7804BD21"
+                "Ref": "rdsLambdaFunction42F59D10"
               },
               "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_throttle_percentage\",\"region\":\"",
               {
@@ -549,11 +1076,11 @@
               },
               "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled_requests_percentage_last_30_mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
               {
-                "Ref": "LambdaFunction7804BD21"
+                "Ref": "rdsLambdaFunction42F59D10"
               },
               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
               {
-                "Ref": "LambdaFunction7804BD21"
+                "Ref": "rdsLambdaFunction42F59D10"
               },
               "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
             ]
@@ -576,7 +1103,7 @@
         },
         "IntegrationType": "AWS_PROXY",
         "IntegrationUri": {
-          "Fn::GetAtt": ["LambdaFunction7804BD21", "Arn"]
+          "Fn::GetAtt": ["rdsLambdaFunction42F59D10", "Arn"]
         },
         "PayloadFormatVersion": "2.0"
       }
@@ -586,7 +1113,7 @@
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Fn::GetAtt": ["LambdaFunction7804BD21", "Arn"]
+          "Fn::GetAtt": ["rdsLambdaFunction42F59D10", "Arn"]
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -646,12 +1173,6 @@
         "AutoDeploy": true
       }
     },
-    "HttpApiGatewayHttpApiGatewayErrorTopicD480707D": {
-      "Type": "AWS::SNS::Topic",
-      "Properties": {
-        "DisplayName": "HttpApiGatewayErrorTopic"
-      }
-    },
     "HttpApiGateway4XXErrorsGreaterThanOnePercentB2B213D3": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {
@@ -659,7 +1180,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "HttpApiGatewayHttpApiGatewayErrorTopicD480707D"
+            "Ref": "ApiLambdaRdsErrorTopic9A747EE3"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -725,7 +1246,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "HttpApiGatewayHttpApiGatewayErrorTopicD480707D"
+            "Ref": "ApiLambdaRdsErrorTopic9A747EE3"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -764,7 +1285,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "HttpApiGatewayHttpApiGatewayErrorTopicD480707D"
+            "Ref": "ApiLambdaRdsErrorTopic9A747EE3"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -891,7 +1412,7 @@
       },
       "DependsOn": ["RestApiLambdaFunction1C9F1F79"]
     },
-    "RestApiLambdaFunctionDeployment91972A2D1bf5851eda3657c1481f9da83f5df772": {
+    "RestApiLambdaFunctionDeployment91972A2D4bf3fb22041b69535e9784133a3d4f0b": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -912,7 +1433,7 @@
           "Ref": "RestApiLambdaFunction1C9F1F79"
         },
         "DeploymentId": {
-          "Ref": "RestApiLambdaFunctionDeployment91972A2D1bf5851eda3657c1481f9da83f5df772"
+          "Ref": "RestApiLambdaFunctionDeployment91972A2D4bf3fb22041b69535e9784133a3d4f0b"
         },
         "StageName": "prod"
       },
@@ -930,12 +1451,12 @@
         }
       }
     },
-    "RestApiLambdaFunctionproxyANYApiPermissionCircuitBreakerLambdaRestApiLambdaFunction5ECEBA7CANYproxyA2ECBB7E": {
+    "RestApiLambdaFunctionproxyANYApiPermissionApiLambdaRdsRestApiLambdaFunctionEBA76FB4ANYproxy09D00B4A": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Fn::GetAtt": ["LambdaFunction7804BD21", "Arn"]
+          "Fn::GetAtt": ["rdsLambdaFunction42F59D10", "Arn"]
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -968,12 +1489,12 @@
         }
       }
     },
-    "RestApiLambdaFunctionproxyANYApiPermissionTestCircuitBreakerLambdaRestApiLambdaFunction5ECEBA7CANYproxy86F7DA53": {
+    "RestApiLambdaFunctionproxyANYApiPermissionTestApiLambdaRdsRestApiLambdaFunctionEBA76FB4ANYproxyAF472E6A": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Fn::GetAtt": ["LambdaFunction7804BD21", "Arn"]
+          "Fn::GetAtt": ["rdsLambdaFunction42F59D10", "Arn"]
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -1030,7 +1551,7 @@
                 },
                 ":lambda:path/2015-03-31/functions/",
                 {
-                  "Fn::GetAtt": ["LambdaFunction7804BD21", "Arn"]
+                  "Fn::GetAtt": ["rdsLambdaFunction42F59D10", "Arn"]
                 },
                 "/invocations"
               ]
@@ -1039,12 +1560,12 @@
         }
       }
     },
-    "RestApiLambdaFunctionANYApiPermissionCircuitBreakerLambdaRestApiLambdaFunction5ECEBA7CANY00B2212F": {
+    "RestApiLambdaFunctionANYApiPermissionApiLambdaRdsRestApiLambdaFunctionEBA76FB4ANY0EC9444A": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Fn::GetAtt": ["LambdaFunction7804BD21", "Arn"]
+          "Fn::GetAtt": ["rdsLambdaFunction42F59D10", "Arn"]
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -1077,12 +1598,12 @@
         }
       }
     },
-    "RestApiLambdaFunctionANYApiPermissionTestCircuitBreakerLambdaRestApiLambdaFunction5ECEBA7CANYCCF9CB16": {
+    "RestApiLambdaFunctionANYApiPermissionTestApiLambdaRdsRestApiLambdaFunctionEBA76FB4ANYCA4AE7DB": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Fn::GetAtt": ["LambdaFunction7804BD21", "Arn"]
+          "Fn::GetAtt": ["rdsLambdaFunction42F59D10", "Arn"]
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -1139,19 +1660,13 @@
                 },
                 ":lambda:path/2015-03-31/functions/",
                 {
-                  "Fn::GetAtt": ["LambdaFunction7804BD21", "Arn"]
+                  "Fn::GetAtt": ["rdsLambdaFunction42F59D10", "Arn"]
                 },
                 "/invocations"
               ]
             ]
           }
         }
-      }
-    },
-    "RestApiGatewayRestApiGatewayErrorTopic0303AB10": {
-      "Type": "AWS::SNS::Topic",
-      "Properties": {
-        "DisplayName": "RestApiGatewayErrorTopic"
       }
     },
     "RestApiGateway4XXErrorsGreaterThanOnePercentA8477924": {
@@ -1161,7 +1676,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "RestApiGatewayRestApiGatewayErrorTopic0303AB10"
+            "Ref": "ApiLambdaRdsErrorTopic9A747EE3"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -1227,7 +1742,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "RestApiGatewayRestApiGatewayErrorTopic0303AB10"
+            "Ref": "ApiLambdaRdsErrorTopic9A747EE3"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -1266,7 +1781,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "RestApiGatewayRestApiGatewayErrorTopic0303AB10"
+            "Ref": "ApiLambdaRdsErrorTopic9A747EE3"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -1361,17 +1876,17 @@
       "Type": "String",
       "Description": "Artifact hash for asset \"1ebc9d3ac2033816c4abb63e4afd69d350b4aba8704cc9236b82ea520b74f4b0\""
     },
-    "AssetParametersdef5530f50caa3edeac5c6f97844808f741434cf32efcfc4783dd9fec188a59cS3BucketB205FF6A": {
+    "AssetParameters5d088e278f20bac83aa4f9da1a01b643d35fb2d012fcd922d3a0926126985b97S3BucketEA4E8CA9": {
       "Type": "String",
-      "Description": "S3 bucket for asset \"def5530f50caa3edeac5c6f97844808f741434cf32efcfc4783dd9fec188a59c\""
+      "Description": "S3 bucket for asset \"5d088e278f20bac83aa4f9da1a01b643d35fb2d012fcd922d3a0926126985b97\""
     },
-    "AssetParametersdef5530f50caa3edeac5c6f97844808f741434cf32efcfc4783dd9fec188a59cS3VersionKeyACB47C97": {
+    "AssetParameters5d088e278f20bac83aa4f9da1a01b643d35fb2d012fcd922d3a0926126985b97S3VersionKeyD3255680": {
       "Type": "String",
-      "Description": "S3 key for asset version \"def5530f50caa3edeac5c6f97844808f741434cf32efcfc4783dd9fec188a59c\""
+      "Description": "S3 key for asset version \"5d088e278f20bac83aa4f9da1a01b643d35fb2d012fcd922d3a0926126985b97\""
     },
-    "AssetParametersdef5530f50caa3edeac5c6f97844808f741434cf32efcfc4783dd9fec188a59cArtifactHash05E16BB3": {
+    "AssetParameters5d088e278f20bac83aa4f9da1a01b643d35fb2d012fcd922d3a0926126985b97ArtifactHash8A12E388": {
       "Type": "String",
-      "Description": "Artifact hash for asset \"def5530f50caa3edeac5c6f97844808f741434cf32efcfc4783dd9fec188a59c\""
+      "Description": "Artifact hash for asset \"5d088e278f20bac83aa4f9da1a01b643d35fb2d012fcd922d3a0926126985b97\""
     }
   },
   "Outputs": {

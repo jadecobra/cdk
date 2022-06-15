@@ -7,7 +7,7 @@ import well_architected_constructs.lambda_function
 
 
 # s3_sqs_lambda_ecs_eventbridge_lambda_dynamodb
-class EventbridgeEtl(well_architected.Stack):
+class EventBridgeEtl(well_architected.Stack):
 
     def __init__(
         self, scope: constructs.Construct, id: str,
