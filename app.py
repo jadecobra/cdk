@@ -7,6 +7,9 @@ class WellArchitected(aws_cdk.App):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        well_architected_stacks.ApiLambdaRds(
+            self, 'ApiLambdaRds',
+        )
         well_architected_stacks.ApiStepFunctions(
             self, "ApiStepFunctions"
         )
@@ -41,9 +44,7 @@ class WellArchitected(aws_cdk.App):
         well_architected_stacks.CircuitBreakerEventBridge(
             self, 'CircuitBreakerEventBridge',
         )
-        well_architected_stacks.ApiLambdaRds(
-            self, 'ApiLambdaRds',
-        )
+
         self.lambda_trilogy()
         self.xray_tracer()
 

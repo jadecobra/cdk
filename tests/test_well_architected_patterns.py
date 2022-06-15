@@ -28,7 +28,6 @@ class TestWellArchitectedPatterns(tests.utilities.TestTemplates):
             'XRayTracerSnsFanOutTopic',
             # 'DynamoDBTable',
             # 'DynamoStreamer',
-            # 'HitCounter',
             # 'LambdaPowerTuner',
             # 'SNSTopic',
             # 'HttpApiLambdaFunction',
