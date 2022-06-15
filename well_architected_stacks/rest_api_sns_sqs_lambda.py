@@ -6,7 +6,7 @@ import well_architected_constructs.rest_api
 import well_architected_constructs.rest_api_sns
 
 
-class ApiSnsSqsLambda(well_architected.Stack):
+class RestApiSnsSqsLambda(well_architected.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)

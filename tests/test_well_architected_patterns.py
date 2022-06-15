@@ -5,6 +5,7 @@ class TestWellArchitectedPatterns(tests.utilities.TestTemplates):
     @staticmethod
     def patterns():
         return (
+            'ApiLambdaRds',
             'ApiSnsLambdaEventBridgeLambda',
             'ApiSnsSqsLambda',
             'ApiStepFunctions',
@@ -29,7 +30,6 @@ class TestWellArchitectedPatterns(tests.utilities.TestTemplates):
             # 'DynamoStreamer',
             # 'HitCounter',
             # 'LambdaPowerTuner',
-            # 'RdsProxy',
             # 'SNSTopic',
             # 'HttpApiLambdaFunction',
             # 'HttpApiStateMachine',

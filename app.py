@@ -1,24 +1,5 @@
 import aws_cdk
 import well_architected_stacks
-# import well_architected_stacks.api_step_functions
-# import well_architected_stacks.circuit_breaker_lambda
-# import well_architected_stacks.circuit_breaker_eventbridge
-# import well_architected_stacks.eventbridge_atm
-# import well_architected_stacks.eventbridge_etl
-# import well_architected_stacks.lambda_trilogy.lambda_lith
-# import well_architected_stacks.lambda_trilogy.lambda_trilogy
-# import well_architected_stacks.rest_api_dynamodb
-# import well_architected_stacks.rest_api_sns
-# import well_architected_stacks.rest_api_sns_sqs_lambda
-# import well_architected_stacks.rest_api_sns_lambda_eventbridge_lambda
-# import well_architected_stacks.saga_step_function
-# import well_architected_stacks.simple_graphql_service.simple_graphql_service
-# import well_architected_stacks.sns_lambda_dynamodb
-# import well_architected_stacks.sns_lambda
-# import well_architected_stacks.sns_lambda_sns
-# import well_architected_stacks.sns_topic
-# import well_architected_stacks.sqs_lambda_sqs
-# import well_architected_stacks.waf_api_lambda_dynamodb
 
 
 class WellArchitected(aws_cdk.App):
@@ -26,40 +7,42 @@ class WellArchitected(aws_cdk.App):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        well_architected_stacks.api_step_functions.ApiStepFunctions(
+        well_architected_stacks.ApiStepFunctions(
             self, "ApiStepFunctions"
         )
-        well_architected_stacks.rest_api_sns_sqs_lambda.ApiSnsSqsLambda(
-            self, 'ApiSnsSqsLambda'
+        well_architected_stacks.RestApiSnsSqsLambda(
+            self, 'RestApiSnsSqsLambda'
         )
-        well_architected_stacks.rest_api_dynamodb.RestApiDynamodb(
+        well_architected_stacks.RestApiDynamodb(
             self, 'RestApiDynamodb',
             partition_key='message',
         )
-        well_architected_stacks.circuit_breaker_lambda.CircuitBreakerLambda(
+        well_architected_stacks.CircuitBreakerLambda(
             self, "CircuitBreakerLambda"
         )
-        well_architected_stacks.eventbridge_atm.EventBridgeAtm(
+        well_architected_stacks.EventBridgeAtm(
             self, "EventBridgeAtm"
         )
-        well_architected_stacks.eventbridge_etl.EventbridgeEtl(
+        well_architected_stacks.EventbridgeEtl(
             self, 'EventBridgeEtl'
         )
-        well_architected_stacks.rest_api_sns_lambda_eventbridge_lambda.ApiSnsLambdaEventBridgeLambda(
-            self, "ApiSnsLambdaEventBridgeLambda"
+        well_architected_stacks.RestApiSnsLambdaEventBridgeLambda(
+            self, "RestApiSnsLambdaEventBridgeLambda"
         )
-        well_architected_stacks.saga_step_function.SagaStepFunction(
+        well_architected_stacks.SagaStepFunction(
             self, "SagaStepFunction",
         )
-        well_architected_stacks.simple_graphql_service.SimpleGraphQlService(
-        # well_architected_stacks.simple_graphql_service.simple_graphql_service.SimpleGraphQlService(
+        well_architected_stacks.SimpleGraphQlService(
             self, "SimpleGraphqlService"
         )
-        well_architected_stacks.waf_api_lambda_dynamodb.WafApiLambdaDynamodb(
+        well_architected_stacks.WafApiLambdaDynamodb(
             self, 'WafApiLambdaDynamodb'
         )
-        well_architected_stacks.circuit_breaker_eventbridge.CircuitBreakerEventBridge(
+        well_architected_stacks.CircuitBreakerEventBridge(
             self, 'CircuitBreakerEventBridge',
+        )
+        well_architected_stacks.ApiLambdaRds(
+            self, 'ApiLambdaRds',
         )
         self.lambda_trilogy()
         self.xray_tracer()
@@ -78,31 +61,31 @@ class WellArchitected(aws_cdk.App):
         )
 
     def xray_tracer(self):
-        xray_tracer_sns_topic = well_architected_stacks.sns_topic.SnsTopic(
+        xray_tracer_sns_topic = well_architected_stacks.SnsTopic(
             self, 'XRayTracerSnsFanOutTopic',
             display_name='The XRay Tracer Fan Out Topic',
         )
-        well_architected_stacks.rest_api_sns.RestApiSnsStack(
+        well_architected_stacks.RestApiSnsStack(
             self, 'RestApiSns',
             sns_topic=xray_tracer_sns_topic.sns_topic,
             error_topic=xray_tracer_sns_topic.error_topic,
         )
-        well_architected_stacks.sns_lambda_sns.SnsLambdaSns(
+        well_architected_stacks.SnsLambdaSns(
             self, 'SnsLambdaSns',
             sns_topic=xray_tracer_sns_topic.sns_topic,
             error_topic=xray_tracer_sns_topic.error_topic,
         )
-        well_architected_stacks.sqs_lambda_sqs.SqsLambdaSqs(
+        well_architected_stacks.SqsLambdaSqs(
             self, 'SqsLambdaSqs',
             sns_topic=xray_tracer_sns_topic.sns_topic,
             error_topic=xray_tracer_sns_topic.error_topic,
         )
-        well_architected_stacks.sns_lambda.SnsLambda(
+        well_architected_stacks.SnsLambda(
             self, 'SnsLambda',
             sns_topic=xray_tracer_sns_topic.sns_topic,
             error_topic=xray_tracer_sns_topic.error_topic,
         )
-        well_architected_stacks.sns_lambda_dynamodb.SnsLambdaDynamodb(
+        well_architected_stacks.SnsLambdaDynamodb(
             self, 'SnsDynamodbLambda',
             sns_topic=xray_tracer_sns_topic.sns_topic,
             error_topic=xray_tracer_sns_topic.error_topic,
@@ -111,6 +94,6 @@ class WellArchitected(aws_cdk.App):
 WellArchitected().synth()
 
 # TODO
-# StateMachine examples - https://docs.aws.amazon.com/step-functions/latest/dg/create-sample-projects.html
-# EventBridge examples - https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-service-event.html
+# StateMachine examples - https://docs.amazon.com/step-functions/latest/dg/create-sample-projects.html
+# EventBridge examples - https://docs.amazon.com/eventbridge/latest/userguide/eb-service-event.html
 # Read Lambda Powertools docs
