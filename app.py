@@ -21,6 +21,7 @@ class WellArchitected(aws_cdk.App):
         well_architected_stacks.ApiLambdaDynamodb(
             self, 'ApiLambdaDynamodb',
             function_name='circuit_breaker_lambda',
+            partition_key='id',
         )
         well_architected_stacks.LambdaPowerTuner(self, 'LambdaPowerTuner')
         well_architected_stacks.RestApiSnsLambdaEventBridgeLambda(
