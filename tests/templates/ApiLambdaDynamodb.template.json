@@ -1,12 +1,12 @@
 {
   "Resources": {
-    "CircuitBreakerLambdaErrorTopic0E38E684": {
+    "ApiLambdaDynamodbErrorTopicB1EFE6DC": {
       "Type": "AWS::SNS::Topic",
       "Properties": {
-        "DisplayName": "CircuitBreakerLambdaErrorTopic"
+        "DisplayName": "ApiLambdaDynamodbErrorTopic"
       }
     },
-    "CircuitBreakerLambda24CC3C2D": {
+    "DynamoDbTable328C754E": {
       "Type": "AWS::DynamoDB::Table",
       "Properties": {
         "KeySchema": [
@@ -26,14 +26,14 @@
       "UpdateReplacePolicy": "Delete",
       "DeletionPolicy": "Delete"
     },
-    "CircuitBreakerLambdaUserErrorsGreaterThanZeroA44BBF2D": {
+    "DynamoDbTableUserErrorsGreaterThanZeroC76B823D": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "CircuitBreakerLambdaErrorTopic0E38E684"
+            "Ref": "ApiLambdaDynamodbErrorTopicB1EFE6DC"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -45,14 +45,14 @@
         "TreatMissingData": "notBreaching"
       }
     },
-    "CircuitBreakerLambdaReadsWritesThrottled1F59A8C8": {
+    "DynamoDbTableReadsWritesThrottled8542A2AF": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "CircuitBreakerLambdaErrorTopic0E38E684"
+            "Ref": "ApiLambdaDynamodbErrorTopicB1EFE6DC"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -70,7 +70,7 @@
                   {
                     "Name": "TableName",
                     "Value": {
-                      "Ref": "CircuitBreakerLambda24CC3C2D"
+                      "Ref": "DynamoDbTable328C754E"
                     }
                   }
                 ],
@@ -90,7 +90,7 @@
                   {
                     "Name": "TableName",
                     "Value": {
-                      "Ref": "CircuitBreakerLambda24CC3C2D"
+                      "Ref": "DynamoDbTable328C754E"
                     }
                   }
                 ],
@@ -107,7 +107,7 @@
         "TreatMissingData": "notBreaching"
       }
     },
-    "CircuitBreakerLambdaCloudWatchDashBoard31AA671F": {
+    "DynamoDbTableCloudWatchDashBoardEB9B1B0A": {
       "Type": "AWS::CloudWatch::Dashboard",
       "Properties": {
         "DashboardBody": {
@@ -120,23 +120,23 @@
               },
               "\",\"stacked\":true,\"metrics\":[[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"GetItem\",\"TableName\",\"",
               {
-                "Ref": "CircuitBreakerLambda24CC3C2D"
+                "Ref": "DynamoDbTable328C754E"
               },
               "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"UpdateItem\",\"TableName\",\"",
               {
-                "Ref": "CircuitBreakerLambda24CC3C2D"
+                "Ref": "DynamoDbTable328C754E"
               },
               "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"PutItem\",\"TableName\",\"",
               {
-                "Ref": "CircuitBreakerLambda24CC3C2D"
+                "Ref": "DynamoDbTable328C754E"
               },
               "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"DeleteItem\",\"TableName\",\"",
               {
-                "Ref": "CircuitBreakerLambda24CC3C2D"
+                "Ref": "DynamoDbTable328C754E"
               },
               "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"Query\",\"TableName\",\"",
               {
-                "Ref": "CircuitBreakerLambda24CC3C2D"
+                "Ref": "DynamoDbTable328C754E"
               },
               "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"dynamodb_consumed_read_write_units\",\"region\":\"",
               {
@@ -144,11 +144,11 @@
               },
               "\",\"stacked\":false,\"metrics\":[[\"AWS/DynamoDB\",\"ConsumedReadCapacityUnits\",\"TableName\",\"",
               {
-                "Ref": "CircuitBreakerLambda24CC3C2D"
+                "Ref": "DynamoDbTable328C754E"
               },
               "\"],[\"AWS/DynamoDB\",\"ConsumedWriteCapacityUnits\",\"TableName\",\"",
               {
-                "Ref": "CircuitBreakerLambda24CC3C2D"
+                "Ref": "DynamoDbTable328C754E"
               },
               "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"dynamodb_throttles\",\"region\":\"",
               {
@@ -156,11 +156,11 @@
               },
               "\",\"stacked\":true,\"metrics\":[[\"AWS/DynamoDB\",\"ReadThrottleEvents\",\"TableName\",\"",
               {
-                "Ref": "CircuitBreakerLambda24CC3C2D"
+                "Ref": "DynamoDbTable328C754E"
               },
               "\",{\"stat\":\"Sum\"}],[\"AWS/DynamoDB\",\"WriteThrottleEvents\",\"TableName\",\"",
               {
-                "Ref": "CircuitBreakerLambda24CC3C2D"
+                "Ref": "DynamoDbTable328C754E"
               },
               "\",{\"stat\":\"Sum\"}]],\"yAxis\":{}}}]}"
             ]
@@ -271,7 +271,7 @@
               "Effect": "Allow",
               "Resource": [
                 {
-                  "Fn::GetAtt": ["CircuitBreakerLambda24CC3C2D", "Arn"]
+                  "Fn::GetAtt": ["DynamoDbTable328C754E", "Arn"]
                 },
                 {
                   "Ref": "AWS::NoValue"
@@ -335,8 +335,8 @@
         },
         "Environment": {
           "Variables": {
-            "CIRCUITBREAKER_TABLE": {
-              "Ref": "CircuitBreakerLambda24CC3C2D"
+            "DYNAMODB_TABLE_NAME": {
+              "Ref": "DynamoDbTable328C754E"
             }
           }
         },
@@ -364,7 +364,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "CircuitBreakerLambdaErrorTopic0E38E684"
+            "Ref": "ApiLambdaDynamodbErrorTopicB1EFE6DC"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -426,7 +426,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "CircuitBreakerLambdaErrorTopic0E38E684"
+            "Ref": "ApiLambdaDynamodbErrorTopicB1EFE6DC"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -453,7 +453,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "CircuitBreakerLambdaErrorTopic0E38E684"
+            "Ref": "ApiLambdaDynamodbErrorTopicB1EFE6DC"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -930,7 +930,7 @@
         }
       }
     },
-    "RestApiLambdaFunctionproxyANYApiPermissionCircuitBreakerLambdaRestApiLambdaFunction5ECEBA7CANYproxyA2ECBB7E": {
+    "RestApiLambdaFunctionproxyANYApiPermissionApiLambdaDynamodbRestApiLambdaFunctionA202B79AANYproxyFDC37F72": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:InvokeFunction",
@@ -968,7 +968,7 @@
         }
       }
     },
-    "RestApiLambdaFunctionproxyANYApiPermissionTestCircuitBreakerLambdaRestApiLambdaFunction5ECEBA7CANYproxy86F7DA53": {
+    "RestApiLambdaFunctionproxyANYApiPermissionTestApiLambdaDynamodbRestApiLambdaFunctionA202B79AANYproxyCF69AB7A": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:InvokeFunction",
@@ -1039,7 +1039,7 @@
         }
       }
     },
-    "RestApiLambdaFunctionANYApiPermissionCircuitBreakerLambdaRestApiLambdaFunction5ECEBA7CANY00B2212F": {
+    "RestApiLambdaFunctionANYApiPermissionApiLambdaDynamodbRestApiLambdaFunctionA202B79AANY23D5C0BA": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:InvokeFunction",
@@ -1077,7 +1077,7 @@
         }
       }
     },
-    "RestApiLambdaFunctionANYApiPermissionTestCircuitBreakerLambdaRestApiLambdaFunction5ECEBA7CANYCCF9CB16": {
+    "RestApiLambdaFunctionANYApiPermissionTestApiLambdaDynamodbRestApiLambdaFunctionA202B79AANYE193907D": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:InvokeFunction",

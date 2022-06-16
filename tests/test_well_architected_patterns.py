@@ -6,12 +6,12 @@ class TestWellArchitectedPatterns(tests.utilities.TestTemplates):
     def patterns():
         return (
             'ApiLambdaRds',
+            'ApiLambdaDynamodb',
             'ApiLambdaEventBridgeLambda',
             'ApiSnsLambdaEventBridgeLambda',
             'ApiSnsSqsLambda',
             'ApiStepFunctions',
             'CircuitBreakerEventBridge',
-            'CircuitBreakerLambda',
             'EventBridgeEtl',
             'LambdaFat',
             'LambdaLith',
