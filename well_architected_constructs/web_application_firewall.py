@@ -7,11 +7,16 @@ class WebApplicationFirewall(well_architected.Construct):
     def __init__(
         self, scope: constructs.Construct, id: str,
         target_arn=None,
+        error_topic=None,
         web_application_firewall_scope='REGIONAL',
         **kwargs
     ) -> None:
         '''NOTE: HTTP APIs are not supported yet'''
-        super().__init__(scope, id, **kwargs)
+        super().__init__(
+            scope, id,
+            error_topic=error_topic,
+            **kwargs
+        )
         self.create_web_application_firewall_association(
             target_arn=target_arn,
             web_application_firewall=self.create_web_application_firewall(

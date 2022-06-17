@@ -6,12 +6,6 @@
         "DisplayName": "ApiLambdaDynamodbErrorTopic"
       }
     },
-    "ApiLambdaDynamodbApiLambdaDynamodbErrorTopic51C49751": {
-      "Type": "AWS::SNS::Topic",
-      "Properties": {
-        "DisplayName": "ApiLambdaDynamodbErrorTopic"
-      }
-    },
     "ApiLambdaDynamodbDynamoDbTable2AE4135D": {
       "Type": "AWS::DynamoDB::Table",
       "Properties": {

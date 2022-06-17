@@ -1,6 +1,6 @@
 from .api_step_functions import ApiStepFunctions
 from .api_lambda_rds import ApiLambdaRds
-from .api_lambda_dynamodb import ApiLambdaDynamodb
+from .api_lambda_dynamodb import ApiLambdaDynamodbStack
 from .circuit_breaker_eventbridge import CircuitBreakerEventBridge
 from .api_lambda_eventbridge_lambda import ApiLambdaEventBridgeLambda
 from .eventbridge_etl import EventBridgeEtl

@@ -18,7 +18,7 @@ class WellArchitected(aws_cdk.App):
             partition_key='message',
         )
         well_architected_stacks.EventBridgeEtl(self, 'EventBridgeEtl')
-        well_architected_stacks.ApiLambdaDynamodb(
+        well_architected_stacks.ApiLambdaDynamodbStack(
             self, 'ApiLambdaDynamodb',
             function_name='circuit_breaker_lambda',
             partition_key='id',

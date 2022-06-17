@@ -15,24 +15,28 @@ class ApiLambdaDynamodbConstruct(well_architected.Construct):
         error_topic=None,
         **kwargs
     ) -> None:
-        super().__init__(scope, id, **kwargs)
-        dynamodb_table = self.create_dynamodb_table(
+        super().__init__(
+            scope, id,
+            error_topic=error_topic,
+            **kwargs
+        )
+        self.dynamodb_table = self.create_dynamodb_table(
             partition_key=partition_key,
             error_topic=error_topic,
         )
-        lambda_function = self.create_lambda_function(
-            dynamodb_table_name=dynamodb_table.table_name,
+        self.lambda_function = self.create_lambda_function(
+            dynamodb_table_name=self.dynamodb_table.table_name,
             function_name=function_name,
             error_topic=error_topic,
         )
-        dynamodb_table.grant_read_write_data(lambda_function)
+        self.dynamodb_table.grant_read_write_data(self.lambda_function)
 
-        well_architected_constructs.api_lambda.create_http_api_lambda(
-            self, lambda_function=lambda_function,
+        self.http_api = well_architected_constructs.api_lambda.create_http_api_lambda(
+            self, lambda_function=self.lambda_function,
             error_topic=error_topic,
         )
-        well_architected_constructs.api_lambda.create_rest_api_lambda(
-            self, lambda_function=lambda_function,
+        self.rest_api = well_architected_constructs.api_lambda.create_rest_api_lambda(
+            self, lambda_function=self.lambda_function,
             error_topic=error_topic,
         )
 
