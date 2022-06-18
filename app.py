@@ -8,6 +8,7 @@ class WellArchitected(aws_cdk.App):
         super().__init__(*args, **kwargs)
 
         well_architected_stacks.ApiLambdaRds(self, 'ApiLambdaRds')
+        well_architected_stacks.ApiLambdaSqsLambdaDynamodb(self, 'ApiLambdaSqsLambdaDynamodb')
         well_architected_stacks.ApiLambdaEventBridgeLambda(
             self, 'ApiLambdaEventBridgeLambda'
         )
@@ -33,7 +34,6 @@ class WellArchitected(aws_cdk.App):
         well_architected_stacks.CircuitBreakerEventBridge(
             self, 'CircuitBreakerEventBridge',
         )
-        well_architected_stacks.ScalableWebhook(self, 'ScalableWebhook')
 
         self.lambda_trilogy()
         self.xray_tracer()

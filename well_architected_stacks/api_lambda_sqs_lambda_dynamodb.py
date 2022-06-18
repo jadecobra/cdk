@@ -6,7 +6,7 @@ import well_architected_constructs.api_lambda
 import well_architected_constructs.dynamodb_table
 
 
-class ScalableWebhook(well_architected.Stack):
+class ApiLambdaSqsLambdaDynamodb(well_architected.Stack):
     '''This pattern is made obsolete by RDS Proxy'''
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
@@ -18,19 +18,19 @@ class ScalableWebhook(well_architected.Stack):
         )
 
         sqs_queue = aws_cdk.aws_sqs.Queue(
-            self, 'RDSPublishQueue',
+            self, 'SqsQueue',
             visibility_timeout=aws_cdk.Duration.seconds(300)
-        )
-
-        sqs_publishing_lambda = self.create_sqs_publishing_lambda(
-            sqs_queue=sqs_queue,
-            error_topic=self.error_topic,
         )
 
         self.create_sqs_subscribing_lambda(
             sqs_queue=sqs_queue,
             dynamodb_table=dynamodb_table,
             error_topic=self.error_topic
+        )
+
+        sqs_publishing_lambda = self.create_sqs_publishing_lambda(
+            sqs_queue=sqs_queue,
+            error_topic=self.error_topic,
         )
 
         well_architected_constructs.api_lambda.create_http_api_lambda(

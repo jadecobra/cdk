@@ -17,6 +17,6 @@ from .sns_lambda_sns import SnsLambdaSns
 from .sqs_lambda_sqs import SqsLambdaSqs
 from .sns_topic import SnsTopic
 from .waf_api_lambda_dynamodb import WafApiLambdaDynamodb
-from .scalable_webhook import ScalableWebhook
+from .api_lambda_sqs_lambda_dynamodb import ApiLambdaSqsLambdaDynamodb
 
 from . import lambda_trilogy

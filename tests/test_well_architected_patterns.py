@@ -8,6 +8,7 @@ class TestWellArchitectedPatterns(tests.utilities.TestTemplates):
             # 'ApiLambdaRds',
             # 'ApiLambdaDynamodb',
             # 'ApiLambdaEventBridgeLambda',
+            'ApiLambdaSqsLambdaDynamodb',
             # 'ApiSnsLambdaEventBridgeLambda',
             # 'ApiSnsSqsLambda',
             # 'ApiStepFunctions',
@@ -31,7 +32,6 @@ class TestWellArchitectedPatterns(tests.utilities.TestTemplates):
             # 'DynamoStreamer',
             # 'SNSTopic',
             # 'ApiLambdaFunction',
-            'ScalableWebhook',
         )
 
     def test_well_architected_cdk_patterns(self):
