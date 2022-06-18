@@ -8,11 +8,11 @@ class TestWellArchitectedPatterns(tests.utilities.TestTemplates):
             # 'ApiLambdaRds',
             # 'ApiLambdaDynamodb',
             # 'ApiLambdaEventBridgeLambda',
-            'ApiLambdaSqsLambdaDynamodb',
+            # 'ApiLambdaSqsLambdaDynamodb',
             # 'ApiSnsLambdaEventBridgeLambda',
             # 'ApiSnsSqsLambda',
             # 'ApiStepFunctions',
-            # 'CircuitBreakerEventBridge',
+            'CircuitBreakerEventBridge',
             # 'EventBridgeEtl',
             # 'LambdaFat',
             # 'LambdaLith',
@@ -30,7 +30,6 @@ class TestWellArchitectedPatterns(tests.utilities.TestTemplates):
             # 'XRayTracerSnsFanOutTopic',
             # 'DynamoDBTable',
             # 'DynamoStreamer',
-            # 'SNSTopic',
             # 'ApiLambdaFunction',
         )
 
