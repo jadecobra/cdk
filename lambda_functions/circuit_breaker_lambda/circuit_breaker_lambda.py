@@ -4,7 +4,7 @@ import os
 import random
 import json
 
-ERROR_RECORDS = boto3.resource('dynamodb').Table(os.environ['CIRCUITBREAKER_TABLE'])
+ERROR_RECORDS = boto3.resource('dynamodb').Table(os.environ['DYNAMODB_TABLE_NAME'])
 
 
 class CircuitBreaker(object):

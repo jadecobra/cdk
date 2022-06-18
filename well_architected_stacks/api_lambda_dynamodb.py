@@ -16,4 +16,4 @@ class ApiLambdaDynamodbStack(well_architected.Stack):
             function_name=function_name,
             error_topic=self.error_topic,
             partition_key=partition_key,
-        )
+        ) 
