@@ -41,6 +41,25 @@ class ApiLambdaSqsLambdaDynamodb(well_architected.Stack):
             error_topic=self.error_topic,
         )
 
+    def create_dynamodb_table(self, partition_key=None, error_topic=None):
+        return well_architected_constructs.dynamodb_table.DynamodbTableConstruct(
+            self, "DynamodbTable",
+            partition_key=partition_key,
+            error_topic=error_topic,
+        ).dynamodb_table
+
+    def create_lambda_function(
+        self, function_name=None,
+        environment_variables=None, concurrent_executions=None,
+        error_topic=None,
+    ):
+        return well_architected_constructs.lambda_function.create_python_lambda_function(
+            self, function_name=function_name,
+            environment_variables=environment_variables,
+            concurrent_executions=concurrent_executions,
+            error_topic=error_topic,
+        )
+
     def create_sqs_publishing_lambda(
         self, sqs_queue:aws_cdk.aws_sqs.Queue=None,
         error_topic:aws_cdk.aws_sns.Topic=None,
@@ -73,22 +92,3 @@ class ApiLambdaSqsLambdaDynamodb(well_architected.Stack):
         sqs_queue.grant_consume_messages(lambda_function)
         dynamodb_table.grant_read_write_data(lambda_function)
         return lambda_function
-
-    def create_dynamodb_table(self, partition_key=None, error_topic=None):
-        return well_architected_constructs.dynamodb_table.DynamodbTableConstruct(
-            self, "DynamodbTable",
-            partition_key=partition_key,
-            error_topic=error_topic,
-        ).dynamodb_table
-
-    def create_lambda_function(
-        self, function_name=None,
-        environment_variables=None, concurrent_executions=None,
-        error_topic=None,
-    ):
-        return well_architected_constructs.lambda_function.create_python_lambda_function(
-            self, function_name=function_name,
-            environment_variables=environment_variables,
-            concurrent_executions=concurrent_executions,
-            error_topic=error_topic,
-        )

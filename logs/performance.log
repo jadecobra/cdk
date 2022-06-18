@@ -27418,3 +27418,4 @@
 2022-06-18 12:25:50.719008::Time taken to synthesize stack: ApiLambdaSqsLambdaDynamodb::  4.5708 seconds
 2022-06-18 12:27:19.782637::Time taken to synthesize stack: ApiLambdaSqsLambdaDynamodb::  5.8131 seconds
 2022-06-18 12:28:44.077864::Time taken to synthesize stack: ApiLambdaSqsLambdaDynamodb::  5.6746 seconds
+2022-06-18 12:29:51.801896::Time taken to synthesize stack: ApiLambdaSqsLambdaDynamodb::  5.6887 seconds
