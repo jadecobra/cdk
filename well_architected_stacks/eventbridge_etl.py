@@ -16,13 +16,15 @@ class EventBridgeEtl(well_architected.Stack):
         super().__init__(scope, id, **kwargs)
         self.dynamodb_table = self.create_dynamodb_table(self.error_topic)
         self.sqs_queue = self.create_sqs_queue()
-        self.s3_bucket = self.create_sqs_triggered_s3_bucket(self.sqs_queue)
         self.vpc = self.create_vpc()
         self.ecs_cluster = self.create_ecs_cluster(self.vpc)
         self.ecs_task_definition = self.create_ecs_task_definition()
         self.ecs_task_definition.add_to_task_role_policy(self.event_bridge_iam_policy())
 
-        self.s3_bucket.grant_read(self.ecs_task_definition.task_role)
+        self.s3_bucket = self.create_sqs_triggered_s3_bucket(
+            sqs_queue=self.sqs_queue,
+            ecs_task_role=self.ecs_task_definition.task_role,
+        )
 
         self.extractor = self.create_extractor_lambda_function(
             ecs_task_definition=self.ecs_task_definition,
@@ -55,17 +57,17 @@ class EventBridgeEtl(well_architected.Stack):
         )
         self.dynamodb_table.grant_read_write_data(self.loader)
 
-        self.create_lambda_function(
-            function_name="observer",
-            error_topic=self.error_topic,
-            event_bridge_rule_description='observe and log all events'
-        )
-
         self.add_policies_to_lambda_functions(
             self.extractor,
             self.transformer,
             self.loader,
             policy=self.event_bridge_iam_policy()
+        )
+
+        self.create_lambda_function(
+            function_name="observer",
+            error_topic=self.error_topic,
+            event_bridge_rule_description='observe and log all events'
         )
 
     def create_vpc(self):
@@ -177,12 +179,16 @@ class EventBridgeEtl(well_architected.Stack):
             visibility_timeout=aws_cdk.Duration.seconds(300)
         )
 
-    def create_sqs_triggered_s3_bucket(self, sqs_queue:aws_cdk.aws_sqs.Queue=None):
+    def create_sqs_triggered_s3_bucket(
+        self, sqs_queue:aws_cdk.aws_sqs.Queue=None,
+        ecs_task_role:aws_cdk.aws_iam.Role=None
+    ):
         s3_bucket = aws_cdk.aws_s3.Bucket(self, "LandingBucket")
         s3_bucket.add_event_notification(
             aws_cdk.aws_s3.EventType.OBJECT_CREATED,
             aws_cdk.aws_s3_notifications.SqsDestination(sqs_queue)
         )
+        s3_bucket.grant_read(ecs_task_role)
         return s3_bucket
 
     @staticmethod

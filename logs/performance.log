@@ -27499,3 +27499,17 @@
 2022-06-18 14:03:49.678435::Time taken to synthesize stack: EventBridgeEtl::  5.4037 seconds
 2022-06-18 14:04:50.269897::Time taken to synthesize stack: ApiLambdaDynamodbEventBridgeLambda::  5.5371 seconds
 2022-06-18 14:04:55.718478::Time taken to synthesize stack: EventBridgeEtl::  5.4419 seconds
+2022-06-18 14:07:41.078039::Time taken to synthesize stack: ApiLambdaDynamodbEventBridgeLambda::  5.7594 seconds
+2022-06-18 14:07:46.712065::Time taken to synthesize stack: EventBridgeEtl::  5.6291 seconds
+2022-06-18 14:07:56.062285::Time taken to synthesize stack: ApiLambdaDynamodbEventBridgeLambda::  5.6499 seconds
+2022-06-18 14:08:01.498405::Time taken to synthesize stack: EventBridgeEtl::  5.4307 seconds
+2022-06-18 14:08:10.753259::Time taken to synthesize stack: ApiLambdaDynamodbEventBridgeLambda::  5.4935 seconds
+2022-06-18 14:08:16.262006::Time taken to synthesize stack: EventBridgeEtl::  5.5037 seconds
+2022-06-18 14:08:25.654633::Time taken to synthesize stack: ApiLambdaDynamodbEventBridgeLambda::  5.6444 seconds
+2022-06-18 14:08:31.126176::Time taken to synthesize stack: EventBridgeEtl::  5.4648 seconds
+2022-06-18 14:08:40.297478::Time taken to synthesize stack: ApiLambdaDynamodbEventBridgeLambda::  5.5247 seconds
+2022-06-18 14:08:45.744691::Time taken to synthesize stack: EventBridgeEtl::  5.4414 seconds
+2022-06-18 14:14:18.220964::Time taken to synthesize stack: ApiLambdaDynamodbEventBridgeLambda::  5.6695 seconds
+2022-06-18 14:14:23.715045::Time taken to synthesize stack: EventBridgeEtl::  5.4884 seconds
+2022-06-18 14:17:16.254403::Time taken to synthesize stack: ApiLambdaDynamodbEventBridgeLambda::  5.5934 seconds
+2022-06-18 14:17:21.832846::Time taken to synthesize stack: EventBridgeEtl::  5.5717 seconds
