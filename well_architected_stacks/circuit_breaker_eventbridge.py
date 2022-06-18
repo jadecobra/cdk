@@ -35,11 +35,22 @@ class CircuitBreakerEventBridge(well_architected.Stack):
             error_topic=self.error_topic
         )
 
+    def create_lambda_function(
+        self, function_name=None, error_topic=None, dynamodb_table_name=None,
+        duration=None,
+    ):
+        return well_architected_constructs.lambda_function.create_python_lambda_function(
+            self, function_name=function_name,
+            error_topic=error_topic,
+            environment_variables=dict(DYNAMODB_TABLE_NAME=dynamodb_table_name),
+            duration=duration,
+        )
+
     def create_webservice_lambda_function(self, dynamodb_table:aws_cdk.aws_dynamodb.Table=None):
-        lambda_function = well_architected_constructs.lambda_function.create_python_lambda_function(
-            self, function_name='webservice',
+        lambda_function = self.create_lambda_function(
+            function_name='webservice',
             error_topic=self.error_topic,
-            environment_variables=dict(DYNAMODB_TABLE_NAME=dynamodb_table.table_name),
+            dynamodb_table_name=dynamodb_table.table_name,
             duration=20,
         )
         lambda_function.add_to_role_policy(
@@ -52,11 +63,14 @@ class CircuitBreakerEventBridge(well_architected.Stack):
         dynamodb_table.grant_read_data(lambda_function)
         return lambda_function
 
-    def create_error_handling_lambda_function(self, dynamodb_table:aws_cdk.aws_dynamodb.Table=None):
-        lambda_function = well_architected_constructs.lambda_function.create_python_lambda_function(
-            self, function_name='error',
+    def create_error_handling_lambda_function(
+        self, dynamodb_table:aws_cdk.aws_dynamodb.Table=None,
+        error_topic:aws_cdk.aws_sns.Topic=None,
+    ):
+        lambda_function = self.create_lambda_function(
+            function_name='error',
             error_topic=self.error_topic,
-            environment_variables=dict(DYNAMODB_TABLE_NAME=dynamodb_table.table_name),
+            dynamodb_table_name=dynamodb_table.table_name,
             duration=3,
         )
         aws_cdk.aws_events.Rule(
