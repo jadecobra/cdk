@@ -27429,3 +27429,6 @@
 2022-06-18 12:46:30.718762::Time taken to synthesize stack: CircuitBreakerEventBridge::  5.5789 seconds
 2022-06-18 12:46:41.901814::Time taken to synthesize stack: CircuitBreakerEventBridge::  5.4934 seconds
 2022-06-18 12:48:08.935117::Time taken to synthesize stack: CircuitBreakerEventBridge::  5.6180 seconds
+2022-06-18 12:48:37.662796::Time taken to synthesize stack: CircuitBreakerEventBridge::  5.8567 seconds
+2022-06-18 12:50:22.218345::Time taken to synthesize stack: CircuitBreakerEventBridge::  5.5615 seconds
+2022-06-18 12:51:33.183367::Time taken to synthesize stack: CircuitBreakerEventBridge::  5.7622 seconds

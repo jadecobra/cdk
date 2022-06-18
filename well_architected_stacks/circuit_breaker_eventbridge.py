@@ -21,24 +21,9 @@ class CircuitBreakerEventBridge(well_architected.Stack):
             sort_key=self.get_sort_key(),
         )
 
-        webservice_lambda_function = well_architected_constructs.lambda_function.create_python_lambda_function(
-            self, function_name='webservice',
-            error_topic=self.error_topic,
-            environment_variables=dict(DYNAMODB_TABLE_NAME=dynamodb_table.table_name),
-            duration=20,
-        )
-        dynamodb_table.grant_read_data(webservice_lambda_function)
-
-        webservice_lambda_function.add_to_role_policy(
-            aws_cdk.aws_iam.PolicyStatement(
-                effect=aws_cdk.aws_iam.Effect.ALLOW,
-                resources=['*'],
-                actions=['events:PutEvents']
-            )
-        )
-
         self.create_error_handling_lambda_function(dynamodb_table)
 
+        webservice_lambda_function = self.create_webservice_lambda_function(dynamodb_table)
         well_architected_constructs.api_lambda.create_http_api_lambda(
             self,
             lambda_function=webservice_lambda_function,
@@ -49,6 +34,23 @@ class CircuitBreakerEventBridge(well_architected.Stack):
             lambda_function=webservice_lambda_function,
             error_topic=self.error_topic
         )
+
+    def create_webservice_lambda_function(self, dynamodb_table:aws_cdk.aws_dynamodb.Table=None):
+        lambda_function = well_architected_constructs.lambda_function.create_python_lambda_function(
+            self, function_name='webservice',
+            error_topic=self.error_topic,
+            environment_variables=dict(DYNAMODB_TABLE_NAME=dynamodb_table.table_name),
+            duration=20,
+        )
+        lambda_function.add_to_role_policy(
+            aws_cdk.aws_iam.PolicyStatement(
+                effect=aws_cdk.aws_iam.Effect.ALLOW,
+                resources=['*'],
+                actions=['events:PutEvents']
+            )
+        )
+        dynamodb_table.grant_read_data(lambda_function)
+        return lambda_function
 
     def create_error_handling_lambda_function(self, dynamodb_table:aws_cdk.aws_dynamodb.Table=None):
         lambda_function = well_architected_constructs.lambda_function.create_python_lambda_function(

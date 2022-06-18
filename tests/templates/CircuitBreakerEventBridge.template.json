@@ -288,6 +288,11 @@
               "Resource": "*"
             },
             {
+              "Action": "events:PutEvents",
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
               "Action": [
                 "dynamodb:BatchGetItem",
                 "dynamodb:GetRecords",
@@ -315,11 +320,6 @@
                   ]
                 }
               ]
-            },
-            {
-              "Action": "events:PutEvents",
-              "Effect": "Allow",
-              "Resource": "*"
             }
           ],
           "Version": "2012-10-17"
