@@ -176,12 +176,6 @@
       "UpdateReplacePolicy": "Delete",
       "DeletionPolicy": "Delete"
     },
-    "publisherpublisherErrorTopicAA5B2520": {
-      "Type": "AWS::SNS::Topic",
-      "Properties": {
-        "DisplayName": "publisherErrorTopic"
-      }
-    },
     "publisherAwsXraySdkLambdaLayer6438089C": {
       "Type": "AWS::Lambda::LayerVersion",
       "Properties": {
@@ -364,7 +358,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "publisherpublisherErrorTopicAA5B2520"
+            "Ref": "ScalableWebhookErrorTopic47E9D2B3"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -426,7 +420,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "publisherpublisherErrorTopicAA5B2520"
+            "Ref": "ScalableWebhookErrorTopic47E9D2B3"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -453,7 +447,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "publisherpublisherErrorTopicAA5B2520"
+            "Ref": "ScalableWebhookErrorTopic47E9D2B3"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -559,12 +553,6 @@
             ]
           ]
         }
-      }
-    },
-    "subscribersubscriberErrorTopic57616E2C": {
-      "Type": "AWS::SNS::Topic",
-      "Properties": {
-        "DisplayName": "subscriberErrorTopic"
       }
     },
     "subscriberAwsXraySdkLambdaLayer44A54647": {
@@ -791,7 +779,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "subscribersubscriberErrorTopic57616E2C"
+            "Ref": "ScalableWebhookErrorTopic47E9D2B3"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -853,7 +841,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "subscribersubscriberErrorTopic57616E2C"
+            "Ref": "ScalableWebhookErrorTopic47E9D2B3"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -880,7 +868,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "subscribersubscriberErrorTopic57616E2C"
+            "Ref": "ScalableWebhookErrorTopic47E9D2B3"
           }
         ],
         "DatapointsToAlarm": 1,

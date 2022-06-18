@@ -22,17 +22,15 @@ class ScalableWebhook(well_architected.Stack):
             visibility_timeout=aws_cdk.Duration.seconds(300)
         )
 
-        sqs_publishing_lambda = self.create_lambda_function(
-            function_name='publisher',
-            environment_variables={
-                'queueURL': sqs_queue.queue_url
-            }
+        sqs_publishing_lambda = self.create_sqs_publishing_lambda(
+            sqs_queue=sqs_queue,
+            error_topic=self.error_topic,
         )
-        sqs_queue.grant_send_messages(sqs_publishing_lambda)
 
-        sqs_subscribing_lambda = self.create_sqs_subscribing_lambda(
+        self.create_sqs_subscribing_lambda(
             sqs_queue=sqs_queue,
             dynamodb_table=dynamodb_table,
+            error_topic=self.error_topic
         )
 
         well_architected_constructs.api_lambda.create_http_api_lambda(
@@ -44,17 +42,33 @@ class ScalableWebhook(well_architected.Stack):
             error_topic=self.error_topic,
         )
 
-    def create_sqs_subscribing_lambda(
-        self, sqs_queue: aws_cdk.aws_sqs.Queue=None,
-        dynamodb_table:aws_cdk.aws_dynamodb.Table=None
+    def create_sqs_publishing_lambda(
+        self, sqs_queue:aws_cdk.aws_sqs.Queue=None,
+        error_topic:aws_cdk.aws_sns.Topic=None,
     ):
         lambda_function = self.create_lambda_function(
+            error_topic=error_topic,
+            function_name='publisher',
+            environment_variables={
+                'queueURL': sqs_queue.queue_url
+            }
+        )
+        sqs_queue.grant_send_messages(lambda_function)
+        return lambda_function
+
+    def create_sqs_subscribing_lambda(
+        self, sqs_queue: aws_cdk.aws_sqs.Queue=None,
+        dynamodb_table:aws_cdk.aws_dynamodb.Table=None,
+        error_topic:aws_cdk.aws_sns.Topic=None,
+    ):
+        lambda_function = self.create_lambda_function(
+            error_topic=error_topic,
             function_name='subscriber',
             environment_variables={
                 'queueURL': sqs_queue.queue_url,
                 'tableName': dynamodb_table.table_name
             },
-            concurrent_executions=2
+            concurrent_executions=2,
         )
         lambda_function.add_event_source(aws_cdk.aws_lambda_event_sources.SqsEventSource(sqs_queue))
         sqs_queue.grant_consume_messages(lambda_function)
@@ -70,10 +84,12 @@ class ScalableWebhook(well_architected.Stack):
 
     def create_lambda_function(
         self, function_name=None,
-        environment_variables=None, concurrent_executions=None
+        environment_variables=None, concurrent_executions=None,
+        error_topic=None,
     ):
         return well_architected_constructs.lambda_function.create_python_lambda_function(
             self, function_name=function_name,
             environment_variables=environment_variables,
             concurrent_executions=concurrent_executions,
+            error_topic=error_topic,
         )
