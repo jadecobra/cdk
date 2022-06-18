@@ -7,7 +7,6 @@ import well_architected_constructs.dynamodb_table
 
 
 class ApiLambdaSqsLambdaDynamodb(well_architected.Stack):
-    '''This pattern is made obsolete by RDS Proxy'''
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)

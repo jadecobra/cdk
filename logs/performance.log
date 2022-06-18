@@ -27404,3 +27404,9 @@
 2022-06-18 03:14:57.057288::Time taken to synthesize stack: ScalableWebhook::  6.1176 seconds
 2022-06-18 03:15:47.412929::Time taken to synthesize stack: ScalableWebhook::  6.0780 seconds
 2022-06-18 03:16:20.322451::Time taken to synthesize stack: ScalableWebhook::  6.0120 seconds
+2022-06-18 03:21:42.872446::Time taken to synthesize stack: ApiLambdaSqsLambdaDynamodb::  6.3174 seconds
+2022-06-18 03:21:56.016456::Time taken to synthesize stack: ApiLambdaSqsLambdaDynamodb::  7.1390 seconds
+2022-06-18 03:22:06.297431::Time taken to synthesize stack: ApiLambdaSqsLambdaDynamodb::  6.1160 seconds
+2022-06-18 03:23:22.721488::Time taken to synthesize stack: ApiLambdaSqsLambdaDynamodb::  6.1517 seconds
+2022-06-18 03:24:54.141879::Time taken to synthesize stack: ApiLambdaSqsLambdaDynamodb::  5.6000 seconds
+2022-06-18 03:25:03.585093::Time taken to synthesize stack: ApiLambdaSqsLambdaDynamodb::  5.6099 seconds
