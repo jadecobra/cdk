@@ -5,14 +5,6 @@ import well_architected_constructs.lambda_function
 import well_architected_constructs.api_lambda
 import well_architected_constructs.dynamodb_table
 
-from aws_cdk import (
-    aws_lambda as aws_lambda,
-    aws_lambda_event_sources as lambda_event,
-    aws_apigateway as api_gw,
-    aws_dynamodb as dynamo_db,
-    aws_sqs as sqs,
-)
-
 
 class ScalableWebhook(well_architected.Stack):
     '''This pattern is made obsolete by RDS Proxy'''
@@ -20,13 +12,12 @@ class ScalableWebhook(well_architected.Stack):
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        dynamodb_table = well_architected_constructs.dynamodb_table.DynamodbTableConstruct(
-            self, "DynamodbTable",
+        dynamodb_table = self.create_dynamodb_table(
             partition_key="id",
             error_topic=self.error_topic,
-        ).dynamodb_table
+        )
 
-        sqs_queue = sqs.Queue(
+        sqs_queue = aws_cdk.aws_sqs.Queue(
             self, 'RDSPublishQueue',
             visibility_timeout=aws_cdk.Duration.seconds(300)
         )
@@ -37,6 +28,7 @@ class ScalableWebhook(well_architected.Stack):
                 'queueURL': sqs_queue.queue_url
             }
         )
+        sqs_queue.grant_send_messages(sqs_publishing_lambda)
 
         sqs_subscribing_lambda = self.create_lambda_function(
             function_name='subscriber',
@@ -46,11 +38,8 @@ class ScalableWebhook(well_architected.Stack):
             },
             concurrent_executions=2
         )
-
-        sqs_queue.grant_send_messages(sqs_publishing_lambda)
+        sqs_subscribing_lambda.add_event_source(aws_cdk.aws_lambda_event_sources.SqsEventSource(sqs_queue))
         sqs_queue.grant_consume_messages(sqs_subscribing_lambda)
-
-        sqs_subscribing_lambda.add_event_source(lambda_event.SqsEventSource(sqs_queue))
         dynamodb_table.grant_read_write_data(sqs_subscribing_lambda)
 
         well_architected_constructs.api_lambda.create_http_api_lambda(
@@ -61,6 +50,13 @@ class ScalableWebhook(well_architected.Stack):
             self, lambda_function=sqs_publishing_lambda,
             error_topic=self.error_topic,
         )
+
+    def create_dynamodb_table(self, partition_key=None, error_topic=None):
+        return well_architected_constructs.dynamodb_table.DynamodbTableConstruct(
+            self, "DynamodbTable",
+            partition_key=partition_key,
+            error_topic=error_topic,
+        ).dynamodb_table
 
     def create_lambda_function(
         self, function_name=None,
