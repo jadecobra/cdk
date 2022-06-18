@@ -49,7 +49,7 @@ class RestApiDynamodb(well_architected.Stack):
         })
 
     def create_dynamodb_table(self, partition_key=None, error_topic=None):
-        return well_architected_constructs.dynamodb_table.DynamoDBTableConstruct(
+        return well_architected_constructs.dynamodb_table.DynamodbTableConstruct(
             self, 'DynamoDbTable',
             stream=aws_cdk.aws_dynamodb.StreamViewType.NEW_IMAGE,
             error_topic=error_topic,

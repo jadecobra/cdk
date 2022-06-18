@@ -20,10 +20,14 @@ class ScalableWebhook(well_architected.Stack):
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        # This could be any database table. Using dynamodb because it's cheaper
-        dynamodb_table = dynamo_db.Table(
-            self, "Messages",
-            partition_key=dynamo_db.Attribute(name="id", type=dynamo_db.AttributeType.STRING)
+        # dynamodb_table = dynamo_db.Table(
+        #     self, "Messages",
+        #     partition_key=dynamo_db.Attribute(name="id", type=dynamo_db.AttributeType.STRING)
+        # )
+        dynamodb_table = well_architected_constructs.dynamodb_table.DynamodbTableConstruct(
+            self, "DynamodbTable",
+            partition_key="id",
+            error_topic=self.error_topic,
         )
 
         sqs_queue = sqs.Queue(

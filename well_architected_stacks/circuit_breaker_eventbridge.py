@@ -18,7 +18,7 @@ class CircuitBreakerEventBridge(well_architected.Stack):
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        error_records = well_architected_constructs.dynamodb_table.DynamoDBTableConstruct(
+        error_records = well_architected_constructs.dynamodb_table.DynamodbTableConstruct(
             self, 'CircuitBreaker',
             error_topic=self.error_topic,
             partition_key="RequestID",

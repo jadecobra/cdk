@@ -16,7 +16,7 @@ class SimpleGraphQlService(well_architected.Stack):
         self.add_dynamodb_data_source(
             graphql_api.add_dynamo_db_data_source(
                 'DynamoDbDataSource',
-                well_architected_constructs.dynamodb_table.DynamoDBTableConstruct(
+                well_architected_constructs.dynamodb_table.DynamodbTableConstruct(
                     self, 'DynamodbTable',
                     error_topic=self.error_topic,
                     partition_key="id",
@@ -40,7 +40,7 @@ class SimpleGraphQlService(well_architected.Stack):
             aws_cdk.CfnOutput(self, logical_id, value=value)
 
     def create_dynamodb_table(self, partition_key=None, error_topic=None):
-        return well_architected_constructs.dynamodb_table.DynamoDBTableConstruct(
+        return well_architected_constructs.dynamodb_table.DynamodbTableConstruct(
             self, 'DynamodbTable',
             error_topic=error_topic,
             partition_key=partition_key,

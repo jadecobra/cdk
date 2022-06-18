@@ -2,7 +2,7 @@ import aws_cdk
 import constructs
 import well_architected
 
-class DynamoDBTableConstruct(well_architected.Construct):
+class DynamodbTableConstruct(well_architected.Construct):
 
     def __init__(
         self, scope: constructs.Construct, id: str,

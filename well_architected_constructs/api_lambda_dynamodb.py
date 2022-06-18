@@ -41,7 +41,7 @@ class ApiLambdaDynamodbConstruct(well_architected.Construct):
         )
 
     def create_dynamodb_table(self, partition_key=None, error_topic=None):
-        return well_architected_constructs.dynamodb_table.DynamoDBTableConstruct(
+        return well_architected_constructs.dynamodb_table.DynamodbTableConstruct(
             self, 'DynamoDbTable',
             partition_key=partition_key,
             error_topic=error_topic,

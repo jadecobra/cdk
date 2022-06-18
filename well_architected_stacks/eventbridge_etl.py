@@ -150,7 +150,7 @@ class EventBridgeEtl(well_architected.Stack):
         ).lambda_function
 
     def create_dynamodb_table(self, error_topic):
-        return well_architected_constructs.dynamodb_table.DynamoDBTableConstruct(
+        return well_architected_constructs.dynamodb_table.DynamodbTableConstruct(
             self, 'TransformedData',
             error_topic=error_topic,
             partition_key="id",
