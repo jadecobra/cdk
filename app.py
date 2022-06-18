@@ -33,6 +33,7 @@ class WellArchitected(aws_cdk.App):
         well_architected_stacks.CircuitBreakerEventBridge(
             self, 'CircuitBreakerEventBridge',
         )
+        well_architected_stacks.ScalableWebhook(self, 'ScalableWebhook')
 
         self.lambda_trilogy()
         self.xray_tracer()
