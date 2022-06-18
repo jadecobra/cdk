@@ -14,14 +14,9 @@ class EventBridgeEtl(well_architected.Stack):
         **kwargs
     ) -> None:
         super().__init__(scope, id, **kwargs)
-        # self.s3_bucket = self.create_s3_bucket()
         self.dynamodb_table = self.create_dynamodb_table(self.error_topic)
         self.sqs_queue = self.create_sqs_queue()
-        # self.add_sqs_event_notification_to_bucket(
-        #     bucket=self.s3_bucket,
-        #     sqs_queue=self.sqs_queue,
-        # )
-        self.s3_bucket = self.create_sqs_triggered_s3_bucket(sqs_queue=self.sqs_queue)
+        self.s3_bucket = self.create_sqs_triggered_s3_bucket(self.sqs_queue)
 
         ####
         # Fargate ECS Task Creation to pull data from S3
