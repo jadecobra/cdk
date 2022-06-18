@@ -27423,3 +27423,9 @@
 2022-06-18 12:32:42.839772::Time taken to synthesize stack: ApiLambdaSqsLambdaDynamodb::  5.6921 seconds
 2022-06-18 12:33:38.202837::Time taken to synthesize stack: ApiLambdaSqsLambdaDynamodb::  5.6721 seconds
 2022-06-18 12:34:16.851498::Time taken to synthesize stack: ApiLambdaSqsLambdaDynamodb::  5.6555 seconds
+2022-06-18 12:37:45.500525::Time taken to synthesize stack: CircuitBreakerEventBridge::  5.6249 seconds
+2022-06-18 12:45:33.517845::Time taken to synthesize stack: CircuitBreakerEventBridge::  5.0992 seconds
+2022-06-18 12:45:56.397241::Time taken to synthesize stack: CircuitBreakerEventBridge::  4.8973 seconds
+2022-06-18 12:46:30.718762::Time taken to synthesize stack: CircuitBreakerEventBridge::  5.5789 seconds
+2022-06-18 12:46:41.901814::Time taken to synthesize stack: CircuitBreakerEventBridge::  5.4934 seconds
+2022-06-18 12:48:08.935117::Time taken to synthesize stack: CircuitBreakerEventBridge::  5.6180 seconds
