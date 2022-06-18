@@ -47,9 +47,9 @@ class ApiLambdaSqsLambdaDynamodb(well_architected.Stack):
     ):
         lambda_function = self.create_lambda_function(
             error_topic=error_topic,
-            function_name='publisher',
+            function_name='api_lambda_sqs_lambda_dynamodb_publisher',
             environment_variables={
-                'queueURL': sqs_queue.queue_url
+                'SQS_QUEUE_URL': sqs_queue.queue_url
             }
         )
         sqs_queue.grant_send_messages(lambda_function)
@@ -62,10 +62,10 @@ class ApiLambdaSqsLambdaDynamodb(well_architected.Stack):
     ):
         lambda_function = self.create_lambda_function(
             error_topic=error_topic,
-            function_name='subscriber',
+            function_name='api_lambda_sqs_lambda_dynamodb_subscriber',
             environment_variables={
-                'queueURL': sqs_queue.queue_url,
-                'tableName': dynamodb_table.table_name
+                'SQS_QUEUE_URL': sqs_queue.queue_url,
+                'DYNAMODB_TABLE_NAME': dynamodb_table.table_name
             },
             concurrent_executions=2,
         )

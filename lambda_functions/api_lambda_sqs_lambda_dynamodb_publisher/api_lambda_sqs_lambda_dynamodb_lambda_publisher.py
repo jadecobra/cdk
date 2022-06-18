@@ -2,7 +2,7 @@ import boto3
 import datetime
 import os
 
-sqs = boto3.client('sqs')
+SQS = boto3.client('sqs')
 
 def send_response(status=200, body=None):
     return {
@@ -17,10 +17,10 @@ def handler(event, context):
     print('request: ', event)
 
     try:
-        response = sqs.send_message(
+        response = SQS.send_message(
             DelaySeconds=10,
             MesageAttributes={
-                'QueueUrl': os.environ.get('queueURL'),
+                'QueueUrl': os.environ.get('SQS_QUEUE_URL'),
                 'MessageBody': f'Hello from {event["path"]}',
                 'MessageDeduplicationId': {
                     'DataType': 'String',
