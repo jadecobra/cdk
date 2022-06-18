@@ -47,7 +47,7 @@ class EventBridgeEtl(well_architected.Stack):
             function_name="loader",
             error_topic=self.error_topic,
             environment_variables={
-                "TABLE_NAME": self.dynamodb_table.table_name
+                "DYNAMODB_TABLE_NAME": self.dynamodb_table.table_name
             },
             event_bridge_rule_description='Load Transformed Data to DynamoDB',
             event_bridge_detail_type='transform',
