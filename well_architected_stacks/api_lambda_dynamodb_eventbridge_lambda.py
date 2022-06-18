@@ -6,7 +6,8 @@ import well_architected_constructs.api_lambda
 import well_architected_constructs.lambda_function
 import well_architected_constructs.dynamodb_table
 
-class ApiLambdaDynamodbEventbridgeLambda(well_architected.Stack):
+
+class ApiLambdaDynamodbEventBridgeLambda(well_architected.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)

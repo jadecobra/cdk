@@ -14,13 +14,14 @@ class EventBridgeEtl(well_architected.Stack):
         **kwargs
     ) -> None:
         super().__init__(scope, id, **kwargs)
-        self.s3_bucket = self.create_s3_bucket()
+        # self.s3_bucket = self.create_s3_bucket()
         self.dynamodb_table = self.create_dynamodb_table(self.error_topic)
         self.sqs_queue = self.create_sqs_queue()
-        self.add_sqs_event_notification_to_bucket(
-            bucket=self.s3_bucket,
-            sqs_queue=self.sqs_queue,
-        )
+        # self.add_sqs_event_notification_to_bucket(
+        #     bucket=self.s3_bucket,
+        #     sqs_queue=self.sqs_queue,
+        # )
+        self.s3_bucket = self.create_sqs_triggered_s3_bucket(sqs_queue=self.sqs_queue)
 
         ####
         # Fargate ECS Task Creation to pull data from S3
@@ -171,6 +172,14 @@ class EventBridgeEtl(well_architected.Stack):
             aws_cdk.aws_s3.EventType.OBJECT_CREATED,
             aws_cdk.aws_s3_notifications.SqsDestination(sqs_queue)
         )
+
+    def create_sqs_triggered_s3_bucket(self, sqs_queue:aws_cdk.aws_sqs.Queue=None):
+        s3_bucket = aws_cdk.aws_s3.Bucket(self, "LandingBucket")
+        s3_bucket.add_event_notification(
+            aws_cdk.aws_s3.EventType.OBJECT_CREATED,
+            aws_cdk.aws_s3_notifications.SqsDestination(sqs_queue)
+        )
+        return s3_bucket
 
     @staticmethod
     def create_iam_policy(resources=None, actions=None):
