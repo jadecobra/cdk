@@ -28,17 +28,11 @@ class EventBridgeEtl(well_architected.Stack):
             ecs_task_definition=self.ecs_task_definition,
             error_topic=self.error_topic,
             sqs_queue=self.sqs_queue,
-            environment_variables={
-                "CLUSTER_NAME": self.ecs_cluster.cluster_name,
-                "SUBNETS": self.get_subnet_ids(self.vpc),
-                "TASK_DEFINITION": self.ecs_task_definition.task_definition_arn,
-                "CONTAINER_NAME": self.create_ecs_container(
-                    ecs_task_definition=self.ecs_task_definition,
-                    image_name='containers/s3DataExtractionTask',
-                    s3_bucket_name=self.s3_bucket.bucket_name,
-                    s3_object_key=''
-                )
-            }
+            ecs_cluster_name=self.ecs_cluster.cluster_name,
+            vpc=self.vpc,
+            image_name='containers/s3DataExtractionTask',
+            s3_bucket_name=self.s3_bucket.bucket_name,
+            s3_object_key=''
         )
 
         self.transformer = self.create_lambda_function(
@@ -140,12 +134,24 @@ class EventBridgeEtl(well_architected.Stack):
 
     def create_extractor_lambda_function(
         self, ecs_task_definition=None, error_topic=None,
-        sqs_queue=None, environment_variables=None,
+        sqs_queue=None, s3_bucket_name=None, s3_object_key=None,
+        image_name=None, ecs_cluster_name=None, vpc=None,
     ):
         lambda_function = self.create_lambda_function(
             function_name='extractor',
             error_topic=error_topic,
-            environment_variables=environment_variables,
+            # environment_variables=environment_variables,
+            environment_variables={
+                "CLUSTER_NAME": ecs_cluster_name,
+                "SUBNETS": self.get_subnet_ids(vpc),
+                "TASK_DEFINITION": ecs_task_definition.task_definition_arn,
+                "CONTAINER_NAME": self.create_ecs_container(
+                    ecs_task_definition=ecs_task_definition,
+                    image_name=image_name,
+                    s3_bucket_name=s3_bucket_name,
+                    s3_object_key=s3_object_key,
+                )
+            },
         )
         self.grant_ecs_task_permissions(
             ecs_task_definition=ecs_task_definition,
