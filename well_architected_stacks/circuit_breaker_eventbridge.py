@@ -11,7 +11,7 @@ class CircuitBreakerEventBridge(well_architected.Stack):
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        dynamodb_table = self.create_dynamodb_table()
+        dynamodb_table = self.create_dynamodb_table(self.error_topic)
         dynamodb_table.add_global_secondary_index(
             index_name='UrlIndex',
             partition_key=aws_cdk.aws_dynamodb.Attribute(
@@ -21,9 +21,15 @@ class CircuitBreakerEventBridge(well_architected.Stack):
             sort_key=self.get_sort_key(),
         )
 
-        self.create_error_handling_lambda_function(dynamodb_table)
+        self.create_error_handling_lambda_function(
+            dynamodb_table=dynamodb_table,
+            error_topic=self.error_topic,
+        )
 
-        webservice_lambda_function = self.create_webservice_lambda_function(dynamodb_table)
+        webservice_lambda_function = self.create_webservice_lambda_function(
+            dynamodb_table=dynamodb_table,
+            error_topic=self.error_topic,
+        )
         well_architected_constructs.api_lambda.create_http_api_lambda(
             self,
             lambda_function=webservice_lambda_function,
@@ -46,10 +52,13 @@ class CircuitBreakerEventBridge(well_architected.Stack):
             duration=duration,
         )
 
-    def create_webservice_lambda_function(self, dynamodb_table:aws_cdk.aws_dynamodb.Table=None):
+    def create_webservice_lambda_function(
+        self, dynamodb_table:aws_cdk.aws_dynamodb.Table=None,
+        error_topic:aws_cdk.aws_sns.Topic=None,
+    ):
         lambda_function = self.create_lambda_function(
             function_name='webservice',
-            error_topic=self.error_topic,
+            error_topic=error_topic,
             dynamodb_table_name=dynamodb_table.table_name,
             duration=20,
         )
@@ -69,7 +78,7 @@ class CircuitBreakerEventBridge(well_architected.Stack):
     ):
         lambda_function = self.create_lambda_function(
             function_name='error',
-            error_topic=self.error_topic,
+            error_topic=error_topic,
             dynamodb_table_name=dynamodb_table.table_name,
             duration=3,
         )
@@ -96,10 +105,10 @@ class CircuitBreakerEventBridge(well_architected.Stack):
             type=aws_cdk.aws_dynamodb.AttributeType.NUMBER
         )
 
-    def create_dynamodb_table(self):
+    def create_dynamodb_table(self, error_topic:aws_cdk.aws_sns.Topic=None):
         return well_architected_constructs.dynamodb_table.DynamodbTableConstruct(
             self, 'CircuitBreaker',
-            error_topic=self.error_topic,
+            error_topic=error_topic,
             partition_key="RequestID",
             sort_key=self.get_sort_key(),
             time_to_live_attribute='ExpirationTime',
