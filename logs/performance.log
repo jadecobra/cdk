@@ -27475,3 +27475,13 @@
 2022-06-18 13:45:23.097344::Time taken to synthesize stack: EventBridgeEtl::  4.7313 seconds
 2022-06-18 13:46:48.545283::Time taken to synthesize stack: ApiLambdaDynamodbEventBridgeLambda::  4.7457 seconds
 2022-06-18 13:46:54.265410::Time taken to synthesize stack: EventBridgeEtl::  5.7131 seconds
+2022-06-18 13:47:18.834350::Time taken to synthesize stack: ApiLambdaDynamodbEventBridgeLambda::  5.5001 seconds
+2022-06-18 13:47:24.480393::Time taken to synthesize stack: EventBridgeEtl::  5.6405 seconds
+2022-06-18 13:51:36.478453::Time taken to synthesize stack: ApiLambdaDynamodbEventBridgeLambda::  4.3638 seconds
+2022-06-18 13:51:40.685441::Time taken to synthesize stack: EventBridgeEtl::  4.2014 seconds
+2022-06-18 13:52:26.054578::Time taken to synthesize stack: ApiLambdaDynamodbEventBridgeLambda::  4.6430 seconds
+2022-06-18 13:52:30.626973::Time taken to synthesize stack: EventBridgeEtl::  4.5649 seconds
+2022-06-18 13:52:54.231158::Time taken to synthesize stack: ApiLambdaDynamodbEventBridgeLambda::  4.9477 seconds
+2022-06-18 13:52:59.022315::Time taken to synthesize stack: EventBridgeEtl::  4.7841 seconds
+2022-06-18 13:55:37.460953::Time taken to synthesize stack: ApiLambdaDynamodbEventBridgeLambda::  5.5841 seconds
+2022-06-18 13:55:42.955493::Time taken to synthesize stack: EventBridgeEtl::  5.4885 seconds

@@ -24,13 +24,14 @@ class EventBridgeEtl(well_architected.Stack):
 
         self.s3_bucket.grant_read(self.ecs_task_definition.task_role)
 
-        self.extractor = self.create_lambda_function(
-            function_name='extractor',
+        self.extractor = self.create_extractor_lambda_function(
+            ecs_task_definition=self.ecs_task_definition,
             error_topic=self.error_topic,
+            sqs_queue=self.sqs_queue,
             environment_variables={
                 "CLUSTER_NAME": self.ecs_cluster.cluster_name,
-                "TASK_DEFINITION": self.ecs_task_definition.task_definition_arn,
                 "SUBNETS": self.get_subnet_ids(self.vpc),
+                "TASK_DEFINITION": self.ecs_task_definition.task_definition_arn,
                 "CONTAINER_NAME": self.create_ecs_container(
                     ecs_task_definition=self.ecs_task_definition,
                     image_name='containers/s3DataExtractionTask',
@@ -39,14 +40,6 @@ class EventBridgeEtl(well_architected.Stack):
                 )
             }
         )
-        self.grant_ecs_task_permissions(
-            ecs_task_definition=self.ecs_task_definition,
-            lambda_function=self.extractor
-        )
-        self.extractor.add_event_source(
-            aws_cdk.aws_lambda_event_sources.SqsEventSource(queue=self.sqs_queue)
-        )
-        self.sqs_queue.grant_consume_messages(self.extractor)
 
         self.transformer = self.create_lambda_function(
             function_name='transformer',
@@ -144,6 +137,25 @@ class EventBridgeEtl(well_architected.Stack):
                 status=event_bridge_detail_status,
             )
         ).lambda_function
+
+    def create_extractor_lambda_function(
+        self, ecs_task_definition=None, error_topic=None,
+        sqs_queue=None, environment_variables=None,
+    ):
+        lambda_function = self.create_lambda_function(
+            function_name='extractor',
+            error_topic=error_topic,
+            environment_variables=environment_variables,
+        )
+        self.grant_ecs_task_permissions(
+            ecs_task_definition=ecs_task_definition,
+            lambda_function=lambda_function
+        )
+        lambda_function.add_event_source(
+            aws_cdk.aws_lambda_event_sources.SqsEventSource(queue=self.sqs_queue)
+        )
+        sqs_queue.grant_consume_messages(lambda_function)
+        return lambda_function
 
     def create_dynamodb_table(self, error_topic):
         return well_architected_constructs.dynamodb_table.DynamodbTableConstruct(
