@@ -12,7 +12,7 @@ class TestWellArchitectedPatterns(tests.utilities.TestTemplates):
             # 'ApiSnsLambdaEventBridgeLambda',
             # 'ApiSnsSqsLambda',
             # 'ApiStepFunctions',
-            'CircuitBreakerEventBridge',
+            'ApiLambdaDynamodbEventbridgeLambda',
             # 'EventBridgeEtl',
             # 'LambdaFat',
             # 'LambdaLith',

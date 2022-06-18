@@ -31,8 +31,8 @@ class WellArchitected(aws_cdk.App):
         well_architected_stacks.SagaStepFunction(self, 'SagaStepFunction')
         well_architected_stacks.SimpleGraphQlService(self, 'SimpleGraphqlService')
         well_architected_stacks.WafApiLambdaDynamodb(self, 'WafApiLambdaDynamodb')
-        well_architected_stacks.CircuitBreakerEventBridge(
-            self, 'CircuitBreakerEventBridge',
+        well_architected_stacks.ApiLambdaDynamodbEventbridgeLambda(
+            self, 'ApiLambdaDynamodbEventbridgeLambda',
         )
 
         self.lambda_trilogy()

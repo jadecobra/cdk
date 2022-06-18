@@ -4,9 +4,13 @@ import time
 import os
 import datetime
 
-eventbridge = boto3.client('events')
-# table = boto3.resource('dynamodb').Table(os.environ.get('ERROR_RECORDS'))
+# EVENT_BRIDGE = boto3.client('events')
+# DYNAMODB_TABLE = boto3.resource('dynamodb').Table(os.environ.get('DYNAMODB_TABLE_NAME'))
 # do resources require a connection?
+
+
+class ServiceTimeoutException(Exception):pass
+
 
 def delimiter():
     print('='*80)
@@ -29,15 +33,12 @@ def create_event_bridge_entry(error_type=None, service_url=None):
         })
     }
 
-class ServiceTimeoutException(Exception):
-    pass
-
 def create_service_timeout_exception_after(seconds):
     time.sleep(seconds)
     raise ServiceTimeoutException
 
 def write_event_bridge_event(service_url):
-    eventbridge.put_events(
+    EVENT_BRIDGE.put_events(
         Entries=[
             create_service_timeout_exception_after(0)
         ]
@@ -71,7 +72,7 @@ def send_response(status, body):
 def handler(event, context):
     serviceURL = 'www.google.com'
 
-    recentErrors = table.query(
+    recentErrors = DYNAMODB_TABLE.query(
         ExpressionAttributeValues={
             ":v1": { "S": serviceURL },
             ":now": { "N": str(time.time()) }
