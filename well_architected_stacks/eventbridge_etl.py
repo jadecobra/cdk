@@ -17,14 +17,11 @@ class EventBridgeEtl(well_architected.Stack):
         self.dynamodb_table = self.create_dynamodb_table(self.error_topic)
         self.sqs_queue = self.create_sqs_queue()
         self.s3_bucket = self.create_sqs_triggered_s3_bucket(self.sqs_queue)
-
-        ####
-        # Fargate ECS Task Creation to pull data from S3
-        ####
         self.vpc = self.create_vpc()
         self.ecs_cluster = self.create_ecs_cluster(self.vpc)
         self.ecs_task_definition = self.create_ecs_task_definition()
         self.ecs_task_definition.add_to_task_role_policy(self.event_bridge_iam_policy())
+
         self.s3_bucket.grant_read(self.ecs_task_definition.task_role)
 
         self.extractor = self.create_lambda_function(
@@ -34,17 +31,22 @@ class EventBridgeEtl(well_architected.Stack):
                 "CLUSTER_NAME": self.ecs_cluster.cluster_name,
                 "TASK_DEFINITION": self.ecs_task_definition.task_definition_arn,
                 "SUBNETS": self.get_subnet_ids(self.vpc),
-                "CONTAINER_NAME": self.ecs_task_definition.add_container(
-                    'AppContainer',
-                    image=aws_cdk.aws_ecs.ContainerImage.from_asset('containers/s3DataExtractionTask'),
-                    logging=self.get_logging_configuration(),
-                    environment={
-                        'S3_BUCKET_NAME': self.s3_bucket.bucket_name,
-                        'S3_OBJECT_KEY': ''
-                    }
-                ).container_name
+                "CONTAINER_NAME": self.create_ecs_container(
+                    ecs_task_definition=self.ecs_task_definition,
+                    image_name='containers/s3DataExtractionTask',
+                    s3_bucket_name=self.s3_bucket.bucket_name,
+                    s3_object_key=''
+                )
             }
         )
+        self.grant_ecs_task_permissions(
+            ecs_task_definition=self.ecs_task_definition,
+            lambda_function=self.extractor
+        )
+        self.extractor.add_event_source(
+            aws_cdk.aws_lambda_event_sources.SqsEventSource(queue=self.sqs_queue)
+        )
+        self.sqs_queue.grant_consume_messages(self.extractor)
 
         self.transformer = self.create_lambda_function(
             function_name='transformer',
@@ -64,6 +66,7 @@ class EventBridgeEtl(well_architected.Stack):
             event_bridge_detail_type='transform',
             event_bridge_detail_status="transformed",
         )
+        self.dynamodb_table.grant_read_write_data(self.loader)
 
         self.create_lambda_function(
             function_name="observer",
@@ -71,26 +74,12 @@ class EventBridgeEtl(well_architected.Stack):
             event_bridge_rule_description='observe and log all events'
         )
 
-        # IAM
-        self.grant_ecs_task_permissions(
-            ecs_task_definition=self.ecs_task_definition,
-            lambda_function=self.extractor
-        )
         self.add_policies_to_lambda_functions(
             self.extractor,
             self.transformer,
             self.loader,
             policy=self.event_bridge_iam_policy()
         )
-
-        self.extractor.add_event_source(
-            aws_cdk.aws_lambda_event_sources.SqsEventSource(queue=self.sqs_queue)
-        )
-        self.sqs_queue.grant_consume_messages(self.extractor)
-        self.dynamodb_table.grant_read_write_data(self.loader)
-
-    def create_s3_bucket(self):
-        return aws_cdk.aws_s3.Bucket(self, "LandingBucket")
 
     def create_vpc(self):
         return aws_cdk.aws_ec2.Vpc(self, "Vpc", max_azs=2)
@@ -105,6 +94,17 @@ class EventBridgeEtl(well_architected.Stack):
             cpu="256",
             compatibility=aws_cdk.aws_ecs.Compatibility.FARGATE
         )
+
+    def create_ecs_container(self, ecs_task_definition=None, s3_bucket_name=None, s3_object_key=None, image_name=None):
+        return ecs_task_definition.add_container(
+            'AppContainer',
+            image=aws_cdk.aws_ecs.ContainerImage.from_asset(image_name),
+            logging=self.get_logging_configuration(),
+            environment={
+                'S3_BUCKET_NAME': s3_bucket_name,
+                'S3_OBJECT_KEY': s3_object_key,
+            }
+        ).container_name
 
     def create_event_bridge_rule(
         self, name=None, description=None, detail_type=None, status=None,
@@ -157,15 +157,6 @@ class EventBridgeEtl(well_architected.Stack):
             self,
             'newObjectInLandingBucketEventQueue',
             visibility_timeout=aws_cdk.Duration.seconds(300)
-        )
-
-    @staticmethod
-    def add_sqs_event_notification_to_bucket(
-        bucket=None, sqs_queue=None
-    ):
-        bucket.add_event_notification(
-            aws_cdk.aws_s3.EventType.OBJECT_CREATED,
-            aws_cdk.aws_s3_notifications.SqsDestination(sqs_queue)
         )
 
     def create_sqs_triggered_s3_bucket(self, sqs_queue:aws_cdk.aws_sqs.Queue=None):
