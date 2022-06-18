@@ -1,9 +1,9 @@
 {
   "Resources": {
-    "ApiLambdaDynamodbEventbridgeLambdaErrorTopic801CFB6A": {
+    "ApiLambdaDynamodbEventBridgeLambdaErrorTopic6F9BF636": {
       "Type": "AWS::SNS::Topic",
       "Properties": {
-        "DisplayName": "ApiLambdaDynamodbEventbridgeLambdaErrorTopic"
+        "DisplayName": "ApiLambdaDynamodbEventBridgeLambdaErrorTopic"
       }
     },
     "CircuitBreaker471A1E98": {
@@ -67,7 +67,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "ApiLambdaDynamodbEventbridgeLambdaErrorTopic801CFB6A"
+            "Ref": "ApiLambdaDynamodbEventBridgeLambdaErrorTopic6F9BF636"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -86,7 +86,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "ApiLambdaDynamodbEventbridgeLambdaErrorTopic801CFB6A"
+            "Ref": "ApiLambdaDynamodbEventBridgeLambdaErrorTopic6F9BF636"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -399,7 +399,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "ApiLambdaDynamodbEventbridgeLambdaErrorTopic801CFB6A"
+            "Ref": "ApiLambdaDynamodbEventBridgeLambdaErrorTopic6F9BF636"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -461,7 +461,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "ApiLambdaDynamodbEventbridgeLambdaErrorTopic801CFB6A"
+            "Ref": "ApiLambdaDynamodbEventBridgeLambdaErrorTopic6F9BF636"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -488,7 +488,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "ApiLambdaDynamodbEventbridgeLambdaErrorTopic801CFB6A"
+            "Ref": "ApiLambdaDynamodbEventBridgeLambdaErrorTopic6F9BF636"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -618,7 +618,7 @@
         ]
       }
     },
-    "webserviceErrorRuleAllowEventRuleApiLambdaDynamodbEventbridgeLambdaerrorLambdaFunction85EF86AF0652081B": {
+    "webserviceErrorRuleAllowEventRuleApiLambdaDynamodbEventBridgeLambdaerrorLambdaFunctionF82E14BDB6796DC0": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:InvokeFunction",
@@ -836,7 +836,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "ApiLambdaDynamodbEventbridgeLambdaErrorTopic801CFB6A"
+            "Ref": "ApiLambdaDynamodbEventBridgeLambdaErrorTopic6F9BF636"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -898,7 +898,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "ApiLambdaDynamodbEventbridgeLambdaErrorTopic801CFB6A"
+            "Ref": "ApiLambdaDynamodbEventBridgeLambdaErrorTopic6F9BF636"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -925,7 +925,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "ApiLambdaDynamodbEventbridgeLambdaErrorTopic801CFB6A"
+            "Ref": "ApiLambdaDynamodbEventBridgeLambdaErrorTopic6F9BF636"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -1125,7 +1125,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "ApiLambdaDynamodbEventbridgeLambdaErrorTopic801CFB6A"
+            "Ref": "ApiLambdaDynamodbEventBridgeLambdaErrorTopic6F9BF636"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -1191,7 +1191,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "ApiLambdaDynamodbEventbridgeLambdaErrorTopic801CFB6A"
+            "Ref": "ApiLambdaDynamodbEventBridgeLambdaErrorTopic6F9BF636"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -1230,7 +1230,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "ApiLambdaDynamodbEventbridgeLambdaErrorTopic801CFB6A"
+            "Ref": "ApiLambdaDynamodbEventBridgeLambdaErrorTopic6F9BF636"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -1396,7 +1396,7 @@
         }
       }
     },
-    "RestApiLambdaFunctionproxyANYApiPermissionApiLambdaDynamodbEventbridgeLambdaRestApiLambdaFunction334228F6ANYproxyD5ED899B": {
+    "RestApiLambdaFunctionproxyANYApiPermissionApiLambdaDynamodbEventBridgeLambdaRestApiLambdaFunctionAA2E3645ANYproxy21877E65": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:InvokeFunction",
@@ -1434,7 +1434,7 @@
         }
       }
     },
-    "RestApiLambdaFunctionproxyANYApiPermissionTestApiLambdaDynamodbEventbridgeLambdaRestApiLambdaFunction334228F6ANYproxy72859F3F": {
+    "RestApiLambdaFunctionproxyANYApiPermissionTestApiLambdaDynamodbEventBridgeLambdaRestApiLambdaFunctionAA2E3645ANYproxyC30DC241": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:InvokeFunction",
@@ -1505,7 +1505,7 @@
         }
       }
     },
-    "RestApiLambdaFunctionANYApiPermissionApiLambdaDynamodbEventbridgeLambdaRestApiLambdaFunction334228F6ANY05479F16": {
+    "RestApiLambdaFunctionANYApiPermissionApiLambdaDynamodbEventBridgeLambdaRestApiLambdaFunctionAA2E3645ANYC08DDA62": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:InvokeFunction",
@@ -1543,7 +1543,7 @@
         }
       }
     },
-    "RestApiLambdaFunctionANYApiPermissionTestApiLambdaDynamodbEventbridgeLambdaRestApiLambdaFunction334228F6ANY68912F5D": {
+    "RestApiLambdaFunctionANYApiPermissionTestApiLambdaDynamodbEventBridgeLambdaRestApiLambdaFunctionAA2E3645ANY6C5F2E47": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:InvokeFunction",
@@ -1621,7 +1621,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "ApiLambdaDynamodbEventbridgeLambdaErrorTopic801CFB6A"
+            "Ref": "ApiLambdaDynamodbEventBridgeLambdaErrorTopic6F9BF636"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -1687,7 +1687,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "ApiLambdaDynamodbEventbridgeLambdaErrorTopic801CFB6A"
+            "Ref": "ApiLambdaDynamodbEventBridgeLambdaErrorTopic6F9BF636"
           }
         ],
         "DatapointsToAlarm": 1,
@@ -1726,7 +1726,7 @@
         "EvaluationPeriods": 6,
         "AlarmActions": [
           {
-            "Ref": "ApiLambdaDynamodbEventbridgeLambdaErrorTopic801CFB6A"
+            "Ref": "ApiLambdaDynamodbEventBridgeLambdaErrorTopic6F9BF636"
           }
         ],
         "DatapointsToAlarm": 1,
