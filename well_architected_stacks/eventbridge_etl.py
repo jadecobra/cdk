@@ -18,8 +18,9 @@ class EventBridgeEtl(well_architected.Stack):
         self.sqs_queue = self.create_sqs_queue()
         self.vpc = self.create_vpc()
         self.ecs_cluster = self.create_ecs_cluster(self.vpc)
-        self.ecs_task_definition = self.create_ecs_task_definition()
-        self.ecs_task_definition.add_to_task_role_policy(self.event_bridge_iam_policy())
+        self.ecs_task_definition = self.create_ecs_task_definition(
+            self.event_bridge_iam_policy()
+        )
 
         self.s3_bucket = self.create_sqs_triggered_s3_bucket(
             sqs_queue=self.sqs_queue,
@@ -76,13 +77,15 @@ class EventBridgeEtl(well_architected.Stack):
     def create_ecs_cluster(self, vpc):
         return aws_cdk.aws_ecs.Cluster(self, 'EcsCluster', vpc=vpc)
 
-    def create_ecs_task_definition(self):
-        return aws_cdk.aws_ecs.TaskDefinition(
+    def create_ecs_task_definition(self, iam_policy):
+        task_definition = aws_cdk.aws_ecs.TaskDefinition(
             self, 'FargateTaskDefinition',
             memory_mib="512",
             cpu="256",
             compatibility=aws_cdk.aws_ecs.Compatibility.FARGATE
         )
+        task_definition.add_to_task_role_policy(iam_policy)
+        return task_definition
 
     def create_ecs_container(self, ecs_task_definition=None, s3_bucket_name=None, s3_object_key=None, image_name=None):
         return ecs_task_definition.add_container(
@@ -142,7 +145,6 @@ class EventBridgeEtl(well_architected.Stack):
         lambda_function = self.create_lambda_function(
             function_name='extractor',
             error_topic=error_topic,
-            # environment_variables=environment_variables,
             environment_variables={
                 "CLUSTER_NAME": ecs_cluster_name,
                 "SUBNETS": self.get_subnet_ids(vpc),
@@ -181,7 +183,7 @@ class EventBridgeEtl(well_architected.Stack):
 
     def create_sqs_triggered_s3_bucket(
         self, sqs_queue:aws_cdk.aws_sqs.Queue=None,
-        ecs_task_role:aws_cdk.aws_iam.Role=None
+        ecs_task_role:aws_cdk.aws_iam.Role=None,
     ):
         s3_bucket = aws_cdk.aws_s3.Bucket(self, "LandingBucket")
         s3_bucket.add_event_notification(
