@@ -27567,3 +27567,5 @@
 2022-06-18 21:24:49.498914::Time taken to synthesize stack: S3SqsLambdaEcsEventBridgeLambdaDynamodb::  5.5078 seconds
 2022-06-18 21:28:50.698079::Time taken to synthesize stack: ApiLambdaDynamodbEventBridgeLambda::  5.6298 seconds
 2022-06-18 21:28:56.304958::Time taken to synthesize stack: S3SqsLambdaEcsEventBridgeLambdaDynamodb::  5.6007 seconds
+2022-06-18 21:33:12.345312::Time taken to synthesize stack: ApiLambdaDynamodbEventBridgeLambda::  5.8518 seconds
+2022-06-18 21:33:18.046372::Time taken to synthesize stack: S3SqsLambdaEcsEventBridgeLambdaDynamodb::  5.6952 seconds

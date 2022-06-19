@@ -131,7 +131,9 @@ class SagaStepFunction(well_architected.Stack):
                         )
                     )
                     .next(
-                        aws_cdk.aws_stepfunctions.Succeed(self, 'We have made your booking!')
+                        aws_cdk.aws_stepfunctions.Succeed(
+                            self, 'We have made your booking!'
+                        )
                     )
             ),
             timeout=aws_cdk.Duration.minutes(5)
