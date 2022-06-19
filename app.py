@@ -7,35 +7,41 @@ class WellArchitected(aws_cdk.App):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        well_architected_stacks.ApiLambdaDynamodbEventBridgeLambda(
+            self, 'ApiLambdaDynamodbEventBridgeLambda',
+        )
         well_architected_stacks.ApiLambdaDynamodbStack(
             self, 'ApiLambdaDynamodb',
             function_name='circuit_breaker_lambda',
             partition_key='id',
         )
-        well_architected_stacks.ApiLambdaDynamodbEventBridgeLambda(
-            self, 'ApiLambdaDynamodbEventBridgeLambda',
-        )
         well_architected_stacks.ApiLambdaEventBridgeLambda(
             self, 'ApiLambdaEventBridgeLambda'
         )
         well_architected_stacks.ApiLambdaRds(self, 'ApiLambdaRds')
-        well_architected_stacks.ApiLambdaSqsLambdaDynamodb(self, 'ApiLambdaSqsLambdaDynamodb')
+        well_architected_stacks.ApiLambdaSqsLambdaDynamodb(
+            self, 'ApiLambdaSqsLambdaDynamodb'
+        )
         well_architected_stacks.ApiStepFunctions(self, 'ApiStepFunctions')
-        well_architected_stacks.RestApiSnsSqsLambda(self, 'RestApiSnsSqsLambda')
+        well_architected_stacks.LambdaPowerTuner(self, 'LambdaPowerTuner')
         well_architected_stacks.RestApiDynamodb(
             self, 'RestApiDynamodb',
             partition_key='message',
         )
-        well_architected_stacks.S3SqsLambdaEcsEventBridgeLambdaDynamodb(
-            self, 'S3SqsLambdaEcsEventBridgeLambdaDynamodb'
-        )
-        well_architected_stacks.LambdaPowerTuner(self, 'LambdaPowerTuner')
         well_architected_stacks.RestApiSnsLambdaEventBridgeLambda(
             self, 'RestApiSnsLambdaEventBridgeLambda'
         )
+        well_architected_stacks.RestApiSnsSqsLambda(self, 'RestApiSnsSqsLambda')
+        well_architected_stacks.S3SqsLambdaEcsEventBridgeLambdaDynamodb(
+            self, 'S3SqsLambdaEcsEventBridgeLambdaDynamodb'
+        )
         well_architected_stacks.SagaStepFunction(self, 'SagaStepFunction')
-        well_architected_stacks.SimpleGraphQlService(self, 'SimpleGraphqlService')
-        well_architected_stacks.WafApiLambdaDynamodb(self, 'WafApiLambdaDynamodb')
+        well_architected_stacks.SimpleGraphQlService(
+            self, 'SimpleGraphqlService'
+        )
+        well_architected_stacks.WafApiLambdaDynamodb(
+            self, 'WafApiLambdaDynamodb'
+        )
 
         self.lambda_trilogy()
         self.xray_tracer()
