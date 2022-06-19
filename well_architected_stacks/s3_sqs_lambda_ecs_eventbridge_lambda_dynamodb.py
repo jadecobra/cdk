@@ -6,8 +6,7 @@ import well_architected_constructs.dynamodb_table
 import well_architected_constructs.lambda_function
 
 
-# s3_sqs_lambda_ecs_eventbridge_lambda_dynamodb
-class EventBridgeEtl(well_architected.Stack):
+class S3SqsLambdaEcsEventBridgeLambdaDynamodb(well_architected.Stack):
 
     def __init__(
         self, scope: constructs.Construct, id: str,
@@ -22,12 +21,12 @@ class EventBridgeEtl(well_architected.Stack):
             self.event_bridge_iam_policy()
         )
 
-        self.s3_bucket = self.create_sqs_triggered_s3_bucket(
+        self.s3_bucket = self.create_s3_bucket_with_sqs_destination(
             sqs_queue=self.sqs_queue,
             ecs_task_role=self.ecs_task_definition.task_role,
         )
 
-        self.extractor = self.create_extractor_lambda_function(
+        self.extractor = self.create_sqs_subscriber_lambda_function(
             ecs_task_definition=self.ecs_task_definition,
             error_topic=self.error_topic,
             sqs_queue=self.sqs_queue,
@@ -137,7 +136,7 @@ class EventBridgeEtl(well_architected.Stack):
             )
         ).lambda_function
 
-    def create_extractor_lambda_function(
+    def create_sqs_subscriber_lambda_function(
         self, ecs_task_definition=None, error_topic=None,
         sqs_queue=None, s3_bucket_name=None, s3_object_key=None,
         image_name=None, ecs_cluster_name=None, vpc=None,
@@ -181,7 +180,7 @@ class EventBridgeEtl(well_architected.Stack):
             visibility_timeout=aws_cdk.Duration.seconds(300)
         )
 
-    def create_sqs_triggered_s3_bucket(
+    def create_s3_bucket_with_sqs_destination(
         self, sqs_queue:aws_cdk.aws_sqs.Queue=None,
         ecs_task_role:aws_cdk.aws_iam.Role=None,
     ):

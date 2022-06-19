@@ -3,7 +3,7 @@ from .api_lambda_rds import ApiLambdaRds
 from .api_lambda_dynamodb import ApiLambdaDynamodbStack
 from .api_lambda_dynamodb_eventbridge_lambda import ApiLambdaDynamodbEventBridgeLambda
 from .api_lambda_eventbridge_lambda import ApiLambdaEventBridgeLambda
-from .eventbridge_etl import EventBridgeEtl
+from .s3_sqs_lambda_ecs_eventbridge_lambda_dynamodb import S3SqsLambdaEcsEventBridgeLambdaDynamodb
 from .lambda_power_tuner import LambdaPowerTuner
 from .rest_api_dynamodb import RestApiDynamodb
 from .rest_api_sns import RestApiSnsStack

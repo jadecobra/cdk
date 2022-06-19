@@ -27523,3 +27523,5 @@
 2022-06-18 21:04:16.431847::Time taken to synthesize stack: EventBridgeEtl::  5.4998 seconds
 2022-06-18 21:05:40.149571::Time taken to synthesize stack: ApiLambdaDynamodbEventBridgeLambda::  5.6347 seconds
 2022-06-18 21:05:45.744290::Time taken to synthesize stack: EventBridgeEtl::  5.5889 seconds
+2022-06-18 21:07:40.284061::Time taken to synthesize stack: ApiLambdaDynamodbEventBridgeLambda::  5.5447 seconds
+2022-06-18 21:07:45.804286::Time taken to synthesize stack: EventBridgeEtl::  5.5149 seconds
