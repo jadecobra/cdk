@@ -1,7 +1,7 @@
 import aws_cdk
 import well_architected_stacks
 import stacks.ecs.autoscaling_ecs
-import stacks.ecs.ecs_load_balanced_service
+import stacks.ecs.nlb_autoscaling_ecs
 
 
 class WellArchitected(aws_cdk.App):
@@ -97,8 +97,8 @@ class WellArchitected(aws_cdk.App):
         stacks.ecs.autoscaling_ecs.AutoscalingEcs(
             self, 'AutoscalingEcs',
         )
-        stacks.ecs.ecs_load_balanced_service.NlbAutoscalingEcs(
-            self, 'EcsLoadBalancedService'
+        stacks.ecs.nlb_autoscaling_ecs.NlbAutoscalingEcs(
+            self, 'NlbAutoscalingEcs'
         )
 
 WellArchitected().synth()
@@ -107,3 +107,4 @@ WellArchitected().synth()
 # StateMachine examples - https://docs.amazon.com/step-functions/latest/dg/create-sample-projects.html
 # EventBridge examples - https://docs.amazon.com/eventbridge/latest/userguide/eb-service-event.html
 # Read Lambda Powertools docs
+# ECS Examples

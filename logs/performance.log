@@ -27769,3 +27769,9 @@
 2022-06-29 16:29:04.632165::Time taken to synthesize stack: EcsLoadBalancedService::  7.1099 seconds
 2022-06-29 16:29:33.843596::Time taken to synthesize stack: AutoscalingEcs::  7.4267 seconds
 2022-06-29 16:29:40.708560::Time taken to synthesize stack: EcsLoadBalancedService::  6.8492 seconds
+2022-06-29 16:30:10.831380::Time taken to synthesize stack: AutoscalingEcs::  7.0684 seconds
+2022-06-29 16:30:17.768395::Time taken to synthesize stack: EcsLoadBalancedService::  6.9289 seconds
+2022-06-29 16:32:58.669973::Time taken to synthesize stack: NlbAutoscalingEcs::  6.8892 seconds
+2022-06-29 16:33:09.277667::Time taken to synthesize stack: NlbAutoscalingEcs::  6.5086 seconds
+2022-06-29 16:34:57.351697::Time taken to synthesize stack: NlbAutoscalingEcs::  6.6071 seconds
+2022-06-29 16:35:04.118600::Time taken to synthesize stack: AutoscalingEcs::  6.7581 seconds
