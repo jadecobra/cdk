@@ -1,17 +1,15 @@
-from aws_cdk import (
-    aws_autoscaling as autoscaling,
-    aws_ec2 as ec2,
-    aws_ecs as ecs,
-    aws_ecs_patterns as ecs_patterns,
-    App, CfnOutput, Stack
-)
 import aws_cdk
 import constructs
 
 
+
 class NlbAutoscalingEcs(aws_cdk.Stack):
 
-    def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
+    def __init__(
+        self, scope: constructs.Construct, id: str,
+        container_image=None,
+        **kwargs
+    ) -> None:
         super().__init__(scope, id, *kwargs)
 
         vpc = self.create_vpc()
@@ -20,9 +18,12 @@ class NlbAutoscalingEcs(aws_cdk.Stack):
             self.create_autoscaling_group_provider(vpc)
         )
 
-        ecs_service = self.create_ecs_service(ecs_cluster)
+        ecs_service = self.create_ecs_service(
+            ecs_cluster=ecs_cluster,
+            container_image=container_image,
+        )
 
-        CfnOutput(
+        aws_cdk.CfnOutput(
             self, "LoadBalancerDNS",
             value=ecs_service.load_balancer.load_balancer_dns_name
         )
@@ -40,10 +41,10 @@ class NlbAutoscalingEcs(aws_cdk.Stack):
         )
 
     def create_autoscaling_group(self, vpc):
-        return autoscaling.AutoScalingGroup(
+        return aws_cdk.aws_autoscaling.AutoScalingGroup(
             self, "AutoScalingGroup",
-            instance_type=ec2.InstanceType("t2.micro"),
-            machine_image=ecs.EcsOptimizedImage.amazon_linux2(),
+            instance_type=aws_cdk.aws_ec2.InstanceType("t2.micro"),
+            machine_image=aws_cdk.aws_ecs.EcsOptimizedImage.amazon_linux2(),
             vpc=vpc,
         )
 
@@ -53,12 +54,14 @@ class NlbAutoscalingEcs(aws_cdk.Stack):
             auto_scaling_group=self.create_autoscaling_group(vpc)
         )
 
-    def create_ecs_service(self, ecs_cluster):
+    def create_ecs_service(self, ecs_cluster=None, container_image=None):
         return aws_cdk.aws_ecs_patterns.NetworkLoadBalancedEc2Service(
             self, "Ec2Service",
             cluster=ecs_cluster,
             memory_limit_mib=512,
-            task_image_options=ecs_patterns.NetworkLoadBalancedTaskImageOptions(
-                image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample")
+            task_image_options=aws_cdk.aws_ecs_patterns.NetworkLoadBalancedTaskImageOptions(
+                image=aws_cdk.aws_ecs.ContainerImage.from_registry(
+                    container_image
+                )
             )
         )

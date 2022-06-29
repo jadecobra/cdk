@@ -98,7 +98,8 @@ class WellArchitected(aws_cdk.App):
             self, 'AutoscalingEcs',
         )
         stacks.ecs.nlb_autoscaling_ecs.NlbAutoscalingEcs(
-            self, 'NlbAutoscalingEcs'
+            self, 'NlbAutoscalingEcs',
+            container_image="amazon/amazon-ecs-sample",
         )
 
 WellArchitected().synth()
