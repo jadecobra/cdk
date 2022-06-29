@@ -1,5 +1,6 @@
 import aws_cdk
 import well_architected_stacks
+import stacks.ecs.ecs_cluster
 
 
 class WellArchitected(aws_cdk.App):
@@ -86,6 +87,11 @@ class WellArchitected(aws_cdk.App):
             self, 'SnsDynamodbLambda',
             sns_topic=xray_tracer_sns_topic.sns_topic,
             error_topic=xray_tracer_sns_topic.error_topic,
+        )
+
+    def test_in_progress(self):
+        stacks.ecs.ecs_cluster.EcsCluster(
+            self, 'EcsCluster',
         )
 
 WellArchitected().synth()
