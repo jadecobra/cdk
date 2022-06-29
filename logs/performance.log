@@ -27689,3 +27689,5 @@
 2022-06-29 16:13:25.665908::Time taken to synthesize stack: EcsLoadBalancedService::  7.3861 seconds
 2022-06-29 16:13:36.779394::Time taken to synthesize stack: EcsCluster::  6.6074 seconds
 2022-06-29 16:13:43.301177::Time taken to synthesize stack: EcsLoadBalancedService::  6.5141 seconds
+2022-06-29 16:13:53.982811::Time taken to synthesize stack: EcsCluster::  6.6108 seconds
+2022-06-29 16:14:00.565349::Time taken to synthesize stack: EcsLoadBalancedService::  6.5760 seconds
