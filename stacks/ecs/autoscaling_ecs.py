@@ -1,27 +1,17 @@
 import aws_cdk
 import constructs
+import regular_constructs.autoscaling_ecs
+
 
 class AutoscalingEcsConstruct(aws_cdk.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs):
         super().__init__(scope, id, **kwargs)
-
-        self.vpc = self.create_vpc()
-        self.ecs_cluster = self.create_ecs_cluster(self.vpc)
-        self.ecs_cluster.add_asg_capacity_provider(
-            self.create_autoscaling_group_provider(self.vpc)
+        ecs_cluster = regular_constructs.autoscaling_ecs.AutoscalingEcsConstruct(
+            self, 'AutoscalingEcs',
         )
-
-    def create_vpc(self, max_azs=4):
-        return aws_cdk.aws_ec2.Vpc(
-            self, 'Vpc',
-            max_azs=2,
-        )
-
-    def create_ecs_cluster(self, vpc):
-        return aws_cdk.aws_ecs.Cluster(
-            self, 'EcsCluster',
-            vpc=vpc
+        ecs_cluster.create_autoscaling_group_provider(
+            self.create_autoscaling_group(ecs_cluster.vpc)
         )
 
     def get_subnets(self):
@@ -38,10 +28,4 @@ class AutoscalingEcsConstruct(aws_cdk.Stack):
             desired_capacity=3,
             vpc=vpc,
             vpc_subnets=self.get_subnets(),
-        )
-
-    def create_autoscaling_group_provider(self, vpc):
-        return aws_cdk.aws_ecs.AsgCapacityProvider(
-            self, "AsgCapacityProvider",
-            auto_scaling_group=self.create_autoscaling_group(vpc)
         )

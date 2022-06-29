@@ -12,7 +12,7 @@ class NlbAutoscalingEcs(aws_cdk.Stack):
     ) -> None:
         super().__init__(scope, id, *kwargs)
 
-        ecs_cluster = regular_constructs.autoscaling_ecs.AutoscalingEcs(
+        ecs_cluster = regular_constructs.autoscaling_ecs.AutoscalingEcsConstruct(
             self, 'AutoscalingEcs',
         )
         ecs_cluster.create_autoscaling_group_provider(
