@@ -2,55 +2,52 @@ import boto3
 import time
 import os
 import csv
-from datetime import datetime
+import datetime
 import json
 
-def main():
-    event_bridge = boto3.client('events')
-    # https://stackoverflow.com/questions/4906977/how-to-access-environment-variable-values
+EVENT_BRIDGE = boto3.client('events')
+S3 = boto3.resource('s3')
 
-    data_s3_bucket_name = os.environ.get('S3_BUCKET_NAME')
-    data_s3_object_key  = os.environ.get('S3_OBJECT_KEY')
+def download_s3_object(filename=None, bucket_name=None, object_key=None):
+    return S3.Object(
+        os.environ.get(bucket_name),
+        os.environ.get(object_key)
+    ).download_file(filename)
 
-    if (None == data_s3_bucket_name
-     or None == data_s3_object_key):
-        print('ERROR: unable to retrieve environment variables (s3 bucket or object key, stream name')
-        exit(1)
+def get_detail(headers=None, row=None):
+    return json.dumps({
+        'status': 'extracted',
+        'headers': ','.join(headers),
+        'data': ','.join(row)
+    })
 
-    print('Bucket Name ' + data_s3_bucket_name)
-    print('S3 Object Key ' + data_s3_object_key)
-
-    local_file = '/tmp/data.tsv'
-
-    s3_resource = boto3.resource('s3')
-    s3_resource.Object(data_s3_bucket_name, data_s3_object_key).download_file(local_file)
-
-    print('SUCCESS: data file downloaded: ' + local_file)
-
-
-    with open(local_file) as csvfile:
+def main(filename):
+    with open(filename) as csvfile:
         reader = csv.reader(csvfile, delimiter=',')
         headers = next(reader)
         for row in reader:
             print(', '.join(row))
-            event = {
-                'status': 'extracted',
-                'headers': ','.join(headers),
-                'data': ','.join(row)
-            }
-            response = event_bridge.put_events(
+            response = EVENT_BRIDGE.put_events(
                 Entries=[
                     {
                         'DetailType': 's3RecordExtraction',
                         'EventBusName': 'default',
                         'Source': 'cdkpatterns.the-eventbridge-etl',
                         'Time': datetime.now(),
-                        'Detail': json.dumps(event)
-
+                        'Detail': get_detail(
+                            headers=headers,
+                            row=row
+                        )
                     },
                 ]
             )
     exit(0)
 
 if __name__ == '__main__':
-    main()
+    filename='/tmp/data.tsv'
+    download_s3_object(
+        bucket_name='S3_BUCKET_NAME',
+        object_key='S3_OBJECT_KEY',
+        filename=filename,
+    )
+    main(filename)
