@@ -94,7 +94,7 @@ class WellArchitected(aws_cdk.App):
         )
 
     def currently_testing(self):
-        stacks.ecs.autoscaling_ecs.AutoscalingEcs(
+        stacks.ecs.autoscaling_ecs.AutoscalingEcsConstruct(
             self, 'AutoscalingEcs',
         )
         stacks.ecs.nlb_autoscaling_ecs.NlbAutoscalingEcs(

@@ -1,11 +1,11 @@
 import aws_cdk
 import constructs
 
-class AutoscalingEcs(aws_cdk.Stack):
+class AutoscalingEcsConstruct(aws_cdk.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs):
         super().__init__(scope, id, **kwargs)
-        
+
         self.vpc = self.create_vpc()
         self.ecs_cluster = self.create_ecs_cluster(self.vpc)
         self.ecs_cluster.add_asg_capacity_provider(

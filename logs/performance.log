@@ -27809,3 +27809,5 @@
 2022-06-29 17:10:26.102887::Time taken to synthesize stack: NlbAutoscalingEcs::  6.6381 seconds
 2022-06-29 17:13:44.305400::Time taken to synthesize stack: AutoscalingEcs::  7.2441 seconds
 2022-06-29 17:13:51.316802::Time taken to synthesize stack: NlbAutoscalingEcs::  7.0028 seconds
+2022-06-29 17:14:16.759495::Time taken to synthesize stack: AutoscalingEcs::  6.4042 seconds
+2022-06-29 17:14:23.500759::Time taken to synthesize stack: NlbAutoscalingEcs::  6.7352 seconds
