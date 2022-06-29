@@ -8,6 +8,12 @@ class WellArchitected(aws_cdk.App):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        self.create_well_architected_stacks()
+        self.lambda_trilogy()
+        self.xray_tracer()
+        self.currently_testing()
+
+    def create_well_architected_stacks(self):
         well_architected_stacks.ApiLambdaDynamodbEventBridgeLambda(
             self, 'ApiLambdaDynamodbEventBridgeLambda',
         )
@@ -43,9 +49,6 @@ class WellArchitected(aws_cdk.App):
         well_architected_stacks.WafApiLambdaDynamodb(
             self, 'WafApiLambdaDynamodb'
         )
-
-        self.lambda_trilogy()
-        self.xray_tracer()
 
     def lambda_trilogy(self):
         well_architected_stacks.lambda_trilogy.LambdaLith(self, "LambdaLith")
@@ -89,7 +92,7 @@ class WellArchitected(aws_cdk.App):
             error_topic=xray_tracer_sns_topic.error_topic,
         )
 
-    def test_in_progress(self):
+    def currently_testing(self):
         stacks.ecs.ecs_cluster.EcsCluster(
             self, 'EcsCluster',
         )
