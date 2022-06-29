@@ -10,7 +10,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "EcsCluster/Vpc"
+            "Value": "AutoscalingEcs/Vpc"
           }
         ]
       }
@@ -42,7 +42,7 @@
           },
           {
             "Key": "Name",
-            "Value": "EcsCluster/Vpc/PublicSubnet1"
+            "Value": "AutoscalingEcs/Vpc/PublicSubnet1"
           }
         ]
       }
@@ -56,7 +56,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "EcsCluster/Vpc/PublicSubnet1"
+            "Value": "AutoscalingEcs/Vpc/PublicSubnet1"
           }
         ]
       }
@@ -92,7 +92,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "EcsCluster/Vpc/PublicSubnet1"
+            "Value": "AutoscalingEcs/Vpc/PublicSubnet1"
           }
         ]
       }
@@ -109,7 +109,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "EcsCluster/Vpc/PublicSubnet1"
+            "Value": "AutoscalingEcs/Vpc/PublicSubnet1"
           }
         ]
       }
@@ -141,7 +141,7 @@
           },
           {
             "Key": "Name",
-            "Value": "EcsCluster/Vpc/PublicSubnet2"
+            "Value": "AutoscalingEcs/Vpc/PublicSubnet2"
           }
         ]
       }
@@ -155,7 +155,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "EcsCluster/Vpc/PublicSubnet2"
+            "Value": "AutoscalingEcs/Vpc/PublicSubnet2"
           }
         ]
       }
@@ -191,7 +191,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "EcsCluster/Vpc/PublicSubnet2"
+            "Value": "AutoscalingEcs/Vpc/PublicSubnet2"
           }
         ]
       }
@@ -208,7 +208,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "EcsCluster/Vpc/PublicSubnet2"
+            "Value": "AutoscalingEcs/Vpc/PublicSubnet2"
           }
         ]
       }
@@ -240,7 +240,7 @@
           },
           {
             "Key": "Name",
-            "Value": "EcsCluster/Vpc/PrivateSubnet1"
+            "Value": "AutoscalingEcs/Vpc/PrivateSubnet1"
           }
         ]
       }
@@ -254,7 +254,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "EcsCluster/Vpc/PrivateSubnet1"
+            "Value": "AutoscalingEcs/Vpc/PrivateSubnet1"
           }
         ]
       }
@@ -309,7 +309,7 @@
           },
           {
             "Key": "Name",
-            "Value": "EcsCluster/Vpc/PrivateSubnet2"
+            "Value": "AutoscalingEcs/Vpc/PrivateSubnet2"
           }
         ]
       }
@@ -323,7 +323,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "EcsCluster/Vpc/PrivateSubnet2"
+            "Value": "AutoscalingEcs/Vpc/PrivateSubnet2"
           }
         ]
       }
@@ -357,7 +357,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "EcsCluster/Vpc"
+            "Value": "AutoscalingEcs/Vpc"
           }
         ]
       }
@@ -393,7 +393,7 @@
     "AutoScalingGroupInstanceSecurityGroup9D2E0C5E": {
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
-        "GroupDescription": "EcsCluster/AutoScalingGroup/InstanceSecurityGroup",
+        "GroupDescription": "AutoscalingEcs/AutoScalingGroup/InstanceSecurityGroup",
         "SecurityGroupEgress": [
           {
             "CidrIp": "0.0.0.0/0",
@@ -404,7 +404,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "EcsCluster/AutoScalingGroup"
+            "Value": "AutoscalingEcs/AutoScalingGroup"
           }
         ],
         "VpcId": {
@@ -440,7 +440,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "EcsCluster/AutoScalingGroup"
+            "Value": "AutoscalingEcs/AutoScalingGroup"
           }
         ]
       }
@@ -557,7 +557,7 @@
           {
             "Key": "Name",
             "PropagateAtLaunch": true,
-            "Value": "EcsCluster/AutoScalingGroup"
+            "Value": "AutoscalingEcs/AutoScalingGroup"
           }
         ],
         "VPCZoneIdentifier": [

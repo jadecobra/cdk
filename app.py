@@ -1,6 +1,7 @@
 import aws_cdk
 import well_architected_stacks
-import stacks.ecs.ecs_cluster
+import stacks.ecs.autoscaling_ecs
+import stacks.ecs.ecs_load_balanced_service
 
 
 class WellArchitected(aws_cdk.App):
@@ -93,8 +94,11 @@ class WellArchitected(aws_cdk.App):
         )
 
     def currently_testing(self):
-        stacks.ecs.ecs_cluster.EcsCluster(
-            self, 'EcsCluster',
+        stacks.ecs.autoscaling_ecs.AutoscalingEcs(
+            self, 'AutoscalingEcs',
+        )
+        stacks.ecs.ecs_load_balanced_service.NlbAutoscalingEcs(
+            self, 'EcsLoadBalancedService'
         )
 
 WellArchitected().synth()

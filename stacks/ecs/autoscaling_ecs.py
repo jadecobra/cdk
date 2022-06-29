@@ -1,7 +1,7 @@
 import aws_cdk
 import constructs
 
-class EcsCluster(aws_cdk.Stack):
+class AutoscalingEcs(aws_cdk.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs):
         super().__init__(scope, id, **kwargs)
@@ -15,7 +15,7 @@ class EcsCluster(aws_cdk.Stack):
     def create_vpc(self, max_azs=4):
         return aws_cdk.aws_ec2.Vpc(
             self, 'Vpc',
-            max_azs=4,
+            max_azs=2,
         )
 
     def create_ecs_cluster(self, vpc):
