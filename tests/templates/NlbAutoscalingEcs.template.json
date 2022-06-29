@@ -1,6 +1,6 @@
 {
   "Resources": {
-    "Vpc8378EB38": {
+    "AutoscalingEcsVpcE1C9A87D": {
       "Type": "AWS::EC2::VPC",
       "Properties": {
         "CidrBlock": "10.0.0.0/16",
@@ -10,16 +10,16 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "NlbAutoscalingEcs/Vpc"
+            "Value": "NlbAutoscalingEcs/AutoscalingEcs/Vpc"
           }
         ]
       }
     },
-    "VpcPublicSubnet1Subnet5C2D37C4": {
+    "AutoscalingEcsVpcPublicSubnet1Subnet0E9D1C37": {
       "Type": "AWS::EC2::Subnet",
       "Properties": {
         "VpcId": {
-          "Ref": "Vpc8378EB38"
+          "Ref": "AutoscalingEcsVpcE1C9A87D"
         },
         "AvailabilityZone": {
           "Fn::Select": [
@@ -42,83 +42,86 @@
           },
           {
             "Key": "Name",
-            "Value": "NlbAutoscalingEcs/Vpc/PublicSubnet1"
+            "Value": "NlbAutoscalingEcs/AutoscalingEcs/Vpc/PublicSubnet1"
           }
         ]
       }
     },
-    "VpcPublicSubnet1RouteTable6C95E38E": {
+    "AutoscalingEcsVpcPublicSubnet1RouteTableE33CE318": {
       "Type": "AWS::EC2::RouteTable",
       "Properties": {
         "VpcId": {
-          "Ref": "Vpc8378EB38"
+          "Ref": "AutoscalingEcsVpcE1C9A87D"
         },
         "Tags": [
           {
             "Key": "Name",
-            "Value": "NlbAutoscalingEcs/Vpc/PublicSubnet1"
+            "Value": "NlbAutoscalingEcs/AutoscalingEcs/Vpc/PublicSubnet1"
           }
         ]
       }
     },
-    "VpcPublicSubnet1RouteTableAssociation97140677": {
+    "AutoscalingEcsVpcPublicSubnet1RouteTableAssociation8E51148B": {
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
       "Properties": {
         "RouteTableId": {
-          "Ref": "VpcPublicSubnet1RouteTable6C95E38E"
+          "Ref": "AutoscalingEcsVpcPublicSubnet1RouteTableE33CE318"
         },
         "SubnetId": {
-          "Ref": "VpcPublicSubnet1Subnet5C2D37C4"
+          "Ref": "AutoscalingEcsVpcPublicSubnet1Subnet0E9D1C37"
         }
       }
     },
-    "VpcPublicSubnet1DefaultRoute3DA9E72A": {
+    "AutoscalingEcsVpcPublicSubnet1DefaultRouteF551E42E": {
       "Type": "AWS::EC2::Route",
       "Properties": {
         "RouteTableId": {
-          "Ref": "VpcPublicSubnet1RouteTable6C95E38E"
+          "Ref": "AutoscalingEcsVpcPublicSubnet1RouteTableE33CE318"
         },
         "DestinationCidrBlock": "0.0.0.0/0",
         "GatewayId": {
-          "Ref": "VpcIGWD7BA715C"
+          "Ref": "AutoscalingEcsVpcIGWF6A06F4B"
         }
       },
-      "DependsOn": ["VpcVPCGWBF912B6E"]
+      "DependsOn": ["AutoscalingEcsVpcVPCGWF1FD80F0"]
     },
-    "VpcPublicSubnet1EIPD7E02669": {
+    "AutoscalingEcsVpcPublicSubnet1EIP0B2F04E2": {
       "Type": "AWS::EC2::EIP",
       "Properties": {
         "Domain": "vpc",
         "Tags": [
           {
             "Key": "Name",
-            "Value": "NlbAutoscalingEcs/Vpc/PublicSubnet1"
+            "Value": "NlbAutoscalingEcs/AutoscalingEcs/Vpc/PublicSubnet1"
           }
         ]
       }
     },
-    "VpcPublicSubnet1NATGateway4D7517AA": {
+    "AutoscalingEcsVpcPublicSubnet1NATGateway0BD71ABF": {
       "Type": "AWS::EC2::NatGateway",
       "Properties": {
         "SubnetId": {
-          "Ref": "VpcPublicSubnet1Subnet5C2D37C4"
+          "Ref": "AutoscalingEcsVpcPublicSubnet1Subnet0E9D1C37"
         },
         "AllocationId": {
-          "Fn::GetAtt": ["VpcPublicSubnet1EIPD7E02669", "AllocationId"]
+          "Fn::GetAtt": [
+            "AutoscalingEcsVpcPublicSubnet1EIP0B2F04E2",
+            "AllocationId"
+          ]
         },
         "Tags": [
           {
             "Key": "Name",
-            "Value": "NlbAutoscalingEcs/Vpc/PublicSubnet1"
+            "Value": "NlbAutoscalingEcs/AutoscalingEcs/Vpc/PublicSubnet1"
           }
         ]
       }
     },
-    "VpcPublicSubnet2Subnet691E08A3": {
+    "AutoscalingEcsVpcPublicSubnet2Subnet8ED15042": {
       "Type": "AWS::EC2::Subnet",
       "Properties": {
         "VpcId": {
-          "Ref": "Vpc8378EB38"
+          "Ref": "AutoscalingEcsVpcE1C9A87D"
         },
         "AvailabilityZone": {
           "Fn::Select": [
@@ -141,83 +144,86 @@
           },
           {
             "Key": "Name",
-            "Value": "NlbAutoscalingEcs/Vpc/PublicSubnet2"
+            "Value": "NlbAutoscalingEcs/AutoscalingEcs/Vpc/PublicSubnet2"
           }
         ]
       }
     },
-    "VpcPublicSubnet2RouteTable94F7E489": {
+    "AutoscalingEcsVpcPublicSubnet2RouteTable940AFAB4": {
       "Type": "AWS::EC2::RouteTable",
       "Properties": {
         "VpcId": {
-          "Ref": "Vpc8378EB38"
+          "Ref": "AutoscalingEcsVpcE1C9A87D"
         },
         "Tags": [
           {
             "Key": "Name",
-            "Value": "NlbAutoscalingEcs/Vpc/PublicSubnet2"
+            "Value": "NlbAutoscalingEcs/AutoscalingEcs/Vpc/PublicSubnet2"
           }
         ]
       }
     },
-    "VpcPublicSubnet2RouteTableAssociationDD5762D8": {
+    "AutoscalingEcsVpcPublicSubnet2RouteTableAssociation647618A9": {
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
       "Properties": {
         "RouteTableId": {
-          "Ref": "VpcPublicSubnet2RouteTable94F7E489"
+          "Ref": "AutoscalingEcsVpcPublicSubnet2RouteTable940AFAB4"
         },
         "SubnetId": {
-          "Ref": "VpcPublicSubnet2Subnet691E08A3"
+          "Ref": "AutoscalingEcsVpcPublicSubnet2Subnet8ED15042"
         }
       }
     },
-    "VpcPublicSubnet2DefaultRoute97F91067": {
+    "AutoscalingEcsVpcPublicSubnet2DefaultRouteEA3CEB6D": {
       "Type": "AWS::EC2::Route",
       "Properties": {
         "RouteTableId": {
-          "Ref": "VpcPublicSubnet2RouteTable94F7E489"
+          "Ref": "AutoscalingEcsVpcPublicSubnet2RouteTable940AFAB4"
         },
         "DestinationCidrBlock": "0.0.0.0/0",
         "GatewayId": {
-          "Ref": "VpcIGWD7BA715C"
+          "Ref": "AutoscalingEcsVpcIGWF6A06F4B"
         }
       },
-      "DependsOn": ["VpcVPCGWBF912B6E"]
+      "DependsOn": ["AutoscalingEcsVpcVPCGWF1FD80F0"]
     },
-    "VpcPublicSubnet2EIP3C605A87": {
+    "AutoscalingEcsVpcPublicSubnet2EIP44D3380F": {
       "Type": "AWS::EC2::EIP",
       "Properties": {
         "Domain": "vpc",
         "Tags": [
           {
             "Key": "Name",
-            "Value": "NlbAutoscalingEcs/Vpc/PublicSubnet2"
+            "Value": "NlbAutoscalingEcs/AutoscalingEcs/Vpc/PublicSubnet2"
           }
         ]
       }
     },
-    "VpcPublicSubnet2NATGateway9182C01D": {
+    "AutoscalingEcsVpcPublicSubnet2NATGateway3B6BADEC": {
       "Type": "AWS::EC2::NatGateway",
       "Properties": {
         "SubnetId": {
-          "Ref": "VpcPublicSubnet2Subnet691E08A3"
+          "Ref": "AutoscalingEcsVpcPublicSubnet2Subnet8ED15042"
         },
         "AllocationId": {
-          "Fn::GetAtt": ["VpcPublicSubnet2EIP3C605A87", "AllocationId"]
+          "Fn::GetAtt": [
+            "AutoscalingEcsVpcPublicSubnet2EIP44D3380F",
+            "AllocationId"
+          ]
         },
         "Tags": [
           {
             "Key": "Name",
-            "Value": "NlbAutoscalingEcs/Vpc/PublicSubnet2"
+            "Value": "NlbAutoscalingEcs/AutoscalingEcs/Vpc/PublicSubnet2"
           }
         ]
       }
     },
-    "VpcPrivateSubnet1Subnet536B997A": {
+    "AutoscalingEcsVpcPrivateSubnet1Subnet87F43741": {
       "Type": "AWS::EC2::Subnet",
       "Properties": {
         "VpcId": {
-          "Ref": "Vpc8378EB38"
+          "Ref": "AutoscalingEcsVpcE1C9A87D"
         },
         "AvailabilityZone": {
           "Fn::Select": [
@@ -240,53 +246,53 @@
           },
           {
             "Key": "Name",
-            "Value": "NlbAutoscalingEcs/Vpc/PrivateSubnet1"
+            "Value": "NlbAutoscalingEcs/AutoscalingEcs/Vpc/PrivateSubnet1"
           }
         ]
       }
     },
-    "VpcPrivateSubnet1RouteTableB2C5B500": {
+    "AutoscalingEcsVpcPrivateSubnet1RouteTableE6F951E8": {
       "Type": "AWS::EC2::RouteTable",
       "Properties": {
         "VpcId": {
-          "Ref": "Vpc8378EB38"
+          "Ref": "AutoscalingEcsVpcE1C9A87D"
         },
         "Tags": [
           {
             "Key": "Name",
-            "Value": "NlbAutoscalingEcs/Vpc/PrivateSubnet1"
+            "Value": "NlbAutoscalingEcs/AutoscalingEcs/Vpc/PrivateSubnet1"
           }
         ]
       }
     },
-    "VpcPrivateSubnet1RouteTableAssociation70C59FA6": {
+    "AutoscalingEcsVpcPrivateSubnet1RouteTableAssociation6DBD6906": {
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
       "Properties": {
         "RouteTableId": {
-          "Ref": "VpcPrivateSubnet1RouteTableB2C5B500"
+          "Ref": "AutoscalingEcsVpcPrivateSubnet1RouteTableE6F951E8"
         },
         "SubnetId": {
-          "Ref": "VpcPrivateSubnet1Subnet536B997A"
+          "Ref": "AutoscalingEcsVpcPrivateSubnet1Subnet87F43741"
         }
       }
     },
-    "VpcPrivateSubnet1DefaultRouteBE02A9ED": {
+    "AutoscalingEcsVpcPrivateSubnet1DefaultRouteA68519C8": {
       "Type": "AWS::EC2::Route",
       "Properties": {
         "RouteTableId": {
-          "Ref": "VpcPrivateSubnet1RouteTableB2C5B500"
+          "Ref": "AutoscalingEcsVpcPrivateSubnet1RouteTableE6F951E8"
         },
         "DestinationCidrBlock": "0.0.0.0/0",
         "NatGatewayId": {
-          "Ref": "VpcPublicSubnet1NATGateway4D7517AA"
+          "Ref": "AutoscalingEcsVpcPublicSubnet1NATGateway0BD71ABF"
         }
       }
     },
-    "VpcPrivateSubnet2Subnet3788AAA1": {
+    "AutoscalingEcsVpcPrivateSubnet2Subnet57142116": {
       "Type": "AWS::EC2::Subnet",
       "Properties": {
         "VpcId": {
-          "Ref": "Vpc8378EB38"
+          "Ref": "AutoscalingEcsVpcE1C9A87D"
         },
         "AvailabilityZone": {
           "Fn::Select": [
@@ -309,85 +315,100 @@
           },
           {
             "Key": "Name",
-            "Value": "NlbAutoscalingEcs/Vpc/PrivateSubnet2"
+            "Value": "NlbAutoscalingEcs/AutoscalingEcs/Vpc/PrivateSubnet2"
           }
         ]
       }
     },
-    "VpcPrivateSubnet2RouteTableA678073B": {
+    "AutoscalingEcsVpcPrivateSubnet2RouteTable5BC8F409": {
       "Type": "AWS::EC2::RouteTable",
       "Properties": {
         "VpcId": {
-          "Ref": "Vpc8378EB38"
+          "Ref": "AutoscalingEcsVpcE1C9A87D"
         },
         "Tags": [
           {
             "Key": "Name",
-            "Value": "NlbAutoscalingEcs/Vpc/PrivateSubnet2"
+            "Value": "NlbAutoscalingEcs/AutoscalingEcs/Vpc/PrivateSubnet2"
           }
         ]
       }
     },
-    "VpcPrivateSubnet2RouteTableAssociationA89CAD56": {
+    "AutoscalingEcsVpcPrivateSubnet2RouteTableAssociation43A7C43D": {
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
       "Properties": {
         "RouteTableId": {
-          "Ref": "VpcPrivateSubnet2RouteTableA678073B"
+          "Ref": "AutoscalingEcsVpcPrivateSubnet2RouteTable5BC8F409"
         },
         "SubnetId": {
-          "Ref": "VpcPrivateSubnet2Subnet3788AAA1"
+          "Ref": "AutoscalingEcsVpcPrivateSubnet2Subnet57142116"
         }
       }
     },
-    "VpcPrivateSubnet2DefaultRoute060D2087": {
+    "AutoscalingEcsVpcPrivateSubnet2DefaultRoute2103FA65": {
       "Type": "AWS::EC2::Route",
       "Properties": {
         "RouteTableId": {
-          "Ref": "VpcPrivateSubnet2RouteTableA678073B"
+          "Ref": "AutoscalingEcsVpcPrivateSubnet2RouteTable5BC8F409"
         },
         "DestinationCidrBlock": "0.0.0.0/0",
         "NatGatewayId": {
-          "Ref": "VpcPublicSubnet2NATGateway9182C01D"
+          "Ref": "AutoscalingEcsVpcPublicSubnet2NATGateway3B6BADEC"
         }
       }
     },
-    "VpcIGWD7BA715C": {
+    "AutoscalingEcsVpcIGWF6A06F4B": {
       "Type": "AWS::EC2::InternetGateway",
       "Properties": {
         "Tags": [
           {
             "Key": "Name",
-            "Value": "NlbAutoscalingEcs/Vpc"
+            "Value": "NlbAutoscalingEcs/AutoscalingEcs/Vpc"
           }
         ]
       }
     },
-    "VpcVPCGWBF912B6E": {
+    "AutoscalingEcsVpcVPCGWF1FD80F0": {
       "Type": "AWS::EC2::VPCGatewayAttachment",
       "Properties": {
         "VpcId": {
-          "Ref": "Vpc8378EB38"
+          "Ref": "AutoscalingEcsVpcE1C9A87D"
         },
         "InternetGatewayId": {
-          "Ref": "VpcIGWD7BA715C"
+          "Ref": "AutoscalingEcsVpcIGWF6A06F4B"
         }
       }
     },
-    "EcsCluster97242B84": {
+    "AutoscalingEcsEcsClusterE559A4EB": {
       "Type": "AWS::ECS::Cluster"
     },
-    "EcsCluster72B17558": {
+    "AutoscalingEcsEcsCluster9FB782D0": {
       "Type": "AWS::ECS::ClusterCapacityProviderAssociations",
       "Properties": {
         "CapacityProviders": [
           {
-            "Ref": "AsgCapacityProvider760D11D9"
+            "Ref": "AutoscalingEcsAsgCapacityProvider149E18E7"
           }
         ],
         "Cluster": {
-          "Ref": "EcsCluster97242B84"
+          "Ref": "AutoscalingEcsEcsClusterE559A4EB"
         },
         "DefaultCapacityProviderStrategy": []
+      }
+    },
+    "AutoscalingEcsAsgCapacityProvider149E18E7": {
+      "Type": "AWS::ECS::CapacityProvider",
+      "Properties": {
+        "AutoScalingGroupProvider": {
+          "AutoScalingGroupArn": {
+            "Ref": "AutoScalingGroupASG804C35BE"
+          },
+          "ManagedScaling": {
+            "Status": "ENABLED",
+            "TargetCapacity": 100
+          },
+          "ManagedTerminationProtection": "ENABLED"
+        }
       }
     },
     "AutoScalingGroupInstanceSecurityGroup9D2E0C5E": {
@@ -408,7 +429,7 @@
           }
         ],
         "VpcId": {
-          "Ref": "Vpc8378EB38"
+          "Ref": "AutoscalingEcsVpcE1C9A87D"
         }
       }
     },
@@ -458,7 +479,7 @@
               ],
               "Effect": "Allow",
               "Resource": {
-                "Fn::GetAtt": ["EcsCluster97242B84", "Arn"]
+                "Fn::GetAtt": ["AutoscalingEcsEcsClusterE559A4EB", "Arn"]
               }
             },
             {
@@ -466,7 +487,7 @@
               "Condition": {
                 "ArnEquals": {
                   "ecs:cluster": {
-                    "Fn::GetAtt": ["EcsCluster97242B84", "Arn"]
+                    "Fn::GetAtt": ["AutoscalingEcsEcsClusterE559A4EB", "Arn"]
                   }
                 }
               },
@@ -529,7 +550,7 @@
               [
                 "#!/bin/bash\necho ECS_CLUSTER=",
                 {
-                  "Ref": "EcsCluster97242B84"
+                  "Ref": "AutoscalingEcsEcsClusterE559A4EB"
                 },
                 " >> /etc/ecs/ecs.config\nsudo iptables --insert FORWARD 1 --in-interface docker+ --destination 169.254.169.254/32 --jump DROP\nsudo service iptables save\necho ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config"
               ]
@@ -560,31 +581,16 @@
         ],
         "VPCZoneIdentifier": [
           {
-            "Ref": "VpcPrivateSubnet1Subnet536B997A"
+            "Ref": "AutoscalingEcsVpcPrivateSubnet1Subnet87F43741"
           },
           {
-            "Ref": "VpcPrivateSubnet2Subnet3788AAA1"
+            "Ref": "AutoscalingEcsVpcPrivateSubnet2Subnet57142116"
           }
         ]
       },
       "UpdatePolicy": {
         "AutoScalingScheduledAction": {
           "IgnoreUnmodifiedGroupSizeProperties": true
-        }
-      }
-    },
-    "AsgCapacityProvider760D11D9": {
-      "Type": "AWS::ECS::CapacityProvider",
-      "Properties": {
-        "AutoScalingGroupProvider": {
-          "AutoScalingGroupArn": {
-            "Ref": "AutoScalingGroupASG804C35BE"
-          },
-          "ManagedScaling": {
-            "Status": "ENABLED",
-            "TargetCapacity": 100
-          },
-          "ManagedTerminationProtection": "ENABLED"
         }
       }
     },
@@ -600,17 +606,17 @@
         "Scheme": "internet-facing",
         "Subnets": [
           {
-            "Ref": "VpcPublicSubnet1Subnet5C2D37C4"
+            "Ref": "AutoscalingEcsVpcPublicSubnet1Subnet0E9D1C37"
           },
           {
-            "Ref": "VpcPublicSubnet2Subnet691E08A3"
+            "Ref": "AutoscalingEcsVpcPublicSubnet2Subnet8ED15042"
           }
         ],
         "Type": "network"
       },
       "DependsOn": [
-        "VpcPublicSubnet1DefaultRoute3DA9E72A",
-        "VpcPublicSubnet2DefaultRoute97F91067"
+        "AutoscalingEcsVpcPublicSubnet1DefaultRouteF551E42E",
+        "AutoscalingEcsVpcPublicSubnet2DefaultRouteEA3CEB6D"
       ]
     },
     "Ec2ServiceLBPublicListenerA941070C": {
@@ -638,7 +644,7 @@
         "Protocol": "TCP",
         "TargetType": "instance",
         "VpcId": {
-          "Ref": "Vpc8378EB38"
+          "Ref": "AutoscalingEcsVpcE1C9A87D"
         }
       }
     },
@@ -749,7 +755,7 @@
       "Type": "AWS::ECS::Service",
       "Properties": {
         "Cluster": {
-          "Ref": "EcsCluster97242B84"
+          "Ref": "AutoscalingEcsEcsClusterE559A4EB"
         },
         "DeploymentConfiguration": {
           "MaximumPercent": 200,
