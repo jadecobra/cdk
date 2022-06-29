@@ -37,6 +37,8 @@ class NlbAutoscalingEcs(aws_cdk.Stack):
             vpc=vpc,
         )
 
+    
+
     def create_ecs_service(self, ecs_cluster=None, container_image=None):
         return aws_cdk.aws_ecs_patterns.NetworkLoadBalancedEc2Service(
             self, "Ec2Service",

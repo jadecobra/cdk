@@ -24,9 +24,6 @@ class AutoscalingEcsConstruct(constructs.Construct):
             vpc=vpc
         )
 
-    def create_autoscaling_group(self, vpc):
-        raise NotImplementedError
-
     def create_autoscaling_group_provider(self, autoscaling_group):
         if autoscaling_group:
             self.ecs_cluster.add_asg_capacity_provider(
