@@ -21,7 +21,7 @@ class NlbAutoscalingEcs(aws_cdk.Stack):
 
         ecs_service = self.create_ecs_service(
             ecs_cluster=ecs_cluster.ecs_cluster,
-            container_image=container_image,
+            task_image_options=self.get_task_image_options(container_image)
         )
 
         aws_cdk.CfnOutput(
@@ -37,16 +37,17 @@ class NlbAutoscalingEcs(aws_cdk.Stack):
             vpc=vpc,
         )
 
-    
+    def get_task_image_options(self, container_image):
+        return aws_cdk.aws_ecs_patterns.NetworkLoadBalancedTaskImageOptions(
+            image=aws_cdk.aws_ecs.ContainerImage.from_registry(
+                container_image
+            )
+        )
 
-    def create_ecs_service(self, ecs_cluster=None, container_image=None):
+    def create_ecs_service(self, ecs_cluster=None, task_image_options=None):
         return aws_cdk.aws_ecs_patterns.NetworkLoadBalancedEc2Service(
             self, "Ec2Service",
             cluster=ecs_cluster,
             memory_limit_mib=512,
-            task_image_options=aws_cdk.aws_ecs_patterns.NetworkLoadBalancedTaskImageOptions(
-                image=aws_cdk.aws_ecs.ContainerImage.from_registry(
-                    container_image
-                )
-            )
+            task_image_options=task_image_options,
         )

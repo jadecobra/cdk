@@ -27834,3 +27834,11 @@
 2022-06-29 17:25:52.819182::Time taken to synthesize stack: NlbAutoscalingEcs::  7.3295 seconds
 2022-06-29 17:26:13.257628::Time taken to synthesize stack: AutoscalingEcs::  6.8381 seconds
 2022-06-29 17:26:20.097591::Time taken to synthesize stack: NlbAutoscalingEcs::  6.8340 seconds
+2022-06-29 17:26:41.008081::Time taken to synthesize stack: AutoscalingEcs::  5.1853 seconds
+2022-06-29 17:26:46.704282::Time taken to synthesize stack: NlbAutoscalingEcs::  5.6895 seconds
+2022-06-29 17:28:09.812401::Time taken to synthesize stack: AutoscalingEcs::  6.8311 seconds
+2022-06-29 17:28:16.345617::Time taken to synthesize stack: NlbAutoscalingEcs::  6.5237 seconds
+2022-06-29 17:29:30.741964::Time taken to synthesize stack: AutoscalingEcs::  6.1772 seconds
+2022-06-29 17:29:35.698532::Time taken to synthesize stack: NlbAutoscalingEcs::  4.9488 seconds
+2022-06-29 17:29:54.771586::Time taken to synthesize stack: AutoscalingEcs::  6.8618 seconds
+2022-06-29 17:30:01.366684::Time taken to synthesize stack: NlbAutoscalingEcs::  6.5880 seconds
