@@ -27678,3 +27678,14 @@
 2022-06-29 14:50:25.098581::Time taken to synthesize stack: EcsCluster::  6.8323 seconds
 2022-06-29 14:51:50.019256::Time taken to synthesize stack: EcsCluster::  7.0149 seconds
 2022-06-29 14:53:41.103380::Time taken to synthesize stack: EcsCluster::  6.6203 seconds
+2022-06-29 14:55:02.862053::Time taken to synthesize stack: EcsCluster::  6.7476 seconds
+2022-06-29 14:56:43.299888::Time taken to synthesize stack: EcsCluster::  7.1789 seconds
+2022-06-29 15:02:35.277804::Time taken to synthesize stack: EcsCluster::  4.9288 seconds
+2022-06-29 15:04:09.132151::Time taken to synthesize stack: EcsCluster::  6.2917 seconds
+2022-06-29 15:04:29.718794::Time taken to synthesize stack: EcsCluster::  6.8633 seconds
+2022-06-29 16:12:59.780356::Time taken to synthesize stack: EcsCluster::  6.5950 seconds
+2022-06-29 16:13:06.907613::Time taken to synthesize stack: EcsLoadBalancedService::  7.1177 seconds
+2022-06-29 16:13:18.271070::Time taken to synthesize stack: EcsCluster::  7.0907 seconds
+2022-06-29 16:13:25.665908::Time taken to synthesize stack: EcsLoadBalancedService::  7.3861 seconds
+2022-06-29 16:13:36.779394::Time taken to synthesize stack: EcsCluster::  6.6074 seconds
+2022-06-29 16:13:43.301177::Time taken to synthesize stack: EcsLoadBalancedService::  6.5141 seconds

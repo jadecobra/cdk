@@ -9,6 +9,7 @@ class TestWellArchitectedPatterns(tests.utilities.TestTemplates):
             # 'ApiLambdaDynamodb',
             # 'ApiLambdaDynamodbEventBridgeLambda',
             'EcsCluster',
+            'EcsLoadBalancedService',
             # 'ApiLambdaEventBridgeLambda',
             # 'ApiLambdaSqsLambdaDynamodb',
             # 'ApiSnsLambdaEventBridgeLambda',
