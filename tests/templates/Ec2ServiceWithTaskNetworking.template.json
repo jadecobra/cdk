@@ -643,10 +643,10 @@
         }
       }
     },
-    "nginx76230F353007": {
+    "SecurityGroupDD263621": {
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
-        "GroupDescription": "Ec2ServiceWithTaskNetworking/nginx--7623",
+        "GroupDescription": "Ec2ServiceWithTaskNetworking/SecurityGroup",
         "SecurityGroupEgress": [
           {
             "CidrIp": "255.255.255.255/32",
@@ -670,7 +670,7 @@
         }
       }
     },
-    "awsvpcecsdemoserviceServiceFC4BE5C7": {
+    "ServiceD69D759B": {
       "Type": "AWS::ECS::Service",
       "Properties": {
         "Cluster": {
@@ -687,7 +687,7 @@
             "AssignPublicIp": "DISABLED",
             "SecurityGroups": [
               {
-                "Fn::GetAtt": ["nginx76230F353007", "GroupId"]
+                "Fn::GetAtt": ["SecurityGroupDD263621", "GroupId"]
               }
             ],
             "Subnets": [

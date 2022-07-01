@@ -34,28 +34,23 @@ class Ec2ServiceWithTaskNetworking(well_architected.Stack):
         )
         web_container.add_port_mappings(port_mapping)
 
+        self.create_ecs_service(
+            ecs_cluster=ecs_cluster.ecs_cluster,
+            ecs_task_definition=task_definition,
+            security_group=self.create_security_group(ecs_cluster.vpc),
+        )
+
+    def create_security_group(self, vpc):
         security_group = aws_cdk.aws_ec2.SecurityGroup(
-            self, "nginx--7623",
-            vpc=ecs_cluster.vpc,
+            self, "SecurityGroup",
+            vpc=vpc,
             allow_all_outbound=False
         )
         security_group.add_ingress_rule(
             aws_cdk.aws_ec2.Peer.any_ipv4(),
             aws_cdk.aws_ec2.Port.tcp(80)
         )
-
-        # Create the service
-        # aws_cdk.aws_ecs.Ec2Service(
-        #     self, "awsvpc-ecs-demo-service",
-        #     cluster=ecs_cluster.ecs_cluster,
-        #     task_definition=task_definition,
-        #     security_groups=[security_group]
-        # )
-        self.create_ecs_service(
-            ecs_cluster=ecs_cluster.ecs_cluster,
-            ecs_task_definition=task_definition,
-            security_group=security_group,
-        )
+        return security_group
 
     def create_ecs_service(self, ecs_cluster=None, ecs_task_definition=None, security_group=None):
         return aws_cdk.aws_ecs.Ec2Service(
