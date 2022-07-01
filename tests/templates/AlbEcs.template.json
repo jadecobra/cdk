@@ -655,7 +655,7 @@
             "ContainerName": "Container",
             "ContainerPort": 80,
             "TargetGroupArn": {
-              "Ref": "LoadBalancerPublicListenerTargetsGroupC05562C9"
+              "Ref": "ApplicationLoadBalancerPublicListenerTargetsGroup726EA750"
             }
           }
         ],
@@ -665,11 +665,11 @@
         }
       },
       "DependsOn": [
-        "LoadBalancerPublicListenerC2ED6A14",
-        "LoadBalancerPublicListenerTargetsGroupC05562C9"
+        "ApplicationLoadBalancerPublicListenerD5D301C9",
+        "ApplicationLoadBalancerPublicListenerTargetsGroup726EA750"
       ]
     },
-    "LoadBalancerBE9EEC3A": {
+    "ApplicationLoadBalancerFD56DEE1": {
       "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
       "Properties": {
         "LoadBalancerAttributes": [
@@ -681,7 +681,10 @@
         "Scheme": "internet-facing",
         "SecurityGroups": [
           {
-            "Fn::GetAtt": ["LoadBalancerSecurityGroupA28D6DD7", "GroupId"]
+            "Fn::GetAtt": [
+              "ApplicationLoadBalancerSecurityGroup4BBE5415",
+              "GroupId"
+            ]
           }
         ],
         "Subnets": [
@@ -699,10 +702,10 @@
         "AutoscalingEcsVpcPublicSubnet2DefaultRouteEA3CEB6D"
       ]
     },
-    "LoadBalancerSecurityGroupA28D6DD7": {
+    "ApplicationLoadBalancerSecurityGroup4BBE5415": {
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
-        "GroupDescription": "Automatically created Security Group for ELB AlbEcsLoadBalancerE1E0DE46",
+        "GroupDescription": "Automatically created Security Group for ELB AlbEcsApplicationLoadBalancerD0AC4FE8",
         "SecurityGroupEgress": [
           {
             "CidrIp": "255.255.255.255/32",
@@ -726,25 +729,25 @@
         }
       }
     },
-    "LoadBalancerPublicListenerC2ED6A14": {
+    "ApplicationLoadBalancerPublicListenerD5D301C9": {
       "Type": "AWS::ElasticLoadBalancingV2::Listener",
       "Properties": {
         "DefaultActions": [
           {
             "TargetGroupArn": {
-              "Ref": "LoadBalancerPublicListenerTargetsGroupC05562C9"
+              "Ref": "ApplicationLoadBalancerPublicListenerTargetsGroup726EA750"
             },
             "Type": "forward"
           }
         ],
         "LoadBalancerArn": {
-          "Ref": "LoadBalancerBE9EEC3A"
+          "Ref": "ApplicationLoadBalancerFD56DEE1"
         },
         "Port": 80,
         "Protocol": "HTTP"
       }
     },
-    "LoadBalancerPublicListenerTargetsGroupC05562C9": {
+    "ApplicationLoadBalancerPublicListenerTargetsGroup726EA750": {
       "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
       "Properties": {
         "HealthCheckIntervalSeconds": 60,
@@ -779,7 +782,7 @@
   "Outputs": {
     "LoadBalancerDNS": {
       "Value": {
-        "Fn::GetAtt": ["LoadBalancerBE9EEC3A", "DNSName"]
+        "Fn::GetAtt": ["ApplicationLoadBalancerFD56DEE1", "DNSName"]
       }
     }
   },

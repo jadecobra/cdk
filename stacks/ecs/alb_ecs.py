@@ -23,12 +23,6 @@ class AlbEcs(aws_cdk.Stack):
             task_definition=ecs_task_definition,
             image_name="amazon/amazon-ecs-sample"
         )
-        # ecs_port_mapping = aws_cdk.aws_ecs.PortMapping(
-        #     container_port=80,
-        #     host_port=8080,
-        #     protocol=aws_cdk.aws_ecs.Protocol.TCP
-        # )
-        # ecs_container.add_port_mappings(ecs_port_mapping)
 
         service = aws_cdk.aws_ecs.Ec2Service(
             self, "Service",
@@ -36,30 +30,30 @@ class AlbEcs(aws_cdk.Stack):
             task_definition=ecs_task_definition
         )
 
-        application_load_balancer = aws_cdk.aws_elasticloadbalancingv2.ApplicationLoadBalancer(
-            self, "LoadBalancer",
-            vpc=ecs_cluster.vpc,
-            internet_facing=True
-        )
+        application_load_balancer = self.create_application_load_balancer(ecs_cluster.vpc)
         listener = application_load_balancer.add_listener(
             "PublicListener",
             port=80,
             open=True
         )
 
-        health_check = self.create_health_check()
-
-        # Attach ALB to ECS Service
         listener.add_targets(
             "Targets",
             port=80,
             targets=[service],
-            health_check=health_check,
+            health_check=self.create_health_check(),
         )
 
         aws_cdk.CfnOutput(
             self, "LoadBalancerDNS",
             value=application_load_balancer.load_balancer_dns_name
+        )
+
+    def create_application_load_balancer(self, vpc):
+        return aws_cdk.aws_elasticloadbalancingv2.ApplicationLoadBalancer(
+            self, "ApplicationLoadBalancer",
+            vpc=vpc,
+            internet_facing=True
         )
 
     @staticmethod
