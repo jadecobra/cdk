@@ -2,7 +2,7 @@ import aws_cdk
 import constructs
 
 
-class AutoscalingEcsConstruct(constructs.Construct):
+class AutoscalingEcsClusterConstruct(constructs.Construct):
 
     def __init__(
         self, scope: constructs.Construct, id: str,

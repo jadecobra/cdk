@@ -1,10 +1,10 @@
 import aws_cdk
 import constructs
-import regular_constructs.autoscaling_ecs
+import regular_constructs.autoscaling_ecs_cluster
 import well_architected
 
 
-class Ec2ServiceWithTaskNetworking(well_architected.Stack):
+class AutoscalingEcsService(well_architected.Stack):
 
     def __init__(
         self, scope: constructs.Construct, id: str,
@@ -13,13 +13,7 @@ class Ec2ServiceWithTaskNetworking(well_architected.Stack):
     ):
         super().__init__(scope, id, **kwargs)
 
-        ecs_cluster = regular_constructs.autoscaling_ecs.AutoscalingEcsConstruct(
-            self, 'AutoscalingEcs',
-        )
-        ecs_cluster.create_autoscaling_group_provider(
-            self.create_autoscaling_group(ecs_cluster.vpc)
-        )
-
+        ecs_cluster = self.create_ecs_cluster()
         ecs_task_definition = self.create_task_definition()
 
         self.create_container(
@@ -34,7 +28,12 @@ class Ec2ServiceWithTaskNetworking(well_architected.Stack):
         )
 
     def create_ecs_cluster(self):
-        
+        ecs_cluster = regular_constructs.autoscaling_ecs_cluster.AutoscalingEcsClusterConstruct(
+            self, 'AutoscalingEcs',
+        )
+        ecs_cluster.create_autoscaling_group_provider(
+            self.create_autoscaling_group(ecs_cluster.vpc)
+        )
         return ecs_cluster
 
     @staticmethod

@@ -1,14 +1,14 @@
 import aws_cdk
 import constructs
-import regular_constructs.autoscaling_ecs
+import regular_constructs.autoscaling_ecs_cluster
 import well_architected
 
 
-class AutoscalingEcsStack(well_architected.Stack):
+class AutoscalingEcsCluster(well_architected.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs):
         super().__init__(scope, id, **kwargs)
-        ecs_cluster = regular_constructs.autoscaling_ecs.AutoscalingEcsConstruct(
+        ecs_cluster = regular_constructs.autoscaling_ecs_cluster.AutoscalingEcsClusterConstruct(
             self, 'AutoscalingEcs',
         )
         ecs_cluster.create_autoscaling_group_provider(

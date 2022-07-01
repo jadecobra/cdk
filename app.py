@@ -1,9 +1,9 @@
 import aws_cdk
 import well_architected_stacks
-import stacks.ecs.autoscaling_ecs
+import stacks.ecs.autoscaling_ecs_cluster
 import stacks.ecs.nlb_autoscaling_ecs
 import stacks.ecs.alb_autoscaling_ecs
-import stacks.ecs.ecs_service_with_task_networking
+import stacks.ecs.autoscaling_ecs_service
 
 
 class WellArchitected(aws_cdk.App):
@@ -99,7 +99,7 @@ class WellArchitected(aws_cdk.App):
         def container_image():
             return "amazon/amazon-ecs-sample"
 
-        stacks.ecs.autoscaling_ecs.AutoscalingEcsStack(
+        stacks.ecs.autoscaling_ecs_cluster.AutoscalingEcsCluster(
             self, 'AutoscalingEcs',
         )
         stacks.ecs.nlb_autoscaling_ecs.NlbAutoscalingEcs(
@@ -110,8 +110,8 @@ class WellArchitected(aws_cdk.App):
             self, 'AlbAutoscalingEcs',
             container_image=container_image(),
         )
-        stacks.ecs.ecs_service_with_task_networking.Ec2ServiceWithTaskNetworking(
-            self, 'Ec2ServiceWithTaskNetworking',
+        stacks.ecs.autoscaling_ecs_service.AutoscalingEcsService(
+            self, 'AutoscalingEcsService',
             container_image="nginx:latest"
         )
 
