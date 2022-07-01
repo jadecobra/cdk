@@ -17,11 +17,6 @@ class AutoscalingEcsService(well_architected.Stack):
         ecs_cluster.create_ecs_service(
             security_group=self.create_security_group(ecs_cluster.vpc),
         )
-
-        # self.create_container(
-        #     ecs_task_definition=ecs_cluster.ecs_task_definition,
-        #     container_image=container_image,
-        # )
         ecs_cluster.create_container(container_image)
 
     def create_ecs_cluster(self):

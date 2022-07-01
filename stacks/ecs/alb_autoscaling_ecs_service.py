@@ -14,9 +14,7 @@ class AlbAutoscalingEcsService(well_architected.Stack):
         super().__init__(scope, id, **kwargs)
 
         ecs_cluster = self.create_ecs_cluster()
-
-        self.create_container(
-            task_definition=ecs_cluster.ecs_task_definition,
+        ecs_cluster.create_container(
             container_image=container_image
         )
 
