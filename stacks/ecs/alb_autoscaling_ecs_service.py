@@ -4,7 +4,7 @@ import well_architected
 import regular_constructs.autoscaling_ecs_cluster
 
 
-class AlbAutoscalingEcs(well_architected.Stack):
+class AlbAutoscalingEcsService(well_architected.Stack):
 
     def __init__(
         self, scope: constructs.Construct, id: str,
@@ -21,14 +21,19 @@ class AlbAutoscalingEcs(well_architected.Stack):
             container_image=container_image
         )
 
+        # ecs_service = self.create_ecs_service(
+        #     ecs_cluster=ecs_cluster.ecs_cluster,
+        #     ecs_task_definition=ecs_task_definition,
+        # )
+        ecs_service = ecs_cluster.create_ecs_service(
+            ecs_task_definition=ecs_task_definition,
+        )
+
         aws_cdk.CfnOutput(
             self, "LoadBalancerDNS",
             value=self.get_application_load_balancer_dns_name(
                 vpc=ecs_cluster.vpc,
-                service=self.create_ecs_service(
-                    ecs_cluster=ecs_cluster.ecs_cluster,
-                    ecs_task_definition=ecs_task_definition,
-                )
+                service=ecs_service,
             )
         )
 

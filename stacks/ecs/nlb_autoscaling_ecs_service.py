@@ -4,7 +4,7 @@ import regular_constructs.autoscaling_ecs_cluster
 import well_architected
 
 
-class NlbAutoscalingEcs(well_architected.Stack):
+class NlbAutoscalingEcsService(well_architected.Stack):
 
     def __init__(
         self, scope: constructs.Construct, id: str,
