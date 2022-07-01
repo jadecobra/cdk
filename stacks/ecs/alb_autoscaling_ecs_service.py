@@ -14,15 +14,13 @@ class AlbAutoscalingEcsService(well_architected.Stack):
         super().__init__(scope, id, **kwargs)
 
         ecs_cluster = self.create_ecs_cluster()
-        ecs_cluster.create_container(
-            container_image=container_image
-        )
-
         aws_cdk.CfnOutput(
             self, "LoadBalancerDNS",
             value=self.get_application_load_balancer_dns_name(
                 vpc=ecs_cluster.vpc,
-                service=ecs_cluster.create_ecs_service(),
+                service=ecs_cluster.create_ecs_service(
+                    container_image=container_image,
+                ),
             )
         )
 
@@ -63,13 +61,6 @@ class AlbAutoscalingEcsService(well_architected.Stack):
             interval=aws_cdk.Duration.seconds(60),
             path="/health",
             timeout=aws_cdk.Duration.seconds(5)
-        )
-
-    def get_port_mappings(self):
-        return aws_cdk.aws_ecs.PortMapping(
-            container_port=self.container_port(),
-            host_port=8080,
-            protocol=aws_cdk.aws_ecs.Protocol.TCP
         )
 
     def create_autoscaling_group(self, vpc):

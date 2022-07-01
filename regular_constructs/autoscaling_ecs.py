@@ -15,8 +15,6 @@ class AutoscalingEcsClusterConstruct(constructs.Construct):
         super().__init__(scope, id, **kwargs)
         self.vpc = self.get_vpc(vpc)
         self.ecs_cluster = self.create_ecs_cluster(self.vpc)
-        self.ecs_task_definition = self.create_task_definition(network_mode) if create_service else None
-        self.create_container(container_image)
 
     def get_vpc(self, vpc=None):
         if vpc:
@@ -42,19 +40,27 @@ class AutoscalingEcsClusterConstruct(constructs.Construct):
                 )
             )
 
-    def create_ecs_service(self, security_group=None):
+    def create_ecs_service(self, security_group=None, network_mode=None, container_image=None):
         return aws_cdk.aws_ecs.Ec2Service(
             self, "Service",
             cluster=self.ecs_cluster,
-            task_definition=self.ecs_task_definition if self.ecs_task_definition else None,
+            task_definition=self.create_task_definition(
+                network_mode=network_mode,
+                container_image=container_image,
+            ),
             security_groups=[security_group] if security_group else None,
         )
 
-    def create_task_definition(self, network_mode=None):
-        return aws_cdk.aws_ecs.Ec2TaskDefinition(
+    def create_task_definition(self, network_mode=None, container_image=None):
+        task_definition = aws_cdk.aws_ecs.Ec2TaskDefinition(
             self, "TaskDefinition",
             network_mode=network_mode
         )
+        self.create_container(
+            task_definition=task_definition,
+            container_image=container_image,
+        )
+        return task_definition
 
     @staticmethod
     def get_port_mappings():
@@ -63,14 +69,13 @@ class AutoscalingEcsClusterConstruct(constructs.Construct):
             protocol=aws_cdk.aws_ecs.Protocol.TCP
         )
 
-    def create_container(self, container_image=None):
-        if container_image:
-            self.ecs_task_definition.add_container(
-                "Container",
-                image=aws_cdk.aws_ecs.ContainerImage.from_registry(container_image),
-                cpu=100,
-                memory_limit_mib=256,
-                essential=True,
-            ).add_port_mappings(
-                self.get_port_mappings()
-            )
+    def create_container(self, task_definition=None, container_image=None):
+        task_definition.add_container(
+            "Container",
+            image=aws_cdk.aws_ecs.ContainerImage.from_registry(container_image),
+            cpu=100,
+            memory_limit_mib=256,
+            essential=True,
+        ).add_port_mappings(
+            self.get_port_mappings()
+        )

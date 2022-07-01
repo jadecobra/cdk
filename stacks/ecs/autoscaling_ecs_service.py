@@ -15,9 +15,10 @@ class AutoscalingEcsService(well_architected.Stack):
 
         ecs_cluster = self.create_ecs_cluster()
         ecs_cluster.create_ecs_service(
+            network_mode=aws_cdk.aws_ecs.NetworkMode.AWS_VPC,
             security_group=self.create_security_group(ecs_cluster.vpc),
+            container_image=container_image,
         )
-        ecs_cluster.create_container(container_image)
 
     def create_ecs_cluster(self):
         ecs_cluster = regular_constructs.autoscaling_ecs.AutoscalingEcsClusterConstruct(
@@ -28,13 +29,6 @@ class AutoscalingEcsService(well_architected.Stack):
             self.create_autoscaling_group(ecs_cluster.vpc)
         )
         return ecs_cluster
-
-    @staticmethod
-    def get_port_mappings():
-        return aws_cdk.aws_ecs.PortMapping(
-            container_port=80,
-            protocol=aws_cdk.aws_ecs.Protocol.TCP
-        )
 
     def create_security_group(self, vpc):
         security_group = aws_cdk.aws_ec2.SecurityGroup(
