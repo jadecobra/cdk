@@ -14,11 +14,9 @@ class AlbAutoscalingEcsService(well_architected.Stack):
         super().__init__(scope, id, **kwargs)
 
         ecs_cluster = self.create_ecs_cluster()
-        # ecs_task_definition = self.create_task_definition()
-        ecs_task_definition = ecs_cluster.create_task_definition()
 
         self.create_container(
-            task_definition=ecs_task_definition,
+            task_definition=ecs_cluster.ecs_task_definition,
             container_image=container_image
         )
 
@@ -26,9 +24,7 @@ class AlbAutoscalingEcsService(well_architected.Stack):
             self, "LoadBalancerDNS",
             value=self.get_application_load_balancer_dns_name(
                 vpc=ecs_cluster.vpc,
-                service=ecs_cluster.create_ecs_service(
-                    ecs_task_definition=ecs_task_definition,
-                ),
+                service=ecs_cluster.create_ecs_service(),
             )
         )
 
@@ -70,11 +66,6 @@ class AlbAutoscalingEcsService(well_architected.Stack):
             path="/health",
             timeout=aws_cdk.Duration.seconds(5)
         )
-
-    # def create_task_definition(self):
-    #     return aws_cdk.aws_ecs.Ec2TaskDefinition(
-    #         self, "TaskDefinition"
-    #     )
 
     def get_port_mappings(self):
         return aws_cdk.aws_ecs.PortMapping(

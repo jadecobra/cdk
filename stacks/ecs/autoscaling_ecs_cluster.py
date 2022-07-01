@@ -10,6 +10,7 @@ class AutoscalingEcsCluster(well_architected.Stack):
         super().__init__(scope, id, **kwargs)
         ecs_cluster = regular_constructs.autoscaling_ecs.AutoscalingEcsClusterConstruct(
             self, 'AutoscalingEcs',
+            create_service=False,
         )
         ecs_cluster.create_autoscaling_group_provider(
             self.create_autoscaling_group(ecs_cluster.vpc)

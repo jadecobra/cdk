@@ -7,11 +7,14 @@ class AutoscalingEcsClusterConstruct(constructs.Construct):
     def __init__(
         self, scope: constructs.Construct, id: str,
         vpc=None,
+        network_mode=None,
+        create_service=True,
         **kwargs
     ):
         super().__init__(scope, id, **kwargs)
         self.vpc = self.get_vpc(vpc)
         self.ecs_cluster = self.create_ecs_cluster(self.vpc)
+        self.ecs_task_definition = self.create_task_definition(network_mode) if create_service else None
 
     def get_vpc(self, vpc=None):
         if vpc:
@@ -37,11 +40,11 @@ class AutoscalingEcsClusterConstruct(constructs.Construct):
                 )
             )
 
-    def create_ecs_service(self, ecs_task_definition=None, security_group=None):
+    def create_ecs_service(self, security_group=None):
         return aws_cdk.aws_ecs.Ec2Service(
             self, "Service",
             cluster=self.ecs_cluster,
-            task_definition=ecs_task_definition,
+            task_definition=self.ecs_task_definition if self.ecs_task_definition else None,
             security_groups=[security_group] if security_group else None,
         )
 

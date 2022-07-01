@@ -14,16 +14,15 @@ class AutoscalingEcsService(well_architected.Stack):
         super().__init__(scope, id, **kwargs)
 
         ecs_cluster = self.create_ecs_cluster()
-        ecs_task_definition = ecs_cluster.create_task_definition(
-            network_mode=aws_cdk.aws_ecs.NetworkMode.AWS_VPC,
-        )
+        # ecs_task_definition = ecs_cluster.create_task_definition()
         ecs_cluster.create_ecs_service(
-            ecs_task_definition=ecs_task_definition,
+            # ecs_task_definition=ecs_task_definition,
             security_group=self.create_security_group(ecs_cluster.vpc),
+
         )
 
         self.create_container(
-            ecs_task_definition=ecs_task_definition,
+            ecs_task_definition=ecs_cluster.ecs_task_definition,
             container_image=container_image,
         )
 
@@ -31,6 +30,7 @@ class AutoscalingEcsService(well_architected.Stack):
     def create_ecs_cluster(self):
         ecs_cluster = regular_constructs.autoscaling_ecs.AutoscalingEcsClusterConstruct(
             self, 'AutoscalingEcs',
+            network_mode=aws_cdk.aws_ecs.NetworkMode.AWS_VPC,
         )
         ecs_cluster.create_autoscaling_group_provider(
             self.create_autoscaling_group(ecs_cluster.vpc)
