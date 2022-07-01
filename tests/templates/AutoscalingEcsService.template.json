@@ -417,6 +417,42 @@
         }
       }
     },
+    "AutoscalingEcsService9C5E6104": {
+      "Type": "AWS::ECS::Service",
+      "Properties": {
+        "Cluster": {
+          "Ref": "AutoscalingEcsEcsClusterE559A4EB"
+        },
+        "DeploymentConfiguration": {
+          "MaximumPercent": 200,
+          "MinimumHealthyPercent": 50
+        },
+        "EnableECSManagedTags": false,
+        "LaunchType": "EC2",
+        "NetworkConfiguration": {
+          "AwsvpcConfiguration": {
+            "AssignPublicIp": "DISABLED",
+            "SecurityGroups": [
+              {
+                "Fn::GetAtt": ["SecurityGroupDD263621", "GroupId"]
+              }
+            ],
+            "Subnets": [
+              {
+                "Ref": "AutoscalingEcsVpcPrivateSubnet1Subnet87F43741"
+              },
+              {
+                "Ref": "AutoscalingEcsVpcPrivateSubnet2Subnet57142116"
+              }
+            ]
+          }
+        },
+        "SchedulingStrategy": "REPLICA",
+        "TaskDefinition": {
+          "Ref": "TaskDefinitionB36D86D9"
+        }
+      }
+    },
     "DefaultAutoScalingGroupInstanceSecurityGroupFBA881D0": {
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
@@ -667,42 +703,6 @@
         ],
         "VpcId": {
           "Ref": "AutoscalingEcsVpcE1C9A87D"
-        }
-      }
-    },
-    "ServiceD69D759B": {
-      "Type": "AWS::ECS::Service",
-      "Properties": {
-        "Cluster": {
-          "Ref": "AutoscalingEcsEcsClusterE559A4EB"
-        },
-        "DeploymentConfiguration": {
-          "MaximumPercent": 200,
-          "MinimumHealthyPercent": 50
-        },
-        "EnableECSManagedTags": false,
-        "LaunchType": "EC2",
-        "NetworkConfiguration": {
-          "AwsvpcConfiguration": {
-            "AssignPublicIp": "DISABLED",
-            "SecurityGroups": [
-              {
-                "Fn::GetAtt": ["SecurityGroupDD263621", "GroupId"]
-              }
-            ],
-            "Subnets": [
-              {
-                "Ref": "AutoscalingEcsVpcPrivateSubnet1Subnet87F43741"
-              },
-              {
-                "Ref": "AutoscalingEcsVpcPrivateSubnet2Subnet57142116"
-              }
-            ]
-          }
-        },
-        "SchedulingStrategy": "REPLICA",
-        "TaskDefinition": {
-          "Ref": "TaskDefinitionB36D86D9"
         }
       }
     }

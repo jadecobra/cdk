@@ -21,27 +21,14 @@ class AlbAutoscalingEcsService(well_architected.Stack):
             container_image=container_image
         )
 
-        # ecs_service = self.create_ecs_service(
-        #     ecs_cluster=ecs_cluster.ecs_cluster,
-        #     ecs_task_definition=ecs_task_definition,
-        # )
-        ecs_service = ecs_cluster.create_ecs_service(
-            ecs_task_definition=ecs_task_definition,
-        )
-
         aws_cdk.CfnOutput(
             self, "LoadBalancerDNS",
             value=self.get_application_load_balancer_dns_name(
                 vpc=ecs_cluster.vpc,
-                service=ecs_service,
+                service=ecs_cluster.create_ecs_service(
+                    ecs_task_definition=ecs_task_definition,
+                ),
             )
-        )
-
-    def create_ecs_service(self, ecs_cluster=None, ecs_task_definition=None):
-        return aws_cdk.aws_ecs.Ec2Service(
-            self, "Service",
-            cluster=ecs_cluster,
-            task_definition=ecs_task_definition
         )
 
     def create_ecs_cluster(self):

@@ -15,17 +15,16 @@ class AutoscalingEcsService(well_architected.Stack):
 
         ecs_cluster = self.create_ecs_cluster()
         ecs_task_definition = self.create_task_definition()
+        ecs_cluster.create_ecs_service(
+            ecs_task_definition=ecs_task_definition,
+            security_group=self.create_security_group(ecs_cluster.vpc),
+        )
 
         self.create_container(
             ecs_task_definition=ecs_task_definition,
             container_image=container_image,
         )
 
-        self.create_ecs_service(
-            ecs_cluster=ecs_cluster.ecs_cluster,
-            ecs_task_definition=ecs_task_definition,
-            security_group=self.create_security_group(ecs_cluster.vpc),
-        )
 
     def create_ecs_cluster(self):
         ecs_cluster = regular_constructs.autoscaling_ecs_cluster.AutoscalingEcsClusterConstruct(
@@ -71,14 +70,6 @@ class AutoscalingEcsService(well_architected.Stack):
             aws_cdk.aws_ec2.Port.tcp(80)
         )
         return security_group
-
-    def create_ecs_service(self, ecs_cluster=None, ecs_task_definition=None, security_group=None):
-        return aws_cdk.aws_ecs.Ec2Service(
-            self, "Service",
-            cluster=ecs_cluster,
-            task_definition=ecs_task_definition,
-            security_groups=[security_group]
-        )
 
     def create_task_definition(self):
         return aws_cdk.aws_ecs.Ec2TaskDefinition(
