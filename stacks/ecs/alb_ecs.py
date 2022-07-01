@@ -10,13 +10,7 @@ class AlbEcs(aws_cdk.Stack):
     ):
         super().__init__(scope, id, **kwargs)
 
-        ecs_cluster = regular_constructs.autoscaling_ecs.AutoscalingEcsConstruct(
-            self, 'AutoscalingEcs',
-        )
-        ecs_cluster.create_autoscaling_group_provider(
-            self.create_autoscaling_group(ecs_cluster.vpc)
-        )
-
+        ecs_cluster = self.create_ecs_cluster()
         ecs_task_definition = self.create_task_definition()
 
         self.create_container(
@@ -39,6 +33,16 @@ class AlbEcs(aws_cdk.Stack):
             self, "LoadBalancerDNS",
             value=application_load_balancer.load_balancer_dns_name
         )
+
+    def create_ecs_cluster(self):
+        ecs_cluster = regular_constructs.autoscaling_ecs.AutoscalingEcsConstruct(
+            self, 'AutoscalingEcs',
+        )
+        ecs_cluster.create_autoscaling_group_provider(
+            self.create_autoscaling_group(ecs_cluster.vpc)
+        )
+        return ecs_cluster
+
 
     @staticmethod
     def container_port():
