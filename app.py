@@ -2,7 +2,7 @@ import aws_cdk
 import well_architected_stacks
 import stacks.ecs.autoscaling_ecs
 import stacks.ecs.nlb_autoscaling_ecs
-import stacks.ecs.alb_autoscaling_ecs_service
+import stacks.ecs.alb_autoscaling_ecs
 import stacks.ecs.ecs_service_with_task_networking
 
 
@@ -14,7 +14,7 @@ class WellArchitected(aws_cdk.App):
         self.create_well_architected_stacks()
         self.lambda_trilogy()
         self.xray_tracer()
-        self.currently_testing()
+        self.ecs()
 
     def create_well_architected_stacks(self):
         well_architected_stacks.ApiLambdaDynamodbEventBridgeLambda(
@@ -95,16 +95,19 @@ class WellArchitected(aws_cdk.App):
             error_topic=xray_tracer_sns_topic.error_topic,
         )
 
-    def currently_testing(self):
+    def ecs(self):
+        def container_image():
+            return "amazon/amazon-ecs-sample"
         stacks.ecs.autoscaling_ecs.AutoscalingEcsConstruct(
             self, 'AutoscalingEcs',
         )
         stacks.ecs.nlb_autoscaling_ecs.NlbAutoscalingEcs(
             self, 'NlbAutoscalingEcs',
-            container_image="amazon/amazon-ecs-sample",
+            container_image=container_image(),
         )
-        stacks.ecs.alb_autoscaling_ecs_service.AlbAutoscalingEcs(
-            self, 'AlbEcs',
+        stacks.ecs.alb_autoscaling_ecs.AlbAutoscalingEcs(
+            self, 'AlbAutoscalingEcs',
+            container_image=container_image(),
         )
         stacks.ecs.ecs_service_with_task_networking.Ec2ServiceWithTaskNetworking(
             self, 'Ec2ServiceWithTaskNetworking',

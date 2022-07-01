@@ -1,9 +1,10 @@
 import aws_cdk
 import constructs
 import regular_constructs.autoscaling_ecs
+import well_architected
 
 
-class NlbAutoscalingEcs(aws_cdk.Stack):
+class NlbAutoscalingEcs(well_architected.Stack):
 
     def __init__(
         self, scope: constructs.Construct, id: str,

@@ -10,7 +10,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "AlbEcs/AutoscalingEcs/Vpc"
+            "Value": "AlbAutoscalingEcs/AutoscalingEcs/Vpc"
           }
         ]
       }
@@ -42,7 +42,7 @@
           },
           {
             "Key": "Name",
-            "Value": "AlbEcs/AutoscalingEcs/Vpc/PublicSubnet1"
+            "Value": "AlbAutoscalingEcs/AutoscalingEcs/Vpc/PublicSubnet1"
           }
         ]
       }
@@ -56,7 +56,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "AlbEcs/AutoscalingEcs/Vpc/PublicSubnet1"
+            "Value": "AlbAutoscalingEcs/AutoscalingEcs/Vpc/PublicSubnet1"
           }
         ]
       }
@@ -92,7 +92,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "AlbEcs/AutoscalingEcs/Vpc/PublicSubnet1"
+            "Value": "AlbAutoscalingEcs/AutoscalingEcs/Vpc/PublicSubnet1"
           }
         ]
       }
@@ -112,7 +112,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "AlbEcs/AutoscalingEcs/Vpc/PublicSubnet1"
+            "Value": "AlbAutoscalingEcs/AutoscalingEcs/Vpc/PublicSubnet1"
           }
         ]
       }
@@ -144,7 +144,7 @@
           },
           {
             "Key": "Name",
-            "Value": "AlbEcs/AutoscalingEcs/Vpc/PublicSubnet2"
+            "Value": "AlbAutoscalingEcs/AutoscalingEcs/Vpc/PublicSubnet2"
           }
         ]
       }
@@ -158,7 +158,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "AlbEcs/AutoscalingEcs/Vpc/PublicSubnet2"
+            "Value": "AlbAutoscalingEcs/AutoscalingEcs/Vpc/PublicSubnet2"
           }
         ]
       }
@@ -194,7 +194,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "AlbEcs/AutoscalingEcs/Vpc/PublicSubnet2"
+            "Value": "AlbAutoscalingEcs/AutoscalingEcs/Vpc/PublicSubnet2"
           }
         ]
       }
@@ -214,7 +214,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "AlbEcs/AutoscalingEcs/Vpc/PublicSubnet2"
+            "Value": "AlbAutoscalingEcs/AutoscalingEcs/Vpc/PublicSubnet2"
           }
         ]
       }
@@ -246,7 +246,7 @@
           },
           {
             "Key": "Name",
-            "Value": "AlbEcs/AutoscalingEcs/Vpc/PrivateSubnet1"
+            "Value": "AlbAutoscalingEcs/AutoscalingEcs/Vpc/PrivateSubnet1"
           }
         ]
       }
@@ -260,7 +260,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "AlbEcs/AutoscalingEcs/Vpc/PrivateSubnet1"
+            "Value": "AlbAutoscalingEcs/AutoscalingEcs/Vpc/PrivateSubnet1"
           }
         ]
       }
@@ -315,7 +315,7 @@
           },
           {
             "Key": "Name",
-            "Value": "AlbEcs/AutoscalingEcs/Vpc/PrivateSubnet2"
+            "Value": "AlbAutoscalingEcs/AutoscalingEcs/Vpc/PrivateSubnet2"
           }
         ]
       }
@@ -329,7 +329,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "AlbEcs/AutoscalingEcs/Vpc/PrivateSubnet2"
+            "Value": "AlbAutoscalingEcs/AutoscalingEcs/Vpc/PrivateSubnet2"
           }
         ]
       }
@@ -363,7 +363,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "AlbEcs/AutoscalingEcs/Vpc"
+            "Value": "AlbAutoscalingEcs/AutoscalingEcs/Vpc"
           }
         ]
       }
@@ -414,7 +414,7 @@
     "AutoScalingGroupInstanceSecurityGroup9D2E0C5E": {
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
-        "GroupDescription": "AlbEcs/AutoScalingGroup/InstanceSecurityGroup",
+        "GroupDescription": "AlbAutoscalingEcs/AutoScalingGroup/InstanceSecurityGroup",
         "SecurityGroupEgress": [
           {
             "CidrIp": "0.0.0.0/0",
@@ -425,7 +425,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "AlbEcs/AutoScalingGroup"
+            "Value": "AlbAutoscalingEcs/AutoScalingGroup"
           }
         ],
         "VpcId": {
@@ -461,7 +461,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "AlbEcs/AutoScalingGroup"
+            "Value": "AlbAutoscalingEcs/AutoScalingGroup"
           }
         ]
       }
@@ -576,7 +576,7 @@
           {
             "Key": "Name",
             "PropagateAtLaunch": true,
-            "Value": "AlbEcs/AutoScalingGroup"
+            "Value": "AlbAutoscalingEcs/AutoScalingGroup"
           }
         ],
         "VPCZoneIdentifier": [
@@ -629,7 +629,7 @@
             ]
           }
         ],
-        "Family": "AlbEcsTaskDefinition72B29C57",
+        "Family": "AlbAutoscalingEcsTaskDefinitionCC1CBF75",
         "NetworkMode": "bridge",
         "RequiresCompatibilities": ["EC2"],
         "TaskRoleArn": {
@@ -705,7 +705,7 @@
     "ApplicationLoadBalancerSecurityGroup4BBE5415": {
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
-        "GroupDescription": "Automatically created Security Group for ELB AlbEcsApplicationLoadBalancerD0AC4FE8",
+        "GroupDescription": "Automatically created Security Group for ELB AlbAutoscalingEcsApplicationLoadBalancerF96E4F82",
         "SecurityGroupEgress": [
           {
             "CidrIp": "255.255.255.255/32",

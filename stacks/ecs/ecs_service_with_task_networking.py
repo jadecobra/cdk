@@ -1,16 +1,10 @@
 import aws_cdk
 import constructs
 import regular_constructs.autoscaling_ecs
-
-from aws_cdk import (
-    aws_autoscaling as autoscaling,
-    aws_ec2 as ec2,
-    aws_ecs as ecs,
-    App, Stack
-)
+import well_architected
 
 
-class Ec2ServiceWithTaskNetworking(aws_cdk.Stack):
+class Ec2ServiceWithTaskNetworking(well_architected.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs):
         super().__init__(scope, id, **kwargs)
@@ -36,7 +30,7 @@ class Ec2ServiceWithTaskNetworking(aws_cdk.Stack):
         )
         port_mapping = aws_cdk.aws_ecs.PortMapping(
             container_port=80,
-            protocol=ecs.Protocol.TCP
+            protocol=aws_cdk.aws_ecs.Protocol.TCP
         )
         web_container.add_port_mappings(port_mapping)
 
@@ -46,8 +40,8 @@ class Ec2ServiceWithTaskNetworking(aws_cdk.Stack):
             allow_all_outbound=False
         )
         security_group.add_ingress_rule(
-            ec2.Peer.any_ipv4(),
-            ec2.Port.tcp(80)
+            aws_cdk.aws_ec2.Peer.any_ipv4(),
+            aws_cdk.aws_ec2.Port.tcp(80)
         )
 
         # Create the service
@@ -67,8 +61,8 @@ class Ec2ServiceWithTaskNetworking(aws_cdk.Stack):
     def create_autoscaling_group(self, vpc):
         return aws_cdk.aws_autoscaling.AutoScalingGroup(
             self, "DefaultAutoScalingGroup",
-            instance_type=ec2.InstanceType("t2.micro"),
-            machine_image=ecs.EcsOptimizedImage.amazon_linux2(),
+            instance_type=aws_cdk.aws_ec2.InstanceType("t2.micro"),
+            machine_image=aws_cdk.aws_ecs.EcsOptimizedImage.amazon_linux2(),
             vpc=vpc,
         )
 

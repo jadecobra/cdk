@@ -1,9 +1,10 @@
 import aws_cdk
 import constructs
+import well_architected
 import regular_constructs.autoscaling_ecs
 
 
-class AlbAutoscalingEcs(aws_cdk.Stack):
+class AlbAutoscalingEcs(well_architected.Stack):
 
     def __init__(
         self, scope: constructs.Construct, id: str,
@@ -16,7 +17,7 @@ class AlbAutoscalingEcs(aws_cdk.Stack):
         ecs_task_definition = self.create_task_definition()
         self.create_container(
             task_definition=ecs_task_definition,
-            image_name="amazon/amazon-ecs-sample"
+            image_name=container_image
         )
 
         aws_cdk.CfnOutput(
