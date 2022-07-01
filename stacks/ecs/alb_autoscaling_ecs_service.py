@@ -1,7 +1,7 @@
 import aws_cdk
 import constructs
 import well_architected
-import regular_constructs.autoscaling_ecs_cluster
+import regular_constructs.autoscaling_ecs
 
 
 class AlbAutoscalingEcsService(well_architected.Stack):
@@ -14,7 +14,8 @@ class AlbAutoscalingEcsService(well_architected.Stack):
         super().__init__(scope, id, **kwargs)
 
         ecs_cluster = self.create_ecs_cluster()
-        ecs_task_definition = self.create_task_definition()
+        # ecs_task_definition = self.create_task_definition()
+        ecs_task_definition = ecs_cluster.create_task_definition()
 
         self.create_container(
             task_definition=ecs_task_definition,
@@ -32,7 +33,7 @@ class AlbAutoscalingEcsService(well_architected.Stack):
         )
 
     def create_ecs_cluster(self):
-        ecs_cluster = regular_constructs.autoscaling_ecs_cluster.AutoscalingEcsClusterConstruct(
+        ecs_cluster = regular_constructs.autoscaling_ecs.AutoscalingEcsClusterConstruct(
             self, 'AutoscalingEcs',
         )
         ecs_cluster.create_autoscaling_group_provider(

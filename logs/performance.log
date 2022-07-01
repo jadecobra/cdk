@@ -28172,3 +28172,12 @@
 2022-06-30 23:19:20.073079::Time taken to synthesize stack: AutoscalingEcsCluster::  6.8550 seconds
 2022-06-30 23:19:26.865984::Time taken to synthesize stack: AlbAutoscalingEcsService::  6.7867 seconds
 2022-06-30 23:19:33.021285::Time taken to synthesize stack: NlbAutoscalingEcsService::  6.1505 seconds
+2022-06-30 23:19:57.415924::Time taken to synthesize stack: AutoscalingEcsService::  6.1359 seconds
+2022-06-30 23:20:03.166554::Time taken to synthesize stack: AutoscalingEcsCluster::  5.7453 seconds
+2022-06-30 23:20:09.038375::Time taken to synthesize stack: AlbAutoscalingEcsService::  5.8660 seconds
+2022-06-30 23:20:14.897260::Time taken to synthesize stack: NlbAutoscalingEcsService::  5.8535 seconds
+2022-06-30 23:22:37.305408::Time taken to synthesize stack: AutoscalingEcsService::  5.8827 seconds
+2022-06-30 23:22:42.925615::Time taken to synthesize stack: AutoscalingEcsCluster::  5.6149 seconds
+2022-06-30 23:22:48.527866::Time taken to synthesize stack: AlbAutoscalingEcsService::  5.5984 seconds
+2022-06-30 23:22:57.786644::Time taken to synthesize stack: AutoscalingEcsService::  5.7074 seconds
+2022-06-30 23:23:03.425139::Time taken to synthesize stack: AutoscalingEcsCluster::  5.6317 seconds

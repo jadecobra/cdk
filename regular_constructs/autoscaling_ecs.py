@@ -1,9 +1,8 @@
 import aws_cdk
 import constructs
-import regular_constructs.autoscaling_ecs_cluster
 
 
-class AutoscalingEcsServiceConstruct(regular_constructs.autoscaling_ecs_cluster.AutoscalingEcsCluster):
+class AutoscalingEcsClusterConstruct(constructs.Construct):
 
     def __init__(
         self, scope: constructs.Construct, id: str,
@@ -37,3 +36,17 @@ class AutoscalingEcsServiceConstruct(regular_constructs.autoscaling_ecs_cluster.
                     auto_scaling_group=autoscaling_group
                 )
             )
+
+    def create_ecs_service(self, ecs_task_definition=None, security_group=None):
+        return aws_cdk.aws_ecs.Ec2Service(
+            self, "Service",
+            cluster=self.ecs_cluster,
+            task_definition=ecs_task_definition,
+            security_groups=[security_group] if security_group else None,
+        )
+
+    def create_task_definition(self, network_mode=None):
+        return aws_cdk.aws_ecs.Ec2TaskDefinition(
+            self, "TaskDefinition",
+            network_mode=network_mode
+        )
