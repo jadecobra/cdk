@@ -15,6 +15,7 @@ class AlbAutoscalingEcs(well_architected.Stack):
 
         ecs_cluster = self.create_ecs_cluster()
         ecs_task_definition = self.create_task_definition()
+
         self.create_container(
             task_definition=ecs_task_definition,
             container_image=container_image

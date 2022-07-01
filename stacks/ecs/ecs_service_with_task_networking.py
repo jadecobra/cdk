@@ -20,29 +20,22 @@ class Ec2ServiceWithTaskNetworking(well_architected.Stack):
             self.create_autoscaling_group(ecs_cluster.vpc)
         )
 
-        task_definition = aws_cdk.aws_ecs.Ec2TaskDefinition(
-            self, "nginx-awsvpc",
-            network_mode=aws_cdk.aws_ecs.NetworkMode.AWS_VPC,
-        )
+        ecs_task_definition = self.create_task_definition()
 
-        web_container = task_definition.add_container(
-            "nginx",
-            image=aws_cdk.aws_ecs.ContainerImage.from_registry("nginx:latest"),
-            cpu=100,
-            memory_limit_mib=256,
-            essential=True
+        self.create_container(
+            ecs_task_definition=ecs_task_definition,
+            container_image=container_image,
         )
-        port_mapping = aws_cdk.aws_ecs.PortMapping(
-            container_port=80,
-            protocol=aws_cdk.aws_ecs.Protocol.TCP
-        )
-        web_container.add_port_mappings(port_mapping)
 
         self.create_ecs_service(
             ecs_cluster=ecs_cluster.ecs_cluster,
-            ecs_task_definition=task_definition,
+            ecs_task_definition=ecs_task_definition,
             security_group=self.create_security_group(ecs_cluster.vpc),
         )
+
+    def create_ecs_cluster(self):
+        
+        return ecs_cluster
 
     @staticmethod
     def get_port_mappings():

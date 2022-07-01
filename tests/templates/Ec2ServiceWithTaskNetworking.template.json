@@ -600,7 +600,7 @@
         }
       }
     },
-    "nginxawsvpcTaskRole8168838D": {
+    "TaskDefinitionTaskRoleFD40A61D": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -617,7 +617,7 @@
         }
       }
     },
-    "nginxawsvpc1E436223": {
+    "TaskDefinitionB36D86D9": {
       "Type": "AWS::ECS::TaskDefinition",
       "Properties": {
         "ContainerDefinitions": [
@@ -626,7 +626,7 @@
             "Essential": true,
             "Image": "nginx:latest",
             "Memory": 256,
-            "Name": "nginx",
+            "Name": "Container",
             "PortMappings": [
               {
                 "ContainerPort": 80,
@@ -635,11 +635,11 @@
             ]
           }
         ],
-        "Family": "Ec2ServiceWithTaskNetworkingnginxawsvpc58B5F21F",
+        "Family": "Ec2ServiceWithTaskNetworkingTaskDefinitionA502C0E9",
         "NetworkMode": "awsvpc",
         "RequiresCompatibilities": ["EC2"],
         "TaskRoleArn": {
-          "Fn::GetAtt": ["nginxawsvpcTaskRole8168838D", "Arn"]
+          "Fn::GetAtt": ["TaskDefinitionTaskRoleFD40A61D", "Arn"]
         }
       }
     },
@@ -702,7 +702,7 @@
         },
         "SchedulingStrategy": "REPLICA",
         "TaskDefinition": {
-          "Ref": "nginxawsvpc1E436223"
+          "Ref": "TaskDefinitionB36D86D9"
         }
       }
     }
