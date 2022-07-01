@@ -1,9 +1,9 @@
 {
   "Resources": {
-    "AutoscalingEcsServiceErrorTopic5207FF70": {
+    "AlbAutoscalingEcsServiceErrorTopic44F8ADD0": {
       "Type": "AWS::SNS::Topic",
       "Properties": {
-        "DisplayName": "AutoscalingEcsServiceErrorTopic"
+        "DisplayName": "AlbAutoscalingEcsServiceErrorTopic"
       }
     },
     "AutoscalingEcsVpcE1C9A87D": {
@@ -16,7 +16,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "AutoscalingEcsService/AutoscalingEcs/Vpc"
+            "Value": "AlbAutoscalingEcsService/AutoscalingEcs/Vpc"
           }
         ]
       }
@@ -48,7 +48,7 @@
           },
           {
             "Key": "Name",
-            "Value": "AutoscalingEcsService/AutoscalingEcs/Vpc/PublicSubnet1"
+            "Value": "AlbAutoscalingEcsService/AutoscalingEcs/Vpc/PublicSubnet1"
           }
         ]
       }
@@ -62,7 +62,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "AutoscalingEcsService/AutoscalingEcs/Vpc/PublicSubnet1"
+            "Value": "AlbAutoscalingEcsService/AutoscalingEcs/Vpc/PublicSubnet1"
           }
         ]
       }
@@ -98,7 +98,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "AutoscalingEcsService/AutoscalingEcs/Vpc/PublicSubnet1"
+            "Value": "AlbAutoscalingEcsService/AutoscalingEcs/Vpc/PublicSubnet1"
           }
         ]
       }
@@ -118,7 +118,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "AutoscalingEcsService/AutoscalingEcs/Vpc/PublicSubnet1"
+            "Value": "AlbAutoscalingEcsService/AutoscalingEcs/Vpc/PublicSubnet1"
           }
         ]
       }
@@ -150,7 +150,7 @@
           },
           {
             "Key": "Name",
-            "Value": "AutoscalingEcsService/AutoscalingEcs/Vpc/PublicSubnet2"
+            "Value": "AlbAutoscalingEcsService/AutoscalingEcs/Vpc/PublicSubnet2"
           }
         ]
       }
@@ -164,7 +164,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "AutoscalingEcsService/AutoscalingEcs/Vpc/PublicSubnet2"
+            "Value": "AlbAutoscalingEcsService/AutoscalingEcs/Vpc/PublicSubnet2"
           }
         ]
       }
@@ -200,7 +200,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "AutoscalingEcsService/AutoscalingEcs/Vpc/PublicSubnet2"
+            "Value": "AlbAutoscalingEcsService/AutoscalingEcs/Vpc/PublicSubnet2"
           }
         ]
       }
@@ -220,7 +220,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "AutoscalingEcsService/AutoscalingEcs/Vpc/PublicSubnet2"
+            "Value": "AlbAutoscalingEcsService/AutoscalingEcs/Vpc/PublicSubnet2"
           }
         ]
       }
@@ -252,7 +252,7 @@
           },
           {
             "Key": "Name",
-            "Value": "AutoscalingEcsService/AutoscalingEcs/Vpc/PrivateSubnet1"
+            "Value": "AlbAutoscalingEcsService/AutoscalingEcs/Vpc/PrivateSubnet1"
           }
         ]
       }
@@ -266,7 +266,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "AutoscalingEcsService/AutoscalingEcs/Vpc/PrivateSubnet1"
+            "Value": "AlbAutoscalingEcsService/AutoscalingEcs/Vpc/PrivateSubnet1"
           }
         ]
       }
@@ -321,7 +321,7 @@
           },
           {
             "Key": "Name",
-            "Value": "AutoscalingEcsService/AutoscalingEcs/Vpc/PrivateSubnet2"
+            "Value": "AlbAutoscalingEcsService/AutoscalingEcs/Vpc/PrivateSubnet2"
           }
         ]
       }
@@ -335,7 +335,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "AutoscalingEcsService/AutoscalingEcs/Vpc/PrivateSubnet2"
+            "Value": "AlbAutoscalingEcsService/AutoscalingEcs/Vpc/PrivateSubnet2"
           }
         ]
       }
@@ -369,7 +369,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "AutoscalingEcsService/AutoscalingEcs/Vpc"
+            "Value": "AlbAutoscalingEcsService/AutoscalingEcs/Vpc"
           }
         ]
       }
@@ -407,7 +407,7 @@
       "Properties": {
         "AutoScalingGroupProvider": {
           "AutoScalingGroupArn": {
-            "Ref": "DefaultAutoScalingGroupASGEBB7E940"
+            "Ref": "AutoScalingGroupASG804C35BE"
           },
           "ManagedScaling": {
             "Status": "ENABLED",
@@ -417,10 +417,42 @@
         }
       }
     },
-    "DefaultAutoScalingGroupInstanceSecurityGroupFBA881D0": {
+    "AutoscalingEcsService9C5E6104": {
+      "Type": "AWS::ECS::Service",
+      "Properties": {
+        "Cluster": {
+          "Ref": "AutoscalingEcsEcsClusterE559A4EB"
+        },
+        "DeploymentConfiguration": {
+          "MaximumPercent": 200,
+          "MinimumHealthyPercent": 50
+        },
+        "EnableECSManagedTags": false,
+        "HealthCheckGracePeriodSeconds": 60,
+        "LaunchType": "EC2",
+        "LoadBalancers": [
+          {
+            "ContainerName": "Container",
+            "ContainerPort": 80,
+            "TargetGroupArn": {
+              "Ref": "ApplicationLoadBalancerPublicListenerTargetsGroup726EA750"
+            }
+          }
+        ],
+        "SchedulingStrategy": "REPLICA",
+        "TaskDefinition": {
+          "Ref": "TaskDefinitionB36D86D9"
+        }
+      },
+      "DependsOn": [
+        "ApplicationLoadBalancerPublicListenerD5D301C9",
+        "ApplicationLoadBalancerPublicListenerTargetsGroup726EA750"
+      ]
+    },
+    "AutoScalingGroupInstanceSecurityGroup9D2E0C5E": {
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
-        "GroupDescription": "AutoscalingEcsService/DefaultAutoScalingGroup/InstanceSecurityGroup",
+        "GroupDescription": "AlbAutoscalingEcsService/AutoScalingGroup/InstanceSecurityGroup",
         "SecurityGroupEgress": [
           {
             "CidrIp": "0.0.0.0/0",
@@ -431,7 +463,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "AutoscalingEcsService/DefaultAutoScalingGroup"
+            "Value": "AlbAutoscalingEcsService/AutoScalingGroup"
           }
         ],
         "VpcId": {
@@ -439,7 +471,7 @@
         }
       }
     },
-    "DefaultAutoScalingGroupInstanceRoleE86E4FF7": {
+    "AutoScalingGroupInstanceRoleDC70D128": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -467,12 +499,12 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "AutoscalingEcsService/DefaultAutoScalingGroup"
+            "Value": "AlbAutoscalingEcsService/AutoScalingGroup"
           }
         ]
       }
     },
-    "DefaultAutoScalingGroupInstanceRoleDefaultPolicyCDCEDE63": {
+    "AutoScalingGroupInstanceRoleDefaultPolicy3DF09528": {
       "Type": "AWS::IAM::Policy",
       "Properties": {
         "PolicyDocument": {
@@ -513,38 +545,38 @@
           ],
           "Version": "2012-10-17"
         },
-        "PolicyName": "DefaultAutoScalingGroupInstanceRoleDefaultPolicyCDCEDE63",
+        "PolicyName": "AutoScalingGroupInstanceRoleDefaultPolicy3DF09528",
         "Roles": [
           {
-            "Ref": "DefaultAutoScalingGroupInstanceRoleE86E4FF7"
+            "Ref": "AutoScalingGroupInstanceRoleDC70D128"
           }
         ]
       }
     },
-    "DefaultAutoScalingGroupInstanceProfileDF6EBEF9": {
+    "AutoScalingGroupInstanceProfile342FAC7C": {
       "Type": "AWS::IAM::InstanceProfile",
       "Properties": {
         "Roles": [
           {
-            "Ref": "DefaultAutoScalingGroupInstanceRoleE86E4FF7"
+            "Ref": "AutoScalingGroupInstanceRoleDC70D128"
           }
         ]
       }
     },
-    "DefaultAutoScalingGroupLaunchConfig8EF01FB2": {
+    "AutoScalingGroupLaunchConfigDEEB160C": {
       "Type": "AWS::AutoScaling::LaunchConfiguration",
       "Properties": {
         "ImageId": {
           "Ref": "SsmParameterValueawsserviceecsoptimizedamiamazonlinux2recommendedimageidC96584B6F00A464EAD1953AFF4B05118Parameter"
         },
-        "InstanceType": "t2.micro",
+        "InstanceType": "t3.micro",
         "IamInstanceProfile": {
-          "Ref": "DefaultAutoScalingGroupInstanceProfileDF6EBEF9"
+          "Ref": "AutoScalingGroupInstanceProfile342FAC7C"
         },
         "SecurityGroups": [
           {
             "Fn::GetAtt": [
-              "DefaultAutoScalingGroupInstanceSecurityGroupFBA881D0",
+              "AutoScalingGroupInstanceSecurityGroup9D2E0C5E",
               "GroupId"
             ]
           }
@@ -565,24 +597,24 @@
         }
       },
       "DependsOn": [
-        "DefaultAutoScalingGroupInstanceRoleDefaultPolicyCDCEDE63",
-        "DefaultAutoScalingGroupInstanceRoleE86E4FF7"
+        "AutoScalingGroupInstanceRoleDefaultPolicy3DF09528",
+        "AutoScalingGroupInstanceRoleDC70D128"
       ]
     },
-    "DefaultAutoScalingGroupASGEBB7E940": {
+    "AutoScalingGroupASG804C35BE": {
       "Type": "AWS::AutoScaling::AutoScalingGroup",
       "Properties": {
         "MaxSize": "1",
         "MinSize": "1",
         "LaunchConfigurationName": {
-          "Ref": "DefaultAutoScalingGroupLaunchConfig8EF01FB2"
+          "Ref": "AutoScalingGroupLaunchConfigDEEB160C"
         },
         "NewInstancesProtectedFromScaleIn": true,
         "Tags": [
           {
             "Key": "Name",
             "PropagateAtLaunch": true,
-            "Value": "AutoscalingEcsService/DefaultAutoScalingGroup"
+            "Value": "AlbAutoscalingEcsService/AutoScalingGroup"
           }
         ],
         "VPCZoneIdentifier": [
@@ -622,31 +654,64 @@
       "Properties": {
         "ContainerDefinitions": [
           {
-            "Cpu": 100,
             "Essential": true,
-            "Image": "nginx:latest",
+            "Image": "amazon/amazon-ecs-sample",
             "Memory": 256,
             "Name": "Container",
             "PortMappings": [
               {
                 "ContainerPort": 80,
+                "HostPort": 8080,
                 "Protocol": "tcp"
               }
             ]
           }
         ],
-        "Family": "AutoscalingEcsServiceTaskDefinition8719CB6C",
-        "NetworkMode": "awsvpc",
+        "Family": "AlbAutoscalingEcsServiceTaskDefinitionD30199F0",
+        "NetworkMode": "bridge",
         "RequiresCompatibilities": ["EC2"],
         "TaskRoleArn": {
           "Fn::GetAtt": ["TaskDefinitionTaskRoleFD40A61D", "Arn"]
         }
       }
     },
-    "SecurityGroupDD263621": {
+    "ApplicationLoadBalancerFD56DEE1": {
+      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+      "Properties": {
+        "LoadBalancerAttributes": [
+          {
+            "Key": "deletion_protection.enabled",
+            "Value": "false"
+          }
+        ],
+        "Scheme": "internet-facing",
+        "SecurityGroups": [
+          {
+            "Fn::GetAtt": [
+              "ApplicationLoadBalancerSecurityGroup4BBE5415",
+              "GroupId"
+            ]
+          }
+        ],
+        "Subnets": [
+          {
+            "Ref": "AutoscalingEcsVpcPublicSubnet1Subnet0E9D1C37"
+          },
+          {
+            "Ref": "AutoscalingEcsVpcPublicSubnet2Subnet8ED15042"
+          }
+        ],
+        "Type": "application"
+      },
+      "DependsOn": [
+        "AutoscalingEcsVpcPublicSubnet1DefaultRouteF551E42E",
+        "AutoscalingEcsVpcPublicSubnet2DefaultRouteEA3CEB6D"
+      ]
+    },
+    "ApplicationLoadBalancerSecurityGroup4BBE5415": {
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
-        "GroupDescription": "AutoscalingEcsService/SecurityGroup",
+        "GroupDescription": "Automatically created Security Group for ELB AlbAutoscalingEcsServiceApplicationLoadBalancer9D2499E0",
         "SecurityGroupEgress": [
           {
             "CidrIp": "255.255.255.255/32",
@@ -659,7 +724,7 @@
         "SecurityGroupIngress": [
           {
             "CidrIp": "0.0.0.0/0",
-            "Description": "from 0.0.0.0/0:80",
+            "Description": "Allow from anyone on port 80",
             "FromPort": 80,
             "IpProtocol": "tcp",
             "ToPort": 80
@@ -670,39 +735,41 @@
         }
       }
     },
-    "ServiceD69D759B": {
-      "Type": "AWS::ECS::Service",
+    "ApplicationLoadBalancerPublicListenerD5D301C9": {
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
       "Properties": {
-        "Cluster": {
-          "Ref": "AutoscalingEcsEcsClusterE559A4EB"
-        },
-        "DeploymentConfiguration": {
-          "MaximumPercent": 200,
-          "MinimumHealthyPercent": 50
-        },
-        "EnableECSManagedTags": false,
-        "LaunchType": "EC2",
-        "NetworkConfiguration": {
-          "AwsvpcConfiguration": {
-            "AssignPublicIp": "DISABLED",
-            "SecurityGroups": [
-              {
-                "Fn::GetAtt": ["SecurityGroupDD263621", "GroupId"]
-              }
-            ],
-            "Subnets": [
-              {
-                "Ref": "AutoscalingEcsVpcPrivateSubnet1Subnet87F43741"
-              },
-              {
-                "Ref": "AutoscalingEcsVpcPrivateSubnet2Subnet57142116"
-              }
-            ]
+        "DefaultActions": [
+          {
+            "TargetGroupArn": {
+              "Ref": "ApplicationLoadBalancerPublicListenerTargetsGroup726EA750"
+            },
+            "Type": "forward"
           }
+        ],
+        "LoadBalancerArn": {
+          "Ref": "ApplicationLoadBalancerFD56DEE1"
         },
-        "SchedulingStrategy": "REPLICA",
-        "TaskDefinition": {
-          "Ref": "TaskDefinitionB36D86D9"
+        "Port": 80,
+        "Protocol": "HTTP"
+      }
+    },
+    "ApplicationLoadBalancerPublicListenerTargetsGroup726EA750": {
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+      "Properties": {
+        "HealthCheckIntervalSeconds": 60,
+        "HealthCheckPath": "/health",
+        "HealthCheckTimeoutSeconds": 5,
+        "Port": 80,
+        "Protocol": "HTTP",
+        "TargetGroupAttributes": [
+          {
+            "Key": "stickiness.enabled",
+            "Value": "false"
+          }
+        ],
+        "TargetType": "instance",
+        "VpcId": {
+          "Ref": "AutoscalingEcsVpcE1C9A87D"
         }
       }
     }
@@ -711,6 +778,13 @@
     "SsmParameterValueawsserviceecsoptimizedamiamazonlinux2recommendedimageidC96584B6F00A464EAD1953AFF4B05118Parameter": {
       "Type": "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>",
       "Default": "/aws/service/ecs/optimized-ami/amazon-linux-2/recommended/image_id"
+    }
+  },
+  "Outputs": {
+    "LoadBalancerDNS": {
+      "Value": {
+        "Fn::GetAtt": ["ApplicationLoadBalancerFD56DEE1", "DNSName"]
+      }
     }
   }
 }

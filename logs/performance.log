@@ -28140,3 +28140,11 @@
 2022-06-30 22:55:48.896912::Time taken to synthesize stack: AlbAutoscalingEcsService::  5.7353 seconds
 2022-06-30 22:55:58.241502::Time taken to synthesize stack: AutoscalingEcsService::  5.7433 seconds
 2022-06-30 22:57:11.927960::Time taken to synthesize stack: AutoscalingEcsService::  5.8587 seconds
+2022-06-30 22:59:26.118037::Time taken to synthesize stack: AutoscalingEcsService::  5.9616 seconds
+2022-06-30 23:01:23.932796::Time taken to synthesize stack: AutoscalingEcsService::  5.8255 seconds
+2022-06-30 23:01:29.585514::Time taken to synthesize stack: AutoscalingEcsCluster::  5.6458 seconds
+2022-06-30 23:01:35.144479::Time taken to synthesize stack: AlbAutoscalingEcsService::  5.5552 seconds
+2022-06-30 23:02:21.600815::Time taken to synthesize stack: AutoscalingEcsService::  5.8447 seconds
+2022-06-30 23:02:27.511942::Time taken to synthesize stack: AutoscalingEcsCluster::  5.9055 seconds
+2022-06-30 23:02:33.367518::Time taken to synthesize stack: AlbAutoscalingEcsService::  5.8519 seconds
+2022-06-30 23:02:38.988373::Time taken to synthesize stack: NlbAutoscalingEcsService::  5.6154 seconds
