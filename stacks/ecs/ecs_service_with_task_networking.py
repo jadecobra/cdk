@@ -15,30 +15,13 @@ class Ec2ServiceWithTaskNetworking(aws_cdk.Stack):
     def __init__(self, scope: constructs.Construct, id: str, **kwargs):
         super().__init__(scope, id, **kwargs)
 
-
-        vpc = ec2.Vpc(
-            self, "Vpc",
-            max_azs=2
+        ecs_cluster = regular_constructs.autoscaling_ecs.AutoscalingEcsConstruct(
+            self, 'AutoscalingEcs',
+        )
+        ecs_cluster.create_autoscaling_group_provider(
+            self.create_autoscaling_group(ecs_cluster.vpc)
         )
 
-        cluster = aws_cdk.aws_ecs.Cluster(
-            self, "awsvpc-ecs-demo-cluster",
-            vpc=vpc
-        )
-
-        asg = aws_cdk.aws_autoscaling.AutoScalingGroup(
-            self, "DefaultAutoScalingGroup",
-            instance_type=ec2.InstanceType("t2.micro"),
-            machine_image=ecs.EcsOptimizedImage.amazon_linux2(),
-            vpc=vpc,
-        )
-        capacity_provider = aws_cdk.aws_ecs.AsgCapacityProvider(
-            self, "AsgCapacityProvider",
-            auto_scaling_group=asg
-        )
-        cluster.add_asg_capacity_provider(capacity_provider)
-
-        # Create a task definition with its own elastic network interface
         task_definition = aws_cdk.aws_ecs.Ec2TaskDefinition(
             self, "nginx-awsvpc",
             network_mode=aws_cdk.aws_ecs.NetworkMode.AWS_VPC,
@@ -57,11 +40,9 @@ class Ec2ServiceWithTaskNetworking(aws_cdk.Stack):
         )
         web_container.add_port_mappings(port_mapping)
 
-        # Create a security group that allows HTTP traffic on port 80 for our
-        # containers without modifying the security group on the instance
         security_group = aws_cdk.aws_ec2.SecurityGroup(
             self, "nginx--7623",
-            vpc=vpc,
+            vpc=ecs_cluster.vpc,
             allow_all_outbound=False
         )
         security_group.add_ingress_rule(
@@ -70,9 +51,20 @@ class Ec2ServiceWithTaskNetworking(aws_cdk.Stack):
         )
 
         # Create the service
-        service = aws_cdk.aws_ecs.Ec2Service(
+        aws_cdk.aws_ecs.Ec2Service(
             self, "awsvpc-ecs-demo-service",
-            cluster=cluster,
+            cluster=ecs_cluster.ecs_cluster,
             task_definition=task_definition,
             security_groups=[security_group]
         )
+
+    def create_autoscaling_group(self, vpc):
+        return aws_cdk.aws_autoscaling.AutoScalingGroup(
+            self, "DefaultAutoScalingGroup",
+            instance_type=ec2.InstanceType("t2.micro"),
+            machine_image=ecs.EcsOptimizedImage.amazon_linux2(),
+            vpc=vpc,
+        )
+
+    def create_ecs_service(self):
+        return
