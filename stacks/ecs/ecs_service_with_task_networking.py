@@ -45,10 +45,23 @@ class Ec2ServiceWithTaskNetworking(well_architected.Stack):
         )
 
         # Create the service
-        aws_cdk.aws_ecs.Ec2Service(
-            self, "awsvpc-ecs-demo-service",
-            cluster=ecs_cluster.ecs_cluster,
-            task_definition=task_definition,
+        # aws_cdk.aws_ecs.Ec2Service(
+        #     self, "awsvpc-ecs-demo-service",
+        #     cluster=ecs_cluster.ecs_cluster,
+        #     task_definition=task_definition,
+        #     security_groups=[security_group]
+        # )
+        self.create_ecs_service(
+            ecs_cluster=ecs_cluster.ecs_cluster,
+            ecs_task_definition=task_definition,
+            security_group=security_group,
+        )
+
+    def create_ecs_service(self, ecs_cluster=None, ecs_task_definition=None, security_group=None):
+        return aws_cdk.aws_ecs.Ec2Service(
+            self, "Service",
+            cluster=ecs_cluster,
+            task_definition=ecs_task_definition,
             security_groups=[security_group]
         )
 
@@ -65,6 +78,3 @@ class Ec2ServiceWithTaskNetworking(well_architected.Stack):
             machine_image=aws_cdk.aws_ecs.EcsOptimizedImage.amazon_linux2(),
             vpc=vpc,
         )
-
-    def create_ecs_service(self):
-        return
