@@ -424,6 +424,7 @@
       "Properties": {
         "ContainerDefinitions": [
           {
+            "Cpu": 100,
             "Essential": true,
             "Image": "amazon/amazon-ecs-sample",
             "Memory": 256,
@@ -431,7 +432,7 @@
             "PortMappings": [
               {
                 "ContainerPort": 80,
-                "HostPort": 8080,
+                "HostPort": 0,
                 "Protocol": "tcp"
               }
             ]

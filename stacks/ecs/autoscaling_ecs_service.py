@@ -36,17 +36,6 @@ class AutoscalingEcsService(well_architected.Stack):
             protocol=aws_cdk.aws_ecs.Protocol.TCP
         )
 
-    # def create_container(self, ecs_task_definition=None, container_image=None):
-    #     ecs_task_definition.add_container(
-    #         "Container",
-    #         image=aws_cdk.aws_ecs.ContainerImage.from_registry(container_image),
-    #         cpu=100,
-    #         memory_limit_mib=256,
-    #         essential=True
-    #     ).add_port_mappings(
-    #         self.get_port_mappings()
-    #     )
-
     def create_security_group(self, vpc):
         security_group = aws_cdk.aws_ec2.SecurityGroup(
             self, "SecurityGroup",
