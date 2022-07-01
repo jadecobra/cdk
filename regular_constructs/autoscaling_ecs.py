@@ -9,7 +9,6 @@ class AutoscalingEcsClusterConstruct(constructs.Construct):
         vpc=None,
         network_mode=None,
         container_image=None,
-        create_service=True,
         **kwargs
     ):
         super().__init__(scope, id, **kwargs)
