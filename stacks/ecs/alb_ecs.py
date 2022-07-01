@@ -19,7 +19,7 @@ class AlbEcs(aws_cdk.Stack):
 
         ecs_task_definition = self.create_task_definition()
 
-        ecs_container = self.create_container(
+        self.create_container(
             task_definition=ecs_task_definition,
             image_name="amazon/amazon-ecs-sample"
         )

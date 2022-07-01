@@ -27918,3 +27918,6 @@
 2022-06-30 19:27:59.217453::Time taken to synthesize stack: AlbEcs::  5.9379 seconds
 2022-06-30 19:28:04.914232::Time taken to synthesize stack: AutoscalingEcs::  5.6920 seconds
 2022-06-30 19:28:10.553413::Time taken to synthesize stack: NlbAutoscalingEcs::  5.6353 seconds
+2022-06-30 19:28:33.647993::Time taken to synthesize stack: AlbEcs::  5.8591 seconds
+2022-06-30 19:28:39.298474::Time taken to synthesize stack: AutoscalingEcs::  5.6457 seconds
+2022-06-30 19:28:44.926041::Time taken to synthesize stack: NlbAutoscalingEcs::  5.6234 seconds
