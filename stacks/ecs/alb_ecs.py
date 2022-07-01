@@ -30,18 +30,9 @@ class AlbEcs(aws_cdk.Stack):
             task_definition=ecs_task_definition
         )
 
-        application_load_balancer = self.create_application_load_balancer(ecs_cluster.vpc)
-        listener = application_load_balancer.add_listener(
-            "PublicListener",
-            port=80,
-            open=True
-        )
-
-        listener.add_targets(
-            "Targets",
-            port=80,
-            targets=[service],
-            health_check=self.create_health_check(),
+        application_load_balancer = self.create_application_load_balancer(
+            vpc=ecs_cluster.vpc,
+            service=service
         )
 
         aws_cdk.CfnOutput(
@@ -49,12 +40,27 @@ class AlbEcs(aws_cdk.Stack):
             value=application_load_balancer.load_balancer_dns_name
         )
 
-    def create_application_load_balancer(self, vpc):
-        return aws_cdk.aws_elasticloadbalancingv2.ApplicationLoadBalancer(
+    @staticmethod
+    def container_port():
+        return 80
+
+    def create_application_load_balancer(self, vpc=None, service=None):
+        application_load_balancer = aws_cdk.aws_elasticloadbalancingv2.ApplicationLoadBalancer(
             self, "ApplicationLoadBalancer",
             vpc=vpc,
             internet_facing=True
         )
+        application_load_balancer.add_listener(
+            "PublicListener",
+            port=self.container_port(),
+            open=True
+        ).add_targets(
+            "Targets",
+            port=self.container_port(),
+            targets=[service],
+            health_check=self.create_health_check(),
+        )
+        return application_load_balancer
 
     @staticmethod
     def create_health_check():
@@ -69,10 +75,9 @@ class AlbEcs(aws_cdk.Stack):
             self, "TaskDefinition"
         )
 
-    @staticmethod
-    def get_port_mappings():
+    def get_port_mappings(self):
         return aws_cdk.aws_ecs.PortMapping(
-            container_port=80,
+            container_port=self.container_port(),
             host_port=8080,
             protocol=aws_cdk.aws_ecs.Protocol.TCP
         )
