@@ -98,7 +98,8 @@ class WellArchitected(aws_cdk.App):
     def ecs(self):
         def container_image():
             return "amazon/amazon-ecs-sample"
-        stacks.ecs.autoscaling_ecs.AutoscalingEcsConstruct(
+
+        stacks.ecs.autoscaling_ecs.AutoscalingEcsStack(
             self, 'AutoscalingEcs',
         )
         stacks.ecs.nlb_autoscaling_ecs.NlbAutoscalingEcs(
@@ -111,6 +112,7 @@ class WellArchitected(aws_cdk.App):
         )
         stacks.ecs.ecs_service_with_task_networking.Ec2ServiceWithTaskNetworking(
             self, 'Ec2ServiceWithTaskNetworking',
+            container_image="nginx:latest"
         )
 
 WellArchitected().synth()

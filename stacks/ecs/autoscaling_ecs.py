@@ -4,7 +4,7 @@ import regular_constructs.autoscaling_ecs
 import well_architected
 
 
-class AutoscalingEcsConstruct(well_architected.Stack):
+class AutoscalingEcsStack(well_architected.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs):
         super().__init__(scope, id, **kwargs)

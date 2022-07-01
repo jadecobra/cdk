@@ -6,7 +6,11 @@ import well_architected
 
 class Ec2ServiceWithTaskNetworking(well_architected.Stack):
 
-    def __init__(self, scope: constructs.Construct, id: str, **kwargs):
+    def __init__(
+        self, scope: constructs.Construct, id: str,
+        container_image=None,
+        **kwargs
+    ):
         super().__init__(scope, id, **kwargs)
 
         ecs_cluster = regular_constructs.autoscaling_ecs.AutoscalingEcsConstruct(
@@ -38,6 +42,24 @@ class Ec2ServiceWithTaskNetworking(well_architected.Stack):
             ecs_cluster=ecs_cluster.ecs_cluster,
             ecs_task_definition=task_definition,
             security_group=self.create_security_group(ecs_cluster.vpc),
+        )
+
+    @staticmethod
+    def get_port_mappings():
+        return aws_cdk.aws_ecs.PortMapping(
+            container_port=80,
+            protocol=aws_cdk.aws_ecs.Protocol.TCP
+        )
+
+    def create_container(self, ecs_task_definition=None, container_image=None):
+        ecs_task_definition.add_container(
+            "Container",
+            image=aws_cdk.aws_ecs.ContainerImage.from_registry(container_image),
+            cpu=100,
+            memory_limit_mib=256,
+            essential=True
+        ).add_port_mappings(
+            self.get_port_mappings()
         )
 
     def create_security_group(self, vpc):
