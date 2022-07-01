@@ -2,7 +2,7 @@ import aws_cdk
 import well_architected_stacks
 import stacks.ecs.autoscaling_ecs
 import stacks.ecs.nlb_autoscaling_ecs
-import stacks.ecs.alb_ecs
+import stacks.ecs.alb_autoscaling_ecs_service
 import stacks.ecs.ecs_service_with_task_networking
 
 
@@ -103,7 +103,7 @@ class WellArchitected(aws_cdk.App):
             self, 'NlbAutoscalingEcs',
             container_image="amazon/amazon-ecs-sample",
         )
-        stacks.ecs.alb_ecs.AlbEcs(
+        stacks.ecs.alb_autoscaling_ecs_service.AlbAutoscalingEcs(
             self, 'AlbEcs',
         )
         stacks.ecs.ecs_service_with_task_networking.Ec2ServiceWithTaskNetworking(

@@ -2,10 +2,12 @@ import aws_cdk
 import constructs
 import regular_constructs.autoscaling_ecs
 
-class AlbEcs(aws_cdk.Stack):
+
+class AlbAutoscalingEcs(aws_cdk.Stack):
 
     def __init__(
         self, scope: constructs.Construct, id: str,
+        container_image=None,
         **kwargs
     ):
         super().__init__(scope, id, **kwargs)

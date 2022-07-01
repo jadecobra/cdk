@@ -8,7 +8,7 @@ class TestWellArchitectedPatterns(tests.utilities.TestTemplates):
             # 'ApiLambdaRds',
             # 'ApiLambdaDynamodb',
             # 'ApiLambdaDynamodbEventBridgeLambda',
-            'AlbEcs',
+            'AlbAutoscalingEcs',
             'AutoscalingEcs',
             'Ec2ServiceWithTaskNetworking',
             'NlbAutoscalingEcs',

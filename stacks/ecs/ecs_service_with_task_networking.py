@@ -58,6 +58,12 @@ class Ec2ServiceWithTaskNetworking(aws_cdk.Stack):
             security_groups=[security_group]
         )
 
+    def create_task_definition(self):
+        return aws_cdk.aws_ecs.Ec2TaskDefinition(
+            self, "TaskDefinition",
+            network_mode=aws_cdk.aws_ecs.NetworkMode.AWS_VPC,
+        )
+
     def create_autoscaling_group(self, vpc):
         return aws_cdk.aws_autoscaling.AutoScalingGroup(
             self, "DefaultAutoScalingGroup",
