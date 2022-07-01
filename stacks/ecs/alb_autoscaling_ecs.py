@@ -17,7 +17,7 @@ class AlbAutoscalingEcs(well_architected.Stack):
         ecs_task_definition = self.create_task_definition()
         self.create_container(
             task_definition=ecs_task_definition,
-            image_name=container_image
+            container_image=container_image
         )
 
         aws_cdk.CfnOutput(
@@ -89,10 +89,10 @@ class AlbAutoscalingEcs(well_architected.Stack):
             protocol=aws_cdk.aws_ecs.Protocol.TCP
         )
 
-    def create_container(self, task_definition=None, image_name=None):
+    def create_container(self, task_definition=None, container_image=None):
         container = task_definition.add_container(
             "Container",
-            image=aws_cdk.aws_ecs.ContainerImage.from_registry(image_name),
+            image=aws_cdk.aws_ecs.ContainerImage.from_registry(container_image),
             memory_limit_mib=256
         )
         container.add_port_mappings(

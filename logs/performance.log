@@ -28090,3 +28090,7 @@
 2022-06-30 22:24:09.017165::Time taken to synthesize stack: AutoscalingEcs::  4.9876 seconds
 2022-06-30 22:24:13.990890::Time taken to synthesize stack: Ec2ServiceWithTaskNetworking::  4.9701 seconds
 2022-06-30 22:24:19.106001::Time taken to synthesize stack: NlbAutoscalingEcs::  5.1089 seconds
+2022-06-30 22:26:31.047272::Time taken to synthesize stack: AlbAutoscalingEcs::  5.7964 seconds
+2022-06-30 22:26:36.716518::Time taken to synthesize stack: AutoscalingEcs::  5.6626 seconds
+2022-06-30 22:26:42.338870::Time taken to synthesize stack: Ec2ServiceWithTaskNetworking::  5.6187 seconds
+2022-06-30 22:26:48.012407::Time taken to synthesize stack: NlbAutoscalingEcs::  5.6657 seconds

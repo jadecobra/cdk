@@ -62,6 +62,12 @@ class Ec2ServiceWithTaskNetworking(well_architected.Stack):
             self.get_port_mappings()
         )
 
+    def create_task_definition(self):
+        return aws_cdk.aws_ecs.Ec2TaskDefinition(
+            self, "TaskDefinition",
+            network_mode=aws_cdk.aws_ecs.NetworkMode.AWS_VPC,
+        )
+
     def create_security_group(self, vpc):
         security_group = aws_cdk.aws_ec2.SecurityGroup(
             self, "SecurityGroup",
