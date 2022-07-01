@@ -28254,3 +28254,15 @@
 2022-06-30 23:44:13.286601::Time taken to synthesize stack: AutoscalingEcsCluster::  5.5963 seconds
 2022-06-30 23:44:18.921033::Time taken to synthesize stack: AlbAutoscalingEcsService::  5.6298 seconds
 2022-06-30 23:44:24.678618::Time taken to synthesize stack: NlbAutoscalingEcsService::  5.7536 seconds
+2022-06-30 23:44:48.798894::Time taken to synthesize stack: AutoscalingEcsService::  5.8261 seconds
+2022-06-30 23:44:54.504604::Time taken to synthesize stack: AutoscalingEcsCluster::  5.7008 seconds
+2022-06-30 23:45:00.280426::Time taken to synthesize stack: AlbAutoscalingEcsService::  5.7717 seconds
+2022-06-30 23:45:06.024668::Time taken to synthesize stack: NlbAutoscalingEcsService::  5.7388 seconds
+2022-06-30 23:51:14.814779::Time taken to synthesize stack: AutoscalingEcsService::  5.1112 seconds
+2022-06-30 23:51:19.810099::Time taken to synthesize stack: AutoscalingEcsCluster::  4.9886 seconds
+2022-06-30 23:51:24.877991::Time taken to synthesize stack: AlbAutoscalingEcsService::  5.0629 seconds
+2022-06-30 23:51:29.840781::Time taken to synthesize stack: NlbAutoscalingEcsService::  4.9569 seconds
+2022-06-30 23:52:20.815460::Time taken to synthesize stack: AutoscalingEcsService::  5.2048 seconds
+2022-06-30 23:52:25.987472::Time taken to synthesize stack: AutoscalingEcsCluster::  5.1645 seconds
+2022-06-30 23:52:31.069986::Time taken to synthesize stack: AlbAutoscalingEcsService::  5.0771 seconds
+2022-06-30 23:52:36.061805::Time taken to synthesize stack: NlbAutoscalingEcsService::  4.9875 seconds

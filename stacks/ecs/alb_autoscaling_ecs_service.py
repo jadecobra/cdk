@@ -74,16 +74,16 @@ class AlbAutoscalingEcsService(well_architected.Stack):
             protocol=aws_cdk.aws_ecs.Protocol.TCP
         )
 
-    def create_container(self, task_definition=None, container_image=None):
-        container = task_definition.add_container(
-            "Container",
-            image=aws_cdk.aws_ecs.ContainerImage.from_registry(container_image),
-            memory_limit_mib=256
-        )
-        container.add_port_mappings(
-            self.get_port_mappings()
-        )
-        return container
+    # def create_container(self, task_definition=None, container_image=None):
+    #     container = task_definition.add_container(
+    #         "Container",
+    #         image=aws_cdk.aws_ecs.ContainerImage.from_registry(container_image),
+    #         memory_limit_mib=256
+    #     )
+    #     container.add_port_mappings(
+    #         self.get_port_mappings()
+    #     )
+    #     return container
 
     def create_autoscaling_group(self, vpc):
         return aws_cdk.aws_autoscaling.AutoScalingGroup(

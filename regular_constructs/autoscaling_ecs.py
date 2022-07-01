@@ -8,6 +8,7 @@ class AutoscalingEcsClusterConstruct(constructs.Construct):
         self, scope: constructs.Construct, id: str,
         vpc=None,
         network_mode=None,
+        container_image=None,
         create_service=True,
         **kwargs
     ):
@@ -15,6 +16,7 @@ class AutoscalingEcsClusterConstruct(constructs.Construct):
         self.vpc = self.get_vpc(vpc)
         self.ecs_cluster = self.create_ecs_cluster(self.vpc)
         self.ecs_task_definition = self.create_task_definition(network_mode) if create_service else None
+        self.create_container(container_image)
 
     def get_vpc(self, vpc=None):
         if vpc:
@@ -53,3 +55,22 @@ class AutoscalingEcsClusterConstruct(constructs.Construct):
             self, "TaskDefinition",
             network_mode=network_mode
         )
+
+    @staticmethod
+    def get_port_mappings():
+        return aws_cdk.aws_ecs.PortMapping(
+            container_port=80,
+            protocol=aws_cdk.aws_ecs.Protocol.TCP
+        )
+
+    def create_container(self, container_image=None):
+        if container_image:
+            self.ecs_task_definition.add_container(
+                "Container",
+                image=aws_cdk.aws_ecs.ContainerImage.from_registry(container_image),
+                cpu=100,
+                memory_limit_mib=256,
+                essential=True,
+            ).add_port_mappings(
+                self.get_port_mappings()
+            )

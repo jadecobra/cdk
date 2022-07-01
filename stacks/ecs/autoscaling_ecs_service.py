@@ -14,18 +14,15 @@ class AutoscalingEcsService(well_architected.Stack):
         super().__init__(scope, id, **kwargs)
 
         ecs_cluster = self.create_ecs_cluster()
-        # ecs_task_definition = ecs_cluster.create_task_definition()
         ecs_cluster.create_ecs_service(
-            # ecs_task_definition=ecs_task_definition,
             security_group=self.create_security_group(ecs_cluster.vpc),
-
         )
 
-        self.create_container(
-            ecs_task_definition=ecs_cluster.ecs_task_definition,
-            container_image=container_image,
-        )
-
+        # self.create_container(
+        #     ecs_task_definition=ecs_cluster.ecs_task_definition,
+        #     container_image=container_image,
+        # )
+        ecs_cluster.create_container(container_image)
 
     def create_ecs_cluster(self):
         ecs_cluster = regular_constructs.autoscaling_ecs.AutoscalingEcsClusterConstruct(
@@ -44,16 +41,16 @@ class AutoscalingEcsService(well_architected.Stack):
             protocol=aws_cdk.aws_ecs.Protocol.TCP
         )
 
-    def create_container(self, ecs_task_definition=None, container_image=None):
-        ecs_task_definition.add_container(
-            "Container",
-            image=aws_cdk.aws_ecs.ContainerImage.from_registry(container_image),
-            cpu=100,
-            memory_limit_mib=256,
-            essential=True
-        ).add_port_mappings(
-            self.get_port_mappings()
-        )
+    # def create_container(self, ecs_task_definition=None, container_image=None):
+    #     ecs_task_definition.add_container(
+    #         "Container",
+    #         image=aws_cdk.aws_ecs.ContainerImage.from_registry(container_image),
+    #         cpu=100,
+    #         memory_limit_mib=256,
+    #         essential=True
+    #     ).add_port_mappings(
+    #         self.get_port_mappings()
+    #     )
 
     def create_security_group(self, vpc):
         security_group = aws_cdk.aws_ec2.SecurityGroup(
