@@ -3,6 +3,7 @@ import well_architected_stacks
 import stacks.ecs.autoscaling_ecs
 import stacks.ecs.nlb_autoscaling_ecs
 import stacks.ecs.alb_ecs
+import stacks.ecs.ecs_service_with_task_networking
 
 
 class WellArchitected(aws_cdk.App):
@@ -104,6 +105,9 @@ class WellArchitected(aws_cdk.App):
         )
         stacks.ecs.alb_ecs.AlbEcs(
             self, 'AlbEcs',
+        )
+        stacks.ecs.ecs_service_with_task_networking.Ec2ServiceWithTaskNetworking(
+            self, 'Ec2ServiceWithTaskNetworking',
         )
 
 WellArchitected().synth()
