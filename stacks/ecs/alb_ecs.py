@@ -12,26 +12,27 @@ class AlbEcs(aws_cdk.Stack):
 
         ecs_cluster = self.create_ecs_cluster()
         ecs_task_definition = self.create_task_definition()
-
         self.create_container(
             task_definition=ecs_task_definition,
             image_name="amazon/amazon-ecs-sample"
         )
 
-        service = aws_cdk.aws_ecs.Ec2Service(
-            self, "Service",
-            cluster=ecs_cluster.ecs_cluster,
-            task_definition=ecs_task_definition
-        )
-
-        application_load_balancer = self.create_application_load_balancer(
-            vpc=ecs_cluster.vpc,
-            service=service
-        )
-
         aws_cdk.CfnOutput(
             self, "LoadBalancerDNS",
-            value=application_load_balancer.load_balancer_dns_name
+            value=self.get_application_load_balancer_dns_name(
+                vpc=ecs_cluster.vpc,
+                service=self.create_ecs_service(
+                    ecs_cluster=ecs_cluster.ecs_cluster,
+                    ecs_task_definition=ecs_task_definition,
+                )
+            )
+        )
+
+    def create_ecs_service(self, ecs_cluster=None, ecs_task_definition=None):
+        return aws_cdk.aws_ecs.Ec2Service(
+            self, "Service",
+            cluster=ecs_cluster,
+            task_definition=ecs_task_definition
         )
 
     def create_ecs_cluster(self):
@@ -43,12 +44,11 @@ class AlbEcs(aws_cdk.Stack):
         )
         return ecs_cluster
 
-
     @staticmethod
     def container_port():
         return 80
 
-    def create_application_load_balancer(self, vpc=None, service=None):
+    def get_application_load_balancer_dns_name(self, vpc=None, service=None):
         application_load_balancer = aws_cdk.aws_elasticloadbalancingv2.ApplicationLoadBalancer(
             self, "ApplicationLoadBalancer",
             vpc=vpc,
@@ -64,7 +64,7 @@ class AlbEcs(aws_cdk.Stack):
             targets=[service],
             health_check=self.create_health_check(),
         )
-        return application_load_balancer
+        return application_load_balancer.load_balancer_dns_name
 
     @staticmethod
     def create_health_check():

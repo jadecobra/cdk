@@ -27939,3 +27939,12 @@
 2022-06-30 19:35:41.469243::Time taken to synthesize stack: AlbEcs::  5.8337 seconds
 2022-06-30 19:35:47.146562::Time taken to synthesize stack: AutoscalingEcs::  5.6723 seconds
 2022-06-30 19:35:52.729453::Time taken to synthesize stack: NlbAutoscalingEcs::  5.5783 seconds
+2022-06-30 19:36:11.511384::Time taken to synthesize stack: AlbEcs::  5.7553 seconds
+2022-06-30 19:36:17.271100::Time taken to synthesize stack: AutoscalingEcs::  5.7524 seconds
+2022-06-30 19:36:23.227353::Time taken to synthesize stack: NlbAutoscalingEcs::  5.9523 seconds
+2022-06-30 19:38:06.571570::Time taken to synthesize stack: AlbEcs::  5.8277 seconds
+2022-06-30 19:38:12.940832::Time taken to synthesize stack: AutoscalingEcs::  6.3632 seconds
+2022-06-30 19:38:18.609003::Time taken to synthesize stack: NlbAutoscalingEcs::  5.6639 seconds
+2022-06-30 19:39:28.824117::Time taken to synthesize stack: AlbEcs::  5.9349 seconds
+2022-06-30 19:39:34.677064::Time taken to synthesize stack: AutoscalingEcs::  5.8486 seconds
+2022-06-30 19:39:40.367991::Time taken to synthesize stack: NlbAutoscalingEcs::  5.6858 seconds
