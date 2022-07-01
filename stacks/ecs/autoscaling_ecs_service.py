@@ -14,7 +14,9 @@ class AutoscalingEcsService(well_architected.Stack):
         super().__init__(scope, id, **kwargs)
 
         ecs_cluster = self.create_ecs_cluster()
-        ecs_task_definition = self.create_task_definition()
+        ecs_task_definition = ecs_cluster.create_task_definition(
+            network_mode=aws_cdk.aws_ecs.NetworkMode.AWS_VPC,
+        )
         ecs_cluster.create_ecs_service(
             ecs_task_definition=ecs_task_definition,
             security_group=self.create_security_group(ecs_cluster.vpc),
@@ -53,12 +55,6 @@ class AutoscalingEcsService(well_architected.Stack):
             self.get_port_mappings()
         )
 
-    def create_task_definition(self):
-        return aws_cdk.aws_ecs.Ec2TaskDefinition(
-            self, "TaskDefinition",
-            network_mode=aws_cdk.aws_ecs.NetworkMode.AWS_VPC,
-        )
-
     def create_security_group(self, vpc):
         security_group = aws_cdk.aws_ec2.SecurityGroup(
             self, "SecurityGroup",
@@ -70,12 +66,6 @@ class AutoscalingEcsService(well_architected.Stack):
             aws_cdk.aws_ec2.Port.tcp(80)
         )
         return security_group
-
-    def create_task_definition(self):
-        return aws_cdk.aws_ecs.Ec2TaskDefinition(
-            self, "TaskDefinition",
-            network_mode=aws_cdk.aws_ecs.NetworkMode.AWS_VPC,
-        )
 
     def create_autoscaling_group(self, vpc):
         return aws_cdk.aws_autoscaling.AutoScalingGroup(

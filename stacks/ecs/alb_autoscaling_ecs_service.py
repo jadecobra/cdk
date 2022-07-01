@@ -71,10 +71,10 @@ class AlbAutoscalingEcsService(well_architected.Stack):
             timeout=aws_cdk.Duration.seconds(5)
         )
 
-    def create_task_definition(self):
-        return aws_cdk.aws_ecs.Ec2TaskDefinition(
-            self, "TaskDefinition"
-        )
+    # def create_task_definition(self):
+    #     return aws_cdk.aws_ecs.Ec2TaskDefinition(
+    #         self, "TaskDefinition"
+    #     )
 
     def get_port_mappings(self):
         return aws_cdk.aws_ecs.PortMapping(

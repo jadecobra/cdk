@@ -417,6 +417,49 @@
         }
       }
     },
+    "AutoscalingEcsTaskDefinitionTaskRole422FBD3E": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      }
+    },
+    "AutoscalingEcsTaskDefinition003B6BDB": {
+      "Type": "AWS::ECS::TaskDefinition",
+      "Properties": {
+        "ContainerDefinitions": [
+          {
+            "Cpu": 100,
+            "Essential": true,
+            "Image": "nginx:latest",
+            "Memory": 256,
+            "Name": "Container",
+            "PortMappings": [
+              {
+                "ContainerPort": 80,
+                "Protocol": "tcp"
+              }
+            ]
+          }
+        ],
+        "Family": "AutoscalingEcsServiceAutoscalingEcsTaskDefinition82936B98",
+        "NetworkMode": "awsvpc",
+        "RequiresCompatibilities": ["EC2"],
+        "TaskRoleArn": {
+          "Fn::GetAtt": ["AutoscalingEcsTaskDefinitionTaskRole422FBD3E", "Arn"]
+        }
+      }
+    },
     "AutoscalingEcsService9C5E6104": {
       "Type": "AWS::ECS::Service",
       "Properties": {
@@ -449,7 +492,7 @@
         },
         "SchedulingStrategy": "REPLICA",
         "TaskDefinition": {
-          "Ref": "TaskDefinitionB36D86D9"
+          "Ref": "AutoscalingEcsTaskDefinition003B6BDB"
         }
       }
     },
@@ -633,49 +676,6 @@
       "UpdatePolicy": {
         "AutoScalingScheduledAction": {
           "IgnoreUnmodifiedGroupSizeProperties": true
-        }
-      }
-    },
-    "TaskDefinitionTaskRoleFD40A61D": {
-      "Type": "AWS::IAM::Role",
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "ecs-tasks.amazonaws.com"
-              }
-            }
-          ],
-          "Version": "2012-10-17"
-        }
-      }
-    },
-    "TaskDefinitionB36D86D9": {
-      "Type": "AWS::ECS::TaskDefinition",
-      "Properties": {
-        "ContainerDefinitions": [
-          {
-            "Cpu": 100,
-            "Essential": true,
-            "Image": "nginx:latest",
-            "Memory": 256,
-            "Name": "Container",
-            "PortMappings": [
-              {
-                "ContainerPort": 80,
-                "Protocol": "tcp"
-              }
-            ]
-          }
-        ],
-        "Family": "AutoscalingEcsServiceTaskDefinition8719CB6C",
-        "NetworkMode": "awsvpc",
-        "RequiresCompatibilities": ["EC2"],
-        "TaskRoleArn": {
-          "Fn::GetAtt": ["TaskDefinitionTaskRoleFD40A61D", "Arn"]
         }
       }
     },
