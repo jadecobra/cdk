@@ -23,12 +23,12 @@ class AlbEcs(aws_cdk.Stack):
             task_definition=ecs_task_definition,
             image_name="amazon/amazon-ecs-sample"
         )
-        ecs_port_mapping = aws_cdk.aws_ecs.PortMapping(
-            container_port=80,
-            host_port=8080,
-            protocol=aws_cdk.aws_ecs.Protocol.TCP
-        )
-        ecs_container.add_port_mappings(ecs_port_mapping)
+        # ecs_port_mapping = aws_cdk.aws_ecs.PortMapping(
+        #     container_port=80,
+        #     host_port=8080,
+        #     protocol=aws_cdk.aws_ecs.Protocol.TCP
+        # )
+        # ecs_container.add_port_mappings(ecs_port_mapping)
 
         service = aws_cdk.aws_ecs.Ec2Service(
             self, "Service",
@@ -47,11 +47,7 @@ class AlbEcs(aws_cdk.Stack):
             open=True
         )
 
-        health_check = aws_cdk.aws_elasticloadbalancingv2.HealthCheck(
-            interval=aws_cdk.Duration.seconds(60),
-            path="/health",
-            timeout=aws_cdk.Duration.seconds(5)
-        )
+        health_check = self.create_health_check()
 
         # Attach ALB to ECS Service
         listener.add_targets(
@@ -66,17 +62,37 @@ class AlbEcs(aws_cdk.Stack):
             value=application_load_balancer.load_balancer_dns_name
         )
 
+    @staticmethod
+    def create_health_check():
+        return aws_cdk.aws_elasticloadbalancingv2.HealthCheck(
+            interval=aws_cdk.Duration.seconds(60),
+            path="/health",
+            timeout=aws_cdk.Duration.seconds(5)
+        )
+
     def create_task_definition(self):
         return aws_cdk.aws_ecs.Ec2TaskDefinition(
             self, "TaskDefinition"
         )
 
+    @staticmethod
+    def get_port_mappings():
+        return aws_cdk.aws_ecs.PortMapping(
+            container_port=80,
+            host_port=8080,
+            protocol=aws_cdk.aws_ecs.Protocol.TCP
+        )
+
     def create_container(self, task_definition=None, image_name=None):
-        return task_definition.add_container(
+        container = task_definition.add_container(
             "Container",
             image=aws_cdk.aws_ecs.ContainerImage.from_registry(image_name),
             memory_limit_mib=256
         )
+        container.add_port_mappings(
+            self.get_port_mappings()
+        )
+        return container
 
     def create_autoscaling_group(self, vpc):
         return aws_cdk.aws_autoscaling.AutoScalingGroup(
