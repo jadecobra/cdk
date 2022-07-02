@@ -29,7 +29,8 @@ class AlbAutoscalingEcsService(well_architected.Stack):
             self, 'AutoscalingEcs',
         )
         ecs_cluster.create_autoscaling_group_provider(
-            self.create_autoscaling_group(ecs_cluster.vpc)
+            # self.create_autoscaling_group(ecs_cluster.vpc)
+            # ecs_cluster.create_autoscaling_group()
         )
         return ecs_cluster
 

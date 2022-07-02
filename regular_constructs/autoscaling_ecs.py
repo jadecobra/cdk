@@ -28,14 +28,21 @@ class AutoscalingEcsClusterConstruct(constructs.Construct):
             vpc=vpc
         )
 
-    def create_autoscaling_group_provider(self, autoscaling_group):
-        if autoscaling_group:
-            self.ecs_cluster.add_asg_capacity_provider(
-                aws_cdk.aws_ecs.AsgCapacityProvider(
-                    self, "AsgCapacityProvider",
-                    auto_scaling_group=autoscaling_group
-                )
+    def create_autoscaling_group(self):
+        return aws_cdk.aws_autoscaling.AutoScalingGroup(
+            self, "AutoScalingGroup",
+            instance_type=aws_cdk.aws_ec2.InstanceType("t2.micro"),
+            machine_image=aws_cdk.aws_ecs.EcsOptimizedImage.amazon_linux2(),
+            vpc=self.vpc,
+        )
+
+    def create_autoscaling_group_provider(self, autoscaling_group=None):
+        self.ecs_cluster.add_asg_capacity_provider(
+            aws_cdk.aws_ecs.AsgCapacityProvider(
+                self, "AsgCapacityProvider",
+                auto_scaling_group=autoscaling_group if autoscaling_group else self.create_autoscaling_group()
             )
+        )
 
     def create_ecs_service(
         self, security_group=None,
@@ -68,7 +75,6 @@ class AutoscalingEcsClusterConstruct(constructs.Construct):
     def get_port_mappings():
         return aws_cdk.aws_ecs.PortMapping(
             container_port=80,
-            host_port=8080,
             protocol=aws_cdk.aws_ecs.Protocol.TCP
         )
 
