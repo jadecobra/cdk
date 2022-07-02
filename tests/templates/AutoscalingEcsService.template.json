@@ -402,6 +402,21 @@
         "DefaultCapacityProviderStrategy": []
       }
     },
+    "AutoscalingEcsAsgCapacityProvider149E18E7": {
+      "Type": "AWS::ECS::CapacityProvider",
+      "Properties": {
+        "AutoScalingGroupProvider": {
+          "AutoScalingGroupArn": {
+            "Ref": "DefaultAutoScalingGroupASGEBB7E940"
+          },
+          "ManagedScaling": {
+            "Status": "ENABLED",
+            "TargetCapacity": 100
+          },
+          "ManagedTerminationProtection": "ENABLED"
+        }
+      }
+    },
     "AutoscalingEcsTaskDefinitionTaskRole422FBD3E": {
       "Type": "AWS::IAM::Role",
       "Properties": {
@@ -442,21 +457,6 @@
         "RequiresCompatibilities": ["EC2"],
         "TaskRoleArn": {
           "Fn::GetAtt": ["AutoscalingEcsTaskDefinitionTaskRole422FBD3E", "Arn"]
-        }
-      }
-    },
-    "AutoscalingEcsAsgCapacityProvider149E18E7": {
-      "Type": "AWS::ECS::CapacityProvider",
-      "Properties": {
-        "AutoScalingGroupProvider": {
-          "AutoScalingGroupArn": {
-            "Ref": "DefaultAutoScalingGroupASGEBB7E940"
-          },
-          "ManagedScaling": {
-            "Status": "ENABLED",
-            "TargetCapacity": 100
-          },
-          "ManagedTerminationProtection": "ENABLED"
         }
       }
     },

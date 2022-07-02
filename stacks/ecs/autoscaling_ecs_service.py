@@ -23,7 +23,6 @@ class AutoscalingEcsService(well_architected.Stack):
     def create_ecs_cluster(self):
         ecs_cluster = regular_constructs.autoscaling_ecs.AutoscalingEcsClusterConstruct(
             self, 'AutoscalingEcs',
-            network_mode=aws_cdk.aws_ecs.NetworkMode.AWS_VPC,
         )
         ecs_cluster.create_autoscaling_group_provider(
             self.create_autoscaling_group(ecs_cluster.vpc)

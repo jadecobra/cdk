@@ -37,12 +37,15 @@ class AlbAutoscalingEcsService(well_architected.Stack):
     def container_port():
         return 80
 
-    def get_application_load_balancer_dns_name(self, vpc=None, service=None):
-        application_load_balancer = aws_cdk.aws_elasticloadbalancingv2.ApplicationLoadBalancer(
+    def create_application_load_balancer(self, vpc):
+        return aws_cdk.aws_elasticloadbalancingv2.ApplicationLoadBalancer(
             self, "ApplicationLoadBalancer",
             vpc=vpc,
             internet_facing=True
         )
+
+    def get_application_load_balancer_dns_name(self, vpc=None, service=None):
+        application_load_balancer = self.create_application_load_balancer(vpc)
         application_load_balancer.add_listener(
             "PublicListener",
             port=self.container_port(),
