@@ -4,6 +4,7 @@ import stacks.ecs.autoscaling_ecs_cluster
 import stacks.ecs.nlb_autoscaling_ecs_service
 import stacks.ecs.alb_autoscaling_ecs_service
 import stacks.ecs.autoscaling_ecs_service
+import stacks.ecs.autoscaling_ecs_service_with_placement
 
 
 class WellArchitected(aws_cdk.App):
@@ -104,7 +105,11 @@ class WellArchitected(aws_cdk.App):
         )
         stacks.ecs.autoscaling_ecs_service.AutoscalingEcsService(
             self, 'AutoscalingEcsService',
-            container_image="nginx:latest"
+            container_image='nginx:latest',
+        )
+        stacks.ecs.autoscaling_ecs_service_with_placement.AutoscalingEcsServiceWithPlacement(
+            self, 'AutoscalingEcsServiceWithPlacement',
+            container_image='nginx:latest',
         )
         stacks.ecs.alb_autoscaling_ecs_service.AlbAutoscalingEcsService(
             self, 'AlbAutoscalingEcsService',

@@ -37,7 +37,11 @@ class AutoscalingEcsClusterConstruct(constructs.Construct):
                 )
             )
 
-    def create_ecs_service(self, security_group=None, network_mode=None, container_image=None):
+    def create_ecs_service(
+        self, security_group=None,
+        network_mode=None, container_image=None,
+        placement_constraints=None,
+    ):
         return aws_cdk.aws_ecs.Ec2Service(
             self, "Service",
             cluster=self.ecs_cluster,
@@ -46,6 +50,7 @@ class AutoscalingEcsClusterConstruct(constructs.Construct):
                 container_image=container_image,
             ),
             security_groups=[security_group] if security_group else None,
+            placement_constraints=placement_constraints,
         )
 
     def create_task_definition(self, network_mode=None, container_image=None):
@@ -63,6 +68,7 @@ class AutoscalingEcsClusterConstruct(constructs.Construct):
     def get_port_mappings():
         return aws_cdk.aws_ecs.PortMapping(
             container_port=80,
+            host_port=8080,
             protocol=aws_cdk.aws_ecs.Protocol.TCP
         )
 
