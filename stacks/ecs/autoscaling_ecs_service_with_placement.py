@@ -31,11 +31,3 @@ class AutoscalingEcsServiceWithPlacement(aws_cdk.Stack):
                 aws_cdk.aws_ecs.BuiltInAttributes.AVAILABILITY_ZONE
             )
         )
-
-    def create_autoscaling_group(self, vpc):
-        return aws_cdk.aws_autoscaling.AutoScalingGroup(
-            self, "AutoScalingGroup",
-            instance_type=aws_cdk.aws_ec2.InstanceType("t2.micro"),
-            machine_image=aws_cdk.aws_ecs.EcsOptimizedImage.amazon_linux2(),
-            vpc=vpc,
-        )

@@ -58,14 +58,3 @@ class AlbAutoscalingEcsService(well_architected.Stack):
             path="/health",
             timeout=aws_cdk.Duration.seconds(5)
         )
-
-    def create_autoscaling_group(self, vpc):
-        return aws_cdk.aws_autoscaling.AutoScalingGroup(
-            self, "AutoScalingGroup",
-            instance_type=aws_cdk.aws_ec2.InstanceType.of(
-                aws_cdk.aws_ec2.InstanceClass.BURSTABLE3,
-                aws_cdk.aws_ec2.InstanceSize.MICRO
-            ),
-            machine_image=aws_cdk.aws_ecs.EcsOptimizedImage.amazon_linux2(),
-            vpc=vpc,
-        )
