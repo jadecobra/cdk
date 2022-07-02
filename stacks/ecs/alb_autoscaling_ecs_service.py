@@ -13,7 +13,9 @@ class AlbAutoscalingEcsService(well_architected.Stack):
     ):
         super().__init__(scope, id, **kwargs)
 
-        ecs_cluster = self.create_ecs_cluster()
+        ecs_cluster = regular_constructs.autoscaling_ecs.AutoscalingEcsClusterConstruct(
+            self, 'AutoscalingEcs',
+        )
         aws_cdk.CfnOutput(
             self, "LoadBalancerDNS",
             value=self.get_application_load_balancer_dns_name(
@@ -23,16 +25,6 @@ class AlbAutoscalingEcsService(well_architected.Stack):
                 ),
             )
         )
-
-    def create_ecs_cluster(self):
-        ecs_cluster = regular_constructs.autoscaling_ecs.AutoscalingEcsClusterConstruct(
-            self, 'AutoscalingEcs',
-        )
-        ecs_cluster.create_autoscaling_group_provider(
-            # self.create_autoscaling_group(ecs_cluster.vpc)
-            # ecs_cluster.create_autoscaling_group()
-        )
-        return ecs_cluster
 
     @staticmethod
     def container_port():

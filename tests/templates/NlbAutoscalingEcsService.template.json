@@ -402,25 +402,10 @@
         "DefaultCapacityProviderStrategy": []
       }
     },
-    "AutoscalingEcsAsgCapacityProvider149E18E7": {
-      "Type": "AWS::ECS::CapacityProvider",
-      "Properties": {
-        "AutoScalingGroupProvider": {
-          "AutoScalingGroupArn": {
-            "Ref": "AutoScalingGroupASG804C35BE"
-          },
-          "ManagedScaling": {
-            "Status": "ENABLED",
-            "TargetCapacity": 100
-          },
-          "ManagedTerminationProtection": "ENABLED"
-        }
-      }
-    },
-    "AutoScalingGroupInstanceSecurityGroup9D2E0C5E": {
+    "AutoscalingEcsAutoScalingGroupInstanceSecurityGroup9B940DE3": {
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
-        "GroupDescription": "NlbAutoscalingEcsService/AutoScalingGroup/InstanceSecurityGroup",
+        "GroupDescription": "NlbAutoscalingEcsService/AutoscalingEcs/AutoScalingGroup/InstanceSecurityGroup",
         "SecurityGroupEgress": [
           {
             "CidrIp": "0.0.0.0/0",
@@ -431,7 +416,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "NlbAutoscalingEcsService/AutoScalingGroup"
+            "Value": "NlbAutoscalingEcsService/AutoscalingEcs/AutoScalingGroup"
           }
         ],
         "VpcId": {
@@ -439,7 +424,7 @@
         }
       }
     },
-    "AutoScalingGroupInstanceRoleDC70D128": {
+    "AutoscalingEcsAutoScalingGroupInstanceRole9D644FA1": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -467,12 +452,12 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "NlbAutoscalingEcsService/AutoScalingGroup"
+            "Value": "NlbAutoscalingEcsService/AutoscalingEcs/AutoScalingGroup"
           }
         ]
       }
     },
-    "AutoScalingGroupInstanceRoleDefaultPolicy3DF09528": {
+    "AutoscalingEcsAutoScalingGroupInstanceRoleDefaultPolicyC4F426E4": {
       "Type": "AWS::IAM::Policy",
       "Properties": {
         "PolicyDocument": {
@@ -513,25 +498,25 @@
           ],
           "Version": "2012-10-17"
         },
-        "PolicyName": "AutoScalingGroupInstanceRoleDefaultPolicy3DF09528",
+        "PolicyName": "AutoscalingEcsAutoScalingGroupInstanceRoleDefaultPolicyC4F426E4",
         "Roles": [
           {
-            "Ref": "AutoScalingGroupInstanceRoleDC70D128"
+            "Ref": "AutoscalingEcsAutoScalingGroupInstanceRole9D644FA1"
           }
         ]
       }
     },
-    "AutoScalingGroupInstanceProfile342FAC7C": {
+    "AutoscalingEcsAutoScalingGroupInstanceProfileCB715A8B": {
       "Type": "AWS::IAM::InstanceProfile",
       "Properties": {
         "Roles": [
           {
-            "Ref": "AutoScalingGroupInstanceRoleDC70D128"
+            "Ref": "AutoscalingEcsAutoScalingGroupInstanceRole9D644FA1"
           }
         ]
       }
     },
-    "AutoScalingGroupLaunchConfigDEEB160C": {
+    "AutoscalingEcsAutoScalingGroupLaunchConfig30C65F4B": {
       "Type": "AWS::AutoScaling::LaunchConfiguration",
       "Properties": {
         "ImageId": {
@@ -539,12 +524,12 @@
         },
         "InstanceType": "t2.micro",
         "IamInstanceProfile": {
-          "Ref": "AutoScalingGroupInstanceProfile342FAC7C"
+          "Ref": "AutoscalingEcsAutoScalingGroupInstanceProfileCB715A8B"
         },
         "SecurityGroups": [
           {
             "Fn::GetAtt": [
-              "AutoScalingGroupInstanceSecurityGroup9D2E0C5E",
+              "AutoscalingEcsAutoScalingGroupInstanceSecurityGroup9B940DE3",
               "GroupId"
             ]
           }
@@ -565,24 +550,24 @@
         }
       },
       "DependsOn": [
-        "AutoScalingGroupInstanceRoleDefaultPolicy3DF09528",
-        "AutoScalingGroupInstanceRoleDC70D128"
+        "AutoscalingEcsAutoScalingGroupInstanceRoleDefaultPolicyC4F426E4",
+        "AutoscalingEcsAutoScalingGroupInstanceRole9D644FA1"
       ]
     },
-    "AutoScalingGroupASG804C35BE": {
+    "AutoscalingEcsAutoScalingGroupASG68FDC093": {
       "Type": "AWS::AutoScaling::AutoScalingGroup",
       "Properties": {
         "MaxSize": "1",
         "MinSize": "1",
         "LaunchConfigurationName": {
-          "Ref": "AutoScalingGroupLaunchConfigDEEB160C"
+          "Ref": "AutoscalingEcsAutoScalingGroupLaunchConfig30C65F4B"
         },
         "NewInstancesProtectedFromScaleIn": true,
         "Tags": [
           {
             "Key": "Name",
             "PropagateAtLaunch": true,
-            "Value": "NlbAutoscalingEcsService/AutoScalingGroup"
+            "Value": "NlbAutoscalingEcsService/AutoscalingEcs/AutoScalingGroup"
           }
         ],
         "VPCZoneIdentifier": [
@@ -597,6 +582,21 @@
       "UpdatePolicy": {
         "AutoScalingScheduledAction": {
           "IgnoreUnmodifiedGroupSizeProperties": true
+        }
+      }
+    },
+    "AutoscalingEcsAsgCapacityProvider149E18E7": {
+      "Type": "AWS::ECS::CapacityProvider",
+      "Properties": {
+        "AutoScalingGroupProvider": {
+          "AutoScalingGroupArn": {
+            "Ref": "AutoscalingEcsAutoScalingGroupASG68FDC093"
+          },
+          "ManagedScaling": {
+            "Status": "ENABLED",
+            "TargetCapacity": 100
+          },
+          "ManagedTerminationProtection": "ENABLED"
         }
       }
     },

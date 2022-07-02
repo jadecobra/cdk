@@ -16,9 +16,6 @@ class NlbAutoscalingEcsService(well_architected.Stack):
         ecs_cluster = regular_constructs.autoscaling_ecs.AutoscalingEcsClusterConstruct(
             self, 'AutoscalingEcs',
         )
-        ecs_cluster.create_autoscaling_group_provider(
-            self.create_autoscaling_group(ecs_cluster.vpc)
-        )
 
         ecs_service = self.create_ecs_service(
             ecs_cluster=ecs_cluster.ecs_cluster,
@@ -28,14 +25,6 @@ class NlbAutoscalingEcsService(well_architected.Stack):
         aws_cdk.CfnOutput(
             self, "LoadBalancerDNS",
             value=ecs_service.load_balancer.load_balancer_dns_name
-        )
-
-    def create_autoscaling_group(self, vpc):
-        return aws_cdk.aws_autoscaling.AutoScalingGroup(
-            self, "AutoScalingGroup",
-            instance_type=aws_cdk.aws_ec2.InstanceType("t2.micro"),
-            machine_image=aws_cdk.aws_ecs.EcsOptimizedImage.amazon_linux2(),
-            vpc=vpc,
         )
 
     def get_task_image_options(self, container_image):

@@ -402,12 +402,195 @@
         "DefaultCapacityProviderStrategy": []
       }
     },
+    "AutoscalingEcsAutoScalingGroupInstanceSecurityGroup9B940DE3": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "AutoscalingEcsService/AutoscalingEcs/AutoScalingGroup/InstanceSecurityGroup",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "AutoscalingEcsService/AutoscalingEcs/AutoScalingGroup"
+          }
+        ],
+        "VpcId": {
+          "Ref": "AutoscalingEcsVpcE1C9A87D"
+        }
+      }
+    },
+    "AutoscalingEcsAutoScalingGroupInstanceRole9D644FA1": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "ec2.",
+                      {
+                        "Ref": "AWS::URLSuffix"
+                      }
+                    ]
+                  ]
+                }
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "AutoscalingEcsService/AutoscalingEcs/AutoScalingGroup"
+          }
+        ]
+      }
+    },
+    "AutoscalingEcsAutoScalingGroupInstanceRoleDefaultPolicyC4F426E4": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "ecs:DeregisterContainerInstance",
+                "ecs:RegisterContainerInstance",
+                "ecs:Submit*"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": ["AutoscalingEcsEcsClusterE559A4EB", "Arn"]
+              }
+            },
+            {
+              "Action": ["ecs:Poll", "ecs:StartTelemetrySession"],
+              "Condition": {
+                "ArnEquals": {
+                  "ecs:cluster": {
+                    "Fn::GetAtt": ["AutoscalingEcsEcsClusterE559A4EB", "Arn"]
+                  }
+                }
+              },
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "ecs:DiscoverPollEndpoint",
+                "ecr:GetAuthorizationToken",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "AutoscalingEcsAutoScalingGroupInstanceRoleDefaultPolicyC4F426E4",
+        "Roles": [
+          {
+            "Ref": "AutoscalingEcsAutoScalingGroupInstanceRole9D644FA1"
+          }
+        ]
+      }
+    },
+    "AutoscalingEcsAutoScalingGroupInstanceProfileCB715A8B": {
+      "Type": "AWS::IAM::InstanceProfile",
+      "Properties": {
+        "Roles": [
+          {
+            "Ref": "AutoscalingEcsAutoScalingGroupInstanceRole9D644FA1"
+          }
+        ]
+      }
+    },
+    "AutoscalingEcsAutoScalingGroupLaunchConfig30C65F4B": {
+      "Type": "AWS::AutoScaling::LaunchConfiguration",
+      "Properties": {
+        "ImageId": {
+          "Ref": "SsmParameterValueawsserviceecsoptimizedamiamazonlinux2recommendedimageidC96584B6F00A464EAD1953AFF4B05118Parameter"
+        },
+        "InstanceType": "t2.micro",
+        "IamInstanceProfile": {
+          "Ref": "AutoscalingEcsAutoScalingGroupInstanceProfileCB715A8B"
+        },
+        "SecurityGroups": [
+          {
+            "Fn::GetAtt": [
+              "AutoscalingEcsAutoScalingGroupInstanceSecurityGroup9B940DE3",
+              "GroupId"
+            ]
+          }
+        ],
+        "UserData": {
+          "Fn::Base64": {
+            "Fn::Join": [
+              "",
+              [
+                "#!/bin/bash\necho ECS_CLUSTER=",
+                {
+                  "Ref": "AutoscalingEcsEcsClusterE559A4EB"
+                },
+                " >> /etc/ecs/ecs.config\nsudo iptables --insert FORWARD 1 --in-interface docker+ --destination 169.254.169.254/32 --jump DROP\nsudo service iptables save\necho ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config"
+              ]
+            ]
+          }
+        }
+      },
+      "DependsOn": [
+        "AutoscalingEcsAutoScalingGroupInstanceRoleDefaultPolicyC4F426E4",
+        "AutoscalingEcsAutoScalingGroupInstanceRole9D644FA1"
+      ]
+    },
+    "AutoscalingEcsAutoScalingGroupASG68FDC093": {
+      "Type": "AWS::AutoScaling::AutoScalingGroup",
+      "Properties": {
+        "MaxSize": "1",
+        "MinSize": "1",
+        "LaunchConfigurationName": {
+          "Ref": "AutoscalingEcsAutoScalingGroupLaunchConfig30C65F4B"
+        },
+        "NewInstancesProtectedFromScaleIn": true,
+        "Tags": [
+          {
+            "Key": "Name",
+            "PropagateAtLaunch": true,
+            "Value": "AutoscalingEcsService/AutoscalingEcs/AutoScalingGroup"
+          }
+        ],
+        "VPCZoneIdentifier": [
+          {
+            "Ref": "AutoscalingEcsVpcPrivateSubnet1Subnet87F43741"
+          },
+          {
+            "Ref": "AutoscalingEcsVpcPrivateSubnet2Subnet57142116"
+          }
+        ]
+      },
+      "UpdatePolicy": {
+        "AutoScalingScheduledAction": {
+          "IgnoreUnmodifiedGroupSizeProperties": true
+        }
+      }
+    },
     "AutoscalingEcsAsgCapacityProvider149E18E7": {
       "Type": "AWS::ECS::CapacityProvider",
       "Properties": {
         "AutoScalingGroupProvider": {
           "AutoScalingGroupArn": {
-            "Ref": "AutoScalingGroupASG804C35BE"
+            "Ref": "AutoscalingEcsAutoScalingGroupASG68FDC093"
           },
           "ManagedScaling": {
             "Status": "ENABLED",
@@ -493,189 +676,6 @@
         "SchedulingStrategy": "REPLICA",
         "TaskDefinition": {
           "Ref": "AutoscalingEcsTaskDefinition003B6BDB"
-        }
-      }
-    },
-    "AutoScalingGroupInstanceSecurityGroup9D2E0C5E": {
-      "Type": "AWS::EC2::SecurityGroup",
-      "Properties": {
-        "GroupDescription": "AutoscalingEcsService/AutoScalingGroup/InstanceSecurityGroup",
-        "SecurityGroupEgress": [
-          {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all outbound traffic by default",
-            "IpProtocol": "-1"
-          }
-        ],
-        "Tags": [
-          {
-            "Key": "Name",
-            "Value": "AutoscalingEcsService/AutoScalingGroup"
-          }
-        ],
-        "VpcId": {
-          "Ref": "AutoscalingEcsVpcE1C9A87D"
-        }
-      }
-    },
-    "AutoScalingGroupInstanceRoleDC70D128": {
-      "Type": "AWS::IAM::Role",
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "ec2.",
-                      {
-                        "Ref": "AWS::URLSuffix"
-                      }
-                    ]
-                  ]
-                }
-              }
-            }
-          ],
-          "Version": "2012-10-17"
-        },
-        "Tags": [
-          {
-            "Key": "Name",
-            "Value": "AutoscalingEcsService/AutoScalingGroup"
-          }
-        ]
-      }
-    },
-    "AutoScalingGroupInstanceRoleDefaultPolicy3DF09528": {
-      "Type": "AWS::IAM::Policy",
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "ecs:DeregisterContainerInstance",
-                "ecs:RegisterContainerInstance",
-                "ecs:Submit*"
-              ],
-              "Effect": "Allow",
-              "Resource": {
-                "Fn::GetAtt": ["AutoscalingEcsEcsClusterE559A4EB", "Arn"]
-              }
-            },
-            {
-              "Action": ["ecs:Poll", "ecs:StartTelemetrySession"],
-              "Condition": {
-                "ArnEquals": {
-                  "ecs:cluster": {
-                    "Fn::GetAtt": ["AutoscalingEcsEcsClusterE559A4EB", "Arn"]
-                  }
-                }
-              },
-              "Effect": "Allow",
-              "Resource": "*"
-            },
-            {
-              "Action": [
-                "ecs:DiscoverPollEndpoint",
-                "ecr:GetAuthorizationToken",
-                "logs:CreateLogStream",
-                "logs:PutLogEvents"
-              ],
-              "Effect": "Allow",
-              "Resource": "*"
-            }
-          ],
-          "Version": "2012-10-17"
-        },
-        "PolicyName": "AutoScalingGroupInstanceRoleDefaultPolicy3DF09528",
-        "Roles": [
-          {
-            "Ref": "AutoScalingGroupInstanceRoleDC70D128"
-          }
-        ]
-      }
-    },
-    "AutoScalingGroupInstanceProfile342FAC7C": {
-      "Type": "AWS::IAM::InstanceProfile",
-      "Properties": {
-        "Roles": [
-          {
-            "Ref": "AutoScalingGroupInstanceRoleDC70D128"
-          }
-        ]
-      }
-    },
-    "AutoScalingGroupLaunchConfigDEEB160C": {
-      "Type": "AWS::AutoScaling::LaunchConfiguration",
-      "Properties": {
-        "ImageId": {
-          "Ref": "SsmParameterValueawsserviceecsoptimizedamiamazonlinux2recommendedimageidC96584B6F00A464EAD1953AFF4B05118Parameter"
-        },
-        "InstanceType": "t2.micro",
-        "IamInstanceProfile": {
-          "Ref": "AutoScalingGroupInstanceProfile342FAC7C"
-        },
-        "SecurityGroups": [
-          {
-            "Fn::GetAtt": [
-              "AutoScalingGroupInstanceSecurityGroup9D2E0C5E",
-              "GroupId"
-            ]
-          }
-        ],
-        "UserData": {
-          "Fn::Base64": {
-            "Fn::Join": [
-              "",
-              [
-                "#!/bin/bash\necho ECS_CLUSTER=",
-                {
-                  "Ref": "AutoscalingEcsEcsClusterE559A4EB"
-                },
-                " >> /etc/ecs/ecs.config\nsudo iptables --insert FORWARD 1 --in-interface docker+ --destination 169.254.169.254/32 --jump DROP\nsudo service iptables save\necho ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config"
-              ]
-            ]
-          }
-        }
-      },
-      "DependsOn": [
-        "AutoScalingGroupInstanceRoleDefaultPolicy3DF09528",
-        "AutoScalingGroupInstanceRoleDC70D128"
-      ]
-    },
-    "AutoScalingGroupASG804C35BE": {
-      "Type": "AWS::AutoScaling::AutoScalingGroup",
-      "Properties": {
-        "MaxSize": "1",
-        "MinSize": "1",
-        "LaunchConfigurationName": {
-          "Ref": "AutoScalingGroupLaunchConfigDEEB160C"
-        },
-        "NewInstancesProtectedFromScaleIn": true,
-        "Tags": [
-          {
-            "Key": "Name",
-            "PropagateAtLaunch": true,
-            "Value": "AutoscalingEcsService/AutoScalingGroup"
-          }
-        ],
-        "VPCZoneIdentifier": [
-          {
-            "Ref": "AutoscalingEcsVpcPrivateSubnet1Subnet87F43741"
-          },
-          {
-            "Ref": "AutoscalingEcsVpcPrivateSubnet2Subnet57142116"
-          }
-        ]
-      },
-      "UpdatePolicy": {
-        "AutoScalingScheduledAction": {
-          "IgnoreUnmodifiedGroupSizeProperties": true
         }
       }
     },
