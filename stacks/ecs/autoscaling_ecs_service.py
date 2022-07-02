@@ -13,12 +13,12 @@ class AutoscalingEcsService(well_architected.Stack):
     ):
         super().__init__(scope, id, **kwargs)
 
-        ecs_cluster = regular_constructs.autoscaling_ecs.AutoscalingEcsClusterConstruct(
+        autoscaling_ecs_cluster = regular_constructs.autoscaling_ecs.AutoscalingEcsClusterConstruct(
             self, 'AutoscalingEcs',
         )
-        ecs_cluster.create_ecs_service(
+        autoscaling_ecs_cluster.create_ecs_service(
             network_mode=aws_cdk.aws_ecs.NetworkMode.AWS_VPC,
-            security_group=self.create_security_group(ecs_cluster.vpc),
+            security_group=self.create_security_group(autoscaling_ecs_cluster.vpc),
             container_image=container_image,
         )
 

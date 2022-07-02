@@ -13,12 +13,12 @@ class NlbAutoscalingEcsService(well_architected.Stack):
     ) -> None:
         super().__init__(scope, id, *kwargs)
 
-        ecs_cluster = regular_constructs.autoscaling_ecs.AutoscalingEcsClusterConstruct(
+        autoscaling_ecs_cluster = regular_constructs.autoscaling_ecs.AutoscalingEcsClusterConstruct(
             self, 'AutoscalingEcs',
         )
 
         ecs_service = self.create_ecs_service(
-            ecs_cluster=ecs_cluster.ecs_cluster,
+            ecs_cluster=autoscaling_ecs_cluster.ecs_cluster,
             task_image_options=self.get_task_image_options(container_image)
         )
 

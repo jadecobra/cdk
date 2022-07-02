@@ -11,10 +11,10 @@ class AutoscalingEcsServiceWithPlacement(aws_cdk.Stack):
     ):
         super().__init__(scope, id, **kwargs)
 
-        ecs_cluster = regular_constructs.autoscaling_ecs.AutoscalingEcsClusterConstruct(
+        autoscaling_ecs_cluster = regular_constructs.autoscaling_ecs.AutoscalingEcsClusterConstruct(
             self, 'AutoscalingEcs',
         )
-        ecs_service = ecs_cluster.create_ecs_service(
+        ecs_service = autoscaling_ecs_cluster.create_ecs_service(
             container_image=container_image,
             placement_constraints=[
                 aws_cdk.aws_ecs.PlacementConstraint.distinct_instances()
