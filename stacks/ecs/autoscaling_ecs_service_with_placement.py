@@ -11,7 +11,7 @@ class AutoscalingEcsServiceWithPlacement(aws_cdk.Stack):
     ):
         super().__init__(scope, id, **kwargs)
 
-        autoscaling_ecs_cluster = regular_constructs.autoscaling_ecs.AutoscalingEcsClusterConstruct(
+        autoscaling_ecs_cluster = regular_constructs.autoscaling_ecs.AutoscalingEcsCluster(
             self, 'AutoscalingEcs',
         )
         ecs_service = autoscaling_ecs_cluster.create_ecs_service(

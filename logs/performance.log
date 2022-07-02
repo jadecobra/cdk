@@ -28504,3 +28504,8 @@
 2022-07-02 15:52:52.625514::Time taken to synthesize stack: AutoscalingEcsCluster::  7.5532 seconds
 2022-07-02 15:52:59.806577::Time taken to synthesize stack: AlbAutoscalingEcsService::  7.1732 seconds
 2022-07-02 15:53:07.342766::Time taken to synthesize stack: NlbAutoscalingEcsService::  7.5277 seconds
+2022-07-02 15:54:09.348621::Time taken to synthesize stack: AutoscalingEcsService::  7.2693 seconds
+2022-07-02 15:54:17.260486::Time taken to synthesize stack: AutoscalingEcsServiceWithPlacement::  7.9018 seconds
+2022-07-02 15:54:24.543937::Time taken to synthesize stack: AutoscalingEcsCluster::  7.2759 seconds
+2022-07-02 15:54:31.760248::Time taken to synthesize stack: AlbAutoscalingEcsService::  7.2113 seconds
+2022-07-02 15:54:39.081505::Time taken to synthesize stack: NlbAutoscalingEcsService::  7.3147 seconds
