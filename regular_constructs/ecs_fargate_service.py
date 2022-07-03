@@ -1,34 +1,32 @@
+from venv import create
 import aws_cdk
 import constructs
 import regular_constructs.autoscaling_ecs
-import well_architected
 
 
-
-class NlbAutoscalingFargateService(well_architected.Stack):
+class FargateService(regular_constructs.autoscaling_ecs.AutoscalingEcsCluster):
 
     def __init__(self, scope: constructs.Construct, id: str,
         container_image=None,
         **kwargs
     ) -> None:
-        super().__init__(scope, id, **kwargs)
-
-        autoscaling_ecs_cluster = regular_constructs.autoscaling_ecs.AutoscalingEcsCluster(
-            self, 'EcsCluster',
-            create_autoscaling_group_provider=False
+        super().__init__(
+            scope, id,
+            create_autoscaling_group_provider=False,
+            **kwargs,
         )
 
-        fargate_service = self.create_fargate_service(
-            ecs_cluster=autoscaling_ecs_cluster.ecs_cluster,
+        self.fargate_service = self.create_fargate_service(
+            ecs_cluster=self.ecs_cluster,
             container_image=container_image,
         )
 
         self.add_security_group_ingress_rule(
-            security_group=fargate_service.service.connections.security_groups[0],
-            vpc_cidr_block=autoscaling_ecs_cluster.vpc.vpc_cidr_block,
+            security_group=self.fargate_service.service.connections.security_groups[0],
+            vpc_cidr_block=self.vpc.vpc_cidr_block,
         )
 
-        fargate_service.service.auto_scale_task_count(
+        self.fargate_service.service.auto_scale_task_count(
             max_capacity=2
         ).scale_on_cpu_utilization(
             "CpuScaling",
@@ -39,7 +37,7 @@ class NlbAutoscalingFargateService(well_architected.Stack):
 
         aws_cdk.CfnOutput(
             self, "LoadBalancerDNS",
-            value=fargate_service.load_balancer.load_balancer_dns_name
+            value=self.fargate_service.load_balancer.load_balancer_dns_name
         )
 
     def create_fargate_service(self, ecs_cluster=None, container_image=None):
