@@ -1,0 +1,643 @@
+{
+  "Resources": {
+    "NlbFargateServiceErrorTopic02D5A50B": {
+      "Type": "AWS::SNS::Topic",
+      "Properties": {
+        "DisplayName": "NlbFargateServiceErrorTopic"
+      }
+    },
+    "AutoscalingEcsClusterVpc474C51EA": {
+      "Type": "AWS::EC2::VPC",
+      "Properties": {
+        "CidrBlock": "10.0.0.0/16",
+        "EnableDnsHostnames": true,
+        "EnableDnsSupport": true,
+        "InstanceTenancy": "default",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "NlbFargateService/AutoscalingEcsCluster/Vpc"
+          }
+        ]
+      }
+    },
+    "AutoscalingEcsClusterVpcPublicSubnet1Subnet449924B9": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "AutoscalingEcsClusterVpc474C51EA"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            0,
+            {
+              "Fn::GetAZs": ""
+            }
+          ]
+        },
+        "CidrBlock": "10.0.0.0/18",
+        "MapPublicIpOnLaunch": true,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Public"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public"
+          },
+          {
+            "Key": "Name",
+            "Value": "NlbFargateService/AutoscalingEcsCluster/Vpc/PublicSubnet1"
+          }
+        ]
+      }
+    },
+    "AutoscalingEcsClusterVpcPublicSubnet1RouteTable5D6E17F4": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "AutoscalingEcsClusterVpc474C51EA"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "NlbFargateService/AutoscalingEcsCluster/Vpc/PublicSubnet1"
+          }
+        ]
+      }
+    },
+    "AutoscalingEcsClusterVpcPublicSubnet1RouteTableAssociation08512677": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "AutoscalingEcsClusterVpcPublicSubnet1RouteTable5D6E17F4"
+        },
+        "SubnetId": {
+          "Ref": "AutoscalingEcsClusterVpcPublicSubnet1Subnet449924B9"
+        }
+      }
+    },
+    "AutoscalingEcsClusterVpcPublicSubnet1DefaultRouteD91D71B9": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "AutoscalingEcsClusterVpcPublicSubnet1RouteTable5D6E17F4"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "AutoscalingEcsClusterVpcIGWA355DB62"
+        }
+      },
+      "DependsOn": ["AutoscalingEcsClusterVpcVPCGW765F148A"]
+    },
+    "AutoscalingEcsClusterVpcPublicSubnet1EIPFABC881D": {
+      "Type": "AWS::EC2::EIP",
+      "Properties": {
+        "Domain": "vpc",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "NlbFargateService/AutoscalingEcsCluster/Vpc/PublicSubnet1"
+          }
+        ]
+      }
+    },
+    "AutoscalingEcsClusterVpcPublicSubnet1NATGatewayB69C7B36": {
+      "Type": "AWS::EC2::NatGateway",
+      "Properties": {
+        "SubnetId": {
+          "Ref": "AutoscalingEcsClusterVpcPublicSubnet1Subnet449924B9"
+        },
+        "AllocationId": {
+          "Fn::GetAtt": [
+            "AutoscalingEcsClusterVpcPublicSubnet1EIPFABC881D",
+            "AllocationId"
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "NlbFargateService/AutoscalingEcsCluster/Vpc/PublicSubnet1"
+          }
+        ]
+      }
+    },
+    "AutoscalingEcsClusterVpcPublicSubnet2SubnetE05BE80C": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "AutoscalingEcsClusterVpc474C51EA"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            1,
+            {
+              "Fn::GetAZs": ""
+            }
+          ]
+        },
+        "CidrBlock": "10.0.64.0/18",
+        "MapPublicIpOnLaunch": true,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Public"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public"
+          },
+          {
+            "Key": "Name",
+            "Value": "NlbFargateService/AutoscalingEcsCluster/Vpc/PublicSubnet2"
+          }
+        ]
+      }
+    },
+    "AutoscalingEcsClusterVpcPublicSubnet2RouteTable72343553": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "AutoscalingEcsClusterVpc474C51EA"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "NlbFargateService/AutoscalingEcsCluster/Vpc/PublicSubnet2"
+          }
+        ]
+      }
+    },
+    "AutoscalingEcsClusterVpcPublicSubnet2RouteTableAssociation42C9A577": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "AutoscalingEcsClusterVpcPublicSubnet2RouteTable72343553"
+        },
+        "SubnetId": {
+          "Ref": "AutoscalingEcsClusterVpcPublicSubnet2SubnetE05BE80C"
+        }
+      }
+    },
+    "AutoscalingEcsClusterVpcPublicSubnet2DefaultRoute8BF4762C": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "AutoscalingEcsClusterVpcPublicSubnet2RouteTable72343553"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "AutoscalingEcsClusterVpcIGWA355DB62"
+        }
+      },
+      "DependsOn": ["AutoscalingEcsClusterVpcVPCGW765F148A"]
+    },
+    "AutoscalingEcsClusterVpcPublicSubnet2EIP876D1DF3": {
+      "Type": "AWS::EC2::EIP",
+      "Properties": {
+        "Domain": "vpc",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "NlbFargateService/AutoscalingEcsCluster/Vpc/PublicSubnet2"
+          }
+        ]
+      }
+    },
+    "AutoscalingEcsClusterVpcPublicSubnet2NATGateway6D6AD348": {
+      "Type": "AWS::EC2::NatGateway",
+      "Properties": {
+        "SubnetId": {
+          "Ref": "AutoscalingEcsClusterVpcPublicSubnet2SubnetE05BE80C"
+        },
+        "AllocationId": {
+          "Fn::GetAtt": [
+            "AutoscalingEcsClusterVpcPublicSubnet2EIP876D1DF3",
+            "AllocationId"
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "NlbFargateService/AutoscalingEcsCluster/Vpc/PublicSubnet2"
+          }
+        ]
+      }
+    },
+    "AutoscalingEcsClusterVpcPrivateSubnet1SubnetB228E187": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "AutoscalingEcsClusterVpc474C51EA"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            0,
+            {
+              "Fn::GetAZs": ""
+            }
+          ]
+        },
+        "CidrBlock": "10.0.128.0/18",
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Private"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private"
+          },
+          {
+            "Key": "Name",
+            "Value": "NlbFargateService/AutoscalingEcsCluster/Vpc/PrivateSubnet1"
+          }
+        ]
+      }
+    },
+    "AutoscalingEcsClusterVpcPrivateSubnet1RouteTable0A4F81DD": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "AutoscalingEcsClusterVpc474C51EA"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "NlbFargateService/AutoscalingEcsCluster/Vpc/PrivateSubnet1"
+          }
+        ]
+      }
+    },
+    "AutoscalingEcsClusterVpcPrivateSubnet1RouteTableAssociationA6F3BFF9": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "AutoscalingEcsClusterVpcPrivateSubnet1RouteTable0A4F81DD"
+        },
+        "SubnetId": {
+          "Ref": "AutoscalingEcsClusterVpcPrivateSubnet1SubnetB228E187"
+        }
+      }
+    },
+    "AutoscalingEcsClusterVpcPrivateSubnet1DefaultRoute80A51366": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "AutoscalingEcsClusterVpcPrivateSubnet1RouteTable0A4F81DD"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "NatGatewayId": {
+          "Ref": "AutoscalingEcsClusterVpcPublicSubnet1NATGatewayB69C7B36"
+        }
+      }
+    },
+    "AutoscalingEcsClusterVpcPrivateSubnet2Subnet560EEBDD": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "AutoscalingEcsClusterVpc474C51EA"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            1,
+            {
+              "Fn::GetAZs": ""
+            }
+          ]
+        },
+        "CidrBlock": "10.0.192.0/18",
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Private"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private"
+          },
+          {
+            "Key": "Name",
+            "Value": "NlbFargateService/AutoscalingEcsCluster/Vpc/PrivateSubnet2"
+          }
+        ]
+      }
+    },
+    "AutoscalingEcsClusterVpcPrivateSubnet2RouteTableF82059E5": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "AutoscalingEcsClusterVpc474C51EA"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "NlbFargateService/AutoscalingEcsCluster/Vpc/PrivateSubnet2"
+          }
+        ]
+      }
+    },
+    "AutoscalingEcsClusterVpcPrivateSubnet2RouteTableAssociation1C530472": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "AutoscalingEcsClusterVpcPrivateSubnet2RouteTableF82059E5"
+        },
+        "SubnetId": {
+          "Ref": "AutoscalingEcsClusterVpcPrivateSubnet2Subnet560EEBDD"
+        }
+      }
+    },
+    "AutoscalingEcsClusterVpcPrivateSubnet2DefaultRoute95FA0D48": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "AutoscalingEcsClusterVpcPrivateSubnet2RouteTableF82059E5"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "NatGatewayId": {
+          "Ref": "AutoscalingEcsClusterVpcPublicSubnet2NATGateway6D6AD348"
+        }
+      }
+    },
+    "AutoscalingEcsClusterVpcIGWA355DB62": {
+      "Type": "AWS::EC2::InternetGateway",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "NlbFargateService/AutoscalingEcsCluster/Vpc"
+          }
+        ]
+      }
+    },
+    "AutoscalingEcsClusterVpcVPCGW765F148A": {
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+      "Properties": {
+        "VpcId": {
+          "Ref": "AutoscalingEcsClusterVpc474C51EA"
+        },
+        "InternetGatewayId": {
+          "Ref": "AutoscalingEcsClusterVpcIGWA355DB62"
+        }
+      }
+    },
+    "AutoscalingEcsClusterDD96B106": {
+      "Type": "AWS::ECS::Cluster"
+    },
+    "FargateServiceLBB353E155": {
+      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+      "Properties": {
+        "LoadBalancerAttributes": [
+          {
+            "Key": "deletion_protection.enabled",
+            "Value": "false"
+          }
+        ],
+        "Scheme": "internet-facing",
+        "Subnets": [
+          {
+            "Ref": "AutoscalingEcsClusterVpcPublicSubnet1Subnet449924B9"
+          },
+          {
+            "Ref": "AutoscalingEcsClusterVpcPublicSubnet2SubnetE05BE80C"
+          }
+        ],
+        "Type": "network"
+      },
+      "DependsOn": [
+        "AutoscalingEcsClusterVpcPublicSubnet1DefaultRouteD91D71B9",
+        "AutoscalingEcsClusterVpcPublicSubnet2DefaultRoute8BF4762C"
+      ]
+    },
+    "FargateServiceLBPublicListener4B4929CA": {
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+      "Properties": {
+        "DefaultActions": [
+          {
+            "TargetGroupArn": {
+              "Ref": "FargateServiceLBPublicListenerECSGroupBE57E081"
+            },
+            "Type": "forward"
+          }
+        ],
+        "LoadBalancerArn": {
+          "Ref": "FargateServiceLBB353E155"
+        },
+        "Port": 80,
+        "Protocol": "TCP"
+      }
+    },
+    "FargateServiceLBPublicListenerECSGroupBE57E081": {
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+      "Properties": {
+        "Port": 80,
+        "Protocol": "TCP",
+        "TargetType": "ip",
+        "VpcId": {
+          "Ref": "AutoscalingEcsClusterVpc474C51EA"
+        }
+      }
+    },
+    "FargateServiceTaskDefTaskRole8CDCF85E": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      }
+    },
+    "FargateServiceTaskDef940E3A80": {
+      "Type": "AWS::ECS::TaskDefinition",
+      "Properties": {
+        "ContainerDefinitions": [
+          {
+            "Essential": true,
+            "Image": "amazon/amazon-ecs-sample",
+            "LogConfiguration": {
+              "LogDriver": "awslogs",
+              "Options": {
+                "awslogs-group": {
+                  "Ref": "FargateServiceTaskDefwebLogGroup71FAF541"
+                },
+                "awslogs-stream-prefix": "FargateService",
+                "awslogs-region": {
+                  "Ref": "AWS::Region"
+                }
+              }
+            },
+            "Name": "web",
+            "PortMappings": [
+              {
+                "ContainerPort": 80,
+                "Protocol": "tcp"
+              }
+            ]
+          }
+        ],
+        "Cpu": "256",
+        "ExecutionRoleArn": {
+          "Fn::GetAtt": ["FargateServiceTaskDefExecutionRole9194820E", "Arn"]
+        },
+        "Family": "NlbFargateServiceTaskDefC3C76A53",
+        "Memory": "512",
+        "NetworkMode": "awsvpc",
+        "RequiresCompatibilities": ["FARGATE"],
+        "TaskRoleArn": {
+          "Fn::GetAtt": ["FargateServiceTaskDefTaskRole8CDCF85E", "Arn"]
+        }
+      }
+    },
+    "FargateServiceTaskDefwebLogGroup71FAF541": {
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain"
+    },
+    "FargateServiceTaskDefExecutionRole9194820E": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      }
+    },
+    "FargateServiceTaskDefExecutionRoleDefaultPolicy827E7CA2": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": ["logs:CreateLogStream", "logs:PutLogEvents"],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "FargateServiceTaskDefwebLogGroup71FAF541",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "FargateServiceTaskDefExecutionRoleDefaultPolicy827E7CA2",
+        "Roles": [
+          {
+            "Ref": "FargateServiceTaskDefExecutionRole9194820E"
+          }
+        ]
+      }
+    },
+    "FargateServiceECC8084D": {
+      "Type": "AWS::ECS::Service",
+      "Properties": {
+        "Cluster": {
+          "Ref": "AutoscalingEcsClusterDD96B106"
+        },
+        "DeploymentConfiguration": {
+          "MaximumPercent": 200,
+          "MinimumHealthyPercent": 50
+        },
+        "EnableECSManagedTags": false,
+        "HealthCheckGracePeriodSeconds": 60,
+        "LaunchType": "FARGATE",
+        "LoadBalancers": [
+          {
+            "ContainerName": "web",
+            "ContainerPort": 80,
+            "TargetGroupArn": {
+              "Ref": "FargateServiceLBPublicListenerECSGroupBE57E081"
+            }
+          }
+        ],
+        "NetworkConfiguration": {
+          "AwsvpcConfiguration": {
+            "AssignPublicIp": "DISABLED",
+            "SecurityGroups": [
+              {
+                "Fn::GetAtt": [
+                  "FargateServiceSecurityGroup262B61DD",
+                  "GroupId"
+                ]
+              }
+            ],
+            "Subnets": [
+              {
+                "Ref": "AutoscalingEcsClusterVpcPrivateSubnet1SubnetB228E187"
+              },
+              {
+                "Ref": "AutoscalingEcsClusterVpcPrivateSubnet2Subnet560EEBDD"
+              }
+            ]
+          }
+        },
+        "TaskDefinition": {
+          "Ref": "FargateServiceTaskDef940E3A80"
+        }
+      },
+      "DependsOn": [
+        "FargateServiceLBPublicListenerECSGroupBE57E081",
+        "FargateServiceLBPublicListener4B4929CA"
+      ]
+    },
+    "FargateServiceSecurityGroup262B61DD": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "NlbFargateService/FargateService/Service/SecurityGroup",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "SecurityGroupIngress": [
+          {
+            "CidrIp": {
+              "Fn::GetAtt": ["AutoscalingEcsClusterVpc474C51EA", "CidrBlock"]
+            },
+            "Description": "Allow http inbound from VPC",
+            "FromPort": 80,
+            "IpProtocol": "tcp",
+            "ToPort": 80
+          }
+        ],
+        "VpcId": {
+          "Ref": "AutoscalingEcsClusterVpc474C51EA"
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "FargateServiceLoadBalancerDNS9433D5F6": {
+      "Value": {
+        "Fn::GetAtt": ["FargateServiceLBB353E155", "DNSName"]
+      }
+    },
+    "LoadBalancerDNS": {
+      "Value": {
+        "Fn::GetAtt": ["FargateServiceLBB353E155", "DNSName"]
+      }
+    }
+  }
+}

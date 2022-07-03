@@ -6,6 +6,7 @@ import stacks.ecs.alb_autoscaling_ecs_service
 import stacks.ecs.autoscaling_ecs_service
 import stacks.ecs.autoscaling_ecs_service_with_placement
 import stacks.ecs.nlb_fargate_service
+import stacks.ecs.nlb_autoscaling_fargate_service
 
 
 class WellArchitected(aws_cdk.App):
@@ -123,6 +124,10 @@ class WellArchitected(aws_cdk.App):
         stacks.ecs.nlb_fargate_service.NlbFargateService(
             self, 'NlbFargateService',
             container_image=container_image(),
+        )
+        stacks.ecs.nlb_autoscaling_fargate_service.NlbAutoscalingFargateService(
+            self, 'NlbAutoscalingFargateService',
+            container_image=container_image()
         )
 
 WellArchitected().synth()
