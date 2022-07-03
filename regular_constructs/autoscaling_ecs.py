@@ -8,12 +8,14 @@ class AutoscalingEcsCluster(constructs.Construct):
         self, scope: constructs.Construct, id: str,
         vpc=None,
         autoscaling_group=None,
+        create_autoscaling_group_provider=True,
         **kwargs
     ):
         super().__init__(scope, id, **kwargs)
         self.vpc = self.get_vpc(vpc)
         self.ecs_cluster = self.create_ecs_cluster(self.vpc)
-        self.create_autoscaling_group_provider(autoscaling_group)
+        if create_autoscaling_group_provider:
+            self.create_autoscaling_group_provider(autoscaling_group)
 
     def get_vpc(self, vpc=None):
         if vpc:

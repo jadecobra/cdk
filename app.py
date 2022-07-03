@@ -5,6 +5,7 @@ import stacks.ecs.nlb_autoscaling_ecs_service
 import stacks.ecs.alb_autoscaling_ecs_service
 import stacks.ecs.autoscaling_ecs_service
 import stacks.ecs.autoscaling_ecs_service_with_placement
+import stacks.ecs.nlb_fargate_service
 
 
 class WellArchitected(aws_cdk.App):
@@ -119,6 +120,10 @@ class WellArchitected(aws_cdk.App):
             self, 'NlbAutoscalingEcsService',
             container_image=container_image(),
         )
+        stacks.ecs.nlb_fargate_service.NlbFargateService(
+            self, 'NlbFargateService',
+            container_image=container_image(),
+        )
 
 WellArchitected().synth()
 
@@ -126,4 +131,3 @@ WellArchitected().synth()
 # StateMachine examples - https://docs.amazon.com/step-functions/latest/dg/create-sample-projects.html
 # EventBridge examples - https://docs.amazon.com/eventbridge/latest/userguide/eb-service-event.html
 # Read Lambda Powertools docs
-# ECS Examples

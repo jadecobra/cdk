@@ -13,6 +13,7 @@ class TestWellArchitectedPatterns(tests.utilities.TestTemplates):
             'AutoscalingEcsCluster',
             'AlbAutoscalingEcsService',
             'NlbAutoscalingEcsService',
+            'NlbFargateService',
             # 'ApiLambdaEventBridgeLambda',
             # 'ApiLambdaSqsLambdaDynamodb',
             # 'ApiSnsLambdaEventBridgeLambda',

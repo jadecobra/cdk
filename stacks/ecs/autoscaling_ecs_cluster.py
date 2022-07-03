@@ -1,4 +1,3 @@
-import aws_cdk
 import constructs
 import regular_constructs.autoscaling_ecs
 import well_architected
