@@ -26,15 +26,6 @@ class FargateService(regular_constructs.autoscaling_ecs.AutoscalingEcsCluster):
             vpc_cidr_block=self.vpc.vpc_cidr_block,
         )
 
-        self.fargate_service.service.auto_scale_task_count(
-            max_capacity=2
-        ).scale_on_cpu_utilization(
-            "CpuScaling",
-            target_utilization_percent=50,
-            scale_in_cooldown=aws_cdk.Duration.seconds(60),
-            scale_out_cooldown=aws_cdk.Duration.seconds(60),
-        )
-
         aws_cdk.CfnOutput(
             self, "LoadBalancerDNS",
             value=self.fargate_service.load_balancer.load_balancer_dns_name
