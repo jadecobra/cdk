@@ -60,7 +60,7 @@ class NlbAutoscalingFargateService(well_architected.Stack):
 
     def create_security_group_ingress_rule(self, vpc_cidr_block=None, security_group=None):
         return security_group.add_ingress_rule(
-            peer = ec2.Peer.ipv4(vpc_cidr_block),
-            connection = ec2.Port.tcp(80),
+            peer = aws_cdk.aws_ec2.Peer.ipv4(vpc_cidr_block),
+            connection = aws_cdk.aws_ec2.Port.tcp(80),
             description="Allow http inbound from VPC"
         )

@@ -28695,3 +28695,17 @@
 2022-07-02 23:20:16.635068::Time taken to synthesize stack: NlbAutoscalingEcsService::  7.3044 seconds
 2022-07-02 23:20:24.044692::Time taken to synthesize stack: NlbFargateService::  7.4032 seconds
 2022-07-02 23:20:31.601476::Time taken to synthesize stack: NlbAutoscalingFargateService::  7.5466 seconds
+2022-07-02 23:20:50.397885::Time taken to synthesize stack: AutoscalingEcsService::  7.5104 seconds
+2022-07-02 23:20:57.769793::Time taken to synthesize stack: AutoscalingEcsServiceWithPlacement::  7.3650 seconds
+2022-07-02 23:21:05.281913::Time taken to synthesize stack: AutoscalingEcsCluster::  7.5058 seconds
+2022-07-02 23:21:12.592844::Time taken to synthesize stack: AlbAutoscalingEcsService::  7.3051 seconds
+2022-07-02 23:21:19.952355::Time taken to synthesize stack: NlbAutoscalingEcsService::  7.3526 seconds
+2022-07-02 23:21:27.140247::Time taken to synthesize stack: NlbFargateService::  7.1799 seconds
+2022-07-02 23:21:34.495547::Time taken to synthesize stack: NlbAutoscalingFargateService::  7.3498 seconds
+2022-07-02 23:22:08.399367::Time taken to synthesize stack: AutoscalingEcsService::  6.7273 seconds
+2022-07-02 23:22:14.826262::Time taken to synthesize stack: AutoscalingEcsServiceWithPlacement::  6.4189 seconds
+2022-07-02 23:22:21.462955::Time taken to synthesize stack: AutoscalingEcsCluster::  6.6311 seconds
+2022-07-02 23:22:28.309958::Time taken to synthesize stack: AlbAutoscalingEcsService::  6.8371 seconds
+2022-07-02 23:22:34.748782::Time taken to synthesize stack: NlbAutoscalingEcsService::  6.4308 seconds
+2022-07-02 23:22:41.126290::Time taken to synthesize stack: NlbFargateService::  6.3697 seconds
+2022-07-02 23:22:48.280142::Time taken to synthesize stack: NlbAutoscalingFargateService::  7.1461 seconds

@@ -23,10 +23,9 @@ class NlbFargateService(well_architected.Stack):
             container_image=container_image,
         )
 
-        fargate_service.service.connections.security_groups[0].add_ingress_rule(
-            peer=aws_cdk.aws_ec2.Peer.ipv4(autoscaling_ecs_cluster.vpc.vpc_cidr_block),
-            connection=aws_cdk.aws_ec2.Port.tcp(80),
-            description="Allow http inbound from VPC"
+        self.create_security_group_ingress_rule(
+            security_group=fargate_service.service.connections.security_groups[0],
+            vpc_cidr_block=autoscaling_ecs_cluster.vpc.vpc_cidr_block,
         )
 
         aws_cdk.CfnOutput(
@@ -41,4 +40,11 @@ class NlbFargateService(well_architected.Stack):
             task_image_options=aws_cdk.aws_ecs_patterns.NetworkLoadBalancedTaskImageOptions(
                 image=aws_cdk.aws_ecs.ContainerImage.from_registry(container_image)
             )
+        )
+
+    def create_security_group_ingress_rule(self, vpc_cidr_block=None, security_group=None):
+        return security_group.add_ingress_rule(
+            peer = aws_cdk.aws_ec2.Peer.ipv4(vpc_cidr_block),
+            connection = aws_cdk.aws_ec2.Port.tcp(80),
+            description="Allow http inbound from VPC"
         )
