@@ -133,6 +133,5 @@ class WellArchitected(aws_cdk.App):
 WellArchitected().synth()
 
 # TODO
-# StateMachine examples - https://docs.amazon.com/step-functions/latest/dg/create-sample-projects.html
-# EventBridge examples - https://docs.amazon.com/eventbridge/latest/userguide/eb-service-event.html
+# StateMachine examples - https://docs.aws.amazon.com/step-functions/latest/dg/create-sample-projects.html
 # Read Lambda Powertools docs
