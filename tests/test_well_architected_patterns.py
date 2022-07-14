@@ -34,10 +34,6 @@ class TestWellArchitectedPatterns(tests.utilities.TestTemplates):
             'SnsLambdaDynamodb',
             'SqsLambdaSqs',
             'WafApiLambdaDynamodb',
-            # 'XRayTracerSnsFanOutTopic',
-            # 'DynamoDBTable',
-            # 'DynamoStreamer',
-            # 'ApiLambdaFunction',
         )
 
     def test_well_architected_cdk_patterns(self):
