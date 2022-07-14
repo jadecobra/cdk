@@ -1,13 +1,7 @@
 import aws_cdk
 import well_architected_stacks
-import stacks.ecs.autoscaling_ecs_cluster
-import stacks.ecs.nlb_autoscaling_ecs_service
-import stacks.ecs.alb_autoscaling_ecs_service
-import stacks.ecs.autoscaling_ecs_service
-import stacks.ecs.autoscaling_ecs_service_with_placement
-import stacks.ecs.nlb_fargate_service
-import stacks.ecs.nlb_autoscaling_fargate_service
-
+import stacks.ecs
+# import stacks.step_functions.job_poller
 
 class WellArchitected(aws_cdk.App):
 
@@ -18,6 +12,7 @@ class WellArchitected(aws_cdk.App):
         self.lambda_trilogy()
         self.xray_tracer()
         self.ecs()
+        self.in_progress()
 
     def create_well_architected_stacks(self):
         well_architected_stacks.ApiLambdaDynamodbEventBridgeLambda(
@@ -128,6 +123,12 @@ class WellArchitected(aws_cdk.App):
         stacks.ecs.nlb_autoscaling_fargate_service.NlbAutoscalingFargateService(
             self, 'NlbAutoscalingFargateService',
             container_image=container_image()
+        )
+
+    def in_progress(self):
+        return
+        stacks.step_functions.job_poller.JobPoller(
+            self, 'StepFunctionsJobPoller',
         )
 
 WellArchitected().synth()
