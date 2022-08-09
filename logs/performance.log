@@ -29119,3 +29119,36 @@
 2022-07-13 22:39:04.937589::Time taken to synthesize stack: SnsLambdaDynamodb::  5.8630 seconds
 2022-07-13 22:39:10.837110::Time taken to synthesize stack: SqsLambdaSqs::  5.8927 seconds
 2022-07-13 22:39:16.572698::Time taken to synthesize stack: WafApiLambdaDynamodb::  5.7302 seconds
+2022-07-13 22:50:22.398446::Time taken to synthesize stack: ApiLambdaRds::  6.0674 seconds
+2022-07-13 22:50:28.246081::Time taken to synthesize stack: ApiLambdaDynamodb::  5.8434 seconds
+2022-07-13 22:50:33.984317::Time taken to synthesize stack: ApiLambdaDynamodbEventBridgeLambda::  5.7343 seconds
+2022-07-13 22:50:39.739777::Time taken to synthesize stack: AutoscalingEcsService::  5.7482 seconds
+2022-07-13 22:50:45.557352::Time taken to synthesize stack: AutoscalingEcsServiceWithPlacement::  5.8128 seconds
+2022-07-13 22:50:52.219117::Time taken to synthesize stack: AutoscalingEcsCluster::  6.6574 seconds
+2022-07-13 22:50:59.108233::Time taken to synthesize stack: AlbAutoscalingEcsService::  6.8799 seconds
+2022-07-13 22:51:05.438870::Time taken to synthesize stack: NlbAutoscalingEcsService::  6.3242 seconds
+2022-07-13 22:51:11.761618::Time taken to synthesize stack: NlbFargateService::  6.3174 seconds
+2022-07-13 22:51:17.850400::Time taken to synthesize stack: NlbAutoscalingFargateService::  6.0824 seconds
+2022-07-13 22:51:24.144519::Time taken to synthesize stack: ApiLambdaEventBridgeLambda::  6.2900 seconds
+2022-07-13 22:51:30.292465::Time taken to synthesize stack: ApiLambdaSqsLambdaDynamodb::  6.1417 seconds
+2022-07-13 22:51:36.322786::Time taken to synthesize stack: ApiSnsLambdaEventBridgeLambda::  6.0257 seconds
+2022-07-13 22:51:42.339750::Time taken to synthesize stack: ApiSnsSqsLambda::  6.0097 seconds
+2022-07-13 22:51:48.094841::Time taken to synthesize stack: ApiStepFunctions::  5.7493 seconds
+2022-07-13 22:51:53.931558::Time taken to synthesize stack: LambdaFat::  5.8316 seconds
+2022-07-13 22:51:59.808946::Time taken to synthesize stack: LambdaLith::  5.8729 seconds
+2022-07-13 22:52:05.766234::Time taken to synthesize stack: LambdaPowerTuner::  5.9515 seconds
+2022-07-13 22:52:11.750932::Time taken to synthesize stack: LambdaSinglePurpose::  5.9780 seconds
+2022-07-13 22:52:17.616856::Time taken to synthesize stack: RestApiDynamodb::  5.8607 seconds
+2022-07-13 22:52:23.812187::Time taken to synthesize stack: RestApiSns::  6.1912 seconds
+2022-07-13 22:52:29.541111::Time taken to synthesize stack: S3SqsLambdaEcsEventBridgeLambdaDynamodb::  5.7238 seconds
+2022-07-13 22:52:35.319331::Time taken to synthesize stack: SagaStepFunction::  5.7742 seconds
+2022-07-13 22:52:41.238207::Time taken to synthesize stack: SimpleGraphqlService::  5.9115 seconds
+2022-07-13 22:52:47.073377::Time taken to synthesize stack: SnsLambda::  5.8316 seconds
+2022-07-13 22:52:52.838001::Time taken to synthesize stack: SnsLambdaSns::  5.7600 seconds
+2022-07-13 22:52:58.522215::Time taken to synthesize stack: SnsLambdaDynamodb::  5.6799 seconds
+2022-07-13 22:53:04.284589::Time taken to synthesize stack: SqsLambdaSqs::  5.7575 seconds
+2022-07-13 22:53:09.946634::Time taken to synthesize stack: WafApiLambdaDynamodb::  5.6578 seconds
+2022-08-03 18:57:49.467892::cdk.ls():"11.9770"
+2022-08-03 19:02:58.825531::cdk.ls():"12.7847"
+2022-08-03 19:03:31.196683::cdk.ls():"9.9037"
+2022-08-03 19:08:59.158283::cdk.ls():"9.3970"

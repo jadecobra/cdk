@@ -1,4 +1,5 @@
 import tests.utilities
+import os
 
 class TestWellArchitectedPatterns(tests.utilities.TestTemplates):
 
@@ -37,6 +38,8 @@ class TestWellArchitectedPatterns(tests.utilities.TestTemplates):
         )
 
     def test_well_architected_cdk_patterns(self):
+        tests.utilities.time_it(
+            os.system, f'cdk ls --version-reporting=false --path-metadata=false --asset-metadata=false', description=f'cdk.ls()')
         for pattern in self.patterns():
             with self.subTest(i=pattern):
                 self.assert_template_equal(pattern)
