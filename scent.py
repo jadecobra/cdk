@@ -12,11 +12,8 @@ import os
 # fail_bg_color = termstyle.bg_default
 
 # All lists in this variable will be under surveillance for changes.
-watch_paths = [
-    '.',
-    'tests/',
-    'tests/templates/',
-]
+watch_paths = ['tests/', 'src/']
+
 
 # this gets invoked on every file that gets changed in the directory. Return
 # True to invoke any runnable functions, False otherwise.
