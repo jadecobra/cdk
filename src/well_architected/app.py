@@ -1,7 +1,8 @@
+assert 1 == 2
 import aws_cdk
-import well_architected.stacks
-import well_architected.stacks.api_lambda_dynamodb_event_bridge_lambda
-import well_architected.stacks.api_lambda_dynamodb
+import well_architected.well_architected_stacks
+import well_architected.well_architected_stacks.api_lambda_dynamodb_event_bridge_lambda
+import well_architected.well_architected_stacks.api_lambda_dynamodb
 # import regular_stacks.ecs
 
 class WellArchitected(aws_cdk.App):
@@ -16,7 +17,7 @@ class WellArchitected(aws_cdk.App):
         # self.in_progress()
 
     def create_well_architected_stacks(self):
-        well_architected.stacks.api_lambda_dynamodb_event_bridge_lambda.ApiLambdaDynamodbEventBridgeLambda(
+        well_architected.well_architected_stacks.api_lambda_dynamodb_event_bridge_lambda.ApiLambdaDynamodbEventBridgeLambda(
             self, 'ApiLambdaDynamodbEventBridgeLambda',
         )
         # well_architected.stacks.api_lambda_dynamodb.ApiLambdaDynamodbStack(
@@ -53,42 +54,42 @@ class WellArchitected(aws_cdk.App):
         # )
 
     def lambda_trilogy(self):
-        well_architected.stacks.lambda_trilogy.LambdaLith(self, "LambdaLith")
-        well_architected.stacks.lambda_trilogy.LambdaTrilogy(
+        well_architected.well_architected_stacks.lambda_trilogy.LambdaLith(self, "LambdaLith")
+        well_architected.well_architected_stacks.lambda_trilogy.LambdaTrilogy(
             self, 'LambdaFat',
             function_name='lambda_fat',
         )
-        well_architected.stacks.lambda_trilogy.LambdaTrilogy(
+        well_architected.well_architected_stacks.lambda_trilogy.LambdaTrilogy(
             self, 'LambdaSinglePurpose',
             function_name='lambda_single_purpose',
         )
 
     def xray_tracer(self):
-        xray_tracer_sns_topic = well_architected.stacks.SnsTopic(
+        xray_tracer_sns_topic = well_architected.well_architected_stacks.SnsTopic(
             self, 'XRayTracerSnsFanOutTopic',
             display_name='The XRay Tracer Fan Out Topic',
         )
-        well_architected.stacks.RestApiSnsStack(
+        well_architected.well_architected_stacks.RestApiSnsStack(
             self, 'RestApiSns',
             sns_topic=xray_tracer_sns_topic.sns_topic,
             error_topic=xray_tracer_sns_topic.error_topic,
         )
-        well_architected.stacks.SnsLambdaSns(
+        well_architected.well_architected_stacks.SnsLambdaSns(
             self, 'SnsLambdaSns',
             sns_topic=xray_tracer_sns_topic.sns_topic,
             error_topic=xray_tracer_sns_topic.error_topic,
         )
-        well_architected.stacks.SqsLambdaSqs(
+        well_architected.well_architected_stacks.SqsLambdaSqs(
             self, 'SqsLambdaSqs',
             sns_topic=xray_tracer_sns_topic.sns_topic,
             error_topic=xray_tracer_sns_topic.error_topic,
         )
-        well_architected.stacks.SnsLambda(
+        well_architected.well_architected_stacks.SnsLambda(
             self, 'SnsLambda',
             sns_topic=xray_tracer_sns_topic.sns_topic,
             error_topic=xray_tracer_sns_topic.error_topic,
         )
-        well_architected.stacks.SnsLambdaDynamodb(
+        well_architected.well_architected_stacks.SnsLambdaDynamodb(
             self, 'SnsDynamodbLambda',
             sns_topic=xray_tracer_sns_topic.sns_topic,
             error_topic=xray_tracer_sns_topic.error_topic,
