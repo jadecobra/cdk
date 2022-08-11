@@ -1,7 +1,7 @@
 import aws_cdk
-import well_architected_stacks
-import stacks.ecs
-# import stacks.step_functions.job_poller
+# import well_architected.stacks
+import well_architected.stacks
+import regular_stacks.ecs
 
 class WellArchitected(aws_cdk.App):
 
@@ -9,13 +9,13 @@ class WellArchitected(aws_cdk.App):
         super().__init__(*args, **kwargs)
 
         self.create_well_architected_stacks()
-        self.lambda_trilogy()
-        self.xray_tracer()
-        self.ecs()
-        self.in_progress()
+        # self.lambda_trilogy()
+        # self.xray_tracer()
+        # self.ecs()
+        # self.in_progress()
 
     def create_well_architected_stacks(self):
-        well_architected.stacks.ApiLambdaDynamodbEventBridgeLambda(
+        well_architected.stacks.api_lambda_dynamodb_eventbridge_lambda.ApiLambdaDynamodbEventBridgeLambda(
             self, 'ApiLambdaDynamodbEventBridgeLambda',
         )
         well_architected.stacks.ApiLambdaDynamodbStack(
@@ -93,43 +93,37 @@ class WellArchitected(aws_cdk.App):
             error_topic=xray_tracer_sns_topic.error_topic,
         )
 
-    def ecs(self):
-        def container_image():
-            return "amazon/amazon-ecs-sample"
+    # def ecs(self):
+    #     def container_image():
+    #         return "amazon/amazon-ecs-sample"
 
-        stacks.ecs.autoscaling_ecs_cluster.AutoscalingEcsCluster(
-            self, 'AutoscalingEcsCluster',
-        )
-        stacks.ecs.autoscaling_ecs_service.AutoscalingEcsService(
-            self, 'AutoscalingEcsService',
-            container_image='nginx:latest',
-        )
-        stacks.ecs.autoscaling_ecs_service_with_placement.AutoscalingEcsServiceWithPlacement(
-            self, 'AutoscalingEcsServiceWithPlacement',
-            container_image='nginx:latest',
-        )
-        stacks.ecs.alb_autoscaling_ecs_service.AlbAutoscalingEcsService(
-            self, 'AlbAutoscalingEcsService',
-            container_image=container_image(),
-        )
-        stacks.ecs.nlb_autoscaling_ecs_service.NlbAutoscalingEcsService(
-            self, 'NlbAutoscalingEcsService',
-            container_image=container_image(),
-        )
-        stacks.ecs.nlb_fargate_service.NlbFargateService(
-            self, 'NlbFargateService',
-            container_image=container_image(),
-        )
-        stacks.ecs.nlb_autoscaling_fargate_service.NlbAutoscalingFargateService(
-            self, 'NlbAutoscalingFargateService',
-            container_image=container_image()
-        )
-
-    def in_progress(self):
-        return
-        stacks.step_functions.job_poller.JobPoller(
-            self, 'StepFunctionsJobPoller',
-        )
+    #     stacks.ecs.autoscaling_ecs_cluster.AutoscalingEcsCluster(
+    #         self, 'AutoscalingEcsCluster',
+    #     )
+    #     stacks.ecs.autoscaling_ecs_service.AutoscalingEcsService(
+    #         self, 'AutoscalingEcsService',
+    #         container_image='nginx:latest',
+    #     )
+    #     stacks.ecs.autoscaling_ecs_service_with_placement.AutoscalingEcsServiceWithPlacement(
+    #         self, 'AutoscalingEcsServiceWithPlacement',
+    #         container_image='nginx:latest',
+    #     )
+    #     stacks.ecs.alb_autoscaling_ecs_service.AlbAutoscalingEcsService(
+    #         self, 'AlbAutoscalingEcsService',
+    #         container_image=container_image(),
+    #     )
+    #     stacks.ecs.nlb_autoscaling_ecs_service.NlbAutoscalingEcsService(
+    #         self, 'NlbAutoscalingEcsService',
+    #         container_image=container_image(),
+    #     )
+    #     stacks.ecs.nlb_fargate_service.NlbFargateService(
+    #         self, 'NlbFargateService',
+    #         container_image=container_image(),
+    #     )
+    #     stacks.ecs.nlb_autoscaling_fargate_service.NlbAutoscalingFargateService(
+    #         self, 'NlbAutoscalingFargateService',
+    #         container_image=container_image()
+    #     )
 
 WellArchitected().synth()
 

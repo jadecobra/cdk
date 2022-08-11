@@ -39,57 +39,38 @@ class TestWellArchitectedPatterns(tests.utilities.TestTemplates):
         )
 
     def test_well_architected_cdk_patterns(self):
-        tests.utilities.time_it(
-            os.system,
+        result = tests.utilities.time_it(
+            subprocess.run,
             (
-                '.src/cdk ls --version-reporting=false'
+                'cdk ls --app python3 src/well_architected/app.py '
+                '--version-reporting=false'
                 '--path-metadata=false --asset-metadata=false'
             ),
-            description=f'cdk.ls()'
+            description=f'cdk ls',
+            shell=True,
+            capture_output=True,
         )
+        print(result.stderr.decode())
+        print(result.stdout.decode())
+        self.assertNotEqual(result.returncode, 1)
         for pattern in self.patterns():
             with self.subTest(i=pattern):
                 self.assert_template_equal(pattern)
 
     def test_cdk_returncode(self):
-        result = subprocess.run('./src/cdk ls', shell=True)
-        self.assertEqual(
-            dir(result),
-            [
-                '__class__',
-                '__class_getitem__',
-                '__delattr__',
-                '__dict__',
-                '__dir__',
-                '__doc__',
-                '__eq__',
-                '__format__',
-                '__ge__',
-                '__getattribute__',
-                '__gt__',
-                '__hash__',
-                '__init__',
-                '__init_subclass__',
-                '__le__',
-                '__lt__',
-                '__module__',
-                '__ne__',
-                '__new__',
-                '__reduce__',
-                '__reduce_ex__',
-                '__repr__',
-                '__setattr__',
-                '__sizeof__',
-                '__str__',
-                '__subclasshook__',
-                '__weakref__',
-                'args',
-                'check_returncode',
-                'returncode',
-                'stderr',
-                'stdout'
-            ]
+        result = subprocess.run(
+            'cdk ls --app python3 src/app.py',
+            shell=True,
+            capture_output=True
         )
-        self.assertIsNone(result.stderr)
-        self.assertIsNone(result.stdout)
-        self.assertIsNone(result.check_returncode())
+        # self.assertEqual(
+        #     result.stderr, b'\n'
+        #     # (
+        #     #     b'\n--app is required either in command-line, '
+        #     #     b'in cdk.json or in ~/.cdk.json\n'
+        #     # )
+        # )
+        self.assertEqual(result.stdout, b'')
+        self.assertEqual(result.returncode, 1)
+        # with self.assertRaises(subprocess.CalledProcessError):
+        #     result.check_returncode()

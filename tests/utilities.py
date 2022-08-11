@@ -20,9 +20,10 @@ def log_performance(result):
 
 def time_it(function, *args, description='run process', **kwargs):
     start_time = time()
-    function(*args, **kwargs)
-    result = f'{description}:"{time() - start_time:.4f}"'
+    response = function(*args, **kwargs)
+    result = f'{description}::"{time() - start_time:.4f}"'
     log_performance(log(result))
+    return response
 
 
 def load_json(filepath):

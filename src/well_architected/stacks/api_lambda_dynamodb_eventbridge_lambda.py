@@ -1,10 +1,10 @@
-from distutils.log import error
 import aws_cdk
 import constructs
-import well_architected
-import well_architected.constructs.api_lambda
-import well_architected.constructs.lambda_function
-import well_architected.constructs.dynamodb_table
+from . import 
+# from . import stack
+# import well_architected.constructs.api_lambda
+# import well_architected.constructs.lambda_function
+# import well_architected.constructs.dynamodb_table
 
 
 class ApiLambdaDynamodbEventBridgeLambda(well_architected.Stack):
