@@ -1,7 +1,8 @@
 import aws_cdk
-# import well_architected.stacks
 import well_architected.stacks
-import regular_stacks.ecs
+import well_architected.stacks.api_lambda_dynamodb_event_bridge_lambda
+import well_architected.stacks.api_lambda_dynamodb
+# import regular_stacks.ecs
 
 class WellArchitected(aws_cdk.App):
 
@@ -15,41 +16,41 @@ class WellArchitected(aws_cdk.App):
         # self.in_progress()
 
     def create_well_architected_stacks(self):
-        well_architected.stacks.api_lambda_dynamodb_eventbridge_lambda.ApiLambdaDynamodbEventBridgeLambda(
+        well_architected.stacks.api_lambda_dynamodb_event_bridge_lambda.ApiLambdaDynamodbEventBridgeLambda(
             self, 'ApiLambdaDynamodbEventBridgeLambda',
         )
-        well_architected.stacks.ApiLambdaDynamodbStack(
-            self, 'ApiLambdaDynamodb',
-            function_name='circuit_breaker_lambda',
-            partition_key='id',
-        )
-        well_architected.stacks.ApiLambdaEventBridgeLambda(
-            self, 'ApiLambdaEventBridgeLambda'
-        )
-        well_architected.stacks.ApiLambdaRds(self, 'ApiLambdaRds')
-        well_architected.stacks.ApiLambdaSqsLambdaDynamodb(
-            self, 'ApiLambdaSqsLambdaDynamodb'
-        )
-        well_architected.stacks.ApiStepFunctions(self, 'ApiStepFunctions')
-        well_architected.stacks.LambdaPowerTuner(self, 'LambdaPowerTuner')
-        well_architected.stacks.RestApiDynamodb(
-            self, 'RestApiDynamodb',
-            partition_key='message',
-        )
-        well_architected.stacks.RestApiSnsLambdaEventBridgeLambda(
-            self, 'RestApiSnsLambdaEventBridgeLambda'
-        )
-        well_architected.stacks.RestApiSnsSqsLambda(self, 'RestApiSnsSqsLambda')
-        well_architected.stacks.S3SqsLambdaEcsEventBridgeLambdaDynamodb(
-            self, 'S3SqsLambdaEcsEventBridgeLambdaDynamodb'
-        )
-        well_architected.stacks.SagaStepFunction(self, 'SagaStepFunction')
-        well_architected.stacks.SimpleGraphQlService(
-            self, 'SimpleGraphqlService'
-        )
-        well_architected.stacks.WafApiLambdaDynamodb(
-            self, 'WafApiLambdaDynamodb'
-        )
+        # well_architected.stacks.api_lambda_dynamodb.ApiLambdaDynamodbStack(
+        #     self, 'ApiLambdaDynamodb',
+        #     function_name='circuit_breaker_lambda',
+        #     partition_key='id',
+        # )
+        # well_architected.stacks.api_lambda_eventbridge_lambda.ApiLambdaEventBridgeLambda(
+        #     self, 'ApiLambdaEventBridgeLambda'
+        # )
+        # well_architected.stacks.api_lambda_rds.ApiLambdaRds(self, 'ApiLambdaRds')
+        # well_architected.stacks.api_lambda_sqs_lambda_dynamodb.ApiLambdaSqsLambdaDynamodb(
+        #     self, 'ApiLambdaSqsLambdaDynamodb'
+        # )
+        # well_architected.stacks.api_stepfunctions.ApiStepFunctions(self, 'ApiStepFunctions')
+        # well_architected.stacks.lambda_power_tuner.LambdaPowerTuner(self, 'LambdaPowerTuner')
+        # well_architected.stacks.rest_api_dynamodb.RestApiDynamodb(
+        #     self, 'RestApiDynamodb',
+        #     partition_key='message',
+        # )
+        # well_architected.stacks.rest_api_sns_lambda_eventbridge_lambda.RestApiSnsLambdaEventBridgeLambda(
+        #     self, 'RestApiSnsLambdaEventBridgeLambda'
+        # )
+        # well_architected.stacks.RestApiSnsSqsLambda(self, 'RestApiSnsSqsLambda')
+        # well_architected.stacks.S3SqsLambdaEcsEventBridgeLambdaDynamodb(
+        #     self, 'S3SqsLambdaEcsEventBridgeLambdaDynamodb'
+        # )
+        # well_architected.stacks.SagaStepFunction(self, 'SagaStepFunction')
+        # well_architected.stacks.SimpleGraphQlService(
+        #     self, 'SimpleGraphqlService'
+        # )
+        # well_architected.stacks.WafApiLambdaDynamodb(
+        #     self, 'WafApiLambdaDynamodb'
+        # )
 
     def lambda_trilogy(self):
         well_architected.stacks.lambda_trilogy.LambdaLith(self, "LambdaLith")
