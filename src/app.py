@@ -15,79 +15,79 @@ class WellArchitected(aws_cdk.App):
         self.in_progress()
 
     def create_well_architected_stacks(self):
-        well_architected_stacks.ApiLambdaDynamodbEventBridgeLambda(
+        well_architected.stacks.ApiLambdaDynamodbEventBridgeLambda(
             self, 'ApiLambdaDynamodbEventBridgeLambda',
         )
-        well_architected_stacks.ApiLambdaDynamodbStack(
+        well_architected.stacks.ApiLambdaDynamodbStack(
             self, 'ApiLambdaDynamodb',
             function_name='circuit_breaker_lambda',
             partition_key='id',
         )
-        well_architected_stacks.ApiLambdaEventBridgeLambda(
+        well_architected.stacks.ApiLambdaEventBridgeLambda(
             self, 'ApiLambdaEventBridgeLambda'
         )
-        well_architected_stacks.ApiLambdaRds(self, 'ApiLambdaRds')
-        well_architected_stacks.ApiLambdaSqsLambdaDynamodb(
+        well_architected.stacks.ApiLambdaRds(self, 'ApiLambdaRds')
+        well_architected.stacks.ApiLambdaSqsLambdaDynamodb(
             self, 'ApiLambdaSqsLambdaDynamodb'
         )
-        well_architected_stacks.ApiStepFunctions(self, 'ApiStepFunctions')
-        well_architected_stacks.LambdaPowerTuner(self, 'LambdaPowerTuner')
-        well_architected_stacks.RestApiDynamodb(
+        well_architected.stacks.ApiStepFunctions(self, 'ApiStepFunctions')
+        well_architected.stacks.LambdaPowerTuner(self, 'LambdaPowerTuner')
+        well_architected.stacks.RestApiDynamodb(
             self, 'RestApiDynamodb',
             partition_key='message',
         )
-        well_architected_stacks.RestApiSnsLambdaEventBridgeLambda(
+        well_architected.stacks.RestApiSnsLambdaEventBridgeLambda(
             self, 'RestApiSnsLambdaEventBridgeLambda'
         )
-        well_architected_stacks.RestApiSnsSqsLambda(self, 'RestApiSnsSqsLambda')
-        well_architected_stacks.S3SqsLambdaEcsEventBridgeLambdaDynamodb(
+        well_architected.stacks.RestApiSnsSqsLambda(self, 'RestApiSnsSqsLambda')
+        well_architected.stacks.S3SqsLambdaEcsEventBridgeLambdaDynamodb(
             self, 'S3SqsLambdaEcsEventBridgeLambdaDynamodb'
         )
-        well_architected_stacks.SagaStepFunction(self, 'SagaStepFunction')
-        well_architected_stacks.SimpleGraphQlService(
+        well_architected.stacks.SagaStepFunction(self, 'SagaStepFunction')
+        well_architected.stacks.SimpleGraphQlService(
             self, 'SimpleGraphqlService'
         )
-        well_architected_stacks.WafApiLambdaDynamodb(
+        well_architected.stacks.WafApiLambdaDynamodb(
             self, 'WafApiLambdaDynamodb'
         )
 
     def lambda_trilogy(self):
-        well_architected_stacks.lambda_trilogy.LambdaLith(self, "LambdaLith")
-        well_architected_stacks.lambda_trilogy.LambdaTrilogy(
+        well_architected.stacks.lambda_trilogy.LambdaLith(self, "LambdaLith")
+        well_architected.stacks.lambda_trilogy.LambdaTrilogy(
             self, 'LambdaFat',
             function_name='lambda_fat',
         )
-        well_architected_stacks.lambda_trilogy.LambdaTrilogy(
+        well_architected.stacks.lambda_trilogy.LambdaTrilogy(
             self, 'LambdaSinglePurpose',
             function_name='lambda_single_purpose',
         )
 
     def xray_tracer(self):
-        xray_tracer_sns_topic = well_architected_stacks.SnsTopic(
+        xray_tracer_sns_topic = well_architected.stacks.SnsTopic(
             self, 'XRayTracerSnsFanOutTopic',
             display_name='The XRay Tracer Fan Out Topic',
         )
-        well_architected_stacks.RestApiSnsStack(
+        well_architected.stacks.RestApiSnsStack(
             self, 'RestApiSns',
             sns_topic=xray_tracer_sns_topic.sns_topic,
             error_topic=xray_tracer_sns_topic.error_topic,
         )
-        well_architected_stacks.SnsLambdaSns(
+        well_architected.stacks.SnsLambdaSns(
             self, 'SnsLambdaSns',
             sns_topic=xray_tracer_sns_topic.sns_topic,
             error_topic=xray_tracer_sns_topic.error_topic,
         )
-        well_architected_stacks.SqsLambdaSqs(
+        well_architected.stacks.SqsLambdaSqs(
             self, 'SqsLambdaSqs',
             sns_topic=xray_tracer_sns_topic.sns_topic,
             error_topic=xray_tracer_sns_topic.error_topic,
         )
-        well_architected_stacks.SnsLambda(
+        well_architected.stacks.SnsLambda(
             self, 'SnsLambda',
             sns_topic=xray_tracer_sns_topic.sns_topic,
             error_topic=xray_tracer_sns_topic.error_topic,
         )
-        well_architected_stacks.SnsLambdaDynamodb(
+        well_architected.stacks.SnsLambdaDynamodb(
             self, 'SnsDynamodbLambda',
             sns_topic=xray_tracer_sns_topic.sns_topic,
             error_topic=xray_tracer_sns_topic.error_topic,

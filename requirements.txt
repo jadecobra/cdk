@@ -5,4 +5,3 @@ aws-cdk-lib
 aws-cdk.aws-apigatewayv2-alpha
 aws-cdk.aws-apigatewayv2-integrations-alpha
 aws_cdk.aws-appsync-alpha
-git+//github.com/jadecobra/mock_boto3.git
