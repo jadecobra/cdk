@@ -1,10 +1,10 @@
 import aws_cdk
 import constructs
-import well_architected
+
 import regular_constructs.autoscaling_ecs
 
 
-class AlbAutoscalingEcsService(well_architected.Stack):
+class AlbAutoscalingEcsService(well_architected_stack.Stack):
 
     def __init__(
         self, scope: constructs.Construct, id: str,

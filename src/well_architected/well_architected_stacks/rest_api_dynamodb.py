@@ -1,15 +1,15 @@
 import aws_cdk
 import constructs
-import well_architected
-import well_architected.constructs.dynamodb_table
-import well_architected.constructs.lambda_function
-import well_architected.constructs.rest_api
+
+import well_architected_constructs.dynamodb_table
+import well_architected_constructs.lambda_function
+import well_architected_constructs.rest_api
 import json
 
-from . import well_architected_stack
+import well_architected_stack
 
 
-class RestApiDynamodb(well_architected.Stack):
+class RestApiDynamodb(well_architected_stack.Stack):
 
     def __init__(
         self, scope: constructs.Construct, id: str,
@@ -51,7 +51,7 @@ class RestApiDynamodb(well_architected.Stack):
         })
 
     def create_dynamodb_table(self, partition_key=None, error_topic=None):
-        return well_architected.constructs.dynamodb_table.DynamodbTableConstruct(
+        return well_architected_constructs.dynamodb_table.DynamodbTableConstruct(
             self, 'DynamoDbTable',
             stream=aws_cdk.aws_dynamodb.StreamViewType.NEW_IMAGE,
             error_topic=error_topic,
@@ -61,7 +61,7 @@ class RestApiDynamodb(well_architected.Stack):
     def create_lambda_function_with_dynamodb_event_source(
         self, dynamodb_table=None, error_topic=None
     ):
-        return well_architected.constructs.lambda_function.LambdaFunctionConstruct(
+        return well_architected_constructs.lambda_function.LambdaFunctionConstruct(
             self, 'LambdaFunction',
             error_topic=error_topic,
             function_name='subscribe',
@@ -73,7 +73,7 @@ class RestApiDynamodb(well_architected.Stack):
         )
 
     def create_rest_api(self, error_topic):
-        return well_architected.constructs.rest_api.RestApiConstruct(
+        return well_architected_constructs.rest_api.RestApiConstruct(
             self, 'RestApiDynamodb',
             error_topic=error_topic,
         )

@@ -1,13 +1,13 @@
 import aws_cdk
 import constructs
-import well_architected
-import well_architected.constructs.lambda_function
-import well_architected.constructs.sns_lambda
 
-from . import well_architected_stack
+import well_architected_constructs.lambda_function
+import well_architected_constructs.sns_lambda
+
+import well_architected_stack
 
 
-class SqsLambdaSqs(well_architected.Stack):
+class SqsLambdaSqs(well_architected_stack.Stack):
 
     def __init__(
         self, scope: constructs.Construct, id: str,
@@ -33,7 +33,7 @@ class SqsLambdaSqs(well_architected.Stack):
         sns_topic: aws_cdk.aws_sns.Topic=None,
         error_topic=None,
     ):
-        sqs_publisher = well_architected.constructs.sns_lambda.SnsLambdaConstruct(
+        sqs_publisher = well_architected_constructs.sns_lambda.SnsLambdaConstruct(
             self, 'SqsPublisher',
             function_name='sqs_publisher',
             error_topic=error_topic,
@@ -48,7 +48,7 @@ class SqsLambdaSqs(well_architected.Stack):
     def create_sqs_subscribing_lambda(
         self, sqs_queue: aws_cdk.aws_sqs.Queue=None, error_topic=None,
     ):
-        sqs_subscriber = well_architected.constructs.lambda_function.create_python_lambda_function(
+        sqs_subscriber = well_architected_constructs.lambda_function.create_python_lambda_function(
             self, function_name="sqs_subscriber",
             error_topic=error_topic,
         )

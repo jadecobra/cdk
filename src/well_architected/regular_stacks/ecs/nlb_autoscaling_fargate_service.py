@@ -1,11 +1,11 @@
 import aws_cdk
 import constructs
 import regular_constructs.autoscaling_ecs
-import well_architected
 
 
 
-class NlbAutoscalingFargateService(well_architected.Stack):
+
+class NlbAutoscalingFargateService(well_architected_stack.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str,
         container_image=None,

@@ -1,18 +1,18 @@
 import aws_cdk
 import constructs
-import well_architected
-import well_architected.constructs.api_lambda
-import well_architected.constructs.dynamodb_table
-import well_architected.constructs.lambda_function
 
-from . import well_architected_stack
+import well_architected_constructs.api_lambda
+import well_architected_constructs.dynamodb_table
+import well_architected_constructs.lambda_function
 
-class SagaStepFunction(well_architected.Stack):
+import well_architected_stack
+
+class SagaStepFunction(well_architected_stack.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        bookings_record = well_architected.constructs.dynamodb_table.DynamodbTableConstruct(
+        bookings_record = well_architected_constructs.dynamodb_table.DynamodbTableConstruct(
             self, 'DynamodbTable',
             partition_key='booking_id',
             sort_key='booking_type',
@@ -151,12 +151,12 @@ class SagaStepFunction(well_architected.Stack):
 
         saga_state_machine.grant_start_execution(saga_lambda)
 
-        well_architected.constructs.api_lambda.create_rest_api_lambda(
+        well_architected_constructs.api_lambda.create_rest_api_lambda(
             self,
             error_topic=self.error_topic,
             lambda_function=saga_lambda
         )
-        well_architected.constructs.api_lambda.create_http_api_lambda(
+        well_architected_constructs.api_lambda.create_http_api_lambda(
             self,
             error_topic=self.error_topic,
             lambda_function=saga_lambda
@@ -198,7 +198,7 @@ class SagaStepFunction(well_architected.Stack):
         self, function_name=None, environment_variables=None,
         error_topic=None,
     ):
-        return well_architected.constructs.lambda_function.LambdaFunctionConstruct(
+        return well_architected_constructs.lambda_function.LambdaFunctionConstruct(
             self, function_name,
             function_name=function_name,
             error_topic=error_topic,

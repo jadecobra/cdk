@@ -64,7 +64,7 @@ def test_focusing_on_task(self):
     #     response=input(f'do you want to commit this change as {task}: [y]/n: ')
     # )
 
-@unittest.skip
+
 class TestBuildDeploy(unittest.TestCase):
 
     @staticmethod

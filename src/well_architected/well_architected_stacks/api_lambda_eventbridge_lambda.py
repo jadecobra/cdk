@@ -1,13 +1,12 @@
 import aws_cdk
 import constructs
-import well_architected
-import well_architected.constructs.lambda_function
-import well_architected.constructs.api_lambda
+import well_architected_constructs.lambda_function
+import well_architected_constructs.api_lambda
 
-from . import well_architected_stack
+import well_architected_stack
 
 
-class ApiLambdaEventBridgeLambda(well_architected.Stack):
+class ApiLambdaEventBridgeLambda(well_architected_stack.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
@@ -58,11 +57,11 @@ class ApiLambdaEventBridgeLambda(well_architected.Stack):
             )
         )
 
-        well_architected.constructs.api_lambda.create_rest_api_lambda(
+        well_architected_constructs.api_lambda.create_rest_api_lambda(
             self, error_topic=self.error_topic,
             lambda_function=atm_producer_lambda
         )
-        well_architected.constructs.api_lambda.create_http_api_lambda(
+        well_architected_constructs.api_lambda.create_http_api_lambda(
             self, error_topic=self.error_topic,
             lambda_function=atm_producer_lambda
         )
@@ -82,7 +81,7 @@ class ApiLambdaEventBridgeLambda(well_architected.Stack):
         self, handler_name='handler', function_name=None,
         event_bridge_rule:aws_cdk.aws_events.Rule=None
     ):
-        return well_architected.constructs.lambda_function.LambdaFunctionConstruct(
+        return well_architected_constructs.lambda_function.LambdaFunctionConstruct(
             self, handler_name,
             handler_name=handler_name,
             function_name=function_name,

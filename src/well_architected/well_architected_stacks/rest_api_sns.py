@@ -1,12 +1,12 @@
 import constructs
 
-import well_architected
-import well_architected.constructs.rest_api_sns
 
-from . import well_architected_stack
+import well_architected_constructs.rest_api_sns
+
+import well_architected_stack
 
 
-class RestApiSnsStack(well_architected.Stack):
+class RestApiSnsStack(well_architected_stack.Stack):
 
     def __init__(
         self, scope: constructs.Construct, id: str,
@@ -16,7 +16,7 @@ class RestApiSnsStack(well_architected.Stack):
         **kwargs,
     ) -> None:
         super().__init__(scope, id, **kwargs)
-        well_architected.constructs.rest_api_sns.RestApiSnsConstruct(
+        well_architected_constructs.rest_api_sns.RestApiSnsConstruct(
             self, 'RestApiSns',
             message="$util.urlEncode($context.path)",
             error_topic=error_topic,

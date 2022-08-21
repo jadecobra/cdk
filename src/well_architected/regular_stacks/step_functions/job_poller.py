@@ -1,5 +1,5 @@
 import aws_cdk
-import well_architected
+
 
 from aws_cdk import (
     aws_stepfunctions as _aws_stepfunctions,
@@ -9,7 +9,7 @@ from aws_cdk import (
 )
 
 
-class JobPollerStack(well_architected.Stack):
+class JobPollerStack(well_architected_stack.Stack):
 
     def __init__(self, app: App, id: str, **kwargs) -> None:
         super().__init__(app, id, **kwargs)

@@ -1,14 +1,14 @@
 import aws_cdk
 import constructs
 
-import well_architected
-import well_architected.constructs.lambda_function
-import well_architected.constructs.dynamodb_table
 
-from . import well_architected_stack
+import well_architected_constructs.lambda_function
+import well_architected_constructs.dynamodb_table
+
+import well_architected_stack
 
 
-class SnsLambdaDynamodb(well_architected.Stack):
+class SnsLambdaDynamodb(well_architected_stack.Stack):
 
     def __init__(
         self, scope: constructs.Construct, id: str,
@@ -18,13 +18,13 @@ class SnsLambdaDynamodb(well_architected.Stack):
         super().__init__(scope, id, **kwargs)
 
 
-        self.dynamodb_table = well_architected.constructs.dynamodb_table.DynamodbTableConstruct(
+        self.dynamodb_table = well_architected_constructs.dynamodb_table.DynamodbTableConstruct(
             self, "DynamoDbTable",
             partition_key="path",
             error_topic=self.error_topic,
         ).dynamodb_table
 
-        self.lambda_function = well_architected.constructs.lambda_function.create_python_lambda_function(
+        self.lambda_function = well_architected_constructs.lambda_function.create_python_lambda_function(
             self, function_name="hit_counter",
             error_topic=self.error_topic,
             environment_variables={

@@ -1,15 +1,15 @@
 import aws_cdk
 import aws_cdk.aws_apigatewayv2_alpha
 import constructs
-import well_architected.constructs.http_api_step_functions
-import well_architected.constructs.lambda_function
-import well_architected.constructs.api
-import well_architected
-
-from . import well_architected_stack
+import well_architected_constructs.http_api_step_functions
+import well_architected_constructs.lambda_function
+import well_architected_constructs.api
 
 
-class ApiStepFunctions(well_architected.Stack):
+import well_architected_stack
+
+
+class ApiStepFunctions(well_architected_stack.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
@@ -82,7 +82,7 @@ class ApiStepFunctions(well_architected.Stack):
         )
 
     def create_lambda_function(self, error_topic):
-        return well_architected.constructs.lambda_function.create_python_lambda_function(
+        return well_architected_constructs.lambda_function.create_python_lambda_function(
             self, function_name='lambda_function',
             error_topic=error_topic
         )
@@ -118,7 +118,7 @@ class ApiStepFunctions(well_architected.Stack):
         )
 
     def create_http_api(self, error_topic=None, state_machine_arn=None, api_gateway_service_role=None):
-        well_architected.constructs.http_api_step_functions.HttpApiStepFunctionsConstruct(
+        well_architected_constructs.http_api_step_functions.HttpApiStepFunctionsConstruct(
             self, 'HttpApiStepFunctions',
             error_topic=error_topic,
             api_gateway_service_role=api_gateway_service_role,
@@ -128,7 +128,7 @@ class ApiStepFunctions(well_architected.Stack):
     def create_rest_api(
         self, error_topic=None, state_machine=None, api_gateway_service_role=None
     ):
-        return well_architected.constructs.api.Api(
+        return well_architected_constructs.api.Api(
             self, 'RestApi',
             error_topic=error_topic,
             api_gateway_service_role=api_gateway_service_role,

@@ -1,14 +1,14 @@
 import aws_cdk
 import constructs
-import well_architected
-import well_architected.constructs.lambda_function
-import well_architected.constructs.rest_api
-import well_architected.constructs.rest_api_sns
 
-from . import well_architected_stack
+import well_architected_constructs.lambda_function
+import well_architected_constructs.rest_api
+import well_architected_constructs.rest_api_sns
+
+import well_architected_stack
 
 
-class RestApiSnsSqsLambda(well_architected.Stack):
+class RestApiSnsSqsLambda(well_architected_stack.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
@@ -33,7 +33,7 @@ class RestApiSnsSqsLambda(well_architected.Stack):
                 sqs_queue=sqs_queue,
             )
 
-        well_architected.constructs.rest_api_sns.RestApiSnsConstruct(
+        well_architected_constructs.rest_api_sns.RestApiSnsConstruct(
             self, 'RestApiSns',
             error_topic=self.error_topic,
             sns_topic_arn=sns_topic.topic_arn,
@@ -80,7 +80,7 @@ class RestApiSnsSqsLambda(well_architected.Stack):
             )
 
     def create_lambda_function(self, function_name=None, error_topic=None):
-        return well_architected.constructs.lambda_function.LambdaFunctionConstruct(
+        return well_architected_constructs.lambda_function.LambdaFunctionConstruct(
             self, function_name,
             error_topic=error_topic,
         ).lambda_function

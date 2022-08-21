@@ -3,13 +3,13 @@ import constructs
 import aws_cdk.aws_apigatewayv2_alpha
 import aws_cdk.aws_apigatewayv2_integrations_alpha
 
-import well_architected
-import well_architected.constructs.api
-import well_architected.constructs.api_lambda
-import well_architected.constructs.lambda_function
+
+import well_architected_constructs.api
+import well_architected_constructs.api_lambda
+import well_architected_constructs.lambda_function
 
 
-class LambdaTrilogy(well_architected.Stack):
+class LambdaTrilogy(well_architected_stack.Stack):
 
     def __init__(
         self, scope: constructs.Construct, id: str,
@@ -70,7 +70,7 @@ class LambdaTrilogy(well_architected.Stack):
         )
 
     def create_rest_api(self, error_topic=None, lambda_function=None):
-        return well_architected.constructs.api_lambda.create_rest_api_lambda(
+        return well_architected_constructs.api_lambda.create_rest_api_lambda(
             self,
             error_topic=error_topic,
             lambda_function=lambda_function,
@@ -78,7 +78,7 @@ class LambdaTrilogy(well_architected.Stack):
         ).api
 
     def create_http_api(self, error_topic):
-        return well_architected.constructs.api.Api(
+        return well_architected_constructs.api.Api(
             self, 'HttpApiGateway',
             error_topic=error_topic,
             api_gateway_service_role=False,
@@ -88,7 +88,7 @@ class LambdaTrilogy(well_architected.Stack):
         ).api
 
     def create_lambda_function(self, handler_name):
-        return well_architected.constructs.lambda_function.LambdaFunctionConstruct(
+        return well_architected_constructs.lambda_function.LambdaFunctionConstruct(
             self, handler_name,
             error_topic=self.error_topic,
             function_name=self.function_name,

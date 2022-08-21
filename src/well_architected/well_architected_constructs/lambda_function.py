@@ -1,8 +1,10 @@
 import constructs
 import aws_cdk
-import well_architected
 
-class LambdaFunctionConstruct(well_architected.Construct):
+import well_architected_construct
+
+
+class LambdaFunctionConstruct(well_architected_construct.Construct):
 
     def __init__(
         self, scope: constructs.Construct, id: str,

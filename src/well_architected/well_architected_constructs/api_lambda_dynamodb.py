@@ -1,12 +1,13 @@
 import constructs
-import well_architected
-import well_architected.constructs.api
-import well_architected.constructs.api_lambda
-import well_architected.constructs.dynamodb_table
-import well_architected.constructs.lambda_function
+import well_architected_constructs.api
+import well_architected_constructs.api_lambda
+import well_architected_constructs.dynamodb_table
+import well_architected_constructs.lambda_function
+
+import well_architected_construct
 
 
-class ApiLambdaDynamodbConstruct(well_architected.Construct):
+class ApiLambdaDynamodbConstruct(well_architected_construct.Construct):
 
     def __init__(
         self, scope: constructs.Construct, id: str,
@@ -31,17 +32,17 @@ class ApiLambdaDynamodbConstruct(well_architected.Construct):
         )
         self.dynamodb_table.grant_read_write_data(self.lambda_function)
 
-        self.http_api = well_architected.constructs.api_lambda.create_http_api_lambda(
+        self.http_api = well_architected_constructs.api_lambda.create_http_api_lambda(
             self, lambda_function=self.lambda_function,
             error_topic=error_topic,
         )
-        self.rest_api = well_architected.constructs.api_lambda.create_rest_api_lambda(
+        self.rest_api = well_architected_constructs.api_lambda.create_rest_api_lambda(
             self, lambda_function=self.lambda_function,
             error_topic=error_topic,
         )
 
     def create_dynamodb_table(self, partition_key=None, error_topic=None):
-        return well_architected.constructs.dynamodb_table.DynamodbTableConstruct(
+        return well_architected_constructs.dynamodb_table.DynamodbTableConstruct(
             self, 'DynamoDbTable',
             partition_key=partition_key,
             error_topic=error_topic,
@@ -51,7 +52,7 @@ class ApiLambdaDynamodbConstruct(well_architected.Construct):
         self, dynamodb_table_name=None, function_name=None,
         error_topic=None,
     ):
-        return well_architected.constructs.lambda_function.LambdaFunctionConstruct(
+        return well_architected_constructs.lambda_function.LambdaFunctionConstruct(
             self, 'LambdaFunction',
             error_topic=error_topic,
             function_name=function_name,

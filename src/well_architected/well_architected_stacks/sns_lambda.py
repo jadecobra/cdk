@@ -1,13 +1,13 @@
 import aws_cdk
 import constructs
-import well_architected
-import well_architected.constructs.lambda_function
-import well_architected.constructs.sns_lambda
 
-from . import well_architected_stack
+import well_architected_constructs.lambda_function
+import well_architected_constructs.sns_lambda
+
+import well_architected_stack
 
 
-class SnsLambda(well_architected.Stack):
+class SnsLambda(well_architected_stack.Stack):
 
     def __init__(
         self, scope: constructs.Construct,
@@ -16,7 +16,7 @@ class SnsLambda(well_architected.Stack):
         **kwargs
     ) -> None:
         super().__init__(scope, id, **kwargs)
-        well_architected.constructs.sns_lambda.SnsLambdaConstruct(
+        well_architected_constructs.sns_lambda.SnsLambdaConstruct(
             self, "SnsLambda",
             function_name="sns_lambda",
             sns_topic=sns_topic,

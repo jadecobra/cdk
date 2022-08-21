@@ -1,7 +1,8 @@
 import aws_cdk
 import constructs
+import well_architected_constructs
 
-from . import well_architected_stack
+import well_architected_stack
 
 
 class ApiLambdaDynamodbEventBridgeLambda(well_architected_stack.Stack):
@@ -28,12 +29,12 @@ class ApiLambdaDynamodbEventBridgeLambda(well_architected_stack.Stack):
             dynamodb_table=dynamodb_table,
             error_topic=self.error_topic,
         )
-        well_architected.constructs.api_lambda.create_http_api_lambda(
+        well_architected_constructs.api_lambda.create_http_api_lambda(
             self,
             lambda_function=webservice_lambda_function,
             error_topic=self.error_topic
         )
-        well_architected.constructs.api_lambda.create_rest_api_lambda(
+        well_architected_constructs.api_lambda.create_rest_api_lambda(
             self,
             lambda_function=webservice_lambda_function,
             error_topic=self.error_topic
@@ -43,7 +44,7 @@ class ApiLambdaDynamodbEventBridgeLambda(well_architected_stack.Stack):
         self, function_name=None, error_topic=None, dynamodb_table_name=None,
         duration=None,
     ):
-        return well_architected.constructs.lambda_function.create_python_lambda_function(
+        return well_architected_constructs.lambda_function.create_python_lambda_function(
             self, function_name=function_name,
             error_topic=error_topic,
             environment_variables=dict(DYNAMODB_TABLE_NAME=dynamodb_table_name),
@@ -104,7 +105,7 @@ class ApiLambdaDynamodbEventBridgeLambda(well_architected_stack.Stack):
         )
 
     def create_dynamodb_table(self, error_topic:aws_cdk.aws_sns.Topic=None):
-        return well_architected.constructs.dynamodb_table.DynamodbTableConstruct(
+        return well_architected_constructs.dynamodb_table.DynamodbTableConstruct(
             self, 'CircuitBreaker',
             error_topic=error_topic,
             partition_key="RequestID",

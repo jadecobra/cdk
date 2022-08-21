@@ -2,14 +2,14 @@ import aws_cdk
 import aws_cdk.aws_apigatewayv2_alpha
 import aws_cdk.aws_apigatewayv2_integrations_alpha
 import constructs
-import well_architected
-import well_architected.constructs.lambda_function
-import well_architected.constructs.api_lambda
 
-from . import well_architected_stack
+import well_architected_constructs.lambda_function
+import well_architected_constructs.api_lambda
+
+import well_architected_stack
 
 
-class ApiLambdaRds(well_architected.Stack):
+class ApiLambdaRds(well_architected_stack.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
@@ -29,7 +29,7 @@ class ApiLambdaRds(well_architected.Stack):
             vpc=vpc,
         )
 
-        rds_lambda = well_architected.constructs.lambda_function.create_python_lambda_function(
+        rds_lambda = well_architected_constructs.lambda_function.create_python_lambda_function(
             self, function_name='rds',
             vpc=vpc,
             environment_variables={
@@ -50,11 +50,11 @@ class ApiLambdaRds(well_architected.Stack):
                 description=description
             )
 
-        well_architected.constructs.api_lambda.create_http_api_lambda(
+        well_architected_constructs.api_lambda.create_http_api_lambda(
             self, lambda_function=rds_lambda,
             error_topic=self.error_topic,
         )
-        well_architected.constructs.api_lambda.create_rest_api_lambda(
+        well_architected_constructs.api_lambda.create_rest_api_lambda(
             self, lambda_function=rds_lambda,
             error_topic=self.error_topic,
         )

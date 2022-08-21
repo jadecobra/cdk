@@ -52,7 +52,7 @@ class TestWellArchitectedPatterns(jadecobra.toolkit.TestCase):
         )
         print(result.stderr.decode())
         print(result.stdout.decode())
-        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.returncode, 0)
         for pattern in self.patterns():
             with self.subTest(i=pattern):
                 self.assert_cdk_templates_equal(pattern)

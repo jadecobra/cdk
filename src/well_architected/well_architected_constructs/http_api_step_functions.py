@@ -1,7 +1,7 @@
 import aws_cdk
 import aws_cdk.aws_apigatewayv2_alpha
 import constructs
-import json
+
 from .api import Api
 
 

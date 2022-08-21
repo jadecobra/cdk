@@ -1,6 +1,8 @@
 import aws_cdk
-import well_architected_stacks.api_lambda_dynamodb_event_bridge_lambda
-import well_architected_stacks.api_lambda_dynamodb
+import well_architected_stacks
+import well_architected_stacks.lambda_trilogy
+import well_architected_stacks.simple_graphql_service.simple_graphql_service
+
 # import regular_stacks.ecs
 
 class WellArchitected(aws_cdk.App):
@@ -15,7 +17,7 @@ class WellArchitected(aws_cdk.App):
         # self.in_progress()
 
     def create_well_architected_stacks(self):
-        well_architected_stacks.api_lambda_dynamodb_event_bridge_lambda.ApiLambdaDynamodbEventBridgeLambda(
+        well_architected_stacks.api_lambda_dynamodb_eventbridge_lambda.ApiLambdaDynamodbEventBridgeLambda(
             self, 'ApiLambdaDynamodbEventBridgeLambda',
         )
         well_architected_stacks.api_lambda_dynamodb.ApiLambdaDynamodbStack(
@@ -30,7 +32,7 @@ class WellArchitected(aws_cdk.App):
         well_architected_stacks.api_lambda_sqs_lambda_dynamodb.ApiLambdaSqsLambdaDynamodb(
             self, 'ApiLambdaSqsLambdaDynamodb'
         )
-        well_architected_stacks.api_stepfunctions.ApiStepFunctions(self, 'ApiStepFunctions')
+        well_architected_stacks.api_step_functions.ApiStepFunctions(self, 'ApiStepFunctions')
         well_architected_stacks.lambda_power_tuner.LambdaPowerTuner(self, 'LambdaPowerTuner')
         well_architected_stacks.rest_api_dynamodb.RestApiDynamodb(
             self, 'RestApiDynamodb',
@@ -39,25 +41,25 @@ class WellArchitected(aws_cdk.App):
         well_architected_stacks.rest_api_sns_lambda_eventbridge_lambda.RestApiSnsLambdaEventBridgeLambda(
             self, 'RestApiSnsLambdaEventBridgeLambda'
         )
-        well_architected_stacks.RestApiSnsSqsLambda(self, 'RestApiSnsSqsLambda')
-        well_architected_stacks.S3SqsLambdaEcsEventBridgeLambdaDynamodb(
+        well_architected_stacks.rest_api_sns_sqs_lambda.RestApiSnsSqsLambda(self, 'RestApiSnsSqsLambda')
+        well_architected_stacks.s3_sqs_lambda_ecs_eventbridge_lambda_dynamodb.S3SqsLambdaEcsEventBridgeLambdaDynamodb(
             self, 'S3SqsLambdaEcsEventBridgeLambdaDynamodb'
         )
-        well_architected_stacks.SagaStepFunction(self, 'SagaStepFunction')
-        well_architected_stacks.SimpleGraphQlService(
+        well_architected_stacks.saga_step_function.SagaStepFunction(self, 'SagaStepFunction')
+        well_architected_stacks.simple_graphql_service.simple_graphql_service.SimpleGraphQlService(
             self, 'SimpleGraphqlService'
         )
-        well_architected_stacks.WafApiLambdaDynamodb(
+        well_architected_stacks.waf_api_lambda_dynamodb.WafApiLambdaDynamodb(
             self, 'WafApiLambdaDynamodb'
         )
 
     def lambda_trilogy(self):
-        well_architected_stacks.lambda_trilogy.LambdaLith(self, "LambdaLith")
-        well_architected_stacks.lambda_trilogy.LambdaTrilogy(
+        well_architected_stacks.lambda_trilogy.lambda_lith.LambdaLith(self, "LambdaLith")
+        well_architected_stacks.lambda_trilogy.lambda_lith.LambdaTrilogy(
             self, 'LambdaFat',
             function_name='lambda_fat',
         )
-        well_architected_stacks.lambda_trilogy.LambdaTrilogy(
+        well_architected_stacks.lambda_trilogy.lambda_trilogy.LambdaTrilogy(
             self, 'LambdaSinglePurpose',
             function_name='lambda_single_purpose',
         )

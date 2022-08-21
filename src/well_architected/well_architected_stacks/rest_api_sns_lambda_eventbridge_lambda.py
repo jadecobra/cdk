@@ -1,14 +1,14 @@
 import aws_cdk
 import constructs
-import well_architected
-import well_architected.constructs.lambda_function
-import well_architected.constructs.rest_api
-import well_architected.constructs.rest_api_sns
 
-from . import well_architected_stack
+import well_architected_constructs.lambda_function
+import well_architected_constructs.rest_api
+import well_architected_constructs.rest_api_sns
+
+import well_architected_stack
 
 
-class RestApiSnsLambdaEventBridgeLambda(well_architected.Stack):
+class RestApiSnsLambdaEventBridgeLambda(well_architected_stack.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
@@ -23,7 +23,7 @@ class RestApiSnsLambdaEventBridgeLambda(well_architected.Stack):
             event_bus=event_bus,
         )
 
-        well_architected.constructs.rest_api_sns.RestApiSnsConstruct(
+        well_architected_constructs.rest_api_sns.RestApiSnsConstruct(
             self, 'RestApiSns',
             error_topic=self.error_topic,
             method='GET',
@@ -115,7 +115,7 @@ class RestApiSnsLambdaEventBridgeLambda(well_architected.Stack):
         function_name=None, duration=3, retry_attempts=2,
         error_topic=None,
     ):
-        return well_architected.constructs.lambda_function.LambdaFunctionConstruct(
+        return well_architected_constructs.lambda_function.LambdaFunctionConstruct(
             self, function_name,
             retry_attempts=retry_attempts,
             error_topic=error_topic,

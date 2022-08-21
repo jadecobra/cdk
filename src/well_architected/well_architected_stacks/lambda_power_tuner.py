@@ -2,12 +2,12 @@ import aws_cdk
 import aws_cdk.aws_lambda
 import aws_cdk.aws_sam
 import constructs
-import well_architected
-
-from . import well_architected_stack
 
 
-class LambdaPowerTuner(well_architected.Stack):
+import well_architected_stack
+
+
+class LambdaPowerTuner(well_architected_stack.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)

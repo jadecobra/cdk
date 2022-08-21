@@ -1,14 +1,14 @@
 import json
 import aws_cdk
 import constructs
-import well_architected
-import well_architected.constructs.dynamodb_table
-import well_architected.constructs.lambda_function
 
-from . import well_architected_stack
+import well_architected_constructs.dynamodb_table
+import well_architected_constructs.lambda_function
+
+import well_architected_stack
 
 
-class S3SqsLambdaEcsEventBridgeLambdaDynamodb(well_architected.Stack):
+class S3SqsLambdaEcsEventBridgeLambdaDynamodb(well_architected_stack.Stack):
 
     def __init__(
         self, scope: constructs.Construct, id: str,
@@ -123,7 +123,7 @@ class S3SqsLambdaEcsEventBridgeLambdaDynamodb(well_architected.Stack):
         event_bridge_detail_type=None,
         event_bridge_detail_status=None
     ):
-        return well_architected.constructs.lambda_function.LambdaFunctionConstruct(
+        return well_architected_constructs.lambda_function.LambdaFunctionConstruct(
             self, function_name,
             function_name=function_name,
             error_topic=error_topic,
@@ -169,7 +169,7 @@ class S3SqsLambdaEcsEventBridgeLambdaDynamodb(well_architected.Stack):
         return lambda_function
 
     def create_dynamodb_table(self, error_topic):
-        return well_architected.constructs.dynamodb_table.DynamodbTableConstruct(
+        return well_architected_constructs.dynamodb_table.DynamodbTableConstruct(
             self, 'TransformedData',
             error_topic=error_topic,
             partition_key="id",

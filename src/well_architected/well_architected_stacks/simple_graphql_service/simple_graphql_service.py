@@ -1,13 +1,14 @@
 import aws_cdk
 import aws_cdk.aws_appsync_alpha
-import well_architected
-import well_architected.constructs.lambda_function
-import well_architected.constructs.dynamodb_table
 import constructs
 import os
+import well_architected_constructs.lambda_function
+import well_architected_constructs.dynamodb_table
+import well_architected_stack
 
 
-class SimpleGraphQlService(well_architected.Stack):
+
+class SimpleGraphQlService(well_architected_stack.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
@@ -16,7 +17,7 @@ class SimpleGraphQlService(well_architected.Stack):
         self.add_dynamodb_data_source(
             graphql_api.add_dynamo_db_data_source(
                 'DynamoDbDataSource',
-                well_architected.constructs.dynamodb_table.DynamodbTableConstruct(
+                well_architected_constructs.dynamodb_table.DynamodbTableConstruct(
                     self, 'DynamodbTable',
                     error_topic=self.error_topic,
                     partition_key="id",
@@ -40,14 +41,14 @@ class SimpleGraphQlService(well_architected.Stack):
             aws_cdk.CfnOutput(self, logical_id, value=value)
 
     def create_dynamodb_table(self, partition_key=None, error_topic=None):
-        return well_architected.constructs.dynamodb_table.DynamodbTableConstruct(
+        return well_architected_constructs.dynamodb_table.DynamodbTableConstruct(
             self, 'DynamodbTable',
             error_topic=error_topic,
             partition_key=partition_key,
         ).dynamodb_table
 
     def create_lambda_function(self, function_name=None, error_topic=None):
-        return well_architected.constructs.lambda_function.LambdaFunctionConstruct(
+        return well_architected_constructs.lambda_function.LambdaFunctionConstruct(
             self, 'LambdaFunction',
             error_topic=error_topic,
             function_name=function_name,

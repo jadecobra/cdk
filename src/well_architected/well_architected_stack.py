@@ -1,8 +1,6 @@
 import aws_cdk
 import constructs
 
-from . import well_architected_stack
-
 
 class Stack(aws_cdk.Stack):
 

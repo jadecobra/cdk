@@ -1,9 +1,9 @@
 import constructs
 import regular_constructs.ecs_fargate_service
-import well_architected
 
 
-class NlbFargateService(well_architected.Stack):
+
+class NlbFargateService(well_architected_stack.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str,
         container_image=None,

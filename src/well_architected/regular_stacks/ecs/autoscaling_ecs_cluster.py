@@ -1,9 +1,9 @@
 import constructs
 import regular_constructs.autoscaling_ecs
-import well_architected
 
 
-class AutoscalingEcsCluster(well_architected.Stack):
+
+class AutoscalingEcsCluster(well_architected_stack.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs):
         super().__init__(scope, id, **kwargs)

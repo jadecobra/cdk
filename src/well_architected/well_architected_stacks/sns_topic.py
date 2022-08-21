@@ -1,11 +1,11 @@
 import aws_cdk
 import constructs
-import well_architected
-
-from . import well_architected_stack
 
 
-class SnsTopic(well_architected.Stack):
+import well_architected_stack
+
+
+class SnsTopic(well_architected_stack.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str, display_name=None, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)

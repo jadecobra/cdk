@@ -1,10 +1,10 @@
 import constructs
 import well_architected_constructs.api_lambda_dynamodb
 
-from . import well_architected_stack
+import well_architected_stack
 
 
-class ApiLambdaDynamodbStack(well_architected.Stack):
+class ApiLambdaDynamodbStack(well_architected_stack.Stack):
 
     def __init__(
         self, scope: constructs.Construct, id: str,
@@ -12,7 +12,7 @@ class ApiLambdaDynamodbStack(well_architected.Stack):
         **kwargs
     ) -> None:
         super().__init__(scope, id, **kwargs)
-        well_architected.constructs.api_lambda_dynamodb.ApiLambdaDynamodbConstruct(
+        well_architected_constructs.api_lambda_dynamodb.ApiLambdaDynamodbConstruct(
             self, 'ApiLambdaDynamodb',
             function_name=function_name,
             error_topic=self.error_topic,

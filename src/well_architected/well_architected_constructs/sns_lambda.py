@@ -1,10 +1,11 @@
 import aws_cdk
 import constructs
-import well_architected
-import well_architected.constructs.lambda_function
+import well_architected_constructs.lambda_function
+
+import well_architected_construct
 
 
-class SnsLambdaConstruct(well_architected.Construct):
+class SnsLambdaConstruct(well_architected_construct.Construct):
 
     def __init__(
         self, scope: constructs.Construct, id: str,
@@ -20,7 +21,7 @@ class SnsLambdaConstruct(well_architected.Construct):
             **kwargs
         )
 
-        self.lambda_function = well_architected.constructs.lambda_function.create_python_lambda_function(
+        self.lambda_function = well_architected_constructs.lambda_function.create_python_lambda_function(
             scope,
             function_name=function_name,
             error_topic=error_topic,

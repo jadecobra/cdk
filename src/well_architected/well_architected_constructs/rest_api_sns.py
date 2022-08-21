@@ -1,5 +1,6 @@
 import aws_cdk
 import constructs
+
 from .rest_api import RestApiConstruct
 
 

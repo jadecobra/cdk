@@ -1,9 +1,10 @@
 import aws_cdk
 import aws_cdk.aws_apigatewayv2_alpha
 import constructs
-import well_architected
 
-class Api(well_architected.Construct):
+import well_architected_construct
+
+class Api(well_architected_construct.Construct):
 
     def __init__(
         self,scope: constructs.Construct, id: str,
