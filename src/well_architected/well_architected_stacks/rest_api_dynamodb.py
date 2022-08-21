@@ -6,6 +6,8 @@ import well_architected.constructs.lambda_function
 import well_architected.constructs.rest_api
 import json
 
+from . import well_architected_stack
+
 
 class RestApiDynamodb(well_architected.Stack):
 

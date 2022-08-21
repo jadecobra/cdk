@@ -5,6 +5,9 @@ import well_architected
 import well_architected.constructs.lambda_function
 import well_architected.constructs.dynamodb_table
 
+from . import well_architected_stack
+
+
 class SnsLambdaDynamodb(well_architected.Stack):
 
     def __init__(

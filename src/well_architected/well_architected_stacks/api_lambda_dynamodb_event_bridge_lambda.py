@@ -1,14 +1,10 @@
 import aws_cdk
 import constructs
+
 from . import well_architected_stack
-# from . import
-# from . import stack
-# import well_architected.constructs.api_lambda
-# import well_architected.constructs.lambda_function
-# import well_architected.constructs.dynamodb_table
 
 
-class ApiLambdaDynamodbEventBridgeLambda(well_architected.Stack):
+class ApiLambdaDynamodbEventBridgeLambda(well_architected_stack.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)

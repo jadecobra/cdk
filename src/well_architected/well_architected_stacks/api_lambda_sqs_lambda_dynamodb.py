@@ -5,6 +5,8 @@ import well_architected.constructs.lambda_function
 import well_architected.constructs.api_lambda
 import well_architected.constructs.dynamodb_table
 
+from . import well_architected_stack
+
 
 class ApiLambdaSqsLambdaDynamodb(well_architected.Stack):
 

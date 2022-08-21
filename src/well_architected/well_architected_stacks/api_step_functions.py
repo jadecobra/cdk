@@ -6,6 +6,9 @@ import well_architected.constructs.lambda_function
 import well_architected.constructs.api
 import well_architected
 
+from . import well_architected_stack
+
+
 class ApiStepFunctions(well_architected.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:

@@ -5,6 +5,8 @@ import well_architected
 import well_architected.constructs.dynamodb_table
 import well_architected.constructs.lambda_function
 
+from . import well_architected_stack
+
 
 class S3SqsLambdaEcsEventBridgeLambdaDynamodb(well_architected.Stack):
 

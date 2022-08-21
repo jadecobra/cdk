@@ -6,6 +6,8 @@ import well_architected.constructs.lambda_function
 import well_architected.constructs.web_application_firewall
 import well_architected.constructs.api_lambda_dynamodb
 
+from . import well_architected_stack
+
 
 class WafApiLambdaDynamodb(well_architected.Stack):
 

@@ -4,6 +4,8 @@ import aws_cdk.aws_sam
 import constructs
 import well_architected
 
+from . import well_architected_stack
+
 
 class LambdaPowerTuner(well_architected.Stack):
 

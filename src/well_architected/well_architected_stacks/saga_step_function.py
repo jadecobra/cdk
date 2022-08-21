@@ -5,6 +5,8 @@ import well_architected.constructs.api_lambda
 import well_architected.constructs.dynamodb_table
 import well_architected.constructs.lambda_function
 
+from . import well_architected_stack
+
 class SagaStepFunction(well_architected.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:

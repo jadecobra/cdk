@@ -4,6 +4,8 @@ import well_architected
 import well_architected.constructs.lambda_function
 import well_architected.constructs.sns_lambda
 
+from . import well_architected_stack
+
 
 class SnsLambdaSns(well_architected.Stack):
 

@@ -5,6 +5,8 @@ import well_architected.constructs.lambda_function
 import well_architected.constructs.rest_api
 import well_architected.constructs.rest_api_sns
 
+from . import well_architected_stack
+
 
 class RestApiSnsLambdaEventBridgeLambda(well_architected.Stack):
 

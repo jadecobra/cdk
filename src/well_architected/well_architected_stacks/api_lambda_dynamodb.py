@@ -1,6 +1,7 @@
 import constructs
-import well_architected
-import well_architected.constructs.api_lambda_dynamodb
+import well_architected_constructs.api_lambda_dynamodb
+
+from . import well_architected_stack
 
 
 class ApiLambdaDynamodbStack(well_architected.Stack):

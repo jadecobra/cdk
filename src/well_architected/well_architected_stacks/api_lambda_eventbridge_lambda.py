@@ -4,6 +4,8 @@ import well_architected
 import well_architected.constructs.lambda_function
 import well_architected.constructs.api_lambda
 
+from . import well_architected_stack
+
 
 class ApiLambdaEventBridgeLambda(well_architected.Stack):
 

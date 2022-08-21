@@ -2,6 +2,8 @@ import aws_cdk
 import constructs
 import well_architected
 
+from . import well_architected_stack
+
 
 class SnsTopic(well_architected.Stack):
 

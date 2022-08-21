@@ -3,6 +3,8 @@ import constructs
 import well_architected
 import well_architected.constructs.rest_api_sns
 
+from . import well_architected_stack
+
 
 class RestApiSnsStack(well_architected.Stack):
 
