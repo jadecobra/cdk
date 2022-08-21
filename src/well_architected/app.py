@@ -19,11 +19,11 @@ class WellArchitected(aws_cdk.App):
         well_architected.well_architected_stacks.api_lambda_dynamodb_event_bridge_lambda.ApiLambdaDynamodbEventBridgeLambda(
             self, 'ApiLambdaDynamodbEventBridgeLambda',
         )
-        # well_architected.stacks.api_lambda_dynamodb.ApiLambdaDynamodbStack(
-        #     self, 'ApiLambdaDynamodb',
-        #     function_name='circuit_breaker_lambda',
-        #     partition_key='id',
-        # )
+        well_architected.stacks.api_lambda_dynamodb.ApiLambdaDynamodbStack(
+            self, 'ApiLambdaDynamodb',
+            function_name='circuit_breaker_lambda',
+            partition_key='id',
+        )
         # well_architected.stacks.api_lambda_eventbridge_lambda.ApiLambdaEventBridgeLambda(
         #     self, 'ApiLambdaEventBridgeLambda'
         # )

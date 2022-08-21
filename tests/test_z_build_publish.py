@@ -14,11 +14,11 @@ def get_todo():
     return get_task_file_contents('todo')
 
 def get_task_file_contents(filename):
-  try:
-      with open(tasks_path(filename)) as reader:
-          return reader.readlines()
-  except FileNotFoundError:
-      return []
+    try:
+        with open(tasks_path(filename)) as reader:
+            return reader.readlines()
+    except FileNotFoundError:
+        return []
 
 def write_to_file(filename=None, contents=None):
     with open(tasks_path(filename), 'w') as writer:

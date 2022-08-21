@@ -1,7 +1,6 @@
-import tests.utilities
-import os
 import subprocess
 import jadecobra.toolkit
+
 
 class TestWellArchitectedPatterns(jadecobra.toolkit.TestCase):
 
@@ -40,7 +39,7 @@ class TestWellArchitectedPatterns(jadecobra.toolkit.TestCase):
         )
 
     def test_well_architected_cdk_patterns(self):
-        result = tests.utilities.time_it(
+        result = jadecobra.toolkit.time_it(
             subprocess.run,
             (
                 'cdk ls --app python3 src/well_architected/app.py '
