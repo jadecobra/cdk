@@ -1,8 +1,9 @@
 import tests.utilities
 import os
 import subprocess
+import jadecobra.toolkit
 
-class TestWellArchitectedPatterns(tests.utilities.TestTemplates):
+class TestWellArchitectedPatterns(jadecobra.toolkit.TestCase):
 
     @staticmethod
     def patterns():
@@ -52,25 +53,7 @@ class TestWellArchitectedPatterns(tests.utilities.TestTemplates):
         )
         print(result.stderr.decode())
         print(result.stdout.decode())
-        self.assertNotEqual(result.returncode, 1)
+        self.assertEqual(result.returncode, 1)
         for pattern in self.patterns():
             with self.subTest(i=pattern):
-                self.assert_template_equal(pattern)
-
-    def test_cdk_returncode(self):
-        result = subprocess.run(
-            'cdk ls --app python3 src/app.py',
-            shell=True,
-            capture_output=True
-        )
-        # self.assertEqual(
-        #     result.stderr, b'\n'
-        #     # (
-        #     #     b'\n--app is required either in command-line, '
-        #     #     b'in cdk.json or in ~/.cdk.json\n'
-        #     # )
-        # )
-        self.assertEqual(result.stdout, b'')
-        self.assertEqual(result.returncode, 1)
-        # with self.assertRaises(subprocess.CalledProcessError):
-        #     result.check_returncode()
+                self.assert_cdk_templates_equal(pattern)

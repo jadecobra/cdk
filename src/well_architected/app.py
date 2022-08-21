@@ -1,4 +1,3 @@
-assert 1 == 2
 import aws_cdk
 import well_architected.well_architected_stacks
 import well_architected.well_architected_stacks.api_lambda_dynamodb_event_bridge_lambda
