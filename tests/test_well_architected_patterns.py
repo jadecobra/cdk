@@ -42,7 +42,7 @@ class TestWellArchitectedPatterns(jadecobra.toolkit.TestCase):
         result = jadecobra.toolkit.time_it(
             subprocess.run,
             (
-                'cdk ls --app python3 src/well_architected/app.py '
+                'cdk ls '
                 '--version-reporting=false'
                 '--path-metadata=false --asset-metadata=false'
             ),

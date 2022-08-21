@@ -1,7 +1,6 @@
 import aws_cdk
-import well_architected.well_architected_stacks
-import well_architected.well_architected_stacks.api_lambda_dynamodb_event_bridge_lambda
-import well_architected.well_architected_stacks.api_lambda_dynamodb
+import well_architected_stacks.api_lambda_dynamodb_event_bridge_lambda
+import well_architected_stacks.api_lambda_dynamodb
 # import regular_stacks.ecs
 
 class WellArchitected(aws_cdk.App):

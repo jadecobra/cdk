@@ -1,7 +1,6 @@
 import aws_cdk
 import constructs
-from . import stack
-assert 5 == 6
+from . import well_architected_stack
 # from . import
 # from . import stack
 # import well_architected.constructs.api_lambda
