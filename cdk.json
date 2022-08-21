@@ -1,0 +1,15 @@
+{
+  "app": "python src/well_architected/app.py",
+  "assetMetadata": false,
+  "requireApproval": "never",
+  "versionReporting": false,
+  "language": "python",
+  "output": "cdk.out",
+  "pathMetadata": false,
+  "progress": "events",
+  "rollback": false,
+  "context": {
+    "aws-cdk:enableDiffNoFail": "true",
+    "@aws-cdk/core:stackRelativeExports": true
+  }
+}
