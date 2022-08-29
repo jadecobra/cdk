@@ -1301,7 +1301,9 @@
             ]
           }
         ]
-      }
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain"
     },
     "RestApiLambdaFunctionAccount73A80E55": {
       "Type": "AWS::ApiGateway::Account",
@@ -1310,7 +1312,9 @@
           "Fn::GetAtt": ["RestApiLambdaFunctionCloudWatchRoleC3D96D40", "Arn"]
         }
       },
-      "DependsOn": ["RestApiLambdaFunction1C9F1F79"]
+      "DependsOn": ["RestApiLambdaFunction1C9F1F79"],
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain"
     },
     "RestApiLambdaFunctionDeployment91972A2D8cd3cfa2ff196d394baa80cd1d645bc3": {
       "Type": "AWS::ApiGateway::Deployment",

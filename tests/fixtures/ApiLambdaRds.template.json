@@ -503,9 +503,9 @@
     "DBInstance46641A50": {
       "Type": "AWS::RDS::DBInstance",
       "Properties": {
-        "DBInstanceClass": "db.t2.small",
         "AllocatedStorage": "100",
         "CopyTagsToSnapshot": true,
+        "DBInstanceClass": "db.t2.small",
         "DBSubnetGroupName": {
           "Ref": "DBInstanceSubnetGroupF597B45B"
         },
@@ -1401,7 +1401,9 @@
             ]
           }
         ]
-      }
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain"
     },
     "RestApiLambdaFunctionAccount73A80E55": {
       "Type": "AWS::ApiGateway::Account",
@@ -1410,7 +1412,9 @@
           "Fn::GetAtt": ["RestApiLambdaFunctionCloudWatchRoleC3D96D40", "Arn"]
         }
       },
-      "DependsOn": ["RestApiLambdaFunction1C9F1F79"]
+      "DependsOn": ["RestApiLambdaFunction1C9F1F79"],
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain"
     },
     "RestApiLambdaFunctionDeployment91972A2D4bf3fb22041b69535e9784133a3d4f0b": {
       "Type": "AWS::ApiGateway::Deployment",

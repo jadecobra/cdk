@@ -43,8 +43,9 @@ class TestWellArchitectedPatterns(jadecobra.toolkit.TestCase):
             subprocess.run,
             (
                 'cdk ls '
-                '--version-reporting=false'
-                '--path-metadata=false --asset-metadata=false'
+                '--no-version-reporting '
+                '--no-path-metadata '
+                '--no-asset-metadata'
             ),
             description=f'cdk ls',
             shell=True,
