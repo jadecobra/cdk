@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "Well Architected"
+name = "Well Architected CDK Patterns"
 version = "1.0.0."
 authors = [
   { name="johnnyblase", email="johnnyblasin@gmail.com" },
@@ -17,6 +17,7 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
+dependencies = ["aws-cdk-lib", "constructs"]
 
 [project.urls]
 "Homepage" = "https://github.com/jadecobra/well_architected"

@@ -46,7 +46,7 @@ class LambdaFunctionConstruct(well_architected_construct.Construct):
         )
         self.add_event_bridge_rule(event_bridge_rule)
         self.create_invocations_error_greater_than_2_percent_alarm()
-        self.create_invocation_longer_than_1_second_alarmration_alarm()
+        self.create_invocation_longer_than_1_second_alarm()
         self.create_throttled_invocations_greater_than_2_percent_alarm()
         self.create_cloudwatch_dashboard(
             self.create_cloudwatch_widgets()
@@ -103,7 +103,7 @@ class LambdaFunctionConstruct(well_architected_construct.Construct):
             threshold=2,
         )
 
-    def create_invocation_longer_than_1_second_alarmration_alarm(self):
+    def create_invocation_longer_than_1_second_alarm(self):
         return self.create_cloudwatch_alarm(
             id="LambdaP99LongDurationGreaterThan1s",
             metric=self.lambda_function.metric_duration(statistic="p99"),
