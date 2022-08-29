@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "Well Architected CDK Patterns"
+name = "well_architected"
 version = "1.0.0."
 authors = [
   { name="johnnyblase", email="johnnyblasin@gmail.com" },
