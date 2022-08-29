@@ -118,7 +118,11 @@
             "Value": "ApiLambdaRds/Vpc/PublicSubnet1"
           }
         ]
-      }
+      },
+      "DependsOn": [
+        "VpcPublicSubnet1DefaultRoute3DA9E72A",
+        "VpcPublicSubnet1RouteTableAssociation97140677"
+      ]
     },
     "VpcPublicSubnet2Subnet691E08A3": {
       "Type": "AWS::EC2::Subnet",
@@ -217,7 +221,11 @@
             "Value": "ApiLambdaRds/Vpc/PublicSubnet2"
           }
         ]
-      }
+      },
+      "DependsOn": [
+        "VpcPublicSubnet2DefaultRoute97F91067",
+        "VpcPublicSubnet2RouteTableAssociationDD5762D8"
+      ]
     },
     "VpcPrivateSubnet1Subnet536B997A": {
       "Type": "AWS::EC2::Subnet",
@@ -748,7 +756,13 @@
             ]
           }
         ]
-      }
+      },
+      "DependsOn": [
+        "VpcPrivateSubnet1DefaultRouteBE02A9ED",
+        "VpcPrivateSubnet1RouteTableAssociation70C59FA6",
+        "VpcPrivateSubnet2DefaultRoute060D2087",
+        "VpcPrivateSubnet2RouteTableAssociationA89CAD56"
+      ]
     },
     "rdsLambdaFunctionServiceRoleDefaultPolicyA5DADDA9": {
       "Type": "AWS::IAM::Policy",
@@ -779,7 +793,13 @@
             "Ref": "rdsLambdaFunctionServiceRole9B0C01C5"
           }
         ]
-      }
+      },
+      "DependsOn": [
+        "VpcPrivateSubnet1DefaultRouteBE02A9ED",
+        "VpcPrivateSubnet1RouteTableAssociation70C59FA6",
+        "VpcPrivateSubnet2DefaultRoute060D2087",
+        "VpcPrivateSubnet2RouteTableAssociationA89CAD56"
+      ]
     },
     "rdsLambdaFunctionSecurityGroupA5EB7662": {
       "Type": "AWS::EC2::SecurityGroup",
@@ -795,7 +815,13 @@
         "VpcId": {
           "Ref": "Vpc8378EB38"
         }
-      }
+      },
+      "DependsOn": [
+        "VpcPrivateSubnet1DefaultRouteBE02A9ED",
+        "VpcPrivateSubnet1RouteTableAssociation70C59FA6",
+        "VpcPrivateSubnet2DefaultRoute060D2087",
+        "VpcPrivateSubnet2RouteTableAssociationA89CAD56"
+      ]
     },
     "rdsLambdaFunction42F59D10": {
       "Type": "AWS::Lambda::Function",
@@ -881,7 +907,11 @@
       },
       "DependsOn": [
         "rdsLambdaFunctionServiceRoleDefaultPolicyA5DADDA9",
-        "rdsLambdaFunctionServiceRole9B0C01C5"
+        "rdsLambdaFunctionServiceRole9B0C01C5",
+        "VpcPrivateSubnet1DefaultRouteBE02A9ED",
+        "VpcPrivateSubnet1RouteTableAssociation70C59FA6",
+        "VpcPrivateSubnet2DefaultRoute060D2087",
+        "VpcPrivateSubnet2RouteTableAssociationA89CAD56"
       ]
     },
     "rdsLambdaInvocationsErrorsGreaterThan2Percent44DE28E3": {

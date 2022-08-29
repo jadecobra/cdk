@@ -7,3 +7,5 @@ constructs
 macfsevents
 sniffer
 jadecobra
+build
+twine
