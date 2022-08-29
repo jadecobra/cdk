@@ -1,11 +1,6 @@
 import constructs
-
-import well_architected_constructs.api_lambda
-import well_architected_constructs.dynamodb_table
-import well_architected_constructs.lambda_function
 import well_architected_constructs.web_application_firewall
 import well_architected_constructs.api_lambda_dynamodb
-
 import well_architected_stack
 
 
@@ -31,7 +26,6 @@ class WafApiLambdaDynamodb(well_architected_stack.Stack):
             error_topic=self.error_topic,
             target_arn= f"arn:aws:apigateway:region::/restapis/{self.api_lambda_dynamodb.rest_api.api_id}/stages/{self.api_lambda_dynamodb.rest_api.api.deployment_stage.stage_name}",
         )
-
 
     @staticmethod
     def camel_to_snake(text):
