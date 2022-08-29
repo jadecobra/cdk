@@ -34,6 +34,16 @@ Well-Architected CDK Patterns in Python from https://cdkpatterns.com/patterns/we
 - WafApiLambdaDynamodb
 
 # Available Constructs
+- Api
+- ApiLambda
+- ApiLambdaDynamodb
+- DynamodbTable
+- HttpApiStepFunctions
+- LambdaFunction
+- RestApi
+- RestApiSns
+- SnsLambda
+- WebApplicationFirewall
 
 # Examples
 
