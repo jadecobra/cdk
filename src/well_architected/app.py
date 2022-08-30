@@ -11,8 +11,8 @@ class WellArchitected(aws_cdk.App):
         super().__init__(*args, **kwargs)
 
         self.create_well_architected_stacks()
-        # self.lambda_trilogy()
-        # self.xray_tracer()
+        self.lambda_trilogy()
+        self.xray_tracer()
         # self.ecs()
         # self.in_progress()
 
