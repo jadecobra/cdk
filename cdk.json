@@ -1,5 +1,5 @@
 {
-  "app": "python src/well_architected/app.py",
+  "app": "python tests/app.py",
   "assetMetadata": false,
   "requireApproval": "never",
   "versionReporting": false,

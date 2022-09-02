@@ -1,4 +1,0 @@
-abstract rest api from lambda and sns rest apis
-write well architected auditor - config + lambda + dynamoDBrefactor eventbridge circuit breaker
-fix import statements
-create simple webservice construct
