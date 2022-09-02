@@ -1,6 +1,5 @@
 import sniffer.api
 import subprocess
-import os
 
 watch_paths = ['tests/', 'src/']
 
