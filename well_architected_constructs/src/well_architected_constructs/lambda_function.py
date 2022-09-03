@@ -10,6 +10,7 @@ class LambdaFunctionConstruct(well_architected_construct.Construct):
 
     def __init__(
         self, scope: constructs.Construct, id: str,
+        lambda_directory='lambda_functions',
         concurrent_executions=None,
         duration=60,
         environment_variables=None,
@@ -35,7 +36,7 @@ class LambdaFunctionConstruct(well_architected_construct.Construct):
             self, 'LambdaFunction',
             runtime=aws_cdk.aws_lambda.Runtime.PYTHON_3_9,  # type: ignore
             handler=f'{function_name}.{handler_name}',
-            code=aws_cdk.aws_lambda.Code.from_asset(f"lambda_functions/{function_name}"),
+            code=aws_cdk.aws_lambda.Code.from_asset(f"{lambda_directory}/{function_name}"),
             timeout=aws_cdk.Duration.seconds(duration) if duration else None,
             tracing=aws_cdk.aws_lambda.Tracing.ACTIVE,
             layers=self.create_layers(layers),
