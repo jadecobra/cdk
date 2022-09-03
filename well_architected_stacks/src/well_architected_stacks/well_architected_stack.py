@@ -4,7 +4,12 @@ import constructs
 
 class Stack(aws_cdk.Stack):
 
-    def __init__(self, scope: constructs.Construct, id: str, error_topic=None, **kwargs):
+    def __init__(
+        self,
+        scope: constructs.Construct,
+        id: str,
+        error_topic=None, **kwargs
+    ):
         super().__init__(
             scope, id,
             synthesizer=aws_cdk.LegacyStackSynthesizer(),

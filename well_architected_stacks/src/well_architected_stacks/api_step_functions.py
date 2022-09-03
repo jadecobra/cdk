@@ -1,8 +1,8 @@
 import aws_cdk
 import aws_cdk.aws_apigatewayv2_alpha
 import constructs
-
 import well_architected_constructs
+
 from . import well_architected_stack
 
 

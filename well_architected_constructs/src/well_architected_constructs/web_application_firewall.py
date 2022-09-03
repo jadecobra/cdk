@@ -13,7 +13,7 @@ class WebApplicationFirewall(well_architected_construct.Construct):
         web_application_firewall_scope='REGIONAL',
         **kwargs
     ) -> None:
-        '''NOTE: HTTP APIs are not supported yet'''
+        '''NOTE: HTTP APIs are not supported use WAF + CloudFront > HTTP API'''
         super().__init__(
             scope, id,
             error_topic=error_topic,

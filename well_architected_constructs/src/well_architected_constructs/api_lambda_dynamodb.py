@@ -33,17 +33,6 @@ class ApiLambdaDynamodbConstruct(well_architected_construct.Construct):
         )
         self.dynamodb_table.grant_read_write_data(self.lambda_function)
 
-        self.http_api = api_lambda.create_http_api_lambda(
-            self, lambda_function=self.lambda_function,
-            error_topic=error_topic,
-            lambda_directory=lambda_directory,
-        )
-        self.rest_api = api_lambda.create_rest_api_lambda(
-            self, lambda_function=self.lambda_function,
-            error_topic=error_topic,
-            lambda_directory=lambda_directory,
-        )
-
     def create_dynamodb_table(self, partition_key=None, error_topic=None):
         return dynamodb_table.DynamodbTableConstruct(
             self, 'DynamoDbTable',

@@ -7,10 +7,10 @@ class TestWellArchitectedPatterns(jadecobra.toolkit.TestCase):
     @staticmethod
     def patterns():
         return (
-            'ApiLambdaRds',
             'ApiLambdaDynamodb',
             'ApiLambdaDynamodbEventBridgeLambda',
             'ApiLambdaEventBridgeLambda',
+            'ApiLambdaRds',
             'ApiLambdaSqsLambdaDynamodb',
             'ApiSnsLambdaEventBridgeLambda',
             'ApiSnsSqsLambda',

@@ -2,14 +2,18 @@ import aws_cdk
 import aws_cdk.aws_apigatewayv2_alpha
 import aws_cdk.aws_apigatewayv2_integrations_alpha
 import constructs
-
 import well_architected_constructs
+
 from . import well_architected_stack
 
 
 class ApiLambdaRds(well_architected_stack.Stack):
 
-    def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
+    def __init__(
+        self, scope: constructs.Construct, id: str,
+        lambda_directory=None,
+        **kwargs
+    ) -> None:
         super().__init__(scope, id, **kwargs)
 
         vpc = aws_cdk.aws_ec2.Vpc(self, 'Vpc', max_azs=2)
@@ -29,6 +33,7 @@ class ApiLambdaRds(well_architected_stack.Stack):
 
         rds_lambda = well_architected_constructs.lambda_function.create_python_lambda_function(
             self, function_name='rds',
+            lambda_directory=lambda_directory,
             vpc=vpc,
             environment_variables={
                 "PROXY_ENDPOINT": rds_proxy.endpoint,
