@@ -13,6 +13,7 @@ class SnsLambdaConstruct(well_architected_construct.Construct):
         error_topic=None,
         function_name=None,
         environment_variables=None,
+        lambda_directory=None,
         **kwargs
     ) -> None:
         super().__init__(
@@ -25,6 +26,7 @@ class SnsLambdaConstruct(well_architected_construct.Construct):
             scope,
             function_name=function_name,
             error_topic=error_topic,
+            lambda_directory=lambda_directory,
             environment_variables=environment_variables,
         )
         sns_topic.add_subscription(

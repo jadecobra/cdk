@@ -172,8 +172,10 @@ def create_python_lambda_function(
         stack,
         function_name=None,
         environment_variables=None,
-        duration=60, error_topic=None, vpc=None,
+        duration=60, error_topic=None,
+        vpc=None,
         concurrent_executions=None,
+        lambda_directory=None,
     ):
     return LambdaFunctionConstruct(
         stack, function_name,
@@ -183,4 +185,5 @@ def create_python_lambda_function(
         error_topic=error_topic,
         vpc=vpc,
         concurrent_executions=concurrent_executions,
+        lambda_directory=lambda_directory,
     ).lambda_function
