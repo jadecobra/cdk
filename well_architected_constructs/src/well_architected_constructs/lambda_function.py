@@ -72,9 +72,7 @@ class LambdaFunctionConstruct(well_architected_construct.Construct):
             jadecobra.aws.lambda_deployer.deploy_lambda_layer.LambdaLayer(
                 dependencies=[layer]
             )
-            return [self.create_layer(layer)]
-        else:
-            return []
+        return [self.create_layer(layer)]
 
     def create_layers(self, layers):
         result = self.create_aws_sdk_layer()
