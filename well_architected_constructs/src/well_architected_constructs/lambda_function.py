@@ -1,5 +1,7 @@
 import constructs
 import aws_cdk
+import jadecobra.aws.lambda_deployer.deploy_lambda_layer
+import os
 
 from . import well_architected_construct
 
@@ -63,8 +65,18 @@ class LambdaFunctionConstruct(well_architected_construct.Construct):
             description=f"{layer} Lambda Layer"
         )
 
+    def create_aws_sdk_layer(self):
+        layer = 'aws-xray-sdk'
+        if not os.path.exists(f'lambda_layers/{layer}'):
+            jadecobra.aws.lambda_deployer.deploy_lambda_layer.LambdaLayer(
+                dependencies=[layer]
+            )
+            return [self.create_layer(layer)]
+        else:
+            return []
+
     def create_layers(self, layers):
-        result = [self.create_layer('aws-xray-sdk')]
+        result = self.create_aws_sdk_layer()
         try:
             for layer in layers:
                 result.append(self.create_layer(layer))
