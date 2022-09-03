@@ -7,6 +7,9 @@ class Construct(constructs.Construct):
     def __init__(self, scope: constructs.Construct, id: str, error_topic=None, **kwargs):
         super().__init__(scope, id, **kwargs)
         self.error_topic = error_topic if error_topic else self.create_sns_topic(f'{id}ErrorTopic')
+        self.create_cloudwatch_dashboard(
+            self.create_cloudwatch_widgets()
+        )
 
     def create_sns_topic(self, display_name):
         return aws_cdk.aws_sns.Topic(
@@ -56,3 +59,6 @@ class Construct(constructs.Construct):
                 [widget] for widget in widgets
             ]
         )
+
+    def create_cloudwatch_widgets(self):
+        raise NotImplementedError
