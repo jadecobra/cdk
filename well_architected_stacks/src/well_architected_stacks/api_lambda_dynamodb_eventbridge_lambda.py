@@ -33,16 +33,15 @@ class ApiLambdaDynamodbEventBridgeLambda(well_architected_stack.Stack):
         webservice_lambda_function = self.create_webservice_lambda_function(
             dynamodb_table=dynamodb_table,
             error_topic=self.error_topic,
+            lambda_directory=lambda_directory,
         )
         well_architected_constructs.api_lambda.create_http_api_lambda(
             self,
-            lambda_directory=lambda_directory,
             lambda_function=webservice_lambda_function,
             error_topic=self.error_topic
         )
         well_architected_constructs.api_lambda.create_rest_api_lambda(
             self,
-            lambda_directory=lambda_directory,
             lambda_function=webservice_lambda_function,
             error_topic=self.error_topic
         )
