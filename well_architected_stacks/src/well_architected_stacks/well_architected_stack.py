@@ -8,6 +8,7 @@ class Stack(aws_cdk.Stack):
         self,
         scope: constructs.Construct,
         id: str,
+        lambda_directory='lambda_functions',
         error_topic=None, **kwargs
     ):
         super().__init__(
@@ -16,6 +17,7 @@ class Stack(aws_cdk.Stack):
             **kwargs,
         )
         self.error_topic = error_topic if error_topic else self.create_sns_topic(f'{id}ErrorTopic')
+        self.lambda_directory = lambda_directory
 
     def create_sns_topic(self, display_name):
         return aws_cdk.aws_sns.Topic(
