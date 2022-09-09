@@ -9,31 +9,19 @@ class ApiLambdaDynamodbEventBridgeLambda(well_architected_stack.Stack):
 
     def __init__(
         self, scope: constructs.Construct, id: str,
-        lambda_directory=None,
         **kwargs
     ) -> None:
         super().__init__(scope, id, **kwargs)
 
-        dynamodb_table = self.create_dynamodb_table(self.error_topic)
-        dynamodb_table.add_global_secondary_index(
-            index_name='UrlIndex',
-            partition_key=aws_cdk.aws_dynamodb.Attribute(
-                name="SiteUrl",
-                type=aws_cdk.aws_dynamodb.AttributeType.STRING
-            ),
-            sort_key=self.get_sort_key(),
-        )
+        dynamodb_table = self.create_dynamodb_table()
+        self.add_global_secondary_index(dynamodb_table)
 
         self.create_error_handling_lambda_function(
-            dynamodb_table=dynamodb_table,
-            error_topic=self.error_topic,
-            lambda_directory=lambda_directory,
+            dynamodb_table
         )
 
         webservice_lambda_function = self.create_webservice_lambda_function(
-            dynamodb_table=dynamodb_table,
-            error_topic=self.error_topic,
-            lambda_directory=lambda_directory,
+            dynamodb_table=dynamodb_table
         )
         well_architected_constructs.api_lambda.create_http_api_lambda(
             self,
@@ -47,28 +35,23 @@ class ApiLambdaDynamodbEventBridgeLambda(well_architected_stack.Stack):
         )
 
     def create_lambda_function(
-        self, function_name=None, error_topic=None, dynamodb_table_name=None,
-        lambda_directory=None,
+        self, function_name=None, dynamodb_table_name=None,
         duration=None,
     ):
         return well_architected_constructs.lambda_function.create_python_lambda_function(
             self, function_name=function_name,
-            lambda_directory=lambda_directory,
-            error_topic=error_topic,
+            lambda_directory=self.lambda_directory,
+            error_topic=self.error_topic,
             environment_variables=dict(DYNAMODB_TABLE_NAME=dynamodb_table_name),
             duration=duration,
         )
 
     def create_webservice_lambda_function(
-        self, dynamodb_table:aws_cdk.aws_dynamodb.Table=None,
-        error_topic:aws_cdk.aws_sns.Topic=None,
-        lambda_directory=None,
+        self, dynamodb_table:aws_cdk.aws_dynamodb.Table,
     ):
         lambda_function = self.create_lambda_function(
             function_name='webservice',
-            error_topic=error_topic,
             dynamodb_table_name=dynamodb_table.table_name,
-            lambda_directory=lambda_directory,
             duration=20,
         )
         lambda_function.add_to_role_policy(
@@ -82,14 +65,10 @@ class ApiLambdaDynamodbEventBridgeLambda(well_architected_stack.Stack):
         return lambda_function
 
     def create_error_handling_lambda_function(
-        self, dynamodb_table:aws_cdk.aws_dynamodb.Table=None,
-        lambda_directory=None,
-        error_topic:aws_cdk.aws_sns.Topic=None,
+        self, dynamodb_table:aws_cdk.aws_dynamodb.Table,
     ):
         lambda_function = self.create_lambda_function(
-            lambda_directory=lambda_directory,
             function_name='error',
-            error_topic=error_topic,
             dynamodb_table_name=dynamodb_table.table_name,
             duration=3,
         )
@@ -119,8 +98,18 @@ class ApiLambdaDynamodbEventBridgeLambda(well_architected_stack.Stack):
     def create_dynamodb_table(self, error_topic:aws_cdk.aws_sns.Topic=None):
         return well_architected_constructs.dynamodb_table.DynamodbTableConstruct(
             self, 'CircuitBreaker',
-            error_topic=error_topic,
+            error_topic=self.error_topic,
             partition_key="RequestID",
             sort_key=self.get_sort_key(),
             time_to_live_attribute='ExpirationTime',
         ).dynamodb_table
+
+    def add_global_secondary_index(self, dynamodb_table):
+        return dynamodb_table.add_global_secondary_index(
+            index_name='UrlIndex',
+            partition_key=aws_cdk.aws_dynamodb.Attribute(
+                name="SiteUrl",
+                type=aws_cdk.aws_dynamodb.AttributeType.STRING
+            ),
+            sort_key=self.get_sort_key(),
+        )
