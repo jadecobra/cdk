@@ -79,5 +79,6 @@ class RestApiSnsSqsLambda(well_architected_stack.Stack):
     def create_lambda_function(self, function_name=None, error_topic=None):
         return well_architected_constructs.lambda_function.LambdaFunctionConstruct(
             self, function_name,
-            error_topic=error_topic,
+            error_topic=self.error_topic,
+            lambda_directory=self.lambda_directory,
         ).lambda_function

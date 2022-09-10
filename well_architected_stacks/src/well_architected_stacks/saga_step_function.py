@@ -199,7 +199,8 @@ class SagaStepFunction(well_architected_stack.Stack):
         return well_architected_constructs.lambda_function.LambdaFunctionConstruct(
             self, function_name,
             function_name=function_name,
-            error_topic=error_topic,
+            error_topic=self.error_topic,
+            lambda_directory=self.lambda_directory,
             environment_variables=environment_variables,
         ).lambda_function
 

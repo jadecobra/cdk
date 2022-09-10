@@ -115,7 +115,8 @@ class RestApiSnsLambdaEventBridgeLambda(well_architected_stack.Stack):
         return well_architected_constructs.lambda_function.LambdaFunctionConstruct(
             self, function_name,
             retry_attempts=retry_attempts,
-            error_topic=error_topic,
+            error_topic=self.error_topic,
+            lambda_directory=self.lambda_directory,
             on_success=on_success,
             on_failure=on_failure,
             duration=duration

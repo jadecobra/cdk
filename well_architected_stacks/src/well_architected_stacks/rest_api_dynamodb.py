@@ -60,7 +60,8 @@ class RestApiDynamodb(well_architected_stack.Stack):
     ):
         return well_architected_constructs.lambda_function.LambdaFunctionConstruct(
             self, 'LambdaFunction',
-            error_topic=error_topic,
+            error_topic=self.error_topic,
+            lambda_directory=self.lambda_directory,
             function_name='subscribe',
         ).lambda_function.add_event_source(
             aws_cdk.aws_lambda_event_sources.DynamoEventSource(

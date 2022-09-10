@@ -19,6 +19,7 @@ class WafApiLambdaDynamodb(well_architected_stack.Stack):
             function_name=self.name,
             partition_key=partition_key,
             error_topic=self.error_topic,
+            lambda_directory=self.lambda_directory,
         )
 
         self.web_application_firewall = well_architected_constructs.web_application_firewall.WebApplicationFirewall(

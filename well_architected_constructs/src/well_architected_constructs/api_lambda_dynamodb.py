@@ -56,3 +56,15 @@ class ApiLambdaDynamodbConstruct(well_architected_construct.Construct):
                 'DYNAMODB_TABLE_NAME': dynamodb_table_name
             }
         ).lambda_function
+
+    def create_http_api_lambda(self):
+        return api_lambda.create_http_api_lambda(
+            self, lambda_function=self.lambda_function,
+            error_topic=self.error_topic,
+        )
+
+    def create_rest_api_lambda(self):
+        return api_lambda.create_rest_api_lambda(
+            self, lambda_function=self.lambda_function,
+            error_topic=self.error_topic,
+        )

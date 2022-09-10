@@ -50,7 +50,8 @@ class SimpleGraphQlService(well_architected_stack.Stack):
     def create_lambda_function(self, function_name=None, error_topic=None):
         return well_architected_constructs.lambda_function.LambdaFunctionConstruct(
             self, 'LambdaFunction',
-            error_topic=error_topic,
+            error_topic=self.error_topic,
+            lambda_directory=self.lambda_directory,
             function_name=function_name,
         ).lambda_function
 

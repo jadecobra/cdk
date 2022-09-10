@@ -12,7 +12,6 @@ class ApiLambdaSqsLambdaDynamodb(well_architected_stack.Stack):
 
         dynamodb_table = self.create_dynamodb_table(
             partition_key="id",
-            error_topic=self.error_topic,
         )
 
         sqs_queue = aws_cdk.aws_sqs.Queue(
@@ -44,7 +43,7 @@ class ApiLambdaSqsLambdaDynamodb(well_architected_stack.Stack):
         return well_architected_constructs.dynamodb_table.DynamodbTableConstruct(
             self, "DynamodbTable",
             partition_key=partition_key,
-            error_topic=error_topic,
+            error_topic=self.error_topic,
         ).dynamodb_table
 
     def create_lambda_function(
@@ -56,7 +55,8 @@ class ApiLambdaSqsLambdaDynamodb(well_architected_stack.Stack):
             self, function_name=function_name,
             environment_variables=environment_variables,
             concurrent_executions=concurrent_executions,
-            error_topic=error_topic,
+            error_topic=self.error_topic,
+            lambda_directory=self.lambda_directory,
         )
 
     def create_sqs_publishing_lambda(
@@ -64,7 +64,7 @@ class ApiLambdaSqsLambdaDynamodb(well_architected_stack.Stack):
         error_topic:aws_cdk.aws_sns.Topic=None,
     ):
         lambda_function = self.create_lambda_function(
-            error_topic=error_topic,
+            # error_topic=self.error_topic,
             function_name='api_lambda_sqs_lambda_dynamodb_publisher',
             environment_variables={
                 'SQS_QUEUE_URL': sqs_queue.queue_url
@@ -79,7 +79,8 @@ class ApiLambdaSqsLambdaDynamodb(well_architected_stack.Stack):
         error_topic:aws_cdk.aws_sns.Topic=None,
     ):
         lambda_function = self.create_lambda_function(
-            error_topic=error_topic,
+            # error_topic=self.error_topic,
+            # lambda_directory=self.lambda_directory,
             function_name='api_lambda_sqs_lambda_dynamodb_subscriber',
             environment_variables={
                 'SQS_QUEUE_URL': sqs_queue.queue_url,

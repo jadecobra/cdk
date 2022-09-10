@@ -19,16 +19,17 @@ class ApiLambdaDynamodbStack(well_architected_stack.Stack):
             function_name=function_name,
             error_topic=self.error_topic,
             partition_key=partition_key,
-        ).lambda_function
-
-    def create_http_api_lambda(self):
-        return well_architected_constructs.api_lambda.create_http_api_lambda(
-            self, lambda_function=self.lambda_function,
-            error_topic=self.error_topic,
         )
+        # ).lambda_function
 
-    def create_rest_api_lambda(self):
-        return well_architected_constructs.api_lambda.create_rest_api_lambda(
-            self, lambda_function=self.lambda_function,
-            error_topic=self.error_topic,
-        )
+    # def create_http_api_lambda(self):
+    #     return well_architected_constructs.api_lambda.create_http_api_lambda(
+    #         self, lambda_function=self.lambda_function,
+    #         error_topic=self.error_topic,
+    #     )
+
+    # def create_rest_api_lambda(self):
+    #     return well_architected_constructs.api_lambda.create_rest_api_lambda(
+    #         self, lambda_function=self.lambda_function,
+    #         error_topic=self.error_topic,
+    #     )

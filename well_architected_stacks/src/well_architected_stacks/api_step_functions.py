@@ -81,7 +81,8 @@ class ApiStepFunctions(well_architected_stack.Stack):
     def create_lambda_function(self, error_topic):
         return well_architected_constructs.lambda_function.create_python_lambda_function(
             self, function_name='lambda_function',
-            error_topic=error_topic
+            error_topic=self.error_topic,
+            lambda_directory=self.lambda_directory,
         )
 
     @staticmethod

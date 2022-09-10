@@ -10,6 +10,7 @@ class S3SqsLambdaEcsEventBridgeLambdaDynamodb(well_architected_stack.Stack):
 
     def __init__(
         self, scope: constructs.Construct, id: str,
+        containers_directory=None,
         **kwargs
     ) -> None:
         super().__init__(scope, id, **kwargs)
@@ -32,7 +33,8 @@ class S3SqsLambdaEcsEventBridgeLambdaDynamodb(well_architected_stack.Stack):
             sqs_queue=self.sqs_queue,
             ecs_cluster_name=self.ecs_cluster.cluster_name,
             vpc=self.vpc,
-            image_name='containers/s3DataExtractionTask',
+            # image_name='containers/s3DataExtractionTask',
+            image_name=f'{containers_directory}/s3DataExtractionTask',
             s3_bucket_name=self.s3_bucket.bucket_name,
             s3_object_key=''
         )
@@ -124,7 +126,8 @@ class S3SqsLambdaEcsEventBridgeLambdaDynamodb(well_architected_stack.Stack):
         return well_architected_constructs.lambda_function.LambdaFunctionConstruct(
             self, function_name,
             function_name=function_name,
-            error_topic=error_topic,
+            error_topic=self.error_topic,
+            lambda_directory=self.lambda_directory,
             concurrent_executions=concurrent_executions,
             duration=duration,
             environment_variables=environment_variables,
