@@ -11,7 +11,6 @@ class ApiLambdaRds(well_architected_stack.Stack):
 
     def __init__(
         self, scope: constructs.Construct, id: str,
-        lambda_directory=None,
         **kwargs
     ) -> None:
         super().__init__(scope, id, **kwargs)
@@ -33,7 +32,8 @@ class ApiLambdaRds(well_architected_stack.Stack):
 
         rds_lambda = well_architected_constructs.lambda_function.create_python_lambda_function(
             self, function_name='rds',
-            lambda_directory=lambda_directory,
+            lambda_directory=self.lambda_directory,
+            error_topic=self.error_topic,
             vpc=vpc,
             environment_variables={
                 "PROXY_ENDPOINT": rds_proxy.endpoint,
