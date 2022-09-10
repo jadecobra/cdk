@@ -8,7 +8,6 @@ from . import well_architected_stack
 class ApiLambdaEventBridgeLambda(well_architected_stack.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str,
-        lambda_directory=None,
         **kwargs
     ) -> None:
         super().__init__(scope, id, **kwargs)
@@ -16,7 +15,6 @@ class ApiLambdaEventBridgeLambda(well_architected_stack.Stack):
         self.create_lambda_function(
             handler_name="approved_transaction_handler",
             function_name="atm_consumer",
-            lambda_directory=lambda_directory,
             event_bridge_rule=self.create_event_bridge_rule(
                 rule_name="approved_transactions_rule",
                 description='Approved Transaction',
@@ -29,7 +27,6 @@ class ApiLambdaEventBridgeLambda(well_architected_stack.Stack):
         self.create_lambda_function(
             handler_name="ny_prefix_transaction_handler",
             function_name="atm_consumer",
-            lambda_directory=lambda_directory,
             event_bridge_rule=self.create_event_bridge_rule(
                 rule_name="ny_prefix_transactions_rule",
                 detail={
@@ -41,7 +38,6 @@ class ApiLambdaEventBridgeLambda(well_architected_stack.Stack):
         self.create_lambda_function(
             handler_name="not_approved_transaction_handler",
             function_name="atm_consumer",
-            lambda_directory=lambda_directory,
             event_bridge_rule=self.create_event_bridge_rule(
                 rule_name="not_approved_transaction_rule",
                 detail={
@@ -52,7 +48,6 @@ class ApiLambdaEventBridgeLambda(well_architected_stack.Stack):
 
         atm_producer_lambda = self.create_lambda_function(
             function_name="atm_producer",
-            lambda_directory=lambda_directory,
         )
 
         atm_producer_lambda.add_to_role_policy(
@@ -93,5 +88,6 @@ class ApiLambdaEventBridgeLambda(well_architected_stack.Stack):
             handler_name=handler_name,
             function_name=function_name,
             event_bridge_rule=event_bridge_rule,
-            lambda_directory=lambda_directory,
+            error_topic=self.error_topic,
+            lambda_directory=self.lambda_directory,
         ).lambda_function

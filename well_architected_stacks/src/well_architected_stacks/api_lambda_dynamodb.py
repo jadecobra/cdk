@@ -8,7 +8,6 @@ class ApiLambdaDynamodbStack(well_architected_stack.Stack):
 
     def __init__(
         self, scope: constructs.Construct, id: str,
-        lambda_directory=None,
         function_name=None,
         partition_key=None,
         **kwargs
@@ -16,7 +15,7 @@ class ApiLambdaDynamodbStack(well_architected_stack.Stack):
         super().__init__(scope, id, **kwargs)
         self.lambda_function = well_architected_constructs.api_lambda_dynamodb.ApiLambdaDynamodbConstruct(
             self, 'ApiLambdaDynamodb',
-            lambda_directory=lambda_directory,
+            lambda_directory=self.lambda_directory,
             function_name=function_name,
             error_topic=self.error_topic,
             partition_key=partition_key,
