@@ -34,7 +34,8 @@ class SqsLambdaSqs(well_architected_stack.Stack):
         sqs_publisher = well_architected_constructs.sns_lambda.SnsLambdaConstruct(
             self, 'SqsPublisher',
             function_name='sqs_publisher',
-            error_topic=error_topic,
+            lambda_directory=self.lambda_directory,
+            error_topic=self.error_topic,
             sns_topic=sns_topic,
             environment_variables={
                 'SQS_URL': sqs_queue.queue_url
@@ -48,7 +49,8 @@ class SqsLambdaSqs(well_architected_stack.Stack):
     ):
         sqs_subscriber = well_architected_constructs.lambda_function.create_python_lambda_function(
             self, function_name="sqs_subscriber",
-            error_topic=error_topic,
+            lambda_directory=self.lambda_directory,
+            error_topic=self.error_topic,
         )
         sqs_subscriber.add_event_source(
             aws_cdk.aws_lambda_event_sources.SqsEventSource(sqs_queue)

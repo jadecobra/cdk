@@ -19,21 +19,32 @@ class SnsLambdaSns(well_architected_stack.Stack):
             display_name='SnsTopic'
         )
 
-        well_architected_constructs.sns_lambda.SnsLambdaConstruct(
-            self, 'SnsSubscriber',
+        self.create_lambda_function(
+            construct_id='SnsSubscriber',
             function_name="sns_subscriber",
             sns_topic=topic,
-            error_topic=self.error_topic,
         )
 
-        sns_publisher = well_architected_constructs.sns_lambda.SnsLambdaConstruct(
-            self, 'SnsPublisher',
+        sns_publisher = self.create_lambda_function(
+            construct_id='SnsPublisher',
             function_name='sns_publisher',
             sns_topic=sns_topic,
-            error_topic=self.error_topic,
             environment_variables={
                 'TOPIC_ARN': topic.topic_arn,
             }
-        ).lambda_function
+        )
 
         topic.grant_publish(sns_publisher)
+
+    def create_lambda_function(
+        self, construct_id=None, function_name=None, sns_topic=None,
+        environment_variables=None,
+    ):
+        return well_architected_constructs.sns_lambda.SnsLambdaConstruct(
+            self, construct_id,
+            function_name=function_name,
+            lambda_directory=self.lambda_directory,
+            sns_topic=sns_topic,
+            error_topic=self.error_topic,
+            environment_variables=environment_variables,
+        ).lambda_function

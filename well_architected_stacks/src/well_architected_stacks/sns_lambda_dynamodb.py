@@ -24,6 +24,7 @@ class SnsLambdaDynamodb(well_architected_stack.Stack):
         self.lambda_function = well_architected_constructs.lambda_function.create_python_lambda_function(
             self, function_name="hit_counter",
             error_topic=self.error_topic,
+            lambda_directory=self.lambda_directory,
             environment_variables={
                 "HITS_TABLE_NAME": self.dynamodb_table.table_name
             }

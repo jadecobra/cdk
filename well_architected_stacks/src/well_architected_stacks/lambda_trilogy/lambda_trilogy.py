@@ -93,5 +93,6 @@ class LambdaTrilogy(well_architected_stack.Stack):
             self, handler_name,
             error_topic=self.error_topic,
             function_name=self.function_name,
+            lambda_directory=self.lambda_directory,
             handler_name=handler_name,
         ).lambda_function

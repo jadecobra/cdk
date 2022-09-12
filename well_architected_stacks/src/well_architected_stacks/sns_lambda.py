@@ -17,6 +17,7 @@ class SnsLambda(well_architected_stack.Stack):
         well_architected_constructs.sns_lambda.SnsLambdaConstruct(
             self, "SnsLambda",
             function_name="sns_lambda",
+            lambda_directory=self.lambda_directory,
             sns_topic=sns_topic,
             error_topic=self.error_topic,
         )
