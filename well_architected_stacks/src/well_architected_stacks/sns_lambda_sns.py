@@ -9,7 +9,9 @@ class SnsLambdaSns(well_architected_stack.Stack):
 
     def __init__(
         self, scope: constructs.Construct, id: str,
-        sns_topic=None,
+        sns_publisher_trigger=None,
+        publisher_lambda_name=None,
+        subscriber_lambda_name=None,
         **kwargs
     ) -> None:
         super().__init__(scope, id, **kwargs)
@@ -21,14 +23,14 @@ class SnsLambdaSns(well_architected_stack.Stack):
 
         self.create_lambda_function(
             construct_id='SnsSubscriber',
-            function_name="sns_subscriber",
+            function_name=subscriber_lambda_name,
             sns_topic=topic,
         )
 
         sns_publisher = self.create_lambda_function(
             construct_id='SnsPublisher',
-            function_name='sns_publisher',
-            sns_topic=sns_topic,
+            function_name=publisher_lambda_name,
+            sns_topic=sns_publisher_trigger,
             environment_variables={
                 'TOPIC_ARN': topic.topic_arn,
             }
