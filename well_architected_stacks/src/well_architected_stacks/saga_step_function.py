@@ -210,7 +210,6 @@ class SagaStepFunction(well_architected_stack.Stack):
     ):
         function = self.create_lambda_function(
             function_name=function_name,
-            error_topic=error_topic,
             environment_variables={
                 'TABLE_NAME': table.table_name
             }

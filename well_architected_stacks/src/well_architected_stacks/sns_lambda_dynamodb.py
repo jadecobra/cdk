@@ -33,4 +33,6 @@ class SnsLambdaDynamodb(well_architected_stack.Stack):
             }
         ).lambda_function
 
-        self.dynamodb_table.grant_read_write_data(self.lambda_function)
+        self.dynamodb_table.grant_read_write_data(
+            self.lambda_function
+        )
