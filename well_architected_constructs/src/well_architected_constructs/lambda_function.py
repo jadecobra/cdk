@@ -179,12 +179,6 @@ class LambdaFunctionConstruct(well_architected_construct.Construct):
             )
         except Exception:
             return
-        else:
-            sns_trigger_topic.add_subscription(
-                aws_cdk.aws_sns_subscriptions.LambdaSubscription(
-                    self.lambda_function
-                )
-            )
 
     def add_sqs_trigger(self, sqs_trigger_queue):
         try:

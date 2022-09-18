@@ -135,7 +135,7 @@ class S3SqsLambdaEcsEventBridgeLambdaDynamodb(well_architected_stack.Stack):
         ).lambda_function
 
     def create_sqs_subscriber_lambda_function(
-        self, ecs_task_definition=None, error_topic=None,
+        self, ecs_task_definition=None,
         sqs_queue=None, s3_bucket_name=None, s3_object_key=None,
         image_name=None, ecs_cluster_name=None, vpc=None,
     ):
