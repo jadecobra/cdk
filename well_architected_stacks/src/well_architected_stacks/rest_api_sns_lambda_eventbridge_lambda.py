@@ -101,17 +101,17 @@ class RestApiSnsLambdaEventBridgeLambda(well_architected_stack.Stack):
         )
 
     def create_lambda_function(
-        self, on_failure=None, on_success=None,
-        function_name=None,
+        self,
         duration=3,
-        retry_attempts=2,
         event_bridge_rule=None,
+        function_name=None,
+        on_failure=None,
+        on_success=None,
+        retry_attempts=2,
         sns_trigger_topic=None,
-        retry_attempts=None,
     ):
         return well_architected_constructs.lambda_function.create_python_lambda_function(
             self, function_name,
-            retry_attempts=retry_attempts,
             error_topic=self.error_topic,
             lambda_directory=self.lambda_directory,
             event_bridge_rule=event_bridge_rule,
