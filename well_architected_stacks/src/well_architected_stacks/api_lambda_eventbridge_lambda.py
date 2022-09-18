@@ -81,7 +81,6 @@ class ApiLambdaEventBridgeLambda(well_architected_stack.Stack):
     def create_lambda_function(
         self, handler_name='handler', function_name=None,
         event_bridge_rule:aws_cdk.aws_events.Rule=None,
-        lambda_directory=None,
     ):
         return well_architected_constructs.lambda_function.LambdaFunctionConstruct(
             self, handler_name,

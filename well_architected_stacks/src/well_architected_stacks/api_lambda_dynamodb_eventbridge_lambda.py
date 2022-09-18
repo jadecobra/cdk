@@ -15,14 +15,9 @@ class ApiLambdaDynamodbEventBridgeLambda(well_architected_stack.Stack):
 
         dynamodb_table = self.create_dynamodb_table()
         self.add_global_secondary_index(dynamodb_table)
+        self.create_error_handling_lambda_function(dynamodb_table)
+        webservice_lambda_function = self.create_webservice_lambda_function(dynamodb_table)
 
-        self.create_error_handling_lambda_function(
-            dynamodb_table
-        )
-
-        webservice_lambda_function = self.create_webservice_lambda_function(
-            dynamodb_table=dynamodb_table
-        )
         well_architected_constructs.api_lambda.create_http_api_lambda(
             self,
             lambda_function=webservice_lambda_function,
@@ -95,7 +90,7 @@ class ApiLambdaDynamodbEventBridgeLambda(well_architected_stack.Stack):
             type=aws_cdk.aws_dynamodb.AttributeType.NUMBER
         )
 
-    def create_dynamodb_table(self, error_topic:aws_cdk.aws_sns.Topic=None):
+    def create_dynamodb_table(self):
         return well_architected_constructs.dynamodb_table.DynamodbTableConstruct(
             self, 'CircuitBreaker',
             error_topic=self.error_topic,

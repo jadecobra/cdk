@@ -13,20 +13,16 @@ class ApiStepFunctions(well_architected_stack.Stack):
 
         self.result_path = '$.resultPath'
         self.state_machine = self.create_state_machine(
-            self.create_lambda_function(
-                self.error_topic
-            )
+            self.create_lambda_function()
         )
         self.api_gateway_service_role = self.create_api_gateway_service_role(self.state_machine.state_machine_arn)
 
         self.rest_api = self.create_rest_api(
-            error_topic=self.error_topic,
             state_machine=self.state_machine,
             api_gateway_service_role=self.api_gateway_service_role,
         )
 
         self.http_api = self.create_http_api(
-            error_topic=self.error_topic,
             api_gateway_service_role=self.api_gateway_service_role,
             state_machine_arn=self.state_machine.state_machine_arn,
         )
@@ -78,7 +74,7 @@ class ApiStepFunctions(well_architected_stack.Stack):
                 .next(self.make_decision())
         )
 
-    def create_lambda_function(self, error_topic):
+    def create_lambda_function(self):
         return well_architected_constructs.lambda_function.create_python_lambda_function(
             self, function_name='lambda_function',
             error_topic=self.error_topic,
@@ -115,20 +111,18 @@ class ApiStepFunctions(well_architected_stack.Stack):
             state_machine_type=aws_cdk.aws_stepfunctions.StateMachineType.EXPRESS
         )
 
-    def create_http_api(self, error_topic=None, state_machine_arn=None, api_gateway_service_role=None):
+    def create_http_api(self, state_machine_arn=None, api_gateway_service_role=None):
         well_architected_constructs.http_api_step_functions.HttpApiStepFunctionsConstruct(
             self, 'HttpApiStepFunctions',
-            error_topic=error_topic,
+            error_topic=self.error_topic,
             api_gateway_service_role=api_gateway_service_role,
             state_machine_arn=state_machine_arn,
         )
 
-    def create_rest_api(
-        self, error_topic=None, state_machine=None, api_gateway_service_role=None
-    ):
+    def create_rest_api(self, state_machine=None, api_gateway_service_role=None):
         return well_architected_constructs.api.Api(
             self, 'RestApi',
-            error_topic=error_topic,
+            error_topic=self.error_topic,
             api_gateway_service_role=api_gateway_service_role,
             api=aws_cdk.aws_apigateway.StepFunctionsRestApi(
                 self, 'RestApiStepFunctions',

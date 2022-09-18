@@ -11,14 +11,8 @@ class RestApiSnsLambdaEventBridgeLambda(well_architected_stack.Stack):
         super().__init__(scope, id, **kwargs)
 
         event_bus = self.create_event_bus(id)
-        self.create_success_lambda(
-            error_topic=self.error_topic,
-            event_bus=event_bus,
-        )
-        self.create_failure_lambda(
-            error_topic=self.error_topic,
-            event_bus=event_bus,
-        )
+        self.create_success_lambda(event_bus)
+        self.create_failure_lambda(event_bus)
 
         well_architected_constructs.rest_api_sns.RestApiSnsConstruct(
             self, 'RestApiSns',
@@ -31,10 +25,9 @@ class RestApiSnsLambdaEventBridgeLambda(well_architected_stack.Stack):
             ).topic_arn,
         )
 
-    def create_success_lambda(self, event_bus=None, error_topic=None):
+    def create_success_lambda(self, event_bus):
         return self.create_event_driven_lambda_function(
             function_name="success",
-            error_topic=error_topic,
             event_bus=event_bus,
             description='all success events are caught here and logged centrally',
             response_payload={
@@ -48,10 +41,9 @@ class RestApiSnsLambdaEventBridgeLambda(well_architected_stack.Stack):
             },
         )
 
-    def create_failure_lambda(self, event_bus=None, error_topic=None):
+    def create_failure_lambda(self, event_bus):
         return self.create_event_driven_lambda_function(
             function_name="failure",
-            error_topic=error_topic,
             event_bus=event_bus,
             description='all failure events are caught here and logged centrally',
             response_payload={
@@ -69,7 +61,6 @@ class RestApiSnsLambdaEventBridgeLambda(well_architected_stack.Stack):
                     on_success=aws_cdk.aws_lambda_destinations.EventBridgeDestination(event_bus=event_bus),
                     on_failure=aws_cdk.aws_lambda_destinations.EventBridgeDestination(event_bus=event_bus),
                     duration=None,
-                    error_topic=self.error_topic
                 )
             )
         )
@@ -82,7 +73,7 @@ class RestApiSnsLambdaEventBridgeLambda(well_architected_stack.Stack):
         )
 
     def create_event_driven_lambda_function(
-        self, event_bus=None, description=None, function_name=None, error_topic=None,
+        self, event_bus=None, description=None, function_name=None,
         response_payload=None, additional_details={}
     ):
         details = {
@@ -101,7 +92,6 @@ class RestApiSnsLambdaEventBridgeLambda(well_architected_stack.Stack):
             aws_cdk.aws_events_targets.LambdaFunction(
                 self.create_lambda_function(
                     function_name=function_name,
-                    error_topic=error_topic,
                 )
             )
         )
@@ -110,7 +100,6 @@ class RestApiSnsLambdaEventBridgeLambda(well_architected_stack.Stack):
     def create_lambda_function(
         self, on_failure=None, on_success=None,
         function_name=None, duration=3, retry_attempts=2,
-        error_topic=None,
     ):
         return well_architected_constructs.lambda_function.LambdaFunctionConstruct(
             self, function_name,

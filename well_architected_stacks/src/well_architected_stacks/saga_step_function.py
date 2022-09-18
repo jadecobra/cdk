@@ -20,47 +20,39 @@ class SagaStepFunction(well_architected_stack.Stack):
         flight_reservation_function = self.create_bookings_lambda_function(
             function_name='flights/reserve_flight',
             table=bookings_record,
-            error_topic=self.error_topic,
         )
         flight_confirmation_function = self.create_bookings_lambda_function(
             function_name='flights/confirm_flight',
             table=bookings_record,
-            error_topic=self.error_topic,
         )
         flight_cancellation_function = self.create_bookings_lambda_function(
             function_name='flights/cancel_flight',
             table=bookings_record,
-            error_topic=self.error_topic,
         )
 
         hotel_reservation_function = self.create_bookings_lambda_function(
             function_name="hotels/reserve_hotel",
             table=bookings_record,
-            error_topic=self.error_topic,
         )
 
         hotel_confirmation_function = self.create_bookings_lambda_function(
             function_name='hotels/confirm_hotel',
             table=bookings_record,
-            error_topic=self.error_topic,
         )
 
         hotel_cancellation_function = self.create_bookings_lambda_function(
             function_name="hotels/cancel_hotel",
             table=bookings_record,
-            error_topic=self.error_topic,
         )
 
         payment_processing_function = self.create_bookings_lambda_function(
             function_name="payments/process_payment",
             table=bookings_record,
-            error_topic=self.error_topic,
         )
 
         payment_refund_function = self.create_bookings_lambda_function(
             function_name="payments/refund_payment",
             table=bookings_record,
-            error_topic=self.error_topic,
         )
 
         '''
@@ -140,7 +132,6 @@ class SagaStepFunction(well_architected_stack.Stack):
         )
 
         saga_lambda = self.create_lambda_function(
-            error_topic=self.error_topic,
             function_name='saga_lambda',
             environment_variables={
                 'statemachine_arn': saga_state_machine.state_machine_arn
@@ -206,7 +197,7 @@ class SagaStepFunction(well_architected_stack.Stack):
 
     def create_bookings_lambda_function(
         self, table: aws_cdk.aws_dynamodb.Table=None,
-        function_name=None, error_topic=None
+        function_name=None,
     ):
         function = self.create_lambda_function(
             function_name=function_name,

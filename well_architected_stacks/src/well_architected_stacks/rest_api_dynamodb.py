@@ -15,26 +15,19 @@ class RestApiDynamodb(well_architected_stack.Stack):
     ) -> None:
         super().__init__(scope, id, **kwargs)
 
-        dynamodb_table = self.create_dynamodb_table(
-            partition_key=partition_key,
-            error_topic=self.error_topic,
-        )
+        dynamodb_table = self.create_dynamodb_table(partition_key)
+        self.create_lambda_function_with_dynamodb_event_source(dynamodb_table)
 
-        self.create_lambda_function_with_dynamodb_event_source(
-            dynamodb_table=dynamodb_table,
-            error_topic=self.error_topic,
-        )
-
-        rest_api = self.create_rest_api(self.error_topic)
+        rest_api = self.create_rest_api()
         rest_api.add_method(
             method='POST',
             path='InsertItem',
             uri='arn:aws:apigateway:us-east-1:dynamodb:action/PutItem',
             request_templates=self.get_request_template(dynamodb_table.table_name),
+            error_selection_pattern="BadRequest",
             success_response_templates={
                 partition_key: 'item added to db'
             },
-            error_selection_pattern="BadRequest",
         )
 
         dynamodb_table.grant_read_write_data(rest_api.api_gateway_service_role)
@@ -47,17 +40,15 @@ class RestApiDynamodb(well_architected_stack.Stack):
             }
         })
 
-    def create_dynamodb_table(self, partition_key=None, error_topic=None):
+    def create_dynamodb_table(self, partition_key):
         return well_architected_constructs.dynamodb_table.DynamodbTableConstruct(
             self, 'DynamoDbTable',
             stream=aws_cdk.aws_dynamodb.StreamViewType.NEW_IMAGE,
-            error_topic=error_topic,
+            error_topic=self.error_topic,
             partition_key=partition_key,
         ).dynamodb_table
 
-    def create_lambda_function_with_dynamodb_event_source(
-        self, dynamodb_table=None, error_topic=None
-    ):
+    def create_lambda_function_with_dynamodb_event_source(self, dynamodb_table):
         return well_architected_constructs.lambda_function.LambdaFunctionConstruct(
             self, 'LambdaFunction',
             error_topic=self.error_topic,
@@ -70,8 +61,8 @@ class RestApiDynamodb(well_architected_stack.Stack):
             )
         )
 
-    def create_rest_api(self, error_topic):
+    def create_rest_api(self):
         return well_architected_constructs.rest_api.RestApiConstruct(
             self, 'RestApiDynamodb',
-            error_topic=error_topic,
+            error_topic=self.error_topic,
         )

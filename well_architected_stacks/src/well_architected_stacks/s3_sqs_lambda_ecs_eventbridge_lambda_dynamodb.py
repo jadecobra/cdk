@@ -14,7 +14,7 @@ class S3SqsLambdaEcsEventBridgeLambdaDynamodb(well_architected_stack.Stack):
         **kwargs
     ) -> None:
         super().__init__(scope, id, **kwargs)
-        self.dynamodb_table = self.create_dynamodb_table(self.error_topic)
+        self.dynamodb_table = self.create_dynamodb_table()
         self.sqs_queue = self.create_sqs_queue()
         self.vpc = self.create_vpc()
         self.ecs_cluster = self.create_ecs_cluster(self.vpc)
@@ -29,7 +29,6 @@ class S3SqsLambdaEcsEventBridgeLambdaDynamodb(well_architected_stack.Stack):
 
         self.extractor = self.create_sqs_subscriber_lambda_function(
             ecs_task_definition=self.ecs_task_definition,
-            error_topic=self.error_topic,
             sqs_queue=self.sqs_queue,
             ecs_cluster_name=self.ecs_cluster.cluster_name,
             vpc=self.vpc,
@@ -41,7 +40,6 @@ class S3SqsLambdaEcsEventBridgeLambdaDynamodb(well_architected_stack.Stack):
 
         self.transformer = self.create_lambda_function(
             function_name='transformer',
-            error_topic=self.error_topic,
             event_bridge_rule_description='Data extracted from S3, Needs transformation',
             event_bridge_detail_type='s3RecordExtraction',
             event_bridge_detail_status="extracted",
@@ -49,7 +47,6 @@ class S3SqsLambdaEcsEventBridgeLambdaDynamodb(well_architected_stack.Stack):
 
         self.loader = self.create_lambda_function(
             function_name="loader",
-            error_topic=self.error_topic,
             environment_variables={
                 "DYNAMODB_TABLE_NAME": self.dynamodb_table.table_name
             },
@@ -68,7 +65,6 @@ class S3SqsLambdaEcsEventBridgeLambdaDynamodb(well_architected_stack.Stack):
 
         self.create_lambda_function(
             function_name="observer",
-            error_topic=self.error_topic,
             event_bridge_rule_description='observe and log all events'
         )
 
@@ -115,7 +111,6 @@ class S3SqsLambdaEcsEventBridgeLambdaDynamodb(well_architected_stack.Stack):
     def create_lambda_function(
         self,
         function_name=None,
-        error_topic=None,
         concurrent_executions=2,
         duration=3,
         environment_variables=None,
@@ -146,7 +141,6 @@ class S3SqsLambdaEcsEventBridgeLambdaDynamodb(well_architected_stack.Stack):
     ):
         lambda_function = self.create_lambda_function(
             function_name='extractor',
-            error_topic=error_topic,
             environment_variables={
                 "CLUSTER_NAME": ecs_cluster_name,
                 "SUBNETS": self.get_subnet_ids(vpc),
@@ -169,10 +163,10 @@ class S3SqsLambdaEcsEventBridgeLambdaDynamodb(well_architected_stack.Stack):
         sqs_queue.grant_consume_messages(lambda_function)
         return lambda_function
 
-    def create_dynamodb_table(self, error_topic):
+    def create_dynamodb_table(self):
         return well_architected_constructs.dynamodb_table.DynamodbTableConstruct(
             self, 'TransformedData',
-            error_topic=error_topic,
+            error_topic=self.error_topic,
             partition_key="id",
         ).dynamodb_table
 
