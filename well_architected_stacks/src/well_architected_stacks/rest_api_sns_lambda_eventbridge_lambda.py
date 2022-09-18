@@ -110,18 +110,6 @@ class RestApiSnsLambdaEventBridgeLambda(well_architected_stack.Stack):
         retry_attempts=2,
         sns_trigger_topic=None,
     ):
-        return well_architected_constructs.lambda_function.create_python_lambda_function(
-            self, function_name,
-            error_topic=self.error_topic,
-            lambda_directory=self.lambda_directory,
-            event_bridge_rule=event_bridge_rule,
-            sns_trigger_topic=sns_trigger_topic,
-            on_success=on_success,
-            on_failure=on_failure,
-            duration=duration,
-            retry_attempts=retry_attempts
-        )
-
         return well_architected_constructs.lambda_function.LambdaFunctionConstruct(
             self, function_name,
             retry_attempts=retry_attempts,
