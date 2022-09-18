@@ -37,6 +37,10 @@ class S3SqsLambdaEcsEventBridgeLambdaDynamodb(well_architected_stack.Stack):
             s3_bucket_name=self.s3_bucket.bucket_name,
             s3_object_key=''
         )
+        self.grant_ecs_task_permissions(
+            ecs_task_definition=self.ecs_task_definition,
+            lambda_function=self.extractor,
+        )
 
         self.transformer = self.create_lambda_function(
             function_name='transformer',
@@ -141,7 +145,7 @@ class S3SqsLambdaEcsEventBridgeLambdaDynamodb(well_architected_stack.Stack):
         sqs_queue=None, s3_bucket_name=None, s3_object_key=None,
         image_name=None, ecs_cluster_name=None, vpc=None,
     ):
-        lambda_function = self.create_lambda_function(
+        return self.create_lambda_function(
             function_name='extractor',
             sqs_trigger_queue=sqs_queue,
             environment_variables={
@@ -156,17 +160,6 @@ class S3SqsLambdaEcsEventBridgeLambdaDynamodb(well_architected_stack.Stack):
                 )
             },
         )
-        self.grant_ecs_task_permissions(
-            ecs_task_definition=ecs_task_definition,
-            lambda_function=lambda_function
-        )
-        # lambda_function.add_event_source(
-        #     aws_cdk.aws_lambda_event_sources.SqsEventSource(
-        #         queue=self.sqs_queue
-        #     )
-        # )
-        # sqs_queue.grant_consume_messages(lambda_function)
-        return lambda_function
 
     def create_dynamodb_table(self):
         return well_architected_constructs.dynamodb_table.DynamodbTableConstruct(
