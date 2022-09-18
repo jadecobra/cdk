@@ -80,32 +80,31 @@ class RestApiSnsLambdaEventBridgeLambda(well_architected_stack.Stack):
             "responsePayload": response_payload
         }
         details.update(additional_details)
-        event_bridge_rule = aws_cdk.aws_events.Rule(
-            self, f'event_bridge_rule_{function_name}',
-            event_bus=event_bus,
-            description=description,
-            event_pattern=aws_cdk.aws_events.EventPattern(
-                detail=details,
-            )
-        )
-        event_bridge_rule.add_target(
-            aws_cdk.aws_events_targets.LambdaFunction(
-                self.create_lambda_function(
-                    function_name=function_name,
+        self.create_lambda_function(
+            function_name=function_name,
+            event_bridge_rule=aws_cdk.aws_events.Rule(
+                self, f'event_bridge_rule_{function_name}',
+                event_bus=event_bus,
+                description=description,
+                event_pattern=aws_cdk.aws_events.EventPattern(
+                    detail=details,
                 )
-            )
+            ),
         )
-        return event_bridge_rule
 
     def create_lambda_function(
         self, on_failure=None, on_success=None,
-        function_name=None, duration=3, retry_attempts=2,
+        function_name=None,
+        duration=3,
+        retry_attempts=2,
+        event_bridge_rule=None,
     ):
         return well_architected_constructs.lambda_function.LambdaFunctionConstruct(
             self, function_name,
             retry_attempts=retry_attempts,
             error_topic=self.error_topic,
             lambda_directory=self.lambda_directory,
+            event_bridge_rule=event_bridge_rule,
             on_success=on_success,
             on_failure=on_failure,
             duration=duration
