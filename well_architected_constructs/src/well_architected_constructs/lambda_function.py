@@ -189,7 +189,7 @@ class LambdaFunctionConstruct(well_architected_construct.Construct):
                     queue=sqs_trigger_queue
                 )
             )
-        except AttributeError:
+        except Exception:
             return
         else:
             sqs_trigger_queue.grant_consume_messages(self.lambda_function)
