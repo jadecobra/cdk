@@ -53,17 +53,25 @@ class RestApiSnsLambdaEventBridgeLambda(well_architected_stack.Stack):
 
     def create_sns_triggered_lambda(self, name=None, event_bus=None):
         sns_topic = self.create_sns_topic(f'{name}SnsTopic')
-        sns_topic.add_subscription(
-            aws_cdk.aws_sns_subscriptions.LambdaSubscription(
-                self.create_lambda_function(
-                    function_name=f"{name}_lambda",
-                    retry_attempts=0,
-                    on_success=aws_cdk.aws_lambda_destinations.EventBridgeDestination(event_bus=event_bus),
-                    on_failure=aws_cdk.aws_lambda_destinations.EventBridgeDestination(event_bus=event_bus),
-                    duration=None,
-                )
-            )
+        self.create_lambda_function(
+            function_name=f"{name}_lambda",
+            retry_attempts=0,
+            on_success=aws_cdk.aws_lambda_destinations.EventBridgeDestination(event_bus=event_bus),
+            on_failure=aws_cdk.aws_lambda_destinations.EventBridgeDestination(event_bus=event_bus),
+            sns_trigger_topic=sns_topic,
+            duration=None,
         )
+        # sns_topic.add_subscription(
+        #     aws_cdk.aws_sns_subscriptions.LambdaSubscription(
+        #         self.create_lambda_function(
+        #             function_name=f"{name}_lambda",
+        #             retry_attempts=0,
+        #             on_success=aws_cdk.aws_lambda_destinations.EventBridgeDestination(event_bus=event_bus),
+        #             on_failure=aws_cdk.aws_lambda_destinations.EventBridgeDestination(event_bus=event_bus),
+        #             duration=None,
+        #         )
+        #     )
+        # )
         return sns_topic
 
     def create_event_bus(self, name):
@@ -98,6 +106,7 @@ class RestApiSnsLambdaEventBridgeLambda(well_architected_stack.Stack):
         duration=3,
         retry_attempts=2,
         event_bridge_rule=None,
+        sns_trigger_topic=None,
     ):
         return well_architected_constructs.lambda_function.LambdaFunctionConstruct(
             self, function_name,
@@ -105,6 +114,7 @@ class RestApiSnsLambdaEventBridgeLambda(well_architected_stack.Stack):
             error_topic=self.error_topic,
             lambda_directory=self.lambda_directory,
             event_bridge_rule=event_bridge_rule,
+            sns_trigger_topic=sns_trigger_topic,
             on_success=on_success,
             on_failure=on_failure,
             duration=duration

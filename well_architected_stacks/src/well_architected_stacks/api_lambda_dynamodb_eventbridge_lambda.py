@@ -80,19 +80,6 @@ class ApiLambdaDynamodbEventBridgeLambda(well_architected_stack.Stack):
                 )
             )
         )
-        # aws_cdk.aws_events.Rule(
-        #     self, 'webserviceErrorRule',
-        #     description='Failed Webservice Call',
-        #     event_pattern=aws_cdk.aws_events.EventPattern(
-        #         source=['cdkpatterns.eventbridge.circuitbreaker'],
-        #         detail_type=['httpcall'],
-        #         detail={
-        #             "status": ["fail"]
-        #         }
-        #     )
-        # ).add_target(
-        #     aws_cdk.aws_events_targets.LambdaFunction(lambda_function)
-        # )
         dynamodb_table.grant_write_data(lambda_function)
         return lambda_function
 
