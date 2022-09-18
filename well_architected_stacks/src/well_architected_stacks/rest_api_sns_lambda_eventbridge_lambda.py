@@ -11,18 +11,22 @@ class RestApiSnsLambdaEventBridgeLambda(well_architected_stack.Stack):
         super().__init__(scope, id, **kwargs)
 
         event_bus = self.create_event_bus(id)
+        name = 'destined'
+        sns_topic = self.create_sns_topic(f'{name}SnsTopic')
         self.create_success_lambda(event_bus)
         self.create_failure_lambda(event_bus)
+        self.create_sns_triggered_lambda(
+            name=name,
+            event_bus=event_bus,
+            sns_topic=sns_topic,
+        )
 
         well_architected_constructs.rest_api_sns.RestApiSnsConstruct(
             self, 'RestApiSns',
             error_topic=self.error_topic,
             method='GET',
             message="please $input.params().querystring.get('mode')",
-            sns_topic_arn=self.create_sns_triggered_lambda(
-                name='destined',
-                event_bus=event_bus
-            ).topic_arn,
+            sns_topic_arn=sns_topic.topic_arn,
         )
 
     def create_success_lambda(self, event_bus):
@@ -51,9 +55,10 @@ class RestApiSnsLambdaEventBridgeLambda(well_architected_stack.Stack):
             },
         )
 
-    def create_sns_triggered_lambda(self, name=None, event_bus=None):
-        sns_topic = self.create_sns_topic(f'{name}SnsTopic')
-        self.create_lambda_function(
+    def create_sns_triggered_lambda(
+        self, name=None, event_bus=None, sns_topic=None
+    ):
+        return self.create_lambda_function(
             function_name=f"{name}_lambda",
             retry_attempts=0,
             on_success=aws_cdk.aws_lambda_destinations.EventBridgeDestination(event_bus=event_bus),
@@ -61,18 +66,6 @@ class RestApiSnsLambdaEventBridgeLambda(well_architected_stack.Stack):
             sns_trigger_topic=sns_topic,
             duration=None,
         )
-        # sns_topic.add_subscription(
-        #     aws_cdk.aws_sns_subscriptions.LambdaSubscription(
-        #         self.create_lambda_function(
-        #             function_name=f"{name}_lambda",
-        #             retry_attempts=0,
-        #             on_success=aws_cdk.aws_lambda_destinations.EventBridgeDestination(event_bus=event_bus),
-        #             on_failure=aws_cdk.aws_lambda_destinations.EventBridgeDestination(event_bus=event_bus),
-        #             duration=None,
-        #         )
-        #     )
-        # )
-        return sns_topic
 
     def create_event_bus(self, name):
         return aws_cdk.aws_events.EventBus(
