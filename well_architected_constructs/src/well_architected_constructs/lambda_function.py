@@ -172,13 +172,32 @@ class LambdaFunctionConstruct(well_architected_construct.Construct):
 
     def add_sns_trigger(self, sns_trigger_topic):
         try:
-            return sns_trigger_topic.add_subscription(
-                aws_cdk.aws_sns_subscriptions.LambdaSubscription(
-                    self.lambda_function
+            self.lambda_function.add_event_source(
+                aws_cdk.aws_lambda_event_sources.SnsEventSource(
+                    topic=sns_trigger_topic
                 )
             )
         except AttributeError:
             return
+        else:
+            sns_trigger_topic.add_subscription(
+                aws_cdk.aws_sns_subscriptions.LambdaSubscription(
+                    self.lambda_function
+                )
+            )
+
+
+    def add_sqs_trigger(self, sqs_trigger_queue)
+        try:
+            self.lambda_function.add_event_source(
+                aws_cdk.aws_lambda_event_sources.SqsEventSource(
+                    queue=sqs_trigger_queue
+                )
+            )
+        except AttributeError:
+            return
+        else:
+            sqs_trigger_queue.grant_consume_messages(self.lambda_function)
 
 def create_python_lambda_function(
         stack,

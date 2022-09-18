@@ -47,12 +47,12 @@ class S3SqsLambdaEcsEventBridgeLambdaDynamodb(well_architected_stack.Stack):
 
         self.loader = self.create_lambda_function(
             function_name="loader",
-            environment_variables={
-                "DYNAMODB_TABLE_NAME": self.dynamodb_table.table_name
-            },
             event_bridge_rule_description='Load Transformed Data to DynamoDB',
             event_bridge_detail_type='transform',
             event_bridge_detail_status="transformed",
+            environment_variables={
+                "DYNAMODB_TABLE_NAME": self.dynamodb_table.table_name
+            },
         )
         self.dynamodb_table.grant_read_write_data(self.loader)
 
@@ -158,7 +158,9 @@ class S3SqsLambdaEcsEventBridgeLambdaDynamodb(well_architected_stack.Stack):
             lambda_function=lambda_function
         )
         lambda_function.add_event_source(
-            aws_cdk.aws_lambda_event_sources.SqsEventSource(queue=self.sqs_queue)
+            aws_cdk.aws_lambda_event_sources.SqsEventSource(
+                queue=self.sqs_queue
+            )
         )
         sqs_queue.grant_consume_messages(lambda_function)
         return lambda_function
