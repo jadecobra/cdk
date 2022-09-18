@@ -30,6 +30,7 @@ class TestConstructAttributes(TestWellArchitectedConstructAttributes):
                 *self.well_architected_construct_attributes(),
                 'add_event_bridge_rule',
                 'add_sns_trigger',
+                'add_sqs_trigger',
                 'create_aws_sdk_layer',
                 'create_invocation_longer_than_1_second_alarm',
                 'create_invocations_error_greater_than_2_percent_alarm',

@@ -187,7 +187,7 @@ class LambdaFunctionConstruct(well_architected_construct.Construct):
             )
 
 
-    def add_sqs_trigger(self, sqs_trigger_queue)
+    def add_sqs_trigger(self, sqs_trigger_queue):
         try:
             self.lambda_function.add_event_source(
                 aws_cdk.aws_lambda_event_sources.SqsEventSource(
