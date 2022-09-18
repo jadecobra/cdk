@@ -163,7 +163,9 @@ class LambdaFunctionConstruct(well_architected_construct.Construct):
     def add_event_bridge_rule(self, event_bridge_rule):
         try:
             event_bridge_rule.add_target(
-                aws_cdk.aws_events_targets.LambdaFunction(self.lambda_function)
+                aws_cdk.aws_events_targets.LambdaFunction(
+                    self.lambda_function
+                )
             )
         except AttributeError:
             return
@@ -171,20 +173,23 @@ class LambdaFunctionConstruct(well_architected_construct.Construct):
     def add_sns_trigger(self, sns_trigger_topic):
         try:
             return sns_trigger_topic.add_subscription(
-                aws_cdk.aws_sns_subscriptions.LambdaSubscription(self.lambda_function)
+                aws_cdk.aws_sns_subscriptions.LambdaSubscription(
+                    self.lambda_function
+                )
             )
         except AttributeError:
             return
 
 def create_python_lambda_function(
         stack,
-        function_name=None,
-        environment_variables=None,
-        duration=60, error_topic=None,
-        vpc=None,
         concurrent_executions=None,
-        lambda_directory=None,
+        duration=60,
+        environment_variables=None,
+        error_topic=None,
         event_bridge_rule=None,
+        function_name=None,
+        lambda_directory=None,
+        vpc=None,
     ):
     return LambdaFunctionConstruct(
         stack, function_name,
