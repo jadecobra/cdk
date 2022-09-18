@@ -190,11 +190,13 @@ def create_python_lambda_function(
         function_name=None,
         lambda_directory=None,
         sns_trigger_topic=None,
+        retry_attempts=None,
         vpc=None,
     ):
     return LambdaFunctionConstruct(
         stack, function_name,
         concurrent_executions=concurrent_executions,
+        retry_attempts=retry_attempts,
         duration=duration,
         environment_variables=environment_variables,
         error_topic=error_topic,
