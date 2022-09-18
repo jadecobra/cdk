@@ -23,6 +23,7 @@ class LambdaFunctionConstruct(well_architected_construct.Construct):
         on_failure=None,
         retry_attempts=None,
         sns_trigger_topic=None,
+        sqs_trigger_queue=None,
         vpc=None,
         **kwargs
     ) -> None:
@@ -50,6 +51,7 @@ class LambdaFunctionConstruct(well_architected_construct.Construct):
         )
         self.add_event_bridge_rule(event_bridge_rule)
         self.add_sns_trigger(sns_trigger_topic)
+        self.add_sqs_trigger(sqs_trigger_queue)
         self.create_invocations_error_greater_than_2_percent_alarm()
         self.create_invocation_longer_than_1_second_alarm()
         self.create_throttled_invocations_greater_than_2_percent_alarm()

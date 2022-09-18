@@ -116,22 +116,24 @@ class S3SqsLambdaEcsEventBridgeLambdaDynamodb(well_architected_stack.Stack):
         environment_variables=None,
         event_bridge_rule_description=None,
         event_bridge_detail_type=None,
-        event_bridge_detail_status=None
+        event_bridge_detail_status=None,
+        sqs_trigger_queue=None,
     ):
         return well_architected_constructs.lambda_function.LambdaFunctionConstruct(
             self, function_name,
             function_name=function_name,
-            error_topic=self.error_topic,
-            lambda_directory=self.lambda_directory,
             concurrent_executions=concurrent_executions,
             duration=duration,
             environment_variables=environment_variables,
+            error_topic=self.error_topic,
             event_bridge_rule=self.create_event_bridge_rule(
                 name=function_name,
                 description=event_bridge_rule_description,
                 detail_type=event_bridge_detail_type,
                 status=event_bridge_detail_status,
-            )
+            ),
+            lambda_directory=self.lambda_directory,
+            sqs_trigger_queue=sqs_trigger_queue,
         ).lambda_function
 
     def create_sqs_subscriber_lambda_function(
@@ -141,6 +143,7 @@ class S3SqsLambdaEcsEventBridgeLambdaDynamodb(well_architected_stack.Stack):
     ):
         lambda_function = self.create_lambda_function(
             function_name='extractor',
+            sqs_trigger_queue=sqs_queue,
             environment_variables={
                 "CLUSTER_NAME": ecs_cluster_name,
                 "SUBNETS": self.get_subnet_ids(vpc),
@@ -157,12 +160,12 @@ class S3SqsLambdaEcsEventBridgeLambdaDynamodb(well_architected_stack.Stack):
             ecs_task_definition=ecs_task_definition,
             lambda_function=lambda_function
         )
-        lambda_function.add_event_source(
-            aws_cdk.aws_lambda_event_sources.SqsEventSource(
-                queue=self.sqs_queue
-            )
-        )
-        sqs_queue.grant_consume_messages(lambda_function)
+        # lambda_function.add_event_source(
+        #     aws_cdk.aws_lambda_event_sources.SqsEventSource(
+        #         queue=self.sqs_queue
+        #     )
+        # )
+        # sqs_queue.grant_consume_messages(lambda_function)
         return lambda_function
 
     def create_dynamodb_table(self):
