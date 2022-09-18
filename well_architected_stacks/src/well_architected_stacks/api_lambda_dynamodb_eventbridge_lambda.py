@@ -32,6 +32,7 @@ class ApiLambdaDynamodbEventBridgeLambda(well_architected_stack.Stack):
     def create_lambda_function(
         self, function_name=None, dynamodb_table_name=None,
         duration=None,
+        event_bridge_rule=None,
     ):
         return well_architected_constructs.lambda_function.create_python_lambda_function(
             self, function_name=function_name,
@@ -39,6 +40,7 @@ class ApiLambdaDynamodbEventBridgeLambda(well_architected_stack.Stack):
             error_topic=self.error_topic,
             environment_variables=dict(DYNAMODB_TABLE_NAME=dynamodb_table_name),
             duration=duration,
+            event_bridge_rule=event_bridge_rule,
         )
 
     def create_webservice_lambda_function(
@@ -66,20 +68,31 @@ class ApiLambdaDynamodbEventBridgeLambda(well_architected_stack.Stack):
             function_name='error',
             dynamodb_table_name=dynamodb_table.table_name,
             duration=3,
-        )
-        aws_cdk.aws_events.Rule(
-            self, 'webserviceErrorRule',
-            description='Failed Webservice Call',
-            event_pattern=aws_cdk.aws_events.EventPattern(
-                source=['cdkpatterns.eventbridge.circuitbreaker'],
-                detail_type=['httpcall'],
-                detail={
-                    "status": ["fail"]
-                }
+            event_bridge_rule=aws_cdk.aws_events.Rule(
+                self, 'webserviceErrorRule',
+                description='Failed Webservice Call',
+                event_pattern=aws_cdk.aws_events.EventPattern(
+                    source=['cdkpatterns.eventbridge.circuitbreaker'],
+                    detail_type=['httpcall'],
+                    detail={
+                        "status": ["fail"]
+                    }
+                )
             )
-        ).add_target(
-            aws_cdk.aws_events_targets.LambdaFunction(lambda_function)
         )
+        # aws_cdk.aws_events.Rule(
+        #     self, 'webserviceErrorRule',
+        #     description='Failed Webservice Call',
+        #     event_pattern=aws_cdk.aws_events.EventPattern(
+        #         source=['cdkpatterns.eventbridge.circuitbreaker'],
+        #         detail_type=['httpcall'],
+        #         detail={
+        #             "status": ["fail"]
+        #         }
+        #     )
+        # ).add_target(
+        #     aws_cdk.aws_events_targets.LambdaFunction(lambda_function)
+        # )
         dynamodb_table.grant_write_data(lambda_function)
         return lambda_function
 

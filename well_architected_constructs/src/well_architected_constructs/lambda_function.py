@@ -184,11 +184,13 @@ def create_python_lambda_function(
         vpc=None,
         concurrent_executions=None,
         lambda_directory=None,
+        event_bridge_rule=None,
     ):
     return LambdaFunctionConstruct(
         stack, function_name,
         function_name=function_name,
         environment_variables=environment_variables,
+        event_bridge_rule=event_bridge_rule,
         duration=duration,
         error_topic=error_topic,
         vpc=vpc,
