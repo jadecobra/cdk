@@ -36,18 +36,19 @@ class LambdaFunctionConstruct(well_architected_construct.Construct):
         function_name = function_name if function_name is not None else id
         self.lambda_function = aws_cdk.aws_lambda.Function(
             self, 'LambdaFunction',
-            runtime=aws_cdk.aws_lambda.Runtime.PYTHON_3_9,  # type: ignore
-            handler=f'{function_name}.{handler_name}',
+            architecture=aws_cdk.aws_lambda.Architecture.ARM_64,
             code=aws_cdk.aws_lambda.Code.from_asset(f"{lambda_directory}/{function_name}"),
-            timeout=aws_cdk.Duration.seconds(duration) if duration else None,
-            tracing=aws_cdk.aws_lambda.Tracing.ACTIVE,
-            layers=self.create_layers(layers),
-            vpc=vpc,
-            reserved_concurrent_executions=concurrent_executions,
             environment=environment_variables,
-            retry_attempts=retry_attempts,
+            handler=f'{function_name}.{handler_name}',
+            layers=self.create_layers(layers),
             on_success=on_success,
             on_failure=on_failure,
+            reserved_concurrent_executions=concurrent_executions,
+            runtime=aws_cdk.aws_lambda.Runtime.PYTHON_3_9,  # type: ignore
+            timeout=aws_cdk.Duration.seconds(duration) if duration else None,
+            tracing=aws_cdk.aws_lambda.Tracing.ACTIVE,
+            vpc=vpc,
+            retry_attempts=retry_attempts,
         )
         self.add_event_bridge_rule(event_bridge_rule)
         self.add_sns_trigger(sns_trigger_topic)
