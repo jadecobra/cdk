@@ -1,5 +1,6 @@
 import aws_cdk
 import constructs
+import jsii.errors
 
 
 class Stack(aws_cdk.Stack):
@@ -29,7 +30,12 @@ class Stack(aws_cdk.Stack):
         raise NotImplementedError
 
     def get_vpc(self, vpc_id=None):
-        return aws_cdk.aws_ec2.Vpc.from_lookup(
-            self, 'Vpc',
-            vpc_id=vpc_id if vpc_id else self.node.try_get_context('vpc_id')
-        )
+        try:
+            return aws_cdk.aws_ec2.Vpc.from_lookup(
+                self, 'Vpc',
+                vpc_id=vpc_id if vpc_id else self.node.try_get_context('vpc_id')
+            )
+        except jsii.errors.JSIIError:
+            return aws_cdk.aws_ec2.Vpc(
+                self, 'Vpc'
+            )
