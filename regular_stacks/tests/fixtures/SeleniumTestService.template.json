@@ -1,806 +1,2075 @@
 {
- "Resources": {
-  "SeleniumTestServiceErrorTopicD37461EC": {
-   "Type": "AWS::SNS::Topic",
-   "Properties": {
-    "DisplayName": "SeleniumTestServiceErrorTopic"
-   }
-  },
-  "Vpc8378EB38": {
-   "Type": "AWS::EC2::VPC",
-   "Properties": {
-    "CidrBlock": "10.0.0.0/16",
-    "EnableDnsHostnames": true,
-    "EnableDnsSupport": true,
-    "InstanceTenancy": "default",
-    "Tags": [
-     {
-      "Key": "Name",
-      "Value": "SeleniumTestService/Vpc"
-     }
-    ]
-   }
-  },
-  "VpcPublicSubnet1Subnet5C2D37C4": {
-   "Type": "AWS::EC2::Subnet",
-   "Properties": {
-    "VpcId": {
-     "Ref": "Vpc8378EB38"
-    },
-    "AvailabilityZone": {
-     "Fn::Select": [
-      0,
-      {
-       "Fn::GetAZs": ""
-      }
-     ]
-    },
-    "CidrBlock": "10.0.0.0/18",
-    "MapPublicIpOnLaunch": true,
-    "Tags": [
-     {
-      "Key": "aws-cdk:subnet-name",
-      "Value": "Public"
-     },
-     {
-      "Key": "aws-cdk:subnet-type",
-      "Value": "Public"
-     },
-     {
-      "Key": "Name",
-      "Value": "SeleniumTestService/Vpc/PublicSubnet1"
-     }
-    ]
-   }
-  },
-  "VpcPublicSubnet1RouteTable6C95E38E": {
-   "Type": "AWS::EC2::RouteTable",
-   "Properties": {
-    "VpcId": {
-     "Ref": "Vpc8378EB38"
-    },
-    "Tags": [
-     {
-      "Key": "Name",
-      "Value": "SeleniumTestService/Vpc/PublicSubnet1"
-     }
-    ]
-   }
-  },
-  "VpcPublicSubnet1RouteTableAssociation97140677": {
-   "Type": "AWS::EC2::SubnetRouteTableAssociation",
-   "Properties": {
-    "RouteTableId": {
-     "Ref": "VpcPublicSubnet1RouteTable6C95E38E"
-    },
-    "SubnetId": {
-     "Ref": "VpcPublicSubnet1Subnet5C2D37C4"
-    }
-   }
-  },
-  "VpcPublicSubnet1DefaultRoute3DA9E72A": {
-   "Type": "AWS::EC2::Route",
-   "Properties": {
-    "RouteTableId": {
-     "Ref": "VpcPublicSubnet1RouteTable6C95E38E"
-    },
-    "DestinationCidrBlock": "0.0.0.0/0",
-    "GatewayId": {
-     "Ref": "VpcIGWD7BA715C"
-    }
-   },
-   "DependsOn": [
-    "VpcVPCGWBF912B6E"
-   ]
-  },
-  "VpcPublicSubnet1EIPD7E02669": {
-   "Type": "AWS::EC2::EIP",
-   "Properties": {
-    "Domain": "vpc",
-    "Tags": [
-     {
-      "Key": "Name",
-      "Value": "SeleniumTestService/Vpc/PublicSubnet1"
-     }
-    ]
-   }
-  },
-  "VpcPublicSubnet1NATGateway4D7517AA": {
-   "Type": "AWS::EC2::NatGateway",
-   "Properties": {
-    "SubnetId": {
-     "Ref": "VpcPublicSubnet1Subnet5C2D37C4"
-    },
-    "AllocationId": {
-     "Fn::GetAtt": [
-      "VpcPublicSubnet1EIPD7E02669",
-      "AllocationId"
-     ]
-    },
-    "Tags": [
-     {
-      "Key": "Name",
-      "Value": "SeleniumTestService/Vpc/PublicSubnet1"
-     }
-    ]
-   },
-   "DependsOn": [
-    "VpcPublicSubnet1DefaultRoute3DA9E72A",
-    "VpcPublicSubnet1RouteTableAssociation97140677"
-   ]
-  },
-  "VpcPublicSubnet2Subnet691E08A3": {
-   "Type": "AWS::EC2::Subnet",
-   "Properties": {
-    "VpcId": {
-     "Ref": "Vpc8378EB38"
-    },
-    "AvailabilityZone": {
-     "Fn::Select": [
-      1,
-      {
-       "Fn::GetAZs": ""
-      }
-     ]
-    },
-    "CidrBlock": "10.0.64.0/18",
-    "MapPublicIpOnLaunch": true,
-    "Tags": [
-     {
-      "Key": "aws-cdk:subnet-name",
-      "Value": "Public"
-     },
-     {
-      "Key": "aws-cdk:subnet-type",
-      "Value": "Public"
-     },
-     {
-      "Key": "Name",
-      "Value": "SeleniumTestService/Vpc/PublicSubnet2"
-     }
-    ]
-   }
-  },
-  "VpcPublicSubnet2RouteTable94F7E489": {
-   "Type": "AWS::EC2::RouteTable",
-   "Properties": {
-    "VpcId": {
-     "Ref": "Vpc8378EB38"
-    },
-    "Tags": [
-     {
-      "Key": "Name",
-      "Value": "SeleniumTestService/Vpc/PublicSubnet2"
-     }
-    ]
-   }
-  },
-  "VpcPublicSubnet2RouteTableAssociationDD5762D8": {
-   "Type": "AWS::EC2::SubnetRouteTableAssociation",
-   "Properties": {
-    "RouteTableId": {
-     "Ref": "VpcPublicSubnet2RouteTable94F7E489"
-    },
-    "SubnetId": {
-     "Ref": "VpcPublicSubnet2Subnet691E08A3"
-    }
-   }
-  },
-  "VpcPublicSubnet2DefaultRoute97F91067": {
-   "Type": "AWS::EC2::Route",
-   "Properties": {
-    "RouteTableId": {
-     "Ref": "VpcPublicSubnet2RouteTable94F7E489"
-    },
-    "DestinationCidrBlock": "0.0.0.0/0",
-    "GatewayId": {
-     "Ref": "VpcIGWD7BA715C"
-    }
-   },
-   "DependsOn": [
-    "VpcVPCGWBF912B6E"
-   ]
-  },
-  "VpcPublicSubnet2EIP3C605A87": {
-   "Type": "AWS::EC2::EIP",
-   "Properties": {
-    "Domain": "vpc",
-    "Tags": [
-     {
-      "Key": "Name",
-      "Value": "SeleniumTestService/Vpc/PublicSubnet2"
-     }
-    ]
-   }
-  },
-  "VpcPublicSubnet2NATGateway9182C01D": {
-   "Type": "AWS::EC2::NatGateway",
-   "Properties": {
-    "SubnetId": {
-     "Ref": "VpcPublicSubnet2Subnet691E08A3"
-    },
-    "AllocationId": {
-     "Fn::GetAtt": [
-      "VpcPublicSubnet2EIP3C605A87",
-      "AllocationId"
-     ]
-    },
-    "Tags": [
-     {
-      "Key": "Name",
-      "Value": "SeleniumTestService/Vpc/PublicSubnet2"
-     }
-    ]
-   },
-   "DependsOn": [
-    "VpcPublicSubnet2DefaultRoute97F91067",
-    "VpcPublicSubnet2RouteTableAssociationDD5762D8"
-   ]
-  },
-  "VpcPrivateSubnet1Subnet536B997A": {
-   "Type": "AWS::EC2::Subnet",
-   "Properties": {
-    "VpcId": {
-     "Ref": "Vpc8378EB38"
-    },
-    "AvailabilityZone": {
-     "Fn::Select": [
-      0,
-      {
-       "Fn::GetAZs": ""
-      }
-     ]
-    },
-    "CidrBlock": "10.0.128.0/18",
-    "MapPublicIpOnLaunch": false,
-    "Tags": [
-     {
-      "Key": "aws-cdk:subnet-name",
-      "Value": "Private"
-     },
-     {
-      "Key": "aws-cdk:subnet-type",
-      "Value": "Private"
-     },
-     {
-      "Key": "Name",
-      "Value": "SeleniumTestService/Vpc/PrivateSubnet1"
-     }
-    ]
-   }
-  },
-  "VpcPrivateSubnet1RouteTableB2C5B500": {
-   "Type": "AWS::EC2::RouteTable",
-   "Properties": {
-    "VpcId": {
-     "Ref": "Vpc8378EB38"
-    },
-    "Tags": [
-     {
-      "Key": "Name",
-      "Value": "SeleniumTestService/Vpc/PrivateSubnet1"
-     }
-    ]
-   }
-  },
-  "VpcPrivateSubnet1RouteTableAssociation70C59FA6": {
-   "Type": "AWS::EC2::SubnetRouteTableAssociation",
-   "Properties": {
-    "RouteTableId": {
-     "Ref": "VpcPrivateSubnet1RouteTableB2C5B500"
-    },
-    "SubnetId": {
-     "Ref": "VpcPrivateSubnet1Subnet536B997A"
-    }
-   }
-  },
-  "VpcPrivateSubnet1DefaultRouteBE02A9ED": {
-   "Type": "AWS::EC2::Route",
-   "Properties": {
-    "RouteTableId": {
-     "Ref": "VpcPrivateSubnet1RouteTableB2C5B500"
-    },
-    "DestinationCidrBlock": "0.0.0.0/0",
-    "NatGatewayId": {
-     "Ref": "VpcPublicSubnet1NATGateway4D7517AA"
-    }
-   }
-  },
-  "VpcPrivateSubnet2Subnet3788AAA1": {
-   "Type": "AWS::EC2::Subnet",
-   "Properties": {
-    "VpcId": {
-     "Ref": "Vpc8378EB38"
-    },
-    "AvailabilityZone": {
-     "Fn::Select": [
-      1,
-      {
-       "Fn::GetAZs": ""
-      }
-     ]
-    },
-    "CidrBlock": "10.0.192.0/18",
-    "MapPublicIpOnLaunch": false,
-    "Tags": [
-     {
-      "Key": "aws-cdk:subnet-name",
-      "Value": "Private"
-     },
-     {
-      "Key": "aws-cdk:subnet-type",
-      "Value": "Private"
-     },
-     {
-      "Key": "Name",
-      "Value": "SeleniumTestService/Vpc/PrivateSubnet2"
-     }
-    ]
-   }
-  },
-  "VpcPrivateSubnet2RouteTableA678073B": {
-   "Type": "AWS::EC2::RouteTable",
-   "Properties": {
-    "VpcId": {
-     "Ref": "Vpc8378EB38"
-    },
-    "Tags": [
-     {
-      "Key": "Name",
-      "Value": "SeleniumTestService/Vpc/PrivateSubnet2"
-     }
-    ]
-   }
-  },
-  "VpcPrivateSubnet2RouteTableAssociationA89CAD56": {
-   "Type": "AWS::EC2::SubnetRouteTableAssociation",
-   "Properties": {
-    "RouteTableId": {
-     "Ref": "VpcPrivateSubnet2RouteTableA678073B"
-    },
-    "SubnetId": {
-     "Ref": "VpcPrivateSubnet2Subnet3788AAA1"
-    }
-   }
-  },
-  "VpcPrivateSubnet2DefaultRoute060D2087": {
-   "Type": "AWS::EC2::Route",
-   "Properties": {
-    "RouteTableId": {
-     "Ref": "VpcPrivateSubnet2RouteTableA678073B"
-    },
-    "DestinationCidrBlock": "0.0.0.0/0",
-    "NatGatewayId": {
-     "Ref": "VpcPublicSubnet2NATGateway9182C01D"
-    }
-   }
-  },
-  "VpcIGWD7BA715C": {
-   "Type": "AWS::EC2::InternetGateway",
-   "Properties": {
-    "Tags": [
-     {
-      "Key": "Name",
-      "Value": "SeleniumTestService/Vpc"
-     }
-    ]
-   }
-  },
-  "VpcVPCGWBF912B6E": {
-   "Type": "AWS::EC2::VPCGatewayAttachment",
-   "Properties": {
-    "VpcId": {
-     "Ref": "Vpc8378EB38"
-    },
-    "InternetGatewayId": {
-     "Ref": "VpcIGWD7BA715C"
-    }
-   }
-  },
-  "SeleniumHubCluster058E12BA": {
-   "Type": "AWS::ECS::Cluster"
-  },
-  "AlbEcsFargateServiceLB36079DE9": {
-   "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
-   "Properties": {
-    "LoadBalancerAttributes": [
-     {
-      "Key": "deletion_protection.enabled",
-      "Value": "false"
-     }
-    ],
-    "Scheme": "internet-facing",
-    "SecurityGroups": [
-     {
-      "Fn::GetAtt": [
-       "AlbEcsFargateServiceLBSecurityGroup6FDF4D79",
-       "GroupId"
-      ]
-     }
-    ],
-    "Subnets": [
-     {
-      "Ref": "VpcPublicSubnet1Subnet5C2D37C4"
-     },
-     {
-      "Ref": "VpcPublicSubnet2Subnet691E08A3"
-     }
-    ],
-    "Type": "application"
-   },
-   "DependsOn": [
-    "VpcPublicSubnet1DefaultRoute3DA9E72A",
-    "VpcPublicSubnet1RouteTableAssociation97140677",
-    "VpcPublicSubnet2DefaultRoute97F91067",
-    "VpcPublicSubnet2RouteTableAssociationDD5762D8"
-   ]
-  },
-  "AlbEcsFargateServiceLBSecurityGroup6FDF4D79": {
-   "Type": "AWS::EC2::SecurityGroup",
-   "Properties": {
-    "GroupDescription": "Automatically created Security Group for ELB SeleniumTestServiceAlbEcsFargateServiceLB35E11192",
-    "SecurityGroupIngress": [
-     {
-      "CidrIp": "0.0.0.0/0",
-      "Description": "Allow from anyone on port 4444",
-      "FromPort": 4444,
-      "IpProtocol": "tcp",
-      "ToPort": 4444
-     }
-    ],
-    "VpcId": {
-     "Ref": "Vpc8378EB38"
-    }
-   }
-  },
-  "AlbEcsFargateServiceLBSecurityGrouptoSeleniumTestServiceAlbEcsFargateServiceSecurityGroup1CA2B6EB803CBB1D29": {
-   "Type": "AWS::EC2::SecurityGroupEgress",
-   "Properties": {
-    "GroupId": {
-     "Fn::GetAtt": [
-      "AlbEcsFargateServiceLBSecurityGroup6FDF4D79",
-      "GroupId"
-     ]
-    },
-    "IpProtocol": "tcp",
-    "Description": "Load balancer to target",
-    "DestinationSecurityGroupId": {
-     "Fn::GetAtt": [
-      "AlbEcsFargateServiceSecurityGroupD6183FBF",
-      "GroupId"
-     ]
-    },
-    "FromPort": 80,
-    "ToPort": 80
-   }
-  },
-  "AlbEcsFargateServiceLBPublicListener00195C0A": {
-   "Type": "AWS::ElasticLoadBalancingV2::Listener",
-   "Properties": {
-    "DefaultActions": [
-     {
-      "TargetGroupArn": {
-       "Ref": "AlbEcsFargateServiceLBPublicListenerECSGroup84D9A583"
+  "Resources": {
+    "SeleniumHubClusterVpc94720294": {
+      "Type": "AWS::EC2::VPC",
+      "Properties": {
+        "CidrBlock": "10.0.0.0/16",
+        "EnableDnsHostnames": true,
+        "EnableDnsSupport": true,
+        "InstanceTenancy": "default",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "testing-stack/SeleniumHubCluster/Vpc"
+          }
+        ]
       },
-      "Type": "forward"
-     }
-    ],
-    "LoadBalancerArn": {
-     "Ref": "AlbEcsFargateServiceLB36079DE9"
-    },
-    "Port": 4444,
-    "Protocol": "HTTP"
-   }
-  },
-  "AlbEcsFargateServiceLBPublicListenerECSGroup84D9A583": {
-   "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
-   "Properties": {
-    "Port": 80,
-    "Protocol": "HTTP",
-    "TargetGroupAttributes": [
-     {
-      "Key": "stickiness.enabled",
-      "Value": "false"
-     }
-    ],
-    "TargetType": "ip",
-    "VpcId": {
-     "Ref": "Vpc8378EB38"
-    }
-   }
-  },
-  "AlbEcsFargateServiceTaskDefTaskRole4162B847": {
-   "Type": "AWS::IAM::Role",
-   "Properties": {
-    "AssumeRolePolicyDocument": {
-     "Statement": [
-      {
-       "Action": "sts:AssumeRole",
-       "Effect": "Allow",
-       "Principal": {
-        "Service": "ecs-tasks.amazonaws.com"
-       }
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/Vpc/Resource"
       }
-     ],
-     "Version": "2012-10-17"
-    }
-   }
-  },
-  "AlbEcsFargateServiceTaskDef8E35C672": {
-   "Type": "AWS::ECS::TaskDefinition",
-   "Properties": {
-    "ContainerDefinitions": [
-     {
-      "Essential": true,
-      "Image": "selenium-hub-container",
-      "LogConfiguration": {
-       "LogDriver": "awslogs",
-       "Options": {
-        "awslogs-group": {
-         "Ref": "AlbEcsFargateServiceTaskDefwebLogGroupF727EF18"
+    },
+    "SeleniumHubClusterVpcPublicSubnet1SubnetE01F3B10": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "SeleniumHubClusterVpc94720294"
         },
-        "awslogs-stream-prefix": "AlbEcsFargateService",
-        "awslogs-region": {
-         "Ref": "AWS::Region"
-        }
-       }
+        "AvailabilityZone": "us-west-2a",
+        "CidrBlock": "10.0.0.0/19",
+        "MapPublicIpOnLaunch": true,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Public"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public"
+          },
+          {
+            "Key": "Name",
+            "Value": "testing-stack/SeleniumHubCluster/Vpc/PublicSubnet1"
+          }
+        ]
       },
-      "Name": "web",
-      "PortMappings": [
-       {
-        "ContainerPort": 80,
-        "Protocol": "tcp"
-       }
-      ]
-     }
-    ],
-    "Cpu": "256",
-    "ExecutionRoleArn": {
-     "Fn::GetAtt": [
-      "AlbEcsFargateServiceTaskDefExecutionRole81EDD85F",
-      "Arn"
-     ]
-    },
-    "Family": "SeleniumTestServiceAlbEcsFargateServiceTaskDef60793FD2",
-    "Memory": "512",
-    "NetworkMode": "awsvpc",
-    "RequiresCompatibilities": [
-     "FARGATE"
-    ],
-    "TaskRoleArn": {
-     "Fn::GetAtt": [
-      "AlbEcsFargateServiceTaskDefTaskRole4162B847",
-      "Arn"
-     ]
-    }
-   }
-  },
-  "AlbEcsFargateServiceTaskDefwebLogGroupF727EF18": {
-   "Type": "AWS::Logs::LogGroup",
-   "UpdateReplacePolicy": "Retain",
-   "DeletionPolicy": "Retain"
-  },
-  "AlbEcsFargateServiceTaskDefExecutionRole81EDD85F": {
-   "Type": "AWS::IAM::Role",
-   "Properties": {
-    "AssumeRolePolicyDocument": {
-     "Statement": [
-      {
-       "Action": "sts:AssumeRole",
-       "Effect": "Allow",
-       "Principal": {
-        "Service": "ecs-tasks.amazonaws.com"
-       }
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/Vpc/PublicSubnet1/Subnet"
       }
-     ],
-     "Version": "2012-10-17"
-    }
-   }
-  },
-  "AlbEcsFargateServiceTaskDefExecutionRoleDefaultPolicy8331F3D8": {
-   "Type": "AWS::IAM::Policy",
-   "Properties": {
-    "PolicyDocument": {
-     "Statement": [
-      {
-       "Action": [
-        "logs:CreateLogStream",
-        "logs:PutLogEvents"
-       ],
-       "Effect": "Allow",
-       "Resource": {
-        "Fn::GetAtt": [
-         "AlbEcsFargateServiceTaskDefwebLogGroupF727EF18",
-         "Arn"
+    },
+    "SeleniumHubClusterVpcPublicSubnet1RouteTableB896F850": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "SeleniumHubClusterVpc94720294"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "testing-stack/SeleniumHubCluster/Vpc/PublicSubnet1"
+          }
         ]
-       }
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/Vpc/PublicSubnet1/RouteTable"
       }
-     ],
-     "Version": "2012-10-17"
     },
-    "PolicyName": "AlbEcsFargateServiceTaskDefExecutionRoleDefaultPolicy8331F3D8",
-    "Roles": [
-     {
-      "Ref": "AlbEcsFargateServiceTaskDefExecutionRole81EDD85F"
-     }
-    ]
-   }
-  },
-  "AlbEcsFargateService3B50803D": {
-   "Type": "AWS::ECS::Service",
-   "Properties": {
-    "Cluster": {
-     "Ref": "SeleniumHubCluster058E12BA"
-    },
-    "DeploymentConfiguration": {
-     "MaximumPercent": 100,
-     "MinimumHealthyPercent": 75
-    },
-    "EnableECSManagedTags": false,
-    "HealthCheckGracePeriodSeconds": 60,
-    "LaunchType": "FARGATE",
-    "LoadBalancers": [
-     {
-      "ContainerName": "web",
-      "ContainerPort": 80,
-      "TargetGroupArn": {
-       "Ref": "AlbEcsFargateServiceLBPublicListenerECSGroup84D9A583"
+    "SeleniumHubClusterVpcPublicSubnet1RouteTableAssociationDEAABAB5": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "SeleniumHubClusterVpcPublicSubnet1RouteTableB896F850"
+        },
+        "SubnetId": {
+          "Ref": "SeleniumHubClusterVpcPublicSubnet1SubnetE01F3B10"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/Vpc/PublicSubnet1/RouteTableAssociation"
       }
-     }
-    ],
-    "NetworkConfiguration": {
-     "AwsvpcConfiguration": {
-      "AssignPublicIp": "DISABLED",
-      "SecurityGroups": [
-       {
-        "Fn::GetAtt": [
-         "AlbEcsFargateServiceSecurityGroupD6183FBF",
-         "GroupId"
+    },
+    "SeleniumHubClusterVpcPublicSubnet1DefaultRoute4407D52E": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "SeleniumHubClusterVpcPublicSubnet1RouteTableB896F850"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "SeleniumHubClusterVpcIGWC5A5E290"
+        }
+      },
+      "DependsOn": ["SeleniumHubClusterVpcVPCGW45D73138"],
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/Vpc/PublicSubnet1/DefaultRoute"
+      }
+    },
+    "SeleniumHubClusterVpcPublicSubnet1EIP00565240": {
+      "Type": "AWS::EC2::EIP",
+      "Properties": {
+        "Domain": "vpc",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "testing-stack/SeleniumHubCluster/Vpc/PublicSubnet1"
+          }
         ]
-       }
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/Vpc/PublicSubnet1/EIP"
+      }
+    },
+    "SeleniumHubClusterVpcPublicSubnet1NATGateway2A5990BB": {
+      "Type": "AWS::EC2::NatGateway",
+      "Properties": {
+        "SubnetId": {
+          "Ref": "SeleniumHubClusterVpcPublicSubnet1SubnetE01F3B10"
+        },
+        "AllocationId": {
+          "Fn::GetAtt": [
+            "SeleniumHubClusterVpcPublicSubnet1EIP00565240",
+            "AllocationId"
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "testing-stack/SeleniumHubCluster/Vpc/PublicSubnet1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/Vpc/PublicSubnet1/NATGateway"
+      }
+    },
+    "SeleniumHubClusterVpcPublicSubnet2Subnet40A6AA4C": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "SeleniumHubClusterVpc94720294"
+        },
+        "AvailabilityZone": "us-west-2b",
+        "CidrBlock": "10.0.32.0/19",
+        "MapPublicIpOnLaunch": true,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Public"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public"
+          },
+          {
+            "Key": "Name",
+            "Value": "testing-stack/SeleniumHubCluster/Vpc/PublicSubnet2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/Vpc/PublicSubnet2/Subnet"
+      }
+    },
+    "SeleniumHubClusterVpcPublicSubnet2RouteTable829268CB": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "SeleniumHubClusterVpc94720294"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "testing-stack/SeleniumHubCluster/Vpc/PublicSubnet2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/Vpc/PublicSubnet2/RouteTable"
+      }
+    },
+    "SeleniumHubClusterVpcPublicSubnet2RouteTableAssociationD073E4A8": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "SeleniumHubClusterVpcPublicSubnet2RouteTable829268CB"
+        },
+        "SubnetId": {
+          "Ref": "SeleniumHubClusterVpcPublicSubnet2Subnet40A6AA4C"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/Vpc/PublicSubnet2/RouteTableAssociation"
+      }
+    },
+    "SeleniumHubClusterVpcPublicSubnet2DefaultRouteADC77F63": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "SeleniumHubClusterVpcPublicSubnet2RouteTable829268CB"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "SeleniumHubClusterVpcIGWC5A5E290"
+        }
+      },
+      "DependsOn": ["SeleniumHubClusterVpcVPCGW45D73138"],
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/Vpc/PublicSubnet2/DefaultRoute"
+      }
+    },
+    "SeleniumHubClusterVpcPublicSubnet3Subnet5C851012": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "SeleniumHubClusterVpc94720294"
+        },
+        "AvailabilityZone": "us-west-2c",
+        "CidrBlock": "10.0.64.0/19",
+        "MapPublicIpOnLaunch": true,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Public"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public"
+          },
+          {
+            "Key": "Name",
+            "Value": "testing-stack/SeleniumHubCluster/Vpc/PublicSubnet3"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/Vpc/PublicSubnet3/Subnet"
+      }
+    },
+    "SeleniumHubClusterVpcPublicSubnet3RouteTable6EB139EE": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "SeleniumHubClusterVpc94720294"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "testing-stack/SeleniumHubCluster/Vpc/PublicSubnet3"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/Vpc/PublicSubnet3/RouteTable"
+      }
+    },
+    "SeleniumHubClusterVpcPublicSubnet3RouteTableAssociationE3536FCC": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "SeleniumHubClusterVpcPublicSubnet3RouteTable6EB139EE"
+        },
+        "SubnetId": {
+          "Ref": "SeleniumHubClusterVpcPublicSubnet3Subnet5C851012"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/Vpc/PublicSubnet3/RouteTableAssociation"
+      }
+    },
+    "SeleniumHubClusterVpcPublicSubnet3DefaultRouteB1BADF1B": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "SeleniumHubClusterVpcPublicSubnet3RouteTable6EB139EE"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "SeleniumHubClusterVpcIGWC5A5E290"
+        }
+      },
+      "DependsOn": ["SeleniumHubClusterVpcVPCGW45D73138"],
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/Vpc/PublicSubnet3/DefaultRoute"
+      }
+    },
+    "SeleniumHubClusterVpcPrivateSubnet1Subnet4DE1E43B": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "SeleniumHubClusterVpc94720294"
+        },
+        "AvailabilityZone": "us-west-2a",
+        "CidrBlock": "10.0.96.0/19",
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Private"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private"
+          },
+          {
+            "Key": "Name",
+            "Value": "testing-stack/SeleniumHubCluster/Vpc/PrivateSubnet1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/Vpc/PrivateSubnet1/Subnet"
+      }
+    },
+    "SeleniumHubClusterVpcPrivateSubnet1RouteTable70472814": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "SeleniumHubClusterVpc94720294"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "testing-stack/SeleniumHubCluster/Vpc/PrivateSubnet1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/Vpc/PrivateSubnet1/RouteTable"
+      }
+    },
+    "SeleniumHubClusterVpcPrivateSubnet1RouteTableAssociationFDDA9D4E": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "SeleniumHubClusterVpcPrivateSubnet1RouteTable70472814"
+        },
+        "SubnetId": {
+          "Ref": "SeleniumHubClusterVpcPrivateSubnet1Subnet4DE1E43B"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/Vpc/PrivateSubnet1/RouteTableAssociation"
+      }
+    },
+    "SeleniumHubClusterVpcPrivateSubnet1DefaultRoute8D1F3626": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "SeleniumHubClusterVpcPrivateSubnet1RouteTable70472814"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "NatGatewayId": {
+          "Ref": "SeleniumHubClusterVpcPublicSubnet1NATGateway2A5990BB"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/Vpc/PrivateSubnet1/DefaultRoute"
+      }
+    },
+    "SeleniumHubClusterVpcPrivateSubnet2Subnet90CCA7DB": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "SeleniumHubClusterVpc94720294"
+        },
+        "AvailabilityZone": "us-west-2b",
+        "CidrBlock": "10.0.128.0/19",
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Private"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private"
+          },
+          {
+            "Key": "Name",
+            "Value": "testing-stack/SeleniumHubCluster/Vpc/PrivateSubnet2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/Vpc/PrivateSubnet2/Subnet"
+      }
+    },
+    "SeleniumHubClusterVpcPrivateSubnet2RouteTable8AD728D3": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "SeleniumHubClusterVpc94720294"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "testing-stack/SeleniumHubCluster/Vpc/PrivateSubnet2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/Vpc/PrivateSubnet2/RouteTable"
+      }
+    },
+    "SeleniumHubClusterVpcPrivateSubnet2RouteTableAssociation5F10BB9B": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "SeleniumHubClusterVpcPrivateSubnet2RouteTable8AD728D3"
+        },
+        "SubnetId": {
+          "Ref": "SeleniumHubClusterVpcPrivateSubnet2Subnet90CCA7DB"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/Vpc/PrivateSubnet2/RouteTableAssociation"
+      }
+    },
+    "SeleniumHubClusterVpcPrivateSubnet2DefaultRouteDADF7A71": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "SeleniumHubClusterVpcPrivateSubnet2RouteTable8AD728D3"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "NatGatewayId": {
+          "Ref": "SeleniumHubClusterVpcPublicSubnet1NATGateway2A5990BB"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/Vpc/PrivateSubnet2/DefaultRoute"
+      }
+    },
+    "SeleniumHubClusterVpcPrivateSubnet3Subnet221B26E9": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "SeleniumHubClusterVpc94720294"
+        },
+        "AvailabilityZone": "us-west-2c",
+        "CidrBlock": "10.0.160.0/19",
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Private"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private"
+          },
+          {
+            "Key": "Name",
+            "Value": "testing-stack/SeleniumHubCluster/Vpc/PrivateSubnet3"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/Vpc/PrivateSubnet3/Subnet"
+      }
+    },
+    "SeleniumHubClusterVpcPrivateSubnet3RouteTable39696D7B": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "SeleniumHubClusterVpc94720294"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "testing-stack/SeleniumHubCluster/Vpc/PrivateSubnet3"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/Vpc/PrivateSubnet3/RouteTable"
+      }
+    },
+    "SeleniumHubClusterVpcPrivateSubnet3RouteTableAssociation3639FA65": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "SeleniumHubClusterVpcPrivateSubnet3RouteTable39696D7B"
+        },
+        "SubnetId": {
+          "Ref": "SeleniumHubClusterVpcPrivateSubnet3Subnet221B26E9"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/Vpc/PrivateSubnet3/RouteTableAssociation"
+      }
+    },
+    "SeleniumHubClusterVpcPrivateSubnet3DefaultRoute0BFA2E1A": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "SeleniumHubClusterVpcPrivateSubnet3RouteTable39696D7B"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "NatGatewayId": {
+          "Ref": "SeleniumHubClusterVpcPublicSubnet1NATGateway2A5990BB"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/Vpc/PrivateSubnet3/DefaultRoute"
+      }
+    },
+    "SeleniumHubClusterVpcIGWC5A5E290": {
+      "Type": "AWS::EC2::InternetGateway",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "testing-stack/SeleniumHubCluster/Vpc"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/Vpc/IGW"
+      }
+    },
+    "SeleniumHubClusterVpcVPCGW45D73138": {
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+      "Properties": {
+        "VpcId": {
+          "Ref": "SeleniumHubClusterVpc94720294"
+        },
+        "InternetGatewayId": {
+          "Ref": "SeleniumHubClusterVpcIGWC5A5E290"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/Vpc/VPCGW"
+      }
+    },
+    "SeleniumHubClustercluster84F73114": {
+      "Type": "AWS::ECS::Cluster",
+      "Properties": {
+        "CapacityProviders": ["FARGATE", "FARGATE_SPOT"],
+        "ClusterSettings": [
+          {
+            "Name": "containerInsights",
+            "Value": "enabled"
+          }
+        ],
+        "DefaultCapacityProviderStrategy": [
+          {
+            "Base": 4,
+            "CapacityProvider": "FARGATE",
+            "Weight": 1
+          },
+          {
+            "CapacityProvider": "FARGATE_SPOT",
+            "Weight": 4
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/cluster/Resource"
+      }
+    },
+    "SeleniumHubClustersecuritygroupseleniumE304DBDC": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "testing-stack/SeleniumHubCluster/security-group-selenium",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "SecurityGroupIngress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Port 4444 for inbound traffic",
+            "FromPort": 4444,
+            "IpProtocol": "tcp",
+            "ToPort": 4444
+          },
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Port 5555 for inbound traffic",
+            "FromPort": 5555,
+            "IpProtocol": "tcp",
+            "ToPort": 5555
+          }
+        ],
+        "VpcId": {
+          "Ref": "SeleniumHubClusterVpc94720294"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/security-group-selenium/Resource"
+      }
+    },
+    "SeleniumHubClustersecuritygroupseleniumfromtestingstackSeleniumHubClusterapplbSecurityGroupD4B8C72744441DD7FA79": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "IpProtocol": "tcp",
+        "Description": "Load balancer to target",
+        "FromPort": 4444,
+        "GroupId": {
+          "Fn::GetAtt": [
+            "SeleniumHubClustersecuritygroupseleniumE304DBDC",
+            "GroupId"
+          ]
+        },
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
+            "SeleniumHubClusterapplbSecurityGroup1E5F87D9",
+            "GroupId"
+          ]
+        },
+        "ToPort": 4444
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/security-group-selenium/from testingstackSeleniumHubClusterapplbSecurityGroupD4B8C727:4444"
+      }
+    },
+    "SeleniumHubClustersecuritygroupseleniumfromtestingstackSeleniumHubClustersecuritygroupselenium2F00C7FE44441F1275A7": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "IpProtocol": "tcp",
+        "Description": "Load balancer to target",
+        "FromPort": 4444,
+        "GroupId": {
+          "Fn::GetAtt": [
+            "SeleniumHubClustersecuritygroupseleniumE304DBDC",
+            "GroupId"
+          ]
+        },
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
+            "SeleniumHubClustersecuritygroupseleniumE304DBDC",
+            "GroupId"
+          ]
+        },
+        "ToPort": 4444
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/security-group-selenium/from testingstackSeleniumHubClustersecuritygroupselenium2F00C7FE:4444"
+      }
+    },
+    "SeleniumHubClusterapplbE16C09C8": {
+      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+      "Properties": {
+        "LoadBalancerAttributes": [
+          {
+            "Key": "deletion_protection.enabled",
+            "Value": "false"
+          }
+        ],
+        "Scheme": "internet-facing",
+        "SecurityGroups": [
+          {
+            "Fn::GetAtt": [
+              "SeleniumHubClusterapplbSecurityGroup1E5F87D9",
+              "GroupId"
+            ]
+          },
+          {
+            "Fn::GetAtt": [
+              "SeleniumHubClustersecuritygroupseleniumE304DBDC",
+              "GroupId"
+            ]
+          }
+        ],
+        "Subnets": [
+          {
+            "Ref": "SeleniumHubClusterVpcPublicSubnet1SubnetE01F3B10"
+          },
+          {
+            "Ref": "SeleniumHubClusterVpcPublicSubnet2Subnet40A6AA4C"
+          },
+          {
+            "Ref": "SeleniumHubClusterVpcPublicSubnet3Subnet5C851012"
+          }
+        ],
+        "Type": "application"
+      },
+      "DependsOn": [
+        "SeleniumHubClusterVpcPublicSubnet1DefaultRoute4407D52E",
+        "SeleniumHubClusterVpcPublicSubnet2DefaultRouteADC77F63",
+        "SeleniumHubClusterVpcPublicSubnet3DefaultRouteB1BADF1B"
       ],
-      "Subnets": [
-       {
-        "Ref": "VpcPrivateSubnet1Subnet536B997A"
-       },
-       {
-        "Ref": "VpcPrivateSubnet2Subnet3788AAA1"
-       }
-      ]
-     }
-    },
-    "TaskDefinition": {
-     "Ref": "AlbEcsFargateServiceTaskDef8E35C672"
-    }
-   },
-   "DependsOn": [
-    "AlbEcsFargateServiceLBPublicListenerECSGroup84D9A583",
-    "AlbEcsFargateServiceLBPublicListener00195C0A"
-   ],
-   "UpdateReplacePolicy": "Delete",
-   "DeletionPolicy": "Delete"
-  },
-  "AlbEcsFargateServiceSecurityGroupD6183FBF": {
-   "Type": "AWS::EC2::SecurityGroup",
-   "Properties": {
-    "GroupDescription": "SeleniumTestService/AlbEcsFargateService/Service/SecurityGroup",
-    "SecurityGroupEgress": [
-     {
-      "CidrIp": "0.0.0.0/0",
-      "Description": "Allow all outbound traffic by default",
-      "IpProtocol": "-1"
-     }
-    ],
-    "VpcId": {
-     "Ref": "Vpc8378EB38"
-    }
-   }
-  },
-  "AlbEcsFargateServiceSecurityGroupfromSeleniumTestServiceAlbEcsFargateServiceLBSecurityGroupDBDE26EC80BB9EAB36": {
-   "Type": "AWS::EC2::SecurityGroupIngress",
-   "Properties": {
-    "IpProtocol": "tcp",
-    "Description": "Load balancer to target",
-    "FromPort": 80,
-    "GroupId": {
-     "Fn::GetAtt": [
-      "AlbEcsFargateServiceSecurityGroupD6183FBF",
-      "GroupId"
-     ]
-    },
-    "SourceSecurityGroupId": {
-     "Fn::GetAtt": [
-      "AlbEcsFargateServiceLBSecurityGroup6FDF4D79",
-      "GroupId"
-     ]
-    },
-    "ToPort": 80
-   }
-  },
-  "AlbEcsFargateServiceTaskCountTargetB2BB1CEB": {
-   "Type": "AWS::ApplicationAutoScaling::ScalableTarget",
-   "Properties": {
-    "MaxCapacity": 10,
-    "MinCapacity": 1,
-    "ResourceId": {
-     "Fn::Join": [
-      "",
-      [
-       "service/",
-       {
-        "Ref": "SeleniumHubCluster058E12BA"
-       },
-       "/",
-       {
-        "Fn::GetAtt": [
-         "AlbEcsFargateService3B50803D",
-         "Name"
-        ]
-       }
-      ]
-     ]
-    },
-    "RoleARN": {
-     "Fn::Join": [
-      "",
-      [
-       "arn:",
-       {
-        "Ref": "AWS::Partition"
-       },
-       ":iam::",
-       {
-        "Ref": "AWS::AccountId"
-       },
-       ":role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService"
-      ]
-     ]
-    },
-    "ScalableDimension": "ecs:service:DesiredCount",
-    "ServiceNamespace": "ecs"
-   }
-  },
-  "AlbEcsFargateServiceTaskCountTargetCpuScaling5D976EBF": {
-   "Type": "AWS::ApplicationAutoScaling::ScalingPolicy",
-   "Properties": {
-    "PolicyName": "SeleniumTestServiceAlbEcsFargateServiceTaskCountTargetCpuScaling8AD64C7E",
-    "PolicyType": "TargetTrackingScaling",
-    "ScalingTargetId": {
-     "Ref": "AlbEcsFargateServiceTaskCountTargetB2BB1CEB"
-    },
-    "TargetTrackingScalingPolicyConfiguration": {
-     "PredefinedMetricSpecification": {
-      "PredefinedMetricType": "ECSServiceAverageCPUUtilization"
-     },
-     "TargetValue": 70
-    }
-   }
-  }
- },
- "Outputs": {
-  "AlbEcsFargateServiceLoadBalancerDNS555CE382": {
-   "Value": {
-    "Fn::GetAtt": [
-     "AlbEcsFargateServiceLB36079DE9",
-     "DNSName"
-    ]
-   }
-  },
-  "AlbEcsFargateServiceServiceURLDD5C0F7E": {
-   "Value": {
-    "Fn::Join": [
-     "",
-     [
-      "http://",
-      {
-       "Fn::GetAtt": [
-        "AlbEcsFargateServiceLB36079DE9",
-        "DNSName"
-       ]
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/app-lb/Resource"
       }
-     ]
-    ]
-   }
+    },
+    "SeleniumHubClusterapplbSecurityGroup1E5F87D9": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Automatically created Security Group for ELB testingstackSeleniumHubClusterapplbDF68BBDC",
+        "SecurityGroupIngress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow from anyone on port 4444",
+            "FromPort": 4444,
+            "IpProtocol": "tcp",
+            "ToPort": 4444
+          }
+        ],
+        "VpcId": {
+          "Ref": "SeleniumHubClusterVpc94720294"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/app-lb/SecurityGroup/Resource"
+      }
+    },
+    "SeleniumHubClusterapplbSecurityGrouptotestingstackSeleniumHubClustersecuritygroupselenium2F00C7FE44448570046D": {
+      "Type": "AWS::EC2::SecurityGroupEgress",
+      "Properties": {
+        "GroupId": {
+          "Fn::GetAtt": [
+            "SeleniumHubClusterapplbSecurityGroup1E5F87D9",
+            "GroupId"
+          ]
+        },
+        "IpProtocol": "tcp",
+        "Description": "Load balancer to target",
+        "DestinationSecurityGroupId": {
+          "Fn::GetAtt": [
+            "SeleniumHubClustersecuritygroupseleniumE304DBDC",
+            "GroupId"
+          ]
+        },
+        "FromPort": 4444,
+        "ToPort": 4444
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/app-lb/SecurityGroup/to testingstackSeleniumHubClustersecuritygroupselenium2F00C7FE:4444"
+      }
+    },
+    "SeleniumHubClusterapplbListenerC53BE27D": {
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+      "Properties": {
+        "DefaultActions": [
+          {
+            "TargetGroupArn": {
+              "Ref": "SeleniumHubClusterapplbListenerECSGroup4D81B6D1"
+            },
+            "Type": "forward"
+          }
+        ],
+        "LoadBalancerArn": {
+          "Ref": "SeleniumHubClusterapplbE16C09C8"
+        },
+        "Port": 4444,
+        "Protocol": "HTTP"
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/app-lb/Listener/Resource"
+      }
+    },
+    "SeleniumHubClusterapplbListenerECSGroup4D81B6D1": {
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+      "Properties": {
+        "Port": 4444,
+        "Protocol": "HTTP",
+        "TargetGroupAttributes": [
+          {
+            "Key": "stickiness.enabled",
+            "Value": "false"
+          }
+        ],
+        "TargetType": "ip",
+        "VpcId": {
+          "Ref": "SeleniumHubClusterVpc94720294"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/app-lb/Listener/ECSGroup/Resource"
+      }
+    },
+    "SeleniumHubClusterseleniumhubtaskdefTaskRoleF04BCD0E": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/selenium-hub-task-def/TaskRole/Resource"
+      }
+    },
+    "SeleniumHubClusterseleniumhubtaskdefTaskRoleDefaultPolicyCD2895AE": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "ssmmessages:CreateControlChannel",
+                "ssmmessages:CreateDataChannel",
+                "ssmmessages:OpenControlChannel",
+                "ssmmessages:OpenDataChannel"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": "logs:DescribeLogGroups",
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "logs:CreateLogStream",
+                "logs:DescribeLogStreams",
+                "logs:PutLogEvents"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "SeleniumHubClusterseleniumhubtaskdefTaskRoleDefaultPolicyCD2895AE",
+        "Roles": [
+          {
+            "Ref": "SeleniumHubClusterseleniumhubtaskdefTaskRoleF04BCD0E"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/selenium-hub-task-def/TaskRole/DefaultPolicy/Resource"
+      }
+    },
+    "SeleniumHubClusterseleniumhubtaskdefB8105919": {
+      "Type": "AWS::ECS::TaskDefinition",
+      "Properties": {
+        "ContainerDefinitions": [
+          {
+            "Cpu": 1024,
+            "Environment": [
+              {
+                "Name": "GRID_BROWSER_TIMEOUT",
+                "Value": "200000"
+              },
+              {
+                "Name": "GRID_TIMEOUT",
+                "Value": "180"
+              },
+              {
+                "Name": "SE_OPTS",
+                "Value": "-debug"
+              }
+            ],
+            "Essential": true,
+            "Image": "selenium/hub:3.141.59",
+            "LogConfiguration": {
+              "LogDriver": "awslogs",
+              "Options": {
+                "awslogs-group": {
+                  "Ref": "SeleniumHubClusterseleniumhubtaskdefseleniumhubcontainerLogGroupCD292309"
+                },
+                "awslogs-stream-prefix": "selenium-hub-logs",
+                "awslogs-region": "us-west-2"
+              }
+            },
+            "Memory": 2048,
+            "Name": "selenium-hub-container",
+            "PortMappings": [
+              {
+                "ContainerPort": 4444,
+                "HostPort": 4444,
+                "Protocol": "tcp"
+              }
+            ]
+          }
+        ],
+        "Cpu": "1024",
+        "ExecutionRoleArn": {
+          "Fn::GetAtt": [
+            "SeleniumHubClusterseleniumhubtaskdefExecutionRole86B7ADBE",
+            "Arn"
+          ]
+        },
+        "Family": "testingstackSeleniumHubClusterseleniumhubtaskdef72DF045D",
+        "Memory": "2048",
+        "NetworkMode": "awsvpc",
+        "RequiresCompatibilities": ["FARGATE"],
+        "TaskRoleArn": {
+          "Fn::GetAtt": [
+            "SeleniumHubClusterseleniumhubtaskdefTaskRoleF04BCD0E",
+            "Arn"
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/selenium-hub-task-def/Resource"
+      }
+    },
+    "SeleniumHubClusterseleniumhubtaskdefseleniumhubcontainerLogGroupCD292309": {
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/selenium-hub-task-def/selenium-hub-container/LogGroup/Resource"
+      }
+    },
+    "SeleniumHubClusterseleniumhubtaskdefExecutionRole86B7ADBE": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/selenium-hub-task-def/ExecutionRole/Resource"
+      }
+    },
+    "SeleniumHubClusterseleniumhubtaskdefExecutionRoleDefaultPolicy2DBCBAF1": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": ["logs:CreateLogStream", "logs:PutLogEvents"],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "SeleniumHubClusterseleniumhubtaskdefseleniumhubcontainerLogGroupCD292309",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "SeleniumHubClusterseleniumhubtaskdefExecutionRoleDefaultPolicy2DBCBAF1",
+        "Roles": [
+          {
+            "Ref": "SeleniumHubClusterseleniumhubtaskdefExecutionRole86B7ADBE"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/selenium-hub-task-def/ExecutionRole/DefaultPolicy/Resource"
+      }
+    },
+    "SeleniumHubClusterseleniumhubserviceService4C8F6F8C": {
+      "Type": "AWS::ECS::Service",
+      "Properties": {
+        "Cluster": {
+          "Ref": "SeleniumHubClustercluster84F73114"
+        },
+        "DeploymentConfiguration": {
+          "MaximumPercent": 100,
+          "MinimumHealthyPercent": 75
+        },
+        "EnableECSManagedTags": false,
+        "EnableExecuteCommand": true,
+        "HealthCheckGracePeriodSeconds": 60,
+        "LaunchType": "FARGATE",
+        "LoadBalancers": [
+          {
+            "ContainerName": "selenium-hub-container",
+            "ContainerPort": 4444,
+            "TargetGroupArn": {
+              "Ref": "SeleniumHubClusterapplbListenerECSGroup4D81B6D1"
+            }
+          }
+        ],
+        "NetworkConfiguration": {
+          "AwsvpcConfiguration": {
+            "AssignPublicIp": "DISABLED",
+            "SecurityGroups": [
+              {
+                "Fn::GetAtt": [
+                  "SeleniumHubClustersecuritygroupseleniumE304DBDC",
+                  "GroupId"
+                ]
+              }
+            ],
+            "Subnets": [
+              {
+                "Ref": "SeleniumHubClusterVpcPrivateSubnet1Subnet4DE1E43B"
+              },
+              {
+                "Ref": "SeleniumHubClusterVpcPrivateSubnet2Subnet90CCA7DB"
+              },
+              {
+                "Ref": "SeleniumHubClusterVpcPrivateSubnet3Subnet221B26E9"
+              }
+            ]
+          }
+        },
+        "TaskDefinition": {
+          "Ref": "SeleniumHubClusterseleniumhubtaskdefB8105919"
+        }
+      },
+      "DependsOn": [
+        "SeleniumHubClusterapplbListenerECSGroup4D81B6D1",
+        "SeleniumHubClusterapplbListenerC53BE27D"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/selenium-hub-service/Service"
+      }
+    },
+    "SeleniumHubClusterseleniumscalableTargethubRoleA2BCFB95": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "application-autoscaling.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/selenium-scalableTarget-hub/Role/Resource"
+      }
+    },
+    "SeleniumHubClusterseleniumscalableTargethub1F6D49A6": {
+      "Type": "AWS::ApplicationAutoScaling::ScalableTarget",
+      "Properties": {
+        "MaxCapacity": 10,
+        "MinCapacity": 1,
+        "ResourceId": {
+          "Fn::Join": [
+            "",
+            [
+              "service/",
+              {
+                "Ref": "SeleniumHubClustercluster84F73114"
+              },
+              "/",
+              {
+                "Fn::GetAtt": [
+                  "SeleniumHubClusterseleniumhubserviceService4C8F6F8C",
+                  "Name"
+                ]
+              }
+            ]
+          ]
+        },
+        "RoleARN": {
+          "Fn::GetAtt": [
+            "SeleniumHubClusterseleniumscalableTargethubRoleA2BCFB95",
+            "Arn"
+          ]
+        },
+        "ScalableDimension": "ecs:service:DesiredCount",
+        "ServiceNamespace": "ecs"
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/selenium-scalableTarget-hub/Resource"
+      }
+    },
+    "SeleniumHubClusterseleniumscalableTargethubstepmetricscalinghubLowerPolicy0D8DAAFA": {
+      "Type": "AWS::ApplicationAutoScaling::ScalingPolicy",
+      "Properties": {
+        "PolicyName": "testingstackSeleniumHubClusterseleniumscalableTargethubstepmetricscalinghubLowerPolicy24E59BB5",
+        "PolicyType": "StepScaling",
+        "ScalingTargetId": {
+          "Ref": "SeleniumHubClusterseleniumscalableTargethub1F6D49A6"
+        },
+        "StepScalingPolicyConfiguration": {
+          "AdjustmentType": "ChangeInCapacity",
+          "Cooldown": 180,
+          "MetricAggregationType": "Maximum",
+          "StepAdjustments": [
+            {
+              "MetricIntervalUpperBound": 0,
+              "ScalingAdjustment": -1
+            }
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/selenium-scalableTarget-hub/step-metric-scaling-hub/LowerPolicy/Resource"
+      }
+    },
+    "SeleniumHubClusterseleniumscalableTargethubstepmetricscalinghubLowerAlarm8C7D01A9": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "LessThanOrEqualToThreshold",
+        "EvaluationPeriods": 1,
+        "AlarmActions": [
+          {
+            "Ref": "SeleniumHubClusterseleniumscalableTargethubstepmetricscalinghubLowerPolicy0D8DAAFA"
+          }
+        ],
+        "AlarmDescription": "Lower threshold scaling alarm",
+        "Dimensions": [
+          {
+            "Name": "ClusterName",
+            "Value": {
+              "Ref": "SeleniumHubClustercluster84F73114"
+            }
+          },
+          {
+            "Name": "ServiceName",
+            "Value": {
+              "Fn::GetAtt": [
+                "SeleniumHubClusterseleniumhubserviceService4C8F6F8C",
+                "Name"
+              ]
+            }
+          }
+        ],
+        "MetricName": "CPUUtilization",
+        "Namespace": "AWS/ECS",
+        "Period": 60,
+        "Statistic": "Maximum",
+        "Threshold": 30
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/selenium-scalableTarget-hub/step-metric-scaling-hub/LowerAlarm/Resource"
+      }
+    },
+    "SeleniumHubClusterseleniumscalableTargethubstepmetricscalinghubUpperPolicy4D776277": {
+      "Type": "AWS::ApplicationAutoScaling::ScalingPolicy",
+      "Properties": {
+        "PolicyName": "testingstackSeleniumHubClusterseleniumscalableTargethubstepmetricscalinghubUpperPolicy3544371C",
+        "PolicyType": "StepScaling",
+        "ScalingTargetId": {
+          "Ref": "SeleniumHubClusterseleniumscalableTargethub1F6D49A6"
+        },
+        "StepScalingPolicyConfiguration": {
+          "AdjustmentType": "ChangeInCapacity",
+          "Cooldown": 180,
+          "MetricAggregationType": "Maximum",
+          "StepAdjustments": [
+            {
+              "MetricIntervalLowerBound": 0,
+              "ScalingAdjustment": 3
+            }
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/selenium-scalableTarget-hub/step-metric-scaling-hub/UpperPolicy/Resource"
+      }
+    },
+    "SeleniumHubClusterseleniumscalableTargethubstepmetricscalinghubUpperAlarmFA06D0F1": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": 1,
+        "AlarmActions": [
+          {
+            "Ref": "SeleniumHubClusterseleniumscalableTargethubstepmetricscalinghubUpperPolicy4D776277"
+          }
+        ],
+        "AlarmDescription": "Upper threshold scaling alarm",
+        "Dimensions": [
+          {
+            "Name": "ClusterName",
+            "Value": {
+              "Ref": "SeleniumHubClustercluster84F73114"
+            }
+          },
+          {
+            "Name": "ServiceName",
+            "Value": {
+              "Fn::GetAtt": [
+                "SeleniumHubClusterseleniumhubserviceService4C8F6F8C",
+                "Name"
+              ]
+            }
+          }
+        ],
+        "MetricName": "CPUUtilization",
+        "Namespace": "AWS/ECS",
+        "Period": 60,
+        "Statistic": "Maximum",
+        "Threshold": 80
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/selenium-scalableTarget-hub/step-metric-scaling-hub/UpperAlarm/Resource"
+      }
+    },
+    "SeleniumHubClusterseleniumchrometaskdefTaskRoleD0C3A5C6": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/selenium-chrome-task-def/TaskRole/Resource"
+      }
+    },
+    "SeleniumHubClusterseleniumchrometaskdefTaskRoleDefaultPolicy880D333B": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "ssmmessages:CreateControlChannel",
+                "ssmmessages:CreateDataChannel",
+                "ssmmessages:OpenControlChannel",
+                "ssmmessages:OpenDataChannel"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": "logs:DescribeLogGroups",
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "logs:CreateLogStream",
+                "logs:DescribeLogStreams",
+                "logs:PutLogEvents"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "SeleniumHubClusterseleniumchrometaskdefTaskRoleDefaultPolicy880D333B",
+        "Roles": [
+          {
+            "Ref": "SeleniumHubClusterseleniumchrometaskdefTaskRoleD0C3A5C6"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/selenium-chrome-task-def/TaskRole/DefaultPolicy/Resource"
+      }
+    },
+    "SeleniumHubClusterseleniumchrometaskdefE780323D": {
+      "Type": "AWS::ECS::TaskDefinition",
+      "Properties": {
+        "ContainerDefinitions": [
+          {
+            "Command": [
+              "PRIVATE=$(curl -s http://169.254.170.2/v2/metadata | jq -r '.Containers[0].Networks[0].IPv4Addresses[0]') ; export REMOTE_HOST=\"http://$PRIVATE:5555\"; export SE_OPTS=\"-host $PRIVATE -port 5555\" ; /opt/bin/entry_point.sh"
+            ],
+            "Cpu": 1024,
+            "EntryPoint": ["sh", "-c"],
+            "Environment": [
+              {
+                "Name": "HUB_PORT_4444_TCP_ADDR",
+                "Value": {
+                  "Fn::GetAtt": ["SeleniumHubClusterapplbE16C09C8", "DNSName"]
+                }
+              },
+              {
+                "Name": "HUB_PORT_4444_TCP_PORT",
+                "Value": "4444"
+              },
+              {
+                "Name": "NODE_MAX_INSTANCES",
+                "Value": "500"
+              },
+              {
+                "Name": "NODE_MAX_SESSION",
+                "Value": "500"
+              },
+              {
+                "Name": "SE_OPTS",
+                "Value": "-debug"
+              },
+              {
+                "Name": "shm_size",
+                "Value": "512"
+              }
+            ],
+            "Essential": true,
+            "Image": "selenium/node-chrome:3.141.59",
+            "LogConfiguration": {
+              "LogDriver": "awslogs",
+              "Options": {
+                "awslogs-group": {
+                  "Ref": "SeleniumHubClusterseleniumchrometaskdefseleniumchromecontainerLogGroup815DDFDA"
+                },
+                "awslogs-stream-prefix": "selenium-chrome-logs",
+                "awslogs-region": "us-west-2"
+              }
+            },
+            "Memory": 2048,
+            "Name": "selenium-chrome-container",
+            "PortMappings": [
+              {
+                "ContainerPort": 4444,
+                "HostPort": 4444,
+                "Protocol": "tcp"
+              }
+            ]
+          }
+        ],
+        "Cpu": "1024",
+        "ExecutionRoleArn": {
+          "Fn::GetAtt": [
+            "SeleniumHubClusterseleniumchrometaskdefExecutionRole5D160E88",
+            "Arn"
+          ]
+        },
+        "Family": "testingstackSeleniumHubClusterseleniumchrometaskdef968734BB",
+        "Memory": "2048",
+        "NetworkMode": "awsvpc",
+        "RequiresCompatibilities": ["FARGATE"],
+        "TaskRoleArn": {
+          "Fn::GetAtt": [
+            "SeleniumHubClusterseleniumchrometaskdefTaskRoleD0C3A5C6",
+            "Arn"
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/selenium-chrome-task-def/Resource"
+      }
+    },
+    "SeleniumHubClusterseleniumchrometaskdefseleniumchromecontainerLogGroup815DDFDA": {
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/selenium-chrome-task-def/selenium-chrome-container/LogGroup/Resource"
+      }
+    },
+    "SeleniumHubClusterseleniumchrometaskdefExecutionRole5D160E88": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/selenium-chrome-task-def/ExecutionRole/Resource"
+      }
+    },
+    "SeleniumHubClusterseleniumchrometaskdefExecutionRoleDefaultPolicy829FC18A": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": ["logs:CreateLogStream", "logs:PutLogEvents"],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "SeleniumHubClusterseleniumchrometaskdefseleniumchromecontainerLogGroup815DDFDA",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "SeleniumHubClusterseleniumchrometaskdefExecutionRoleDefaultPolicy829FC18A",
+        "Roles": [
+          {
+            "Ref": "SeleniumHubClusterseleniumchrometaskdefExecutionRole5D160E88"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/selenium-chrome-task-def/ExecutionRole/DefaultPolicy/Resource"
+      }
+    },
+    "SeleniumHubClusterseleniumchromeserviceService5A68E1F7": {
+      "Type": "AWS::ECS::Service",
+      "Properties": {
+        "Cluster": {
+          "Ref": "SeleniumHubClustercluster84F73114"
+        },
+        "DeploymentConfiguration": {
+          "MaximumPercent": 100,
+          "MinimumHealthyPercent": 75
+        },
+        "EnableECSManagedTags": false,
+        "EnableExecuteCommand": true,
+        "LaunchType": "FARGATE",
+        "NetworkConfiguration": {
+          "AwsvpcConfiguration": {
+            "AssignPublicIp": "DISABLED",
+            "SecurityGroups": [
+              {
+                "Fn::GetAtt": [
+                  "SeleniumHubClustersecuritygroupseleniumE304DBDC",
+                  "GroupId"
+                ]
+              }
+            ],
+            "Subnets": [
+              {
+                "Ref": "SeleniumHubClusterVpcPrivateSubnet1Subnet4DE1E43B"
+              },
+              {
+                "Ref": "SeleniumHubClusterVpcPrivateSubnet2Subnet90CCA7DB"
+              },
+              {
+                "Ref": "SeleniumHubClusterVpcPrivateSubnet3Subnet221B26E9"
+              }
+            ]
+          }
+        },
+        "TaskDefinition": {
+          "Ref": "SeleniumHubClusterseleniumchrometaskdefE780323D"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/selenium-chrome-service/Service"
+      }
+    },
+    "SeleniumHubClusterseleniumscalableTargetchromeRoleBEB51A25": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "application-autoscaling.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/selenium-scalableTarget-chrome/Role/Resource"
+      }
+    },
+    "SeleniumHubClusterseleniumscalableTargetchromeAFAAE48C": {
+      "Type": "AWS::ApplicationAutoScaling::ScalableTarget",
+      "Properties": {
+        "MaxCapacity": 10,
+        "MinCapacity": 1,
+        "ResourceId": {
+          "Fn::Join": [
+            "",
+            [
+              "service/",
+              {
+                "Ref": "SeleniumHubClustercluster84F73114"
+              },
+              "/",
+              {
+                "Fn::GetAtt": [
+                  "SeleniumHubClusterseleniumchromeserviceService5A68E1F7",
+                  "Name"
+                ]
+              }
+            ]
+          ]
+        },
+        "RoleARN": {
+          "Fn::GetAtt": [
+            "SeleniumHubClusterseleniumscalableTargetchromeRoleBEB51A25",
+            "Arn"
+          ]
+        },
+        "ScalableDimension": "ecs:service:DesiredCount",
+        "ServiceNamespace": "ecs"
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/selenium-scalableTarget-chrome/Resource"
+      }
+    },
+    "SeleniumHubClusterseleniumscalableTargetchromestepmetricscalingchromeLowerPolicy84967E93": {
+      "Type": "AWS::ApplicationAutoScaling::ScalingPolicy",
+      "Properties": {
+        "PolicyName": "testingstackSeleniumHubClusterseleniumscalableTargetchromestepmetricscalingchromeLowerPolicy4F4D3F69",
+        "PolicyType": "StepScaling",
+        "ScalingTargetId": {
+          "Ref": "SeleniumHubClusterseleniumscalableTargetchromeAFAAE48C"
+        },
+        "StepScalingPolicyConfiguration": {
+          "AdjustmentType": "ChangeInCapacity",
+          "Cooldown": 180,
+          "MetricAggregationType": "Maximum",
+          "StepAdjustments": [
+            {
+              "MetricIntervalUpperBound": 0,
+              "ScalingAdjustment": -1
+            }
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/selenium-scalableTarget-chrome/step-metric-scaling-chrome/LowerPolicy/Resource"
+      }
+    },
+    "SeleniumHubClusterseleniumscalableTargetchromestepmetricscalingchromeLowerAlarm6AD952B7": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "LessThanOrEqualToThreshold",
+        "EvaluationPeriods": 1,
+        "AlarmActions": [
+          {
+            "Ref": "SeleniumHubClusterseleniumscalableTargetchromestepmetricscalingchromeLowerPolicy84967E93"
+          }
+        ],
+        "AlarmDescription": "Lower threshold scaling alarm",
+        "Dimensions": [
+          {
+            "Name": "ClusterName",
+            "Value": {
+              "Ref": "SeleniumHubClustercluster84F73114"
+            }
+          },
+          {
+            "Name": "ServiceName",
+            "Value": {
+              "Fn::GetAtt": [
+                "SeleniumHubClusterseleniumchromeserviceService5A68E1F7",
+                "Name"
+              ]
+            }
+          }
+        ],
+        "MetricName": "CPUUtilization",
+        "Namespace": "AWS/ECS",
+        "Period": 60,
+        "Statistic": "Maximum",
+        "Threshold": 30
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/selenium-scalableTarget-chrome/step-metric-scaling-chrome/LowerAlarm/Resource"
+      }
+    },
+    "SeleniumHubClusterseleniumscalableTargetchromestepmetricscalingchromeUpperPolicyBF7E0A51": {
+      "Type": "AWS::ApplicationAutoScaling::ScalingPolicy",
+      "Properties": {
+        "PolicyName": "testingstackSeleniumHubClusterseleniumscalableTargetchromestepmetricscalingchromeUpperPolicy727087B1",
+        "PolicyType": "StepScaling",
+        "ScalingTargetId": {
+          "Ref": "SeleniumHubClusterseleniumscalableTargetchromeAFAAE48C"
+        },
+        "StepScalingPolicyConfiguration": {
+          "AdjustmentType": "ChangeInCapacity",
+          "Cooldown": 180,
+          "MetricAggregationType": "Maximum",
+          "StepAdjustments": [
+            {
+              "MetricIntervalLowerBound": 0,
+              "ScalingAdjustment": 3
+            }
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/selenium-scalableTarget-chrome/step-metric-scaling-chrome/UpperPolicy/Resource"
+      }
+    },
+    "SeleniumHubClusterseleniumscalableTargetchromestepmetricscalingchromeUpperAlarm35F1F6F4": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": 1,
+        "AlarmActions": [
+          {
+            "Ref": "SeleniumHubClusterseleniumscalableTargetchromestepmetricscalingchromeUpperPolicyBF7E0A51"
+          }
+        ],
+        "AlarmDescription": "Upper threshold scaling alarm",
+        "Dimensions": [
+          {
+            "Name": "ClusterName",
+            "Value": {
+              "Ref": "SeleniumHubClustercluster84F73114"
+            }
+          },
+          {
+            "Name": "ServiceName",
+            "Value": {
+              "Fn::GetAtt": [
+                "SeleniumHubClusterseleniumchromeserviceService5A68E1F7",
+                "Name"
+              ]
+            }
+          }
+        ],
+        "MetricName": "CPUUtilization",
+        "Namespace": "AWS/ECS",
+        "Period": 60,
+        "Statistic": "Maximum",
+        "Threshold": 80
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/selenium-scalableTarget-chrome/step-metric-scaling-chrome/UpperAlarm/Resource"
+      }
+    },
+    "SeleniumHubClusterseleniumfirefoxtaskdefTaskRoleC9FE59AB": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/selenium-firefox-task-def/TaskRole/Resource"
+      }
+    },
+    "SeleniumHubClusterseleniumfirefoxtaskdefTaskRoleDefaultPolicyE6EDA1FC": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "ssmmessages:CreateControlChannel",
+                "ssmmessages:CreateDataChannel",
+                "ssmmessages:OpenControlChannel",
+                "ssmmessages:OpenDataChannel"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": "logs:DescribeLogGroups",
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "logs:CreateLogStream",
+                "logs:DescribeLogStreams",
+                "logs:PutLogEvents"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "SeleniumHubClusterseleniumfirefoxtaskdefTaskRoleDefaultPolicyE6EDA1FC",
+        "Roles": [
+          {
+            "Ref": "SeleniumHubClusterseleniumfirefoxtaskdefTaskRoleC9FE59AB"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/selenium-firefox-task-def/TaskRole/DefaultPolicy/Resource"
+      }
+    },
+    "SeleniumHubClusterseleniumfirefoxtaskdef637AA438": {
+      "Type": "AWS::ECS::TaskDefinition",
+      "Properties": {
+        "ContainerDefinitions": [
+          {
+            "Command": [
+              "PRIVATE=$(curl -s http://169.254.170.2/v2/metadata | jq -r '.Containers[0].Networks[0].IPv4Addresses[0]') ; export REMOTE_HOST=\"http://$PRIVATE:5555\"; export SE_OPTS=\"-host $PRIVATE -port 5555\" ; /opt/bin/entry_point.sh"
+            ],
+            "Cpu": 1024,
+            "EntryPoint": ["sh", "-c"],
+            "Environment": [
+              {
+                "Name": "HUB_PORT_4444_TCP_ADDR",
+                "Value": {
+                  "Fn::GetAtt": ["SeleniumHubClusterapplbE16C09C8", "DNSName"]
+                }
+              },
+              {
+                "Name": "HUB_PORT_4444_TCP_PORT",
+                "Value": "4444"
+              },
+              {
+                "Name": "NODE_MAX_INSTANCES",
+                "Value": "500"
+              },
+              {
+                "Name": "NODE_MAX_SESSION",
+                "Value": "500"
+              },
+              {
+                "Name": "SE_OPTS",
+                "Value": "-debug"
+              },
+              {
+                "Name": "shm_size",
+                "Value": "512"
+              }
+            ],
+            "Essential": true,
+            "Image": "selenium/node-firefox:3.141.59",
+            "LogConfiguration": {
+              "LogDriver": "awslogs",
+              "Options": {
+                "awslogs-group": {
+                  "Ref": "SeleniumHubClusterseleniumfirefoxtaskdefseleniumfirefoxcontainerLogGroup40F51790"
+                },
+                "awslogs-stream-prefix": "selenium-firefox-logs",
+                "awslogs-region": "us-west-2"
+              }
+            },
+            "Memory": 2048,
+            "Name": "selenium-firefox-container",
+            "PortMappings": [
+              {
+                "ContainerPort": 4444,
+                "HostPort": 4444,
+                "Protocol": "tcp"
+              }
+            ]
+          }
+        ],
+        "Cpu": "1024",
+        "ExecutionRoleArn": {
+          "Fn::GetAtt": [
+            "SeleniumHubClusterseleniumfirefoxtaskdefExecutionRole255C29B1",
+            "Arn"
+          ]
+        },
+        "Family": "testingstackSeleniumHubClusterseleniumfirefoxtaskdef3C128965",
+        "Memory": "2048",
+        "NetworkMode": "awsvpc",
+        "RequiresCompatibilities": ["FARGATE"],
+        "TaskRoleArn": {
+          "Fn::GetAtt": [
+            "SeleniumHubClusterseleniumfirefoxtaskdefTaskRoleC9FE59AB",
+            "Arn"
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/selenium-firefox-task-def/Resource"
+      }
+    },
+    "SeleniumHubClusterseleniumfirefoxtaskdefseleniumfirefoxcontainerLogGroup40F51790": {
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/selenium-firefox-task-def/selenium-firefox-container/LogGroup/Resource"
+      }
+    },
+    "SeleniumHubClusterseleniumfirefoxtaskdefExecutionRole255C29B1": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/selenium-firefox-task-def/ExecutionRole/Resource"
+      }
+    },
+    "SeleniumHubClusterseleniumfirefoxtaskdefExecutionRoleDefaultPolicyAF8B34A4": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": ["logs:CreateLogStream", "logs:PutLogEvents"],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "SeleniumHubClusterseleniumfirefoxtaskdefseleniumfirefoxcontainerLogGroup40F51790",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "SeleniumHubClusterseleniumfirefoxtaskdefExecutionRoleDefaultPolicyAF8B34A4",
+        "Roles": [
+          {
+            "Ref": "SeleniumHubClusterseleniumfirefoxtaskdefExecutionRole255C29B1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/selenium-firefox-task-def/ExecutionRole/DefaultPolicy/Resource"
+      }
+    },
+    "SeleniumHubClusterseleniumfirefoxserviceService19064102": {
+      "Type": "AWS::ECS::Service",
+      "Properties": {
+        "Cluster": {
+          "Ref": "SeleniumHubClustercluster84F73114"
+        },
+        "DeploymentConfiguration": {
+          "MaximumPercent": 100,
+          "MinimumHealthyPercent": 75
+        },
+        "EnableECSManagedTags": false,
+        "EnableExecuteCommand": true,
+        "LaunchType": "FARGATE",
+        "NetworkConfiguration": {
+          "AwsvpcConfiguration": {
+            "AssignPublicIp": "DISABLED",
+            "SecurityGroups": [
+              {
+                "Fn::GetAtt": [
+                  "SeleniumHubClustersecuritygroupseleniumE304DBDC",
+                  "GroupId"
+                ]
+              }
+            ],
+            "Subnets": [
+              {
+                "Ref": "SeleniumHubClusterVpcPrivateSubnet1Subnet4DE1E43B"
+              },
+              {
+                "Ref": "SeleniumHubClusterVpcPrivateSubnet2Subnet90CCA7DB"
+              },
+              {
+                "Ref": "SeleniumHubClusterVpcPrivateSubnet3Subnet221B26E9"
+              }
+            ]
+          }
+        },
+        "TaskDefinition": {
+          "Ref": "SeleniumHubClusterseleniumfirefoxtaskdef637AA438"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/selenium-firefox-service/Service"
+      }
+    },
+    "SeleniumHubClusterseleniumscalableTargetfirefoxRole26511D5F": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "application-autoscaling.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/selenium-scalableTarget-firefox/Role/Resource"
+      }
+    },
+    "SeleniumHubClusterseleniumscalableTargetfirefoxF5EF2CCF": {
+      "Type": "AWS::ApplicationAutoScaling::ScalableTarget",
+      "Properties": {
+        "MaxCapacity": 10,
+        "MinCapacity": 1,
+        "ResourceId": {
+          "Fn::Join": [
+            "",
+            [
+              "service/",
+              {
+                "Ref": "SeleniumHubClustercluster84F73114"
+              },
+              "/",
+              {
+                "Fn::GetAtt": [
+                  "SeleniumHubClusterseleniumfirefoxserviceService19064102",
+                  "Name"
+                ]
+              }
+            ]
+          ]
+        },
+        "RoleARN": {
+          "Fn::GetAtt": [
+            "SeleniumHubClusterseleniumscalableTargetfirefoxRole26511D5F",
+            "Arn"
+          ]
+        },
+        "ScalableDimension": "ecs:service:DesiredCount",
+        "ServiceNamespace": "ecs"
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/selenium-scalableTarget-firefox/Resource"
+      }
+    },
+    "SeleniumHubClusterseleniumscalableTargetfirefoxstepmetricscalingfirefoxLowerPolicy70521594": {
+      "Type": "AWS::ApplicationAutoScaling::ScalingPolicy",
+      "Properties": {
+        "PolicyName": "testingstackSeleniumHubClusterseleniumscalableTargetfirefoxstepmetricscalingfirefoxLowerPolicyAA3C96D3",
+        "PolicyType": "StepScaling",
+        "ScalingTargetId": {
+          "Ref": "SeleniumHubClusterseleniumscalableTargetfirefoxF5EF2CCF"
+        },
+        "StepScalingPolicyConfiguration": {
+          "AdjustmentType": "ChangeInCapacity",
+          "Cooldown": 180,
+          "MetricAggregationType": "Maximum",
+          "StepAdjustments": [
+            {
+              "MetricIntervalUpperBound": 0,
+              "ScalingAdjustment": -1
+            }
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/selenium-scalableTarget-firefox/step-metric-scaling-firefox/LowerPolicy/Resource"
+      }
+    },
+    "SeleniumHubClusterseleniumscalableTargetfirefoxstepmetricscalingfirefoxLowerAlarmC5F9208D": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "LessThanOrEqualToThreshold",
+        "EvaluationPeriods": 1,
+        "AlarmActions": [
+          {
+            "Ref": "SeleniumHubClusterseleniumscalableTargetfirefoxstepmetricscalingfirefoxLowerPolicy70521594"
+          }
+        ],
+        "AlarmDescription": "Lower threshold scaling alarm",
+        "Dimensions": [
+          {
+            "Name": "ClusterName",
+            "Value": {
+              "Ref": "SeleniumHubClustercluster84F73114"
+            }
+          },
+          {
+            "Name": "ServiceName",
+            "Value": {
+              "Fn::GetAtt": [
+                "SeleniumHubClusterseleniumfirefoxserviceService19064102",
+                "Name"
+              ]
+            }
+          }
+        ],
+        "MetricName": "CPUUtilization",
+        "Namespace": "AWS/ECS",
+        "Period": 60,
+        "Statistic": "Maximum",
+        "Threshold": 30
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/selenium-scalableTarget-firefox/step-metric-scaling-firefox/LowerAlarm/Resource"
+      }
+    },
+    "SeleniumHubClusterseleniumscalableTargetfirefoxstepmetricscalingfirefoxUpperPolicy403D8D38": {
+      "Type": "AWS::ApplicationAutoScaling::ScalingPolicy",
+      "Properties": {
+        "PolicyName": "testingstackSeleniumHubClusterseleniumscalableTargetfirefoxstepmetricscalingfirefoxUpperPolicyAE72C903",
+        "PolicyType": "StepScaling",
+        "ScalingTargetId": {
+          "Ref": "SeleniumHubClusterseleniumscalableTargetfirefoxF5EF2CCF"
+        },
+        "StepScalingPolicyConfiguration": {
+          "AdjustmentType": "ChangeInCapacity",
+          "Cooldown": 180,
+          "MetricAggregationType": "Maximum",
+          "StepAdjustments": [
+            {
+              "MetricIntervalLowerBound": 0,
+              "ScalingAdjustment": 3
+            }
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/selenium-scalableTarget-firefox/step-metric-scaling-firefox/UpperPolicy/Resource"
+      }
+    },
+    "SeleniumHubClusterseleniumscalableTargetfirefoxstepmetricscalingfirefoxUpperAlarm239EB45D": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": 1,
+        "AlarmActions": [
+          {
+            "Ref": "SeleniumHubClusterseleniumscalableTargetfirefoxstepmetricscalingfirefoxUpperPolicy403D8D38"
+          }
+        ],
+        "AlarmDescription": "Upper threshold scaling alarm",
+        "Dimensions": [
+          {
+            "Name": "ClusterName",
+            "Value": {
+              "Ref": "SeleniumHubClustercluster84F73114"
+            }
+          },
+          {
+            "Name": "ServiceName",
+            "Value": {
+              "Fn::GetAtt": [
+                "SeleniumHubClusterseleniumfirefoxserviceService19064102",
+                "Name"
+              ]
+            }
+          }
+        ],
+        "MetricName": "CPUUtilization",
+        "Namespace": "AWS/ECS",
+        "Period": 60,
+        "Statistic": "Maximum",
+        "Threshold": 80
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/SeleniumHubCluster/selenium-scalableTarget-firefox/step-metric-scaling-firefox/UpperAlarm/Resource"
+      }
+    },
+    "CDKMetadata": {
+      "Type": "AWS::CDK::Metadata",
+      "Properties": {
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/31TTU/DMAz9LdxDYAgJjozxoUkIqhVx9zJTwrKkSpxNqOp/x0lb2oHEyS/PL7H96s7k7OpSnp/cwCGcqs32rFHOo2xKArUVC2cD+ahIrDC46BWKxbt9iVRHSmhgW5GuN6guZPNWq5R6KxaiiGujVRnXFrN8RCsXCV9hbXDkR24eglMaSDv7I07gflmk8Az0CIQH+BKF13uG48NLS+gZD4Kuk/40J57qY4eWRIkqek1fj97FOvfwL7G0lccQ/vD3mW4FqiCbhYmBqyfRAB/AV5CmCts7fNdWDzP9Zpwl0Bb9hOvvluj3ujO+h1zOQCCtjIPNGgxYpW21Z+/ndc2GZ+OeOHebc11HR+epTnOjttcMeJJ/5S7YzsGVybEVGnayWbnuI+ZYOL6XXe9QK4yr2JonV/08MWBemrEMRHJBgeFBePkYpD3oiuXJj5mSsC47dV9xwszVYPKRpBXsV9wcgNQHO2XA75Img7ZthXUblJ/hbD+7ljP+Iz6D1qc+WtI7lKsufgOnJRM8LgMAAA=="
+      },
+      "Metadata": {
+        "aws:cdk:path": "testing-stack/CDKMetadata/Default"
+      }
+    }
+  },
+  "Outputs": {
+    "SeleniumHubClusterLoadBalancerDNS18CC1A57": {
+      "Value": {
+        "Fn::GetAtt": ["SeleniumHubClusterapplbE16C09C8", "DNSName"]
+      },
+      "Export": {
+        "Name": "Selenium-Hub-DNS"
+      }
+    }
   }
- }
 }
