@@ -15,24 +15,11 @@ class TestWellArchitectedPatterns(jadecobra.toolkit.TestCase):
             'AlbFargateService',
             'NlbFargateService',
             'NlbAutoscalingFargateService',
+            'SeleniumTestService'
         )
 
     def test_well_architected_cdk_patterns(self):
-        result = jadecobra.toolkit.time_it(
-            subprocess.run,
-            (
-                'cdk ls *Ecs*'
-                '--no-version-reporting '
-                '--no-path-metadata '
-                '--no-asset-metadata'
-            ),
-            description=f'cdk ls',
-            shell=True,
-            capture_output=True,
-        )
-        print(result.stderr.decode())
-        print(result.stdout.decode())
-        self.assertEqual(result.returncode, 0)
+        self.create_cdk_templates()
         for pattern in self.patterns():
             with self.subTest(i=pattern):
                 self.assert_cdk_templates_equal(pattern)

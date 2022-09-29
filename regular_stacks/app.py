@@ -7,6 +7,7 @@ class RegularStacks(aws_cdk.App):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.ecs()
+        self.selenium()
         # self.in_progress()
 
     @staticmethod
@@ -54,6 +55,13 @@ class RegularStacks(aws_cdk.App):
         #     self, 'AlbEc2Service',
         #     container_image=self.container_image(),
         # )
+
+    def selenium(self):
+        ecs.selenium_test_service.SeleniumTestService(
+            self, 'SeleniumTestService',
+            container_image='selenium-hub-container',
+            max_capacity=10,
+        )
 
 RegularStacks().synth()
 
