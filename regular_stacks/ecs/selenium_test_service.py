@@ -48,6 +48,7 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
             command=self.get_node_commands(),
             entry_point=self.get_entry_point_commands(),
         )
+
         self.firefox_hub = self.create_fargate_service(
             name='selenium-firefox-node',
             container_image='selenium/node-firefox:3.141.59',
@@ -56,10 +57,10 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
             command=self.get_node_commands(),
             entry_point=self.get_entry_point_commands(),
         )
-        self.selenium_hub.service.apply_removal_policy(
+        self.selenium_hub.apply_removal_policy(
             aws_cdk.RemovalPolicy.DESTROY
         )
-        scalable_task = self.selenium_hub.service.auto_scale_task_count(
+        scalable_task = self.selenium_hub.auto_scale_task_count(
             min_capacity=1,
             max_capacity=max_capacity
         )
@@ -157,10 +158,8 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
         )
 
     def create_task_definition(
-        self, name=None, container_image=None, container_name=None,
-        port=None, cpu=None, memory=None,
-        environment=None, command=None,
-        entry_point=None,
+        self, name=None, container_image=None, port=None, cpu=None, memory=None,
+        environment=None, command=None, entry_point=None,
     ):
         task_definition = aws_cdk.aws_ecs.FargateTaskDefinition(
             self, f'{name}FargateTaskDefinition',
@@ -173,7 +172,7 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
         task_definition.add_container(
             f'{name}Container',
             command=command,
-            container_name=container_name,
+            container_name=f'{name}-container',
             cpu=cpu,
             entry_point=entry_point,
             environment=environment,
@@ -188,34 +187,24 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
     def create_application_load_balancer(self):
         return
 
-    def create_a_fargate_service(self, name):
+    def create_fargate_service(
+        self, name=None, container_image=None, port=None,
+        environment=None, command=None, entry_point=None
+    ):
         return aws_cdk.aws_ecs.FargateService(
             self, f'{name}FargateService',
-            task_definition=None,
             assign_public_ip=False,
             platform_version=aws_cdk.aws_ecs.FargatePlatformVersion.LATEST,
             cluster=self.ecs_cluster,
             capacity_provider_strategies=self.capacity_provider_strategies(),
-            enable_execute_command=True
-        )
-
-    def create_fargate_service(self, name=None, container_image=None, environment=None, port=None, command=None, entry_point=None):
-        return aws_cdk.aws_ecs_patterns.ApplicationLoadBalancedFargateService(
-            self, f'{name}AlbEcsFargateService',
-            assign_public_ip=False,
-            capacity_provider_strategies=self.capacity_provider_strategies(),
             enable_execute_command=True,
+            enable_ecs_managed_tags=False,
+            health_check_grace_period=aws_cdk.Duration.seconds(60),
             max_healthy_percent=100,
             min_healthy_percent=75,
-            listener_port=port,
-            open_listener=False,
-            cluster=self.ecs_cluster,
-            runtime_platform=aws_cdk.aws_ecs.RuntimePlatform(
-                cpu_architecture=aws_cdk.aws_ecs.CpuArchitecture.ARM64,
-            ),
+            service_name=name,
             task_definition=self.create_task_definition(
                 container_image=container_image,
-                container_name=f'{name}-container',
                 port=port,
                 cpu=1024,
                 name=name,
@@ -225,3 +214,29 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
                 entry_point=entry_point,
             ),
         )
+
+    # def create_fargate_service(self, name=None, container_image=None, environment=None, port=None, command=None, entry_point=None):
+    #     return aws_cdk.aws_ecs_patterns.ApplicationLoadBalancedFargateService(
+    #         self, f'{name}AlbEcsFargateService',
+    #         assign_public_ip=False,
+    #         capacity_provider_strategies=self.capacity_provider_strategies(),
+    #         enable_execute_command=True,
+    #         max_healthy_percent=100,
+    #         min_healthy_percent=75,
+    #         listener_port=port,
+    #         open_listener=False,
+    #         cluster=self.ecs_cluster,
+    #         runtime_platform=aws_cdk.aws_ecs.RuntimePlatform(
+    #             cpu_architecture=aws_cdk.aws_ecs.CpuArchitecture.ARM64,
+    #         ),
+    #         task_definition=self.create_task_definition(
+    #             container_image=container_image,
+    #             port=port,
+    #             cpu=1024,
+    #             name=name,
+    #             memory=2048,
+    #             environment=environment,
+    #             command=command,
+    #             entry_point=entry_point,
+    #         ),
+    #     )
