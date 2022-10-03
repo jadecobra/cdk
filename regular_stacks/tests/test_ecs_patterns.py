@@ -15,7 +15,7 @@ class TestWellArchitectedPatterns(jadecobra.toolkit.TestCase):
             'AlbFargateService',
             'NlbFargateService',
             'NlbAutoscalingFargateService',
-            'SeleniumTestService'
+            'SeleniumHubCluster'
         )
 
     def test_well_architected_cdk_patterns(self):

@@ -16,42 +16,98 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
         self.name = name
         self.vpc = self.get_vpc()
         self.ecs_cluster = self.create_autoscaling_ecs_cluster()
+        self.security_group = self.create_security_group()
+        self.load_balancer = self.create_application_load_balancer(self.security_group)
 
         self.selenium_hub = self.create_selenium_hub(
             max_capacity=max_capacity,
-            security_groups=self.ecs_cluster.connections.security_groups,
+            security_group=self.security_group,
+        )
+
+        # self.register_load_balancer_targets(self.selenium_hub)
+        self.selenium_hub.register_load_balancer_targets(
+            aws_cdk.aws_ecs.EcsTarget(
+                container_name='selenium-hub-container',
+                container_port=self.default_port(),
+                new_target_group_id='ECS',
+                listener=aws_cdk.aws_ecs.ListenerConfig.application_listener(
+                    listener=self.load_balancer.add_listener(
+                        'Listener',
+                        port=self.default_port(),
+                        protocol=aws_cdk.aws_elasticloadbalancingv2.ApplicationProtocol.HTTP
+                    ),
+                    port=self.default_port(),
+                    protocol=aws_cdk.aws_elasticloadbalancingv2.ApplicationProtocol.HTTPS
+                )
+            )
         )
 
         self.create_chrome_node(
-            load_balancer_dns_name=self.selenium_hub.load_balancer.load_balancer_dns_name,
+            load_balancer_dns_name=self.load_balancer.load_balancer_dns_name,
             max_capacity=max_capacity,
-            security_group=self.ecs_cluster.connections,
+            security_group=self.security_group,
         )
         self.create_firefox_node(
-            dns_name=self.selenium_hub.load_balancer.load_balancer_dns_name,
+            load_balancer_dns_name=self.load_balancer.load_balancer_dns_name,
             max_capacity=max_capacity,
-            security_group=self.ecs_cluster.connections,
+            security_group=self.security_group,
         )
 
-        self.create_security_group_ingress_rule(
-            connection=self.selenium_hub.service.connections,
-            port=self.default_port(),
-        )
-        self.create_security_group_ingress_rule(
-            connection=self.selenium_hub.service.connections,
-            port=self.entry_port(),
-        )
-        self.create_security_group_ingress_rule(
-            connection=self.selenium_hub.load_balancer.connections,
+        self.create_a_security_group_ingress_rule(
+            connection=self.load_balancer.connections,
             port=self.default_port(),
         )
 
+    def register_load_balancer_targets(self, service):
+        return service.register_load_balancer_targets(
+            aws_cdk.aws_ecs.EcsTarget(
+                container_name='selenium-hub-container',
+                container_port=self.default_port(),
+                new_target_group_id='ECS',
+                listener=aws_cdk.aws_ecs.ListenerConfig.application_listener(
+                    listener=self.load_balancer.add_listener(
+                        'Listener',
+                        port=self.default_port(),
+                        protocol=aws_cdk.aws_elasticloadbalancingv2.ApplicationProtocol.HTTP
+                    ),
+                    port=self.default_port(),
+                    protocol=aws_cdk.aws_elasticloadbalancingv2.ApplicationProtocol.HTTPS
+                )
+            )
+        )
 
-    def create_security_group_ingress_rule(self, connection=None, port=None):
+    def create_security_group_ingress_rule(self, security_group=None, port=None):
+        return security_group.add_ingress_rule(
+            aws_cdk.aws_ec2.Peer.any_ipv4(),
+            aws_cdk.aws_ec2.Port.tcp(port),
+            f'Port {port} for inbound traffic'
+        )
+
+    def create_a_security_group_ingress_rule(self, connection=None, port=None):
         return connection.allow_from_any_ipv4(
             port_range=aws_cdk.aws_ec2.Port.tcp(port),
             description=f'Port {port} for inbound traffic'
         )
+
+    def create_security_group(self):
+        security_group = aws_cdk.aws_ec2.SecurityGroup(
+            self, 'security-group-selenium',
+            vpc=self.vpc,
+            allow_all_outbound=True,
+        )
+        for port in (
+            self.default_port(),
+            self.entry_port(),
+        ):
+            self.create_security_group_ingress_rule(
+                security_group=security_group,
+                port=port,
+            )
+        return security_group
+
+    @staticmethod
+    def selenium_version():
+        return '3.141.59'
 
     @staticmethod
     def entry_port():
@@ -61,44 +117,42 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
     def default_port():
         return 4444
 
-    def create_selenium_hub(self, max_capacity=None, security_groups=None):
-        load_balanced_fargate_service = self.create_application_load_balanced_fargate_service(
+    def create_selenium_hub(self, max_capacity=None, security_group=None):
+        return self.create_autoscaling_fargate_service(
             name='selenium-hub',
-            container_image='selenium/hub:3.141.59',
-            security_groups=security_groups,
-            port=self.default_port(),
+            container_image=f'selenium/hub:{self.selenium_version()}',
+            security_group=security_group,
+            max_capacity=max_capacity,
             environment_variables={
                 "GRID_BROWSER_TIMEOUT": "200000",
                 "GRID_TIMEOUT": "180",
                 "SE_OPTS": "-debug"
             }
         )
-        self.create_scaling_configuration(
-            service=load_balanced_fargate_service.service,
-            max_capacity=max_capacity,
-        )
-        return load_balanced_fargate_service
 
     def create_chrome_node(self, load_balancer_dns_name=None, max_capacity=None, security_group=None):
-        self.create_fargate_service(
+        self.create_autoscaling_fargate_service(
             name='selenium-chrome-node',
-            container_image='selenium/node-chrome:3.141.59',
-            load_balancer_dns_name=load_balancer_dns_name,
+            container_image=f'selenium/node-chrome:{self.selenium_version()}',
             max_capacity=max_capacity,
             security_group=security_group,
+            environment_variables=self.get_node_environment_variables(load_balancer_dns_name),
+            command=self.get_node_commands(),
+            entry_point=self.get_entry_point_commands(),
         )
 
-    def create_firefox_node(self, dns_name=None, max_capacity=None, security_group=None):
-        self.create_fargate_service(
+    def create_firefox_node(self, load_balancer_dns_name=None, max_capacity=None, security_group=None):
+        self.create_autoscaling_fargate_service(
             name='selenium-firefox-node',
-            container_image='selenium/node-firefox:3.141.59',
-            load_balancer_dns_name=dns_name,
+            container_image=f'selenium/node-firefox:{self.selenium_version()}',
             max_capacity=max_capacity,
             security_group=security_group,
+            environment_variables=self.get_node_environment_variables(load_balancer_dns_name),
+            command=self.get_node_commands(),
+            entry_point=self.get_entry_point_commands(),
         )
 
     def create_scaling_configuration(self, service=None, max_capacity=None):
-        service.apply_removal_policy(aws_cdk.RemovalPolicy.DESTROY)
         service.auto_scale_task_count(
             min_capacity=1,
             max_capacity=max_capacity,
@@ -112,11 +166,11 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
             scaling_steps=[
                 aws_cdk.aws_applicationautoscaling.ScalingInterval(
                     change=-1,
-                    upper=2
+                    upper=30
                 ),
                 aws_cdk.aws_applicationautoscaling.ScalingInterval(
                     change=3,
-                    lower=3,
+                    lower=80,
                 ),
             ],
             adjustment_type=aws_cdk.aws_applicationautoscaling.AdjustmentType.CHANGE_IN_CAPACITY,
@@ -242,21 +296,23 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
     def sixty_seconds():
         return aws_cdk.Duration.seconds(60)
 
-    # def create_application_load_balancer(self):
-    #     return aws_cdk.aws_elasticloadbalancingv2.ApplicationLoadBalancer(
-    #         self, 'ApplicationLoadBalancer',
-    #         idle_timeout=self.sixty_seconds(),
-    #         vpc=self.vpc,
-    #         deletion_protection=False,
-    #         internet_facing=True,
-    #     )
+    def create_application_load_balancer(self, security_group):
+        load_balancer = aws_cdk.aws_elasticloadbalancingv2.ApplicationLoadBalancer(
+            self, 'app-lb',
+            idle_timeout=self.sixty_seconds(),
+            vpc=self.vpc,
+            deletion_protection=False,
+            internet_facing=True,
+        )
+        load_balancer.add_security_group(security_group)
+        return load_balancer
 
     def create_fargate_service(
         self, name=None, container_image=None,
-        max_capacity=None, load_balancer_dns_name=None,
-        security_group=None,
+        security_group=None, environment_variables=None,
+        command=None, entry_point=None
     ):
-        service = aws_cdk.aws_ecs.FargateService(
+        return aws_cdk.aws_ecs.FargateService(
             self, f'{name}FargateService',
             assign_public_ip=False,
             platform_version=aws_cdk.aws_ecs.FargatePlatformVersion.LATEST,
@@ -274,43 +330,33 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
                 cpu=1024,
                 name=name,
                 memory=2048,
-                environment=self.get_node_environment_variables(load_balancer_dns_name),
-                command=self.get_node_commands(),
-                entry_point=self.get_entry_point_commands(),
+                environment=environment_variables,
+                command=command,
+                entry_point=entry_point,
             ),
         )
+
+    def create_autoscaling_fargate_service(
+        self, max_capacity=None, environment_variables=None, load_balancer=None, security_group=None,
+        name=None, container_image=None, command=None, entry_point=None,
+    ):
+        service = self.create_fargate_service(
+            name=name,
+            container_image=container_image,
+            security_group=security_group,
+            environment_variables=environment_variables,
+            command=command,
+            entry_point=entry_point,
+        )
+        service.apply_removal_policy(aws_cdk.RemovalPolicy.DESTROY)
         self.create_scaling_configuration(
             service=service,
             max_capacity=max_capacity,
         )
+        return service
 
     @staticmethod
     def runtime_platform():
         return aws_cdk.aws_ecs.RuntimePlatform(
             cpu_architecture=aws_cdk.aws_ecs.CpuArchitecture.ARM64,
-        )
-
-    def create_application_load_balanced_fargate_service(self, name=None, container_image=None, environment_variables=None, port=None, command=None, entry_point=None, security_groups=None):
-        return aws_cdk.aws_ecs_patterns.ApplicationLoadBalancedFargateService(
-            self, f'{name}AlbEcsFargateService',
-            assign_public_ip=False,
-            capacity_provider_strategies=self.capacity_provider_strategies(),
-            enable_execute_command=True,
-            max_healthy_percent=100,
-            min_healthy_percent=75,
-            listener_port=port,
-            open_listener=False,
-            cluster=self.ecs_cluster,
-            security_groups=security_groups,
-            runtime_platform=self.runtime_platform(),
-            task_definition=self.create_task_definition(
-                container_image=container_image,
-                port=port,
-                cpu=1024,
-                name=name,
-                memory=2048,
-                environment=environment_variables,
-                command=command,
-                entry_point=entry_point,
-            ),
         )
