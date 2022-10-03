@@ -60,7 +60,6 @@ class RegularStacks(aws_cdk.App):
         ecs.selenium_test_service.SeleniumTestService(
             self, 'SeleniumTestService',
             name='selenium-hub',
-            container_image='selenium/hub:3.141.59',
             max_capacity=10,
         )
 
