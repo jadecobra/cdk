@@ -19,27 +19,9 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
         self.security_group = self.create_security_group()
         self.load_balancer = self.create_application_load_balancer(self.security_group)
 
-        self.selenium_hub = self.create_selenium_hub(
+        self.create_selenium_hub(
             max_capacity=max_capacity,
             security_group=self.security_group,
-        )
-
-        # self.register_load_balancer_targets(self.selenium_hub)
-        self.selenium_hub.register_load_balancer_targets(
-            aws_cdk.aws_ecs.EcsTarget(
-                container_name='selenium-hub-container',
-                container_port=self.default_port(),
-                new_target_group_id='ECS',
-                listener=aws_cdk.aws_ecs.ListenerConfig.application_listener(
-                    listener=self.load_balancer.add_listener(
-                        'Listener',
-                        port=self.default_port(),
-                        protocol=aws_cdk.aws_elasticloadbalancingv2.ApplicationProtocol.HTTP
-                    ),
-                    port=self.default_port(),
-                    protocol=aws_cdk.aws_elasticloadbalancingv2.ApplicationProtocol.HTTPS
-                )
-            )
         )
 
         self.create_chrome_node(
@@ -118,7 +100,7 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
         return 4444
 
     def create_selenium_hub(self, max_capacity=None, security_group=None):
-        return self.create_autoscaling_fargate_service(
+        service = self.create_autoscaling_fargate_service(
             name='selenium-hub',
             container_image=f'selenium/hub:{self.selenium_version()}',
             security_group=security_group,
@@ -129,6 +111,8 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
                 "SE_OPTS": "-debug"
             }
         )
+        self.register_load_balancer_targets(service)
+        return service
 
     def create_chrome_node(self, load_balancer_dns_name=None, max_capacity=None, security_group=None):
         self.create_autoscaling_fargate_service(
