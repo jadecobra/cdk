@@ -8,36 +8,33 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
 
     def __init__(
         self, scope: constructs.Construct, construct_id: str,
-        name=None,
         max_capacity=None,
         **kwargs
     ) -> None:
         super().__init__(scope, construct_id, **kwargs)
-        self.name = name
         self.vpc = self.get_vpc()
         self.ecs_cluster = self.create_autoscaling_ecs_cluster()
         self.security_group = self.create_security_group()
         self.load_balancer = self.create_application_load_balancer(self.security_group)
 
-        self.create_selenium_hub(
+        self.create_hub_service(
             max_capacity=max_capacity,
             security_group=self.security_group,
         )
 
-        self.create_node_service(
+        self.create_browser_node(
             name='chrome',
             max_capacity=max_capacity,
             security_group=self.security_group,
             load_balancer_dns_name=self.load_balancer.load_balancer_dns_name,
         )
 
-        self.create_node_service(
+        self.create_browser_node(
             name='firefox',
             max_capacity=max_capacity,
             security_group=self.security_group,
             load_balancer_dns_name=self.load_balancer.load_balancer_dns_name,
         )
-
 
         self.create_security_group_ingress_rule(
             security_group=self.load_balancer.connections.security_groups[0],
@@ -75,98 +72,39 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
             stream_prefix=f'{name}-logs'
         )
 
-    def register_load_balancer_targets(self, service):
-        return service.register_load_balancer_targets(
-            aws_cdk.aws_ecs.EcsTarget(
-                container_name='selenium-hub-container',
-                container_port=self.default_port(),
-                new_target_group_id='ECS',
-                listener=aws_cdk.aws_ecs.ListenerConfig.application_listener(
-                    listener=self.load_balancer.add_listener(
-                        'Listener',
-                        port=self.default_port(),
-                        protocol=aws_cdk.aws_elasticloadbalancingv2.ApplicationProtocol.HTTP
-                    ),
-                    port=self.default_port(),
-                    protocol=aws_cdk.aws_elasticloadbalancingv2.ApplicationProtocol.HTTPS
-                )
-            )
+    @staticmethod
+    def runtime_platform():
+        return aws_cdk.aws_ecs.RuntimePlatform(
+            cpu_architecture=aws_cdk.aws_ecs.CpuArchitecture.ARM64,
         )
 
-    def create_security_group_ingress_rule(self, security_group=None, port=None):
+    @staticmethod
+    def create_security_group_ingress_rule(security_group=None, port=None):
         return security_group.add_ingress_rule(
             aws_cdk.aws_ec2.Peer.any_ipv4(),
             aws_cdk.aws_ec2.Port.tcp(port),
             f'Port {port} for inbound traffic'
         )
 
-    def create_security_group(self):
-        security_group = aws_cdk.aws_ec2.SecurityGroup(
-            self, 'security-group-selenium',
-            vpc=self.vpc,
-            allow_all_outbound=True,
-        )
-        for port in (
-            self.default_port(),
-            self.entry_port(),
-        ):
-            self.create_security_group_ingress_rule(
-                security_group=security_group,
-                port=port,
-            )
-        return security_group
-
-    def create_selenium_hub(self, max_capacity=None, security_group=None):
-        service = self.create_autoscaling_fargate_service(
-            name='selenium-hub',
-            container_image=f'selenium/hub:{self.selenium_version()}',
-            security_group=security_group,
-            max_capacity=max_capacity,
-            environment_variables={
-                "GRID_BROWSER_TIMEOUT": "200000",
-                "GRID_TIMEOUT": "180",
-                "SE_OPTS": "-debug"
-            }
-        )
-        self.register_load_balancer_targets(service)
-        return service
-
-    def create_node_service(self, name=None, load_balancer_dns_name=None, security_group=None, max_capacity=None):
-        return self.create_autoscaling_fargate_service(
-            name=f'selenium-{name}-node',
-            container_image=f'selenium/node-{name}:{self.selenium_version()}',
-            max_capacity=max_capacity,
-            security_group=security_group,
-            environment_variables=self.get_node_environment_variables(load_balancer_dns_name),
-            command=self.get_node_commands(),
-            entry_point=self.get_entry_point_commands(),
+    @staticmethod
+    def get_subnets():
+        return aws_cdk.aws_ec2.SubnetSelection(
+            subnet_type=aws_cdk.aws_ec2.SubnetType.PUBLIC
         )
 
-    def create_scaling_configuration(self, service=None, max_capacity=None):
-        service.auto_scale_task_count(
-            min_capacity=1,
-            max_capacity=max_capacity,
-        ).scale_on_metric(
-            "CpuScaling",
-            metric=service.metric_cpu_utilization(
-                period=self.sixty_seconds(),
-                statistic='Maximum',
+    @staticmethod
+    def capacity_provider_strategies():
+        return [
+            aws_cdk.aws_ecs.CapacityProviderStrategy(
+                capacity_provider='FARGATE',
+                weight=1,
+                base=4,
             ),
-            evaluation_periods=1,
-            scaling_steps=[
-                aws_cdk.aws_applicationautoscaling.ScalingInterval(
-                    change=-1,
-                    upper=30
-                ),
-                aws_cdk.aws_applicationautoscaling.ScalingInterval(
-                    change=3,
-                    lower=80,
-                ),
-            ],
-            adjustment_type=aws_cdk.aws_applicationautoscaling.AdjustmentType.CHANGE_IN_CAPACITY,
-            cooldown=aws_cdk.Duration.seconds(180),
-            metric_aggregation_type=aws_cdk.aws_applicationautoscaling.MetricAggregationType.MAXIMUM,
-        )
+            aws_cdk.aws_ecs.CapacityProviderStrategy(
+                capacity_provider='FARGATE_SPOT',
+                weight=4
+            )
+        ]
 
     @staticmethod
     def get_entry_point_commands():
@@ -187,23 +125,94 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
             "shm_size": "512",
         }
 
-    @staticmethod
-    def capacity_provider_strategies():
-        return [
-            aws_cdk.aws_ecs.CapacityProviderStrategy(
-                capacity_provider='FARGATE',
-                weight=1,
-                base=4,
-            ),
-            aws_cdk.aws_ecs.CapacityProviderStrategy(
-                capacity_provider='FARGATE_SPOT',
-                weight=4
+    def register_load_balancer_targets(self, service):
+        return service.register_load_balancer_targets(
+            aws_cdk.aws_ecs.EcsTarget(
+                container_name='selenium-hub-container',
+                container_port=self.default_port(),
+                new_target_group_id='ECS',
+                listener=aws_cdk.aws_ecs.ListenerConfig.application_listener(
+                    listener=self.load_balancer.add_listener(
+                        'Listener',
+                        port=self.default_port(),
+                        protocol=aws_cdk.aws_elasticloadbalancingv2.ApplicationProtocol.HTTP
+                    ),
+                    port=self.default_port(),
+                    protocol=aws_cdk.aws_elasticloadbalancingv2.ApplicationProtocol.HTTP
+                )
             )
+        )
+
+    def create_security_group(self):
+        security_group = aws_cdk.aws_ec2.SecurityGroup(
+            self, 'security-group-selenium',
+            vpc=self.vpc,
+            allow_all_outbound=True,
+        )
+        for port in (
+            self.default_port(),
+            self.entry_port(),
+        ):
+            self.create_security_group_ingress_rule(
+                security_group=security_group,
+                port=port,
+            )
+        return security_group
+
+    def create_hub_service(self, max_capacity=None, security_group=None):
+        service = self.create_autoscaling_fargate_service(
+            name='selenium-hub',
+            container_image=f'selenium/hub:{self.selenium_version()}',
+            security_group=security_group,
+            max_capacity=max_capacity,
+            environment_variables={
+                "GRID_BROWSER_TIMEOUT": "200000",
+                "GRID_TIMEOUT": "180",
+                "SE_OPTS": "-debug"
+            }
+        )
+        self.register_load_balancer_targets(service)
+        return service
+
+    def create_browser_node(self, name=None, load_balancer_dns_name=None, security_group=None, max_capacity=None):
+        return self.create_autoscaling_fargate_service(
+            name=f'selenium-{name}-node',
+            container_image=f'selenium/node-{name}:{self.selenium_version()}',
+            max_capacity=max_capacity,
+            security_group=security_group,
+            environment_variables=self.get_node_environment_variables(load_balancer_dns_name),
+            command=self.get_node_commands(),
+            entry_point=self.get_entry_point_commands(),
+        )
+
+    @staticmethod
+    def scaling_intervals():
+        return [
+            aws_cdk.aws_applicationautoscaling.ScalingInterval(
+                change=-1,
+                upper=30
+            ),
+            aws_cdk.aws_applicationautoscaling.ScalingInterval(
+                change=3,
+                lower=80,
+            ),
         ]
 
-    def get_subnets(self):
-        return aws_cdk.aws_ec2.SubnetSelection(
-            subnet_type=aws_cdk.aws_ec2.SubnetType.PUBLIC
+    def create_scaling_configuration(self, service=None, max_capacity=None):
+        service.auto_scale_task_count(
+            min_capacity=1,
+            max_capacity=max_capacity,
+        ).scale_on_metric(
+            "CpuScaling",
+            metric=service.metric_cpu_utilization(
+                period=self.sixty_seconds(),
+                statistic='Maximum',
+            ),
+            evaluation_periods=1,
+            scaling_steps=self.scaling_intervals(),
+            adjustment_type=aws_cdk.aws_applicationautoscaling.AdjustmentType.CHANGE_IN_CAPACITY,
+            cooldown=aws_cdk.Duration.seconds(180),
+            metric_aggregation_type=aws_cdk.aws_applicationautoscaling.MetricAggregationType.MAXIMUM,
         )
 
     def create_autoscaling_group(self, security_group):
@@ -228,7 +237,7 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
 
     def create_autoscaling_ecs_cluster(self):
         ecs_cluster = aws_cdk.aws_ecs.Cluster(
-            self, 'SeleniumHubCluster',
+            self, 'EcsCluster',
             enable_fargate_capacity_providers=False,
             container_insights=True,
             vpc=self.vpc
@@ -269,7 +278,7 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
 
     def create_application_load_balancer(self, security_group):
         load_balancer = aws_cdk.aws_elasticloadbalancingv2.ApplicationLoadBalancer(
-            self, 'app-lb',
+            self, 'ApplicationLoadBalancer',
             idle_timeout=self.sixty_seconds(),
             vpc=self.vpc,
             deletion_protection=False,
@@ -308,8 +317,9 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
         )
 
     def create_autoscaling_fargate_service(
-        self, max_capacity=None, environment_variables=None, load_balancer=None, security_group=None,
-        name=None, container_image=None, command=None, entry_point=None,
+        self, max_capacity=None, environment_variables=None,
+        security_group=None, name=None, container_image=None,
+        command=None, entry_point=None,
     ):
         service = self.create_fargate_service(
             name=name,
@@ -325,9 +335,3 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
             max_capacity=max_capacity,
         )
         return service
-
-    @staticmethod
-    def runtime_platform():
-        return aws_cdk.aws_ecs.RuntimePlatform(
-            cpu_architecture=aws_cdk.aws_ecs.CpuArchitecture.ARM64,
-        )

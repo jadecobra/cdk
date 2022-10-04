@@ -59,7 +59,6 @@ class RegularStacks(aws_cdk.App):
     def selenium(self):
         ecs.selenium_test_service.SeleniumTestService(
             self, 'SeleniumHubCluster',
-            name='selenium-hub',
             max_capacity=10,
         )
 
