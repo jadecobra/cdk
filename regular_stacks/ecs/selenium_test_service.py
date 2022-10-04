@@ -300,13 +300,13 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
         load_balancer.add_security_group(security_group)
         return load_balancer
 
-    def create_fargate_service(
+    def create_autoscaling_fargate_service(
         self, name=None, container_image=None,
         security_group=None, environment_variables=None,
         command=None, entry_point=None,
-        cpu=None, memory=None,
+        cpu=None, memory=None, max_capacity=None,
     ):
-        return aws_cdk.aws_ecs.FargateService(
+        service = aws_cdk.aws_ecs.FargateService(
             self, f'{name}FargateService',
             assign_public_ip=False,
             platform_version=aws_cdk.aws_ecs.FargatePlatformVersion.LATEST,
@@ -328,22 +328,6 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
                 command=command,
                 entry_point=entry_point,
             ),
-        )
-
-    def create_autoscaling_fargate_service(
-        self, max_capacity=None, environment_variables=None,
-        security_group=None, name=None, container_image=None,
-        command=None, entry_point=None, cpu=None, memory=None,
-    ):
-        service = self.create_fargate_service(
-            name=name,
-            container_image=container_image,
-            security_group=security_group,
-            environment_variables=environment_variables,
-            command=command,
-            entry_point=entry_point,
-            cpu=cpu,
-            memory=memory,
         )
         service.apply_removal_policy(aws_cdk.RemovalPolicy.DESTROY)
         self.create_scaling_configuration(
