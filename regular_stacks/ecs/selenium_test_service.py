@@ -24,16 +24,20 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
             security_group=self.security_group,
         )
 
-        self.create_chrome_node(
-            load_balancer_dns_name=self.load_balancer.load_balancer_dns_name,
+        self.create_node_service(
+            name='chrome',
             max_capacity=max_capacity,
             security_group=self.security_group,
-        )
-        self.create_firefox_node(
             load_balancer_dns_name=self.load_balancer.load_balancer_dns_name,
+        )
+
+        self.create_node_service(
+            name='firefox',
             max_capacity=max_capacity,
             security_group=self.security_group,
+            load_balancer_dns_name=self.load_balancer.load_balancer_dns_name,
         )
+
 
         self.create_security_group_ingress_rule(
             security_group=self.load_balancer.connections.security_groups[0],
@@ -127,35 +131,10 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
         self.register_load_balancer_targets(service)
         return service
 
-    def create_node(self, name=None, load_balancer_dns_name=None, security_group=None, max_capacity=None):
+    def create_node_service(self, name=None, load_balancer_dns_name=None, security_group=None, max_capacity=None):
         return self.create_autoscaling_fargate_service(
             name=f'selenium-{name}-node',
             container_image=f'selenium/node-{name}:{self.selenium_version()}',
-            max_capacity=max_capacity,
-            security_group=security_group,
-            environment_variables=self.get_node_environment_variables(load_balancer_dns_name),
-            command=self.get_node_commands(),
-            entry_point=self.get_entry_point_commands(),
-        )
-
-    def create_chrome_node(self, load_balancer_dns_name=None, max_capacity=None, security_group=None):
-        return self.create_node(
-            name='chrome',
-            max_capacity=max_capacity,
-            security_group=security_group,
-            load_balancer_dns_name=load_balancer_dns_name,
-        )
-
-    def create_firefox_node(self, load_balancer_dns_name=None, max_capacity=None, security_group=None):
-        return self.create_node(
-            name='firefox',
-            max_capacity=max_capacity,
-            security_group=security_group,
-            load_balancer_dns_name=load_balancer_dns_name,
-        )
-        self.create_autoscaling_fargate_service(
-            name='selenium-firefox-node',
-            container_image=f'selenium/node-firefox:{self.selenium_version()}',
             max_capacity=max_capacity,
             security_group=security_group,
             environment_variables=self.get_node_environment_variables(load_balancer_dns_name),
