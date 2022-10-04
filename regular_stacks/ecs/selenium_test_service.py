@@ -211,29 +211,29 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
             ),
         ]
 
-    def create_scaling_configuration(self, service=None, max_capacity=None):
-        service.auto_scale_task_count(
-            min_capacity=1,
-            max_capacity=max_capacity,
-        ).scale_on_metric(
-            "CpuScaling",
-            metric=service.metric_cpu_utilization(
-                period=self.sixty_seconds(),
-                statistic='Maximum',
-            ),
-            evaluation_periods=1,
-            scaling_steps=self.scaling_intervals(),
-            adjustment_type=aws_cdk.aws_applicationautoscaling.AdjustmentType.CHANGE_IN_CAPACITY,
-            cooldown=aws_cdk.Duration.seconds(180),
-            metric_aggregation_type=aws_cdk.aws_applicationautoscaling.MetricAggregationType.MAXIMUM,
-        )
-
     def create_ecs_cluster(self):
         return aws_cdk.aws_ecs.Cluster(
             self, 'EcsCluster',
             enable_fargate_capacity_providers=False,
             container_insights=True,
             vpc=self.vpc
+        )
+
+    def create_scaling_configuration(self, service=None, max_capacity=None):
+        service.auto_scale_task_count(
+            min_capacity=1,
+            max_capacity=max_capacity,
+        ).scale_on_metric(
+            "CpuScaling",
+            adjustment_type=aws_cdk.aws_applicationautoscaling.AdjustmentType.CHANGE_IN_CAPACITY,
+            cooldown=aws_cdk.Duration.seconds(180),
+            evaluation_periods=1,
+            scaling_steps=self.scaling_intervals(),
+            metric_aggregation_type=aws_cdk.aws_applicationautoscaling.MetricAggregationType.MAXIMUM,
+            metric=service.metric_cpu_utilization(
+                period=self.sixty_seconds(),
+                statistic='Maximum',
+            ),
         )
 
     def create_application_load_balancer(self, security_group):
