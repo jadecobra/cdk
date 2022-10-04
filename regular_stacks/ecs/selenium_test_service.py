@@ -13,7 +13,7 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
     ) -> None:
         super().__init__(scope, construct_id, **kwargs)
         self.vpc = self.get_vpc()
-        self.ecs_cluster = self.create_autoscaling_ecs_cluster()
+        self.ecs_cluster = self.create_ecs_cluster()
         self.security_group = self.create_security_group()
         self.load_balancer = self.create_application_load_balancer(self.security_group)
 
@@ -228,39 +228,24 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
             metric_aggregation_type=aws_cdk.aws_applicationautoscaling.MetricAggregationType.MAXIMUM,
         )
 
-    def create_autoscaling_group(self, security_group):
-        return aws_cdk.aws_autoscaling.AutoScalingGroup(
-            self, "AutoScalingGroup",
-            instance_type=aws_cdk.aws_ec2.InstanceType("t2.micro"),
-            machine_image=aws_cdk.aws_ecs.EcsOptimizedImage.amazon_linux2(),
-            associate_public_ip_address=True,
-            desired_capacity=5,
-            vpc=self.vpc,
-            vpc_subnets=self.get_subnets(),
-            security_group=security_group,
-        )
-
-    def create_autoscaling_capacity_provider(self, autoscaling_group):
-        return aws_cdk.aws_ecs.AsgCapacityProvider(
-            self, "AsgCapacityProvider",
-            auto_scaling_group=autoscaling_group,
-            spot_instance_draining=True,
-            machine_image_type=aws_cdk.aws_ecs.MachineImageType.AMAZON_LINUX_2,
-        )
-
-    def create_autoscaling_ecs_cluster(self):
-        ecs_cluster = aws_cdk.aws_ecs.Cluster(
+    def create_ecs_cluster(self):
+        return aws_cdk.aws_ecs.Cluster(
             self, 'EcsCluster',
             enable_fargate_capacity_providers=False,
             container_insights=True,
             vpc=self.vpc
         )
-        ecs_cluster.add_asg_capacity_provider(
-            self.create_autoscaling_capacity_provider(
-                self.create_autoscaling_group(ecs_cluster.connections)
-            )
+
+    def create_application_load_balancer(self, security_group):
+        load_balancer = aws_cdk.aws_elasticloadbalancingv2.ApplicationLoadBalancer(
+            self, 'ApplicationLoadBalancer',
+            idle_timeout=self.sixty_seconds(),
+            vpc=self.vpc,
+            deletion_protection=False,
+            internet_facing=True,
         )
-        return ecs_cluster
+        load_balancer.add_security_group(security_group)
+        return load_balancer
 
     def create_task_definition(
         self, name=None, container_image=None, port=None, cpu=None, memory=None,
@@ -288,17 +273,6 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
             logging=self.create_log_driver(name)
         )
         return task_definition
-
-    def create_application_load_balancer(self, security_group):
-        load_balancer = aws_cdk.aws_elasticloadbalancingv2.ApplicationLoadBalancer(
-            self, 'ApplicationLoadBalancer',
-            idle_timeout=self.sixty_seconds(),
-            vpc=self.vpc,
-            deletion_protection=False,
-            internet_facing=True,
-        )
-        load_balancer.add_security_group(security_group)
-        return load_balancer
 
     def create_autoscaling_fargate_service(
         self, name=None, container_image=None,
