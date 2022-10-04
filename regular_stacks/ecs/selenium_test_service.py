@@ -35,9 +35,40 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
             security_group=self.security_group,
         )
 
-        self.create_a_security_group_ingress_rule(
-            connection=self.load_balancer.connections,
-            port=self.default_port(),
+        self.create_security_group_ingress_rule(
+            security_group=self.load_balancer.connections.security_groups[0],
+            port=self.default_port()
+        )
+
+    @staticmethod
+    def selenium_version():
+        return '3.141.59'
+
+    @staticmethod
+    def entry_port():
+        return 5555
+
+    @staticmethod
+    def default_port():
+        return 4444
+
+    @staticmethod
+    def sixty_seconds():
+        return aws_cdk.Duration.seconds(60)
+
+    @staticmethod
+    def get_port_mappings(port):
+        return [
+            aws_cdk.aws_ecs.PortMapping(
+                container_port=port,
+                host_port=port,
+            )
+        ]
+
+    @staticmethod
+    def create_log_driver(name):
+        return aws_cdk.aws_ecs.LogDriver.aws_logs(
+            stream_prefix=f'{name}-logs'
         )
 
     def register_load_balancer_targets(self, service):
@@ -65,12 +96,6 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
             f'Port {port} for inbound traffic'
         )
 
-    def create_a_security_group_ingress_rule(self, connection=None, port=None):
-        return connection.allow_from_any_ipv4(
-            port_range=aws_cdk.aws_ec2.Port.tcp(port),
-            description=f'Port {port} for inbound traffic'
-        )
-
     def create_security_group(self):
         security_group = aws_cdk.aws_ec2.SecurityGroup(
             self, 'security-group-selenium',
@@ -87,18 +112,6 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
             )
         return security_group
 
-    @staticmethod
-    def selenium_version():
-        return '3.141.59'
-
-    @staticmethod
-    def entry_port():
-        return 5555
-
-    @staticmethod
-    def default_port():
-        return 4444
-
     def create_selenium_hub(self, max_capacity=None, security_group=None):
         service = self.create_autoscaling_fargate_service(
             name='selenium-hub',
@@ -114,10 +127,10 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
         self.register_load_balancer_targets(service)
         return service
 
-    def create_chrome_node(self, load_balancer_dns_name=None, max_capacity=None, security_group=None):
-        self.create_autoscaling_fargate_service(
-            name='selenium-chrome-node',
-            container_image=f'selenium/node-chrome:{self.selenium_version()}',
+    def create_node(self, name=None, load_balancer_dns_name=None, security_group=None, max_capacity=None):
+        return self.create_autoscaling_fargate_service(
+            name=f'selenium-{name}-node',
+            container_image=f'selenium/node-{name}:{self.selenium_version()}',
             max_capacity=max_capacity,
             security_group=security_group,
             environment_variables=self.get_node_environment_variables(load_balancer_dns_name),
@@ -125,7 +138,21 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
             entry_point=self.get_entry_point_commands(),
         )
 
+    def create_chrome_node(self, load_balancer_dns_name=None, max_capacity=None, security_group=None):
+        return self.create_node(
+            name='chrome',
+            max_capacity=max_capacity,
+            security_group=security_group,
+            load_balancer_dns_name=load_balancer_dns_name,
+        )
+
     def create_firefox_node(self, load_balancer_dns_name=None, max_capacity=None, security_group=None):
+        return self.create_node(
+            name='firefox',
+            max_capacity=max_capacity,
+            security_group=security_group,
+            load_balancer_dns_name=load_balancer_dns_name,
+        )
         self.create_autoscaling_fargate_service(
             name='selenium-firefox-node',
             container_image=f'selenium/node-firefox:{self.selenium_version()}',
@@ -234,21 +261,6 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
         )
         return ecs_cluster
 
-    @staticmethod
-    def get_port_mappings(port):
-        return [
-            aws_cdk.aws_ecs.PortMapping(
-                container_port=port,
-                host_port=port,
-            )
-        ]
-
-    @staticmethod
-    def create_log_driver(name):
-        return aws_cdk.aws_ecs.LogDriver.aws_logs(
-            stream_prefix=f'{name}-logs'
-        )
-
     def create_task_definition(
         self, name=None, container_image=None, port=None, cpu=None, memory=None,
         environment=None, command=None, entry_point=None,
@@ -275,10 +287,6 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
             logging=self.create_log_driver(name)
         )
         return task_definition
-
-    @staticmethod
-    def sixty_seconds():
-        return aws_cdk.Duration.seconds(60)
 
     def create_application_load_balancer(self, security_group):
         load_balancer = aws_cdk.aws_elasticloadbalancingv2.ApplicationLoadBalancer(
