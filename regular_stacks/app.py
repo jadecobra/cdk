@@ -59,7 +59,9 @@ class RegularStacks(aws_cdk.App):
     def selenium(self):
         ecs.selenium_test_service.SeleniumTestService(
             self, 'SeleniumHubCluster',
+            cpu=1024,
             max_capacity=10,
+            memory=2048,
         )
 
 RegularStacks().synth()

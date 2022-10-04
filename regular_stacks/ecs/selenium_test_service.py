@@ -8,7 +8,7 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
 
     def __init__(
         self, scope: constructs.Construct, construct_id: str,
-        max_capacity=None,
+        max_capacity=None, memory=None, cpu=None,
         **kwargs
     ) -> None:
         super().__init__(scope, construct_id, **kwargs)
@@ -20,6 +20,8 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
         self.create_hub_service(
             max_capacity=max_capacity,
             security_group=self.security_group,
+            cpu=cpu,
+            memory=memory,
         )
 
         self.create_browser_node(
@@ -27,6 +29,8 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
             max_capacity=max_capacity,
             security_group=self.security_group,
             load_balancer_dns_name=self.load_balancer.load_balancer_dns_name,
+            cpu=cpu,
+            memory=memory,
         )
 
         self.create_browser_node(
@@ -34,6 +38,8 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
             max_capacity=max_capacity,
             security_group=self.security_group,
             load_balancer_dns_name=self.load_balancer.load_balancer_dns_name,
+            cpu=cpu,
+            memory=memory,
         )
 
         self.create_security_group_ingress_rule(
@@ -159,10 +165,12 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
             )
         return security_group
 
-    def create_hub_service(self, max_capacity=None, security_group=None):
+    def create_hub_service(self, max_capacity=None, security_group=None, cpu=None, memory=None):
         service = self.create_autoscaling_fargate_service(
             name='selenium-hub',
             container_image=f'selenium/hub:{self.selenium_version()}',
+            cpu=cpu,
+            memory=memory,
             security_group=security_group,
             max_capacity=max_capacity,
             environment_variables={
@@ -174,11 +182,16 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
         self.register_load_balancer_targets(service)
         return service
 
-    def create_browser_node(self, name=None, load_balancer_dns_name=None, security_group=None, max_capacity=None):
+    def create_browser_node(
+        self, name=None, load_balancer_dns_name=None, security_group=None,
+        max_capacity=None, cpu=None, memory=None
+    ):
         return self.create_autoscaling_fargate_service(
             name=f'selenium-{name}-node',
             container_image=f'selenium/node-{name}:{self.selenium_version()}',
             max_capacity=max_capacity,
+            cpu=cpu,
+            memory=memory,
             security_group=security_group,
             environment_variables=self.get_node_environment_variables(load_balancer_dns_name),
             command=self.get_node_commands(),
@@ -290,7 +303,8 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
     def create_fargate_service(
         self, name=None, container_image=None,
         security_group=None, environment_variables=None,
-        command=None, entry_point=None
+        command=None, entry_point=None,
+        cpu=None, memory=None,
     ):
         return aws_cdk.aws_ecs.FargateService(
             self, f'{name}FargateService',
@@ -307,9 +321,9 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
             task_definition=self.create_task_definition(
                 container_image=container_image,
                 port=self.default_port(),
-                cpu=1024,
+                cpu=cpu,
                 name=name,
-                memory=2048,
+                memory=memory,
                 environment=environment_variables,
                 command=command,
                 entry_point=entry_point,
@@ -319,7 +333,7 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
     def create_autoscaling_fargate_service(
         self, max_capacity=None, environment_variables=None,
         security_group=None, name=None, container_image=None,
-        command=None, entry_point=None,
+        command=None, entry_point=None, cpu=None, memory=None,
     ):
         service = self.create_fargate_service(
             name=name,
@@ -328,6 +342,8 @@ class SeleniumTestService(well_architected_stacks.well_architected_stack.Stack):
             environment_variables=environment_variables,
             command=command,
             entry_point=entry_point,
+            cpu=cpu,
+            memory=memory,
         )
         service.apply_removal_policy(aws_cdk.RemovalPolicy.DESTROY)
         self.create_scaling_configuration(
