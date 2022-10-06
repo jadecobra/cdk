@@ -15,7 +15,7 @@ class SnsLambdaDynamodb(well_architected_stack.Stack):
         **kwargs
     ) -> None:
         super().__init__(scope, id, **kwargs)
-
+        self.error_topic = self.create_error_topic()
         self.dynamodb_table = well_architected_constructs.dynamodb_table.DynamodbTableConstruct(
             self, "DynamoDbTable",
             partition_key=partition_key,

@@ -12,6 +12,7 @@ class SqsLambdaSqs(well_architected_stack.Stack):
         sns_topic=None, **kwargs
     ) -> None:
         super().__init__(scope, id, **kwargs)
+        self.error_topic = self.create_error_topic()
         self.sqs_queue = aws_cdk.aws_sqs.Queue(
             self, 'SqsQueue',
             visibility_timeout=aws_cdk.Duration.seconds(300)

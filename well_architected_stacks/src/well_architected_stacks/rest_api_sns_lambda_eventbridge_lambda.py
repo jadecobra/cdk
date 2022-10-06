@@ -12,7 +12,8 @@ class RestApiSnsLambdaEventBridgeLambda(well_architected_stack.Stack):
 
         event_bus = self.create_event_bus(id)
         name = 'destined'
-        sns_topic = self.create_error_topic(f'{name}SnsTopic')
+        sns_topic = self.create_sns_topic(f'{name}SnsTopic')
+        self.error_topic = self.create_error_topic()
         self.create_success_lambda(event_bus)
         self.create_failure_lambda(event_bus)
         self.create_sns_triggered_lambda(

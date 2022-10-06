@@ -13,7 +13,7 @@ class Construct(constructs.Construct):
         **kwargs
     ):
         super().__init__(scope, id, **kwargs)
-        self.error_topic = error_topic if error_topic else self.create_sns_topic(f'{id}ErrorTopic')
+        self.error_topic = error_topic
 
     def create_sns_topic(self, display_name):
         return aws_cdk.aws_sns.Topic(
@@ -44,7 +44,7 @@ class Construct(constructs.Construct):
         )
 
     def create_cloudwatch_alarm(self, id=None, metric=None, threshold=1):
-        return aws_cdk.aws_cloudwatch.Alarm(
+        alarm = aws_cdk.aws_cloudwatch.Alarm(
             self,
             id=id,
             metric=metric,
@@ -52,9 +52,11 @@ class Construct(constructs.Construct):
             evaluation_periods=6,
             datapoints_to_alarm=1,
             treat_missing_data=aws_cdk.aws_cloudwatch.TreatMissingData.NOT_BREACHING,
-        ).add_alarm_action(
-            aws_cdk.aws_cloudwatch_actions.SnsAction(self.error_topic)
         )
+        if self.error_topic:
+            alarm.add_alarm_action(
+                aws_cdk.aws_cloudwatch_actions.SnsAction(self.error_topic)
+            )
 
     def create_cloudwatch_dashboard(self, widgets):
         return aws_cdk.aws_cloudwatch.Dashboard(

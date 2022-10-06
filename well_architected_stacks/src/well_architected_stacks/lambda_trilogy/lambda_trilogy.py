@@ -17,6 +17,7 @@ class LambdaTrilogy(well_architected_stack.Stack):
         function_name=None, **kwargs
     ) -> None:
         super().__init__(scope, id, **kwargs)
+        self.error_topic = self.create_error_topic()
         self.function_name = function_name
         add = 'add'
         subtract = 'subtract'
