@@ -5,5 +5,6 @@ sniffer
 macfsevents
 aws_cdk.aws_apigatewayv2_alpha
 aws_cdk.aws_apigatewayv2_integrations_alpha
+aws_cdk.aws_batch_alpha
 well_architected_constructs
 well_architected_stacks

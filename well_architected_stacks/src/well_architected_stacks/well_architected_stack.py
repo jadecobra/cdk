@@ -10,6 +10,7 @@ class Stack(aws_cdk.Stack):
         scope: constructs.Construct,
         id: str,
         lambda_directory='lambda_functions',
+        permissions_boundary_name=None,
         error_topic=None, **kwargs
     ):
         super().__init__(
@@ -19,6 +20,9 @@ class Stack(aws_cdk.Stack):
         )
         self.error_topic = error_topic if error_topic else self.create_sns_topic(f'{id}ErrorTopic')
         self.lambda_directory = lambda_directory
+
+        if permissions_boundary_name:
+            self.add_permissions_boundary(permissions_boundary_name)
 
     def create_sns_topic(self, display_name):
         return aws_cdk.aws_sns.Topic(
@@ -39,3 +43,13 @@ class Stack(aws_cdk.Stack):
             return aws_cdk.aws_ec2.Vpc(
                 self, 'Vpc'
             )
+
+    def add_permissions_boundary(self, policy_name):
+        aws_cdk.aws_iam.PermissionsBoundary.of(
+            self
+        ).apply(
+            aws_cdk.aws_iam.ManagedPolicy.from_managed_policy_name(
+                self, 'PermissionsBoundary',
+                policy_name
+            )
+        )

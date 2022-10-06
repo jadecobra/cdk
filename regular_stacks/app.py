@@ -1,5 +1,6 @@
 import aws_cdk
 import ecs
+import batch
 
 
 class RegularStacks(aws_cdk.App):
@@ -8,7 +9,7 @@ class RegularStacks(aws_cdk.App):
         super().__init__(*args, **kwargs)
         self.ecs()
         self.selenium()
-        # self.in_progress()
+        self.regular_stacks()
 
     @staticmethod
     def container_image():
@@ -62,6 +63,11 @@ class RegularStacks(aws_cdk.App):
             cpu=1024,
             max_capacity=10,
             memory=2048,
+        )
+
+    def regular_stacks(self):
+        batch.BatchEC2Stack(
+            self, 'BatchEC2Stack'
         )
 
 RegularStacks().synth()

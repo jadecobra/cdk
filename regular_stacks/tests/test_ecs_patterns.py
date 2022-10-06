@@ -16,6 +16,7 @@ class TestWellArchitectedPatterns(jadecobra.toolkit.TestCase):
             'NlbFargateService',
             'NlbAutoscalingFargateService',
             'SeleniumTestService',
+            'Batch'
         )
 
     def test_well_architected_cdk_patterns(self):
