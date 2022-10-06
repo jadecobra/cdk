@@ -20,9 +20,7 @@ class Stack(aws_cdk.Stack):
         )
         self.error_topic = error_topic if error_topic else self.create_sns_topic(f'{id}ErrorTopic')
         self.lambda_directory = lambda_directory
-
-        if permissions_boundary_name:
-            self.add_permissions_boundary(permissions_boundary_name)
+        self.add_permissions_boundary(permissions_boundary_name)
 
     def create_sns_topic(self, display_name):
         return aws_cdk.aws_sns.Topic(
@@ -45,11 +43,12 @@ class Stack(aws_cdk.Stack):
             )
 
     def add_permissions_boundary(self, policy_name):
-        aws_cdk.aws_iam.PermissionsBoundary.of(
-            self
-        ).apply(
-            aws_cdk.aws_iam.ManagedPolicy.from_managed_policy_name(
-                self, 'PermissionsBoundary',
-                policy_name
+        if policy_name:
+            return aws_cdk.aws_iam.PermissionsBoundary.of(
+                self
+            ).apply(
+                aws_cdk.aws_iam.ManagedPolicy.from_managed_policy_name(
+                    self, 'PermissionsBoundary',
+                    policy_name
+                )
             )
-        )
