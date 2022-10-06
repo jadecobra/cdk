@@ -18,15 +18,16 @@ class Stack(aws_cdk.Stack):
             synthesizer=aws_cdk.LegacyStackSynthesizer(),
             **kwargs,
         )
-        self.error_topic = error_topic if error_topic else self.create_sns_topic(f'{id}ErrorTopic')
+
         self.lambda_directory = lambda_directory
         self.add_permissions_boundary(permissions_boundary_name)
 
-    def create_sns_topic(self, display_name):
-        return aws_cdk.aws_sns.Topic(
-            self, display_name,
-            display_name=display_name,
-        )
+    def create_error_topic(self, display_name):
+        if display_name:
+            return aws_cdk.aws_sns.Topic(
+                self, f'{self.id}ErrorTopic',
+                display_name=display_name,
+            )
 
     def create_lambda_function(self, function_name=None):
         raise NotImplementedError
