@@ -1,0 +1,11 @@
+jadecobra
+aws-cdk-lib
+aws-cdk.aws-apigatewayv2-alpha
+aws-cdk.aws-apigatewayv2-integrations-alpha
+aws_cdk.aws-appsync-alpha
+constructs
+well-architected-constructs
+build
+twine
+sniffer
+macfsevents

@@ -62,7 +62,6 @@ class BatchEC2Stack(well_architected_stacks.well_architected_stack.Stack):
         aws_cdk.CfnOutput(self, "JobDefinition",value=self.batch_job_definition.job_definition_name)
 
 
-
 # app = App()
 # BatchEC2Stack(app, "BatchEC2Stack")
 # app.synth()
