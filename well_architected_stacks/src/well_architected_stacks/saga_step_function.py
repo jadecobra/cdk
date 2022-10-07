@@ -9,7 +9,8 @@ class SagaStepFunction(well_architected_stack.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
-        self.error_topic = self.create_error_topic()
+        self.create_error_topic()
+        
         bookings_record = well_architected_constructs.dynamodb_table.DynamodbTableConstruct(
             self, 'DynamodbTable',
             partition_key='booking_id',

@@ -7,7 +7,7 @@ class LambdaLith(well_architected_stack.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str, function_name=None, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
-        self.error_topic = self.create_error_topic()
+        self.create_error_topic()
         lambda_function = well_architected_constructs.lambda_function.create_python_lambda_function(
             self,
             function_name=function_name,

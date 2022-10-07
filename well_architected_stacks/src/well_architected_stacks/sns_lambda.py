@@ -15,7 +15,7 @@ class SnsLambda(well_architected_stack.Stack):
         **kwargs
     ) -> None:
         super().__init__(scope, id, **kwargs)
-        self.error_topic=self.create_error_topic()
+
         well_architected_constructs.sns_lambda.SnsLambdaConstruct(
             self, "SnsLambda",
             function_name=lambda_function_name,

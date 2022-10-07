@@ -14,7 +14,7 @@ class ApiLambdaRds(well_architected_stack.Stack):
         **kwargs
     ) -> None:
         super().__init__(scope, id, **kwargs)
-        self.error_topic = self.create_error_topic()
+        self.create_error_topic()
         vpc = aws_cdk.aws_ec2.Vpc(self, 'Vpc', max_azs=2)
         db_credentials_secret = self.create_credentials_secret(id)
         self.create_parameter_store_for_db_credentials(db_credentials_secret.secret_arn)

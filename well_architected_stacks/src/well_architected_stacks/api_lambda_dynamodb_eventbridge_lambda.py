@@ -12,12 +12,12 @@ class ApiLambdaDynamodbEventBridgeLambda(well_architected_stack.Stack):
         **kwargs
     ) -> None:
         super().__init__(scope, id, **kwargs)
-        self.error_topic = self.create_error_topic()
+        self.create_error_topic()
         dynamodb_table = self.create_dynamodb_table()
         self.add_global_secondary_index(dynamodb_table)
         self.create_error_handling_lambda_function(dynamodb_table)
         webservice_lambda_function = self.create_webservice_lambda_function(dynamodb_table)
-        
+
         well_architected_constructs.api_lambda.create_http_api_lambda(
             self,
             lambda_function=webservice_lambda_function,

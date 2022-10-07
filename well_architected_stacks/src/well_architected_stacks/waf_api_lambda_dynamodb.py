@@ -18,6 +18,7 @@ class WafApiLambdaDynamodb(api_lambda_dynamodb.ApiLambdaDynamodbStack):
             partition_key=partition_key,
             **kwargs
         )
+        self.create_error_topic()
         self.name = self.camel_to_snake(id)
         self.rest_api = self.api_lambda_dynamodb.create_rest_api_lambda()
         self.web_application_firewall = well_architected_constructs.web_application_firewall.WebApplicationFirewall(

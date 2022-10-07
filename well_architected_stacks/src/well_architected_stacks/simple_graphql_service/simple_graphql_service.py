@@ -12,7 +12,7 @@ class SimpleGraphQlService(well_architected_stack.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
-        self.error_topic = self.create_error_topic()
+        self.create_error_topic()
         graphql_api = self.create_graphql_api()
         self.add_dynamodb_data_source(
             graphql_api.add_dynamo_db_data_source(

@@ -9,7 +9,7 @@ class RestApiSnsSqsLambda(well_architected_stack.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
-        self.error_topic = self.create_error_topic()
+        self.create_error_topic()
         sns_topic = self.create_sns_topic('The Big Fan CDK Pattern Topic')
         logging_lambda_function = self.create_lambda_function("big_fan_logger")
 

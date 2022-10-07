@@ -11,7 +11,7 @@ class ApiLambdaEventBridgeLambda(well_architected_stack.Stack):
         **kwargs
     ) -> None:
         super().__init__(scope, id, **kwargs)
-        self.error_topic = self.create_error_topic()
+        self.create_error_topic()
         self.create_lambda_function(
             handler_name="approved_transaction_handler",
             function_name="atm_consumer",
