@@ -15,20 +15,17 @@ class BatchEC2Stack(well_architected_stacks.well_architected_stack.Stack):
         super().__init__(scope, id, **kwargs)
         self.vpc = self.get_vpc()
         self.container_name = container_name
-
-        batch_compute_environments = self.create_batch_compute_environments(number_of_environments=)
-        # batch_compute_environments = [
-        #     aws_cdk.aws_batch_alpha.JobQueueComputeEnvironment(
-        #         compute_environment=self.create_compute_environment(number),
-        #         order=number
-        #     ) for number in range(number_of_environments)
-        # ]
-
-        self.batch_queue = self.create_batch_queue(batch_compute_environments)
+        self.batch_compute_environments = self.create_batch_compute_environments(number_of_environments)
+        self.batch_queue = self.create_batch_queue(self.batch_compute_environments)
         self.batch_job_definition = self.create_batch_job_definition()
 
-        aws_cdk.CfnOutput(self, "BatchJobQueue",value=self.batch_queue.job_queue_name)
-        aws_cdk.CfnOutput(self, "JobDefinition",value=self.batch_job_definition.job_definition_name)
+
+        aws_cdk.CfnOutput(
+            self, "BatchJobQueue",value=self.batch_queue.job_queue_name
+        )
+        aws_cdk.CfnOutput(
+            self, "BatchJobDefinition",value=self.batch_job_definition.job_definition_name
+        )
 
     def create_batch_compute_environments(self, number_of_environments):
         return [
@@ -40,7 +37,7 @@ class BatchEC2Stack(well_architected_stacks.well_architected_stack.Stack):
 
     def create_batch_queue(self, compute_environments):
         return aws_cdk.aws_batch_alpha.JobQueue(
-            self, "JobQueueArm64",
+            self, "JobQueue",
             compute_environments=compute_environments
         )
 
@@ -75,14 +72,14 @@ class BatchEC2Stack(well_architected_stacks.well_architected_stack.Stack):
 
     def create_batch_job_definition(self):
         return aws_cdk.aws_batch_alpha.JobDefinition(
-            self, "MyJobDefArm64",
-            job_definition_name="CDKJobDefArm64",
+            self, "JobDefinition",
+            job_definition_name="JobDefinition",
             container=self.get_container(),
         )
 
     def create_compute_environment(self, number):
         return aws_cdk.aws_batch_alpha.ComputeEnvironment(
-            self, f"BatchARM64Env{number}",
+            self, f"BatchComputeEnvironment{number}",
             compute_resources=aws_cdk.aws_batch_alpha.ComputeResources(
                 type=aws_cdk.aws_batch_alpha.ComputeResourceType.SPOT,
                 bid_percentage=75,

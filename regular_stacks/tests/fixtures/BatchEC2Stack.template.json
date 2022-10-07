@@ -381,10 +381,10 @@
         }
       }
     },
-    "BatchARM64Env0ResourceSecurityGroup15DB7442": {
+    "BatchComputeEnvironment0ResourceSecurityGroupDB26289A": {
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
-        "GroupDescription": "BatchEC2Stack/BatchARM64Env0/Resource-Security-Group",
+        "GroupDescription": "BatchEC2Stack/BatchComputeEnvironment0/Resource-Security-Group",
         "SecurityGroupEgress": [
           {
             "CidrIp": "0.0.0.0/0",
@@ -422,7 +422,7 @@
         "VpcVPCGWBF912B6E"
       ]
     },
-    "BatchARM64Env0EcsInstanceRole740BD3CD": {
+    "BatchComputeEnvironment0EcsInstanceRoleF75DA27D": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -488,12 +488,12 @@
         "VpcVPCGWBF912B6E"
       ]
     },
-    "BatchARM64Env0InstanceProfileF7C76245": {
+    "BatchComputeEnvironment0InstanceProfile2EF298D8": {
       "Type": "AWS::IAM::InstanceProfile",
       "Properties": {
         "Roles": [
           {
-            "Ref": "BatchARM64Env0EcsInstanceRole740BD3CD"
+            "Ref": "BatchComputeEnvironment0EcsInstanceRoleF75DA27D"
           }
         ]
       },
@@ -523,7 +523,7 @@
         "VpcVPCGWBF912B6E"
       ]
     },
-    "BatchARM64Env0ResourceServiceInstanceRoleE1B9D80B": {
+    "BatchComputeEnvironment0ResourceServiceInstanceRole2DB5E3DE": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -579,7 +579,7 @@
         "VpcVPCGWBF912B6E"
       ]
     },
-    "BatchARM64Env0CE2487FC": {
+    "BatchComputeEnvironment0FFED1342": {
       "Type": "AWS::Batch::ComputeEnvironment",
       "Properties": {
         "Type": "MANAGED",
@@ -590,7 +590,10 @@
             "Ref": "SsmParameterValueawsserviceecsoptimizedamiamazonlinux2arm64recommendedimageidC96584B6F00A464EAD1953AFF4B05118Parameter"
           },
           "InstanceRole": {
-            "Fn::GetAtt": ["BatchARM64Env0InstanceProfileF7C76245", "Arn"]
+            "Fn::GetAtt": [
+              "BatchComputeEnvironment0InstanceProfile2EF298D8",
+              "Arn"
+            ]
           },
           "InstanceTypes": ["a1.medium", "a1.large"],
           "MaxvCpus": 256,
@@ -598,7 +601,7 @@
           "SecurityGroupIds": [
             {
               "Fn::GetAtt": [
-                "BatchARM64Env0ResourceSecurityGroup15DB7442",
+                "BatchComputeEnvironment0ResourceSecurityGroupDB26289A",
                 "GroupId"
               ]
             }
@@ -631,7 +634,7 @@
         },
         "ServiceRole": {
           "Fn::GetAtt": [
-            "BatchARM64Env0ResourceServiceInstanceRoleE1B9D80B",
+            "BatchComputeEnvironment0ResourceServiceInstanceRole2DB5E3DE",
             "Arn"
           ]
         },
@@ -663,10 +666,10 @@
         "VpcVPCGWBF912B6E"
       ]
     },
-    "BatchARM64Env1ResourceSecurityGroup80BF3902": {
+    "BatchComputeEnvironment1ResourceSecurityGroup07DD8771": {
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
-        "GroupDescription": "BatchEC2Stack/BatchARM64Env1/Resource-Security-Group",
+        "GroupDescription": "BatchEC2Stack/BatchComputeEnvironment1/Resource-Security-Group",
         "SecurityGroupEgress": [
           {
             "CidrIp": "0.0.0.0/0",
@@ -704,7 +707,7 @@
         "VpcVPCGWBF912B6E"
       ]
     },
-    "BatchARM64Env1EcsInstanceRole94362790": {
+    "BatchComputeEnvironment1EcsInstanceRole04EF80F5": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -770,12 +773,12 @@
         "VpcVPCGWBF912B6E"
       ]
     },
-    "BatchARM64Env1InstanceProfile6C02092D": {
+    "BatchComputeEnvironment1InstanceProfile0692696F": {
       "Type": "AWS::IAM::InstanceProfile",
       "Properties": {
         "Roles": [
           {
-            "Ref": "BatchARM64Env1EcsInstanceRole94362790"
+            "Ref": "BatchComputeEnvironment1EcsInstanceRole04EF80F5"
           }
         ]
       },
@@ -805,7 +808,7 @@
         "VpcVPCGWBF912B6E"
       ]
     },
-    "BatchARM64Env1ResourceServiceInstanceRole803DB36B": {
+    "BatchComputeEnvironment1ResourceServiceInstanceRole377709F9": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -861,7 +864,7 @@
         "VpcVPCGWBF912B6E"
       ]
     },
-    "BatchARM64Env195FC24ED": {
+    "BatchComputeEnvironment10FBD4737": {
       "Type": "AWS::Batch::ComputeEnvironment",
       "Properties": {
         "Type": "MANAGED",
@@ -872,7 +875,10 @@
             "Ref": "SsmParameterValueawsserviceecsoptimizedamiamazonlinux2arm64recommendedimageidC96584B6F00A464EAD1953AFF4B05118Parameter"
           },
           "InstanceRole": {
-            "Fn::GetAtt": ["BatchARM64Env1InstanceProfile6C02092D", "Arn"]
+            "Fn::GetAtt": [
+              "BatchComputeEnvironment1InstanceProfile0692696F",
+              "Arn"
+            ]
           },
           "InstanceTypes": ["a1.medium", "a1.large"],
           "MaxvCpus": 256,
@@ -880,7 +886,7 @@
           "SecurityGroupIds": [
             {
               "Fn::GetAtt": [
-                "BatchARM64Env1ResourceSecurityGroup80BF3902",
+                "BatchComputeEnvironment1ResourceSecurityGroup07DD8771",
                 "GroupId"
               ]
             }
@@ -913,7 +919,7 @@
         },
         "ServiceRole": {
           "Fn::GetAtt": [
-            "BatchARM64Env1ResourceServiceInstanceRole803DB36B",
+            "BatchComputeEnvironment1ResourceServiceInstanceRole377709F9",
             "Arn"
           ]
         },
@@ -945,10 +951,10 @@
         "VpcVPCGWBF912B6E"
       ]
     },
-    "BatchARM64Env2ResourceSecurityGroup8547E632": {
+    "BatchComputeEnvironment2ResourceSecurityGroupAE9308E9": {
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
-        "GroupDescription": "BatchEC2Stack/BatchARM64Env2/Resource-Security-Group",
+        "GroupDescription": "BatchEC2Stack/BatchComputeEnvironment2/Resource-Security-Group",
         "SecurityGroupEgress": [
           {
             "CidrIp": "0.0.0.0/0",
@@ -986,7 +992,7 @@
         "VpcVPCGWBF912B6E"
       ]
     },
-    "BatchARM64Env2EcsInstanceRoleE1886C72": {
+    "BatchComputeEnvironment2EcsInstanceRole93EF2CAA": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -1052,12 +1058,12 @@
         "VpcVPCGWBF912B6E"
       ]
     },
-    "BatchARM64Env2InstanceProfile63447CED": {
+    "BatchComputeEnvironment2InstanceProfile986F0FD3": {
       "Type": "AWS::IAM::InstanceProfile",
       "Properties": {
         "Roles": [
           {
-            "Ref": "BatchARM64Env2EcsInstanceRoleE1886C72"
+            "Ref": "BatchComputeEnvironment2EcsInstanceRole93EF2CAA"
           }
         ]
       },
@@ -1087,7 +1093,7 @@
         "VpcVPCGWBF912B6E"
       ]
     },
-    "BatchARM64Env2ResourceServiceInstanceRoleAC230E47": {
+    "BatchComputeEnvironment2ResourceServiceInstanceRole93D4CCA2": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -1143,7 +1149,7 @@
         "VpcVPCGWBF912B6E"
       ]
     },
-    "BatchARM64Env2F3009337": {
+    "BatchComputeEnvironment2E5E1CBB4": {
       "Type": "AWS::Batch::ComputeEnvironment",
       "Properties": {
         "Type": "MANAGED",
@@ -1154,7 +1160,10 @@
             "Ref": "SsmParameterValueawsserviceecsoptimizedamiamazonlinux2arm64recommendedimageidC96584B6F00A464EAD1953AFF4B05118Parameter"
           },
           "InstanceRole": {
-            "Fn::GetAtt": ["BatchARM64Env2InstanceProfile63447CED", "Arn"]
+            "Fn::GetAtt": [
+              "BatchComputeEnvironment2InstanceProfile986F0FD3",
+              "Arn"
+            ]
           },
           "InstanceTypes": ["a1.medium", "a1.large"],
           "MaxvCpus": 256,
@@ -1162,7 +1171,7 @@
           "SecurityGroupIds": [
             {
               "Fn::GetAtt": [
-                "BatchARM64Env2ResourceSecurityGroup8547E632",
+                "BatchComputeEnvironment2ResourceSecurityGroupAE9308E9",
                 "GroupId"
               ]
             }
@@ -1195,7 +1204,7 @@
         },
         "ServiceRole": {
           "Fn::GetAtt": [
-            "BatchARM64Env2ResourceServiceInstanceRoleAC230E47",
+            "BatchComputeEnvironment2ResourceServiceInstanceRole93D4CCA2",
             "Arn"
           ]
         },
@@ -1227,25 +1236,25 @@
         "VpcVPCGWBF912B6E"
       ]
     },
-    "JobQueueArm64268A7638": {
+    "JobQueueEE3AD499": {
       "Type": "AWS::Batch::JobQueue",
       "Properties": {
         "ComputeEnvironmentOrder": [
           {
             "ComputeEnvironment": {
-              "Ref": "BatchARM64Env0CE2487FC"
+              "Ref": "BatchComputeEnvironment0FFED1342"
             },
             "Order": 0
           },
           {
             "ComputeEnvironment": {
-              "Ref": "BatchARM64Env195FC24ED"
+              "Ref": "BatchComputeEnvironment10FBD4737"
             },
             "Order": 1
           },
           {
             "ComputeEnvironment": {
-              "Ref": "BatchARM64Env2F3009337"
+              "Ref": "BatchComputeEnvironment2E5E1CBB4"
             },
             "Order": 2
           }
@@ -1254,7 +1263,7 @@
         "State": "ENABLED"
       }
     },
-    "MyJobDefArm649B856D03": {
+    "JobDefinition24FFE3ED": {
       "Type": "AWS::Batch::JobDefinition",
       "Properties": {
         "Type": "container",
@@ -1288,7 +1297,7 @@
             }
           ]
         },
-        "JobDefinitionName": "CDKJobDefArm64",
+        "JobDefinitionName": "JobDefinition",
         "PlatformCapabilities": ["EC2"],
         "RetryStrategy": {
           "Attempts": 1
@@ -1306,12 +1315,12 @@
   "Outputs": {
     "BatchJobQueue": {
       "Value": {
-        "Ref": "JobQueueArm64268A7638"
+        "Ref": "JobQueueEE3AD499"
       }
     },
-    "JobDefinition": {
+    "BatchJobDefinition": {
       "Value": {
-        "Ref": "MyJobDefArm649B856D03"
+        "Ref": "JobDefinition24FFE3ED"
       }
     }
   }

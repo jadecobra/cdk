@@ -40,11 +40,12 @@ class Stack(aws_cdk.Stack):
     def create_lambda_function(self, function_name=None):
         raise NotImplementedError
 
-    def get_vpc(self, vpc_id=None):
+    def get_vpc(self, vpc_id=None, is_default=None):
         try:
             return aws_cdk.aws_ec2.Vpc.from_lookup(
                 self, 'Vpc',
-                vpc_id=vpc_id if vpc_id else self.node.try_get_context('vpc_id')
+                vpc_id=vpc_id if vpc_id else self.node.try_get_context('vpc_id'),
+                is_default=is_default,
             )
         except jsii.errors.JSIIError:
             return aws_cdk.aws_ec2.Vpc(
