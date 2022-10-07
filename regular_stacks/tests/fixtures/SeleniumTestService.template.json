@@ -1,11 +1,5 @@
 {
   "Resources": {
-    "SeleniumTestServiceErrorTopicD37461EC": {
-      "Type": "AWS::SNS::Topic",
-      "Properties": {
-        "DisplayName": "SeleniumTestServiceErrorTopic"
-      }
-    },
     "Vpc8378EB38": {
       "Type": "AWS::EC2::VPC",
       "Properties": {

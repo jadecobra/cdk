@@ -1,11 +1,5 @@
 {
   "Resources": {
-    "AlbFargateServiceErrorTopicDE8D2A21": {
-      "Type": "AWS::SNS::Topic",
-      "Properties": {
-        "DisplayName": "AlbFargateServiceErrorTopic"
-      }
-    },
     "Vpc8378EB38": {
       "Type": "AWS::EC2::VPC",
       "Properties": {

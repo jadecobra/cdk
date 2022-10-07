@@ -1,11 +1,5 @@
 {
   "Resources": {
-    "NlbFargateServiceErrorTopic02D5A50B": {
-      "Type": "AWS::SNS::Topic",
-      "Properties": {
-        "DisplayName": "NlbFargateServiceErrorTopic"
-      }
-    },
     "Vpc8378EB38": {
       "Type": "AWS::EC2::VPC",
       "Properties": {

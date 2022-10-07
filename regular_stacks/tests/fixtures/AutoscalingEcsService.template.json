@@ -1,11 +1,5 @@
 {
   "Resources": {
-    "AutoscalingEcsServiceErrorTopic5207FF70": {
-      "Type": "AWS::SNS::Topic",
-      "Properties": {
-        "DisplayName": "AutoscalingEcsServiceErrorTopic"
-      }
-    },
     "AutoscalingEcsVpcE1C9A87D": {
       "Type": "AWS::EC2::VPC",
       "Properties": {
