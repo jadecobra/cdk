@@ -67,7 +67,9 @@ class RegularStacks(aws_cdk.App):
 
     def regular_stacks(self):
         batch.BatchEC2Stack(
-            self, 'BatchEC2Stack'
+            self, 'BatchEC2Stack',
+            container_name='public.ecr.aws/amazonlinux/amazonlinux:latest',
+            number_of_environments=3,
         )
 
 RegularStacks().synth()
