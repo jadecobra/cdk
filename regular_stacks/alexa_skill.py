@@ -2,8 +2,6 @@ import aws_cdk
 import constructs
 import well_architected_stacks
 import well_architected_constructs
-import subprocess
-import os
 
 
 class AlexaSkill(well_architected_stacks.well_architected_stack.Stack):
@@ -84,7 +82,7 @@ class AlexaSkill(well_architected_stacks.well_architected_stack.Stack):
 
     def create_dynamodb_table(self):
         return aws_cdk.aws_dynamodb.Table(
-            self, 'Users',
+            self, 'DynamoDbTable',
             partition_key=aws_cdk.aws_dynamodb.Attribute(
                 name='userId',
                 type=aws_cdk.aws_dynamodb.AttributeType.STRING
@@ -95,7 +93,7 @@ class AlexaSkill(well_architected_stacks.well_architected_stack.Stack):
 
     def create_lambda_function(self, table_name=None, lambda_directory=None):
         return aws_cdk.aws_lambda.Function(
-            self, "AlexaLambdaHandler",
+            self, "LambdaFunction",
             runtime=aws_cdk.aws_lambda.Runtime.PYTHON_3_9,
             code=aws_cdk.aws_lambda.Code.from_asset(f"{lambda_directory}/alexa_skill"),
             handler="alexa_skill.handler",
@@ -125,7 +123,7 @@ class AlexaSkill(well_architected_stacks.well_architected_stack.Stack):
 
     def create_alexa_skill(self, skill_package):
         return aws_cdk.alexa_ask.CfnSkill(
-            self, 'the-alexa-skill',
+            self, 'AlexaSkill',
             skill_package=skill_package,
             vendor_id='',
             authentication_configuration={
