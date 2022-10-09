@@ -8,6 +8,11 @@ import os
 
 class AlexaSkill(well_architected_stacks.well_architected_stack.Stack):
 
+    def get_skill_asset(self, path):
+        return aws_cdk.aws_s3_assets.Asset(
+            self, 'SkillAsset', path=path,
+        )
+
     def __init__(
         self, scope: constructs.Construct, id: str,
         alexa_skills_directory=None,
@@ -15,12 +20,11 @@ class AlexaSkill(well_architected_stacks.well_architected_stack.Stack):
         **kwargs
     ) -> None:
         super().__init__(scope, id, **kwargs)
-
-        asset = aws_cdk.aws_s3_assets.Asset(
-            self, 'SkillAsset',
-            # path=os.path.dirname(os.path.realpath(__file__)) + "/../skill"
-            path=alexa_skills_directory,
-        )
+        asset = self.get_skill_asset(alexa_skills_directory)
+        # asset = aws_cdk.aws_s3_assets.Asset(
+        #     self, 'SkillAsset',
+        #     path=alexa_skills_directory,
+        # )
 
         role = aws_cdk.aws_iam.Role(
             self, 'Role',
