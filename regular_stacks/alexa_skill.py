@@ -23,19 +23,9 @@ class AlexaSkill(well_architected_stacks.well_architected_stack.Stack):
         )
 
         users_table = self.create_dynamodb_table()
-
-        # install node dependencies for lambdas
-        # subprocess.check_call("npm i".split(), cwd=lambda_directory, stdout=subprocess.DEVNULL)
-        # subprocess.check_call("npm run build".split(), cwd=lambda_directory, stdout=subprocess.DEVNULL)
-
-        alexa_lambda = aws_cdk.aws_lambda.Function(
-            self, "AlexaLambdaHandler",
-            runtime=aws_cdk.aws_lambda.Runtime.PYTHON_3_9,
-            code=aws_cdk.aws_lambda.Code.from_asset(f"{lambda_directory}/alexa_skill"),
-            handler="alexa_skill.handler",
-            environment={
-                "USERS_TABLE": users_table.table_name
-            }
+        alexa_lambda = self.create_lambda_function(
+            lambda_directory=lambda_directory,
+            table_name=users_table.table_name
         )
 
         # grant the lambda role read/write permissions to our table
@@ -119,4 +109,15 @@ class AlexaSkill(well_architected_stacks.well_architected_stack.Stack):
             ),
             billing_mode=aws_cdk.aws_dynamodb.BillingMode.PAY_PER_REQUEST,
             removal_policy=aws_cdk.RemovalPolicy.DESTROY
+        )
+
+    def create_lambda_function(self, table_name=None, lambda_directory=None):
+        return aws_cdk.aws_lambda.Function(
+            self, "AlexaLambdaHandler",
+            runtime=aws_cdk.aws_lambda.Runtime.PYTHON_3_9,
+            code=aws_cdk.aws_lambda.Code.from_asset(f"{lambda_directory}/alexa_skill"),
+            handler="alexa_skill.handler",
+            environment={
+                "USERS_TABLE": table_name
+            }
         )
