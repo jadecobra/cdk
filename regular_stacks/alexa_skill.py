@@ -12,7 +12,11 @@ class AlexaSkill(well_architected_stacks.well_architected_stack.Stack):
         lambda_directory=None,
         **kwargs
     ) -> None:
-        super().__init__(scope, id, **kwargs)
+        super().__init__(
+            scope, id,
+            lambda_directory=lambda_directory,
+            **kwargs
+        )
         asset = self.get_skill_asset(alexa_skills_directory)
         role = self.create_iam_role()
         self.grant_access_to_asset(
@@ -87,15 +91,15 @@ class AlexaSkill(well_architected_stacks.well_architected_stack.Stack):
         ).dynamodb_table
 
     def create_lambda_function(self, table_name=None, lambda_directory=None):
-        return aws_cdk.aws_lambda.Function(
-            self, "LambdaFunction",
-            runtime=aws_cdk.aws_lambda.Runtime.PYTHON_3_9,
-            code=aws_cdk.aws_lambda.Code.from_asset(f"{lambda_directory}/alexa_skill"),
-            handler="alexa_skill.handler",
-            environment={
+        return well_architected_constructs.lambda_function.LambdaFunctionConstruct(
+            self, 'LambdaFunction',
+            function_name='alexa_skill',
+            lambda_directory=self.lambda_directory,
+            duration=60,
+            environment_variables={
                 "USERS_TABLE": table_name
             }
-        )
+        ).lambda_function
 
     @staticmethod
     def get_skill_package(s3_bucket=None, s3_key=None, role_arn=None, lambda_function_arn=None):
