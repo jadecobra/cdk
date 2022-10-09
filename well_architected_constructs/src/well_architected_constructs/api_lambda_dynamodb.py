@@ -27,20 +27,22 @@ class ApiLambdaDynamodbConstruct(well_architected_construct.Construct):
             error_topic=error_topic,
         )
         self.lambda_function = self.create_lambda_function(
-            dynamodb_table_name=self.dynamodb_table.table_name,
+            dynamodb_table_name=self.dynamodb_table.dynamodb_table.table_name,
             lambda_directory=lambda_directory,
             function_name=function_name,
             duration=duration,
             error_topic=error_topic,
         )
-        self.dynamodb_table.grant_read_write_data(self.lambda_function)
+        self.dynamodb_table.dynamodb_table.grant_read_write_data(
+            self.lambda_function.lambda_function
+        )
 
     def create_dynamodb_table(self, partition_key=None, error_topic=None):
         return dynamodb_table.DynamodbTableConstruct(
             self, 'DynamoDbTable',
             partition_key=partition_key,
             error_topic=error_topic,
-        ).dynamodb_table
+        )
 
     def create_lambda_function(
         self,
@@ -59,16 +61,16 @@ class ApiLambdaDynamodbConstruct(well_architected_construct.Construct):
             environment_variables={
                 'DYNAMODB_TABLE_NAME': dynamodb_table_name
             }
-        ).lambda_function
+        )
 
     def create_http_api_lambda(self):
         return api_lambda.create_http_api_lambda(
-            self, lambda_function=self.lambda_function,
+            self, lambda_function=self.lambda_function.lambda_function,
             error_topic=self.error_topic,
         )
 
     def create_rest_api_lambda(self):
         return api_lambda.create_rest_api_lambda(
-            self, lambda_function=self.lambda_function,
+            self, lambda_function=self.lambda_function.lambda_function,
             error_topic=self.error_topic,
         )

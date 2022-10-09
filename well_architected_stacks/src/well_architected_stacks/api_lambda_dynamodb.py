@@ -21,3 +21,9 @@ class ApiLambdaDynamodbStack(well_architected_stack.Stack):
             error_topic=self.error_topic,
             partition_key=partition_key,
         )
+                # self.create_cloudwatch_dashboard(
+        #     self.create_cloudwatch_widgets()
+        # )
+        self.api_lambda_dynamodb.create_cloudwatch_dashboard(
+            self.api_lambda_dynamodb.lambda_function.
+        )
