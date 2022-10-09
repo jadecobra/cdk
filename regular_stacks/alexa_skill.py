@@ -22,16 +22,7 @@ class AlexaSkill(well_architected_stacks.well_architected_stack.Stack):
             asset=asset
         )
 
-        # DynamoDB Table
-        users_table = aws_cdk.aws_dynamodb.Table(
-            self, 'Users',
-            partition_key=aws_cdk.aws_dynamodb.Attribute(
-                name='userId',
-                type=aws_cdk.aws_dynamodb.AttributeType.STRING
-            ),
-            billing_mode=aws_cdk.aws_dynamodb.BillingMode.PAY_PER_REQUEST,
-            removal_policy=aws_cdk.RemovalPolicy.DESTROY
-        )
+        users_table = self.create_dynamodb_table()
 
         # install node dependencies for lambdas
         # subprocess.check_call("npm i".split(), cwd=lambda_directory, stdout=subprocess.DEVNULL)
@@ -117,4 +108,15 @@ class AlexaSkill(well_architected_stacks.well_architected_stack.Stack):
                 self.get_alexa_service_principal(),
                 aws_cdk.aws_iam.ServicePrincipal('cloudformation.amazonaws.com')
             )
+        )
+
+    def create_dynamodb_table(self):
+        return aws_cdk.aws_dynamodb.Table(
+            self, 'Users',
+            partition_key=aws_cdk.aws_dynamodb.Attribute(
+                name='userId',
+                type=aws_cdk.aws_dynamodb.AttributeType.STRING
+            ),
+            billing_mode=aws_cdk.aws_dynamodb.BillingMode.PAY_PER_REQUEST,
+            removal_policy=aws_cdk.RemovalPolicy.DESTROY
         )
