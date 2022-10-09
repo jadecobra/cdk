@@ -12,7 +12,8 @@ class ApiLambdaEventBridgeLambda(well_architected_stack.Stack):
     ) -> None:
         super().__init__(scope, id, **kwargs)
         self.create_error_topic()
-        self.create_lambda_function(
+
+        self.approved_transaction = self.create_lambda_function(
             handler_name="approved_transaction_handler",
             function_name="atm_consumer",
             event_bridge_rule=self.create_event_bridge_rule(
@@ -24,7 +25,7 @@ class ApiLambdaEventBridgeLambda(well_architected_stack.Stack):
             ),
         )
 
-        self.create_lambda_function(
+        self.ny_prefix_transaction = self.create_lambda_function(
             handler_name="ny_prefix_transaction_handler",
             function_name="atm_consumer",
             event_bridge_rule=self.create_event_bridge_rule(
@@ -35,7 +36,7 @@ class ApiLambdaEventBridgeLambda(well_architected_stack.Stack):
             ),
         )
 
-        self.create_lambda_function(
+        self.not_approved_transaction = self.create_lambda_function(
             handler_name="not_approved_transaction_handler",
             function_name="atm_consumer",
             event_bridge_rule=self.create_event_bridge_rule(
@@ -46,11 +47,11 @@ class ApiLambdaEventBridgeLambda(well_architected_stack.Stack):
             ),
         )
 
-        atm_producer_lambda = self.create_lambda_function(
+        self.atm_producer = self.create_lambda_function(
             function_name="atm_producer",
         )
 
-        atm_producer_lambda.add_to_role_policy(
+        self.atm_producer.lambda_function.add_to_role_policy(
             aws_cdk.aws_iam.PolicyStatement(
                 effect=aws_cdk.aws_iam.Effect.ALLOW,
                 resources=['*'],
@@ -58,13 +59,22 @@ class ApiLambdaEventBridgeLambda(well_architected_stack.Stack):
             )
         )
 
-        well_architected_constructs.api_lambda.create_rest_api_lambda(
+        self.rest_api = well_architected_constructs.api_lambda.create_rest_api_lambda(
             self, error_topic=self.error_topic,
-            lambda_function=atm_producer_lambda
+            lambda_function=self.atm_producer.lambda_function,
         )
-        well_architected_constructs.api_lambda.create_http_api_lambda(
+        self.http_api = well_architected_constructs.api_lambda.create_http_api_lambda(
             self, error_topic=self.error_topic,
-            lambda_function=atm_producer_lambda
+            lambda_function=self.atm_producer.lambda_function,
+        )
+
+        self.atm_producer.create_cloudwatch_dashboard(
+            *self.approved_transaction.create_cloudwatch_widgets(),
+            *self.ny_prefix_transaction.create_cloudwatch_widgets(),
+            *self.not_approved_transaction.create_cloudwatch_widgets(),
+            *self.atm_producer.create_cloudwatch_widgets(),
+            *self.http_api.create_cloudwatch_widgets(),
+            *self.rest_api.create_cloudwatch_widgets(),
         )
 
     def create_event_bridge_rule(self, rule_name=None, description=None, detail=None):
@@ -89,4 +99,4 @@ class ApiLambdaEventBridgeLambda(well_architected_stack.Stack):
             event_bridge_rule=event_bridge_rule,
             error_topic=self.error_topic,
             lambda_directory=self.lambda_directory,
-        ).lambda_function
+        )

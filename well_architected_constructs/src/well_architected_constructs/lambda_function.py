@@ -221,4 +221,4 @@ def create_python_lambda_function(
         retry_attempts=retry_attempts,
         sns_trigger_topic=sns_trigger_topic,
         vpc=vpc,
-    ).lambda_function
+    )

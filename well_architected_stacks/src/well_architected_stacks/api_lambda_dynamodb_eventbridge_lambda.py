@@ -13,20 +13,27 @@ class ApiLambdaDynamodbEventBridgeLambda(well_architected_stack.Stack):
     ) -> None:
         super().__init__(scope, id, **kwargs)
         self.create_error_topic()
-        dynamodb_table = self.create_dynamodb_table()
-        self.add_global_secondary_index(dynamodb_table)
-        self.create_error_handling_lambda_function(dynamodb_table)
-        webservice_lambda_function = self.create_webservice_lambda_function(dynamodb_table)
+        self.dynamodb_table = self.create_dynamodb_table()
+        self.add_global_secondary_index(self.dynamodb_table)
+        self.error_handler = self.create_error_handling_lambda_function(self.dynamodb_table)
+        self.webservice_lambda_function = self.create_webservice_lambda_function(self.dynamodb_table)
 
-        well_architected_constructs.api_lambda.create_http_api_lambda(
+        self.http_api = well_architected_constructs.api_lambda.create_http_api_lambda(
             self,
-            lambda_function=webservice_lambda_function,
+            lambda_function=self.webservice_lambda_function,
             error_topic=self.error_topic
         )
-        well_architected_constructs.api_lambda.create_rest_api_lambda(
+        self.rest_api = well_architected_constructs.api_lambda.create_rest_api_lambda(
             self,
-            lambda_function=webservice_lambda_function,
+            lambda_function=self.webservice_lambda_function,
             error_topic=self.error_topic
+        )
+
+        self.webservice_lambda_function.create_cloudwatch_dashboard(
+            *self.dynamodb_table.create_cloudwatch_widgets(),
+            *self.error_handler.create_cloudwatch_widgets(),
+            *self.http_api.create_cloudwatch_widgets(),
+            *self.rest_api.create_cloudwatch_widgets(),
         )
 
     def create_lambda_function(
