@@ -17,14 +17,9 @@ class AlexaSkill(well_architected_stacks.well_architected_stack.Stack):
         super().__init__(scope, id, **kwargs)
         asset = self.get_skill_asset(alexa_skills_directory)
         role = self.create_iam_role()
-
-
-        # Allow the skill resource to access the zipped skill package
-        role.add_to_policy(
-            aws_cdk.aws_iam.PolicyStatement(
-                actions=['S3:GetObject'],
-                resources=[f'arn:aws:s3:::{asset.s3_bucket_name}/{asset.s3_object_key}']
-            )
+        self.grant_access_to_asset(
+            role=role,
+            asset=asset
         )
 
         # DynamoDB Table
@@ -100,6 +95,15 @@ class AlexaSkill(well_architected_stacks.well_architected_stack.Stack):
     @staticmethod
     def get_alexa_service_principal():
         return aws_cdk.aws_iam.ServicePrincipal('alexa-appkit.amazon.com')
+
+    @staticmethod
+    def grant_access_to_asset(role=None, asset=None):
+        return role.add_to_policy(
+            aws_cdk.aws_iam.PolicyStatement(
+                actions=['S3:GetObject'],
+                resources=[f'arn:aws:s3:::{asset.s3_bucket_name}/{asset.s3_object_key}']
+            )
+        )
 
     def get_skill_asset(self, path):
         return aws_cdk.aws_s3_assets.Asset(
