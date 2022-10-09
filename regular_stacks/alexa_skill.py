@@ -29,7 +29,7 @@ class AlexaSkill(well_architected_stacks.well_architected_stack.Stack):
         )
         users_table.grant_read_write_data(alexa_lambda)
 
-        self.create_alexa_skill(
+        alexa_skill = self.create_alexa_skill(
             self.get_skill_package(
                 lambda_function_arn=alexa_lambda.function_arn,
                 s3_key=asset.s3_object_key,
@@ -38,17 +38,15 @@ class AlexaSkill(well_architected_stacks.well_architected_stack.Stack):
             )
         )
 
-        ###
-        # Allow the Alexa service to invoke the fulfillment Lambda.
-        # In order for the Skill to be created, the fulfillment Lambda
-        # must have a permission allowing Alexa to invoke it, this causes
-        # a circular dependency and requires the first deploy to allow all
-        # Alexa skills to invoke the lambda, subsequent deploys will work
-        # when specifying the eventSourceToken
-        ###
-        alexa_lambda.add_permission(
+        self.grant_permission_to_invoke_lambda(
+            lambda_function=alexa_lambda,
+            event_source_token=alexa_skill.ref,
+        )
+
+    def grant_permission_to_invoke_lambda(self, lambda_function=None, event_source_token=None):
+        lambda_function.add_permission(
             'AlexaPermission',
-            # eventSourceToken: skill.ref,
+            event_source_token=event_source_token, # comment out if first deploy fails with circular dependency
             principal=self.get_alexa_service_principal(),
             action='lambda:InvokeFunction'
         )
