@@ -69,10 +69,34 @@ class ApiLambdaDynamodbEventBridgeLambda(well_architected_stack.Stack):
         dynamodb_table.grant_read_data(lambda_function)
         return lambda_function
 
+    def create_event_bridge_rule(self):
+        return aws_cdk.aws_events.Rule(
+            self, 'webserviceErrorRule',
+            description='Failed Webservice Call',
+            event_pattern=aws_cdk.aws_events.EventPattern(
+                source=['cdkpatterns.eventbridge.circuitbreaker'],
+                detail_type=['httpcall'],
+                detail={
+                    "status": ["fail"]
+                }
+            )
+        )
+
     def create_error_handling_lambda_function(
         self, dynamodb_table:aws_cdk.aws_dynamodb.Table,
     ):
         return well_architected_constructs.api_lambda_dynamodb.ApiLambdaDynamodbConstruct(
+            self, 'LambdaDynamodb',
+            function_name='error',
+            # dynamodb_table_name=dynamodb_table.table_name,
+            partition_key="RequestID",
+            sort_key=self.get_sort_key(),
+            duration=3,
+            event_bridge_rule=self.create_event_bridge_rule()
+            error_topic=self.error_topic,
+            time_to_live_attribute='ExpirationTime',
+        )
+        lambda_construct = self.create_lambda_function(
             function_name='error',
             dynamodb_table_name=dynamodb_table.table_name,
             duration=3,
@@ -87,9 +111,6 @@ class ApiLambdaDynamodbEventBridgeLambda(well_architected_stack.Stack):
                     }
                 )
             )
-
-        )
-        lambda_construct = self.create_lambda_function(
         )
         dynamodb_table.grant_write_data(lambda_construct.lambda_function)
         return lambda_construct

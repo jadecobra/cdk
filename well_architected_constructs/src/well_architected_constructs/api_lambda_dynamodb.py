@@ -1,3 +1,4 @@
+from time import time
 import constructs
 
 from . import api_lambda
@@ -16,6 +17,8 @@ class ApiLambdaDynamodbConstruct(well_architected_construct.Construct):
         lambda_directory=None,
         duration=60,
         event_bridge_rule=None,
+        time_to_live_attribute=None,
+        sort_key=None,
         **kwargs
     ) -> None:
         super().__init__(
@@ -23,8 +26,11 @@ class ApiLambdaDynamodbConstruct(well_architected_construct.Construct):
             error_topic=error_topic,
             **kwargs
         )
-        self.dynamodb_table = self.create_dynamodb_table(
+        self.dynamodb_table = dynamodb_table.DynamodbTableConstruct(
+            self, 'DynamoDbTable',
             partition_key=partition_key,
+            sort_key=sort_key,
+            time_to_live_attribute=time_to_live_attribute,
             error_topic=error_topic,
         )
         self.lambda_function = self.create_lambda_function(
@@ -37,13 +43,6 @@ class ApiLambdaDynamodbConstruct(well_architected_construct.Construct):
         )
         self.dynamodb_table.dynamodb_table.grant_read_write_data(
             self.lambda_function.lambda_function
-        )
-
-    def create_dynamodb_table(self, partition_key=None, error_topic=None):
-        return dynamodb_table.DynamodbTableConstruct(
-            self, 'DynamoDbTable',
-            partition_key=partition_key,
-            error_topic=error_topic,
         )
 
     def create_lambda_function(
