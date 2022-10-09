@@ -8,15 +8,6 @@ import os
 
 class AlexaSkill(well_architected_stacks.well_architected_stack.Stack):
 
-    def create_iam_role(self):
-        return aws_cdk.aws_iam.Role(
-            self, 'Role',
-            assumed_by=aws_cdk.aws_iam.CompositePrincipal(
-                aws_cdk.aws_iam.ServicePrincipal('alexa-appkit.amazon.com'),
-                aws_cdk.aws_iam.ServicePrincipal('cloudformation.amazonaws.com')
-            )
-        )
-
     def __init__(
         self, scope: constructs.Construct, id: str,
         alexa_skills_directory=None,
@@ -102,11 +93,24 @@ class AlexaSkill(well_architected_stacks.well_architected_stack.Stack):
         alexa_lambda.add_permission(
             'AlexaPermission',
             # eventSourceToken: skill.ref,
-            principal=aws_cdk.aws_iam.ServicePrincipal('alexa-appkit.amazon.com'),
+            principal=self.get_alexa_service_principal(),
             action='lambda:InvokeFunction'
         )
+
+    @staticmethod
+    def get_alexa_service_principal():
+        return aws_cdk.aws_iam.ServicePrincipal('alexa-appkit.amazon.com')
 
     def get_skill_asset(self, path):
         return aws_cdk.aws_s3_assets.Asset(
             self, 'SkillAsset', path=path,
+        )
+
+    def create_iam_role(self):
+        return aws_cdk.aws_iam.Role(
+            self, 'Role',
+            assumed_by=aws_cdk.aws_iam.CompositePrincipal(
+                self.get_alexa_service_principal(),
+                aws_cdk.aws_iam.ServicePrincipal('cloudformation.amazonaws.com')
+            )
         )
