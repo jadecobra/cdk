@@ -24,6 +24,7 @@ class LambdaTrilogy(well_architected_stack.Stack):
         multiply = 'multiply'
 
         adder = self.create_lambda_function(add)
+
         rest_api = self.create_rest_api(
             error_topic=self.error_topic,
             lambda_function=adder,

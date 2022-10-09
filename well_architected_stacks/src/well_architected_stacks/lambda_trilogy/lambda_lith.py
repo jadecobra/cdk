@@ -12,6 +12,7 @@ class LambdaLith(well_architected_stack.Stack):
             self,
             function_name=function_name,
             lambda_directory=self.lambda_directory,
+            error_topic=self.error_topic,
         )
 
         well_architected_constructs.api_lambda.create_rest_api_lambda(
