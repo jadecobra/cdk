@@ -27,35 +27,15 @@ class AlexaSkill(well_architected_stacks.well_architected_stack.Stack):
             lambda_directory=lambda_directory,
             table_name=users_table.table_name
         )
-
-        # grant the lambda role read/write permissions to our table
         users_table.grant_read_write_data(alexa_lambda)
 
-        # create the skill
-        skill = aws_cdk.alexa_ask.CfnSkill(
-            self, 'the-alexa-skill',
-            vendor_id='',
-            authentication_configuration={
-                'clientId': '',
-                'clientSecret': '',
-                'refreshToken': ''
-            },
-            skill_package={
-                's3Bucket': asset.s3_bucket_name,
-                's3Key': asset.s3_object_key,
-                's3BucketRole': role.role_arn,
-                'overrides': {
-                    'manifest': {
-                        'apis': {
-                            'custom': {
-                                'endpoint': {
-                                    'uri': alexa_lambda.function_arn
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+        self.create_alexa_skill(
+            self.get_skill_package(
+                lambda_function_arn=alexa_lambda.function_arn,
+                s3_key=asset.s3_object_key,
+                s3_bucket=asset.s3_bucket_name,
+                role_arn=role.role_arn
+            )
         )
 
         ###
@@ -120,4 +100,35 @@ class AlexaSkill(well_architected_stacks.well_architected_stack.Stack):
             environment={
                 "USERS_TABLE": table_name
             }
+        )
+
+    @staticmethod
+    def get_skill_package(s3_bucket=None, s3_key=None, role_arn=None, lambda_function_arn=None):
+        return {
+            's3Bucket': s3_bucket,
+            's3Key': s3_key,
+            's3BucketRole': role_arn,
+            'overrides': {
+                'manifest': {
+                    'apis': {
+                        'custom': {
+                            'endpoint': {
+                                'uri': lambda_function_arn
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    def create_alexa_skill(self, skill_package):
+        return aws_cdk.alexa_ask.CfnSkill(
+            self, 'the-alexa-skill',
+            skill_package=skill_package,
+            vendor_id='',
+            authentication_configuration={
+                'clientId': '',
+                'clientSecret': '',
+                'refreshToken': ''
+            },
         )
