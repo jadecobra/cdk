@@ -1,6 +1,7 @@
 import aws_cdk
 import ecs
 import batch
+import alexa_skill
 
 
 class RegularStacks(aws_cdk.App):
@@ -10,6 +11,7 @@ class RegularStacks(aws_cdk.App):
         self.ecs()
         self.selenium()
         self.regular_stacks()
+        self.cdk_patterns()
 
     @staticmethod
     def container_image():
@@ -72,6 +74,12 @@ class RegularStacks(aws_cdk.App):
             number_of_environments=3,
         )
 
+    def cdk_patterns(self):
+        alexa_skill.AlexaSkill(
+            self, 'AlexaSkill',
+            alexa_skills_directory='../alexa_skills',
+            lambda_directory='../lambda_functions',
+        )
 RegularStacks().synth()
 
 # TODO
