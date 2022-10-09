@@ -26,13 +26,6 @@ class AlexaSkill(well_architected_stacks.well_architected_stack.Stack):
             s3_object_key=asset.s3_object_key,
         )
 
-        # users_table = self.create_dynamodb_table()
-        # alexa_lambda = self.create_lambda_function(
-        #     lambda_directory=lambda_directory,
-        #     table_name=users_table.table_name
-        # )
-        # users_table.grant_read_write_data(alexa_lambda)
-
         alexa_lambda = self.create_lambda_function_and_dynamodb_table()
 
         alexa_skill = self.create_alexa_skill(
