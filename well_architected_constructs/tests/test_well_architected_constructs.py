@@ -60,7 +60,6 @@ class TestWellArchitectedConstructAttributes(jadecobra.toolkit.TestCase):
         return (
             'cloudwatch_math_sum',
             'create_cloudwatch_alarm',
-            'create_cloudwatch_dashboard',
             'create_cloudwatch_math_expression',
             'create_cloudwatch_widget',
             'create_cloudwatch_widgets',
