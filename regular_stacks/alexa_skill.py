@@ -17,6 +17,7 @@ class AlexaSkill(well_architected_stacks.well_architected_stack.Stack):
             lambda_directory=lambda_directory,
             **kwargs
         )
+        self.create_error_topic()
         asset = self.get_skill_asset(alexa_skills_directory)
         role = self.create_iam_role()
         self.grant_access_to_asset(
@@ -84,10 +85,22 @@ class AlexaSkill(well_architected_stacks.well_architected_stack.Stack):
             )
         )
 
+    def create_lambda_function_and_dynamodb_table(self):
+        return well_architected_constructs.api_lambda_dynamodb.ApiLambdaDynamodb(
+            self, 'LambdaDynamoDb',
+            function_name='alexa_skill',
+            lambda_directory=self.lambda_directory,
+            duration=60,
+            partition_key='userId',
+            error_topic=self.error_topic,
+
+        )
+
     def create_dynamodb_table(self):
         return well_architected_constructs.dynamodb_table.DynamodbTableConstruct(
             self, 'DynamoDbTable',
             partition_key='userId',
+            error_topic=self.error_topic,
         ).dynamodb_table
 
     def create_lambda_function(self, table_name=None, lambda_directory=None):
@@ -96,6 +109,7 @@ class AlexaSkill(well_architected_stacks.well_architected_stack.Stack):
             function_name='alexa_skill',
             lambda_directory=self.lambda_directory,
             duration=60,
+            error_topic=self.error_topic,
             environment_variables={
                 "USERS_TABLE": table_name
             }

@@ -14,6 +14,7 @@ class ApiLambdaDynamodbConstruct(well_architected_construct.Construct):
         partition_key=None,
         error_topic=None,
         lambda_directory=None,
+        duration=60,
         **kwargs
     ) -> None:
         super().__init__(
@@ -29,6 +30,7 @@ class ApiLambdaDynamodbConstruct(well_architected_construct.Construct):
             dynamodb_table_name=self.dynamodb_table.table_name,
             lambda_directory=lambda_directory,
             function_name=function_name,
+            duration=duration,
             error_topic=error_topic,
         )
         self.dynamodb_table.grant_read_write_data(self.lambda_function)
@@ -45,12 +47,14 @@ class ApiLambdaDynamodbConstruct(well_architected_construct.Construct):
         dynamodb_table_name=None,
         function_name=None,
         lambda_directory=None,
+        duration=None,
         error_topic=None,
     ):
         return lambda_function.LambdaFunctionConstruct(
             self, 'LambdaFunction',
             error_topic=error_topic,
             function_name=function_name,
+            duration=duration,
             lambda_directory=lambda_directory,
             environment_variables={
                 'DYNAMODB_TABLE_NAME': dynamodb_table_name
