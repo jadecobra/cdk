@@ -29,8 +29,9 @@ class ApiLambdaDynamodbEventBridgeLambda(well_architected_stack.Stack):
             error_topic=self.error_topic
         )
 
-        self.webservice_lambda_function.create_cloudwatch_dashboard(
+        self.create_cloudwatch_dashboard(
             *self.dynamodb_table.create_cloudwatch_widgets(),
+            *self.webservice_lambda_function.create_cloudwatch_widgets(),
             *self.error_handler.create_cloudwatch_widgets(),
             *self.http_api.create_cloudwatch_widgets(),
             *self.rest_api.create_cloudwatch_widgets(),
@@ -71,7 +72,7 @@ class ApiLambdaDynamodbEventBridgeLambda(well_architected_stack.Stack):
     def create_error_handling_lambda_function(
         self, dynamodb_table:aws_cdk.aws_dynamodb.Table,
     ):
-        lambda_function = self.create_lambda_function(
+        return well_architected_constructs.api_lambda_dynamodb.ApiLambdaDynamodbConstruct(
             function_name='error',
             dynamodb_table_name=dynamodb_table.table_name,
             duration=3,
@@ -86,9 +87,12 @@ class ApiLambdaDynamodbEventBridgeLambda(well_architected_stack.Stack):
                     }
                 )
             )
+
         )
-        dynamodb_table.grant_write_data(lambda_function)
-        return lambda_function
+        lambda_construct = self.create_lambda_function(
+        )
+        dynamodb_table.grant_write_data(lambda_construct.lambda_function)
+        return lambda_construct
 
     @staticmethod
     def get_sort_key():

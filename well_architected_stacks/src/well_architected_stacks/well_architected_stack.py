@@ -62,3 +62,11 @@ class Stack(aws_cdk.Stack):
                     policy_name
                 )
             )
+
+    def create_cloudwatch_dashboard(self, *widgets):
+        return aws_cdk.aws_cloudwatch.Dashboard(
+            self, "CloudWatchDashBoard",
+            widgets=[
+                [widget] for widget in widgets
+            ]
+        )

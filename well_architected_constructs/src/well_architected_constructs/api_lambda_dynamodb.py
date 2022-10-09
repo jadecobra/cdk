@@ -15,6 +15,7 @@ class ApiLambdaDynamodbConstruct(well_architected_construct.Construct):
         error_topic=None,
         lambda_directory=None,
         duration=60,
+        event_bridge_rule=None,
         **kwargs
     ) -> None:
         super().__init__(
@@ -32,6 +33,7 @@ class ApiLambdaDynamodbConstruct(well_architected_construct.Construct):
             function_name=function_name,
             duration=duration,
             error_topic=error_topic,
+            event_bridge_rule=event_bridge_rule,
         )
         self.dynamodb_table.dynamodb_table.grant_read_write_data(
             self.lambda_function.lambda_function
@@ -51,10 +53,12 @@ class ApiLambdaDynamodbConstruct(well_architected_construct.Construct):
         lambda_directory=None,
         duration=None,
         error_topic=None,
+        event_bridge_rule=None,
     ):
         return lambda_function.LambdaFunctionConstruct(
             self, 'LambdaFunction',
             error_topic=error_topic,
+            event_bridge_rule=event_bridge_rule,
             function_name=function_name,
             duration=duration,
             lambda_directory=lambda_directory,

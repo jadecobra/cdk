@@ -68,7 +68,7 @@ class ApiLambdaEventBridgeLambda(well_architected_stack.Stack):
             lambda_function=self.atm_producer.lambda_function,
         )
 
-        self.atm_producer.create_cloudwatch_dashboard(
+        self.create_cloudwatch_dashboard(
             *self.approved_transaction.create_cloudwatch_widgets(),
             *self.ny_prefix_transaction.create_cloudwatch_widgets(),
             *self.not_approved_transaction.create_cloudwatch_widgets(),
