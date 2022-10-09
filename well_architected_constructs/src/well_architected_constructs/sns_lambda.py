@@ -31,6 +31,6 @@ class SnsLambdaConstruct(well_architected_construct.Construct):
         )
         sns_topic.add_subscription(
             aws_cdk.aws_sns_subscriptions.LambdaSubscription(
-                self.lambda_function
+                self.lambda_function.lambda_function
             )
         )
