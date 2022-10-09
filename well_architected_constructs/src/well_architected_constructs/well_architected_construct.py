@@ -58,7 +58,7 @@ class Construct(constructs.Construct):
                 aws_cdk.aws_cloudwatch_actions.SnsAction(self.error_topic)
             )
 
-    def create_cloudwatch_dashboard(self, widgets):
+    def create_cloudwatch_dashboard(self, *widgets):
         return aws_cdk.aws_cloudwatch.Dashboard(
             self, "CloudWatchDashBoard",
             widgets=[
