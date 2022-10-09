@@ -19,7 +19,8 @@ class AlexaSkill(well_architected_stacks.well_architected_stack.Stack):
         role = self.create_iam_role()
         self.grant_access_to_asset(
             role=role,
-            asset=asset
+            s3_bucket_name=asset.s3_bucket_name,
+            s3_object_key=asset.s3_object_key,
         )
 
         users_table = self.create_dynamodb_table()
@@ -56,11 +57,11 @@ class AlexaSkill(well_architected_stacks.well_architected_stack.Stack):
         return aws_cdk.aws_iam.ServicePrincipal('alexa-appkit.amazon.com')
 
     @staticmethod
-    def grant_access_to_asset(role=None, asset=None):
+    def grant_access_to_asset(role=None, s3_bucket_name=None, s3_object_key=None):
         return role.add_to_policy(
             aws_cdk.aws_iam.PolicyStatement(
                 actions=['S3:GetObject'],
-                resources=[f'arn:aws:s3:::{asset.s3_bucket_name}/{asset.s3_object_key}']
+                resources=[f'arn:aws:s3:::{s3_bucket_name}/{s3_object_key}']
             )
         )
 
