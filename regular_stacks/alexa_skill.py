@@ -26,12 +26,14 @@ class AlexaSkill(well_architected_stacks.well_architected_stack.Stack):
             s3_object_key=asset.s3_object_key,
         )
 
-        users_table = self.create_dynamodb_table()
-        alexa_lambda = self.create_lambda_function(
-            lambda_directory=lambda_directory,
-            table_name=users_table.table_name
-        )
-        users_table.grant_read_write_data(alexa_lambda)
+        # users_table = self.create_dynamodb_table()
+        # alexa_lambda = self.create_lambda_function(
+        #     lambda_directory=lambda_directory,
+        #     table_name=users_table.table_name
+        # )
+        # users_table.grant_read_write_data(alexa_lambda)
+
+        alexa_lambda = self.create_lambda_function_and_dynamodb_table()
 
         alexa_skill = self.create_alexa_skill(
             self.get_skill_package(
@@ -86,33 +88,13 @@ class AlexaSkill(well_architected_stacks.well_architected_stack.Stack):
         )
 
     def create_lambda_function_and_dynamodb_table(self):
-        return well_architected_constructs.api_lambda_dynamodb.ApiLambdaDynamodb(
+        return well_architected_constructs.api_lambda_dynamodb.ApiLambdaDynamodbConstruct(
             self, 'LambdaDynamoDb',
             function_name='alexa_skill',
             lambda_directory=self.lambda_directory,
             duration=60,
             partition_key='userId',
             error_topic=self.error_topic,
-
-        )
-
-    def create_dynamodb_table(self):
-        return well_architected_constructs.dynamodb_table.DynamodbTableConstruct(
-            self, 'DynamoDbTable',
-            partition_key='userId',
-            error_topic=self.error_topic,
-        ).dynamodb_table
-
-    def create_lambda_function(self, table_name=None, lambda_directory=None):
-        return well_architected_constructs.lambda_function.LambdaFunctionConstruct(
-            self, 'LambdaFunction',
-            function_name='alexa_skill',
-            lambda_directory=self.lambda_directory,
-            duration=60,
-            error_topic=self.error_topic,
-            environment_variables={
-                "USERS_TABLE": table_name
-            }
         ).lambda_function
 
     @staticmethod
