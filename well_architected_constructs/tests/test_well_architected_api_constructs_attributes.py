@@ -30,7 +30,6 @@ class TestApiConstructAttributes(TestWellArchitectedConstructAttributes):
             src.well_architected_constructs.api_lambda_dynamodb.ApiLambdaDynamodbConstruct,
             [
                 *self.well_architected_construct_attributes(),
-                'create_dynamodb_table',
                 'create_lambda_function',
                 'create_http_api_lambda',
                 'create_rest_api_lambda',
