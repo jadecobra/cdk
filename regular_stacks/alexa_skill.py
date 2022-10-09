@@ -48,13 +48,16 @@ class AlexaSkill(well_architected_stacks.well_architected_stack.Stack):
         lambda_function.add_permission(
             'AlexaPermission',
             event_source_token=event_source_token, # comment out if first deploy fails with circular dependency
-            principal=self.get_alexa_service_principal(),
+            principal=self.alexa_service_principal(),
             action='lambda:InvokeFunction'
         )
 
     @staticmethod
-    def get_alexa_service_principal():
-        return aws_cdk.aws_iam.ServicePrincipal('alexa-appkit.amazon.com')
+    def service_principal(principal):
+        return aws_cdk.aws_iam.ServicePrincipal(principal)
+
+    def alexa_service_principal(self):
+        return self.service_principal('alexa-appkit.amazon.com')
 
     @staticmethod
     def grant_access_to_asset(role=None, s3_bucket_name=None, s3_object_key=None):
@@ -74,8 +77,8 @@ class AlexaSkill(well_architected_stacks.well_architected_stack.Stack):
         return aws_cdk.aws_iam.Role(
             self, 'Role',
             assumed_by=aws_cdk.aws_iam.CompositePrincipal(
-                self.get_alexa_service_principal(),
-                aws_cdk.aws_iam.ServicePrincipal('cloudformation.amazonaws.com')
+                self.alexa_service_principal(),
+                self.service_principal('cloudformation.amazonaws.com')
             )
         )
 
