@@ -8,9 +8,13 @@ import os
 
 class AlexaSkill(well_architected_stacks.well_architected_stack.Stack):
 
-    def get_skill_asset(self, path):
-        return aws_cdk.aws_s3_assets.Asset(
-            self, 'SkillAsset', path=path,
+    def create_iam_role(self):
+        return aws_cdk.aws_iam.Role(
+            self, 'Role',
+            assumed_by=aws_cdk.aws_iam.CompositePrincipal(
+                aws_cdk.aws_iam.ServicePrincipal('alexa-appkit.amazon.com'),
+                aws_cdk.aws_iam.ServicePrincipal('cloudformation.amazonaws.com')
+            )
         )
 
     def __init__(
@@ -21,18 +25,8 @@ class AlexaSkill(well_architected_stacks.well_architected_stack.Stack):
     ) -> None:
         super().__init__(scope, id, **kwargs)
         asset = self.get_skill_asset(alexa_skills_directory)
-        # asset = aws_cdk.aws_s3_assets.Asset(
-        #     self, 'SkillAsset',
-        #     path=alexa_skills_directory,
-        # )
+        role = self.create_iam_role()
 
-        role = aws_cdk.aws_iam.Role(
-            self, 'Role',
-            assumed_by=aws_cdk.aws_iam.CompositePrincipal(
-                aws_cdk.aws_iam.ServicePrincipal('alexa-appkit.amazon.com'),
-                aws_cdk.aws_iam.ServicePrincipal('cloudformation.amazonaws.com')
-            )
-        )
 
         # Allow the skill resource to access the zipped skill package
         role.add_to_policy(
@@ -110,4 +104,9 @@ class AlexaSkill(well_architected_stacks.well_architected_stack.Stack):
             # eventSourceToken: skill.ref,
             principal=aws_cdk.aws_iam.ServicePrincipal('alexa-appkit.amazon.com'),
             action='lambda:InvokeFunction'
+        )
+
+    def get_skill_asset(self, path):
+        return aws_cdk.aws_s3_assets.Asset(
+            self, 'SkillAsset', path=path,
         )
