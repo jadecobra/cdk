@@ -56,9 +56,6 @@ class LambdaFunctionConstruct(well_architected_construct.Construct):
         self.create_invocations_error_greater_than_2_percent_alarm()
         self.create_invocation_longer_than_1_second_alarm()
         self.create_throttled_invocations_greater_than_2_percent_alarm()
-        self.create_cloudwatch_dashboard(
-            self.create_cloudwatch_widgets()
-        )
 
     @staticmethod
     def to_camel_case(text):

@@ -25,7 +25,6 @@ class Api(well_architected_construct.Construct):
         self.create_api_gateway_4xx_alarm()
         self.create_api_gateway_5xx_alarm()
         self.create_api_gateway_latency_alarm()
-        self.create_cloudwatch_dashboard(self.create_cloudwatch_widgets())
         aws_cdk.CfnOutput(self, f'{id} URL', value=api.url)
 
     def get_api_id(self, api):

@@ -34,9 +34,6 @@ class DynamodbTableConstruct(well_architected_construct.Construct):
         )
         self.create_user_errors_alarm()
         self.create_throttles_alarm()
-        self.create_cloudwatch_dashboard(
-            self.create_cloudwatch_widgets()
-        )
 
     @staticmethod
     def get_dynamodb_key(key):
