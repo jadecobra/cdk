@@ -26,14 +26,9 @@ class ApiLambdaDynamodbStack(well_architected_stack.Stack):
             create_http_api=create_http_api,
             create_rest_api=create_rest_api,
         )
-        self.create_cloudwatch_dashboard()
 
-    def create_cloudwatch_dashboard(self):
-        return self.create_cloudwatch_dashboard(
-            *self.api_lambda_dynamodb.create_cloudwatch_widgets(),
-            *self.api.create_cloudwatch_widgets(),
-        )
         self.create_cloudwatch_dashboard(
-            *self.api_lambda_dynamodb.lambda_function.create_cloudwatch_widgets(),
-            *self.api_lambda_dynamodb.dynamodb_table.create_cloudwatch_widgets(),
+            *self.api_lambda_dynamodb.api.create_cloudwatch_widgets(),
+            *self.api_lambda_dynamodb.lambda_construct.create_cloudwatch_widgets(),
+            *self.api_lambda_dynamodb.dynamodb_construct.create_cloudwatch_widgets(),
         )

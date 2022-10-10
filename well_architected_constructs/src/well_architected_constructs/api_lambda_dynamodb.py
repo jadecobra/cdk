@@ -28,22 +28,23 @@ class ApiLambdaDynamodbConstruct(well_architected_construct.Construct):
             error_topic=error_topic,
             **kwargs
         )
-        self.dynamodb_table = dynamodb_table.DynamodbTableConstruct(
+        self.dynamodb_construct = dynamodb_table.DynamodbTableConstruct(
             self, 'DynamoDbTable',
             partition_key=partition_key,
             sort_key=sort_key,
             time_to_live_attribute=time_to_live_attribute,
             error_topic=error_topic,
         )
-        self.lambda_construct = self.create_lambda_function(
-            dynamodb_table_name=self.dynamodb_table.dynamodb_table.table_name,
+        self.lambda_construct = self.create_lambda_construct(
+            dynamodb_table_name=self.dynamodb_construct.dynamodb_table.table_name,
             lambda_directory=lambda_directory,
             function_name=function_name,
             duration=duration,
             error_topic=error_topic,
             event_bridge_rule=event_bridge_rule,
         )
-        self.dynamodb_table.dynamodb_table.grant_read_write_data(
+
+        self.dynamodb_construct.dynamodb_table.grant_read_write_data(
             self.lambda_construct.lambda_function
         )
 
@@ -71,7 +72,7 @@ class ApiLambdaDynamodbConstruct(well_architected_construct.Construct):
                 error_topic=error_topic
             )
 
-    def create_lambda_function(
+    def create_lambda_construct(
         self,
         dynamodb_table_name=None,
         function_name=None,
