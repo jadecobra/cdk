@@ -11,6 +11,8 @@ class ApiLambdaRds(well_architected_stack.Stack):
 
     def __init__(
         self, scope: constructs.Construct, id: str,
+        create_rest_api=False,
+        create_http_api=False,
         **kwargs
     ) -> None:
         super().__init__(scope, id, **kwargs)
@@ -30,7 +32,17 @@ class ApiLambdaRds(well_architected_stack.Stack):
             vpc=vpc,
         )
 
-        rds_lambda = well_architected_constructs.lambda_function.create_python_lambda_function(
+        # rds_lambda_construct = well_architected_constructs.lambda_function.create_python_lambda_function(
+        #     self, function_name='rds',
+        #     lambda_directory=self.lambda_directory,
+        #     error_topic=self.error_topic,
+        #     vpc=vpc,
+        #     environment_variables={
+        #         "PROXY_ENDPOINT": rds_proxy.endpoint,
+        #         "RDS_SECRET_NAME": f'{id}-rds-credentials',
+        #     }
+        # )
+        rds_lambda_construct = well_architected_constructs.lambda_function.create_python_lambda_function(
             self, function_name='rds',
             lambda_directory=self.lambda_directory,
             error_topic=self.error_topic,
@@ -40,7 +52,7 @@ class ApiLambdaRds(well_architected_stack.Stack):
                 "RDS_SECRET_NAME": f'{id}-rds-credentials',
             }
         )
-
+        rds_lambda = rds_lambda_construct.lambda_function
         db_credentials_secret.grant_read(rds_lambda)
 
         for security_group, description in (

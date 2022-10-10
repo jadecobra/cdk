@@ -8,6 +8,7 @@ class TestApiLambda(jadecobra.toolkit.TestCase):
         self.assert_attributes_equal(
             src.well_architected_constructs.api_lambda,
             sorted([
+                'ApiLambdaConstruct',
                 '__builtins__',
                 '__cached__',
                 '__doc__',
@@ -18,7 +19,10 @@ class TestApiLambda(jadecobra.toolkit.TestCase):
                 '__spec__',
                 'api',
                 'aws_cdk',
+                'constructs',
                 'create_http_api_lambda',
                 'create_rest_api_lambda',
+                'lambda_function',
+                'well_architected_construct',
             ])
         )
