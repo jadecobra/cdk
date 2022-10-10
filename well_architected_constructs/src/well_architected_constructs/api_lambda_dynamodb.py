@@ -19,6 +19,8 @@ class ApiLambdaDynamodbConstruct(well_architected_construct.Construct):
         event_bridge_rule=None,
         time_to_live_attribute=None,
         sort_key=None,
+        create_http_api=False,
+        create_rest_api=False,
         **kwargs
     ) -> None:
         super().__init__(
@@ -33,7 +35,7 @@ class ApiLambdaDynamodbConstruct(well_architected_construct.Construct):
             time_to_live_attribute=time_to_live_attribute,
             error_topic=error_topic,
         )
-        self.lambda_function = self.create_lambda_function(
+        self.lambda_construct = self.create_lambda_function(
             dynamodb_table_name=self.dynamodb_table.dynamodb_table.table_name,
             lambda_directory=lambda_directory,
             function_name=function_name,
@@ -42,8 +44,32 @@ class ApiLambdaDynamodbConstruct(well_architected_construct.Construct):
             event_bridge_rule=event_bridge_rule,
         )
         self.dynamodb_table.dynamodb_table.grant_read_write_data(
-            self.lambda_function.lambda_function
+            self.lambda_construct.lambda_function
         )
+
+        self.api = self.create_api(
+            create_http_api=create_http_api,
+            create_rest_api=create_rest_api,
+            lambda_function=self.lambda_construct.lambda_function,
+            error_topic=error_topic,
+        )
+
+    def create_api(self,
+        create_http_api=None, create_rest_api=None,
+        lambda_function=None, error_topic=None
+    ):
+        if create_http_api:
+            return api_lambda.create_http_api_lambda(
+                self,
+                lambda_function=lambda_function,
+                error_topic=error_topic
+            )
+        if create_rest_api:
+            return api_lambda.create_rest_api_lambda(
+                self,
+                lambda_function=lambda_function,
+                error_topic=error_topic
+            )
 
     def create_lambda_function(
         self,
@@ -64,16 +90,4 @@ class ApiLambdaDynamodbConstruct(well_architected_construct.Construct):
             environment_variables={
                 'DYNAMODB_TABLE_NAME': dynamodb_table_name
             }
-        )
-
-    def create_http_api_lambda(self):
-        return api_lambda.create_http_api_lambda(
-            self, lambda_function=self.lambda_function.lambda_function,
-            error_topic=self.error_topic,
-        )
-
-    def create_rest_api_lambda(self):
-        return api_lambda.create_rest_api_lambda(
-            self, lambda_function=self.lambda_function.lambda_function,
-            error_topic=self.error_topic,
         )

@@ -11,97 +11,109 @@ class WellArchitected(aws_cdk.App):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.lambda_directory = '../lambda_functions'
-        self.create_well_architected_stacks(self.lambda_directory)
-        self.lambda_trilogy(self.lambda_directory)
-        self.xray_tracer(self.lambda_directory)
+        self.create_well_architected_stacks()
+        self.lambda_trilogy()
+        self.xray_tracer()
         # self.ecs()
         # self.in_progress()
 
-    def create_well_architected_stacks(self, lambda_directory):
-        api_lambda_dynamodb = well_architected_stacks.api_lambda_dynamodb.ApiLambdaDynamodbStack(
-            self, 'ApiLambdaDynamodb',
+    def create_well_architected_stacks(self):
+        well_architected_stacks.api_lambda_dynamodb.ApiLambdaDynamodbStack(
+            self, 'HttpApiLambdaDynamodb',
             function_name='hit_counter',
             partition_key='path',
-            lambda_directory=lambda_directory,
-        ).api_lambda_dynamodb
-        api_lambda_dynamodb.create_http_api_lambda()
-        api_lambda_dynamodb.create_rest_api_lambda()
+            lambda_directory=self.lambda_directory,
+            http_api=True,
+        )
+        well_architected_stacks.api_lambda_dynamodb_eventbridge_lambda.ApiLambdaDynamodbEventBridgeLambda(
+            self, 'HttpApiLambdaDynamodbEventBridgeLambda',
+            lambda_directory=self.lambda_directory,
+            create_http_api=True
+        )
+        well_architected_stacks.api_lambda_dynamodb.ApiLambdaDynamodbStack(
+            self, 'RestApiLambdaDynamodb',
+            function_name='hit_counter',
+            partition_key='path',
+            lambda_directory=self.lambda_directory,
+            rest_api=True,
+        )
 
         well_architected_stacks.api_lambda_dynamodb_eventbridge_lambda.ApiLambdaDynamodbEventBridgeLambda(
-            self, 'ApiLambdaDynamodbEventBridgeLambda',
-            lambda_directory=lambda_directory,
+            self, 'RestApiLambdaDynamodbEventBridgeLambda',
+            lambda_directory=self.lambda_directory,
+            create_rest_api=True,
         )
         well_architected_stacks.api_lambda_eventbridge_lambda.ApiLambdaEventBridgeLambda(
             self, 'ApiLambdaEventBridgeLambda',
-            lambda_directory=lambda_directory,
+            lambda_directory=self.lambda_directory,
         )
         well_architected_stacks.api_lambda_rds.ApiLambdaRds(
             self, 'ApiLambdaRds',
-            lambda_directory=lambda_directory,
+            lambda_directory=self.lambda_directory,
         )
         well_architected_stacks.api_lambda_sqs_lambda_dynamodb.ApiLambdaSqsLambdaDynamodb(
             self, 'ApiLambdaSqsLambdaDynamodb',
-            lambda_directory=lambda_directory,
+            lambda_directory=self.lambda_directory,
         )
         well_architected_stacks.api_step_functions.ApiStepFunctions(
             self, 'ApiStepFunctions',
-            lambda_directory=lambda_directory,
+            lambda_directory=self.lambda_directory,
         )
         well_architected_stacks.lambda_power_tuner.LambdaPowerTuner(
             self, 'LambdaPowerTuner',
-            lambda_directory=lambda_directory,
+            lambda_directory=self.lambda_directory,
         )
         well_architected_stacks.rest_api_dynamodb.RestApiDynamodb(
             self, 'RestApiDynamodb',
             partition_key='message',
-            lambda_directory=lambda_directory,
+            lambda_directory=self.lambda_directory,
         )
         well_architected_stacks.rest_api_sns_lambda_eventbridge_lambda.RestApiSnsLambdaEventBridgeLambda(
             self, 'RestApiSnsLambdaEventBridgeLambda',
-            lambda_directory=lambda_directory,
+            lambda_directory=self.lambda_directory,
         )
         well_architected_stacks.rest_api_sns_sqs_lambda.RestApiSnsSqsLambda(
             self, 'RestApiSnsSqsLambda',
-            lambda_directory=lambda_directory,
+            lambda_directory=self.lambda_directory,
         )
         well_architected_stacks.s3_sqs_lambda_ecs_eventbridge_lambda_dynamodb.S3SqsLambdaEcsEventBridgeLambdaDynamodb(
             self, 'S3SqsLambdaEcsEventBridgeLambdaDynamodb',
-            lambda_directory=lambda_directory,
+            lambda_directory=self.lambda_directory,
             containers_directory='../containers',
         )
         well_architected_stacks.saga_step_function.SagaStepFunction(
             self, 'SagaStepFunction',
-            lambda_directory=lambda_directory,
+            lambda_directory=self.lambda_directory,
         )
         simple_graphql_service.SimpleGraphQlService(
             self, 'SimpleGraphqlService',
-            lambda_directory=lambda_directory,
+            lambda_directory=self.lambda_directory,
         )
         well_architected_stacks.waf_api_lambda_dynamodb.WafApiLambdaDynamodb(
             self, 'WafApiLambdaDynamodb',
-            lambda_directory=lambda_directory,
+            lambda_directory=self.lambda_directory,
             function_name='hit_counter',
             partition_key='path',
         )
 
-    def lambda_trilogy(self, lambda_directory):
+    def lambda_trilogy(self):
         well_architected_stacks.lambda_trilogy.lambda_lith.LambdaLith(
             self, "LambdaLith",
             function_name='lambda_lith',
-            lambda_directory=lambda_directory,
+            lambda_directory=self.lambda_directory,
         )
         well_architected_stacks.lambda_trilogy.lambda_trilogy.LambdaTrilogy(
             self, 'LambdaFat',
             function_name='lambda_fat',
-            lambda_directory=lambda_directory,
+            lambda_directory=self.lambda_directory,
         )
         well_architected_stacks.lambda_trilogy.lambda_trilogy.LambdaTrilogy(
             self, 'LambdaSinglePurpose',
             function_name='lambda_single_purpose',
-            lambda_directory=lambda_directory,
+            lambda_directory=self.lambda_directory,
         )
 
-    def xray_tracer(self, lambda_directory):
+    def xray_tracer(self):
         xray_tracer_sns_topic = well_architected_stacks.sns_topic.SnsTopic(
             self, 'XRayTracerSnsTopic', display_name='XRayTracerSnsTopic',
         )
@@ -112,13 +124,13 @@ class WellArchitected(aws_cdk.App):
             self, 'RestApiSns',
             sns_topic=xray_tracer_sns_topic.sns_topic,
             error_topic=xray_tracer_error_topic.sns_topic,
-            lambda_directory=lambda_directory,
+            lambda_directory=self.lambda_directory,
         )
         well_architected_stacks.sns_lambda_sns.SnsLambdaSns(
             self, 'SnsLambdaSns',
             sns_publisher_trigger=xray_tracer_sns_topic.sns_topic,
             error_topic=xray_tracer_error_topic.sns_topic,
-            lambda_directory=lambda_directory,
+            lambda_directory=self.lambda_directory,
             publisher_lambda_name='sns_publisher',
             subscriber_lambda_name='sns_subscriber',
         )
@@ -126,13 +138,13 @@ class WellArchitected(aws_cdk.App):
             self, 'SqsLambdaSqs',
             sns_topic=xray_tracer_sns_topic.sns_topic,
             error_topic=xray_tracer_error_topic.sns_topic,
-            lambda_directory=lambda_directory,
+            lambda_directory=self.lambda_directory,
         )
         well_architected_stacks.sns_lambda.SnsLambda(
             self, 'SnsLambda',
             sns_topic=xray_tracer_sns_topic.sns_topic,
             error_topic=xray_tracer_error_topic.sns_topic,
-            lambda_directory=lambda_directory,
+            lambda_directory=self.lambda_directory,
             lambda_function_name="sns_lambda",
         )
         well_architected_stacks.sns_lambda_dynamodb.SnsLambdaDynamodb(
@@ -141,7 +153,7 @@ class WellArchitected(aws_cdk.App):
             lambda_function_name="hit_counter",
             sns_topic=xray_tracer_sns_topic.sns_topic,
             error_topic=xray_tracer_error_topic.sns_topic,
-            lambda_directory=lambda_directory,
+            lambda_directory=self.lambda_directory,
         )
 
     def ecs(self):
