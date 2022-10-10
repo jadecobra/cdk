@@ -23,24 +23,10 @@ class ApiLambdaDynamodbStack(well_architected_stack.Stack):
             function_name=function_name,
             error_topic=self.error_topic,
             partition_key=partition_key,
-            create_http_api=False,
-            create_rest_api=False,
+            create_http_api=create_http_api,
+            create_rest_api=create_rest_api,
         )
         self.create_cloudwatch_dashboard()
-
-    def create_api(self, create_http_api=None, create_rest_api=None):
-        if create_http_api:
-            return well_architected_constructs.api_lambda.create_http_api_lambda(
-                self,
-                lambda_function=self.api_lambda_dynamodb.lambda_function,
-                error_topic=self.error_topic
-            )
-        if create_rest_api:
-            return well_architected_constructs.api_lambda.create_rest_api_lambda(
-                self,
-                lambda_function=self.api_lambda_dynamodb.lambda_function,
-                error_topic=self.error_topic
-            )
 
     def create_cloudwatch_dashboard(self):
         return self.create_cloudwatch_dashboard(

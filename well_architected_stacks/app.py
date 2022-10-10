@@ -23,7 +23,7 @@ class WellArchitected(aws_cdk.App):
             function_name='hit_counter',
             partition_key='path',
             lambda_directory=self.lambda_directory,
-            http_api=True,
+            create_http_api=True,
         )
         well_architected_stacks.api_lambda_dynamodb_eventbridge_lambda.ApiLambdaDynamodbEventBridgeLambda(
             self, 'HttpApiLambdaDynamodbEventBridgeLambda',
@@ -35,7 +35,7 @@ class WellArchitected(aws_cdk.App):
             function_name='hit_counter',
             partition_key='path',
             lambda_directory=self.lambda_directory,
-            rest_api=True,
+            create_rest_api=True,
         )
 
         well_architected_stacks.api_lambda_dynamodb_eventbridge_lambda.ApiLambdaDynamodbEventBridgeLambda(
