@@ -36,14 +36,11 @@ class ApiLambdaDynamodbEventBridgeLambda(well_architected_stack.Stack):
             self.dynamodb_table
         )
 
-
-        self.api = self.api_lambda_dynamodb.api
-
         self.create_cloudwatch_dashboard(
             *self.api_lambda_dynamodb.dynamodb_construct.create_cloudwatch_widgets(),
             *self.api_lambda_dynamodb.lambda_construct.create_cloudwatch_widgets(),
+            *self.api_lambda_dynamodb.api_construct.create_cloudwatch_widgets(),
             *self.error_handler.create_cloudwatch_widgets(),
-            *self.api.create_cloudwatch_widgets(),
         )
 
     def create_lambda_dynamodb(self, create_http_api=None, create_rest_api=None):

@@ -44,16 +44,34 @@ class WellArchitected(aws_cdk.App):
             create_rest_api=True,
         )
         well_architected_stacks.api_lambda_eventbridge_lambda.ApiLambdaEventBridgeLambda(
-            self, 'ApiLambdaEventBridgeLambda',
+            self, 'HttpApiLambdaEventBridgeLambda',
             lambda_directory=self.lambda_directory,
+            create_http_api=True,
+        )
+        well_architected_stacks.api_lambda_eventbridge_lambda.ApiLambdaEventBridgeLambda(
+            self, 'RestApiLambdaEventBridgeLambda',
+            lambda_directory=self.lambda_directory,
+            create_rest_api=True,
         )
         well_architected_stacks.api_lambda_rds.ApiLambdaRds(
-            self, 'ApiLambdaRds',
+            self, 'HttpApiLambdaRds',
             lambda_directory=self.lambda_directory,
+            create_http_api=True,
+        )
+        well_architected_stacks.api_lambda_rds.ApiLambdaRds(
+            self, 'RestApiLambdaRds',
+            lambda_directory=self.lambda_directory,
+            create_rest_api=True,
         )
         well_architected_stacks.api_lambda_sqs_lambda_dynamodb.ApiLambdaSqsLambdaDynamodb(
-            self, 'ApiLambdaSqsLambdaDynamodb',
+            self, 'HttpApiLambdaSqsLambdaDynamodb',
             lambda_directory=self.lambda_directory,
+            create_http_api=True,
+        )
+        well_architected_stacks.api_lambda_sqs_lambda_dynamodb.ApiLambdaSqsLambdaDynamodb(
+            self, 'RestApiLambdaSqsLambdaDynamodb',
+            lambda_directory=self.lambda_directory,
+            create_rest_api=True,
         )
         well_architected_stacks.api_step_functions.ApiStepFunctions(
             self, 'ApiStepFunctions',

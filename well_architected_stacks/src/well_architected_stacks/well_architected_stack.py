@@ -30,6 +30,7 @@ class Stack(aws_cdk.Stack):
         )
 
     def create_error_topic(self, topic_name=None):
+        # Refactor
         if not self.error_topic:
             if topic_name:
                 display_name = topic_name

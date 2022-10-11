@@ -11,68 +11,73 @@ class ApiLambdaRds(well_architected_stack.Stack):
 
     def __init__(
         self, scope: constructs.Construct, id: str,
+        lambda_directory=None,
         create_rest_api=False,
         create_http_api=False,
         **kwargs
     ) -> None:
         super().__init__(scope, id, **kwargs)
+        self.lambda_directory = lambda_directory
         self.create_error_topic()
-        vpc = aws_cdk.aws_ec2.Vpc(self, 'Vpc', max_azs=2)
+        self.vpc = aws_cdk.aws_ec2.Vpc(self, 'Vpc', max_azs=2)
         db_credentials_secret = self.create_credentials_secret(id)
         self.create_parameter_store_for_db_credentials(db_credentials_secret.secret_arn)
-        rds_instance = self.create_rds_instance(
+        self.rds_instance = self.create_rds_instance(
             credentials_secret=db_credentials_secret,
-            vpc=vpc
+            vpc=self.vpc
         )
 
-        rds_proxy = rds_instance.add_proxy(
+        self.rds_proxy = self.rds_instance.add_proxy(
             f'{id}-proxy',
             secrets=[db_credentials_secret],
             debug_logging=True,
-            vpc=vpc,
+            vpc=self.vpc,
         )
 
-        # rds_lambda_construct = well_architected_constructs.lambda_function.create_python_lambda_function(
+        # self.rds_lambda_construct = well_architected_constructs.lambda_function.create_python_lambda_function(
         #     self, function_name='rds',
         #     lambda_directory=self.lambda_directory,
         #     error_topic=self.error_topic,
-        #     vpc=vpc,
+        #     vpc=self.vpc,
         #     environment_variables={
-        #         "PROXY_ENDPOINT": rds_proxy.endpoint,
+        #         "PROXY_ENDPOINT": self.rds_proxy.endpoint,
         #         "RDS_SECRET_NAME": f'{id}-rds-credentials',
         #     }
         # )
-        rds_lambda_construct = well_architected_constructs.lambda_function.create_python_lambda_function(
-            self, function_name='rds',
+        self.rds_lambda_construct = well_architected_constructs.api_lambda.ApiLambdaConstruct(
+            self, 'RdsLambda',
+            function_name='rds',
             lambda_directory=self.lambda_directory,
             error_topic=self.error_topic,
-            vpc=vpc,
+            vpc=self.vpc,
             environment_variables={
-                "PROXY_ENDPOINT": rds_proxy.endpoint,
+                "PROXY_ENDPOINT": self.rds_proxy.endpoint,
                 "RDS_SECRET_NAME": f'{id}-rds-credentials',
-            }
+            },
+            create_http_api=create_http_api,
+            create_rest_api=create_rest_api,
         )
-        rds_lambda = rds_lambda_construct.lambda_function
+        rds_lambda = self.rds_lambda_construct.lambda_function
         db_credentials_secret.grant_read(rds_lambda)
 
         for security_group, description in (
-            (rds_proxy, 'allow db connection'),
+            (self.rds_proxy, 'allow db connection'),
             (rds_lambda, 'allow lambda connection'),
         ):
-            rds_instance.connections.allow_from(
+            self.rds_instance.connections.allow_from(
                 security_group,
                 aws_cdk.aws_ec2.Port.tcp(3306),
                 description=description
             )
 
-        well_architected_constructs.api_lambda.create_http_api_lambda(
-            self, lambda_function=rds_lambda,
-            error_topic=self.error_topic,
-        )
-        well_architected_constructs.api_lambda.create_rest_api_lambda(
-            self, lambda_function=rds_lambda,
-            error_topic=self.error_topic,
-        )
+        # well_architected_constructs.api_lambda.create_http_api_lambda(
+        #     self, lambda_function=rds_lambda,
+        #     error_topic=self.error_topic,
+        # )
+        # well_architected_constructs.api_lambda.create_rest_api_lambda(
+        #     self, lambda_function=rds_lambda,
+        #     error_topic=self.error_topic,
+        # )
 
     def create_credentials_secret(self, id):
         return aws_cdk.aws_secretsmanager.Secret(
