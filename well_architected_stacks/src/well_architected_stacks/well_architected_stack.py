@@ -11,7 +11,10 @@ class Stack(aws_cdk.Stack):
         id: str,
         lambda_directory='lambda_functions',
         permissions_boundary_name=None,
-        error_topic=None, **kwargs
+        error_topic=None,
+        create_http_api=False,
+        create_rest_api=False,
+        **kwargs
     ):
         super().__init__(
             scope, id,
@@ -21,6 +24,8 @@ class Stack(aws_cdk.Stack):
         self.id = id
         self.lambda_directory = lambda_directory
         self.error_topic = error_topic
+        self.create_http_api = create_http_api
+        self.create_rest_api = create_rest_api
         self.permissions_boundary = self.add_permissions_boundary(permissions_boundary_name)
 
     def create_sns_topic(self, display_name):

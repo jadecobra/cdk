@@ -102,3 +102,8 @@ class TestWellArchitectedConstructAttributes(jadecobra.toolkit.TestCase):
             'to_string',
             *self.cloudwatch_attributes(),
         )
+
+# TODO
+# Abstract ApiLambdaDynnamoDb to use ApiLambda inheritance
+# Can StepFunctions use RestApi?
+# Can Sns use HttpApi?

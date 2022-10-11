@@ -210,6 +210,9 @@ class WellArchitected(aws_cdk.App):
 WellArchitected().synth()
 
 # TODO
+# Use Inheritance for ApiLambda stacks
+# Add RDS metrics to ApiLambdaRds
+# Break up WellArchitected
 # StateMachine examples - https://docs.aws.amazon.com/step-functions/latest/dg/create-sample-projects.html
 # Read Lambda Powertools docs
 # Add EventPattern as LambdaFunction input

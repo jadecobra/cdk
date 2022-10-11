@@ -28,7 +28,12 @@ class TestApiConstructAttributes(TestWellArchitectedConstructAttributes):
     def test_api_lambda_dynamodb(self):
         self.assert_attributes_equal(
             src.well_architected_constructs.api_lambda_dynamodb.ApiLambdaDynamodbConstruct,
-            self.well_architected_construct_attributes(),
+            [
+                *self.well_architected_construct_attributes(),
+                'create_api',
+                'create_http_api_lambda',
+                'create_rest_api_lambda',
+            ]
         )
 
     def test_http_api_step_functions(self):

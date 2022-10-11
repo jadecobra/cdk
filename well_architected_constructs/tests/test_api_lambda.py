@@ -20,8 +20,6 @@ class TestApiLambda(jadecobra.toolkit.TestCase):
                 'api',
                 'aws_cdk',
                 'constructs',
-                'create_http_api_lambda',
-                'create_rest_api_lambda',
                 'lambda_function',
                 'well_architected_construct',
             ])

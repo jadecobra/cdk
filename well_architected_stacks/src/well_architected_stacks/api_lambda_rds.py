@@ -11,13 +11,11 @@ class ApiLambdaRds(well_architected_stack.Stack):
 
     def __init__(
         self, scope: constructs.Construct, id: str,
-        lambda_directory=None,
         create_rest_api=False,
         create_http_api=False,
         **kwargs
     ) -> None:
         super().__init__(scope, id, **kwargs)
-        self.lambda_directory = lambda_directory
         self.create_error_topic()
         self.vpc = aws_cdk.aws_ec2.Vpc(self, 'Vpc', max_azs=2)
         db_credentials_secret = self.create_credentials_secret(id)
@@ -34,16 +32,6 @@ class ApiLambdaRds(well_architected_stack.Stack):
             vpc=self.vpc,
         )
 
-        # self.rds_lambda_construct = well_architected_constructs.lambda_function.create_python_lambda_function(
-        #     self, function_name='rds',
-        #     lambda_directory=self.lambda_directory,
-        #     error_topic=self.error_topic,
-        #     vpc=self.vpc,
-        #     environment_variables={
-        #         "PROXY_ENDPOINT": self.rds_proxy.endpoint,
-        #         "RDS_SECRET_NAME": f'{id}-rds-credentials',
-        #     }
-        # )
         self.rds_lambda_construct = well_architected_constructs.api_lambda.ApiLambdaConstruct(
             self, 'RdsLambda',
             function_name='rds',
@@ -57,12 +45,12 @@ class ApiLambdaRds(well_architected_stack.Stack):
             create_http_api=create_http_api,
             create_rest_api=create_rest_api,
         )
-        rds_lambda = self.rds_lambda_construct.lambda_function
-        db_credentials_secret.grant_read(rds_lambda)
+        self.lambda_function = self.rds_lambda_construct.lambda_function
+        db_credentials_secret.grant_read(self.lambda_function)
 
         for security_group, description in (
             (self.rds_proxy, 'allow db connection'),
-            (rds_lambda, 'allow lambda connection'),
+            (self.lambda_function, 'allow lambda connection'),
         ):
             self.rds_instance.connections.allow_from(
                 security_group,
@@ -70,14 +58,11 @@ class ApiLambdaRds(well_architected_stack.Stack):
                 description=description
             )
 
-        # well_architected_constructs.api_lambda.create_http_api_lambda(
-        #     self, lambda_function=rds_lambda,
-        #     error_topic=self.error_topic,
-        # )
-        # well_architected_constructs.api_lambda.create_rest_api_lambda(
-        #     self, lambda_function=rds_lambda,
-        #     error_topic=self.error_topic,
-        # )
+        self.create_cloudwatch_dashboard(
+            *self.rds_lambda_construct.lambda_construct.create_cloudwatch_widgets(),
+            *self.rds_lambda_construct.api_construct.create_cloudwatch_widgets(),
+            # What are the RDS metrics?
+        )
 
     def create_credentials_secret(self, id):
         return aws_cdk.aws_secretsmanager.Secret(
