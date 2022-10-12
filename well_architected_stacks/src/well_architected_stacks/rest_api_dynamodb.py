@@ -15,22 +15,43 @@ class RestApiDynamodb(well_architected_stack.Stack):
     ) -> None:
         super().__init__(scope, id, **kwargs)
         self.create_error_topic()
-        dynamodb_table = self.create_dynamodb_table(partition_key)
-        self.create_lambda_function_with_dynamodb_event_source(dynamodb_table)
+        self.dynamodb_table_construct = self.create_dynamodb_table(partition_key)
+        self.dynamodb_table = self.dynamodb_table_construct.dynamodb_table
+        self.create_lambda_function_with_dynamodb_event_source(self.dynamodb_table)
 
-        rest_api = self.create_rest_api()
-        rest_api.add_method(
+        self.rest_api_construct = self.create_rest_api_construct(self.error_topic)
+        self.create_api_dynamodb_integration(
+            rest_api=self.rest_api_construct,
+            request_templates=self.get_request_template(self.dynamodb_table.table_name),
+            partition_key=partition_key,
+        )
+
+        self.dynamodb_table.grant_read_write_data(self.rest_api_construct.api_gateway_service_role)
+        self.create_cloudwatch_dashboard(
+            *self.rest_api_construct.create_cloudwatch_widgets(),
+            *self.dynamodb_table_construct.create_cloudwatch_widgets(),
+        )
+
+    def create_rest_api_construct(self, error_topic):
+        return well_architected_constructs.rest_api.RestApiConstruct(
+            self, 'RestApiDynamodb',
+            error_topic=error_topic,
+        )
+
+
+    def create_api_dynamodb_integration(
+        self, rest_api=None, request_templates=None, partition_key=None
+    ):
+        return rest_api.add_method(
             method='POST',
             path='InsertItem',
             uri='arn:aws:apigateway:us-east-1:dynamodb:action/PutItem',
-            request_templates=self.get_request_template(dynamodb_table.table_name),
+            request_templates=request_templates,
             error_selection_pattern="BadRequest",
             success_response_templates={
                 partition_key: 'item added to db'
             },
         )
-
-        dynamodb_table.grant_read_write_data(rest_api.api_gateway_service_role)
 
     def get_request_template(self, table_name):
         return json.dumps({
@@ -46,7 +67,7 @@ class RestApiDynamodb(well_architected_stack.Stack):
             stream=aws_cdk.aws_dynamodb.StreamViewType.NEW_IMAGE,
             error_topic=self.error_topic,
             partition_key=partition_key,
-        ).dynamodb_table
+        )
 
     def create_lambda_function_with_dynamodb_event_source(self, dynamodb_table):
         return well_architected_constructs.lambda_function.LambdaFunctionConstruct(
@@ -59,10 +80,4 @@ class RestApiDynamodb(well_architected_stack.Stack):
                 table=dynamodb_table,
                 starting_position=aws_cdk.aws_lambda.StartingPosition.LATEST,
             )
-        )
-
-    def create_rest_api(self):
-        return well_architected_constructs.rest_api.RestApiConstruct(
-            self, 'RestApiDynamodb',
-            error_topic=self.error_topic,
         )
