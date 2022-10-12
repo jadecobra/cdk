@@ -39,7 +39,7 @@ class ApiLambdaSqsLambdaDynamodb(well_architected_stack.Stack):
                 'SQS_QUEUE_URL': sqs_queue.queue_url,
             },
         )
-        
+
         sqs_publishing_lambda = self.create_sqs_publishing_lambda(sqs_queue)
         self.create_cloudwatch_dashboard(
 
@@ -53,7 +53,7 @@ class ApiLambdaSqsLambdaDynamodb(well_architected_stack.Stack):
             error_topic=self.error_topic,
         ).dynamodb_table
 
-    def create_lambda_function(
+    def create_lambda_construct(
         self, function_name=None,
         environment_variables=None, concurrent_executions=None,
     ):
@@ -68,7 +68,7 @@ class ApiLambdaSqsLambdaDynamodb(well_architected_stack.Stack):
     def create_sqs_publishing_lambda(
         self, sqs_queue:aws_cdk.aws_sqs.Queue
     ):
-        lambda_construct = self.create_lambda_function(
+        lambda_construct = self.create_lambda_construct(
             function_name='api_lambda_sqs_lambda_dynamodb_publisher',
             environment_variables={
                 'SQS_QUEUE_URL': sqs_queue.queue_url
@@ -82,7 +82,7 @@ class ApiLambdaSqsLambdaDynamodb(well_architected_stack.Stack):
         self, sqs_queue: aws_cdk.aws_sqs.Queue=None,
         dynamodb_table:aws_cdk.aws_dynamodb.Table=None,
     ):
-        lambda_construct = self.create_lambda_function(
+        lambda_construct = self.create_lambda_construct(
             function_name='api_lambda_sqs_lambda_dynamodb_subscriber',
             concurrent_executions=2,
             environment_variables={

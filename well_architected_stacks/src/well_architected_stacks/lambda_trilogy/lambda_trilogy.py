@@ -23,7 +23,7 @@ class LambdaTrilogy(well_architected_stack.Stack):
         subtract = 'subtract'
         multiply = 'multiply'
 
-        adder = self.create_lambda_function(add)
+        adder = self.create_lambda_construct(add)
 
         rest_api = self.create_rest_api(
             error_topic=self.error_topic,
@@ -37,8 +37,8 @@ class LambdaTrilogy(well_architected_stack.Stack):
             rest_api=rest_api,
             lambda_functions=(
                 (add, adder),
-                (subtract, self.create_lambda_function(subtract)),
-                (multiply, self.create_lambda_function(multiply)),
+                (subtract, self.create_lambda_construct(subtract)),
+                (multiply, self.create_lambda_construct(multiply)),
             ),
         )
 
@@ -90,7 +90,7 @@ class LambdaTrilogy(well_architected_stack.Stack):
             )
         ).api
 
-    def create_lambda_function(self, handler_name):
+    def create_lambda_construct(self, handler_name):
         return well_architected_constructs.lambda_function.LambdaFunctionConstruct(
             self, handler_name,
             error_topic=self.error_topic,

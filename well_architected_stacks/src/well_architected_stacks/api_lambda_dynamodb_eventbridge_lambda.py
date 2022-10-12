@@ -57,7 +57,7 @@ class ApiLambdaDynamodbEventBridgeLambda(well_architected_stack.Stack):
             create_rest_api=create_rest_api,
         )
 
-    def create_lambda_function(
+    def create_lambda_construct(
         self,
         function_name=None,
         dynamodb_table_name=None,
@@ -77,7 +77,7 @@ class ApiLambdaDynamodbEventBridgeLambda(well_architected_stack.Stack):
     def create_webservice_lambda_function(
         self, dynamodb_table:aws_cdk.aws_dynamodb.Table,
     ):
-        lambda_construct = self.create_lambda_function(
+        lambda_construct = self.create_lambda_construct(
             function_name='webservice',
             dynamodb_table_name=dynamodb_table.table_name,
             duration=20,
@@ -108,7 +108,7 @@ class ApiLambdaDynamodbEventBridgeLambda(well_architected_stack.Stack):
     def create_error_handling_lambda_function(
         self, dynamodb_table:aws_cdk.aws_dynamodb.Table,
     ):
-        lambda_construct = self.create_lambda_function(
+        lambda_construct = self.create_lambda_construct(
             function_name='error',
             dynamodb_table_name=dynamodb_table.table_name,
             duration=3,

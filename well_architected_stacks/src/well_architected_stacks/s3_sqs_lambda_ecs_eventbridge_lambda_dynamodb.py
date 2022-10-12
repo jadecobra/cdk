@@ -15,7 +15,7 @@ class S3SqsLambdaEcsEventBridgeLambdaDynamodb(well_architected_stack.Stack):
     ) -> None:
         super().__init__(scope, id, **kwargs)
         self.create_error_topic()
-        
+
         self.dynamodb_table = self.create_dynamodb_table()
         self.sqs_queue = self.create_sqs_queue()
         self.vpc = self.create_vpc()
@@ -43,14 +43,14 @@ class S3SqsLambdaEcsEventBridgeLambdaDynamodb(well_architected_stack.Stack):
             lambda_function=self.extractor,
         )
 
-        self.transformer = self.create_lambda_function(
+        self.transformer = self.create_lambda_construct(
             function_name='transformer',
             event_bridge_rule_description='Data extracted from S3, Needs transformation',
             event_bridge_detail_type='s3RecordExtraction',
             event_bridge_detail_status="extracted",
         )
 
-        self.loader = self.create_lambda_function(
+        self.loader = self.create_lambda_construct(
             function_name="loader",
             event_bridge_rule_description='Load Transformed Data to DynamoDB',
             event_bridge_detail_type='transform',
@@ -68,7 +68,7 @@ class S3SqsLambdaEcsEventBridgeLambdaDynamodb(well_architected_stack.Stack):
             policy=self.event_bridge_iam_policy()
         )
 
-        self.create_lambda_function(
+        self.create_lambda_construct(
             function_name="observer",
             event_bridge_rule_description='observe and log all events'
         )
@@ -113,7 +113,7 @@ class S3SqsLambdaEcsEventBridgeLambdaDynamodb(well_architected_stack.Stack):
             )
         )
 
-    def create_lambda_function(
+    def create_lambda_construct(
         self,
         function_name=None,
         concurrent_executions=2,
@@ -146,7 +146,7 @@ class S3SqsLambdaEcsEventBridgeLambdaDynamodb(well_architected_stack.Stack):
         sqs_queue=None, s3_bucket_name=None, s3_object_key=None,
         image_name=None, ecs_cluster_name=None, vpc=None,
     ):
-        return self.create_lambda_function(
+        return self.create_lambda_construct(
             function_name='extractor',
             sqs_trigger_queue=sqs_queue,
             environment_variables={

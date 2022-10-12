@@ -106,8 +106,14 @@ class WellArchitected(aws_cdk.App):
             containers_directory='../containers',
         )
         well_architected_stacks.saga_step_function.SagaStepFunction(
-            self, 'SagaStepFunction',
+            self, 'HttpApiSagaStepFunction',
             lambda_directory=self.lambda_directory,
+            create_http_api=True,
+        )
+        well_architected_stacks.saga_step_function.SagaStepFunction(
+            self, 'RestApiSagaStepFunction',
+            lambda_directory=self.lambda_directory,
+            create_rest_api=True,
         )
         simple_graphql_service.SimpleGraphQlService(
             self, 'SimpleGraphqlService',

@@ -15,21 +15,35 @@ class RestApiDynamodb(well_architected_stack.Stack):
     ) -> None:
         super().__init__(scope, id, **kwargs)
         self.create_error_topic()
+
         self.dynamodb_table_construct = self.create_dynamodb_table(partition_key)
         self.dynamodb_table = self.dynamodb_table_construct.dynamodb_table
-        self.create_lambda_function_with_dynamodb_event_source(self.dynamodb_table)
+        self.lambda_construct =well_architected_constructs.lambda_function.LambdaFunctionConstruct(
+            self, 'LambdaFunction',
+            function_name='subscribe',
+            error_topic=self.error_topic,
+            lambda_directory=self.lambda_directory,
+        )
+        self.add_dynamodb_event_source(
+            lambda_function=self.lambda_construct.lambda_function,
+            dynamodb_table=self.dynamodb_table,
+        )
 
         self.rest_api_construct = self.create_rest_api_construct(self.error_topic)
+
         self.create_api_dynamodb_integration(
             rest_api=self.rest_api_construct,
             request_templates=self.get_request_template(self.dynamodb_table.table_name),
             partition_key=partition_key,
         )
+        self.dynamodb_table.grant_read_write_data(
+            self.rest_api_construct.api_gateway_service_role
+        )
 
-        self.dynamodb_table.grant_read_write_data(self.rest_api_construct.api_gateway_service_role)
         self.create_cloudwatch_dashboard(
             *self.rest_api_construct.create_cloudwatch_widgets(),
             *self.dynamodb_table_construct.create_cloudwatch_widgets(),
+            *self.lambda_construct.create_cloudwatch_widgets(),
         )
 
     def create_rest_api_construct(self, error_topic):
@@ -69,13 +83,9 @@ class RestApiDynamodb(well_architected_stack.Stack):
             partition_key=partition_key,
         )
 
-    def create_lambda_function_with_dynamodb_event_source(self, dynamodb_table):
-        return well_architected_constructs.lambda_function.LambdaFunctionConstruct(
-            self, 'LambdaFunction',
-            error_topic=self.error_topic,
-            lambda_directory=self.lambda_directory,
-            function_name='subscribe',
-        ).lambda_function.add_event_source(
+    @staticmethod
+    def add_dynamodb_event_source(lambda_function=None, dynamodb_table=None):
+        return lambda_function.add_event_source(
             aws_cdk.aws_lambda_event_sources.DynamoEventSource(
                 table=dynamodb_table,
                 starting_position=aws_cdk.aws_lambda.StartingPosition.LATEST,

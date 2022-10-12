@@ -18,13 +18,13 @@ class SnsLambdaSns(well_architected_stack.Stack):
 
         topic = self.create_sns_topic('SnsTopic')
 
-        self.create_lambda_function(
+        self.create_lambda_construct(
             construct_id='SnsSubscriber',
             function_name=subscriber_lambda_name,
             sns_topic=topic,
         )
 
-        sns_publisher = self.create_lambda_function(
+        sns_publisher = self.create_lambda_construct(
             construct_id='SnsPublisher',
             function_name=publisher_lambda_name,
             sns_topic=sns_publisher_trigger,
@@ -35,7 +35,7 @@ class SnsLambdaSns(well_architected_stack.Stack):
 
         topic.grant_publish(sns_publisher)
 
-    def create_lambda_function(
+    def create_lambda_construct(
         self, construct_id=None, function_name=None, sns_topic=None,
         environment_variables=None,
     ):

@@ -11,7 +11,7 @@ class RestApiSnsSqsLambda(well_architected_stack.Stack):
         super().__init__(scope, id, **kwargs)
         self.create_error_topic()
         sns_topic = self.create_sns_topic('The Big Fan CDK Pattern Topic')
-        logging_lambda_function = self.create_lambda_function("big_fan_logger")
+        logging_lambda_function = self.create_lambda_construct("big_fan_logger")
 
         for queue_name, filter_name in (
             ('BigFanTopicStatusCreatedSubscriberQueue', 'allowlist'),
@@ -73,7 +73,7 @@ class RestApiSnsSqsLambda(well_architected_stack.Stack):
                 aws_cdk.aws_lambda_event_sources.SqsEventSource(sqs_queue)
             )
 
-    def create_lambda_function(self, function_name):
+    def create_lambda_construct(self, function_name):
         return well_architected_constructs.lambda_function.LambdaFunctionConstruct(
             self, function_name,
             error_topic=self.error_topic,

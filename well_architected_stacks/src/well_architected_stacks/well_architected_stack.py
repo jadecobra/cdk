@@ -43,7 +43,7 @@ class Stack(aws_cdk.Stack):
                 display_name = f'{self.id}ErrorTopic'
             self.error_topic = self.create_sns_topic(display_name)
 
-    def create_lambda_function(self, function_name=None):
+    def create_lambda_construct(self, function_name=None):
         raise NotImplementedError
 
     def get_vpc(self, vpc_id=None, is_default=None):

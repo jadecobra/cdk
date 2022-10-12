@@ -58,7 +58,7 @@ class RestApiSnsLambdaEventBridgeLambda(well_architected_stack.Stack):
     def create_sns_triggered_lambda(
         self, name=None, event_bus=None, sns_topic=None
     ):
-        return self.create_lambda_function(
+        return self.create_lambda_construct(
             function_name=f"{name}_lambda",
             retry_attempts=0,
             on_success=aws_cdk.aws_lambda_destinations.EventBridgeDestination(event_bus=event_bus),
@@ -81,7 +81,7 @@ class RestApiSnsLambdaEventBridgeLambda(well_architected_stack.Stack):
             "responsePayload": response_payload
         }
         details.update(additional_details)
-        self.create_lambda_function(
+        self.create_lambda_construct(
             function_name=function_name,
             event_bridge_rule=aws_cdk.aws_events.Rule(
                 self, f'event_bridge_rule_{function_name}',
@@ -93,7 +93,7 @@ class RestApiSnsLambdaEventBridgeLambda(well_architected_stack.Stack):
             ),
         )
 
-    def create_lambda_function(
+    def create_lambda_construct(
         self,
         duration=3,
         event_bridge_rule=None,

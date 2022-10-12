@@ -16,7 +16,7 @@ class ApiLambdaEventBridgeLambda(well_architected_stack.Stack):
         super().__init__(scope, id, **kwargs)
         self.create_error_topic()
         self.lambda_directory = lambda_directory
-        self.approved_transaction = self.create_lambda_function(
+        self.approved_transaction = self.create_lambda_construct(
             handler_name="approved_transaction_handler",
             function_name="atm_consumer",
             event_bridge_rule=self.create_event_bridge_rule(
@@ -28,7 +28,7 @@ class ApiLambdaEventBridgeLambda(well_architected_stack.Stack):
             ),
         )
 
-        self.ny_prefix_transaction = self.create_lambda_function(
+        self.ny_prefix_transaction = self.create_lambda_construct(
             handler_name="ny_prefix_transaction_handler",
             function_name="atm_consumer",
             event_bridge_rule=self.create_event_bridge_rule(
@@ -39,7 +39,7 @@ class ApiLambdaEventBridgeLambda(well_architected_stack.Stack):
             ),
         )
 
-        self.not_approved_transaction = self.create_lambda_function(
+        self.not_approved_transaction = self.create_lambda_construct(
             handler_name="not_approved_transaction_handler",
             function_name="atm_consumer",
             event_bridge_rule=self.create_event_bridge_rule(
@@ -86,7 +86,7 @@ class ApiLambdaEventBridgeLambda(well_architected_stack.Stack):
             )
         )
 
-    def create_lambda_function(
+    def create_lambda_construct(
         self, handler_name='handler', function_name=None,
         event_bridge_rule:aws_cdk.aws_events.Rule=None,
     ):

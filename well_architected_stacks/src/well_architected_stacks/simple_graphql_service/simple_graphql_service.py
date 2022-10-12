@@ -27,7 +27,7 @@ class SimpleGraphQlService(well_architected_stack.Stack):
         self.add_lambda_function_data_source(
             graphql_api.add_lambda_data_source(
                 'LambdaDataSource',
-                self.create_lambda_function(
+                self.create_lambda_construct(
                     error_topic=self.error_topic,
                     function_name='loyalty',
                 )
@@ -47,7 +47,7 @@ class SimpleGraphQlService(well_architected_stack.Stack):
             partition_key=partition_key,
         ).dynamodb_table
 
-    def create_lambda_function(self, function_name=None, error_topic=None):
+    def create_lambda_construct(self, function_name=None, error_topic=None):
         return well_architected_constructs.lambda_function.LambdaFunctionConstruct(
             self, 'LambdaFunction',
             error_topic=self.error_topic,

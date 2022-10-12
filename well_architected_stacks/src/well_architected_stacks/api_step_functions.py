@@ -12,25 +12,24 @@ class ApiStepFunctions(well_architected_stack.Stack):
         super().__init__(scope, id, **kwargs)
         self.create_error_topic()
         self.result_path = '$.resultPath'
-        self.lambda_construct = self.create_lambda_function()
-        self.state_machine = self.create_state_machine(
-            self.lambda_construct.lambda_function
-        )
-        self.api_gateway_service_role = self.create_api_gateway_service_role(
-            self.state_machine.state_machine_arn
-        )
+        self.lambda_construct = self.create_lambda_construct()
+        # self.state_machine = self.create_state_machine(
+        #     self.lambda_construct.lambda_function
+        # )
+
         self.api_step_functions = well_architected_constructs.api_step_functions.ApiStepFunctionsConstruct(
             self, 'ApiStepFunctions',
-            state_machine=self.state_machine,
-            api_gateway_service_role=self.api_gateway_service_role,
             create_http_api=self.create_http_api,
             create_rest_api=self.create_rest_api,
+            state_machine_definition=self.state_machine_definition(
+                self.lambda_construct.lambda_function
+            ),
         )
+        self.state_machine = self.api_step_functions.state_machine
         self.create_cloudwatch_dashboard(
             *self.lambda_construct.create_cloudwatch_widgets(),
             *self.api_step_functions.api_construct.create_cloudwatch_widgets(),
         )
-
 
     def failure_message(self):
         return aws_cdk.aws_stepfunctions.Fail(
@@ -79,59 +78,18 @@ class ApiStepFunctions(well_architected_stack.Stack):
                 .next(self.make_decision())
         )
 
-    def create_lambda_function(self):
+    def create_lambda_construct(self):
         return well_architected_constructs.lambda_function.create_python_lambda_function(
             self, function_name='lambda_function',
             error_topic=self.error_topic,
             lambda_directory=self.lambda_directory,
         )
 
-    @staticmethod
-    def state_machine_execution_permissions(state_machine_arn):
-        return aws_cdk.aws_iam.PolicyDocument(
-            statements=[
-                aws_cdk.aws_iam.PolicyStatement(
-                    actions=["states:StartSyncExecution"],
-                    effect=aws_cdk.aws_iam.Effect.ALLOW,
-                    resources=[state_machine_arn]
-                )
-            ]
-        )
-
-    def create_api_gateway_service_role(self, state_machine_arn):
-        return aws_cdk.aws_iam.Role(
-            self, 'StateMachineApiGatewayIamServiceRole',
-            assumed_by=aws_cdk.aws_iam.ServicePrincipal('apigateway.amazonaws.com'),
-            inline_policies={
-                "AllowSFNExec": self.state_machine_execution_permissions(state_machine_arn)
-            }
-        )
-
-    def create_state_machine(self, lambda_function):
-        return aws_cdk.aws_stepfunctions.StateMachine(
-            self, 'StateMachine',
-            definition=self.state_machine_definition(lambda_function),
-            timeout=aws_cdk.Duration.minutes(5),
-            tracing_enabled=True,
-            state_machine_type=aws_cdk.aws_stepfunctions.StateMachineType.EXPRESS
-        )
-
-    # def create_http_api(self, state_machine_arn=None, api_gateway_service_role=None):
-    #     well_architected_constructs.http_api_step_functions.HttpApiStepFunctionsConstruct(
-    #         self, 'HttpApiStepFunctions',
-    #         error_topic=self.error_topic,
-    #         api_gateway_service_role=api_gateway_service_role,
-    #         state_machine_arn=state_machine_arn,
-    #     )
-
-    # def create_rest_api(self, state_machine=None, api_gateway_service_role=None):
-    #     return well_architected_constructs.api.Api(
-    #         self, 'RestApi',
-    #         error_topic=self.error_topic,
-    #         api_gateway_service_role=api_gateway_service_role,
-    #         api=aws_cdk.aws_apigateway.StepFunctionsRestApi(
-    #             self, 'RestApiStepFunctions',
-    #             state_machine=state_machine,
-    #             deploy=True,
-    #         )
+    # def create_state_machine(self, lambda_function):
+    #     return aws_cdk.aws_stepfunctions.StateMachine(
+    #         self, 'StateMachine',
+    #         definition=self.state_machine_definition(lambda_function),
+    #         timeout=aws_cdk.Duration.minutes(5),
+    #         tracing_enabled=True,
+    #         state_machine_type=aws_cdk.aws_stepfunctions.StateMachineType.EXPRESS,
     #     )
