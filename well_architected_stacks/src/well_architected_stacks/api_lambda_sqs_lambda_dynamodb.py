@@ -21,9 +21,9 @@ class ApiLambdaSqsLambdaDynamodb(well_architected_stack.Stack):
             visibility_timeout=aws_cdk.Duration.seconds(300)
         )
 
-        dynamodb_table = self.create_dynamodb_table(
-            partition_key="id",
-        )
+        # dynamodb_table = self.create_dynamodb_table(
+        #     partition_key="id",
+        # )
         # self.create_sqs_subscribing_lambda(
         #     sqs_queue=sqs_queue,
         #     dynamodb_table=dynamodb_table,
@@ -32,13 +32,14 @@ class ApiLambdaSqsLambdaDynamodb(well_architected_stack.Stack):
         sqs_subscriber = well_architected_constructs.api_lambda_dynamodb.ApiLambdaDynamodbConstruct(
             self, 'LambdaDynamodb',
             function_name='api_lambda_sqs_lambda_dynamodb_subscriber',
+            partition_key="id",
+            lambda_directory=self.lambda_directory,
             concurrent_executions=2,
             environment_variables={
                 'SQS_QUEUE_URL': sqs_queue.queue_url,
-                'DYNAMODB_TABLE_NAME': dynamodb_table.table_name
             },
         )
-
+        
         sqs_publishing_lambda = self.create_sqs_publishing_lambda(sqs_queue)
         self.create_cloudwatch_dashboard(
 

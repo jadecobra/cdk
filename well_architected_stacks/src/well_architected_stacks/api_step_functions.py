@@ -111,22 +111,22 @@ class ApiStepFunctions(well_architected_stack.Stack):
             state_machine_type=aws_cdk.aws_stepfunctions.StateMachineType.EXPRESS
         )
 
-    def create_http_api(self, state_machine_arn=None, api_gateway_service_role=None):
-        well_architected_constructs.http_api_step_functions.HttpApiStepFunctionsConstruct(
-            self, 'HttpApiStepFunctions',
-            error_topic=self.error_topic,
-            api_gateway_service_role=api_gateway_service_role,
-            state_machine_arn=state_machine_arn,
-        )
+    # def create_http_api(self, state_machine_arn=None, api_gateway_service_role=None):
+    #     well_architected_constructs.http_api_step_functions.HttpApiStepFunctionsConstruct(
+    #         self, 'HttpApiStepFunctions',
+    #         error_topic=self.error_topic,
+    #         api_gateway_service_role=api_gateway_service_role,
+    #         state_machine_arn=state_machine_arn,
+    #     )
 
-    def create_rest_api(self, state_machine=None, api_gateway_service_role=None):
-        return well_architected_constructs.api.Api(
-            self, 'RestApi',
-            error_topic=self.error_topic,
-            api_gateway_service_role=api_gateway_service_role,
-            api=aws_cdk.aws_apigateway.StepFunctionsRestApi(
-                self, 'RestApiStepFunctions',
-                state_machine=state_machine,
-                deploy=True,
-            )
-        )
+    # def create_rest_api(self, state_machine=None, api_gateway_service_role=None):
+    #     return well_architected_constructs.api.Api(
+    #         self, 'RestApi',
+    #         error_topic=self.error_topic,
+    #         api_gateway_service_role=api_gateway_service_role,
+    #         api=aws_cdk.aws_apigateway.StepFunctionsRestApi(
+    #             self, 'RestApiStepFunctions',
+    #             state_machine=state_machine,
+    #             deploy=True,
+    #         )
+    #     )
