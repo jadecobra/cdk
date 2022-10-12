@@ -12,20 +12,25 @@ class ApiStepFunctions(well_architected_stack.Stack):
         super().__init__(scope, id, **kwargs)
         self.create_error_topic()
         self.result_path = '$.resultPath'
+        self.lambda_construct = self.create_lambda_function()
         self.state_machine = self.create_state_machine(
-            self.create_lambda_function()
+            self.lambda_construct.lambda_function
         )
-        self.api_gateway_service_role = self.create_api_gateway_service_role(self.state_machine.state_machine_arn)
-
-        self.rest_api = self.create_rest_api(
+        self.api_gateway_service_role = self.create_api_gateway_service_role(
+            self.state_machine.state_machine_arn
+        )
+        self.api_step_functions = well_architected_constructs.api_step_functions.ApiStepFunctionsConstruct(
+            self, 'ApiStepFunctions',
             state_machine=self.state_machine,
             api_gateway_service_role=self.api_gateway_service_role,
+            create_http_api=self.create_http_api,
+            create_rest_api=self.create_rest_api,
+        )
+        self.create_cloudwatch_dashboard(
+            *self.lambda_construct.create_cloudwatch_widgets(),
+            *self.api_step_functions.api_construct.create_cloudwatch_widgets(),
         )
 
-        self.http_api = self.create_http_api(
-            api_gateway_service_role=self.api_gateway_service_role,
-            state_machine_arn=self.state_machine.state_machine_arn,
-        )
 
     def failure_message(self):
         return aws_cdk.aws_stepfunctions.Fail(

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "well_architected_constructs"
-version = "0.0.039"
+version = "0.0.040"
 authors = [
   { name="johnnyblase", email="johnnyblasin@gmail.com" },
 ]

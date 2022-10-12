@@ -74,8 +74,14 @@ class WellArchitected(aws_cdk.App):
             create_rest_api=True,
         )
         well_architected_stacks.api_step_functions.ApiStepFunctions(
-            self, 'ApiStepFunctions',
+            self, 'HttpApiStepFunctions',
             lambda_directory=self.lambda_directory,
+            create_http_api=True,
+        )
+        well_architected_stacks.api_step_functions.ApiStepFunctions(
+            self, 'RestApiStepFunctions',
+            lambda_directory=self.lambda_directory,
+            create_rest_api=True,
         )
         well_architected_stacks.lambda_power_tuner.LambdaPowerTuner(
             self, 'LambdaPowerTuner',
@@ -212,6 +218,8 @@ WellArchitected().synth()
 # TODO
 # Use Inheritance for ApiLambda stacks
 # Add RDS metrics to ApiLambdaRds
+# Add StateMachine Metrics
+# Can we just sum up invocations over time and error rates?
 # Break up WellArchitected
 # StateMachine examples - https://docs.aws.amazon.com/step-functions/latest/dg/create-sample-projects.html
 # Read Lambda Powertools docs
