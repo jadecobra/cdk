@@ -1,0 +1,1760 @@
+{
+ "Resources": {
+  "RestApiLambdaRdsErrorTopic596471C7": {
+   "Type": "AWS::SNS::Topic",
+   "Properties": {
+    "DisplayName": "RestApiLambdaRdsErrorTopic"
+   }
+  },
+  "Vpc8378EB38": {
+   "Type": "AWS::EC2::VPC",
+   "Properties": {
+    "CidrBlock": "10.0.0.0/16",
+    "EnableDnsHostnames": true,
+    "EnableDnsSupport": true,
+    "InstanceTenancy": "default",
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "RestApiLambdaRds/Vpc"
+     }
+    ]
+   }
+  },
+  "VpcPublicSubnet1Subnet5C2D37C4": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "VpcId": {
+     "Ref": "Vpc8378EB38"
+    },
+    "AvailabilityZone": {
+     "Fn::Select": [
+      0,
+      {
+       "Fn::GetAZs": ""
+      }
+     ]
+    },
+    "CidrBlock": "10.0.0.0/18",
+    "MapPublicIpOnLaunch": true,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "Public"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Public"
+     },
+     {
+      "Key": "Name",
+      "Value": "RestApiLambdaRds/Vpc/PublicSubnet1"
+     }
+    ]
+   }
+  },
+  "VpcPublicSubnet1RouteTable6C95E38E": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "VpcId": {
+     "Ref": "Vpc8378EB38"
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "RestApiLambdaRds/Vpc/PublicSubnet1"
+     }
+    ]
+   }
+  },
+  "VpcPublicSubnet1RouteTableAssociation97140677": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "VpcPublicSubnet1RouteTable6C95E38E"
+    },
+    "SubnetId": {
+     "Ref": "VpcPublicSubnet1Subnet5C2D37C4"
+    }
+   }
+  },
+  "VpcPublicSubnet1DefaultRoute3DA9E72A": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "VpcPublicSubnet1RouteTable6C95E38E"
+    },
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "GatewayId": {
+     "Ref": "VpcIGWD7BA715C"
+    }
+   },
+   "DependsOn": [
+    "VpcVPCGWBF912B6E"
+   ]
+  },
+  "VpcPublicSubnet1EIPD7E02669": {
+   "Type": "AWS::EC2::EIP",
+   "Properties": {
+    "Domain": "vpc",
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "RestApiLambdaRds/Vpc/PublicSubnet1"
+     }
+    ]
+   }
+  },
+  "VpcPublicSubnet1NATGateway4D7517AA": {
+   "Type": "AWS::EC2::NatGateway",
+   "Properties": {
+    "SubnetId": {
+     "Ref": "VpcPublicSubnet1Subnet5C2D37C4"
+    },
+    "AllocationId": {
+     "Fn::GetAtt": [
+      "VpcPublicSubnet1EIPD7E02669",
+      "AllocationId"
+     ]
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "RestApiLambdaRds/Vpc/PublicSubnet1"
+     }
+    ]
+   },
+   "DependsOn": [
+    "VpcPublicSubnet1DefaultRoute3DA9E72A",
+    "VpcPublicSubnet1RouteTableAssociation97140677"
+   ]
+  },
+  "VpcPublicSubnet2Subnet691E08A3": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "VpcId": {
+     "Ref": "Vpc8378EB38"
+    },
+    "AvailabilityZone": {
+     "Fn::Select": [
+      1,
+      {
+       "Fn::GetAZs": ""
+      }
+     ]
+    },
+    "CidrBlock": "10.0.64.0/18",
+    "MapPublicIpOnLaunch": true,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "Public"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Public"
+     },
+     {
+      "Key": "Name",
+      "Value": "RestApiLambdaRds/Vpc/PublicSubnet2"
+     }
+    ]
+   }
+  },
+  "VpcPublicSubnet2RouteTable94F7E489": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "VpcId": {
+     "Ref": "Vpc8378EB38"
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "RestApiLambdaRds/Vpc/PublicSubnet2"
+     }
+    ]
+   }
+  },
+  "VpcPublicSubnet2RouteTableAssociationDD5762D8": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "VpcPublicSubnet2RouteTable94F7E489"
+    },
+    "SubnetId": {
+     "Ref": "VpcPublicSubnet2Subnet691E08A3"
+    }
+   }
+  },
+  "VpcPublicSubnet2DefaultRoute97F91067": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "VpcPublicSubnet2RouteTable94F7E489"
+    },
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "GatewayId": {
+     "Ref": "VpcIGWD7BA715C"
+    }
+   },
+   "DependsOn": [
+    "VpcVPCGWBF912B6E"
+   ]
+  },
+  "VpcPublicSubnet2EIP3C605A87": {
+   "Type": "AWS::EC2::EIP",
+   "Properties": {
+    "Domain": "vpc",
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "RestApiLambdaRds/Vpc/PublicSubnet2"
+     }
+    ]
+   }
+  },
+  "VpcPublicSubnet2NATGateway9182C01D": {
+   "Type": "AWS::EC2::NatGateway",
+   "Properties": {
+    "SubnetId": {
+     "Ref": "VpcPublicSubnet2Subnet691E08A3"
+    },
+    "AllocationId": {
+     "Fn::GetAtt": [
+      "VpcPublicSubnet2EIP3C605A87",
+      "AllocationId"
+     ]
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "RestApiLambdaRds/Vpc/PublicSubnet2"
+     }
+    ]
+   },
+   "DependsOn": [
+    "VpcPublicSubnet2DefaultRoute97F91067",
+    "VpcPublicSubnet2RouteTableAssociationDD5762D8"
+   ]
+  },
+  "VpcPrivateSubnet1Subnet536B997A": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "VpcId": {
+     "Ref": "Vpc8378EB38"
+    },
+    "AvailabilityZone": {
+     "Fn::Select": [
+      0,
+      {
+       "Fn::GetAZs": ""
+      }
+     ]
+    },
+    "CidrBlock": "10.0.128.0/18",
+    "MapPublicIpOnLaunch": false,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "Private"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Private"
+     },
+     {
+      "Key": "Name",
+      "Value": "RestApiLambdaRds/Vpc/PrivateSubnet1"
+     }
+    ]
+   }
+  },
+  "VpcPrivateSubnet1RouteTableB2C5B500": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "VpcId": {
+     "Ref": "Vpc8378EB38"
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "RestApiLambdaRds/Vpc/PrivateSubnet1"
+     }
+    ]
+   }
+  },
+  "VpcPrivateSubnet1RouteTableAssociation70C59FA6": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "VpcPrivateSubnet1RouteTableB2C5B500"
+    },
+    "SubnetId": {
+     "Ref": "VpcPrivateSubnet1Subnet536B997A"
+    }
+   }
+  },
+  "VpcPrivateSubnet1DefaultRouteBE02A9ED": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "VpcPrivateSubnet1RouteTableB2C5B500"
+    },
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "NatGatewayId": {
+     "Ref": "VpcPublicSubnet1NATGateway4D7517AA"
+    }
+   }
+  },
+  "VpcPrivateSubnet2Subnet3788AAA1": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "VpcId": {
+     "Ref": "Vpc8378EB38"
+    },
+    "AvailabilityZone": {
+     "Fn::Select": [
+      1,
+      {
+       "Fn::GetAZs": ""
+      }
+     ]
+    },
+    "CidrBlock": "10.0.192.0/18",
+    "MapPublicIpOnLaunch": false,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "Private"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Private"
+     },
+     {
+      "Key": "Name",
+      "Value": "RestApiLambdaRds/Vpc/PrivateSubnet2"
+     }
+    ]
+   }
+  },
+  "VpcPrivateSubnet2RouteTableA678073B": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "VpcId": {
+     "Ref": "Vpc8378EB38"
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "RestApiLambdaRds/Vpc/PrivateSubnet2"
+     }
+    ]
+   }
+  },
+  "VpcPrivateSubnet2RouteTableAssociationA89CAD56": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "VpcPrivateSubnet2RouteTableA678073B"
+    },
+    "SubnetId": {
+     "Ref": "VpcPrivateSubnet2Subnet3788AAA1"
+    }
+   }
+  },
+  "VpcPrivateSubnet2DefaultRoute060D2087": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "VpcPrivateSubnet2RouteTableA678073B"
+    },
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "NatGatewayId": {
+     "Ref": "VpcPublicSubnet2NATGateway9182C01D"
+    }
+   }
+  },
+  "VpcIGWD7BA715C": {
+   "Type": "AWS::EC2::InternetGateway",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "RestApiLambdaRds/Vpc"
+     }
+    ]
+   }
+  },
+  "VpcVPCGWBF912B6E": {
+   "Type": "AWS::EC2::VPCGatewayAttachment",
+   "Properties": {
+    "VpcId": {
+     "Ref": "Vpc8378EB38"
+    },
+    "InternetGatewayId": {
+     "Ref": "VpcIGWD7BA715C"
+    }
+   }
+  },
+  "DBCredentialsSecretAFB45EA2": {
+   "Type": "AWS::SecretsManager::Secret",
+   "Properties": {
+    "GenerateSecretString": {
+     "ExcludePunctuation": true,
+     "GenerateStringKey": "password",
+     "IncludeSpace": false,
+     "SecretStringTemplate": "{\"username\":\"syscdk\"}"
+    },
+    "Name": "RestApiLambdaRds-rds-credentials"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete"
+  },
+  "DBCredentialsSecretAttachment8D28662C": {
+   "Type": "AWS::SecretsManager::SecretTargetAttachment",
+   "Properties": {
+    "SecretId": {
+     "Ref": "DBCredentialsSecretAFB45EA2"
+    },
+    "TargetId": {
+     "Ref": "DBInstance46641A50"
+    },
+    "TargetType": "AWS::RDS::DBInstance"
+   }
+  },
+  "DBCredentialsArn15122902": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Type": "String",
+    "Value": {
+     "Ref": "DBCredentialsSecretAFB45EA2"
+    },
+    "Name": "rds-credentials-arn"
+   }
+  },
+  "DBInstanceSubnetGroupF597B45B": {
+   "Type": "AWS::RDS::DBSubnetGroup",
+   "Properties": {
+    "DBSubnetGroupDescription": "Subnet group for DBInstance database",
+    "SubnetIds": [
+     {
+      "Ref": "VpcPrivateSubnet1Subnet536B997A"
+     },
+     {
+      "Ref": "VpcPrivateSubnet2Subnet3788AAA1"
+     }
+    ]
+   }
+  },
+  "DBInstanceSecurityGroup8BE42C36": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "Security group for DBInstance database",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "Vpc8378EB38"
+    }
+   }
+  },
+  "DBInstanceSecurityGroupfromRestApiLambdaRdsDBInstanceRestApiLambdaRdsproxyProxySecurityGroupC129492AIndirectPortB7D2B408": {
+   "Type": "AWS::EC2::SecurityGroupIngress",
+   "Properties": {
+    "IpProtocol": "tcp",
+    "Description": "Allow connections to the database Instance from the Proxy",
+    "FromPort": {
+     "Fn::GetAtt": [
+      "DBInstance46641A50",
+      "Endpoint.Port"
+     ]
+    },
+    "GroupId": {
+     "Fn::GetAtt": [
+      "DBInstanceSecurityGroup8BE42C36",
+      "GroupId"
+     ]
+    },
+    "SourceSecurityGroupId": {
+     "Fn::GetAtt": [
+      "DBInstanceRestApiLambdaRdsproxyProxySecurityGroup5ECEF2C4",
+      "GroupId"
+     ]
+    },
+    "ToPort": {
+     "Fn::GetAtt": [
+      "DBInstance46641A50",
+      "Endpoint.Port"
+     ]
+    }
+   }
+  },
+  "DBInstanceSecurityGroupfromRestApiLambdaRdsDBInstanceRestApiLambdaRdsproxyProxySecurityGroupC129492A3306E0183D0B": {
+   "Type": "AWS::EC2::SecurityGroupIngress",
+   "Properties": {
+    "IpProtocol": "tcp",
+    "Description": "allow db connection",
+    "FromPort": 3306,
+    "GroupId": {
+     "Fn::GetAtt": [
+      "DBInstanceSecurityGroup8BE42C36",
+      "GroupId"
+     ]
+    },
+    "SourceSecurityGroupId": {
+     "Fn::GetAtt": [
+      "DBInstanceRestApiLambdaRdsproxyProxySecurityGroup5ECEF2C4",
+      "GroupId"
+     ]
+    },
+    "ToPort": 3306
+   }
+  },
+  "DBInstanceSecurityGroupfromRestApiLambdaRdsRdsLambdaLambdaFunctionSecurityGroupBD6555833306ADFA18E4": {
+   "Type": "AWS::EC2::SecurityGroupIngress",
+   "Properties": {
+    "IpProtocol": "tcp",
+    "Description": "allow lambda connection",
+    "FromPort": 3306,
+    "GroupId": {
+     "Fn::GetAtt": [
+      "DBInstanceSecurityGroup8BE42C36",
+      "GroupId"
+     ]
+    },
+    "SourceSecurityGroupId": {
+     "Fn::GetAtt": [
+      "RdsLambdaLambdaFunctionSecurityGroupEF27B1CC",
+      "GroupId"
+     ]
+    },
+    "ToPort": 3306
+   }
+  },
+  "DBInstance46641A50": {
+   "Type": "AWS::RDS::DBInstance",
+   "Properties": {
+    "AllocatedStorage": "100",
+    "CopyTagsToSnapshot": true,
+    "DBInstanceClass": "db.t2.small",
+    "DBSubnetGroupName": {
+     "Ref": "DBInstanceSubnetGroupF597B45B"
+    },
+    "DeletionProtection": false,
+    "Engine": "mysql",
+    "EngineVersion": "5.7.30",
+    "MasterUsername": {
+     "Fn::Join": [
+      "",
+      [
+       "{{resolve:secretsmanager:",
+       {
+        "Ref": "DBCredentialsSecretAFB45EA2"
+       },
+       ":SecretString:username::}}"
+      ]
+     ]
+    },
+    "MasterUserPassword": {
+     "Fn::Join": [
+      "",
+      [
+       "{{resolve:secretsmanager:",
+       {
+        "Ref": "DBCredentialsSecretAFB45EA2"
+       },
+       ":SecretString:password::}}"
+      ]
+     ]
+    },
+    "StorageType": "gp2",
+    "VPCSecurityGroups": [
+     {
+      "Fn::GetAtt": [
+       "DBInstanceSecurityGroup8BE42C36",
+       "GroupId"
+      ]
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete"
+  },
+  "DBInstanceRestApiLambdaRdsproxyIAMRoleE806958D": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "rds.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   }
+  },
+  "DBInstanceRestApiLambdaRdsproxyIAMRoleDefaultPolicy522E2EB9": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "secretsmanager:GetSecretValue",
+        "secretsmanager:DescribeSecret"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Ref": "DBCredentialsSecretAFB45EA2"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "DBInstanceRestApiLambdaRdsproxyIAMRoleDefaultPolicy522E2EB9",
+    "Roles": [
+     {
+      "Ref": "DBInstanceRestApiLambdaRdsproxyIAMRoleE806958D"
+     }
+    ]
+   }
+  },
+  "DBInstanceRestApiLambdaRdsproxyProxySecurityGroup5ECEF2C4": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "SecurityGroup for Database Proxy",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "Vpc8378EB38"
+    }
+   }
+  },
+  "DBInstanceRestApiLambdaRdsproxy0B1E4575": {
+   "Type": "AWS::RDS::DBProxy",
+   "Properties": {
+    "Auth": [
+     {
+      "AuthScheme": "SECRETS",
+      "IAMAuth": "DISABLED",
+      "SecretArn": {
+       "Ref": "DBCredentialsSecretAFB45EA2"
+      }
+     }
+    ],
+    "DBProxyName": "RestApiLambdaRds-proxy",
+    "EngineFamily": "MYSQL",
+    "RoleArn": {
+     "Fn::GetAtt": [
+      "DBInstanceRestApiLambdaRdsproxyIAMRoleE806958D",
+      "Arn"
+     ]
+    },
+    "VpcSubnetIds": [
+     {
+      "Ref": "VpcPrivateSubnet1Subnet536B997A"
+     },
+     {
+      "Ref": "VpcPrivateSubnet2Subnet3788AAA1"
+     }
+    ],
+    "DebugLogging": true,
+    "RequireTLS": true,
+    "VpcSecurityGroupIds": [
+     {
+      "Fn::GetAtt": [
+       "DBInstanceRestApiLambdaRdsproxyProxySecurityGroup5ECEF2C4",
+       "GroupId"
+      ]
+     }
+    ]
+   }
+  },
+  "DBInstanceRestApiLambdaRdsproxyProxyTargetGroupBF030592": {
+   "Type": "AWS::RDS::DBProxyTargetGroup",
+   "Properties": {
+    "DBProxyName": {
+     "Ref": "DBInstanceRestApiLambdaRdsproxy0B1E4575"
+    },
+    "TargetGroupName": "default",
+    "ConnectionPoolConfigurationInfo": {},
+    "DBInstanceIdentifiers": [
+     {
+      "Ref": "DBInstance46641A50"
+     }
+    ]
+   }
+  },
+  "RdsLambdaLambdaFunctionAwsXraySdkLambdaLayer62884606": {
+   "Type": "AWS::Lambda::LayerVersion",
+   "Properties": {
+    "Content": {
+     "S3Bucket": {
+      "Ref": "AssetParametersab1166279d7c8a56e3bf81a33028c5971446eeb0d52a44ef75a169b7b8900e50S3BucketC7F143AF"
+     },
+     "S3Key": {
+      "Fn::Join": [
+       "",
+       [
+        {
+         "Fn::Select": [
+          0,
+          {
+           "Fn::Split": [
+            "||",
+            {
+             "Ref": "AssetParametersab1166279d7c8a56e3bf81a33028c5971446eeb0d52a44ef75a169b7b8900e50S3VersionKeyDE6F367B"
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "Fn::Select": [
+          1,
+          {
+           "Fn::Split": [
+            "||",
+            {
+             "Ref": "AssetParametersab1166279d7c8a56e3bf81a33028c5971446eeb0d52a44ef75a169b7b8900e50S3VersionKeyDE6F367B"
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      ]
+     }
+    },
+    "Description": "aws-xray-sdk Lambda Layer"
+   }
+  },
+  "RdsLambdaLambdaFunctionServiceRole3CED865E": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     },
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "DependsOn": [
+    "VpcPrivateSubnet1DefaultRouteBE02A9ED",
+    "VpcPrivateSubnet1RouteTableAssociation70C59FA6",
+    "VpcPrivateSubnet2DefaultRoute060D2087",
+    "VpcPrivateSubnet2RouteTableAssociationA89CAD56"
+   ]
+  },
+  "RdsLambdaLambdaFunctionServiceRoleDefaultPolicy64B49632": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "xray:PutTraceSegments",
+        "xray:PutTelemetryRecords"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "secretsmanager:GetSecretValue",
+        "secretsmanager:DescribeSecret"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Ref": "DBCredentialsSecretAFB45EA2"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "RdsLambdaLambdaFunctionServiceRoleDefaultPolicy64B49632",
+    "Roles": [
+     {
+      "Ref": "RdsLambdaLambdaFunctionServiceRole3CED865E"
+     }
+    ]
+   },
+   "DependsOn": [
+    "VpcPrivateSubnet1DefaultRouteBE02A9ED",
+    "VpcPrivateSubnet1RouteTableAssociation70C59FA6",
+    "VpcPrivateSubnet2DefaultRoute060D2087",
+    "VpcPrivateSubnet2RouteTableAssociationA89CAD56"
+   ]
+  },
+  "RdsLambdaLambdaFunctionSecurityGroupEF27B1CC": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "Automatic security group for Lambda Function RestApiLambdaRdsRdsLambdaLambdaFunction4038DC2E",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "Vpc8378EB38"
+    }
+   },
+   "DependsOn": [
+    "VpcPrivateSubnet1DefaultRouteBE02A9ED",
+    "VpcPrivateSubnet1RouteTableAssociation70C59FA6",
+    "VpcPrivateSubnet2DefaultRoute060D2087",
+    "VpcPrivateSubnet2RouteTableAssociationA89CAD56"
+   ]
+  },
+  "RdsLambdaLambdaFunctionEAB3023F": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Ref": "AssetParameters5d088e278f20bac83aa4f9da1a01b643d35fb2d012fcd922d3a0926126985b97S3BucketEA4E8CA9"
+     },
+     "S3Key": {
+      "Fn::Join": [
+       "",
+       [
+        {
+         "Fn::Select": [
+          0,
+          {
+           "Fn::Split": [
+            "||",
+            {
+             "Ref": "AssetParameters5d088e278f20bac83aa4f9da1a01b643d35fb2d012fcd922d3a0926126985b97S3VersionKeyD3255680"
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "Fn::Select": [
+          1,
+          {
+           "Fn::Split": [
+            "||",
+            {
+             "Ref": "AssetParameters5d088e278f20bac83aa4f9da1a01b643d35fb2d012fcd922d3a0926126985b97S3VersionKeyD3255680"
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      ]
+     }
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "RdsLambdaLambdaFunctionServiceRole3CED865E",
+      "Arn"
+     ]
+    },
+    "Architectures": [
+     "arm64"
+    ],
+    "Environment": {
+     "Variables": {
+      "PROXY_ENDPOINT": {
+       "Fn::GetAtt": [
+        "DBInstanceRestApiLambdaRdsproxy0B1E4575",
+        "Endpoint"
+       ]
+      },
+      "RDS_SECRET_NAME": "RestApiLambdaRds-rds-credentials"
+     }
+    },
+    "Handler": "rds.handler",
+    "Layers": [
+     {
+      "Ref": "RdsLambdaLambdaFunctionAwsXraySdkLambdaLayer62884606"
+     }
+    ],
+    "Runtime": "python3.9",
+    "Timeout": 60,
+    "TracingConfig": {
+     "Mode": "Active"
+    },
+    "VpcConfig": {
+     "SecurityGroupIds": [
+      {
+       "Fn::GetAtt": [
+        "RdsLambdaLambdaFunctionSecurityGroupEF27B1CC",
+        "GroupId"
+       ]
+      }
+     ],
+     "SubnetIds": [
+      {
+       "Ref": "VpcPrivateSubnet1Subnet536B997A"
+      },
+      {
+       "Ref": "VpcPrivateSubnet2Subnet3788AAA1"
+      }
+     ]
+    }
+   },
+   "DependsOn": [
+    "RdsLambdaLambdaFunctionServiceRoleDefaultPolicy64B49632",
+    "RdsLambdaLambdaFunctionServiceRole3CED865E",
+    "VpcPrivateSubnet1DefaultRouteBE02A9ED",
+    "VpcPrivateSubnet1RouteTableAssociation70C59FA6",
+    "VpcPrivateSubnet2DefaultRoute060D2087",
+    "VpcPrivateSubnet2RouteTableAssociationA89CAD56"
+   ]
+  },
+  "RdsLambdaLambdaFunctionLambdaInvocationsErrorsGreaterThan2PercentC57703A8": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "RestApiLambdaRdsErrorTopic596471C7"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "Metrics": [
+     {
+      "Expression": "(errors / invocations) * 100",
+      "Id": "expr_1",
+      "Label": "invocations_errored_percentage_last_5_mins"
+     },
+     {
+      "Id": "invocations",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "FunctionName",
+          "Value": {
+           "Ref": "RdsLambdaLambdaFunctionEAB3023F"
+          }
+         }
+        ],
+        "MetricName": "Invocations",
+        "Namespace": "AWS/Lambda"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     },
+     {
+      "Id": "errors",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "FunctionName",
+          "Value": {
+           "Ref": "RdsLambdaLambdaFunctionEAB3023F"
+          }
+         }
+        ],
+        "MetricName": "Errors",
+        "Namespace": "AWS/Lambda"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     }
+    ],
+    "Threshold": 2,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "RdsLambdaLambdaFunctionLambdaP99LongDurationGreaterThan1sEF3B33D6": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "RestApiLambdaRdsErrorTopic596471C7"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "Dimensions": [
+     {
+      "Name": "FunctionName",
+      "Value": {
+       "Ref": "RdsLambdaLambdaFunctionEAB3023F"
+      }
+     }
+    ],
+    "ExtendedStatistic": "p99",
+    "MetricName": "Duration",
+    "Namespace": "AWS/Lambda",
+    "Period": 300,
+    "Threshold": 1000,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "RdsLambdaLambdaFunctionLambdaThrottledInvocationsGreaterThan2PercentF810290D": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "RestApiLambdaRdsErrorTopic596471C7"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "Metrics": [
+     {
+      "Expression": "(throttles * 100) / (invocations + throttles)",
+      "Id": "expr_1",
+      "Label": "throttled_requests_percentage_last_30_mins"
+     },
+     {
+      "Id": "invocations",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "FunctionName",
+          "Value": {
+           "Ref": "RdsLambdaLambdaFunctionEAB3023F"
+          }
+         }
+        ],
+        "MetricName": "Invocations",
+        "Namespace": "AWS/Lambda"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     },
+     {
+      "Id": "throttles",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "FunctionName",
+          "Value": {
+           "Ref": "RdsLambdaLambdaFunctionEAB3023F"
+          }
+         }
+        ],
+        "MetricName": "Throttles",
+        "Namespace": "AWS/Lambda"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     }
+    ],
+    "Threshold": 2,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "RdsLambdaRestApiLambdaFunctionAB3325CC": {
+   "Type": "AWS::ApiGateway::RestApi",
+   "Properties": {
+    "Name": "RestApiLambdaFunction"
+   }
+  },
+  "RdsLambdaRestApiLambdaFunctionCloudWatchRole48272C82": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "apigateway.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+       ]
+      ]
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain"
+  },
+  "RdsLambdaRestApiLambdaFunctionAccount2664950F": {
+   "Type": "AWS::ApiGateway::Account",
+   "Properties": {
+    "CloudWatchRoleArn": {
+     "Fn::GetAtt": [
+      "RdsLambdaRestApiLambdaFunctionCloudWatchRole48272C82",
+      "Arn"
+     ]
+    }
+   },
+   "DependsOn": [
+    "RdsLambdaRestApiLambdaFunctionAB3325CC"
+   ],
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain"
+  },
+  "RdsLambdaRestApiLambdaFunctionDeploymentF19A1DC375b6f9cc39e3cf49b5ae4024ce038b9e": {
+   "Type": "AWS::ApiGateway::Deployment",
+   "Properties": {
+    "RestApiId": {
+     "Ref": "RdsLambdaRestApiLambdaFunctionAB3325CC"
+    },
+    "Description": "Automatically created by the RestApi construct"
+   },
+   "DependsOn": [
+    "RdsLambdaRestApiLambdaFunctionproxyANY8A791EDD",
+    "RdsLambdaRestApiLambdaFunctionproxy5E178C7D",
+    "RdsLambdaRestApiLambdaFunctionANYA3C23BB6"
+   ]
+  },
+  "RdsLambdaRestApiLambdaFunctionDeploymentStageprod71E40301": {
+   "Type": "AWS::ApiGateway::Stage",
+   "Properties": {
+    "RestApiId": {
+     "Ref": "RdsLambdaRestApiLambdaFunctionAB3325CC"
+    },
+    "DeploymentId": {
+     "Ref": "RdsLambdaRestApiLambdaFunctionDeploymentF19A1DC375b6f9cc39e3cf49b5ae4024ce038b9e"
+    },
+    "StageName": "prod"
+   },
+   "DependsOn": [
+    "RdsLambdaRestApiLambdaFunctionAccount2664950F"
+   ]
+  },
+  "RdsLambdaRestApiLambdaFunctionproxy5E178C7D": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "RdsLambdaRestApiLambdaFunctionAB3325CC",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "{proxy+}",
+    "RestApiId": {
+     "Ref": "RdsLambdaRestApiLambdaFunctionAB3325CC"
+    }
+   }
+  },
+  "RdsLambdaRestApiLambdaFunctionproxyANYApiPermissionRestApiLambdaRdsRdsLambdaRestApiLambdaFunction1DFD77FBANYproxyA16CF60C": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "RdsLambdaLambdaFunctionEAB3023F",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "RdsLambdaRestApiLambdaFunctionAB3325CC"
+       },
+       "/",
+       {
+        "Ref": "RdsLambdaRestApiLambdaFunctionDeploymentStageprod71E40301"
+       },
+       "/*/*"
+      ]
+     ]
+    }
+   }
+  },
+  "RdsLambdaRestApiLambdaFunctionproxyANYApiPermissionTestRestApiLambdaRdsRdsLambdaRestApiLambdaFunction1DFD77FBANYproxy56D53FAC": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "RdsLambdaLambdaFunctionEAB3023F",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "RdsLambdaRestApiLambdaFunctionAB3325CC"
+       },
+       "/test-invoke-stage/*/*"
+      ]
+     ]
+    }
+   }
+  },
+  "RdsLambdaRestApiLambdaFunctionproxyANY8A791EDD": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "HttpMethod": "ANY",
+    "ResourceId": {
+     "Ref": "RdsLambdaRestApiLambdaFunctionproxy5E178C7D"
+    },
+    "RestApiId": {
+     "Ref": "RdsLambdaRestApiLambdaFunctionAB3325CC"
+    },
+    "AuthorizationType": "NONE",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "RdsLambdaLambdaFunctionEAB3023F",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    }
+   }
+  },
+  "RdsLambdaRestApiLambdaFunctionANYApiPermissionRestApiLambdaRdsRdsLambdaRestApiLambdaFunction1DFD77FBANY92DF71BF": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "RdsLambdaLambdaFunctionEAB3023F",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "RdsLambdaRestApiLambdaFunctionAB3325CC"
+       },
+       "/",
+       {
+        "Ref": "RdsLambdaRestApiLambdaFunctionDeploymentStageprod71E40301"
+       },
+       "/*/"
+      ]
+     ]
+    }
+   }
+  },
+  "RdsLambdaRestApiLambdaFunctionANYApiPermissionTestRestApiLambdaRdsRdsLambdaRestApiLambdaFunction1DFD77FBANY8B990472": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "RdsLambdaLambdaFunctionEAB3023F",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "RdsLambdaRestApiLambdaFunctionAB3325CC"
+       },
+       "/test-invoke-stage/*/"
+      ]
+     ]
+    }
+   }
+  },
+  "RdsLambdaRestApiLambdaFunctionANYA3C23BB6": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "HttpMethod": "ANY",
+    "ResourceId": {
+     "Fn::GetAtt": [
+      "RdsLambdaRestApiLambdaFunctionAB3325CC",
+      "RootResourceId"
+     ]
+    },
+    "RestApiId": {
+     "Ref": "RdsLambdaRestApiLambdaFunctionAB3325CC"
+    },
+    "AuthorizationType": "NONE",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "RdsLambdaLambdaFunctionEAB3023F",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    }
+   }
+  },
+  "RdsLambdaRestApiGateway4XXErrorsGreaterThanOnePercentC76C6447": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "RestApiLambdaRdsErrorTopic596471C7"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "Metrics": [
+     {
+      "Expression": "m1 / m2 * 100",
+      "Id": "expr_1",
+      "Label": "api_gateway_4XX_errors_percentage"
+     },
+     {
+      "Id": "m1",
+      "Label": "4XX_errors",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "ApiId",
+          "Value": {
+           "Ref": "RdsLambdaRestApiLambdaFunctionAB3325CC"
+          }
+         }
+        ],
+        "MetricName": "4XXError",
+        "Namespace": "AWS/ApiGateway"
+       },
+       "Period": 300,
+       "Stat": "Sum",
+       "Unit": "Count"
+      },
+      "ReturnData": false
+     },
+     {
+      "Id": "m2",
+      "Label": "number_of_requests",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "ApiId",
+          "Value": {
+           "Ref": "RdsLambdaRestApiLambdaFunctionAB3325CC"
+          }
+         }
+        ],
+        "MetricName": "Count",
+        "Namespace": "AWS/ApiGateway"
+       },
+       "Period": 300,
+       "Stat": "Sum",
+       "Unit": "Count"
+      },
+      "ReturnData": false
+     }
+    ],
+    "Threshold": 1,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "RdsLambdaRestApiGateway5XXErrorsGreaterThanZero9F360343": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "RestApiLambdaRdsErrorTopic596471C7"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "Metrics": [
+     {
+      "Id": "m1",
+      "Label": "api_gateway_5XX_errors",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "ApiId",
+          "Value": {
+           "Ref": "RdsLambdaRestApiLambdaFunctionAB3325CC"
+          }
+         }
+        ],
+        "MetricName": "5XXError",
+        "Namespace": "AWS/ApiGateway"
+       },
+       "Period": 900,
+       "Stat": "p99",
+       "Unit": "Count"
+      },
+      "ReturnData": true
+     }
+    ],
+    "Threshold": 0,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "RdsLambdaRestApiGatewayP99LatencyGreaterThanOneSecondF5F3A4F6": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "RestApiLambdaRdsErrorTopic596471C7"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "Metrics": [
+     {
+      "Id": "m1",
+      "Label": "api_gateway_latency",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "ApiId",
+          "Value": {
+           "Ref": "RdsLambdaRestApiLambdaFunctionAB3325CC"
+          }
+         }
+        ],
+        "MetricName": "Latency",
+        "Namespace": "AWS/ApiGateway"
+       },
+       "Period": 900,
+       "Stat": "p99",
+       "Unit": "Count"
+      },
+      "ReturnData": true
+     }
+    ],
+    "Threshold": 1000,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "CloudWatchDashBoard043C60B6": {
+   "Type": "AWS::CloudWatch::Dashboard",
+   "Properties": {
+    "DashboardBody": {
+     "Fn::Join": [
+      "",
+      [
+       "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_error_percentage\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":false,\"metrics\":[[{\"label\":\"invocations_errored_percentage_last_5_mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+       {
+        "Ref": "RdsLambdaLambdaFunctionEAB3023F"
+       },
+       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
+       {
+        "Ref": "RdsLambdaLambdaFunctionEAB3023F"
+       },
+       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_duration\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+       {
+        "Ref": "RdsLambdaLambdaFunctionEAB3023F"
+       },
+       "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+       {
+        "Ref": "RdsLambdaLambdaFunctionEAB3023F"
+       },
+       "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+       {
+        "Ref": "RdsLambdaLambdaFunctionEAB3023F"
+       },
+       "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_throttle_percentage\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled_requests_percentage_last_30_mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+       {
+        "Ref": "RdsLambdaLambdaFunctionEAB3023F"
+       },
+       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
+       {
+        "Ref": "RdsLambdaLambdaFunctionEAB3023F"
+       },
+       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":18,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Requests\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":false,\"metrics\":[[\"AWS/ApiGateway\",\"Count\",\"ApiId\",\"",
+       {
+        "Ref": "RdsLambdaRestApiLambdaFunctionAB3325CC"
+       },
+       "\",{\"label\":\"# Requests\",\"period\":900,\"stat\":\"Sum\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":24,\"properties\":{\"view\":\"timeSeries\",\"title\":\"api_gateway_latency\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":true,\"metrics\":[[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
+       {
+        "Ref": "RdsLambdaRestApiLambdaFunctionAB3325CC"
+       },
+       "\",{\"label\":\"api_gateway_latency_p50\",\"period\":900,\"stat\":\"p50\"}],[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
+       {
+        "Ref": "RdsLambdaRestApiLambdaFunctionAB3325CC"
+       },
+       "\",{\"label\":\"api_gateway_latency_p90\",\"period\":900,\"stat\":\"p90\"}],[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
+       {
+        "Ref": "RdsLambdaRestApiLambdaFunctionAB3325CC"
+       },
+       "\",{\"label\":\"api_gateway_latency_p99\",\"period\":900,\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":30,\"properties\":{\"view\":\"timeSeries\",\"title\":\"api_gateway_errors\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":true,\"metrics\":[[\"AWS/ApiGateway\",\"4XXError\",\"ApiId\",\"",
+       {
+        "Ref": "RdsLambdaRestApiLambdaFunctionAB3325CC"
+       },
+       "\",{\"label\":\"api_gateway_4XXErrors\",\"period\":900,\"stat\":\"Sum\"}],[\"AWS/ApiGateway\",\"5XXError\",\"ApiId\",\"",
+       {
+        "Ref": "RdsLambdaRestApiLambdaFunctionAB3325CC"
+       },
+       "\",{\"label\":\"api_gateway_5XXErrors\",\"period\":900,\"stat\":\"Sum\"}]],\"yAxis\":{}}}]}"
+      ]
+     ]
+    }
+   }
+  }
+ },
+ "Outputs": {
+  "RdsLambdaRestApiLambdaFunctionEndpointB2C814DF": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "RdsLambdaRestApiLambdaFunctionAB3325CC"
+      },
+      ".execute-api.",
+      {
+       "Ref": "AWS::Region"
+      },
+      ".",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "RdsLambdaRestApiLambdaFunctionDeploymentStageprod71E40301"
+      },
+      "/"
+     ]
+    ]
+   }
+  },
+  "RdsLambdaRestApiGatewayRestApiGatewayURL09AE9E81": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "RdsLambdaRestApiLambdaFunctionAB3325CC"
+      },
+      ".execute-api.",
+      {
+       "Ref": "AWS::Region"
+      },
+      ".",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "RdsLambdaRestApiLambdaFunctionDeploymentStageprod71E40301"
+      },
+      "/"
+     ]
+    ]
+   }
+  }
+ },
+ "Parameters": {
+  "AssetParametersab1166279d7c8a56e3bf81a33028c5971446eeb0d52a44ef75a169b7b8900e50S3BucketC7F143AF": {
+   "Type": "String",
+   "Description": "S3 bucket for asset \"ab1166279d7c8a56e3bf81a33028c5971446eeb0d52a44ef75a169b7b8900e50\""
+  },
+  "AssetParametersab1166279d7c8a56e3bf81a33028c5971446eeb0d52a44ef75a169b7b8900e50S3VersionKeyDE6F367B": {
+   "Type": "String",
+   "Description": "S3 key for asset version \"ab1166279d7c8a56e3bf81a33028c5971446eeb0d52a44ef75a169b7b8900e50\""
+  },
+  "AssetParametersab1166279d7c8a56e3bf81a33028c5971446eeb0d52a44ef75a169b7b8900e50ArtifactHashAA3157EB": {
+   "Type": "String",
+   "Description": "Artifact hash for asset \"ab1166279d7c8a56e3bf81a33028c5971446eeb0d52a44ef75a169b7b8900e50\""
+  },
+  "AssetParameters5d088e278f20bac83aa4f9da1a01b643d35fb2d012fcd922d3a0926126985b97S3BucketEA4E8CA9": {
+   "Type": "String",
+   "Description": "S3 bucket for asset \"5d088e278f20bac83aa4f9da1a01b643d35fb2d012fcd922d3a0926126985b97\""
+  },
+  "AssetParameters5d088e278f20bac83aa4f9da1a01b643d35fb2d012fcd922d3a0926126985b97S3VersionKeyD3255680": {
+   "Type": "String",
+   "Description": "S3 key for asset version \"5d088e278f20bac83aa4f9da1a01b643d35fb2d012fcd922d3a0926126985b97\""
+  },
+  "AssetParameters5d088e278f20bac83aa4f9da1a01b643d35fb2d012fcd922d3a0926126985b97ArtifactHash8A12E388": {
+   "Type": "String",
+   "Description": "Artifact hash for asset \"5d088e278f20bac83aa4f9da1a01b643d35fb2d012fcd922d3a0926126985b97\""
+  }
+ }
+}

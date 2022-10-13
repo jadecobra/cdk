@@ -1,0 +1,417 @@
+{
+  "Resources": {
+    "snslambdaAwsXraySdkLambdaLayer9A506C71": {
+      "Type": "AWS::Lambda::LayerVersion",
+      "Properties": {
+        "Content": {
+          "S3Bucket": {
+            "Ref": "AssetParametersab1166279d7c8a56e3bf81a33028c5971446eeb0d52a44ef75a169b7b8900e50S3BucketC7F143AF"
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersab1166279d7c8a56e3bf81a33028c5971446eeb0d52a44ef75a169b7b8900e50S3VersionKeyDE6F367B"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersab1166279d7c8a56e3bf81a33028c5971446eeb0d52a44ef75a169b7b8900e50S3VersionKeyDE6F367B"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        },
+        "Description": "aws-xray-sdk Lambda Layer"
+      }
+    },
+    "snslambdaLambdaFunctionServiceRole86AF70E5": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    "snslambdaLambdaFunctionServiceRoleDefaultPolicy9B7ABEA9": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": ["xray:PutTraceSegments", "xray:PutTelemetryRecords"],
+              "Effect": "Allow",
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "snslambdaLambdaFunctionServiceRoleDefaultPolicy9B7ABEA9",
+        "Roles": [
+          {
+            "Ref": "snslambdaLambdaFunctionServiceRole86AF70E5"
+          }
+        ]
+      }
+    },
+    "snslambdaLambdaFunctionF4BB56D4": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "AssetParameters2bacbe346578da78b41b7f8eb59c994beb782d987f855258fdc4acfcdc92dbf7S3Bucket9578B4A2"
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParameters2bacbe346578da78b41b7f8eb59c994beb782d987f855258fdc4acfcdc92dbf7S3VersionKey9F4055CE"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParameters2bacbe346578da78b41b7f8eb59c994beb782d987f855258fdc4acfcdc92dbf7S3VersionKey9F4055CE"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": ["snslambdaLambdaFunctionServiceRole86AF70E5", "Arn"]
+        },
+        "Architectures": ["arm64"],
+        "Handler": "sns_lambda.handler",
+        "Layers": [
+          {
+            "Ref": "snslambdaAwsXraySdkLambdaLayer9A506C71"
+          }
+        ],
+        "Runtime": "python3.9",
+        "Timeout": 60,
+        "TracingConfig": {
+          "Mode": "Active"
+        }
+      },
+      "DependsOn": [
+        "snslambdaLambdaFunctionServiceRoleDefaultPolicy9B7ABEA9",
+        "snslambdaLambdaFunctionServiceRole86AF70E5"
+      ]
+    },
+    "snslambdaLambdaFunctionAllowInvokeXRayTracerSnsTopicF55E5E8B2340D88E": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": ["snslambdaLambdaFunctionF4BB56D4", "Arn"]
+        },
+        "Principal": "sns.amazonaws.com",
+        "SourceArn": {
+          "Fn::ImportValue": "XRayTracerSnsTopic:ExportsOutputRefXRayTracerSnsTopicC2928ED9A114427E"
+        }
+      }
+    },
+    "snslambdaLambdaFunctionXRayTracerSnsTopicB07D9A39": {
+      "Type": "AWS::SNS::Subscription",
+      "Properties": {
+        "Protocol": "lambda",
+        "TopicArn": {
+          "Fn::ImportValue": "XRayTracerSnsTopic:ExportsOutputRefXRayTracerSnsTopicC2928ED9A114427E"
+        },
+        "Endpoint": {
+          "Fn::GetAtt": ["snslambdaLambdaFunctionF4BB56D4", "Arn"]
+        }
+      }
+    },
+    "snslambdaLambdaInvocationsErrorsGreaterThan2PercentAFD1E539": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": 6,
+        "AlarmActions": [
+          {
+            "Fn::ImportValue": "XRayTracerErrorTopic:ExportsOutputRefXRayTracerErrorTopicEFD21A448768586F"
+          }
+        ],
+        "DatapointsToAlarm": 1,
+        "Metrics": [
+          {
+            "Expression": "(errors / invocations) * 100",
+            "Id": "expr_1",
+            "Label": "invocations_errored_percentage_last_5_mins"
+          },
+          {
+            "Id": "invocations",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "FunctionName",
+                    "Value": {
+                      "Ref": "snslambdaLambdaFunctionF4BB56D4"
+                    }
+                  }
+                ],
+                "MetricName": "Invocations",
+                "Namespace": "AWS/Lambda"
+              },
+              "Period": 300,
+              "Stat": "Sum"
+            },
+            "ReturnData": false
+          },
+          {
+            "Id": "errors",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "FunctionName",
+                    "Value": {
+                      "Ref": "snslambdaLambdaFunctionF4BB56D4"
+                    }
+                  }
+                ],
+                "MetricName": "Errors",
+                "Namespace": "AWS/Lambda"
+              },
+              "Period": 300,
+              "Stat": "Sum"
+            },
+            "ReturnData": false
+          }
+        ],
+        "Threshold": 2,
+        "TreatMissingData": "notBreaching"
+      }
+    },
+    "snslambdaLambdaP99LongDurationGreaterThan1s1544994E": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": 6,
+        "AlarmActions": [
+          {
+            "Fn::ImportValue": "XRayTracerErrorTopic:ExportsOutputRefXRayTracerErrorTopicEFD21A448768586F"
+          }
+        ],
+        "DatapointsToAlarm": 1,
+        "Dimensions": [
+          {
+            "Name": "FunctionName",
+            "Value": {
+              "Ref": "snslambdaLambdaFunctionF4BB56D4"
+            }
+          }
+        ],
+        "ExtendedStatistic": "p99",
+        "MetricName": "Duration",
+        "Namespace": "AWS/Lambda",
+        "Period": 300,
+        "Threshold": 1000,
+        "TreatMissingData": "notBreaching"
+      }
+    },
+    "snslambdaLambdaThrottledInvocationsGreaterThan2Percent8896D631": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": 6,
+        "AlarmActions": [
+          {
+            "Fn::ImportValue": "XRayTracerErrorTopic:ExportsOutputRefXRayTracerErrorTopicEFD21A448768586F"
+          }
+        ],
+        "DatapointsToAlarm": 1,
+        "Metrics": [
+          {
+            "Expression": "(throttles * 100) / (invocations + throttles)",
+            "Id": "expr_1",
+            "Label": "throttled_requests_percentage_last_30_mins"
+          },
+          {
+            "Id": "invocations",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "FunctionName",
+                    "Value": {
+                      "Ref": "snslambdaLambdaFunctionF4BB56D4"
+                    }
+                  }
+                ],
+                "MetricName": "Invocations",
+                "Namespace": "AWS/Lambda"
+              },
+              "Period": 300,
+              "Stat": "Sum"
+            },
+            "ReturnData": false
+          },
+          {
+            "Id": "throttles",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "FunctionName",
+                    "Value": {
+                      "Ref": "snslambdaLambdaFunctionF4BB56D4"
+                    }
+                  }
+                ],
+                "MetricName": "Throttles",
+                "Namespace": "AWS/Lambda"
+              },
+              "Period": 300,
+              "Stat": "Sum"
+            },
+            "ReturnData": false
+          }
+        ],
+        "Threshold": 2,
+        "TreatMissingData": "notBreaching"
+      }
+    },
+    "snslambdaCloudWatchDashBoard604B4ED9": {
+      "Type": "AWS::CloudWatch::Dashboard",
+      "Properties": {
+        "DashboardBody": {
+          "Fn::Join": [
+            "",
+            [
+              "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_error_percentage\",\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"invocations_errored_percentage_last_5_mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+              {
+                "Ref": "snslambdaLambdaFunctionF4BB56D4"
+              },
+              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
+              {
+                "Ref": "snslambdaLambdaFunctionF4BB56D4"
+              },
+              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_duration\",\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+              {
+                "Ref": "snslambdaLambdaFunctionF4BB56D4"
+              },
+              "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+              {
+                "Ref": "snslambdaLambdaFunctionF4BB56D4"
+              },
+              "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+              {
+                "Ref": "snslambdaLambdaFunctionF4BB56D4"
+              },
+              "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_throttle_percentage\",\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled_requests_percentage_last_30_mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+              {
+                "Ref": "snslambdaLambdaFunctionF4BB56D4"
+              },
+              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
+              {
+                "Ref": "snslambdaLambdaFunctionF4BB56D4"
+              },
+              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
+            ]
+          ]
+        }
+      }
+    }
+  },
+  "Parameters": {
+    "AssetParametersab1166279d7c8a56e3bf81a33028c5971446eeb0d52a44ef75a169b7b8900e50S3BucketC7F143AF": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"ab1166279d7c8a56e3bf81a33028c5971446eeb0d52a44ef75a169b7b8900e50\""
+    },
+    "AssetParametersab1166279d7c8a56e3bf81a33028c5971446eeb0d52a44ef75a169b7b8900e50S3VersionKeyDE6F367B": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"ab1166279d7c8a56e3bf81a33028c5971446eeb0d52a44ef75a169b7b8900e50\""
+    },
+    "AssetParametersab1166279d7c8a56e3bf81a33028c5971446eeb0d52a44ef75a169b7b8900e50ArtifactHashAA3157EB": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"ab1166279d7c8a56e3bf81a33028c5971446eeb0d52a44ef75a169b7b8900e50\""
+    },
+    "AssetParameters2bacbe346578da78b41b7f8eb59c994beb782d987f855258fdc4acfcdc92dbf7S3Bucket9578B4A2": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"2bacbe346578da78b41b7f8eb59c994beb782d987f855258fdc4acfcdc92dbf7\""
+    },
+    "AssetParameters2bacbe346578da78b41b7f8eb59c994beb782d987f855258fdc4acfcdc92dbf7S3VersionKey9F4055CE": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"2bacbe346578da78b41b7f8eb59c994beb782d987f855258fdc4acfcdc92dbf7\""
+    },
+    "AssetParameters2bacbe346578da78b41b7f8eb59c994beb782d987f855258fdc4acfcdc92dbf7ArtifactHashD92CA6BA": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"2bacbe346578da78b41b7f8eb59c994beb782d987f855258fdc4acfcdc92dbf7\""
+    }
+  }
+}

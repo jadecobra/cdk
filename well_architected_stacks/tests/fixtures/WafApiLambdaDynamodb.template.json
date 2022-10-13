@@ -1,0 +1,1311 @@
+{
+ "Resources": {
+  "WafApiLambdaDynamodbErrorTopicA8AB4110": {
+   "Type": "AWS::SNS::Topic",
+   "Properties": {
+    "DisplayName": "WafApiLambdaDynamodbErrorTopic"
+   }
+  },
+  "ApiLambdaDynamodbDynamoDbTable2AE4135D": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "KeySchema": [
+     {
+      "AttributeName": "path",
+      "KeyType": "HASH"
+     }
+    ],
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "path",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete"
+  },
+  "ApiLambdaDynamodbDynamoDbTableUserErrorsGreaterThanZero15D5A206": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "WafApiLambdaDynamodbErrorTopicA8AB4110"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "MetricName": "UserErrors",
+    "Namespace": "AWS/DynamoDB",
+    "Period": 300,
+    "Statistic": "Sum",
+    "Threshold": 0,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "ApiLambdaDynamodbDynamoDbTableReadsWritesThrottled247FAC34": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "WafApiLambdaDynamodbErrorTopicA8AB4110"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "Metrics": [
+     {
+      "Expression": "m1 + m2",
+      "Id": "expr_1",
+      "Label": "dynamodb_throttles"
+     },
+     {
+      "Id": "m1",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "TableName",
+          "Value": {
+           "Ref": "ApiLambdaDynamodbDynamoDbTable2AE4135D"
+          }
+         }
+        ],
+        "MetricName": "ReadThrottleEvents",
+        "Namespace": "AWS/DynamoDB"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     },
+     {
+      "Id": "m2",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "TableName",
+          "Value": {
+           "Ref": "ApiLambdaDynamodbDynamoDbTable2AE4135D"
+          }
+         }
+        ],
+        "MetricName": "WriteThrottleEvents",
+        "Namespace": "AWS/DynamoDB"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     }
+    ],
+    "Threshold": 1,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "ApiLambdaDynamodbDynamoDbTableCloudWatchDashBoard54AC097C": {
+   "Type": "AWS::CloudWatch::Dashboard",
+   "Properties": {
+    "DashboardBody": {
+     "Fn::Join": [
+      "",
+      [
+       "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"dynamodb_latency\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":true,\"metrics\":[[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"GetItem\",\"TableName\",\"",
+       {
+        "Ref": "ApiLambdaDynamodbDynamoDbTable2AE4135D"
+       },
+       "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"UpdateItem\",\"TableName\",\"",
+       {
+        "Ref": "ApiLambdaDynamodbDynamoDbTable2AE4135D"
+       },
+       "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"PutItem\",\"TableName\",\"",
+       {
+        "Ref": "ApiLambdaDynamodbDynamoDbTable2AE4135D"
+       },
+       "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"DeleteItem\",\"TableName\",\"",
+       {
+        "Ref": "ApiLambdaDynamodbDynamoDbTable2AE4135D"
+       },
+       "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"Query\",\"TableName\",\"",
+       {
+        "Ref": "ApiLambdaDynamodbDynamoDbTable2AE4135D"
+       },
+       "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"dynamodb_consumed_read_write_units\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":false,\"metrics\":[[\"AWS/DynamoDB\",\"ConsumedReadCapacityUnits\",\"TableName\",\"",
+       {
+        "Ref": "ApiLambdaDynamodbDynamoDbTable2AE4135D"
+       },
+       "\"],[\"AWS/DynamoDB\",\"ConsumedWriteCapacityUnits\",\"TableName\",\"",
+       {
+        "Ref": "ApiLambdaDynamodbDynamoDbTable2AE4135D"
+       },
+       "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"dynamodb_throttles\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":true,\"metrics\":[[\"AWS/DynamoDB\",\"ReadThrottleEvents\",\"TableName\",\"",
+       {
+        "Ref": "ApiLambdaDynamodbDynamoDbTable2AE4135D"
+       },
+       "\",{\"stat\":\"Sum\"}],[\"AWS/DynamoDB\",\"WriteThrottleEvents\",\"TableName\",\"",
+       {
+        "Ref": "ApiLambdaDynamodbDynamoDbTable2AE4135D"
+       },
+       "\",{\"stat\":\"Sum\"}]],\"yAxis\":{}}}]}"
+      ]
+     ]
+    }
+   }
+  },
+  "ApiLambdaDynamodbLambdaFunctionAwsXraySdkLambdaLayer54C0EE3E": {
+   "Type": "AWS::Lambda::LayerVersion",
+   "Properties": {
+    "Content": {
+     "S3Bucket": {
+      "Ref": "AssetParametersab1166279d7c8a56e3bf81a33028c5971446eeb0d52a44ef75a169b7b8900e50S3BucketC7F143AF"
+     },
+     "S3Key": {
+      "Fn::Join": [
+       "",
+       [
+        {
+         "Fn::Select": [
+          0,
+          {
+           "Fn::Split": [
+            "||",
+            {
+             "Ref": "AssetParametersab1166279d7c8a56e3bf81a33028c5971446eeb0d52a44ef75a169b7b8900e50S3VersionKeyDE6F367B"
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "Fn::Select": [
+          1,
+          {
+           "Fn::Split": [
+            "||",
+            {
+             "Ref": "AssetParametersab1166279d7c8a56e3bf81a33028c5971446eeb0d52a44ef75a169b7b8900e50S3VersionKeyDE6F367B"
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      ]
+     }
+    },
+    "Description": "aws-xray-sdk Lambda Layer"
+   }
+  },
+  "ApiLambdaDynamodbLambdaFunctionServiceRole3AAD1EC3": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   }
+  },
+  "ApiLambdaDynamodbLambdaFunctionServiceRoleDefaultPolicy1782FCC5": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "xray:PutTraceSegments",
+        "xray:PutTelemetryRecords"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:Query",
+        "dynamodb:GetItem",
+        "dynamodb:Scan",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:PutItem",
+        "dynamodb:UpdateItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "ApiLambdaDynamodbDynamoDbTable2AE4135D",
+          "Arn"
+         ]
+        },
+        {
+         "Ref": "AWS::NoValue"
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "ApiLambdaDynamodbLambdaFunctionServiceRoleDefaultPolicy1782FCC5",
+    "Roles": [
+     {
+      "Ref": "ApiLambdaDynamodbLambdaFunctionServiceRole3AAD1EC3"
+     }
+    ]
+   }
+  },
+  "ApiLambdaDynamodbLambdaFunctionC517E8F3": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Ref": "AssetParameterse3f1122f3703cb2202936ccc77ff51f4397c40d836205a2feca433162036748aS3BucketF82F479F"
+     },
+     "S3Key": {
+      "Fn::Join": [
+       "",
+       [
+        {
+         "Fn::Select": [
+          0,
+          {
+           "Fn::Split": [
+            "||",
+            {
+             "Ref": "AssetParameterse3f1122f3703cb2202936ccc77ff51f4397c40d836205a2feca433162036748aS3VersionKey7329F578"
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "Fn::Select": [
+          1,
+          {
+           "Fn::Split": [
+            "||",
+            {
+             "Ref": "AssetParameterse3f1122f3703cb2202936ccc77ff51f4397c40d836205a2feca433162036748aS3VersionKey7329F578"
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      ]
+     }
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "ApiLambdaDynamodbLambdaFunctionServiceRole3AAD1EC3",
+      "Arn"
+     ]
+    },
+    "Architectures": [
+     "arm64"
+    ],
+    "Environment": {
+     "Variables": {
+      "DYNAMODB_TABLE_NAME": {
+       "Ref": "ApiLambdaDynamodbDynamoDbTable2AE4135D"
+      }
+     }
+    },
+    "Handler": "hit_counter.handler",
+    "Layers": [
+     {
+      "Ref": "ApiLambdaDynamodbLambdaFunctionAwsXraySdkLambdaLayer54C0EE3E"
+     }
+    ],
+    "Runtime": "python3.9",
+    "Timeout": 60,
+    "TracingConfig": {
+     "Mode": "Active"
+    }
+   },
+   "DependsOn": [
+    "ApiLambdaDynamodbLambdaFunctionServiceRoleDefaultPolicy1782FCC5",
+    "ApiLambdaDynamodbLambdaFunctionServiceRole3AAD1EC3"
+   ]
+  },
+  "ApiLambdaDynamodbLambdaFunctionLambdaInvocationsErrorsGreaterThan2Percent2093781E": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "WafApiLambdaDynamodbErrorTopicA8AB4110"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "Metrics": [
+     {
+      "Expression": "(errors / invocations) * 100",
+      "Id": "expr_1",
+      "Label": "invocations_errored_percentage_last_5_mins"
+     },
+     {
+      "Id": "invocations",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "FunctionName",
+          "Value": {
+           "Ref": "ApiLambdaDynamodbLambdaFunctionC517E8F3"
+          }
+         }
+        ],
+        "MetricName": "Invocations",
+        "Namespace": "AWS/Lambda"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     },
+     {
+      "Id": "errors",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "FunctionName",
+          "Value": {
+           "Ref": "ApiLambdaDynamodbLambdaFunctionC517E8F3"
+          }
+         }
+        ],
+        "MetricName": "Errors",
+        "Namespace": "AWS/Lambda"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     }
+    ],
+    "Threshold": 2,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "ApiLambdaDynamodbLambdaFunctionLambdaP99LongDurationGreaterThan1s4923672D": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "WafApiLambdaDynamodbErrorTopicA8AB4110"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "Dimensions": [
+     {
+      "Name": "FunctionName",
+      "Value": {
+       "Ref": "ApiLambdaDynamodbLambdaFunctionC517E8F3"
+      }
+     }
+    ],
+    "ExtendedStatistic": "p99",
+    "MetricName": "Duration",
+    "Namespace": "AWS/Lambda",
+    "Period": 300,
+    "Threshold": 1000,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "ApiLambdaDynamodbLambdaFunctionLambdaThrottledInvocationsGreaterThan2Percent0D8AFF6E": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "WafApiLambdaDynamodbErrorTopicA8AB4110"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "Metrics": [
+     {
+      "Expression": "(throttles * 100) / (invocations + throttles)",
+      "Id": "expr_1",
+      "Label": "throttled_requests_percentage_last_30_mins"
+     },
+     {
+      "Id": "invocations",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "FunctionName",
+          "Value": {
+           "Ref": "ApiLambdaDynamodbLambdaFunctionC517E8F3"
+          }
+         }
+        ],
+        "MetricName": "Invocations",
+        "Namespace": "AWS/Lambda"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     },
+     {
+      "Id": "throttles",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "FunctionName",
+          "Value": {
+           "Ref": "ApiLambdaDynamodbLambdaFunctionC517E8F3"
+          }
+         }
+        ],
+        "MetricName": "Throttles",
+        "Namespace": "AWS/Lambda"
+       },
+       "Period": 300,
+       "Stat": "Sum"
+      },
+      "ReturnData": false
+     }
+    ],
+    "Threshold": 2,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "ApiLambdaDynamodbLambdaFunctionCloudWatchDashBoard069B15C4": {
+   "Type": "AWS::CloudWatch::Dashboard",
+   "Properties": {
+    "DashboardBody": {
+     "Fn::Join": [
+      "",
+      [
+       "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_error_percentage\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":false,\"metrics\":[[{\"label\":\"invocations_errored_percentage_last_5_mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+       {
+        "Ref": "ApiLambdaDynamodbLambdaFunctionC517E8F3"
+       },
+       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
+       {
+        "Ref": "ApiLambdaDynamodbLambdaFunctionC517E8F3"
+       },
+       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_duration\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+       {
+        "Ref": "ApiLambdaDynamodbLambdaFunctionC517E8F3"
+       },
+       "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+       {
+        "Ref": "ApiLambdaDynamodbLambdaFunctionC517E8F3"
+       },
+       "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+       {
+        "Ref": "ApiLambdaDynamodbLambdaFunctionC517E8F3"
+       },
+       "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_throttle_percentage\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled_requests_percentage_last_30_mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+       {
+        "Ref": "ApiLambdaDynamodbLambdaFunctionC517E8F3"
+       },
+       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
+       {
+        "Ref": "ApiLambdaDynamodbLambdaFunctionC517E8F3"
+       },
+       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
+      ]
+     ]
+    }
+   }
+  },
+  "ApiLambdaDynamodbRestApiLambdaFunction29742C79": {
+   "Type": "AWS::ApiGateway::RestApi",
+   "Properties": {
+    "Name": "RestApiLambdaFunction"
+   }
+  },
+  "ApiLambdaDynamodbRestApiLambdaFunctionCloudWatchRole05622BD7": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "apigateway.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+       ]
+      ]
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain"
+  },
+  "ApiLambdaDynamodbRestApiLambdaFunctionAccount63B69182": {
+   "Type": "AWS::ApiGateway::Account",
+   "Properties": {
+    "CloudWatchRoleArn": {
+     "Fn::GetAtt": [
+      "ApiLambdaDynamodbRestApiLambdaFunctionCloudWatchRole05622BD7",
+      "Arn"
+     ]
+    }
+   },
+   "DependsOn": [
+    "ApiLambdaDynamodbRestApiLambdaFunction29742C79"
+   ],
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain"
+  },
+  "ApiLambdaDynamodbRestApiLambdaFunctionDeploymentDFE9AA42e649525cff1a6908e35fd1fd1389642c": {
+   "Type": "AWS::ApiGateway::Deployment",
+   "Properties": {
+    "RestApiId": {
+     "Ref": "ApiLambdaDynamodbRestApiLambdaFunction29742C79"
+    },
+    "Description": "Automatically created by the RestApi construct"
+   },
+   "DependsOn": [
+    "ApiLambdaDynamodbRestApiLambdaFunctionproxyANY25695EAC",
+    "ApiLambdaDynamodbRestApiLambdaFunctionproxy8502D615",
+    "ApiLambdaDynamodbRestApiLambdaFunctionANY75F09559"
+   ]
+  },
+  "ApiLambdaDynamodbRestApiLambdaFunctionDeploymentStageprod4D298C1D": {
+   "Type": "AWS::ApiGateway::Stage",
+   "Properties": {
+    "RestApiId": {
+     "Ref": "ApiLambdaDynamodbRestApiLambdaFunction29742C79"
+    },
+    "DeploymentId": {
+     "Ref": "ApiLambdaDynamodbRestApiLambdaFunctionDeploymentDFE9AA42e649525cff1a6908e35fd1fd1389642c"
+    },
+    "StageName": "prod"
+   },
+   "DependsOn": [
+    "ApiLambdaDynamodbRestApiLambdaFunctionAccount63B69182"
+   ]
+  },
+  "ApiLambdaDynamodbRestApiLambdaFunctionproxy8502D615": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "ApiLambdaDynamodbRestApiLambdaFunction29742C79",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "{proxy+}",
+    "RestApiId": {
+     "Ref": "ApiLambdaDynamodbRestApiLambdaFunction29742C79"
+    }
+   }
+  },
+  "ApiLambdaDynamodbRestApiLambdaFunctionproxyANYApiPermissionWafApiLambdaDynamodbRestApiLambdaFunctionF22DB37AANYproxy52E53BBB": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "ApiLambdaDynamodbLambdaFunctionC517E8F3",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ApiLambdaDynamodbRestApiLambdaFunction29742C79"
+       },
+       "/",
+       {
+        "Ref": "ApiLambdaDynamodbRestApiLambdaFunctionDeploymentStageprod4D298C1D"
+       },
+       "/*/*"
+      ]
+     ]
+    }
+   }
+  },
+  "ApiLambdaDynamodbRestApiLambdaFunctionproxyANYApiPermissionTestWafApiLambdaDynamodbRestApiLambdaFunctionF22DB37AANYproxyFC3F1283": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "ApiLambdaDynamodbLambdaFunctionC517E8F3",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ApiLambdaDynamodbRestApiLambdaFunction29742C79"
+       },
+       "/test-invoke-stage/*/*"
+      ]
+     ]
+    }
+   }
+  },
+  "ApiLambdaDynamodbRestApiLambdaFunctionproxyANY25695EAC": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "HttpMethod": "ANY",
+    "ResourceId": {
+     "Ref": "ApiLambdaDynamodbRestApiLambdaFunctionproxy8502D615"
+    },
+    "RestApiId": {
+     "Ref": "ApiLambdaDynamodbRestApiLambdaFunction29742C79"
+    },
+    "AuthorizationType": "NONE",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "ApiLambdaDynamodbLambdaFunctionC517E8F3",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    }
+   }
+  },
+  "ApiLambdaDynamodbRestApiLambdaFunctionANYApiPermissionWafApiLambdaDynamodbRestApiLambdaFunctionF22DB37AANYCE5E35E6": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "ApiLambdaDynamodbLambdaFunctionC517E8F3",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ApiLambdaDynamodbRestApiLambdaFunction29742C79"
+       },
+       "/",
+       {
+        "Ref": "ApiLambdaDynamodbRestApiLambdaFunctionDeploymentStageprod4D298C1D"
+       },
+       "/*/"
+      ]
+     ]
+    }
+   }
+  },
+  "ApiLambdaDynamodbRestApiLambdaFunctionANYApiPermissionTestWafApiLambdaDynamodbRestApiLambdaFunctionF22DB37AANY0F0A41CB": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "ApiLambdaDynamodbLambdaFunctionC517E8F3",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ApiLambdaDynamodbRestApiLambdaFunction29742C79"
+       },
+       "/test-invoke-stage/*/"
+      ]
+     ]
+    }
+   }
+  },
+  "ApiLambdaDynamodbRestApiLambdaFunctionANY75F09559": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "HttpMethod": "ANY",
+    "ResourceId": {
+     "Fn::GetAtt": [
+      "ApiLambdaDynamodbRestApiLambdaFunction29742C79",
+      "RootResourceId"
+     ]
+    },
+    "RestApiId": {
+     "Ref": "ApiLambdaDynamodbRestApiLambdaFunction29742C79"
+    },
+    "AuthorizationType": "NONE",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "ApiLambdaDynamodbLambdaFunctionC517E8F3",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    }
+   }
+  },
+  "ApiLambdaDynamodbRestApiGateway4XXErrorsGreaterThanOnePercentB425052F": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "WafApiLambdaDynamodbErrorTopicA8AB4110"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "Metrics": [
+     {
+      "Expression": "m1 / m2 * 100",
+      "Id": "expr_1",
+      "Label": "api_gateway_4XX_errors_percentage"
+     },
+     {
+      "Id": "m1",
+      "Label": "4XX_errors",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "ApiId",
+          "Value": {
+           "Ref": "ApiLambdaDynamodbRestApiLambdaFunction29742C79"
+          }
+         }
+        ],
+        "MetricName": "4XXError",
+        "Namespace": "AWS/ApiGateway"
+       },
+       "Period": 300,
+       "Stat": "Sum",
+       "Unit": "Count"
+      },
+      "ReturnData": false
+     },
+     {
+      "Id": "m2",
+      "Label": "number_of_requests",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "ApiId",
+          "Value": {
+           "Ref": "ApiLambdaDynamodbRestApiLambdaFunction29742C79"
+          }
+         }
+        ],
+        "MetricName": "Count",
+        "Namespace": "AWS/ApiGateway"
+       },
+       "Period": 300,
+       "Stat": "Sum",
+       "Unit": "Count"
+      },
+      "ReturnData": false
+     }
+    ],
+    "Threshold": 1,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "ApiLambdaDynamodbRestApiGateway5XXErrorsGreaterThanZero920F8DF4": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "WafApiLambdaDynamodbErrorTopicA8AB4110"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "Metrics": [
+     {
+      "Id": "m1",
+      "Label": "api_gateway_5XX_errors",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "ApiId",
+          "Value": {
+           "Ref": "ApiLambdaDynamodbRestApiLambdaFunction29742C79"
+          }
+         }
+        ],
+        "MetricName": "5XXError",
+        "Namespace": "AWS/ApiGateway"
+       },
+       "Period": 900,
+       "Stat": "p99",
+       "Unit": "Count"
+      },
+      "ReturnData": true
+     }
+    ],
+    "Threshold": 0,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "ApiLambdaDynamodbRestApiGatewayP99LatencyGreaterThanOneSecond15659BA0": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 6,
+    "AlarmActions": [
+     {
+      "Ref": "WafApiLambdaDynamodbErrorTopicA8AB4110"
+     }
+    ],
+    "DatapointsToAlarm": 1,
+    "Metrics": [
+     {
+      "Id": "m1",
+      "Label": "api_gateway_latency",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "ApiId",
+          "Value": {
+           "Ref": "ApiLambdaDynamodbRestApiLambdaFunction29742C79"
+          }
+         }
+        ],
+        "MetricName": "Latency",
+        "Namespace": "AWS/ApiGateway"
+       },
+       "Period": 900,
+       "Stat": "p99",
+       "Unit": "Count"
+      },
+      "ReturnData": true
+     }
+    ],
+    "Threshold": 1000,
+    "TreatMissingData": "notBreaching"
+   }
+  },
+  "ApiLambdaDynamodbRestApiGatewayCloudWatchDashBoardBCB7B730": {
+   "Type": "AWS::CloudWatch::Dashboard",
+   "Properties": {
+    "DashboardBody": {
+     "Fn::Join": [
+      "",
+      [
+       "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Requests\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":false,\"metrics\":[[\"AWS/ApiGateway\",\"Count\",\"ApiId\",\"",
+       {
+        "Ref": "ApiLambdaDynamodbRestApiLambdaFunction29742C79"
+       },
+       "\",{\"label\":\"# Requests\",\"period\":900,\"stat\":\"Sum\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"api_gateway_latency\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":true,\"metrics\":[[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
+       {
+        "Ref": "ApiLambdaDynamodbRestApiLambdaFunction29742C79"
+       },
+       "\",{\"label\":\"api_gateway_latency_p50\",\"period\":900,\"stat\":\"p50\"}],[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
+       {
+        "Ref": "ApiLambdaDynamodbRestApiLambdaFunction29742C79"
+       },
+       "\",{\"label\":\"api_gateway_latency_p90\",\"period\":900,\"stat\":\"p90\"}],[\"AWS/ApiGateway\",\"Latency\",\"ApiId\",\"",
+       {
+        "Ref": "ApiLambdaDynamodbRestApiLambdaFunction29742C79"
+       },
+       "\",{\"label\":\"api_gateway_latency_p99\",\"period\":900,\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"api_gateway_errors\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"stacked\":true,\"metrics\":[[\"AWS/ApiGateway\",\"4XXError\",\"ApiId\",\"",
+       {
+        "Ref": "ApiLambdaDynamodbRestApiLambdaFunction29742C79"
+       },
+       "\",{\"label\":\"api_gateway_4XXErrors\",\"period\":900,\"stat\":\"Sum\"}],[\"AWS/ApiGateway\",\"5XXError\",\"ApiId\",\"",
+       {
+        "Ref": "ApiLambdaDynamodbRestApiLambdaFunction29742C79"
+       },
+       "\",{\"label\":\"api_gateway_5XXErrors\",\"period\":900,\"stat\":\"Sum\"}]],\"yAxis\":{}}}]}"
+      ]
+     ]
+    }
+   }
+  },
+  "WebApplicationFirewall5B9A8CD2": {
+   "Type": "AWS::WAFv2::WebACL",
+   "Properties": {
+    "DefaultAction": {
+     "Allow": {}
+    },
+    "Scope": "REGIONAL",
+    "VisibilityConfig": {
+     "CloudWatchMetricsEnabled": true,
+     "MetricName": "webACL",
+     "SampledRequestsEnabled": true
+    },
+    "Name": "WebApplicationFirewall",
+    "Rules": [
+     {
+      "Name": "AWSManagedRulesCommonRuleSet",
+      "OverrideAction": {
+       "None": {}
+      },
+      "Priority": 1,
+      "Statement": {
+       "ManagedRuleGroupStatement": {
+        "ExcludedRules": [
+         {
+          "Name": "SizeRestrictions_BODY"
+         }
+        ],
+        "Name": "AWSManagedRulesCommonRuleSet",
+        "VendorName": "AWS"
+       }
+      },
+      "VisibilityConfig": {
+       "CloudWatchMetricsEnabled": true,
+       "MetricName": "AWSManagedRulesCommonRuleSet",
+       "SampledRequestsEnabled": true
+      }
+     },
+     {
+      "Name": "AWSManagedRulesAnonymousIpList",
+      "OverrideAction": {
+       "None": {}
+      },
+      "Priority": 2,
+      "Statement": {
+       "ManagedRuleGroupStatement": {
+        "ExcludedRules": [],
+        "Name": "AWSManagedRulesAnonymousIpList",
+        "VendorName": "AWS"
+       }
+      },
+      "VisibilityConfig": {
+       "CloudWatchMetricsEnabled": true,
+       "MetricName": "AWSManagedRulesAnonymousIpList",
+       "SampledRequestsEnabled": true
+      }
+     },
+     {
+      "Name": "AWSManagedRulesAmazonIpReputationList",
+      "OverrideAction": {
+       "None": {}
+      },
+      "Priority": 3,
+      "Statement": {
+       "ManagedRuleGroupStatement": {
+        "ExcludedRules": [],
+        "Name": "AWSManagedRulesAmazonIpReputationList",
+        "VendorName": "AWS"
+       }
+      },
+      "VisibilityConfig": {
+       "CloudWatchMetricsEnabled": true,
+       "MetricName": "AWSManagedRulesAmazonIpReputationList",
+       "SampledRequestsEnabled": true
+      }
+     },
+     {
+      "Action": {
+       "Block": {}
+      },
+      "Name": "GeoBlockingRule",
+      "Priority": 4,
+      "Statement": {
+       "GeoMatchStatement": {
+        "CountryCodes": [
+         "NZ"
+        ]
+       }
+      },
+      "VisibilityConfig": {
+       "CloudWatchMetricsEnabled": true,
+       "MetricName": "geoblock",
+       "SampledRequestsEnabled": true
+      }
+     }
+    ]
+   }
+  },
+  "WebApplicationFirewallWebApplicationFirewallAPIGatewayAssociation48156246": {
+   "Type": "AWS::WAFv2::WebACLAssociation",
+   "Properties": {
+    "ResourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:apigateway:region::/restapis/",
+       {
+        "Ref": "ApiLambdaDynamodbRestApiLambdaFunction29742C79"
+       },
+       "/stages/",
+       {
+        "Ref": "ApiLambdaDynamodbRestApiLambdaFunctionDeploymentStageprod4D298C1D"
+       }
+      ]
+     ]
+    },
+    "WebACLArn": {
+     "Fn::GetAtt": [
+      "WebApplicationFirewall5B9A8CD2",
+      "Arn"
+     ]
+    }
+   }
+  }
+ },
+ "Outputs": {
+  "ApiLambdaDynamodbRestApiLambdaFunctionEndpoint313FF09C": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "ApiLambdaDynamodbRestApiLambdaFunction29742C79"
+      },
+      ".execute-api.",
+      {
+       "Ref": "AWS::Region"
+      },
+      ".",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "ApiLambdaDynamodbRestApiLambdaFunctionDeploymentStageprod4D298C1D"
+      },
+      "/"
+     ]
+    ]
+   }
+  },
+  "ApiLambdaDynamodbRestApiGatewayRestApiGatewayURLA6BAFDC3": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "ApiLambdaDynamodbRestApiLambdaFunction29742C79"
+      },
+      ".execute-api.",
+      {
+       "Ref": "AWS::Region"
+      },
+      ".",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "ApiLambdaDynamodbRestApiLambdaFunctionDeploymentStageprod4D298C1D"
+      },
+      "/"
+     ]
+    ]
+   }
+  }
+ },
+ "Parameters": {
+  "AssetParametersab1166279d7c8a56e3bf81a33028c5971446eeb0d52a44ef75a169b7b8900e50S3BucketC7F143AF": {
+   "Type": "String",
+   "Description": "S3 bucket for asset \"ab1166279d7c8a56e3bf81a33028c5971446eeb0d52a44ef75a169b7b8900e50\""
+  },
+  "AssetParametersab1166279d7c8a56e3bf81a33028c5971446eeb0d52a44ef75a169b7b8900e50S3VersionKeyDE6F367B": {
+   "Type": "String",
+   "Description": "S3 key for asset version \"ab1166279d7c8a56e3bf81a33028c5971446eeb0d52a44ef75a169b7b8900e50\""
+  },
+  "AssetParametersab1166279d7c8a56e3bf81a33028c5971446eeb0d52a44ef75a169b7b8900e50ArtifactHashAA3157EB": {
+   "Type": "String",
+   "Description": "Artifact hash for asset \"ab1166279d7c8a56e3bf81a33028c5971446eeb0d52a44ef75a169b7b8900e50\""
+  },
+  "AssetParameterse3f1122f3703cb2202936ccc77ff51f4397c40d836205a2feca433162036748aS3BucketF82F479F": {
+   "Type": "String",
+   "Description": "S3 bucket for asset \"e3f1122f3703cb2202936ccc77ff51f4397c40d836205a2feca433162036748a\""
+  },
+  "AssetParameterse3f1122f3703cb2202936ccc77ff51f4397c40d836205a2feca433162036748aS3VersionKey7329F578": {
+   "Type": "String",
+   "Description": "S3 key for asset version \"e3f1122f3703cb2202936ccc77ff51f4397c40d836205a2feca433162036748a\""
+  },
+  "AssetParameterse3f1122f3703cb2202936ccc77ff51f4397c40d836205a2feca433162036748aArtifactHash7680F60F": {
+   "Type": "String",
+   "Description": "Artifact hash for asset \"e3f1122f3703cb2202936ccc77ff51f4397c40d836205a2feca433162036748a\""
+  }
+ }
+}

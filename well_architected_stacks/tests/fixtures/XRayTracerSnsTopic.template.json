@@ -1,0 +1,34 @@
+{
+ "Resources": {
+  "XRayTracerSnsTopicErrorTopic03AA4417": {
+   "Type": "AWS::SNS::Topic",
+   "Properties": {
+    "DisplayName": "XRayTracerSnsTopicErrorTopic"
+   }
+  },
+  "XRayTracerSnsTopicC2928ED9": {
+   "Type": "AWS::SNS::Topic",
+   "Properties": {
+    "DisplayName": "Sns Topic"
+   }
+  }
+ },
+ "Outputs": {
+  "ExportsOutputRefXRayTracerSnsTopicErrorTopic03AA44179AE55202": {
+   "Value": {
+    "Ref": "XRayTracerSnsTopicErrorTopic03AA4417"
+   },
+   "Export": {
+    "Name": "XRayTracerSnsTopic:ExportsOutputRefXRayTracerSnsTopicErrorTopic03AA44179AE55202"
+   }
+  },
+  "ExportsOutputRefXRayTracerSnsTopicC2928ED9A114427E": {
+   "Value": {
+    "Ref": "XRayTracerSnsTopicC2928ED9"
+   },
+   "Export": {
+    "Name": "XRayTracerSnsTopic:ExportsOutputRefXRayTracerSnsTopicC2928ED9A114427E"
+   }
+  }
+ }
+}
