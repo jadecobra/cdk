@@ -9,8 +9,6 @@ class ApiLambdaSqsLambdaDynamodb(well_architected_stack.Stack):
 
     def __init__(
         self, scope: constructs.Construct, id: str,
-        create_http_api=None,
-        create_rest_api=None,
         **kwargs
     ) -> None:
         super().__init__(scope, id, **kwargs)
@@ -34,24 +32,31 @@ class ApiLambdaSqsLambdaDynamodb(well_architected_stack.Stack):
             function_name='api_lambda_sqs_lambda_dynamodb_subscriber',
             partition_key="id",
             lambda_directory=self.lambda_directory,
+            error_topic=self.error_topic,
             concurrent_executions=2,
             environment_variables={
                 'SQS_QUEUE_URL': sqs_queue.queue_url,
             },
         )
 
-        sqs_publishing_lambda = self.create_sqs_publishing_lambda(sqs_queue)
-        self.create_cloudwatch_dashboard(
+        sqs_subscriber.lambda_function.add_event_source(aws_cdk.aws_lambda_event_sources.SqsEventSource(sqs_queue))
+        sqs_queue.grant_consume_messages(sqs_subscriber.lambda_function)
+        sqs_subscriber.dynamodb_table.grant_read_write_data(sqs_subscriber.lambda_function)
 
+        sqs_publishing_lambda = self.create_sqs_publishing_lambda(sqs_queue)
+
+        self.create_cloudwatch_dashboard(
+            *sqs_subscriber.lambda_construct.create_cloudwatch_widgets(),
+            *sqs_subscriber.dynamodb_construct.create_cloudwatch_widgets(),
+            *sqs_publishing_lambda.create_cloudwatch_widgets(),
         )
 
-
-    def create_dynamodb_table(self, partition_key):
-        return well_architected_constructs.dynamodb_table.DynamodbTableConstruct(
-            self, "DynamodbTable",
-            partition_key=partition_key,
-            error_topic=self.error_topic,
-        ).dynamodb_table
+    # def create_dynamodb_table(self, partition_key):
+    #     return well_architected_constructs.dynamodb_table.DynamodbTableConstruct(
+    #         self, "DynamodbTable",
+    #         partition_key=partition_key,
+    #         error_topic=self.error_topic,
+    #     ).dynamodb_table
 
     def create_lambda_construct(
         self, function_name=None,

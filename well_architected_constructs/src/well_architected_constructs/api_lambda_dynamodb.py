@@ -26,10 +26,9 @@ class ApiLambdaDynamodbConstruct(api_lambda.ApiLambdaConstruct):
             time_to_live_attribute=time_to_live_attribute,
             error_topic=self.error_topic,
         )
+        self.dynamodb_table = self.dynamodb_construct.dynamodb_table
         self.lambda_function.add_environment(
             key='DYNAMODB_TABLE_NAME',
-            value=self.dynamodb_construct.dynamodb_table.table_name
+            value=self.dynamodb_table.table_name
         )
-        self.dynamodb_construct.dynamodb_table.grant_read_write_data(
-            self.lambda_function
-        )
+        self.dynamodb_table.grant_read_write_data(self.lambda_function)

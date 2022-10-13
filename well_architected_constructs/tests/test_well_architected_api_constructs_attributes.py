@@ -44,19 +44,11 @@ class TestApiConstructAttributes(TestWellArchitectedConstructAttributes):
                 'create_api',
                 'create_http_api',
                 'create_rest_api',
-                # 'add_api_gateway_metric',
-                # 'create_api_gateway_4xx_alarm',
-                # 'create_api_gateway_5xx_alarm',
-                # 'create_api_gateway_errors_widget',
-                # 'create_api_gateway_latency_alarm',
-                # 'create_api_gateway_latency_widget',
-                # 'create_api_gateway_number_of_requests_widget',
-                # 'create_api_gateway_service_role',
+                'create_api_gateway_service_role',
+                'create_express_state_machine',
                 'create_http_api_step_functions_route',
                 'create_http_api_stepfunctions_integration',
-                # 'get_api_id',
-                # 'metric_names',
-                # 'percentile_statistics',
+                'state_machine_execution_permissions',
             ]
         )
 

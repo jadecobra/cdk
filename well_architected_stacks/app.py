@@ -12,23 +12,18 @@ class WellArchitected(aws_cdk.App):
         super().__init__(*args, **kwargs)
         self.lambda_directory = '../lambda_functions'
         self.create_well_architected_stacks()
-        self.lambda_trilogy()
-        self.xray_tracer()
+        # self.lambda_trilogy()
+        # self.xray_tracer()
         # self.ecs()
         # self.in_progress()
 
-    def create_well_architected_stacks(self):
+    def api_lambda_dynamodb(self):
         well_architected_stacks.api_lambda_dynamodb.ApiLambdaDynamodbStack(
             self, 'HttpApiLambdaDynamodb',
             function_name='hit_counter',
             partition_key='path',
             lambda_directory=self.lambda_directory,
             create_http_api=True,
-        )
-        well_architected_stacks.api_lambda_dynamodb_eventbridge_lambda.ApiLambdaDynamodbEventBridgeLambda(
-            self, 'HttpApiLambdaDynamodbEventBridgeLambda',
-            lambda_directory=self.lambda_directory,
-            create_http_api=True
         )
         well_architected_stacks.api_lambda_dynamodb.ApiLambdaDynamodbStack(
             self, 'RestApiLambdaDynamodb',
@@ -38,11 +33,20 @@ class WellArchitected(aws_cdk.App):
             create_rest_api=True,
         )
 
+    def api_lambda_dynamodb_eventbridge(self):
+        well_architected_stacks.api_lambda_dynamodb_eventbridge_lambda.ApiLambdaDynamodbEventBridgeLambda(
+            self, 'HttpApiLambdaDynamodbEventBridgeLambda',
+            lambda_directory=self.lambda_directory,
+            create_http_api=True
+        )
+
         well_architected_stacks.api_lambda_dynamodb_eventbridge_lambda.ApiLambdaDynamodbEventBridgeLambda(
             self, 'RestApiLambdaDynamodbEventBridgeLambda',
             lambda_directory=self.lambda_directory,
             create_rest_api=True,
         )
+
+    def api_lambda_eventbridge_lambda(self):
         well_architected_stacks.api_lambda_eventbridge_lambda.ApiLambdaEventBridgeLambda(
             self, 'HttpApiLambdaEventBridgeLambda',
             lambda_directory=self.lambda_directory,
@@ -53,6 +57,8 @@ class WellArchitected(aws_cdk.App):
             lambda_directory=self.lambda_directory,
             create_rest_api=True,
         )
+
+    def api_lambda_rds(self):
         well_architected_stacks.api_lambda_rds.ApiLambdaRds(
             self, 'HttpApiLambdaRds',
             lambda_directory=self.lambda_directory,
@@ -63,6 +69,8 @@ class WellArchitected(aws_cdk.App):
             lambda_directory=self.lambda_directory,
             create_rest_api=True,
         )
+
+    def api_lambda_sqs_lambda_dynamodb(self):
         well_architected_stacks.api_lambda_sqs_lambda_dynamodb.ApiLambdaSqsLambdaDynamodb(
             self, 'HttpApiLambdaSqsLambdaDynamodb',
             lambda_directory=self.lambda_directory,
@@ -73,6 +81,8 @@ class WellArchitected(aws_cdk.App):
             lambda_directory=self.lambda_directory,
             create_rest_api=True,
         )
+
+    def api_step_functions(self):
         well_architected_stacks.api_step_functions.ApiStepFunctions(
             self, 'HttpApiStepFunctions',
             lambda_directory=self.lambda_directory,
@@ -83,6 +93,17 @@ class WellArchitected(aws_cdk.App):
             lambda_directory=self.lambda_directory,
             create_rest_api=True,
         )
+
+    def create_well_architected_stacks(self):
+        # self.api_lambda_dynamodb()
+        # self.api_lambda_dynamodb_eventbridge()
+        # self.api_lambda_eventbridge_lambda()
+        # self.api_lambda_rds()
+        self.api_lambda_sqs_lambda_dynamodb()
+        return
+        self.api_step_functions()
+        self.lambda_power_tuner()
+
         well_architected_stacks.lambda_power_tuner.LambdaPowerTuner(
             self, 'LambdaPowerTuner',
             lambda_directory=self.lambda_directory,
