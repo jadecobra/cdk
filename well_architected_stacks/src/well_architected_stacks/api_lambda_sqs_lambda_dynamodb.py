@@ -19,20 +19,14 @@ class ApiLambdaSqsLambdaDynamodb(well_architected_stack.Stack):
             visibility_timeout=aws_cdk.Duration.seconds(300)
         )
 
-        # dynamodb_table = self.create_dynamodb_table(
-        #     partition_key="id",
-        # )
-        # self.create_sqs_subscribing_lambda(
-        #     sqs_queue=sqs_queue,
-        #     dynamodb_table=dynamodb_table,
-        # )
-
         sqs_subscriber = well_architected_constructs.api_lambda_dynamodb.ApiLambdaDynamodbConstruct(
             self, 'LambdaDynamodb',
             function_name='api_lambda_sqs_lambda_dynamodb_subscriber',
             partition_key="id",
             lambda_directory=self.lambda_directory,
             error_topic=self.error_topic,
+            create_http_api=self.create_http_api,
+            create_rest_api=self.create_rest_api,
             concurrent_executions=2,
             environment_variables={
                 'SQS_QUEUE_URL': sqs_queue.queue_url,
@@ -43,20 +37,14 @@ class ApiLambdaSqsLambdaDynamodb(well_architected_stack.Stack):
         sqs_queue.grant_consume_messages(sqs_subscriber.lambda_function)
         sqs_subscriber.dynamodb_table.grant_read_write_data(sqs_subscriber.lambda_function)
 
-        sqs_publishing_lambda = self.create_sqs_publishing_lambda(sqs_queue)
+        sqs_publisher = self.create_sqs_publishing_lambda(sqs_queue)
 
         self.create_cloudwatch_dashboard(
+            *sqs_subscriber.api_construct.create_cloudwatch_widgets(),
             *sqs_subscriber.lambda_construct.create_cloudwatch_widgets(),
             *sqs_subscriber.dynamodb_construct.create_cloudwatch_widgets(),
-            *sqs_publishing_lambda.create_cloudwatch_widgets(),
+            *sqs_publisher.create_cloudwatch_widgets(),
         )
-
-    # def create_dynamodb_table(self, partition_key):
-    #     return well_architected_constructs.dynamodb_table.DynamodbTableConstruct(
-    #         self, "DynamodbTable",
-    #         partition_key=partition_key,
-    #         error_topic=self.error_topic,
-    #     ).dynamodb_table
 
     def create_lambda_construct(
         self, function_name=None,
@@ -81,7 +69,7 @@ class ApiLambdaSqsLambdaDynamodb(well_architected_stack.Stack):
         )
         lambda_function = lambda_construct.lambda_function
         sqs_queue.grant_send_messages(lambda_function)
-        return lambda_function
+        return lambda_construct
 
     def create_sqs_subscribing_lambda(
         self, sqs_queue: aws_cdk.aws_sqs.Queue=None,
