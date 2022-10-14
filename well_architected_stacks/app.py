@@ -83,31 +83,44 @@ class WellArchitected(aws_cdk.App):
         )
 
     def api_step_functions(self):
-        well_architected_stacks.api_step_functions.ApiStepFunctions(
-            self, 'HttpApiStepFunctions',
+        # well_architected_stacks.api_step_functions.ApiStepFunctions(
+        #     self, 'HttpApiStepFunctions',
+        #     lambda_directory=self.lambda_directory,
+        #     create_http_api=True,
+        # )
+        # well_architected_stacks.api_step_functions.ApiStepFunctions(
+        #     self, 'RestApiStepFunctions',
+        #     lambda_directory=self.lambda_directory,
+        #     create_rest_api=True,
+        # )
+        well_architected_stacks.saga_step_function.SagaStepFunction(
+            self, 'HttpApiSagaStepFunction',
             lambda_directory=self.lambda_directory,
             create_http_api=True,
         )
-        well_architected_stacks.api_step_functions.ApiStepFunctions(
-            self, 'RestApiStepFunctions',
+        # well_architected_stacks.api_saga_step_function.SagaStepFunction(
+        #     self, 'RestApiSagaStepFunction',
+        #     lambda_directory=self.lambda_directory,
+        #     create_rest_api=True,
+        # )
+
+    def lambda_power_tuner(self):
+        well_architected_stacks.lambda_power_tuner.LambdaPowerTuner(
+            self, 'LambdaPowerTuner',
             lambda_directory=self.lambda_directory,
-            create_rest_api=True,
         )
+
 
     def create_well_architected_stacks(self):
         # self.api_lambda_dynamodb()
         # self.api_lambda_dynamodb_eventbridge()
         # self.api_lambda_eventbridge_lambda()
         # self.api_lambda_rds()
-        self.api_lambda_sqs_lambda_dynamodb()
-        return
+        # self.api_lambda_sqs_lambda_dynamodb()
         self.api_step_functions()
+        return
         self.lambda_power_tuner()
 
-        well_architected_stacks.lambda_power_tuner.LambdaPowerTuner(
-            self, 'LambdaPowerTuner',
-            lambda_directory=self.lambda_directory,
-        )
         well_architected_stacks.rest_api_dynamodb.RestApiDynamodb(
             self, 'RestApiDynamodb',
             partition_key='message',
@@ -126,16 +139,7 @@ class WellArchitected(aws_cdk.App):
             lambda_directory=self.lambda_directory,
             containers_directory='../containers',
         )
-        well_architected_stacks.saga_step_function.SagaStepFunction(
-            self, 'HttpApiSagaStepFunction',
-            lambda_directory=self.lambda_directory,
-            create_http_api=True,
-        )
-        well_architected_stacks.saga_step_function.SagaStepFunction(
-            self, 'RestApiSagaStepFunction',
-            lambda_directory=self.lambda_directory,
-            create_rest_api=True,
-        )
+
         simple_graphql_service.SimpleGraphQlService(
             self, 'SimpleGraphqlService',
             lambda_directory=self.lambda_directory,
