@@ -6,7 +6,7 @@ from . import dynamodb_table
 from . import well_architected_construct
 
 
-class ApiLambdaDynamodbConstruct(api_lambda.ApiLambdaConstruct):
+class ApiLambdaDynamodb(api_lambda.ApiLambda):
 
     def __init__(
         self, scope: constructs.Construct, id: str,
@@ -19,7 +19,7 @@ class ApiLambdaDynamodbConstruct(api_lambda.ApiLambdaConstruct):
             scope, id,
             **kwargs
         )
-        self.dynamodb_construct = dynamodb_table.DynamodbTableConstruct(
+        self.dynamodb_construct = dynamodb_table.DynamodbTable(
             self, 'DynamoDbTable',
             partition_key=partition_key,
             sort_key=sort_key,

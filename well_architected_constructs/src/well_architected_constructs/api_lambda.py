@@ -8,7 +8,7 @@ from . import lambda_function
 from . import well_architected_construct
 
 
-class ApiLambdaConstruct(well_architected_construct.Construct):
+class ApiLambda(well_architected_construct.WellArchitected):
 
     def __init__(
         self, scope: constructs.Construct, id: str,
@@ -36,7 +36,7 @@ class ApiLambdaConstruct(well_architected_construct.Construct):
             error_topic=error_topic,
             **kwargs
         )
-        self.lambda_construct = lambda_function.LambdaFunctionConstruct(
+        self.lambda_construct = lambda_function.LambdaFunction(
             self, 'LambdaFunction',
             concurrent_executions=concurrent_executions,
             duration=duration,

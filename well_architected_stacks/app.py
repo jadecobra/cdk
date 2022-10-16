@@ -12,7 +12,7 @@ class WellArchitected(aws_cdk.App):
         super().__init__(*args, **kwargs)
         self.lambda_directory = '../lambda_functions'
         self.create_well_architected_stacks()
-        # self.lambda_trilogy()
+        self.lambda_trilogy()
         # self.xray_tracer()
         # self.ecs()
         # self.in_progress()
@@ -83,26 +83,28 @@ class WellArchitected(aws_cdk.App):
         )
 
     def api_step_functions(self):
-        # well_architected_stacks.api_step_functions.ApiStepFunctions(
-        #     self, 'HttpApiStepFunctions',
-        #     lambda_directory=self.lambda_directory,
-        #     create_http_api=True,
-        # )
-        # well_architected_stacks.api_step_functions.ApiStepFunctions(
-        #     self, 'RestApiStepFunctions',
-        #     lambda_directory=self.lambda_directory,
-        #     create_rest_api=True,
-        # )
+        well_architected_stacks.api_step_functions.ApiStepFunctions(
+            self, 'HttpApiStepFunctions',
+            lambda_directory=self.lambda_directory,
+            create_http_api=True,
+        )
+        well_architected_stacks.api_step_functions.ApiStepFunctions(
+            self, 'RestApiStepFunctions',
+            lambda_directory=self.lambda_directory,
+            create_rest_api=True,
+        )
+
+    def api_saga_step_functions(self):
         well_architected_stacks.saga_step_function.SagaStepFunction(
             self, 'HttpApiSagaStepFunction',
             lambda_directory=self.lambda_directory,
             create_http_api=True,
         )
-        # well_architected_stacks.api_saga_step_function.SagaStepFunction(
-        #     self, 'RestApiSagaStepFunction',
-        #     lambda_directory=self.lambda_directory,
-        #     create_rest_api=True,
-        # )
+        well_architected_stacks.saga_step_function.SagaStepFunction(
+            self, 'RestApiSagaStepFunction',
+            lambda_directory=self.lambda_directory,
+            create_rest_api=True,
+        )
 
     def lambda_power_tuner(self):
         well_architected_stacks.lambda_power_tuner.LambdaPowerTuner(
@@ -117,6 +119,7 @@ class WellArchitected(aws_cdk.App):
         # self.api_lambda_eventbridge_lambda()
         # self.api_lambda_rds()
         # self.api_lambda_sqs_lambda_dynamodb()
+        # self.api_saga_step_functions() # Fix this. Do StepFunctions examples
         self.api_step_functions()
         return
         self.lambda_power_tuner()
@@ -153,9 +156,16 @@ class WellArchitected(aws_cdk.App):
 
     def lambda_trilogy(self):
         well_architected_stacks.lambda_trilogy.lambda_lith.LambdaLith(
-            self, "LambdaLith",
+            self, "HttpApiLambdaLith",
             function_name='lambda_lith',
             lambda_directory=self.lambda_directory,
+            create_http_api=True,
+        )
+        well_architected_stacks.lambda_trilogy.lambda_lith.LambdaLith(
+            self, "RestApiLambdaLith",
+            function_name='lambda_lith',
+            lambda_directory=self.lambda_directory,
+            create_rest_api=True,
         )
         well_architected_stacks.lambda_trilogy.lambda_trilogy.LambdaTrilogy(
             self, 'LambdaFat',

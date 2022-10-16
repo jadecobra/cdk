@@ -24,13 +24,20 @@ class LambdaTrilogy(well_architected_stack.Stack):
         multiply = 'multiply'
 
         adder = self.create_lambda_construct(add)
-
-        rest_api = self.create_rest_api(
+        adder = well_architected_constructs.api_lambda.ApiLambdaConstruct(
+            self, self.function_name,
+            handler_name='add',
             error_topic=self.error_topic,
-            lambda_function=adder,
+            lamdba_directory=self.lambda_directory,
+            create_http_api=self.create_http_api,
+            create_rest_api=self.create_rest_api,
         )
+        # rest_api = self.create_rest_api_construct(
+        #     error_topic=self.error_topic,
+        #     lambda_function=adder,
+        # )
 
-        http_api = self.create_http_api(self.error_topic)
+        # http_api = self.create_http_api_construct(self.error_topic)
 
         self.create_api_methods(
             http_api=http_api,
@@ -55,40 +62,48 @@ class LambdaTrilogy(well_architected_stack.Stack):
                 lambda_function=lambda_function,
             )
 
-    @staticmethod
-    def create_http_api_method(http_api=None, path=None, lambda_function=None):
-        return http_api.add_routes(
-            path=f'/{path}',
-            methods=[aws_cdk.aws_apigatewayv2_alpha.HttpMethod.GET],
-            integration=aws_cdk.aws_apigatewayv2_integrations_alpha.HttpLambdaIntegration(
-                f'HttpApi{path.title()}Integration',
-                handler=lambda_function
-            ),
-        )
+    # @staticmethod
+    # def create_http_api_method(http_api=None, path=None, lambda_function=None):
+    #     return http_api.add_routes(
+    #         path=f'/{path}',
+    #         methods=[aws_cdk.aws_apigatewayv2_alpha.HttpMethod.GET],
+    #         integration=aws_cdk.aws_apigatewayv2_integrations_alpha.HttpLambdaIntegration(
+    #             f'HttpApi{path.title()}Integration',
+    #             handler=lambda_function
+    #         ),
+    #     )
 
-    @staticmethod
-    def create_rest_api_method(rest_api=None, path=None, lambda_function=None):
-        return rest_api.root.resource_for_path(path).add_method(
-            'GET', aws_cdk.aws_apigateway.LambdaIntegration(lambda_function)
-        )
+    # @staticmethod
+    # def create_rest_api_method(rest_api=None, path=None, lambda_function=None):
+    #     return rest_api.root.resource_for_path(path).add_method(
+    #         'GET', aws_cdk.aws_apigateway.LambdaIntegration(lambda_function)
+    #     )
 
-    def create_rest_api(self, error_topic=None, lambda_function=None):
-        return well_architected_constructs.api_lambda.create_rest_api_lambda(
-            self,
-            error_topic=error_topic,
-            lambda_function=lambda_function,
-            proxy=False,
-        ).api
+    # def create_rest_api_construct(self, error_topic=None, lambda_function=None):
+    #     return well_architected_constructs.api_lambda.ApiLambdaConstruct(
+    #         self, 'ApiLambda',
+    #         error_topic=error_topic,
+    #         lambda_function=lambda_function,
+    #         create_rest_api=self.create_rest_api,
+    #         proxy=False,
+    #     ).api
 
-    def create_http_api(self, error_topic):
-        return well_architected_constructs.api.Api(
-            self, 'HttpApiGateway',
-            error_topic=error_topic,
-            api_gateway_service_role=False,
-            api=aws_cdk.aws_apigatewayv2_alpha.HttpApi(
-                self, 'HttpApi',
-            )
-        ).api
+    #     return well_architected_constructs.api_lambda.create_rest_api_lambda(
+    #         self,
+    #         error_topic=error_topic,
+    #         lambda_function=lambda_function,
+    #         proxy=False,
+    #     ).api
+
+    # def create_http_api_construct(self, error_topic):
+    #     return well_architected_constructs.api.Api(
+    #         self, 'HttpApiGateway',
+    #         error_topic=error_topic,
+    #         api_gateway_service_role=False,
+    #         api=aws_cdk.aws_apigatewayv2_alpha.HttpApi(
+    #             self, 'HttpApi',
+    #         )
+    #     ).api
 
     def create_lambda_construct(self, handler_name):
         return well_architected_constructs.lambda_function.LambdaFunctionConstruct(

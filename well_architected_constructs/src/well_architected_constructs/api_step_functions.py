@@ -7,7 +7,7 @@ from . import api
 from . import well_architected_construct
 
 
-class ApiStepFunctionsConstruct(well_architected_construct.Construct):
+class ApiStepFunctions(well_architected_construct.WellArchitected):
 
     def __init__(
         self, scope: constructs.Construct, id: str,

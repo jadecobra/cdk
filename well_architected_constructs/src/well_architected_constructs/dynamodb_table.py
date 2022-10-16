@@ -4,7 +4,7 @@ import constructs
 from . import well_architected_construct
 
 
-class DynamodbTableConstruct(well_architected_construct.Construct):
+class DynamodbTable(well_architected_construct.WellArchitected):
 
     def __init__(
         self, scope: constructs.Construct, id: str,

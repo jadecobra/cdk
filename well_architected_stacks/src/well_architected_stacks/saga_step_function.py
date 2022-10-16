@@ -84,9 +84,59 @@ class SagaStepFunction(well_architected_stack.Stack):
             lambda_function=payment_refund_function.lambda_function,
             next_step=cancel_flight_reservation
         )
-        av
 
-        self.step_api_functions = well_architected_constructs.api_step_functions.ApiStepFunctionsConstruct(
+
+        # self.state_machine = aws_cdk.aws_stepfunctions.StateMachine(
+        #     self, 'StateMachine',
+        #     definition=(
+        #         aws_cdk.aws_stepfunctions.Chain
+        #             .start(
+        #                 self.create_step_function_task_with_error_handler(
+        #                     task_name='ReserveHotel',
+        #                     lambda_function=hotel_reservation_function.lambda_function,
+        #                     error_handler=cancel_hotel_reservation,
+        #                 )
+        #             )
+        #             .next(
+        #                 self.create_step_function_task_with_error_handler(
+        #                     task_name='ReserveFlight',
+        #                     lambda_function=flight_reservation_function.lambda_function,
+        #                     error_handler=cancel_flight_reservation,
+        #                 )
+        #             )
+        #             .next(
+        #                 self.create_step_function_task_with_error_handler(
+        #                     task_name='TakePayment',
+        #                     lambda_function=payment_processing_function.lambda_function,
+        #                     error_handler=refund_payment,
+        #                 )
+        #             )
+        #             .next(
+        #                 self.create_step_function_task_with_error_handler(
+        #                     task_name='ConfirmHotelBooking',
+        #                     lambda_function=hotel_confirmation_function.lambda_function,
+        #                     error_handler=refund_payment,
+        #                 )
+        #             )
+        #             .next(
+        #                 self.create_step_function_task_with_error_handler(
+        #                     task_name='ConfirmFlight',
+        #                     lambda_function=flight_confirmation_function.lambda_function,
+        #                     error_handler=refund_payment,
+        #                 )
+        #             )
+        #             .next(
+        #                 aws_cdk.aws_stepfunctions.Succeed(
+        #                     self, 'We have made your booking!'
+        #                 )
+        #             )
+        #     ),
+        #     timeout=aws_cdk.Duration.minutes(5),
+        #     tracing_enabled=True,
+        #     state_machine_type=aws_cdk.aws_stepfunctions.StateMachineType.EXPRESS,
+        # )
+
+        self.step_api_function = well_architected_constructs.api_step_functions.ApiStepFunctionsConstruct(
             self, 'ApiStepFunctions',
             error_topic=self.error_topic,
             create_http_api=self.create_http_api,
@@ -133,35 +183,33 @@ class SagaStepFunction(well_architected_stack.Stack):
                             self, 'We have made your booking!'
                         )
                     )
-
             )
         )
 
 
+        self.state_machine = self.step_api_function.state_machine
+        self.saga_lambda = self.create_lambda_construct(
+            function_name='saga_lambda',
+            environment_variables={
+                'statemachine_arn': self.state_machine.state_machine_arn
+            },
+        )
 
-        # self.state_machine = self.step_api_functions.state_machine
-        # self.saga_lambda = self.create_lambda_construct(
-        #     function_name='saga_lambda',
-        #     environment_variables={
-        #         'statemachine_arn': self.state_machine.state_machine_arn
-        #     },
-        # )
-
-        # self.state_machine.grant_start_execution(self.saga_lambda.lambda_function)
-
-        # self.create_cloudwatch_dashboard(
-        #     *self.dynamodb_construct.create_cloudwatch_widgets(),
-        #     *self.saga_lambda.create_cloudwatch_widgets(),
-        #     *self.api_step_functions.api_construct.create_cloudwatch_widgets(),
-        #     *flight_reservation_function.create_cloudwatch_widgets(),
-        #     *flight_confirmation_function.create_cloudwatch_widgets(),
-        #     *flight_cancellation_function.create_cloudwatch_widgets(),
-        #     *hotel_reservation_function.create_cloudwatch_widgets(),
-        #     *hotel_confirmation_function.create_cloudwatch_widgets(),
-        #     *hotel_cancellation_function.create_cloudwatch_widgets(),
-        #     *payment_processing_function.create_cloudwatch_widgets(),
-        #     *payment_refund_function.create_cloudwatch_widgets(),
-        # )
+        self.state_machine.grant_start_execution(self.saga_lambda.lambda_function)
+        flight_reservation_function.lambda_function.grant_invoke(self.state_machine.role)
+        self.create_cloudwatch_dashboard(
+            *self.dynamodb_construct.create_cloudwatch_widgets(),
+            *self.saga_lambda.create_cloudwatch_widgets(),
+            *self.step_api_function.api_construct.create_cloudwatch_widgets(),
+            *flight_reservation_function.create_cloudwatch_widgets(),
+            *flight_confirmation_function.create_cloudwatch_widgets(),
+            *flight_cancellation_function.create_cloudwatch_widgets(),
+            *hotel_reservation_function.create_cloudwatch_widgets(),
+            *hotel_confirmation_function.create_cloudwatch_widgets(),
+            *hotel_cancellation_function.create_cloudwatch_widgets(),
+            *payment_processing_function.create_cloudwatch_widgets(),
+            *payment_refund_function.create_cloudwatch_widgets(),
+        )
 
     def create_stepfunctions_task(
         self, task_name=None, lambda_function=None

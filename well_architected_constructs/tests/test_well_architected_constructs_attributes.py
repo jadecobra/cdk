@@ -8,7 +8,7 @@ class TestConstructAttributes(TestWellArchitectedConstructAttributes):
 
     def test_dynamodb_table(self):
         self.assert_attributes_equal(
-            well_architected_constructs.dynamodb_table.DynamodbTableConstruct,
+            well_architected_constructs.dynamodb_table.DynamodbTable,
             [
                 *self.well_architected_construct_attributes(),
                 'create_latency_widget',
@@ -25,7 +25,7 @@ class TestConstructAttributes(TestWellArchitectedConstructAttributes):
 
     def test_lambda_function(self):
         self.assert_attributes_equal(
-            well_architected_constructs.lambda_function.LambdaFunctionConstruct,
+            well_architected_constructs.lambda_function.LambdaFunction,
             [
                 *self.well_architected_construct_attributes(),
                 'add_event_bridge_rule',
@@ -49,7 +49,7 @@ class TestConstructAttributes(TestWellArchitectedConstructAttributes):
 
     def test_sns_lambda(self):
         self.assert_attributes_equal(
-            well_architected_constructs.sns_lambda.SnsLambdaConstruct,
+            well_architected_constructs.sns_lambda.SnsLambda,
             list(self.well_architected_construct_attributes()),
         )
 

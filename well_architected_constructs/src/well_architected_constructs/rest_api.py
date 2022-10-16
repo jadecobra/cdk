@@ -5,7 +5,7 @@ import json
 from . import api
 
 
-class RestApiConstruct(api.Api):
+class RestApi(api.Api):
 
     def __init__(
         self, scope: constructs.Construct, id: str,

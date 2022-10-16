@@ -5,7 +5,7 @@ from . import lambda_function
 from . import well_architected_construct
 
 
-class SnsLambdaConstruct(well_architected_construct.Construct):
+class SnsLambda(well_architected_construct.WellArchitected):
 
     def __init__(
         self, scope: constructs.Construct, id: str,

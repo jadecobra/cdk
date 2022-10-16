@@ -27,7 +27,7 @@ class TestApiConstructAttributes(TestWellArchitectedConstructAttributes):
 
     def test_api_lambda_dynamodb(self):
         self.assert_attributes_equal(
-            src.well_architected_constructs.api_lambda_dynamodb.ApiLambdaDynamodbConstruct,
+            src.well_architected_constructs.api_lambda_dynamodb.ApiLambdaDynamodb,
             [
                 *self.well_architected_construct_attributes(),
                 'create_api',
@@ -38,7 +38,7 @@ class TestApiConstructAttributes(TestWellArchitectedConstructAttributes):
 
     def test_http_api_step_functions(self):
         self.assert_attributes_equal(
-            src.well_architected_constructs.api_step_functions.ApiStepFunctionsConstruct,
+            src.well_architected_constructs.api_step_functions.ApiStepFunctions,
             [
                 *self.well_architected_construct_attributes(),
                 'create_api',
@@ -54,7 +54,7 @@ class TestApiConstructAttributes(TestWellArchitectedConstructAttributes):
 
     def test_rest_api(self):
         self.assert_attributes_equal(
-            src.well_architected_constructs.rest_api.RestApiConstruct,
+            src.well_architected_constructs.rest_api.RestApi,
             [
                 *self.well_architected_construct_attributes(),
                 'add_api_gateway_metric',
@@ -89,7 +89,7 @@ class TestApiConstructAttributes(TestWellArchitectedConstructAttributes):
 
     def test_rest_api_sns(self):
         self.assert_attributes_equal(
-            src.well_architected_constructs.rest_api_sns.RestApiSnsConstruct,
+            src.well_architected_constructs.rest_api_sns.RestApiSns,
             [
                 *self.well_architected_construct_attributes(),
                 'add_api_gateway_metric',

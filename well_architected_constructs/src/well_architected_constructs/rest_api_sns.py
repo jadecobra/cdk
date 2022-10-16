@@ -4,7 +4,7 @@ import constructs
 from . import rest_api
 
 
-class RestApiSnsConstruct(rest_api.RestApiConstruct):
+class RestApiSns(rest_api.RestApi):
 
     def __init__(
         self, scope: constructs.Construct, id: str,

@@ -6,7 +6,7 @@ import os
 from . import well_architected_construct
 
 
-class LambdaFunctionConstruct(well_architected_construct.Construct):
+class LambdaFunction(well_architected_construct.WellArchitected):
 
     def __init__(
         self, scope: constructs.Construct, id: str,
@@ -207,7 +207,7 @@ def create_python_lambda_function(
         sns_trigger_topic=None,
         vpc=None,
     ):
-    return LambdaFunctionConstruct(
+    return LambdaFunction(
         stack, function_name,
         concurrent_executions=concurrent_executions,
         duration=duration,

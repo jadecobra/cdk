@@ -5,7 +5,7 @@ import constructs
 from . import well_architected_construct
 
 
-class Api(well_architected_construct.Construct):
+class Api(well_architected_construct.WellArchitected):
 
     def __init__(
         self,scope: constructs.Construct, id: str,
