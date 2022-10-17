@@ -14,6 +14,7 @@ class ApiLambda(well_architected_construct.WellArchitected):
         self, scope: constructs.Construct, id: str,
         create_http_api=False,
         create_rest_api=False,
+        proxy=True,
         duration=60,
         error_topic=None,
         function_name=None,
@@ -60,6 +61,7 @@ class ApiLambda(well_architected_construct.WellArchitected):
         self.api_construct = self.create_api(
             lambda_function=self.lambda_function,
             error_topic=error_topic,
+            proxy=proxy,
         )
 
     def create_http_api_method(self, path=None, lambda_function=None):
@@ -72,7 +74,7 @@ class ApiLambda(well_architected_construct.WellArchitected):
             ),
         )
 
-    def create_rest_api_method(self, path=None, lambda_fucntion=None):
+    def create_rest_api_method(self, path=None, lambda_function=None):
         return self.api_construct.api.root.resource_for_path(path).add_method(
             'GET', aws_cdk.aws_apigateway.LambdaIntegration(lambda_function)
         )
@@ -81,10 +83,10 @@ class ApiLambda(well_architected_construct.WellArchitected):
         if self.create_http_api:
             return self.create_http_api_method(path=path, lambda_function=lambda_function)
         if self.create_rest_api:
-            return self.create_rest_api_method(path=path, lambda_fucntion=lambda_function)
+            return self.create_rest_api_method(path=path, lambda_function=lambda_function)
 
     def create_api(self,
-        lambda_function=None, error_topic=None
+        lambda_function=None, error_topic=None, proxy=True,
     ):
         if self.create_http_api:
             return self.create_http_api_lambda(
@@ -94,7 +96,8 @@ class ApiLambda(well_architected_construct.WellArchitected):
         if self.create_rest_api:
             return self.create_rest_api_lambda(
                 lambda_function=lambda_function,
-                error_topic=error_topic
+                error_topic=error_topic,
+                proxy=proxy
             )
 
     def create_http_api_lambda(

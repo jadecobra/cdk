@@ -21,7 +21,6 @@ class LambdaTrilogy(well_architected_stack.Stack):
         subtract = 'subtract'
         multiply = 'multiply'
 
-        adder = self.create_lambda_construct(add)
         api_lambda_construct = well_architected_constructs.api_lambda.ApiLambda(
             self, self.function_name,
             function_name=function_name,
@@ -30,90 +29,29 @@ class LambdaTrilogy(well_architected_stack.Stack):
             lambda_directory=self.lambda_directory,
             create_http_api=self.create_http_api,
             create_rest_api=self.create_rest_api,
+            proxy=False,
         )
 
-        for path, lambda_function in (
+        subtracter = self.create_lambda_construct(subtract)
+        multiplier = self.create_lambda_construct(multiply)
+
+        for path, lambda_construct in (
             (
-                (add, adder),
-                (subtract, self.create_lambda_construct(subtract)),
-                (multiply, self.create_lambda_construct(multiply)),
+                (add, api_lambda_construct),
+                (subtract, subtracter),
+                (multiply, multiplier),
             )
         ):
             api_lambda_construct.add_method(
-                path=path, lambda_function=lambda_function
-            )
-        # rest_api = self.create_rest_api_construct(
-        #     error_topic=self.error_topic,
-        #     lambda_function=adder,
-        # )
-
-        # http_api = self.create_http_api_construct(self.error_topic)
-
-        # self.create_api_methods(
-        #     http_api=http_api,
-        #     rest_api=rest_api,
-        #     lambda_functions=(
-        #         (add, adder),
-        #         (subtract, self.create_lambda_construct(subtract)),
-        #         (multiply, self.create_lambda_construct(multiply)),
-        #     ),
-        # )
-
-    def create_api_methods(self, lambda_functions=None, rest_api=None, http_api=None):
-        for path, lambda_function in lambda_functions:
-            self.create_rest_api_method(
-                rest_api=rest_api,
-                path=path,
-                lambda_function=lambda_function,
-            )
-            self.create_http_api_method(
-                http_api=http_api,
-                path=path,
-                lambda_function=lambda_function,
+                path=path, lambda_function=lambda_construct.lambda_function
             )
 
-    # @staticmethod
-    # def create_http_api_method(http_api=None, path=None, lambda_function=None):
-    #     return http_api.add_routes(
-    #         path=f'/{path}',
-    #         methods=[aws_cdk.aws_apigatewayv2_alpha.HttpMethod.GET],
-    #         integration=aws_cdk.aws_apigatewayv2_integrations_alpha.HttpLambdaIntegration(
-    #             f'HttpApi{path.title()}Integration',
-    #             handler=lambda_function
-    #         ),
-    #     )
-
-    # @staticmethod
-    # def create_rest_api_method(rest_api=None, path=None, lambda_function=None):
-    #     return rest_api.root.resource_for_path(path).add_method(
-    #         'GET', aws_cdk.aws_apigateway.LambdaIntegration(lambda_function)
-    #     )
-
-    # def create_rest_api_construct(self, error_topic=None, lambda_function=None):
-    #     return well_architected_constructs.api_lambda.ApiLambda(
-    #         self, 'ApiLambda',
-    #         error_topic=error_topic,
-    #         lambda_function=lambda_function,
-    #         create_rest_api=self.create_rest_api,
-    #         proxy=False,
-    #     ).api
-
-    #     return well_architected_constructs.api_lambda.create_rest_api_lambda(
-    #         self,
-    #         error_topic=error_topic,
-    #         lambda_function=lambda_function,
-    #         proxy=False,
-    #     ).api
-
-    # def create_http_api_construct(self, error_topic):
-    #     return well_architected_constructs.api.Api(
-    #         self, 'HttpApiGateway',
-    #         error_topic=error_topic,
-    #         api_gateway_service_role=False,
-    #         api=aws_cdk.aws_apigatewayv2_alpha.HttpApi(
-    #             self, 'HttpApi',
-    #         )
-    #     ).api
+        self.create_cloudwatch_dashboard(
+            *api_lambda_construct.api_construct.create_cloudwatch_widgets(),
+            *api_lambda_construct.lambda_construct.create_cloudwatch_widgets(),
+            *subtracter.create_cloudwatch_widgets(),
+            *multiplier.create_cloudwatch_widgets(),
+        )
 
     def create_lambda_construct(self, handler_name):
         return well_architected_constructs.lambda_function.LambdaFunction(
@@ -122,4 +60,4 @@ class LambdaTrilogy(well_architected_stack.Stack):
             function_name=self.function_name,
             lambda_directory=self.lambda_directory,
             handler_name=handler_name,
-        ).lambda_function
+        )
