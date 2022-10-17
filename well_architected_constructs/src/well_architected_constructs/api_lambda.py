@@ -36,6 +36,8 @@ class ApiLambda(well_architected_construct.WellArchitected):
             error_topic=error_topic,
             **kwargs
         )
+        self.create_rest_api = create_rest_api
+        self.create_http_api = create_http_api
         self.lambda_construct = lambda_function.LambdaFunction(
             self, 'LambdaFunction',
             concurrent_executions=concurrent_executions,
@@ -56,22 +58,40 @@ class ApiLambda(well_architected_construct.WellArchitected):
         )
         self.lambda_function = self.lambda_construct.lambda_function
         self.api_construct = self.create_api(
-            create_http_api=create_http_api,
-            create_rest_api=create_rest_api,
             lambda_function=self.lambda_function,
             error_topic=error_topic,
         )
 
+    def create_http_api_method(self, path=None, lambda_function=None):
+        return self.api_construct.api.add_routes(
+            path=f'/{path}',
+            methods=[aws_cdk.aws_apigatewayv2_alpha.HttpMethod.GET],
+            integration=aws_cdk.aws_apigatewayv2_integrations_alpha.HttpLambdaIntegration(
+                f'HttpApi{path.title()}Integration',
+                handler=lambda_function
+            ),
+        )
+
+    def create_rest_api_method(self, path=None, lambda_fucntion=None):
+        return self.api_construct.api.root.resource_for_path(path).add_method(
+            'GET', aws_cdk.aws_apigateway.LambdaIntegration(lambda_function)
+        )
+
+    def add_method(self, path=None, lambda_function=None):
+        if self.create_http_api:
+            return self.create_http_api_method(path=path, lambda_function=lambda_function)
+        if self.create_rest_api:
+            return self.create_rest_api_method(path=path, lambda_fucntion=lambda_function)
+
     def create_api(self,
-        create_http_api=None, create_rest_api=None,
         lambda_function=None, error_topic=None
     ):
-        if create_http_api:
+        if self.create_http_api:
             return self.create_http_api_lambda(
                 lambda_function=lambda_function,
                 error_topic=error_topic
             )
-        if create_rest_api:
+        if self.create_rest_api:
             return self.create_rest_api_lambda(
                 lambda_function=lambda_function,
                 error_topic=error_topic

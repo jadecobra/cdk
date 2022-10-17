@@ -44,7 +44,7 @@ class ApiLambdaDynamodbEventBridgeLambda(well_architected_stack.Stack):
         )
 
     def create_lambda_dynamodb(self, create_http_api=None, create_rest_api=None):
-        return well_architected_constructs.api_lambda_dynamodb.ApiLambdaDynamodbConstruct(
+        return well_architected_constructs.api_lambda_dynamodb.ApiLambdaDynamodb(
             self, 'ApiLambdaDynamoDb',
             function_name='webservice',
             partition_key="RequestID",
@@ -135,7 +135,7 @@ class ApiLambdaDynamodbEventBridgeLambda(well_architected_stack.Stack):
         )
 
     def create_dynamodb_table(self):
-        return well_architected_constructs.dynamodb_table.DynamodbTableConstruct(
+        return well_architected_constructs.dynamodb_table.DynamodbTable(
             self, 'CircuitBreaker',
             error_topic=self.error_topic,
             partition_key="RequestID",

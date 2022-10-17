@@ -124,7 +124,7 @@ class S3SqsLambdaEcsEventBridgeLambdaDynamodb(well_architected_stack.Stack):
         event_bridge_detail_status=None,
         sqs_trigger_queue=None,
     ):
-        return well_architected_constructs.lambda_function.LambdaFunctionConstruct(
+        return well_architected_constructs.lambda_function.LambdaFunction(
             self, function_name,
             function_name=function_name,
             concurrent_executions=concurrent_executions,
@@ -163,7 +163,7 @@ class S3SqsLambdaEcsEventBridgeLambdaDynamodb(well_architected_stack.Stack):
         )
 
     def create_dynamodb_table(self):
-        return well_architected_constructs.dynamodb_table.DynamodbTableConstruct(
+        return well_architected_constructs.dynamodb_table.DynamodbTable(
             self, 'TransformedData',
             error_topic=self.error_topic,
             partition_key="id",

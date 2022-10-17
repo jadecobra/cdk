@@ -39,7 +39,7 @@ class SnsLambdaSns(well_architected_stack.Stack):
         self, construct_id=None, function_name=None, sns_topic=None,
         environment_variables=None,
     ):
-        return well_architected_constructs.sns_lambda.SnsLambdaConstruct(
+        return well_architected_constructs.sns_lambda.SnsLambda(
             self, construct_id,
             function_name=function_name,
             lambda_directory=self.lambda_directory,

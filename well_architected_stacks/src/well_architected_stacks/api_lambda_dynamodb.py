@@ -15,7 +15,7 @@ class ApiLambdaDynamodbStack(well_architected_stack.Stack):
     ) -> None:
         super().__init__(scope, id, **kwargs)
         self.create_error_topic()
-        self.api_lambda_dynamodb = well_architected_constructs.api_lambda_dynamodb.ApiLambdaDynamodbConstruct(
+        self.api_lambda_dynamodb = well_architected_constructs.api_lambda_dynamodb.ApiLambdaDynamodb(
             self, 'ApiLambdaDynamodb',
             lambda_directory=self.lambda_directory,
             function_name=function_name,
@@ -24,7 +24,7 @@ class ApiLambdaDynamodbStack(well_architected_stack.Stack):
             create_http_api=self.create_http_api,
             create_rest_api=self.create_rest_api,
         )
-        
+
         self.create_cloudwatch_dashboard(
             *self.api_lambda_dynamodb.api_construct.create_cloudwatch_widgets(),
             *self.api_lambda_dynamodb.lambda_construct.create_cloudwatch_widgets(),

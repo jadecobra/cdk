@@ -4,9 +4,7 @@ import aws_cdk.aws_apigatewayv2_alpha
 import aws_cdk.aws_apigatewayv2_integrations_alpha
 
 import well_architected_constructs
-# import well_architected_stack
 
-# from . import well_architected_constructs
 from .. import well_architected_stack
 
 
@@ -24,14 +22,26 @@ class LambdaTrilogy(well_architected_stack.Stack):
         multiply = 'multiply'
 
         adder = self.create_lambda_construct(add)
-        adder = well_architected_constructs.api_lambda.ApiLambdaConstruct(
+        api_lambda_construct = well_architected_constructs.api_lambda.ApiLambda(
             self, self.function_name,
+            function_name=function_name,
             handler_name='add',
             error_topic=self.error_topic,
-            lamdba_directory=self.lambda_directory,
+            lambda_directory=self.lambda_directory,
             create_http_api=self.create_http_api,
             create_rest_api=self.create_rest_api,
         )
+
+        for path, lambda_function in (
+            (
+                (add, adder),
+                (subtract, self.create_lambda_construct(subtract)),
+                (multiply, self.create_lambda_construct(multiply)),
+            )
+        ):
+            api_lambda_construct.add_method(
+                path=path, lambda_function=lambda_function
+            )
         # rest_api = self.create_rest_api_construct(
         #     error_topic=self.error_topic,
         #     lambda_function=adder,
@@ -39,15 +49,15 @@ class LambdaTrilogy(well_architected_stack.Stack):
 
         # http_api = self.create_http_api_construct(self.error_topic)
 
-        self.create_api_methods(
-            http_api=http_api,
-            rest_api=rest_api,
-            lambda_functions=(
-                (add, adder),
-                (subtract, self.create_lambda_construct(subtract)),
-                (multiply, self.create_lambda_construct(multiply)),
-            ),
-        )
+        # self.create_api_methods(
+        #     http_api=http_api,
+        #     rest_api=rest_api,
+        #     lambda_functions=(
+        #         (add, adder),
+        #         (subtract, self.create_lambda_construct(subtract)),
+        #         (multiply, self.create_lambda_construct(multiply)),
+        #     ),
+        # )
 
     def create_api_methods(self, lambda_functions=None, rest_api=None, http_api=None):
         for path, lambda_function in lambda_functions:
@@ -80,7 +90,7 @@ class LambdaTrilogy(well_architected_stack.Stack):
     #     )
 
     # def create_rest_api_construct(self, error_topic=None, lambda_function=None):
-    #     return well_architected_constructs.api_lambda.ApiLambdaConstruct(
+    #     return well_architected_constructs.api_lambda.ApiLambda(
     #         self, 'ApiLambda',
     #         error_topic=error_topic,
     #         lambda_function=lambda_function,
@@ -106,7 +116,7 @@ class LambdaTrilogy(well_architected_stack.Stack):
     #     ).api
 
     def create_lambda_construct(self, handler_name):
-        return well_architected_constructs.lambda_function.LambdaFunctionConstruct(
+        return well_architected_constructs.lambda_function.LambdaFunction(
             self, handler_name,
             error_topic=self.error_topic,
             function_name=self.function_name,

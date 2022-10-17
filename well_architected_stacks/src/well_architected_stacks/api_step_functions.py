@@ -6,7 +6,7 @@ import well_architected_constructs
 from . import well_architected_stack
 
 
-class ApiStepFunctions(well_architected_stack.Stack):
+class ApiStepFunctionsStack(well_architected_stack.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
@@ -14,7 +14,7 @@ class ApiStepFunctions(well_architected_stack.Stack):
         self.result_path = '$.resultPath'
         self.lambda_construct = self.create_lambda_construct()
 
-        self.api_step_functions = well_architected_constructs.api_step_functions.ApiStepFunctionsConstruct(
+        self.api_step_functions = well_architected_constructs.api_step_functions.ApiStepFunctions(
             self, 'ApiStepFunctions',
             create_http_api=self.create_http_api,
             create_rest_api=self.create_rest_api,

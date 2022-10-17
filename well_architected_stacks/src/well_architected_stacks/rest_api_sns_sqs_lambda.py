@@ -27,7 +27,7 @@ class RestApiSnsSqsLambda(well_architected_stack.Stack):
                 sqs_queue=sqs_queue,
             )
 
-        well_architected_constructs.rest_api_sns.RestApiSnsConstruct(
+        well_architected_constructs.rest_api_sns.RestApiSns(
             self, 'RestApiSns',
             error_topic=self.error_topic,
             sns_topic_arn=sns_topic.topic_arn,
@@ -74,7 +74,7 @@ class RestApiSnsSqsLambda(well_architected_stack.Stack):
             )
 
     def create_lambda_construct(self, function_name):
-        return well_architected_constructs.lambda_function.LambdaFunctionConstruct(
+        return well_architected_constructs.lambda_function.LambdaFunction(
             self, function_name,
             error_topic=self.error_topic,
             lambda_directory=self.lambda_directory,

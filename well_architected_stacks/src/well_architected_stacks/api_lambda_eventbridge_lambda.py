@@ -50,7 +50,7 @@ class ApiLambdaEventBridgeLambda(well_architected_stack.Stack):
             ),
         )
 
-        self.atm_producer = well_architected_constructs.api_lambda.ApiLambdaConstruct(
+        self.atm_producer = well_architected_constructs.api_lambda.ApiLambda(
             self, 'AtmProducer',
             function_name='atm_producer',
             create_http_api=create_http_api,
@@ -90,7 +90,7 @@ class ApiLambdaEventBridgeLambda(well_architected_stack.Stack):
         self, handler_name='handler', function_name=None,
         event_bridge_rule:aws_cdk.aws_events.Rule=None,
     ):
-        return well_architected_constructs.lambda_function.LambdaFunctionConstruct(
+        return well_architected_constructs.lambda_function.LambdaFunction(
             self, handler_name,
             handler_name=handler_name,
             function_name=function_name,

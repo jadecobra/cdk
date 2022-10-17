@@ -83,12 +83,12 @@ class WellArchitected(aws_cdk.App):
         )
 
     def api_step_functions(self):
-        well_architected_stacks.api_step_functions.ApiStepFunctions(
+        well_architected_stacks.api_step_functions.ApiStepFunctionsStack(
             self, 'HttpApiStepFunctions',
             lambda_directory=self.lambda_directory,
             create_http_api=True,
         )
-        well_architected_stacks.api_step_functions.ApiStepFunctions(
+        well_architected_stacks.api_step_functions.ApiStepFunctionsStack(
             self, 'RestApiStepFunctions',
             lambda_directory=self.lambda_directory,
             create_rest_api=True,
@@ -161,6 +161,7 @@ class WellArchitected(aws_cdk.App):
             lambda_directory=self.lambda_directory,
             create_http_api=True,
         )
+        return
         well_architected_stacks.lambda_trilogy.lambda_lith.LambdaLith(
             self, "RestApiLambdaLith",
             function_name='lambda_lith',
@@ -179,6 +180,7 @@ class WellArchitected(aws_cdk.App):
         )
 
     def xray_tracer(self):
+        return
         xray_tracer_sns_topic = well_architected_stacks.sns_topic.SnsTopic(
             self, 'XRayTracerSnsTopic', display_name='XRayTracerSnsTopic',
         )

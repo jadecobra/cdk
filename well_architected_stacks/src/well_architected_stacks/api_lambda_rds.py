@@ -32,7 +32,7 @@ class ApiLambdaRds(well_architected_stack.Stack):
             vpc=self.vpc,
         )
 
-        self.rds_lambda_construct = well_architected_constructs.api_lambda.ApiLambdaConstruct(
+        self.rds_lambda_construct = well_architected_constructs.api_lambda.ApiLambda(
             self, 'RdsLambda',
             function_name='rds',
             lambda_directory=self.lambda_directory,

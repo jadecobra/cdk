@@ -16,7 +16,7 @@ class SnsLambda(well_architected_stack.Stack):
     ) -> None:
         super().__init__(scope, id, **kwargs)
 
-        well_architected_constructs.sns_lambda.SnsLambdaConstruct(
+        well_architected_constructs.sns_lambda.SnsLambda(
             self, "SnsLambda",
             function_name=lambda_function_name,
             lambda_directory=self.lambda_directory,

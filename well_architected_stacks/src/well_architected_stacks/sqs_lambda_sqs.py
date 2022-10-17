@@ -29,7 +29,7 @@ class SqsLambdaSqs(well_architected_stack.Stack):
         self, sqs_queue: aws_cdk.aws_sqs.Queue=None,
         sns_topic: aws_cdk.aws_sns.Topic=None,
     ):
-        sqs_publisher = well_architected_constructs.sns_lambda.SnsLambdaConstruct(
+        sqs_publisher = well_architected_constructs.sns_lambda.SnsLambda(
             self, 'SqsPublisher',
             function_name='sqs_publisher',
             lambda_directory=self.lambda_directory,

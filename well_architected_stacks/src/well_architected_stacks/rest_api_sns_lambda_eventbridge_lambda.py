@@ -21,7 +21,7 @@ class RestApiSnsLambdaEventBridgeLambda(well_architected_stack.Stack):
             sns_topic=sns_topic,
         )
 
-        well_architected_constructs.rest_api_sns.RestApiSnsConstruct(
+        well_architected_constructs.rest_api_sns.RestApiSns(
             self, 'RestApiSns',
             error_topic=self.error_topic,
             method='GET',
@@ -103,7 +103,7 @@ class RestApiSnsLambdaEventBridgeLambda(well_architected_stack.Stack):
         retry_attempts=2,
         sns_trigger_topic=None,
     ):
-        return well_architected_constructs.lambda_function.LambdaFunctionConstruct(
+        return well_architected_constructs.lambda_function.LambdaFunction(
             self, function_name,
             retry_attempts=retry_attempts,
             error_topic=self.error_topic,

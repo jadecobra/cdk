@@ -19,7 +19,7 @@ class ApiLambdaSqsLambdaDynamodb(well_architected_stack.Stack):
             visibility_timeout=aws_cdk.Duration.seconds(300)
         )
 
-        sqs_subscriber = well_architected_constructs.api_lambda_dynamodb.ApiLambdaDynamodbConstruct(
+        sqs_subscriber = well_architected_constructs.api_lambda_dynamodb.ApiLambdaDynamodb(
             self, 'LambdaDynamodb',
             function_name='api_lambda_sqs_lambda_dynamodb_subscriber',
             partition_key="id",

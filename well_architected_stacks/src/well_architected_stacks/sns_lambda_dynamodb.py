@@ -16,13 +16,13 @@ class SnsLambdaDynamodb(well_architected_stack.Stack):
     ) -> None:
         super().__init__(scope, id, **kwargs)
 
-        self.dynamodb_table = well_architected_constructs.dynamodb_table.DynamodbTableConstruct(
+        self.dynamodb_table = well_architected_constructs.dynamodb_table.DynamodbTable(
             self, "DynamoDbTable",
             partition_key=partition_key,
             error_topic=self.error_topic,
         ).dynamodb_table
 
-        self.lambda_function = well_architected_constructs.sns_lambda.SnsLambdaConstruct(
+        self.lambda_function = well_architected_constructs.sns_lambda.SnsLambda(
             self, 'SnsLambda',
             function_name=lambda_function_name,
             sns_topic=sns_topic,

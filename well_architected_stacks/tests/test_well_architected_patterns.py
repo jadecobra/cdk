@@ -21,9 +21,10 @@ class TestWellArchitectedPatterns(jadecobra.toolkit.TestCase):
             'RestApiStepFunctions',
             # 'HttpApiSagaStepFunction',
             # 'RestApiSagaStepFunction',
-            'LambdaFat',
             'HttpApiLambdaLith',
             'RestApiLambdaLith',
+            'HttpApiLambdaFat',
+            'RestApiLambdaFat',
             'LambdaPowerTuner',
             'LambdaSinglePurpose',
             'RestApiDynamodb', # Can we do these with an HTTP API

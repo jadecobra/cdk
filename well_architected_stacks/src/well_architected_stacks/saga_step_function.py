@@ -11,7 +11,7 @@ class SagaStepFunction(well_architected_stack.Stack):
         super().__init__(scope, id, **kwargs)
         self.create_error_topic()
 
-        self.dynamodb_construct = well_architected_constructs.dynamodb_table.DynamodbTableConstruct(
+        self.dynamodb_construct = well_architected_constructs.dynamodb_table.DynamodbTable(
             self, 'DynamodbTable',
             partition_key='booking_id',
             sort_key='booking_type',
@@ -136,7 +136,7 @@ class SagaStepFunction(well_architected_stack.Stack):
         #     state_machine_type=aws_cdk.aws_stepfunctions.StateMachineType.EXPRESS,
         # )
 
-        self.step_api_function = well_architected_constructs.api_step_functions.ApiStepFunctionsConstruct(
+        self.step_api_function = well_architected_constructs.api_step_functions.ApiStepFunctions(
             self, 'ApiStepFunctions',
             error_topic=self.error_topic,
             create_http_api=self.create_http_api,
@@ -246,7 +246,7 @@ class SagaStepFunction(well_architected_stack.Stack):
     def create_lambda_construct(
         self, function_name=None, environment_variables=None,
     ):
-        return well_architected_constructs.lambda_function.LambdaFunctionConstruct(
+        return well_architected_constructs.lambda_function.LambdaFunction(
             self, f'{function_name}Lambda',
             function_name=function_name,
             error_topic=self.error_topic,

@@ -18,7 +18,7 @@ class RestApiDynamodb(well_architected_stack.Stack):
 
         self.dynamodb_table_construct = self.create_dynamodb_table(partition_key)
         self.dynamodb_table = self.dynamodb_table_construct.dynamodb_table
-        self.lambda_construct =well_architected_constructs.lambda_function.LambdaFunctionConstruct(
+        self.lambda_construct =well_architected_constructs.lambda_function.LambdaFunction(
             self, 'LambdaFunction',
             function_name='subscribe',
             error_topic=self.error_topic,
@@ -47,7 +47,7 @@ class RestApiDynamodb(well_architected_stack.Stack):
         )
 
     def create_rest_api_construct(self, error_topic):
-        return well_architected_constructs.rest_api.RestApiConstruct(
+        return well_architected_constructs.rest_api.RestApi(
             self, 'RestApiDynamodb',
             error_topic=error_topic,
         )
@@ -76,7 +76,7 @@ class RestApiDynamodb(well_architected_stack.Stack):
         })
 
     def create_dynamodb_table(self, partition_key):
-        return well_architected_constructs.dynamodb_table.DynamodbTableConstruct(
+        return well_architected_constructs.dynamodb_table.DynamodbTable(
             self, 'DynamoDbTable',
             stream=aws_cdk.aws_dynamodb.StreamViewType.NEW_IMAGE,
             error_topic=self.error_topic,

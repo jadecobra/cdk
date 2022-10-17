@@ -15,7 +15,7 @@ class RestApiSnsStack(well_architected_stack.Stack):
     ) -> None:
         super().__init__(scope, id, **kwargs)
 
-        well_architected_constructs.rest_api_sns.RestApiSnsConstruct(
+        well_architected_constructs.rest_api_sns.RestApiSns(
             self, 'RestApiSns',
             message="$util.urlEncode($context.path)",
             error_topic=error_topic,
