@@ -19,5 +19,5 @@ from . import sns_lambda_dynamodb
 from . import sns_lambda_sns
 from . import sns_topic
 from . import sqs_lambda_sqs
-from . import waf_api_lambda_dynamodb
+from . import waf_rest_api_lambda_dynamodb
 from . import simple_graphql_service

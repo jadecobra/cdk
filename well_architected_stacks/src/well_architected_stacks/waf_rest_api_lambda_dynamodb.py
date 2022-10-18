@@ -20,11 +20,11 @@ class WafApiLambdaDynamodb(api_lambda_dynamodb.ApiLambdaDynamodbStack):
         )
         self.create_error_topic()
         self.name = self.camel_to_snake(id)
-        self.rest_api = self.api_lambda_dynamodb.create_rest_api_lambda()
+        self.rest_api = self.api_lambda_dynamodb.api_construct.api
         self.web_application_firewall = well_architected_constructs.web_application_firewall.WebApplicationFirewall(
             self, 'WebApplicationFirewall',
             error_topic=self.error_topic,
-            target_arn= f"arn:aws:apigateway:region::/restapis/{self.rest_api.api_id}/stages/{self.rest_api.api.deployment_stage.stage_name}",
+            target_arn= f"arn:aws:apigateway:region::/restapis/{self.rest_api.rest_api_id}/stages/{self.rest_api.deployment_stage.stage_name}",
         )
 
     @staticmethod

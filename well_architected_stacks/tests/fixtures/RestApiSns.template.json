@@ -50,7 +50,7 @@
       "UpdateReplacePolicy": "Retain",
       "DeletionPolicy": "Retain"
     },
-    "RestApiDeployment180EC503a4fc54c19fa4495c47bc14cf859f5454": {
+    "RestApiDeployment180EC50303d8713cf6c31fe90ef4d378756c7b6a": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -72,7 +72,7 @@
           "Ref": "RestApi0C43BF4B"
         },
         "DeploymentId": {
-          "Ref": "RestApiDeployment180EC503a4fc54c19fa4495c47bc14cf859f5454"
+          "Ref": "RestApiDeployment180EC50303d8713cf6c31fe90ef4d378756c7b6a"
         },
         "MethodSettings": [
           {
@@ -140,7 +140,18 @@
             "integration.request.header.Content-Type": "'application/x-www-form-urlencoded'"
           },
           "RequestTemplates": {
-            "application/json": "Action=Publish&Version=2010-03-31&Message=$util.urlEncode($context.path)&TargetArn=$util.urlEncode('None')"
+            "application/json": {
+              "Fn::Join": [
+                "",
+                [
+                  "Action=Publish&Version=2010-03-31&Message=$util.urlEncode($context.path)&TargetArn=$util.urlEncode('",
+                  {
+                    "Fn::ImportValue": "XRayTracerSnsTopic:ExportsOutputRefXRayTracerSnsTopicC2928ED9A114427E"
+                  },
+                  "')"
+                ]
+              ]
+            }
           },
           "Type": "AWS",
           "Uri": "arn:aws:apigateway:us-east-1:sns:path//"
@@ -379,7 +390,7 @@
         "TreatMissingData": "notBreaching"
       }
     },
-    "RestApiSnsCloudWatchDashBoard1B0D7822": {
+    "CloudWatchDashBoard043C60B6": {
       "Type": "AWS::CloudWatch::Dashboard",
       "Properties": {
         "DashboardBody": {

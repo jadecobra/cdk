@@ -31,7 +31,7 @@ class TestWellArchitectedConstructs(jadecobra.toolkit.TestCase):
                 'sns_lambda_sns.py',
                 'sns_topic.py',
                 'sqs_lambda_sqs.py',
-                'waf_api_lambda_dynamodb.py',
+                'waf_rest_api_lambda_dynamodb.py',
                 'well_architected_app.py',
                 'well_architected_stack.py'
             ]
@@ -70,7 +70,7 @@ class TestWellArchitectedConstructs(jadecobra.toolkit.TestCase):
                 'sns_lambda_sns',
                 'sns_topic',
                 'sqs_lambda_sqs',
-                'waf_api_lambda_dynamodb',
+                'waf_rest_api_lambda_dynamodb',
                 'well_architected_stack'
             ]
         )

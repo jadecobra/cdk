@@ -26,8 +26,8 @@ class TestWellArchitectedPatterns(jadecobra.toolkit.TestCase):
             'LambdaPowerTuner',
             'HttpApiLambdaSinglePurpose',
             'RestApiLambdaSinglePurpose',
-            # 'RestApiDynamodb', # Can we do these with an HTTP API
-            # 'RestApiSns',
+            'RestApiDynamodb',
+            'RestApiSns',
             # 'RestApiSnsLambdaEventBridgeLambda',
             # 'RestApiSnsSqsLambda',
             # 'RestApiSns',
@@ -37,9 +37,9 @@ class TestWellArchitectedPatterns(jadecobra.toolkit.TestCase):
             # 'SnsLambdaSns',
             # 'SnsLambdaDynamodb',
             # 'SqsLambdaSqs',
-            # 'WafApiLambdaDynamodb',
             # 'HttpApiSagaStepFunction',
             # 'RestApiSagaStepFunction',
+            'WafRestApiLambdaDynamodb',
         )
 
     def test_well_architected_cdk_patterns(self):

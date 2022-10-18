@@ -13,7 +13,7 @@ class WellArchitected(aws_cdk.App):
         self.lambda_directory = '../lambda_functions'
         self.create_well_architected_stacks()
         self.lambda_trilogy()
-        # self.xray_tracer()
+        self.xray_tracer()
         # self.ecs()
         # self.in_progress()
 
@@ -113,17 +113,7 @@ class WellArchitected(aws_cdk.App):
         )
 
 
-    def create_well_architected_stacks(self):
-        self.api_lambda_dynamodb()
-        self.api_lambda_dynamodb_eventbridge()
-        self.api_lambda_eventbridge_lambda()
-        self.api_lambda_rds()
-        self.api_lambda_sqs_lambda_dynamodb()
-        # self.api_saga_step_functions() # Fix this. Do StepFunctions examples
-        self.api_step_functions()
-        return
-        self.lambda_power_tuner()
-
+    def rest_api_stacks(self):
         well_architected_stacks.rest_api_dynamodb.RestApiDynamodb(
             self, 'RestApiDynamodb',
             partition_key='message',
@@ -137,6 +127,8 @@ class WellArchitected(aws_cdk.App):
             self, 'RestApiSnsSqsLambda',
             lambda_directory=self.lambda_directory,
         )
+
+    def misc(self):
         well_architected_stacks.s3_sqs_lambda_ecs_eventbridge_lambda_dynamodb.S3SqsLambdaEcsEventBridgeLambdaDynamodb(
             self, 'S3SqsLambdaEcsEventBridgeLambdaDynamodb',
             lambda_directory=self.lambda_directory,
@@ -147,12 +139,26 @@ class WellArchitected(aws_cdk.App):
             self, 'SimpleGraphqlService',
             lambda_directory=self.lambda_directory,
         )
-        well_architected_stacks.waf_api_lambda_dynamodb.WafApiLambdaDynamodb(
-            self, 'WafApiLambdaDynamodb',
+        well_architected_stacks.waf_rest_api_lambda_dynamodb.WafApiLambdaDynamodb(
+            self, 'WafRestApiLambdaDynamodb',
             lambda_directory=self.lambda_directory,
             function_name='hit_counter',
             partition_key='path',
+            create_rest_api=True,
         )
+
+    def create_well_architected_stacks(self):
+        self.api_lambda_dynamodb()
+        self.api_lambda_dynamodb_eventbridge()
+        self.api_lambda_eventbridge_lambda()
+        self.api_lambda_rds()
+        self.api_lambda_sqs_lambda_dynamodb()
+        self.api_step_functions()
+        self.lambda_power_tuner()
+        self.rest_api_stacks()
+        self.misc()
+        # self.api_saga_step_functions() # Fix this. Do StepFunctions examples
+        return
 
     def lambda_trilogy(self):
         well_architected_stacks.lambda_trilogy.lambda_lith.LambdaLith(
@@ -193,7 +199,6 @@ class WellArchitected(aws_cdk.App):
         )
 
     def xray_tracer(self):
-        return
         xray_tracer_sns_topic = well_architected_stacks.sns_topic.SnsTopic(
             self, 'XRayTracerSnsTopic', display_name='XRayTracerSnsTopic',
         )
@@ -202,39 +207,39 @@ class WellArchitected(aws_cdk.App):
         )
         well_architected_stacks.rest_api_sns.RestApiSnsStack(
             self, 'RestApiSns',
-            sns_topic=xray_tracer_sns_topic.sns_topic,
+            sns_topic_arn=xray_tracer_sns_topic.sns_topic.topic_arn,
             error_topic=xray_tracer_error_topic.sns_topic,
             lambda_directory=self.lambda_directory,
         )
-        well_architected_stacks.sns_lambda_sns.SnsLambdaSns(
-            self, 'SnsLambdaSns',
-            sns_publisher_trigger=xray_tracer_sns_topic.sns_topic,
-            error_topic=xray_tracer_error_topic.sns_topic,
-            lambda_directory=self.lambda_directory,
-            publisher_lambda_name='sns_publisher',
-            subscriber_lambda_name='sns_subscriber',
-        )
-        well_architected_stacks.sqs_lambda_sqs.SqsLambdaSqs(
-            self, 'SqsLambdaSqs',
-            sns_topic=xray_tracer_sns_topic.sns_topic,
-            error_topic=xray_tracer_error_topic.sns_topic,
-            lambda_directory=self.lambda_directory,
-        )
-        well_architected_stacks.sns_lambda.SnsLambda(
-            self, 'SnsLambda',
-            sns_topic=xray_tracer_sns_topic.sns_topic,
-            error_topic=xray_tracer_error_topic.sns_topic,
-            lambda_directory=self.lambda_directory,
-            lambda_function_name="sns_lambda",
-        )
-        well_architected_stacks.sns_lambda_dynamodb.SnsLambdaDynamodb(
-            self, 'SnsLambdaDynamodb',
-            partition_key="path",
-            lambda_function_name="hit_counter",
-            sns_topic=xray_tracer_sns_topic.sns_topic,
-            error_topic=xray_tracer_error_topic.sns_topic,
-            lambda_directory=self.lambda_directory,
-        )
+        # well_architected_stacks.sns_lambda_sns.SnsLambdaSns(
+        #     self, 'SnsLambdaSns',
+        #     sns_publisher_trigger=xray_tracer_sns_topic.sns_topic,
+        #     error_topic=xray_tracer_error_topic.sns_topic,
+        #     lambda_directory=self.lambda_directory,
+        #     publisher_lambda_name='sns_publisher',
+        #     subscriber_lambda_name='sns_subscriber',
+        # )
+        # well_architected_stacks.sqs_lambda_sqs.SqsLambdaSqs(
+        #     self, 'SqsLambdaSqs',
+        #     sns_topic_arn=xray_tracer_sns_topic.sns_topic.topic_arn,
+        #     error_topic=xray_tracer_error_topic.sns_topic,
+        #     lambda_directory=self.lambda_directory,
+        # )
+        # well_architected_stacks.sns_lambda.SnsLambda(
+        #     self, 'SnsLambda',
+        #     sns_topic_arn=xray_tracer_sns_topic.sns_topic.topic_arn,
+        #     error_topic=xray_tracer_error_topic.sns_topic,
+        #     lambda_directory=self.lambda_directory,
+        #     lambda_function_name="sns_lambda",
+        # )
+        # well_architected_stacks.sns_lambda_dynamodb.SnsLambdaDynamodb(
+        #     self, 'SnsLambdaDynamodb',
+        #     partition_key="path",
+        #     lambda_function_name="hit_counter",
+        #     sns_topic_arn=xray_tracer_sns_topic.sns_topic.topic_arn,
+        #     error_topic=xray_tracer_error_topic.sns_topic,
+        #     lambda_directory=self.lambda_directory,
+        # )
 
     def ecs(self):
         return
@@ -272,11 +277,11 @@ class WellArchitected(aws_cdk.App):
 WellArchitected().synth()
 
 # TODO
-# Use Inheritance for ApiLambda stacks
-# Add RDS metrics to ApiLambdaRds
-# Add StateMachine Metrics
-# Can we just sum up invocations over time and error rates?
-# Break up WellArchitected
+# Add Metrics/Alarms for
+# - RDS
+# - StateMachine
+# - WAF
+# ApiSagaStepFunctions
+# Error Rate over time - Total Errors / Total Invocations
 # StateMachine examples - https://docs.aws.amazon.com/step-functions/latest/dg/create-sample-projects.html
-# Read Lambda Powertools docs
-# Add EventPattern as LambdaFunction input
+# Add Lambda Powertools layer
