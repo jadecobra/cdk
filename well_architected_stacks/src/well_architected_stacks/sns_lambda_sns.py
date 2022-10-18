@@ -36,8 +36,8 @@ class SnsLambdaSns(well_architected_stack.Stack):
         self.sns_topic.grant_publish(self.publisher.lambda_function)
 
         self.create_cloudwatch_dashboard(
-            *self.subscriber.create_cloudwatch_widgets(),
-            *self.publisher.create_cloudwatch_widgets()
+            *self.subscriber.lambda_construct.create_cloudwatch_widgets(),
+            *self.publisher.lambda_construct.create_cloudwatch_widgets(),
         )
 
 
