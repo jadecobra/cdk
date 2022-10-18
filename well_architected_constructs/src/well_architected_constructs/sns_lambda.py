@@ -22,15 +22,16 @@ class SnsLambda(well_architected_construct.WellArchitected):
             **kwargs
         )
 
-        self.lambda_function = lambda_function.create_python_lambda_function(
+        self.lambda_construct = lambda_function.create_python_lambda_function(
             scope,
             function_name=function_name,
             error_topic=error_topic,
             lambda_directory=lambda_directory,
             environment_variables=environment_variables,
         )
+        self.lambda_function = self.lambda_construct.lambda_function
         sns_topic.add_subscription(
             aws_cdk.aws_sns_subscriptions.LambdaSubscription(
-                self.lambda_function.lambda_function
+                self.lambda_function
             )
         )

@@ -211,14 +211,14 @@ class WellArchitected(aws_cdk.App):
             error_topic=xray_tracer_error_topic.sns_topic,
             lambda_directory=self.lambda_directory,
         )
-        # well_architected_stacks.sns_lambda_sns.SnsLambdaSns(
-        #     self, 'SnsLambdaSns',
-        #     sns_publisher_trigger=xray_tracer_sns_topic.sns_topic,
-        #     error_topic=xray_tracer_error_topic.sns_topic,
-        #     lambda_directory=self.lambda_directory,
-        #     publisher_lambda_name='sns_publisher',
-        #     subscriber_lambda_name='sns_subscriber',
-        # )
+        well_architected_stacks.sns_lambda_sns.SnsLambdaSns(
+            self, 'SnsLambdaSns',
+            sns_publisher_trigger=xray_tracer_sns_topic.sns_topic,
+            error_topic=xray_tracer_error_topic.sns_topic,
+            lambda_directory=self.lambda_directory,
+            publisher_lambda_name='sns_publisher',
+            subscriber_lambda_name='sns_subscriber',
+        )
         # well_architected_stacks.sqs_lambda_sqs.SqsLambdaSqs(
         #     self, 'SqsLambdaSqs',
         #     sns_topic_arn=xray_tracer_sns_topic.sns_topic.topic_arn,

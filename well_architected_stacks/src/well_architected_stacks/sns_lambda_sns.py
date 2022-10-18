@@ -16,24 +16,30 @@ class SnsLambdaSns(well_architected_stack.Stack):
     ) -> None:
         super().__init__(scope, id, **kwargs)
 
-        topic = self.create_sns_topic('SnsTopic')
+        self.sns_topic = self.create_sns_topic('SnsTopic')
 
-        self.create_lambda_construct(
+        self.subscriber = self.create_lambda_construct(
             construct_id='SnsSubscriber',
             function_name=subscriber_lambda_name,
-            sns_topic=topic,
+            sns_topic=self.sns_topic,
         )
 
-        sns_publisher = self.create_lambda_construct(
+        self.publisher = self.create_lambda_construct(
             construct_id='SnsPublisher',
             function_name=publisher_lambda_name,
             sns_topic=sns_publisher_trigger,
             environment_variables={
-                'TOPIC_ARN': topic.topic_arn,
+                'TOPIC_ARN': self.sns_topic.topic_arn,
             }
         )
 
-        topic.grant_publish(sns_publisher)
+        self.sns_topic.grant_publish(self.publisher.lambda_function)
+
+        self.create_cloudwatch_dashboard(
+            *self.subscriber.create_cloudwatch_widgets(),
+            *self.publisher.create_cloudwatch_widgets()
+        )
+
 
     def create_lambda_construct(
         self, construct_id=None, function_name=None, sns_topic=None,
@@ -46,4 +52,4 @@ class SnsLambdaSns(well_architected_stack.Stack):
             sns_topic=sns_topic,
             error_topic=self.error_topic,
             environment_variables=environment_variables,
-        ).lambda_function
+        )
