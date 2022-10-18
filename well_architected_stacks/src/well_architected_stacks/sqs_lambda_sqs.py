@@ -17,19 +17,23 @@ class SqsLambdaSqs(well_architected_stack.Stack):
             self, 'SqsQueue',
             visibility_timeout=aws_cdk.Duration.seconds(300)
         )
-        self.create_sqs_publishing_lambda(
+        self.publisher = self.create_sqs_publishing_lambda(
             sqs_queue=self.sqs_queue,
             sns_topic=sns_topic,
         )
-        self.create_sqs_subscribing_lambda(
+        self.subscriber = self.create_sqs_subscribing_lambda(
             sqs_queue=self.sqs_queue,
+        )
+        self.create_cloudwatch_dashboard(
+            *self.publisher.create_cloudwatch_widgets(),
+            *self.subscriber.create_cloudwatch_widgets(),
         )
 
     def create_sqs_publishing_lambda(
         self, sqs_queue: aws_cdk.aws_sqs.Queue=None,
         sns_topic: aws_cdk.aws_sns.Topic=None,
     ):
-        sqs_publisher = well_architected_constructs.sns_lambda.SnsLambda(
+        sns_lambda = well_architected_constructs.sns_lambda.SnsLambda(
             self, 'SqsPublisher',
             function_name='sqs_publisher',
             lambda_directory=self.lambda_directory,
@@ -38,22 +42,22 @@ class SqsLambdaSqs(well_architected_stack.Stack):
             environment_variables={
                 'SQS_URL': sqs_queue.queue_url
             }
-        ).lambda_function
-        sqs_queue.grant_send_messages(sqs_publisher)
-        return sqs_publisher
+        )
+        sqs_queue.grant_send_messages(sns_lambda.lambda_function)
+        return sns_lambda.lambda_construct
 
     def create_sqs_subscribing_lambda(
         self, sqs_queue: aws_cdk.aws_sqs.Queue=None,
     ):
-        sqs_subscriber = well_architected_constructs.lambda_function.create_python_lambda_function(
+        lambda_construct = well_architected_constructs.lambda_function.create_python_lambda_function(
             self, function_name="sqs_subscriber",
             lambda_directory=self.lambda_directory,
             error_topic=self.error_topic,
         )
-        sqs_subscriber.add_event_source(
+        lambda_construct.lambda_function.add_event_source(
             aws_cdk.aws_lambda_event_sources.SqsEventSource(
                 sqs_queue
             )
         )
-        sqs_queue.grant_consume_messages(sqs_subscriber)
-        return sqs_subscriber
+        sqs_queue.grant_consume_messages(lambda_construct.lambda_function)
+        return lambda_construct
