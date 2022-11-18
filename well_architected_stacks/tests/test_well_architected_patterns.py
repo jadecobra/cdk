@@ -28,7 +28,7 @@ class TestWellArchitectedPatterns(jadecobra.toolkit.TestCase):
             'RestApiLambdaSinglePurpose',
             'RestApiDynamodb',
             'RestApiSns',
-            # 'RestApiSnsLambdaEventBridgeLambda',
+            'RestApiSnsLambdaEventBridgeLambda',
             # 'RestApiSnsSqsLambda',
             # 'RestApiSns',
             # 'S3SqsLambdaEcsEventBridgeLambdaDynamodb',
