@@ -93,6 +93,7 @@ class WellArchitected(aws_cdk.App):
         )
 
     def api_saga_step_functions(self):
+        return
         well_architected_stacks.saga_step_function.SagaStepFunction(
             self, 'HttpApiSagaStepFunction',
             lambda_directory=self.lambda_directory,
@@ -151,11 +152,11 @@ class WellArchitected(aws_cdk.App):
         self.api_lambda_eventbridge_lambda()
         self.api_lambda_rds()
         self.api_lambda_sqs_lambda_dynamodb()
+        self.api_saga_step_functions() # Fix this. Do StepFunctions examples
         self.api_step_functions()
         self.lambda_power_tuner()
         self.rest_api_stacks()
         self.misc()
-        # self.api_saga_step_functions() # Fix this. Do StepFunctions examples
         return
 
     def lambda_trilogy(self):
@@ -275,6 +276,7 @@ class WellArchitected(aws_cdk.App):
 WellArchitected().synth()
 
 # TODO
+# Add other CDK Patterns
 # Add Metrics/Alarms for
 # - RDS
 # - StateMachine

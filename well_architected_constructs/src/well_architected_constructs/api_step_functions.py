@@ -13,6 +13,7 @@ class ApiStepFunctions(well_architected_construct.WellArchitected):
         self, scope: constructs.Construct, id: str,
         error_topic=None,
         state_machine_definition=None,
+        state_machine=None,
         create_http_api=False,
         create_rest_api=False,
         **kwargs,
@@ -22,9 +23,10 @@ class ApiStepFunctions(well_architected_construct.WellArchitected):
             error_topic=error_topic,
             **kwargs,
         )
-        self.state_machine = self.create_express_state_machine(
-            state_machine_definition
-        )
+        # self.state_machine = self.create_express_state_machine(
+        #     state_machine_definition
+        # )
+        self.state_machine = state_machine
         self.api_gateway_service_role = self.create_api_gateway_service_role(
             self.state_machine.state_machine_arn
         )

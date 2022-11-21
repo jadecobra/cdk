@@ -13,16 +13,22 @@ class ApiStepFunctionsStack(well_architected_stack.Stack):
 
         self.result_path = '$.resultPath'
         self.lambda_construct = self.create_lambda_construct()
-
+        self.state_machine = aws_cdk.aws_stepfunctions.StateMachine(
+            self, 'StateMachine',
+            definition=self.create_state_machine_definition(
+                self.lambda_construct.lambda_function
+            ),
+            timeout=aws_cdk.Duration.minutes(5),
+            tracing_enabled=True,
+            state_machine_type=aws_cdk.aws_stepfunctions.StateMachineType.EXPRESS
+        )
         self.api_step_functions = well_architected_constructs.api_step_functions.ApiStepFunctions(
             self, 'ApiStepFunctions',
             create_http_api=self.create_http_api,
             create_rest_api=self.create_rest_api,
-            state_machine_definition=self.state_machine_definition(
-                self.lambda_construct.lambda_function
-            ),
+            state_machine=self.state_machine
         )
-        self.state_machine = self.api_step_functions.state_machine
+
         self.create_cloudwatch_dashboard(
             *self.lambda_construct.create_cloudwatch_widgets(),
             *self.api_step_functions.api_construct.create_cloudwatch_widgets(),
@@ -67,7 +73,7 @@ class ApiStepFunctionsStack(well_architected_stack.Stack):
             )
         )
 
-    def state_machine_definition(self, lambda_function):
+    def create_state_machine_definition(self, lambda_function):
         return (
             aws_cdk.aws_stepfunctions
                 .Chain

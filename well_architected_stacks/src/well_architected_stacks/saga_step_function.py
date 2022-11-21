@@ -86,62 +86,9 @@ class SagaStepFunction(well_architected_stack.Stack):
         )
 
 
-        # self.state_machine = aws_cdk.aws_stepfunctions.StateMachine(
-        #     self, 'StateMachine',
-        #     definition=(
-        #         aws_cdk.aws_stepfunctions.Chain
-        #             .start(
-        #                 self.create_step_function_task_with_error_handler(
-        #                     task_name='ReserveHotel',
-        #                     lambda_function=hotel_reservation_function.lambda_function,
-        #                     error_handler=cancel_hotel_reservation,
-        #                 )
-        #             )
-        #             .next(
-        #                 self.create_step_function_task_with_error_handler(
-        #                     task_name='ReserveFlight',
-        #                     lambda_function=flight_reservation_function.lambda_function,
-        #                     error_handler=cancel_flight_reservation,
-        #                 )
-        #             )
-        #             .next(
-        #                 self.create_step_function_task_with_error_handler(
-        #                     task_name='TakePayment',
-        #                     lambda_function=payment_processing_function.lambda_function,
-        #                     error_handler=refund_payment,
-        #                 )
-        #             )
-        #             .next(
-        #                 self.create_step_function_task_with_error_handler(
-        #                     task_name='ConfirmHotelBooking',
-        #                     lambda_function=hotel_confirmation_function.lambda_function,
-        #                     error_handler=refund_payment,
-        #                 )
-        #             )
-        #             .next(
-        #                 self.create_step_function_task_with_error_handler(
-        #                     task_name='ConfirmFlight',
-        #                     lambda_function=flight_confirmation_function.lambda_function,
-        #                     error_handler=refund_payment,
-        #                 )
-        #             )
-        #             .next(
-        #                 aws_cdk.aws_stepfunctions.Succeed(
-        #                     self, 'We have made your booking!'
-        #                 )
-        #             )
-        #     ),
-        #     timeout=aws_cdk.Duration.minutes(5),
-        #     tracing_enabled=True,
-        #     state_machine_type=aws_cdk.aws_stepfunctions.StateMachineType.EXPRESS,
-        # )
-
-        self.step_api_function = well_architected_constructs.api_step_functions.ApiStepFunctions(
-            self, 'ApiStepFunctions',
-            error_topic=self.error_topic,
-            create_http_api=self.create_http_api,
-            create_rest_api=self.create_rest_api,
-            state_machine_definition=(
+        self.state_machine = aws_cdk.aws_stepfunctions.StateMachine(
+            self, 'StateMachine',
+            definition=(
                 aws_cdk.aws_stepfunctions.Chain
                     .start(
                         self.create_step_function_task_with_error_handler(
@@ -183,11 +130,71 @@ class SagaStepFunction(well_architected_stack.Stack):
                             self, 'We have made your booking!'
                         )
                     )
-            )
+            ),
+            timeout=aws_cdk.Duration.minutes(5),
+            tracing_enabled=True,
+            state_machine_type=aws_cdk.aws_stepfunctions.StateMachineType.EXPRESS,
         )
 
+        # self.step_api_function = well_architected_constructs.api_step_functions.ApiStepFunctions(
+        #     self, 'ApiStepFunctions',
+        #     error_topic=self.error_topic,
+        #     create_http_api=self.create_http_api,
+        #     create_rest_api=self.create_rest_api,
+        #     state_machine_definition=(
+        #         aws_cdk.aws_stepfunctions.Chain
+        #             .start(
+        #                 self.create_step_function_task_with_error_handler(
+        #                     task_name='ReserveHotel',
+        #                     lambda_function=hotel_reservation_function.lambda_function,
+        #                     error_handler=cancel_hotel_reservation,
+        #                 )
+        #             )
+        #             .next(
+        #                 self.create_step_function_task_with_error_handler(
+        #                     task_name='ReserveFlight',
+        #                     lambda_function=flight_reservation_function.lambda_function,
+        #                     error_handler=cancel_flight_reservation,
+        #                 )
+        #             )
+        #             .next(
+        #                 self.create_step_function_task_with_error_handler(
+        #                     task_name='TakePayment',
+        #                     lambda_function=payment_processing_function.lambda_function,
+        #                     error_handler=refund_payment,
+        #                 )
+        #             )
+        #             .next(
+        #                 self.create_step_function_task_with_error_handler(
+        #                     task_name='ConfirmHotelBooking',
+        #                     lambda_function=hotel_confirmation_function.lambda_function,
+        #                     error_handler=refund_payment,
+        #                 )
+        #             )
+        #             .next(
+        #                 self.create_step_function_task_with_error_handler(
+        #                     task_name='ConfirmFlight',
+        #                     lambda_function=flight_confirmation_function.lambda_function,
+        #                     error_handler=refund_payment,
+        #                 )
+        #             )
+        #             .next(
+        #                 aws_cdk.aws_stepfunctions.Succeed(
+        #                     self, 'We have made your booking!'
+        #                 )
+        #             )
+        #     )
+        # )
 
-        self.state_machine = self.step_api_function.state_machine
+        # self.state_machine = self.step_api_function.state_machine
+
+        self.step_api_function = well_architected_constructs.api_step_functions.ApiStepFunctions(
+            self, 'ApiStepFunctions',
+            error_topic=self.error_topic,
+            create_http_api=self.create_http_api,
+            create_rest_api=self.create_rest_api,
+            state_machine=self.state_machine,
+        )
         self.saga_lambda = self.create_lambda_construct(
             function_name='saga_lambda',
             environment_variables={

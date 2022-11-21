@@ -318,7 +318,7 @@
         "TreatMissingData": "notBreaching"
       }
     },
-    "ApiStepFunctionsStateMachineRoleBA2B1415": {
+    "StateMachineRoleB840431D": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -343,7 +343,7 @@
         }
       }
     },
-    "ApiStepFunctionsStateMachineRoleDefaultPolicy748B3642": {
+    "StateMachineRoleDefaultPolicyDF1E6607": {
       "Type": "AWS::IAM::Policy",
       "Properties": {
         "PolicyDocument": {
@@ -384,19 +384,19 @@
           ],
           "Version": "2012-10-17"
         },
-        "PolicyName": "ApiStepFunctionsStateMachineRoleDefaultPolicy748B3642",
+        "PolicyName": "StateMachineRoleDefaultPolicyDF1E6607",
         "Roles": [
           {
-            "Ref": "ApiStepFunctionsStateMachineRoleBA2B1415"
+            "Ref": "StateMachineRoleB840431D"
           }
         ]
       }
     },
-    "ApiStepFunctionsStateMachineB69E4E15": {
+    "StateMachine2E01A3A5": {
       "Type": "AWS::StepFunctions::StateMachine",
       "Properties": {
         "RoleArn": {
-          "Fn::GetAtt": ["ApiStepFunctionsStateMachineRoleBA2B1415", "Arn"]
+          "Fn::GetAtt": ["StateMachineRoleB840431D", "Arn"]
         },
         "DefinitionString": {
           "Fn::Join": [
@@ -406,7 +406,7 @@
               {
                 "Fn::GetAtt": ["lambdafunctionLambdaFunction099DEFEA", "Arn"]
               },
-              "\"},\"isValid?\":{\"Type\":\"Choice\",\"Choices\":[{\"Variable\":\"$.resultPath.isValid\",\"BooleanEquals\":true,\"Next\":\"Failed\"}],\"Default\":\"Success\"},\"Success\":{\"Type\":\"Succeed\",\"OutputPath\":\"$.resultPath\"},\"Failed\":{\"Type\":\"Fail\",\"Error\":\"Error\",\"Cause\":\"Excpetion\"}}}"
+              "\"},\"isValid?\":{\"Type\":\"Choice\",\"Choices\":[{\"Variable\":\"$.resultPath.isValid\",\"BooleanEquals\":true,\"Next\":\"Failed\"}],\"Default\":\"Success\"},\"Success\":{\"Type\":\"Succeed\",\"OutputPath\":\"$.resultPath\"},\"Failed\":{\"Type\":\"Fail\",\"Error\":\"Error\",\"Cause\":\"Excpetion\"}},\"TimeoutSeconds\":300}"
             ]
           ]
         },
@@ -416,8 +416,8 @@
         }
       },
       "DependsOn": [
-        "ApiStepFunctionsStateMachineRoleDefaultPolicy748B3642",
-        "ApiStepFunctionsStateMachineRoleBA2B1415"
+        "StateMachineRoleDefaultPolicyDF1E6607",
+        "StateMachineRoleB840431D"
       ]
     },
     "ApiStepFunctionsStateMachineApiGatewayIamServiceRole05D249AF": {
@@ -443,7 +443,7 @@
                   "Action": "states:StartSyncExecution",
                   "Effect": "Allow",
                   "Resource": {
-                    "Ref": "ApiStepFunctionsStateMachineB69E4E15"
+                    "Ref": "StateMachine2E01A3A5"
                   }
                 }
               ],
@@ -619,7 +619,7 @@
         "RequestParameters": {
           "Input": "$request.body",
           "StateMachineArn": {
-            "Ref": "ApiStepFunctionsStateMachineB69E4E15"
+            "Ref": "StateMachine2E01A3A5"
           }
         },
         "TimeoutInMillis": 10000
