@@ -107,67 +107,6 @@
     "TreatMissingData": "notBreaching"
    }
   },
-  "TransformedDataCloudWatchDashBoardBB415568": {
-   "Type": "AWS::CloudWatch::Dashboard",
-   "Properties": {
-    "DashboardBody": {
-     "Fn::Join": [
-      "",
-      [
-       "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"dynamodb_latency\",\"region\":\"",
-       {
-        "Ref": "AWS::Region"
-       },
-       "\",\"stacked\":true,\"metrics\":[[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"GetItem\",\"TableName\",\"",
-       {
-        "Ref": "TransformedData0F179200"
-       },
-       "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"UpdateItem\",\"TableName\",\"",
-       {
-        "Ref": "TransformedData0F179200"
-       },
-       "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"PutItem\",\"TableName\",\"",
-       {
-        "Ref": "TransformedData0F179200"
-       },
-       "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"DeleteItem\",\"TableName\",\"",
-       {
-        "Ref": "TransformedData0F179200"
-       },
-       "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"Query\",\"TableName\",\"",
-       {
-        "Ref": "TransformedData0F179200"
-       },
-       "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"dynamodb_consumed_read_write_units\",\"region\":\"",
-       {
-        "Ref": "AWS::Region"
-       },
-       "\",\"stacked\":false,\"metrics\":[[\"AWS/DynamoDB\",\"ConsumedReadCapacityUnits\",\"TableName\",\"",
-       {
-        "Ref": "TransformedData0F179200"
-       },
-       "\"],[\"AWS/DynamoDB\",\"ConsumedWriteCapacityUnits\",\"TableName\",\"",
-       {
-        "Ref": "TransformedData0F179200"
-       },
-       "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"dynamodb_throttles\",\"region\":\"",
-       {
-        "Ref": "AWS::Region"
-       },
-       "\",\"stacked\":true,\"metrics\":[[\"AWS/DynamoDB\",\"ReadThrottleEvents\",\"TableName\",\"",
-       {
-        "Ref": "TransformedData0F179200"
-       },
-       "\",{\"stat\":\"Sum\"}],[\"AWS/DynamoDB\",\"WriteThrottleEvents\",\"TableName\",\"",
-       {
-        "Ref": "TransformedData0F179200"
-       },
-       "\",{\"stat\":\"Sum\"}]],\"yAxis\":{}}}]}"
-      ]
-     ]
-    }
-   }
-  },
   "newObjectInLandingBucketEventQueue67CBE2F2": {
    "Type": "AWS::SQS::Queue",
    "Properties": {
@@ -1399,59 +1338,6 @@
     "TreatMissingData": "notBreaching"
    }
   },
-  "extractorCloudWatchDashBoardD8B0F6EE": {
-   "Type": "AWS::CloudWatch::Dashboard",
-   "Properties": {
-    "DashboardBody": {
-     "Fn::Join": [
-      "",
-      [
-       "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_error_percentage\",\"region\":\"",
-       {
-        "Ref": "AWS::Region"
-       },
-       "\",\"stacked\":false,\"metrics\":[[{\"label\":\"invocations_errored_percentage_last_5_mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
-       {
-        "Ref": "extractorLambdaFunctionE8E746C8"
-       },
-       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
-       {
-        "Ref": "extractorLambdaFunctionE8E746C8"
-       },
-       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_duration\",\"region\":\"",
-       {
-        "Ref": "AWS::Region"
-       },
-       "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
-       {
-        "Ref": "extractorLambdaFunctionE8E746C8"
-       },
-       "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
-       {
-        "Ref": "extractorLambdaFunctionE8E746C8"
-       },
-       "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
-       {
-        "Ref": "extractorLambdaFunctionE8E746C8"
-       },
-       "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_throttle_percentage\",\"region\":\"",
-       {
-        "Ref": "AWS::Region"
-       },
-       "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled_requests_percentage_last_30_mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
-       {
-        "Ref": "extractorLambdaFunctionE8E746C8"
-       },
-       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
-       {
-        "Ref": "extractorLambdaFunctionE8E746C8"
-       },
-       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
-      ]
-     ]
-    }
-   }
-  },
   "transformerRuleA9C7F670": {
    "Type": "AWS::Events::Rule",
    "Properties": {
@@ -1823,59 +1709,6 @@
     ],
     "Threshold": 2,
     "TreatMissingData": "notBreaching"
-   }
-  },
-  "transformerCloudWatchDashBoard25766404": {
-   "Type": "AWS::CloudWatch::Dashboard",
-   "Properties": {
-    "DashboardBody": {
-     "Fn::Join": [
-      "",
-      [
-       "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_error_percentage\",\"region\":\"",
-       {
-        "Ref": "AWS::Region"
-       },
-       "\",\"stacked\":false,\"metrics\":[[{\"label\":\"invocations_errored_percentage_last_5_mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
-       {
-        "Ref": "transformerLambdaFunction2E6EE6A9"
-       },
-       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
-       {
-        "Ref": "transformerLambdaFunction2E6EE6A9"
-       },
-       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_duration\",\"region\":\"",
-       {
-        "Ref": "AWS::Region"
-       },
-       "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
-       {
-        "Ref": "transformerLambdaFunction2E6EE6A9"
-       },
-       "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
-       {
-        "Ref": "transformerLambdaFunction2E6EE6A9"
-       },
-       "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
-       {
-        "Ref": "transformerLambdaFunction2E6EE6A9"
-       },
-       "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_throttle_percentage\",\"region\":\"",
-       {
-        "Ref": "AWS::Region"
-       },
-       "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled_requests_percentage_last_30_mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
-       {
-        "Ref": "transformerLambdaFunction2E6EE6A9"
-       },
-       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
-       {
-        "Ref": "transformerLambdaFunction2E6EE6A9"
-       },
-       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
-      ]
-     ]
-    }
    }
   },
   "loaderRule16B863C1": {
@@ -2286,59 +2119,6 @@
     "TreatMissingData": "notBreaching"
    }
   },
-  "loaderCloudWatchDashBoardB9B81C0A": {
-   "Type": "AWS::CloudWatch::Dashboard",
-   "Properties": {
-    "DashboardBody": {
-     "Fn::Join": [
-      "",
-      [
-       "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_error_percentage\",\"region\":\"",
-       {
-        "Ref": "AWS::Region"
-       },
-       "\",\"stacked\":false,\"metrics\":[[{\"label\":\"invocations_errored_percentage_last_5_mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
-       {
-        "Ref": "loaderLambdaFunction64628E18"
-       },
-       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
-       {
-        "Ref": "loaderLambdaFunction64628E18"
-       },
-       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_duration\",\"region\":\"",
-       {
-        "Ref": "AWS::Region"
-       },
-       "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
-       {
-        "Ref": "loaderLambdaFunction64628E18"
-       },
-       "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
-       {
-        "Ref": "loaderLambdaFunction64628E18"
-       },
-       "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
-       {
-        "Ref": "loaderLambdaFunction64628E18"
-       },
-       "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_throttle_percentage\",\"region\":\"",
-       {
-        "Ref": "AWS::Region"
-       },
-       "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled_requests_percentage_last_30_mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
-       {
-        "Ref": "loaderLambdaFunction64628E18"
-       },
-       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
-       {
-        "Ref": "loaderLambdaFunction64628E18"
-       },
-       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
-      ]
-     ]
-    }
-   }
-  },
   "observerRule7DADF317": {
    "Type": "AWS::Events::Rule",
    "Properties": {
@@ -2697,59 +2477,6 @@
     ],
     "Threshold": 2,
     "TreatMissingData": "notBreaching"
-   }
-  },
-  "observerCloudWatchDashBoard42CB6E58": {
-   "Type": "AWS::CloudWatch::Dashboard",
-   "Properties": {
-    "DashboardBody": {
-     "Fn::Join": [
-      "",
-      [
-       "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_error_percentage\",\"region\":\"",
-       {
-        "Ref": "AWS::Region"
-       },
-       "\",\"stacked\":false,\"metrics\":[[{\"label\":\"invocations_errored_percentage_last_5_mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
-       {
-        "Ref": "observerLambdaFunction5EEFF70A"
-       },
-       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
-       {
-        "Ref": "observerLambdaFunction5EEFF70A"
-       },
-       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_duration\",\"region\":\"",
-       {
-        "Ref": "AWS::Region"
-       },
-       "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
-       {
-        "Ref": "observerLambdaFunction5EEFF70A"
-       },
-       "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
-       {
-        "Ref": "observerLambdaFunction5EEFF70A"
-       },
-       "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
-       {
-        "Ref": "observerLambdaFunction5EEFF70A"
-       },
-       "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_throttle_percentage\",\"region\":\"",
-       {
-        "Ref": "AWS::Region"
-       },
-       "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled_requests_percentage_last_30_mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
-       {
-        "Ref": "observerLambdaFunction5EEFF70A"
-       },
-       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
-       {
-        "Ref": "observerLambdaFunction5EEFF70A"
-       },
-       "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
-      ]
-     ]
-    }
    }
   }
  },

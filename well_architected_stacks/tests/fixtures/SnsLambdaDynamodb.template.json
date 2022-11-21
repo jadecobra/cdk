@@ -101,67 +101,6 @@
         "TreatMissingData": "notBreaching"
       }
     },
-    "DynamoDbTableCloudWatchDashBoardEB9B1B0A": {
-      "Type": "AWS::CloudWatch::Dashboard",
-      "Properties": {
-        "DashboardBody": {
-          "Fn::Join": [
-            "",
-            [
-              "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"dynamodb_latency\",\"region\":\"",
-              {
-                "Ref": "AWS::Region"
-              },
-              "\",\"stacked\":true,\"metrics\":[[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"GetItem\",\"TableName\",\"",
-              {
-                "Ref": "DynamoDbTable328C754E"
-              },
-              "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"UpdateItem\",\"TableName\",\"",
-              {
-                "Ref": "DynamoDbTable328C754E"
-              },
-              "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"PutItem\",\"TableName\",\"",
-              {
-                "Ref": "DynamoDbTable328C754E"
-              },
-              "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"DeleteItem\",\"TableName\",\"",
-              {
-                "Ref": "DynamoDbTable328C754E"
-              },
-              "\"],[\"AWS/DynamoDB\",\"SuccessfulRequestLatency\",\"Operation\",\"Query\",\"TableName\",\"",
-              {
-                "Ref": "DynamoDbTable328C754E"
-              },
-              "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"dynamodb_consumed_read_write_units\",\"region\":\"",
-              {
-                "Ref": "AWS::Region"
-              },
-              "\",\"stacked\":false,\"metrics\":[[\"AWS/DynamoDB\",\"ConsumedReadCapacityUnits\",\"TableName\",\"",
-              {
-                "Ref": "DynamoDbTable328C754E"
-              },
-              "\"],[\"AWS/DynamoDB\",\"ConsumedWriteCapacityUnits\",\"TableName\",\"",
-              {
-                "Ref": "DynamoDbTable328C754E"
-              },
-              "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"dynamodb_throttles\",\"region\":\"",
-              {
-                "Ref": "AWS::Region"
-              },
-              "\",\"stacked\":true,\"metrics\":[[\"AWS/DynamoDB\",\"ReadThrottleEvents\",\"TableName\",\"",
-              {
-                "Ref": "DynamoDbTable328C754E"
-              },
-              "\",{\"stat\":\"Sum\"}],[\"AWS/DynamoDB\",\"WriteThrottleEvents\",\"TableName\",\"",
-              {
-                "Ref": "DynamoDbTable328C754E"
-              },
-              "\",{\"stat\":\"Sum\"}]],\"yAxis\":{}}}]}"
-            ]
-          ]
-        }
-      }
-    },
     "hitcounterAwsXraySdkLambdaLayer67CDDA7F": {
       "Type": "AWS::Lambda::LayerVersion",
       "Properties": {
@@ -526,59 +465,6 @@
         ],
         "Threshold": 2,
         "TreatMissingData": "notBreaching"
-      }
-    },
-    "hitcounterCloudWatchDashBoard56CA7346": {
-      "Type": "AWS::CloudWatch::Dashboard",
-      "Properties": {
-        "DashboardBody": {
-          "Fn::Join": [
-            "",
-            [
-              "{\"widgets\":[{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_error_percentage\",\"region\":\"",
-              {
-                "Ref": "AWS::Region"
-              },
-              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"invocations_errored_percentage_last_5_mins\",\"expression\":\"(errors / invocations) * 100\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
-              {
-                "Ref": "hitcounterLambdaFunctionB862C182"
-              },
-              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
-              {
-                "Ref": "hitcounterLambdaFunctionB862C182"
-              },
-              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"errors\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_duration\",\"region\":\"",
-              {
-                "Ref": "AWS::Region"
-              },
-              "\",\"stacked\":true,\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
-              {
-                "Ref": "hitcounterLambdaFunctionB862C182"
-              },
-              "\",{\"stat\":\"p50\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
-              {
-                "Ref": "hitcounterLambdaFunctionB862C182"
-              },
-              "\",{\"stat\":\"p90\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
-              {
-                "Ref": "hitcounterLambdaFunctionB862C182"
-              },
-              "\",{\"stat\":\"p99\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":8,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"lambda_throttle_percentage\",\"region\":\"",
-              {
-                "Ref": "AWS::Region"
-              },
-              "\",\"stacked\":false,\"metrics\":[[{\"label\":\"throttled_requests_percentage_last_30_mins\",\"expression\":\"(throttles * 100) / (invocations + throttles)\"}],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
-              {
-                "Ref": "hitcounterLambdaFunctionB862C182"
-              },
-              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"invocations\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
-              {
-                "Ref": "hitcounterLambdaFunctionB862C182"
-              },
-              "\",{\"stat\":\"Sum\",\"visible\":false,\"id\":\"throttles\"}]],\"yAxis\":{}}}]}"
-            ]
-          ]
-        }
       }
     }
   },

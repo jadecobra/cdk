@@ -1,8 +1,6 @@
 import aws_cdk
 import src.well_architected_stacks as well_architected_stacks
-import src.well_architected_stacks.lambda_trilogy as lambda_trilogy
 import src.well_architected_stacks.simple_graphql_service.simple_graphql_service as simple_graphql_service
-# import src.regular_stacks.ecs
 
 import os
 
@@ -227,7 +225,7 @@ class WellArchitected(aws_cdk.App):
         )
         well_architected_stacks.sns_lambda.SnsLambda(
             self, 'SnsLambda',
-            sns_topic_arn=xray_tracer_sns_topic.sns_topic.topic_arn,
+            sns_topic=xray_tracer_sns_topic.sns_topic,
             error_topic=xray_tracer_error_topic.sns_topic,
             lambda_directory=self.lambda_directory,
             lambda_function_name="sns_lambda",
@@ -236,7 +234,7 @@ class WellArchitected(aws_cdk.App):
             self, 'SnsLambdaDynamodb',
             partition_key="path",
             lambda_function_name="hit_counter",
-            sns_topic_arn=xray_tracer_sns_topic.sns_topic.topic_arn,
+            sns_topic=xray_tracer_sns_topic.sns_topic,
             error_topic=xray_tracer_error_topic.sns_topic,
             lambda_directory=self.lambda_directory,
         )

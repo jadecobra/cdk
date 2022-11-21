@@ -37,8 +37,8 @@ class TestWellArchitectedPatterns(jadecobra.toolkit.TestCase):
             'SnsLambdaSns',
             'SnsLambdaDynamodb',
             'SqsLambdaSqs',
-            'HttpApiSagaStepFunction',
-            'RestApiSagaStepFunction',
+            # 'HttpApiSagaStepFunction',
+            # 'RestApiSagaStepFunction',
             'WafRestApiLambdaDynamodb',
         )
 
