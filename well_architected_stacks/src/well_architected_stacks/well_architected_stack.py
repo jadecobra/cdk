@@ -23,10 +23,10 @@ class Stack(aws_cdk.Stack):
         )
         self.id = id
         self.lambda_directory = lambda_directory
-        self.error_topic = error_topic
+        self.permissions_boundary = self.add_permissions_boundary(permissions_boundary_name)
+        self.error_topic = self.create_error_topic(error_topic)
         self.create_http_api = create_http_api
         self.create_rest_api = create_rest_api
-        self.permissions_boundary = self.add_permissions_boundary(permissions_boundary_name)
 
     def create_sns_topic(self, display_name):
         return aws_cdk.aws_sns.Topic(
@@ -34,14 +34,15 @@ class Stack(aws_cdk.Stack):
             display_name=display_name,
         )
 
-    def create_error_topic(self, topic_name=None):
-        # Refactor
-        if not self.error_topic:
+    def create_error_topic(self, topic_name=None, error_topic=None):
+        if error_topic is not None:
+            return error_topic
+        else:
             if topic_name:
                 display_name = topic_name
             else:
                 display_name = f'{self.id}ErrorTopic'
-            self.error_topic = self.create_sns_topic(display_name)
+            return self.create_sns_topic(display_name)
 
     def create_lambda_construct(self, function_name=None):
         raise NotImplementedError

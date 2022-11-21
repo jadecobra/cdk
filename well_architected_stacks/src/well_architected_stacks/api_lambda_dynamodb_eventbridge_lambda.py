@@ -20,11 +20,6 @@ class ApiLambdaDynamodbEventBridgeLambda(well_architected_stack.Stack):
             **kwargs
         )
         self.create_error_topic()
-        # self.dynamodb_table = self.create_dynamodb_table()
-        # self.add_global_secondary_index(self.dynamodb_table.dynamodb_table)
-        # self.webservice_lambda_function = self.create_webservice_lambda_function(
-        #     self.dynamodb_table.dynamodb_table
-        # )
         self.api_lambda_dynamodb = self.create_lambda_dynamodb(
             create_http_api=create_http_api,
             create_rest_api=create_rest_api,
