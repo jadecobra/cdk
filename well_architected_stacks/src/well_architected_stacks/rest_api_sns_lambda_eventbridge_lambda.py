@@ -9,7 +9,7 @@ class RestApiSnsLambdaEventBridgeLambda(well_architected_stack.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
-        self.create_error_topic()
+
         event_bus = self.create_event_bus(id)
         name = 'destined'
         sns_topic = self.create_sns_topic(f'{name}SnsTopic')

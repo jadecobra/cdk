@@ -14,7 +14,7 @@ class ApiLambdaDynamodbStack(well_architected_stack.Stack):
         **kwargs
     ) -> None:
         super().__init__(scope, id, **kwargs)
-        self.create_error_topic()
+
         self.api_lambda_dynamodb = well_architected_constructs.api_lambda_dynamodb.ApiLambdaDynamodb(
             self, 'ApiLambdaDynamodb',
             lambda_directory=self.lambda_directory,

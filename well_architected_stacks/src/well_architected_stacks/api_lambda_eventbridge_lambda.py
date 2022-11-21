@@ -14,7 +14,7 @@ class ApiLambdaEventBridgeLambda(well_architected_stack.Stack):
         **kwargs
     ) -> None:
         super().__init__(scope, id, **kwargs)
-        self.create_error_topic()
+
         self.lambda_directory = lambda_directory
         self.approved_transaction = self.create_lambda_construct(
             handler_name="approved_transaction_handler",

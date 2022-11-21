@@ -14,7 +14,7 @@ class RestApiDynamodb(well_architected_stack.Stack):
         **kwargs
     ) -> None:
         super().__init__(scope, id, **kwargs)
-        self.create_error_topic()
+
 
         self.dynamodb_table_construct = self.create_dynamodb_table(partition_key)
         self.dynamodb_table = self.dynamodb_table_construct.dynamodb_table

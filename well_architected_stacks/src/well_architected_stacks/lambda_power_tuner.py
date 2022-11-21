@@ -10,7 +10,7 @@ class LambdaPowerTuner(well_architected_stack.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
-        self.create_error_topic()
+
         example_lambda_function = aws_cdk.aws_lambda.Function(
             self, "exampleLambda",
             runtime=aws_cdk.aws_lambda.Runtime.PYTHON_3_9,

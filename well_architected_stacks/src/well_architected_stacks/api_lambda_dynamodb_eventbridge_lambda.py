@@ -8,7 +8,7 @@ from . import well_architected_stack
 class ApiLambdaDynamodbEventBridgeLambda(well_architected_stack.Stack):
 
     def __init__(
-        self, scope: constructs.Construct, id: str,
+        self, scope: constructs.Construct, id: str, *,
         lambda_directory=None,
         create_rest_api=False,
         create_http_api=False,
@@ -19,7 +19,7 @@ class ApiLambdaDynamodbEventBridgeLambda(well_architected_stack.Stack):
             lambda_directory=lambda_directory,
             **kwargs
         )
-        self.create_error_topic()
+
         self.api_lambda_dynamodb = self.create_lambda_dynamodb(
             create_http_api=create_http_api,
             create_rest_api=create_rest_api,

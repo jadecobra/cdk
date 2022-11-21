@@ -211,32 +211,32 @@ class WellArchitected(aws_cdk.App):
         )
         well_architected_stacks.sns_lambda_sns.SnsLambdaSns(
             self, 'SnsLambdaSns',
+            lambda_directory=self.lambda_directory,
             sns_publisher_trigger=xray_tracer_sns_topic.sns_topic,
             error_topic=xray_tracer_error_topic.sns_topic,
-            lambda_directory=self.lambda_directory,
             publisher_lambda_name='sns_publisher',
             subscriber_lambda_name='sns_subscriber',
         )
         well_architected_stacks.sqs_lambda_sqs.SqsLambdaSqs(
             self, 'SqsLambdaSqs',
+            lambda_directory=self.lambda_directory,
             sns_topic=xray_tracer_sns_topic.sns_topic,
             error_topic=xray_tracer_error_topic.sns_topic,
-            lambda_directory=self.lambda_directory,
         )
         well_architected_stacks.sns_lambda.SnsLambda(
             self, 'SnsLambda',
+            lambda_directory=self.lambda_directory,
             sns_topic=xray_tracer_sns_topic.sns_topic,
             error_topic=xray_tracer_error_topic.sns_topic,
-            lambda_directory=self.lambda_directory,
             lambda_function_name="sns_lambda",
         )
         well_architected_stacks.sns_lambda_dynamodb.SnsLambdaDynamodb(
             self, 'SnsLambdaDynamodb',
             partition_key="path",
+            lambda_directory=self.lambda_directory,
             lambda_function_name="hit_counter",
             sns_topic=xray_tracer_sns_topic.sns_topic,
             error_topic=xray_tracer_error_topic.sns_topic,
-            lambda_directory=self.lambda_directory,
         )
 
     def ecs(self):

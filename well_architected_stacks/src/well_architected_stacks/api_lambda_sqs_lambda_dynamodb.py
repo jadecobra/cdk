@@ -12,7 +12,7 @@ class ApiLambdaSqsLambdaDynamodb(well_architected_stack.Stack):
         **kwargs
     ) -> None:
         super().__init__(scope, id, **kwargs)
-        self.create_error_topic()
+
 
         sqs_queue = aws_cdk.aws_sqs.Queue(
             self, 'SqsQueue',

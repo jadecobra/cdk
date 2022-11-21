@@ -14,7 +14,7 @@ class S3SqsLambdaEcsEventBridgeLambdaDynamodb(well_architected_stack.Stack):
         **kwargs
     ) -> None:
         super().__init__(scope, id, **kwargs)
-        self.create_error_topic()
+
 
         self.dynamodb_table = self.create_dynamodb_table()
         self.sqs_queue = self.create_sqs_queue()

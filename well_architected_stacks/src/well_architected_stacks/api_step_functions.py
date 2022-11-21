@@ -10,7 +10,7 @@ class ApiStepFunctionsStack(well_architected_stack.Stack):
 
     def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
-        self.create_error_topic()
+
         self.result_path = '$.resultPath'
         self.lambda_construct = self.create_lambda_construct()
 

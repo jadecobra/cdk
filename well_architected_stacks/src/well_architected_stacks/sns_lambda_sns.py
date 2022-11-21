@@ -8,7 +8,7 @@ from . import well_architected_stack
 class SnsLambdaSns(well_architected_stack.Stack):
 
     def __init__(
-        self, scope: constructs.Construct, id: str,
+        self, scope: constructs.Construct, id: str, *,
         sns_publisher_trigger=None,
         publisher_lambda_name=None,
         subscriber_lambda_name=None,

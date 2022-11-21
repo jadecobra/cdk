@@ -21,10 +21,12 @@ class Stack(aws_cdk.Stack):
             synthesizer=aws_cdk.LegacyStackSynthesizer(),
             **kwargs,
         )
-        self.id = id
         self.lambda_directory = lambda_directory
         self.permissions_boundary = self.add_permissions_boundary(permissions_boundary_name)
-        self.error_topic = self.create_error_topic(error_topic)
+        self.error_topic = self.create_error_topic(
+            error_topic=error_topic,
+            stack_name=id,
+        )
         self.create_http_api = create_http_api
         self.create_rest_api = create_rest_api
 
@@ -34,14 +36,14 @@ class Stack(aws_cdk.Stack):
             display_name=display_name,
         )
 
-    def create_error_topic(self, topic_name=None, error_topic=None):
-        if error_topic is not None:
+    def create_error_topic(self, topic_name=None, error_topic=None, stack_name=None):
+        if isinstance(error_topic, aws_cdk.aws_sns.Topic):
             return error_topic
         else:
             if topic_name:
                 display_name = topic_name
             else:
-                display_name = f'{self.id}ErrorTopic'
+                display_name = f'{stack_name}ErrorTopic'
             return self.create_sns_topic(display_name)
 
     def create_lambda_construct(self, function_name=None):
